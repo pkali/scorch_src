@@ -76,8 +76,8 @@ margin=48 ;mountain drawing Y variable margin
 display=$1010 ;kill dos with the casette recorder!
 MaxPlayers = 6
 
-    icl '../lib/atari.hea'
-    icl '../lib/macro.hea'
+    icl 'lib/atari.hea'
+    icl 'lib/macro.hea'
 
     ;Game loading address
     ORG  $3010 ;two hex thousands for screen
