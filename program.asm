@@ -15,7 +15,7 @@
 ;textproc.asm - text routines like list of weapons and shop
 ;variables.asm - all non-zero page variables and constans
 ;display.asm - display lists and text screen definitions
-;ai.asm - artificial stupidity of the computer players
+;ai.asm - artificial stupidity of computer opponents
 
 ;we were trying to use as much macros and pseudoops as possible
 ;they are defined in atari.hea and macro.hea files together with many
@@ -29,7 +29,7 @@
 ;
 ;originally most variables were in Polish, comments were sparse
 ;but we wanted to release this piece of code to public
-;and due to being always short of time (to finish the game)
+;and due to being always short of time/energy (to finish the game)
 ;we decided it must go in 'English' to let other people work on it
 
     .zpvar xdraw .word = $80 ;variable X for plot
