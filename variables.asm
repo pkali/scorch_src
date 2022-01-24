@@ -60,7 +60,7 @@ MaxEnergyTableH
 ;-----------------------------------
 
 AngleTable ;Angle of the barrel of each tank during the round
-    .by (255-90),(255-90),(255-90),(255-90),(255-90),(255-90)
+    :MaxPlayers .by (255-90)
 NewAngle
     .by 0
 ;-----------------------------------
@@ -109,12 +109,11 @@ scrcodes
     dta d"7890.-"
 ;-----------------------------------
 Erase    .byte 0 ; if 1 only mask of the character is printed
-                 ;  on the graphics screen. if 0 character is printed normally
+                 ; on the graphics screen. if 0 character is printed normally
 
 ;-----------------------------------
 RangeLeft  .wo 0 ;range of the soil to be fallen down
-    ;it is being set by all Explosions
-RangeRight  .wo 0
+RangeRight .wo 0 ;it is being set by all Explosions
 ;-----------------------------------
 WeaponRangeLeft  .wo 0 ;Range of the Explosion of the given weapon
 WeaponRangeRight .wo 0
@@ -366,7 +365,7 @@ LineYdraw
 LineTop
     dta d"(%%%%%%%%%%%)"
     .byte $ff
-;# - pion, () * +, % - poziom
+;# - vertical, () * +, % - horizontal
 LineBottom
     dta d"*%%%%%%%%%%%+"
     .byte $ff

@@ -9,12 +9,13 @@
 ;this source code was compiled under OMC65 crossassembler
 ;and on 2012-06-21 translated to mads
 ;
-;game source code is split into 5 parts:
-;program.s65 is the main game code (with many assorted routines)
-;grafproc.s65 - graphics routines like line or circle
-;textproc.s65 - text routines like list of weapons and shop
-;variables.s65 - all non-zero page variables and constans
-;display.s65 - display lists and text screen definitions
+;game source code is split into 5+1 parts:
+;program.asm is the main game code (with many assorted routines)
+;grafproc.asm - graphics routines like line or circle
+;textproc.asm - text routines like list of weapons and shop
+;variables.asm - all non-zero page variables and constans
+;display.asm - display lists and text screen definitions
+;ai.asm - artificial stupidity of the computer players
 
 ;we were trying to use as much macros and pseudoops as possible
 ;they are defined in atari.hea and macro.hea files together with many
@@ -68,17 +69,18 @@
 
 ;-------------------------------
 ;constants
-FlyDelay=150
-screenheight=200
+FlyDelay = 150
+screenheight = 200
 screenBytes = 40
-screenwidth=screenBytes*8
-margin=48 ;mountain drawing Y variable margin
-display=$1010 ;kill dos with the casette recorder!
+screenwidth = screenBytes*8
+margin = 48 ;mountain drawing Y variable margin
+display = $1010 ;kill dos with the casette recorder!
 MaxPlayers = 6
 
-    icl '../lib/atari.hea'
-    icl '../lib/macro.hea'
+    icl 'lib/atari.hea'
+    icl 'lib/macro.hea'
 
+	icl 'artwork/HIMARS14.asm'
     ;Game loading address
     ORG  $3010 ;two hex thousands for screen
 ;-----------------------------------------------

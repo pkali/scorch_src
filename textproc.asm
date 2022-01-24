@@ -1143,10 +1143,9 @@ displayloop1
 
     rts
 ;-------decimal constans
+zero
 digits   dta d"0123456789"
-zero     dta d"0"
-nineplus ;.sbyte ('9+1)
-    dta d"9"+1
+nineplus dta d"9"+1
 space    dta d" "
 
 ;--------------------------------------------------------

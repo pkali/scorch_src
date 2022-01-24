@@ -15,8 +15,8 @@ MoreUpdl
         .byte 0,$42
 WeaponsListDL
         .word ListOfWeapons
- .byte 0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0
- .byte $42
+ :15 .byte 0,2
+ .byte 0, $42
 MoreDownDL
  .word EmptyLine
  .byte $10,$42
@@ -26,7 +26,7 @@ MoreDownDL
         .word PurchaseDL
 ;------------------------
 OptionsDL
-        .byte $70,$70,$70,$70,$70
+        :5 .byte $70
         .byte $42
         .word OptionsScreen
         .byte $02,$02,$70,$02,0,$02,0,$2,0,$2
@@ -35,7 +35,7 @@ OptionsDL
 ;------------------------
 ;Enter names of tanks DL
 NameDL
-        .byte $70,$70,$70,$70,$70
+        :5 .byte $70
         .byte $42
         .word NameScreen
         .byte $30
@@ -77,7 +77,7 @@ PlotLine = display + screenHeight*screenBytes ; the last line is plot pointer
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. 124 (cc)2000-2013"
+ dta d"Welcome to Scorch ver. 125 (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   
@@ -119,60 +119,10 @@ MoreDown
  dta 93,93,93
  dta d"             "
 ListOfWeapons
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
+ :36 dta d"                                        "
 ListOfWeapons1End
 ListOfDefensiveWeapons
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
- dta d"                                        "
+ :16 dta d"                                        "
 ListOfDefensiveWeaponsEnd ;constant useful when clearing
 WeaponsDescription
  dta d"  "
@@ -187,8 +137,8 @@ EmptyLine
  dta d"                                        "
 ;-----------------------------------------------
 textbuffer
-        dta d"Player:                                 "
-        dta d"                                        "
+ dta d"Player:                                 "
+ dta d"                                        "
 textbuffer2
  dta d"Player: ********       Cash: 00000      "
  dta d"----------------------------------------"
