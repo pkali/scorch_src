@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=program.asm
+;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 
@@ -1617,8 +1617,8 @@ EndOfFlight2
 .endp
 
 SecondFlight .proc
-; ----------------  przekopiowany fragment sprzed odpalenie strza³u malo kulturalne.....
-; ---------------- ponownie wyznacza parametry strza³u
+; ----------------  przekopiowany fragment sprzed odpalenie strzaï¿½u malo kulturalne.....
+; ---------------- ponownie wyznacza parametry strzaï¿½u
     ldx TankNr
     lda EnergyTableL,x
     sta Force

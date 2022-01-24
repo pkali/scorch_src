@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=program.asm
+;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 .IF *>0 ;this is a trick that prevents compiling this file alone
 

@@ -1,16 +1,18 @@
-;	@com.wudsn.ide.asm.mainsourcefile=program.asm
+;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
 ;Atari 8-bit Scorched Earth source code
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000,2001,2002,2003,2009,2012,2013
-;you can contact us at pecus@poczta.fm or pirx@91.pl
-;home page of this project is http://pecus.pigwa.net/pliki/Atari/scorch/
+;Miami 2022
+;you can contact us at pecus@poczta.fm or pirx@5oft.pl
+;home page of this project is https://github.com/pkali/scorch_src
 
-;this source code was compiled under OMC65 crossassembler
+;this source code was compiled under OMC65 crossassembler 
+;(https://github.com/pkali/omc65)
 ;and on 2012-06-21 translated to mads
 ;
 ;game source code is split into 5+1 parts:
-;program.asm is the main game code (with many assorted routines)
+;scorch.asm is the main game code (with many assorted routines)
 ;grafproc.asm - graphics routines like line or circle
 ;textproc.asm - text routines like list of weapons and shop
 ;variables.asm - all non-zero page variables and constans
@@ -23,8 +25,8 @@
 ;port this code to e.g. C64
 ;
 ;After those N years of working on this piece of code
-;we are sure it would be much wiser to write it in C or
-;Action!, but on the other hand it is so much fun to type 150 chars
+;we are sure it would be much wiser to write it in C, Action!
+;or MadPascal but on the other hand it is so much fun to type 150 chars
 ;where you want to have y=ax+b :)
 ;
 ;originally most variables were in Polish, comments were sparse

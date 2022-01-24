@@ -1,8 +1,38 @@
-/*
-scr48	=	%00111111	;screen 48b
-scr40	=	%00111110	;screen 40b
-scr32	=	%00111101	;screen 32b
-*/
+.enum	@dmactl
+	blank	= %00
+	narrow	= %01
+	standard= %10
+	wide	= %11
+	missiles= %100
+	players	= %1000
+	lineX1	= %10000
+	lineX2	= %00000
+	dma	= %100000
+.ende
+
+scr48	= @dmactl(wide|dma|players|missiles|lineX1)		;screen 48b
+scr40	= @dmactl(standard|dma|players|missiles|lineX1)		;screen 40b
+scr32	= @dmactl(narrow|dma|players|missiles|lineX1)		;screen 32b
+
+.enum	@pmcntl
+	missiles= %1
+	players	= %10
+	trigs	= %100
+.ende
+
+.enum	@gtictl
+	prior0	= %0
+	prior1	= %1
+	prior2	= %10
+	prior4	= %100
+	prior8	= %1000
+	ply5	= %10000	; Fifth Player Enable
+	mlc	= %100000	; Multiple Color Player Enable
+	mode9	= %01000000
+	mode10	= %10000000
+	mode11	= %11000000
+.ende
+
 
 * ---------------------------------------------------------------------------------------------
 * ---	GTIA
@@ -19,12 +49,12 @@ SIZEP0	=	$D008		; poziomy rozmiar gracza 0 (Z)
 SIZEP1	=	$D009		; poziomy rozmiar gracza 1 (Z)
 SIZEP2	=	$D00A		; poziomy rozmiar gracza 2 (Z)
 SIZEP3	=	$D00B		; poziomy rozmiar gracza 3 (Z)
-SIZEM	=	$D00C		; poziomy rozmiar pocisków (Z)
+SIZEM	=	$D00C		; poziomy rozmiar pociskï¿½w (Z)
 GRAFP0	=	$D00D		; rejestr grafiki gracza 0 (Z)
 GRAFP1	=	$D00E		; rejestr grafiki gracza 1 (Z)
 GRAFP2	=	$D00F		; rejestr grafiki gracza 2 (Z)
 GRAFP3	=	$D010		; rejestr grafiki gracza 3 (Z)
-GRAFM	=	$D011		; rejestr grafiki pocisków (Z)
+GRAFM	=	$D011		; rejestr grafiki pociskï¿½w (Z)
 COLPM0	=	$D012		; rejestr koloru gracza i pocisku 0 (Z)
 COLPM1	=	$D013		; rejestr koloru gracza i pocisku 1 (Z)
 COLPM2	=	$D014		; rejestr koloru gracza i pocisku 2 (Z)
@@ -33,7 +63,7 @@ COLPF0	=	$D016		; rejestr koloru pola gry 0 (Z)
 COLPF1	=	$D017		; rejestr koloru pola gry 1 (Z)
 COLPF2	=	$D018		; rejestr koloru pola gry 2 (Z)
 COLPF3	=	$D019		; rejestr koloru pola gry 3 (Z)
-COLBAK	=	$D01A		; rejestr koloru t³a (Z)
+COLBAK	=	$D01A		; rejestr koloru tï¿½a (Z)
 
 COLOR0	=	colpf0
 COLOR1	=	colpf1
@@ -58,120 +88,120 @@ KOLP2P	=	$D00E		; kolizja gracza 2 z innym graczem (O)
 KOLP3P	=	$D00F		; kolizja gracza 3 z innym graczem (O)
 TRIG0	=	$D010		; stan przycisku joysticka 0 (O)
 TRIG1	=	$D011		; stan przycisku joysticka 1 (O)
-TRIG3	=	$D013		; znacznik do³¹czenia cartridge-a (O)
+TRIG3	=	$D013		; znacznik doï¿½ï¿½czenia cartridge-a (O)
 PAL	=	$D014		; znacznik systemu TV (O)
 
-GTICTL	=	$D01B		; rejestr kontroli uk³adu GTIA
+GTICTL	=	$D01B		; rejestr kontroli ukï¿½adu GTIA
 GTIACTL	=	gtictl
 
-VDELAY	=	$D01C		; licznik opóŸnienia pionowego P/MG
-PMCNTL	=	$D01D		; rejestr kontroli graczy i pocisków
-HITCLR	=	$D01E		; rejestr kasowania rejestrów kolizji
+VDELAY	=	$D01C		; licznik opï¿½nienia pionowego P/MG
+PMCNTL	=	$D01D		; rejestr kontroli graczy i pociskï¿½w
+HITCLR	=	$D01E		; rejestr kasowania rejestrï¿½w kolizji
 CONSOL	=	$D01F		; rejestr stanu klawiszy konsoli Start (bit 0), Select (bit 1), Option (bit 2) 
 
 * ---------------------------------------------------------------------------------------------
 * ---	POKEY
 * ---------------------------------------------------------------------------------------------
 
-IRQENS	=	$0010		; rejestr-cieñ IRQEN
-IRQSTAT	=	$0011		; rejestr-cieñ IRQST
+IRQENS	=	$0010		; rejestr-cieï¿½ IRQEN
+IRQSTAT	=	$0011		; rejestr-cieï¿½ IRQST
 
-AUDF3	=	$D204		; czêstotliwoœæ pracy generatora 3 (Z)
-AUDCTL	=	$D208		; rejestr kontroli generatorów dŸwiêku (Z)
-STIMER	=	$D209		; rejestr zerowania liczników (Z)
-KBCODE	=	$D209		; kod ostatnio naciœniêtego klawisza (O)
-SKSTRES	=	$D20A		; rejestr statusu z³¹cza szeregowego (Z)
+AUDF3	=	$D204		; czï¿½stotliwoï¿½ï¿½ pracy generatora 3 (Z)
+AUDCTL	=	$D208		; rejestr kontroli generatorï¿½w dï¿½wiï¿½ku (Z)
+STIMER	=	$D209		; rejestr zerowania licznikï¿½w (Z)
+KBCODE	=	$D209		; kod ostatnio naciï¿½niï¿½tego klawisza (O)
+SKSTRES	=	$D20A		; rejestr statusu zï¿½ï¿½cza szeregowego (Z)
 RANDOM	=	$D20A		; rejestr liczby losowej (O)
-SEROUT	=	$D20D		; szeregowy rejestr wyjœciowy (Z)
-SERIN	=	$D20D		; szeregowy rejestr wejœciowy (O)
-IRQEN	=	$D20E		; zezwolenie przerwañ IRQ (Z)
-IRQST	=	$D20E		; status przerwañ IRQ (O)
-SKCTL	=	$D20F		; rejestr kontroli z³¹cza szeregowego (Z)
-SKSTAT	=	$D20F		; rejestr statusu z³¹cza szeregowego (O)
+SEROUT	=	$D20D		; szeregowy rejestr wyjï¿½ciowy (Z)
+SERIN	=	$D20D		; szeregowy rejestr wejï¿½ciowy (O)
+IRQEN	=	$D20E		; zezwolenie przerwaï¿½ IRQ (Z)
+IRQST	=	$D20E		; status przerwaï¿½ IRQ (O)
+SKCTL	=	$D20F		; rejestr kontroli zï¿½ï¿½cza szeregowego (Z)
+SKSTAT	=	$D20F		; rejestr statusu zï¿½ï¿½cza szeregowego (O)
 
 * ---------------------------------------------------------------------------------------------
 * ---	PIA
 * ---------------------------------------------------------------------------------------------
-PORTA	=	$D300		; port A uk³adu PIA
-PORTB	=	$D301		; port B uk³adu PIA
+PORTA	=	$D300		; port A ukï¿½adu PIA
+PORTB	=	$D301		; port B ukï¿½adu PIA
 PACTL	=	$D302		; rejestr kontroli portu A
 PBCTL	=	$D303		; rejestr kontroli portu B
 
 * ---------------------------------------------------------------------------------------------
 * ---	ANTIC
 * ---------------------------------------------------------------------------------------------
-DMACTL	=	$D400		; rejestr kontroli dostêpu do pamiêci
-CHRCTL	=	$D401		; rejestr kontroli wyœwietlania znaków
+DMACTL	=	$D400		; rejestr kontroli dostï¿½pu do pamiï¿½ci
+CHRCTL	=	$D401		; rejestr kontroli wyï¿½wietlania znakï¿½w
 DLPTR	=	$D402		; adres programu ANTIC-a
 HSCROL	=	$D404		; znacznik poziomego przesuwu obrazu
 VSCROL	=	$D405		; znacznik pionowego przesuwu obrazu
-PMBASE	=	$D407		; adres pamiêci graczy i pocisków
-CHBASE	=	$D409		; adres zestawu znaków
-WSYNC	=	$D40A		; znacznik oczekiwania na synchronizacjê poziom¹
+PMBASE	=	$D407		; adres pamiï¿½ci graczy i pociskï¿½w
+CHBASE	=	$D409		; adres zestawu znakï¿½w
+WSYNC	=	$D40A		; znacznik oczekiwania na synchronizacjï¿½ poziomï¿½
 VCOUNT	=	$D40B		; licznik linii obrazu
-LPENH	=	$D40C		; poziome po³o¿enie pióra œwietlengo
-LPENV	=	$D40D		; pionowe po³o¿enie pióra œwietlnego
-NMIEN	=	$D40E		; rejestr zezwoleñ na przerwania NMI
-NMIST	=	$D40F		; rejestr statusu przerwañ NMI
+LPENH	=	$D40C		; poziome poï¿½oï¿½enie piï¿½ra ï¿½wietlengo
+LPENV	=	$D40D		; pionowe poï¿½oï¿½enie piï¿½ra ï¿½wietlnego
+NMIEN	=	$D40E		; rejestr zezwoleï¿½ na przerwania NMI
+NMIST	=	$D40F		; rejestr statusu przerwaï¿½ NMI
 
 ;-------------------------------------
 ;additional system variables
 ;-------------------------------------
-COLPM0S = $02C0 ;- - rejestr-cieñ COLPM0
-COLPM1S = $02C1 ;- - rejestr-cieñ COLPM1
-COLPM2S = $02C2 ;- - rejestr-cieñ COLPM2
-COLPM3S = $02C3 ;- - rejestr-cieñ COLPM3
-COLPF0S = $02C4 ;- - rejestr-cieñ COLPF0
-COLPF1S = $02C5 ;- - rejestr-cieñ COLPF1
-COLPF2S = $02C6 ;- - rejestr-cieñ COLPF2
-COLPF3S = $02C7 ;- - rejestr-cieñ COLPF3
+COLPM0S = $02C0 ;- - rejestr-cieï¿½ COLPM0
+COLPM1S = $02C1 ;- - rejestr-cieï¿½ COLPM1
+COLPM2S = $02C2 ;- - rejestr-cieï¿½ COLPM2
+COLPM3S = $02C3 ;- - rejestr-cieï¿½ COLPM3
+COLPF0S = $02C4 ;- - rejestr-cieï¿½ COLPF0
+COLPF1S = $02C5 ;- - rejestr-cieï¿½ COLPF1
+COLPF2S = $02C6 ;- - rejestr-cieï¿½ COLPF2
+COLPF3S = $02C7 ;- - rejestr-cieï¿½ COLPF3
 
 COLBAKS = $02C8
-GTICTLS = $026F ;- - rejestr-cieñ GTIACTL
+GTICTLS = $026F ;- - rejestr-cieï¿½ GTIACTL
 
-DMACTLS = $022F ;- - rejestr kontroli dostêpu do pamiêci - cieñ
-DLPTRS  = $0230 ;- - adres programu ANTIC-a - cieñ
-CHBAS   = $02F4 ;- - rejestr-cieñ CHBASE
-KBCODES = $02FC ;- - rejestr-cieñ KBCODE
+DMACTLS = $022F ;- - rejestr kontroli dostï¿½pu do pamiï¿½ci - cieï¿½
+DLPTRS  = $0230 ;- - adres programu ANTIC-a - cieï¿½
+CHBAS   = $02F4 ;- - rejestr-cieï¿½ CHBASE
+KBCODES = $02FC ;- - rejestr-cieï¿½ KBCODE
 
 SETVBV  =   $E45C
 XITVBV  =   $E462
 SYSVBV  =   $E45F
 RTCLOK  =   $0012
 
-MEMTOP  =   $02E5 ;- - adres górnej granicy wolnej pamiêci RAM
-MEMLO   =   $02E7 ;- - adres dolnej granicy wolnej pamiêci RAM
+MEMTOP  =   $02E5 ;- - adres gï¿½rnej granicy wolnej pamiï¿½ci RAM
+MEMLO   =   $02E7 ;- - adres dolnej granicy wolnej pamiï¿½ci RAM
 
-JSTICK0 = $0278 ;-  - po³o¿enie joysticka 0
-JSTICK1 = $0279 ;- JSTICK1 - po³o¿enie joysticka 1
-JSTICK2 = $027A ;- JSTICK2 - po³o¿enie joysticka 0
-JSTICK3 = $027B ;- JSTICK3 - po³o¿enie joysticka 1
+JSTICK0 = $0278 ;-  - poï¿½oï¿½enie joysticka 0
+JSTICK1 = $0279 ;- JSTICK1 - poï¿½oï¿½enie joysticka 1
+JSTICK2 = $027A ;- JSTICK2 - poï¿½oï¿½enie joysticka 0
+JSTICK3 = $027B ;- JSTICK3 - poï¿½oï¿½enie joysticka 1
 PTRIG0  = $027C ;- PTRIG0 - przycisk potencjometru 0
 PTRIG1  = $027D ;- PTRIG1 - przycisk potencjometru 1
-TRIG0S  = $0284 ;- TRIG0S - przycisk joysticka 0, rejestr-cieñ TRIG0
-TRIG1S  = $0285 ;- TRIG1S - przycisk joysticka 1, rejestr-cieñ TRIG1
-TRIG2S  = $0286 ;- TRIG2S - rejestr-cieñ TRIG0
-TRIG3S  = $0287 ;- TRIG3S - rejestr-cieñ TRIG1
+TRIG0S  = $0284 ;- TRIG0S - przycisk joysticka 0, rejestr-cieï¿½ TRIG0
+TRIG1S  = $0285 ;- TRIG1S - przycisk joysticka 1, rejestr-cieï¿½ TRIG1
+TRIG2S  = $0286 ;- TRIG2S - rejestr-cieï¿½ TRIG0
+TRIG3S  = $0287 ;- TRIG3S - rejestr-cieï¿½ TRIG1
 
 
 /*
-Rejestry OS w pamiêci RAM
+Rejestry OS w pamiï¿½ci RAM
 
-  $08 - WARMST - znacznik gor¹cego startu
-  $0E - APPMHI - najwy¿szy adres RAM zajêty przez program
-  $10 - IRQENS - rejestr-cieñ IRQEN
-  $11 - IRQSTAT - rejestr-cieñ IRQST
+  $08 - WARMST - znacznik gorï¿½cego startu
+  $0E - APPMHI - najwyï¿½szy adres RAM zajï¿½ty przez program
+  $10 - IRQENS - rejestr-cieï¿½ IRQEN
+  $11 - IRQSTAT - rejestr-cieï¿½ IRQST
   $12 - RTCLOK - zegar czasu rzeczywistego
   $15 - BUFADR - adres bufora dla operacji dyskowych
-  $17 - ICCOMT - rejestr przejœciowy kodu operacji I/O
+  $17 - ICCOMT - rejestr przejï¿½ciowy kodu operacji I/O
   $20 - ZIOCB - zerostronicowy blok kontroli I/O
-  $20 - ICHIDZ - indeks wpisu urz¹dzenia w HATABS
-  $21 - ICDNOZ - numer urz¹dzenia
-  $22 - ICCOMZ - kod operacji wejœcia/wyjœcia
-  $23 - ICSTZ - status operacji wejœcia/wyjœcia
+  $20 - ICHIDZ - indeks wpisu urzï¿½dzenia w HATABS
+  $21 - ICDNOZ - numer urzï¿½dzenia
+  $22 - ICCOMZ - kod operacji wejï¿½cia/wyjï¿½cia
+  $23 - ICSTZ - status operacji wejï¿½cia/wyjï¿½cia
   $24 - ICBAZ - adres bufora danych dla operacji I/O
-  $26 - ICPTZ - adres procedury obs³ugi dla operacji
-  $28 - ICBLZ - d³ugoœæ bufora danych dla operacji I/O
+  $26 - ICPTZ - adres procedury obsï¿½ugi dla operacji
+  $28 - ICBLZ - dï¿½ugoï¿½ï¿½ bufora danych dla operacji I/O
   $2A - ICAX1Z - rejestr pomocniczy ZIOCB
   $2B - ICAX2Z - rejestr pomocniczy ZIOCB
   $2C - ICAX3Z - rejestr pomocniczy ZIOCB
@@ -181,54 +211,54 @@ Rejestry OS w pamiêci RAM
   $30 - STATUS - status aktualnej operacji SIO
   $31 - CHKSUM - suma kontrolna dla operacji SIO
   $32 - BUFR - adres bufora danych dla SIO
-  $34 - BUFEN - adres koñca bufora danych dla SIO
+  $34 - BUFEN - adres koï¿½ca bufora danych dla SIO
   $36 - LTEMP - pomocniczy wektor odczytu listy liniowej
-  $38 - BUFRFL - znacznik zape³nienia bufora SIO
-  $39 - RECVND - znacznik koñca odczytu
-  $3A - XMTDON - znacznik koñca transmisji
+  $38 - BUFRFL - znacznik zapeï¿½nienia bufora SIO
+  $39 - RECVND - znacznik koï¿½ca odczytu
+  $3A - XMTDON - znacznik koï¿½ca transmisji
   $3B - CHKSNT - znacznik nadania sumy kontrolnej
   $3C - NOCKSM - znacznik braku sumy kontrolnej
   $3D - BPTR - licznik bufora magnetofonu
-  $3E - GAPTYP - znacznik d³ugoœci przerwy miêdzy blokami
-  $3F - FEOF - znacznik koñca zbioru
-  $40 - FREQ - licznik dŸwiêku przy otwarciu magnetofonu
-  $41 - IOSNDEN - znacznik dŸwiêku przy transmisji
+  $3E - GAPTYP - znacznik dï¿½ugoï¿½ci przerwy miï¿½dzy blokami
+  $3F - FEOF - znacznik koï¿½ca zbioru
+  $40 - FREQ - licznik dï¿½wiï¿½ku przy otwarciu magnetofonu
+  $41 - IOSNDEN - znacznik dï¿½wiï¿½ku przy transmisji
   $42 - CRITIC - znacznik krytycznych czasowo operacji I/O
-  $4A - ZCHAIN - rejestr nastêpstwa listy liniowej
+  $4A - ZCHAIN - rejestr nastï¿½pstwa listy liniowej
   $4C - DSTAT - status klawiatury i ekranu
-  $50 - TEMP - pomocniczy rejestr przejœciowy
-  $51 - HOLD1 - pomocniczy rejestr przejœciowy
+  $50 - TEMP - pomocniczy rejestr przejï¿½ciowy
+  $51 - HOLD1 - pomocniczy rejestr przejï¿½ciowy
   $52 - LMARGIN - lewy margines obrazu
   $53 - RMARGIN - prawy margines obrazu
   $54 - ROWCRS - pionowa pozycja kursora
   $55 - COLCRS - pozioma pozycja kursora
   $57 - DINDEX - numer trybu graficznego OS
-  $58 - SAVMSC - adres pamiêci obrazu
+  $58 - SAVMSC - adres pamiï¿½ci obrazu
   $5A - OLDROW - poprzednia pionowa pozycja kursora
   $5B - OLDCOL - poprzednia pozioma pozycja kursora
   $5D - OLDCHR - poprzedni znak na ekranie
   $5E - OLDADR - poprzedni adres znaku na ekranie
   $60 - FKDEFP - wektor tabeli definicji klawiszy F1-F4
-  $62 - PALNTS - wskaŸnik systemu TV
+  $62 - PALNTS - wskaï¿½nik systemu TV
   $63 - LOGCOL - adres kursora w wierszu logicznym
   $64 - ADRESS - rejestr adresowy dla procedur edytora
-  $66 - MLTTMP - pomocniczy rejestr przejœciowy
+  $66 - MLTTMP - pomocniczy rejestr przejï¿½ciowy
   $68 - SAVADR - pomocniczy rejestr adresowy
-  $6A - RAMTOP - liczba stron pamiêci RAM
+  $6A - RAMTOP - liczba stron pamiï¿½ci RAM
   $6B - BUFCNT - licznik bufora edytora
   $6C - BUFSTR - adres bufora dla edytora
-  $6E - BITMSK - maska bitowa do wyœwietlenia znaku
-  $6F - SHFAMT - liczba przesuniêæ punktu
+  $6E - BITMSK - maska bitowa do wyï¿½wietlenia znaku
+  $6F - SHFAMT - liczba przesuniï¿½ï¿½ punktu
   $70 - ROWAC - aktualny wiersz przy rysowaniu
   $72 - COLAC - aktualna kolumna przy rysowaniu
-  $74 - ENDPT - znacznik koñca rysowanej linii
+  $74 - ENDPT - znacznik koï¿½ca rysowanej linii
   $76 - DELTAR - przyrost pionowej pozycji kursora
   $77 - DELTAC - przyrost poziomej pozycji kursora
   $79 - KEYDEFP - wektor tabeli definicji klawiszy
   $7B - SWPFLG - znacznik kursora w trybach z oknem
-  $7C - HOLDCH - przechowywanie wartoœci znaku
+  $7C - HOLDCH - przechowywanie wartoï¿½ci znaku
   $7D - INSDAT - rejestr pomocniczy edytora
-  $7E - COUNTR - licznik pamiêci obrazu dla DOSCR i DRAW
+  $7E - COUNTR - licznik pamiï¿½ci obrazu dla DOSCR i DRAW
 $0100 - STACK - stos mikroprocesora 6502
 $0200 - DLIV - wektor przerwania programu ANTIC-a
 $0210 - VTIMR1 - wektor przerwania licznika 1 POKEY-a
@@ -237,124 +267,124 @@ $0214 - VTIMR4 - wektor przerwania licznika 4 POKEY-a
 $0218 - TIMCNT1 - pierwszy licznik systemu
 $0226 - TIMVEC1 - wektor przerwania licznika TIMCNT1
 $022A - TIMFLG3 - znacznik wyzerowania licznika TIMCNT3
-$022F - DMACTLS - rejestr-cieñ DMACTL
-$0230 - DLPTRS - rejestr-cieñ DLPTR
-$0232 - SKCTLS - rejestr-cieñ SKCTL
-$0233 - LCOUNT - licznik odczytu dla nowego urz¹dzenia
-$0234 - LPENHS - rejestr-cieñ LPENH
-$0235 - LPENVS - rejestr-cieñ LPENV
-$023A - CDEVIC - kod urz¹dzenia dla SIO
+$022F - DMACTLS - rejestr-cieï¿½ DMACTL
+$0230 - DLPTRS - rejestr-cieï¿½ DLPTR
+$0232 - SKCTLS - rejestr-cieï¿½ SKCTL
+$0233 - LCOUNT - licznik odczytu dla nowego urzï¿½dzenia
+$0234 - LPENHS - rejestr-cieï¿½ LPENH
+$0235 - LPENVS - rejestr-cieï¿½ LPENV
+$023A - CDEVIC - kod urzï¿½dzenia dla SIO
 $023B - CCMND - kod operacji dla SIO
 $023C - CAUX1 - pierwszy bajt pomocniczy dla SIO
 $023D - CAUX2 - drugi bajt pomocniczy dla SIO
-$023E - TEMP - tymczasowy rejestr odpowiedzi urz¹dzenia
-$023F - ERRFLG - znacznik b³êdu operacji SIO
+$023E - TEMP - tymczasowy rejestr odpowiedzi urzï¿½dzenia
+$023F - ERRFLG - znacznik bï¿½ï¿½du operacji SIO
 $0244 - COLDST - znacznik zimnego startu systemu
-$0245 - RECLEN - d³ugoœæ rekordu z nowego urz¹dzenia
-$0246 - DSKTIM - wartoœæ Timeout dla stacji dysków
-$0247 - PDVMSK - maska obecnoœci nowych urz¹dzeñ
-$0248 - PDVRS - rejestr-cieñ PDVREG
+$0245 - RECLEN - dï¿½ugoï¿½ï¿½ rekordu z nowego urzï¿½dzenia
+$0246 - DSKTIM - wartoï¿½ï¿½ Timeout dla stacji dyskï¿½w
+$0247 - PDVMSK - maska obecnoï¿½ci nowych urzï¿½dzeï¿½
+$0248 - PDVRS - rejestr-cieï¿½ PDVREG
 $024A - RELADR - adres procedury przemieszczalnej
-$024C - PPTMPA - rejestr przechowania zawartoœci akumulatora
-$024D - PPTMPX - rejestr przechowania zawartoœci rejestru X
-$026B - CHSPTR - wektor nieu¿ywanego zestawu znaków
+$024C - PPTMPA - rejestr przechowania zawartoï¿½ci akumulatora
+$024D - PPTMPX - rejestr przechowania zawartoï¿½ci rejestru X
+$026B - CHSPTR - wektor nieuï¿½ywanego zestawu znakï¿½w
 $026C - VSFLAG - znacznik przesuwu pionowego obrazu
 $026E - FINE - znacznik delikatnego przesuwu obrazu
-$026F - GTICTLS - rejestr-cieñ GTIACTL
-$0270 - PADDL0 - rejestr-cieñ POT0
-$0278 - JSTICK0 - po³o¿enie joysticka 0
-$0279 - JSTICK1 - po³o¿enie joysticka 1
-$027A - JSTICK2 - po³o¿enie joysticka 0
-$027B - JSTICK3 - po³o¿enie joysticka 1
+$026F - GTICTLS - rejestr-cieï¿½ GTIACTL
+$0270 - PADDL0 - rejestr-cieï¿½ POT0
+$0278 - JSTICK0 - poï¿½oï¿½enie joysticka 0
+$0279 - JSTICK1 - poï¿½oï¿½enie joysticka 1
+$027A - JSTICK2 - poï¿½oï¿½enie joysticka 0
+$027B - JSTICK3 - poï¿½oï¿½enie joysticka 1
 $027C - PTRIG0 - przycisk potencjometru 0
 $027D - PTRIG1 - przycisk potencjometru 1
-$0284 - TRIG0S - przycisk joysticka 0, rejestr-cieñ TRIG0
-$0285 - TRIG1S - przycisk joysticka 1, rejestr-cieñ TRIG1
-$0286 - TRIG2S - rejestr-cieñ TRIG0
-$0287 - TRIG3S - rejestr-cieñ TRIG1
-$0288 - HIBYTE - indeks operacji nowego urz¹dzenia
-$0289 - WMODE - znacznik sposobu dostêpu do magnetofonu
-$028A - BLIM - d³ugoœæ bufora magnetofonu
-$028E - NEWADR - adres procedury nowego urz¹dzenia
+$0284 - TRIG0S - przycisk joysticka 0, rejestr-cieï¿½ TRIG0
+$0285 - TRIG1S - przycisk joysticka 1, rejestr-cieï¿½ TRIG1
+$0286 - TRIG2S - rejestr-cieï¿½ TRIG0
+$0287 - TRIG3S - rejestr-cieï¿½ TRIG1
+$0288 - HIBYTE - indeks operacji nowego urzï¿½dzenia
+$0289 - WMODE - znacznik sposobu dostï¿½pu do magnetofonu
+$028A - BLIM - dï¿½ugoï¿½ï¿½ bufora magnetofonu
+$028E - NEWADR - adres procedury nowego urzï¿½dzenia
 $0290 - TXTROW - wiersz kursora w oknie tekstowym
 $0291 - TXTCOL - kolumna kursora w oknie tekstowym
 $0293 - TINDEX - tryb graficzny OS w oknie tekstowym
-$0294 - TXTMSC - adres pamiêci okna tekstowego
-$029C - CRETRY - liczba powtórzeñ rozkazu operacji
-$029D - HOLD3 - pomocniczy rejestr przejœciowy
-$029E - SUBTMP - pomocniczy rejestr przejœciowy
-$02A0 - DMASK - maska punktów obrazu
+$0294 - TXTMSC - adres pamiï¿½ci okna tekstowego
+$029C - CRETRY - liczba powtï¿½rzeï¿½ rozkazu operacji
+$029D - HOLD3 - pomocniczy rejestr przejï¿½ciowy
+$029E - SUBTMP - pomocniczy rejestr przejï¿½ciowy
+$02A0 - DMASK - maska punktï¿½w obrazu
 $02A2 - ESCFLG - znacznik klawisza ESC
 $02A3 - TABMAP - mapa pozycji tabulacji
 $02B2 - LOGMAP - mapa linii logicznych
 $02B6 - INVFLG - znacznik klawisza inverse video
-$02B7 - FILFLG - znacznik wype³niania obrazu
+$02B7 - FILFLG - znacznik wypeï¿½niania obrazu
 $02B8 - TMPROW - tymczasowy rejestr pozycji kursora
 $02B9 - TMPCOL - tymczasowy rejestr pozycji kursora
 $02BB - SCRFLG - znacznik przesuwu obrazu
-$02BC - HOLD4 - pomocniczy rejestr przejœciowy
-$02BD - DRETRY - liczba powtórzeñ wywo³añ urz¹dzenia
+$02BC - HOLD4 - pomocniczy rejestr przejï¿½ciowy
+$02BD - DRETRY - liczba powtï¿½rzeï¿½ wywoï¿½aï¿½ urzï¿½dzenia
 $02BE - SHFLOK - znacznik klawiszy SHIFT i CONTROL
 $02BF - BOTSCR - liczba wierszy tekstu
-$02C0 - COLPM0S - rejestr-cieñ COLPM0
-$02C1 - COLPM1S - rejestr-cieñ COLPM1
-$02C2 - COLPM2S - rejestr-cieñ COLPM2
-$02C3 - COLPM3S - rejestr-cieñ COLPM3
-$02C4 - COLPF0S - rejestr-cieñ COLPF0
-$02C5 - COLPF1S - rejestr-cieñ COLPF1 ;gr.8 letters
-$02C6 - COLPF2S - rejestr-cieñ COLPF2 ;gr.8 background
-$02C7 - COLPF3S - rejestr-cieñ COLPF3
-$02C8 - COLBAKS - rejestr-cieñ COLBAK
-$02C9 - RUNADR - adres procedury nowego urz¹dzenia
-$02CB - HIUSED - adres koñcowy procedury nowego urz¹dzenia
-$02CF - GBYTEA - adres procedury nowego urz¹dzenia
-$02D1 - LOADAD - adres wczytywania z nowego urz¹dzenia
+$02C0 - COLPM0S - rejestr-cieï¿½ COLPM0
+$02C1 - COLPM1S - rejestr-cieï¿½ COLPM1
+$02C2 - COLPM2S - rejestr-cieï¿½ COLPM2
+$02C3 - COLPM3S - rejestr-cieï¿½ COLPM3
+$02C4 - COLPF0S - rejestr-cieï¿½ COLPF0
+$02C5 - COLPF1S - rejestr-cieï¿½ COLPF1 ;gr.8 letters
+$02C6 - COLPF2S - rejestr-cieï¿½ COLPF2 ;gr.8 background
+$02C7 - COLPF3S - rejestr-cieï¿½ COLPF3
+$02C8 - COLBAKS - rejestr-cieï¿½ COLBAK
+$02C9 - RUNADR - adres procedury nowego urzï¿½dzenia
+$02CB - HIUSED - adres koï¿½cowy procedury nowego urzï¿½dzenia
+$02CF - GBYTEA - adres procedury nowego urzï¿½dzenia
+$02D1 - LOADAD - adres wczytywania z nowego urzï¿½dzenia
 $02D3 - ZLOADA - pomocniczy rejestr adresu wczytywania
-$02D5 - DSCTLN - d³ugoœæ sektora dyskowego
-$02DB - NOCLIK - znacznik dŸwiêku klawiatury
+$02D5 - DSCTLN - dï¿½ugoï¿½ï¿½ sektora dyskowego
+$02DB - NOCLIK - znacznik dï¿½wiï¿½ku klawiatury
 $02DE - PBPNT - licznik bufora drukarki
-$02DF - PBUFSZ - d³ugoœæ bufora drukarki
-$02E5 - MEMTOP - adres górnej granicy wolnej pamiêci RAM
-$02E7 - MEMLO - adres dolnej granicy wolnej pamiêci RAM
-$02E9 - HNDLOD - znacznik relokowalnej procedury obs³ugi I/O
-$02EA - DVSTAT - dodatkowy rejestr statusu urz¹dzenia
-$02EC - DVTMOT - dodatkowy rejestr Timeout urz¹dzenia
-$02ED - REVNUM - numer wersji nowego urz¹dzenia
-$02EE - CBAUD - prêdkoœæ transmisji z magnetofonu
-$02F0 - CRSINH - znacznik widocznoœci kursora
-$02F3 - CHACT - rejestr-cieñ CHRCTL
-$02F4 - CHBAS - rejestr-cieñ CHBASE
+$02DF - PBUFSZ - dï¿½ugoï¿½ï¿½ bufora drukarki
+$02E5 - MEMTOP - adres gï¿½rnej granicy wolnej pamiï¿½ci RAM
+$02E7 - MEMLO - adres dolnej granicy wolnej pamiï¿½ci RAM
+$02E9 - HNDLOD - znacznik relokowalnej procedury obsï¿½ugi I/O
+$02EA - DVSTAT - dodatkowy rejestr statusu urzï¿½dzenia
+$02EC - DVTMOT - dodatkowy rejestr Timeout urzï¿½dzenia
+$02ED - REVNUM - numer wersji nowego urzï¿½dzenia
+$02EE - CBAUD - prï¿½dkoï¿½ï¿½ transmisji z magnetofonu
+$02F0 - CRSINH - znacznik widocznoï¿½ci kursora
+$02F3 - CHACT - rejestr-cieï¿½ CHRCTL
+$02F4 - CHBAS - rejestr-cieï¿½ CHBASE
 $02F5 - NEWROW - nowa pozycja pionowa kursora
 $02F6 - NEWCOL - nowa pozycja pozioma kursora
 $02F8 - ROWINC - zmiana pionowej pozycji kursora
 $02F9 - COLINC - zmiana poziomej pozycji kursora
-$02FA - CHAR - kod wewnêtrzny znaku
+$02FA - CHAR - kod wewnï¿½trzny znaku
 $02FB - ATACHR - kod ATASCII znaku
-$02FC - KBCODES - rejestr-cieñ KBCODE
-$02FD - FILDAT - numer koloru dla wype³niania
-$02FE - DSPFLG - znacznik wyœwietlania znaków kontrolnych
+$02FC - KBCODES - rejestr-cieï¿½ KBCODE
+$02FD - FILDAT - numer koloru dla wypeï¿½niania
+$02FE - DSPFLG - znacznik wyï¿½wietlania znakï¿½w kontrolnych
 $02FF - SSFLAG - znacznik start/stop dla przesuwu obrazu
-$0300 - DDEVIC - kod identyfikacyjny urz¹dzenia
-$0301 - DUNIT - numer identyfikacyjny urz¹dzenia
-$0302 - DCMND - bajt rozkazu dla urz¹dzenia
-$0303 - DSTATS - status urz¹dzenia
+$0300 - DDEVIC - kod identyfikacyjny urzï¿½dzenia
+$0301 - DUNIT - numer identyfikacyjny urzï¿½dzenia
+$0302 - DCMND - bajt rozkazu dla urzï¿½dzenia
+$0303 - DSTATS - status urzï¿½dzenia
 $0304 - DBUFA - adres bufora danych
-$0306 - DTIMLO - wartoœæ Timeout dla urz¹dzenia
-$0308 - DBYT - d³ugoœæ bufora danych
+$0306 - DTIMLO - wartoï¿½ï¿½ Timeout dla urzï¿½dzenia
+$0308 - DBYT - dï¿½ugoï¿½ï¿½ bufora danych
 $030A - DAUX1 - rejestr pomocniczy dla operacji I/O
 $030B - DAUX2 - rejestr pomocniczy dla operacji I/O
 $030C - INTIM1 - rejestr czasu przy odczycie z magnetofonu
 $030F - CASFLG - znacznik operacji z magnetofonem
 $0310 - INTIM2 - rejestr czasu przy odczycie z magnetofonu
-$0312 - TEMP1 - pomocniczy rejestr przejœciowy
-$0313 - TEMP2 - pomocniczy rejestr przejœciowy
-$0314 - PTIMOT - wartoœæ Timeout dla drukarki
-$0315 - TEMP3 - pomocniczy rejestr przejœciowy
-$0316 - SAVIO - rejestr przejœciowy dla operacji SIO
-$0317 - TIMFLG - znacznik up³yniêcia czasu Timeout
-$0318 - STACKP - rejestr wskaŸnika stosu dla SIO
-$0319 - TSTAT - przejœciowy rejestr statusu SIO
-$031A - HATABS - tabela wektorów procedur obs³ugi
+$0312 - TEMP1 - pomocniczy rejestr przejï¿½ciowy
+$0313 - TEMP2 - pomocniczy rejestr przejï¿½ciowy
+$0314 - PTIMOT - wartoï¿½ï¿½ Timeout dla drukarki
+$0315 - TEMP3 - pomocniczy rejestr przejï¿½ciowy
+$0316 - SAVIO - rejestr przejï¿½ciowy dla operacji SIO
+$0317 - TIMFLG - znacznik upï¿½yniï¿½cia czasu Timeout
+$0318 - STACKP - rejestr wskaï¿½nika stosu dla SIO
+$0319 - TSTAT - przejï¿½ciowy rejestr statusu SIO
+$031A - HATABS - tabela wektorï¿½w procedur obsï¿½ugi
 $0340 - IOCB0 - blok kontroli I/O numer 0
 $0350 - IOCB1 - blok kontroli I/O numer 1
 $0360 - IOCB2 - blok kontroli I/O numer 2
@@ -363,13 +393,13 @@ $0380 - IOCB4 - blok kontroli I/O numer 4
 $0390 - IOCB5 - blok kontroli I/O numer 5
 $03A0 - IOCB6 - blok kontroli I/O numer 6
 $03B0 - IOCB7 - blok kontroli I/O numer 7
-$0340 - ICCHID - indeks wpisu urz¹dzenia w HATABS
-$0341 - ICDNO - numer urz¹dzenia
+$0340 - ICCHID - indeks wpisu urzï¿½dzenia w HATABS
+$0341 - ICDNO - numer urzï¿½dzenia
 $0342 - ICCMD - kod rozkazu operacji I/O
 $0343 - ICSTAT - status operacji I/O
 $0344 - ICBUFA - adres bufora danych dla operacji I/O
-$0346 - ICPUTB - adres procedury przesy³ania danych
-$0348 - ICBUFL - d³ugoœæ bufora danych dla operacji I/O
+$0346 - ICPUTB - adres procedury przesyï¿½ania danych
+$0348 - ICBUFL - dï¿½ugoï¿½ï¿½ bufora danych dla operacji I/O
 $034A - ICAX1 - rejestr pomocniczy dla operacji I/O
 $034B - ICAX2 - rejestr pomocniczy dla operacji I/O
 $034C - ICAX3 - rejestr pomocniczy dla operacji I/O
@@ -379,10 +409,10 @@ $034F - ICAX6 - rejestr pomocniczy dla operacji I/O
 $03C0 - PRNBUF - bufor drukarki
 $03E8 - SUPERF - znacznik stosowany przy odczycie klawiatury
 $03E9 - CKEY - znacznik klawisza START przy zimnym starcie
-$03EC - DERRF - znacznik b³êdu przy otwieraniu edytora
-$03FB - CHLINK  - rejestr elementów listy liniowej
-$03FD - CSCB - bajty kontroli szybkoœci magnetofonu
-$03FF - CRCB - bajt d³ugoœci rekordu magnetofonowego
+$03EC - DERRF - znacznik bï¿½ï¿½du przy otwieraniu edytora
+$03FB - CHLINK  - rejestr elementï¿½w listy liniowej
+$03FD - CSCB - bajty kontroli szybkoï¿½ci magnetofonu
+$03FF - CRCB - bajt dï¿½ugoï¿½ci rekordu magnetofonowego
 $0400 - CASBUF - bufor magnetofonu
 $047F - CASBEN - koniec bufora magnetofonu
 $D000 - HPOSP0 - pozioma pozycja gracza 0 (Z)
@@ -409,7 +439,7 @@ $D00A - SIZEP2 - poziomy rozmiar gracza 2 (Z)
 $D00A - KOLM2P - kolizja pocisku 2 z graczem (O)
 $D00B - SIZEP3 - poziomy rozmiar gracza 3 (Z)
 $D00B - KOLM3P - kolizja pocisku 3 z graczem (O)
-$D00C - SIZEM - poziomy rozmiar pocisków (Z)
+$D00C - SIZEM - poziomy rozmiar pociskï¿½w (Z)
 $D00C - KOLP0P - kolizja gracza 0 z innym graczem (O)
 $D00D - GRAFP0 - rejestr grafiki gracza 0 (Z)
 $D00D - KOLP1P - kolizja gracza 1 z innym graczem (O)
@@ -419,11 +449,11 @@ $D00F - GRAFP2 - rejestr grafiki gracza 2 (Z)
 $D00F - KOLP3P - kolizja gracza 3 z innym graczem (O)
 $D010 - GRAFP3 - rejestr grafiki gracza 3 (Z)
 $D010 - TRIG0 - stan przycisku joysticka 0 (O)
-$D011 - GRAFM - rejestr grafiki pocisków (Z)
+$D011 - GRAFM - rejestr grafiki pociskï¿½w (Z)
 $D011 - TRIG1 - stan przycisku joysticka 1 (O)
 $D012 - COLPM0 - rejestr koloru gracza i pocisku 0 (Z)
 $D013 - COLPM1 - rejestr koloru gracza i pocisku 1 (Z)
-$D013 - TRIG3 - znacznik do³¹czenia cartridge'a (O)
+$D013 - TRIG3 - znacznik doï¿½ï¿½czenia cartridge'a (O)
 $D014 - COLPM2 - rejestr koloru gracza i pocisku 2 (Z)
 $D014 - PAL - znacznik systemu TV (O)
 $D015 - COLPM3 - rejestr koloru gracza i pocisku 3 (Z)
@@ -431,53 +461,53 @@ $D016 - COLPF0 - rejestr koloru pola gry 0 (Z)
 $D017 - COLPF1 - rejestr koloru pola gry 1 (Z)
 $D018 - COLPF2 - rejestr koloru pola gry 2 (Z)
 $D019 - COLPF3 - rejestr koloru pola gry 3 (Z)
-$D01A - COLBAK - rejestr koloru t³a (Z)
-$D01B - GTIACTL - rejestr kontroli uk³adu GTIA
-$D01C - VDELAY - licznik opóŸnienia pionowego P/MG
-$D01D - PMCNTL - rejestr kontroli graczy i pocisków
-$D01E - HITCLR - rejestr kasowania rejestrów kolizji
+$D01A - COLBAK - rejestr koloru tï¿½a (Z)
+$D01B - GTIACTL - rejestr kontroli ukï¿½adu GTIA
+$D01C - VDELAY - licznik opï¿½nienia pionowego P/MG
+$D01D - PMCNTL - rejestr kontroli graczy i pociskï¿½w
+$D01E - HITCLR - rejestr kasowania rejestrï¿½w kolizji
 $D01F - CONSOL - rejestr stanu klawiszy konsoli
-$D1FF - PDVREG - rejestr wyboru nowego urz¹dzenia
-$D200 - AUDF1 - czêstotliwoœæ pracy generatora 1 (Z)
-$D200 - POT0 - rejestr po³o¿enia potencjometru 0 (O)
-$D201 - AUDC1 - rejestr kontroli dŸwiêku generatora 1 (Z)
-$D201 - POT1 - rejestr po³o¿enia potencjometru 1 (O)
-$D202 - AUDF2 - czêstotliwoœæ pracy generatora 2 (Z)
-$D202 - POT2 - rejestr po³o¿enia potencjometru 2 (O)
-$D203 - AUDC2 - rejestr kontroli dŸwiêku generatora 2 (Z)
-$D203 - POT3 - rejestr po³o¿enia potencjometru 3 (O)
-$D204 - AUDF3 - czêstotliwoœæ pracy generatora 3 (Z)
-$D205 - AUDC3 - rejestr kontroli dŸwiêku generatora 3 (Z)
-$D206 - AUDF4 - czêstotliwoœæ pracy generatora 4 (Z)
-$D207 - AUDC4 - rejestr kontroli dŸwiêku generatora 4 (Z)
-$D208 - AUDCTL - rejestr kontroli generatorów dŸwiêku (Z)
-$D208 - POTST - status odczytu potencjometrów (O)
-$D209 - STIMER - rejestr zerowania liczników (Z)
-$D209 - KBCODE - kod ostatnio naciœniêtego klawisza (O)
-$D20A - SKSTRES - reset statusu z³¹cza szeregowego (Z)
+$D1FF - PDVREG - rejestr wyboru nowego urzï¿½dzenia
+$D200 - AUDF1 - czï¿½stotliwoï¿½ï¿½ pracy generatora 1 (Z)
+$D200 - POT0 - rejestr poï¿½oï¿½enia potencjometru 0 (O)
+$D201 - AUDC1 - rejestr kontroli dï¿½wiï¿½ku generatora 1 (Z)
+$D201 - POT1 - rejestr poï¿½oï¿½enia potencjometru 1 (O)
+$D202 - AUDF2 - czï¿½stotliwoï¿½ï¿½ pracy generatora 2 (Z)
+$D202 - POT2 - rejestr poï¿½oï¿½enia potencjometru 2 (O)
+$D203 - AUDC2 - rejestr kontroli dï¿½wiï¿½ku generatora 2 (Z)
+$D203 - POT3 - rejestr poï¿½oï¿½enia potencjometru 3 (O)
+$D204 - AUDF3 - czï¿½stotliwoï¿½ï¿½ pracy generatora 3 (Z)
+$D205 - AUDC3 - rejestr kontroli dï¿½wiï¿½ku generatora 3 (Z)
+$D206 - AUDF4 - czï¿½stotliwoï¿½ï¿½ pracy generatora 4 (Z)
+$D207 - AUDC4 - rejestr kontroli dï¿½wiï¿½ku generatora 4 (Z)
+$D208 - AUDCTL - rejestr kontroli generatorï¿½w dï¿½wiï¿½ku (Z)
+$D208 - POTST - status odczytu potencjometrï¿½w (O)
+$D209 - STIMER - rejestr zerowania licznikï¿½w (Z)
+$D209 - KBCODE - kod ostatnio naciï¿½niï¿½tego klawisza (O)
+$D20A - SKSTRES - reset statusu zï¿½ï¿½cza szeregowego (Z)
 $D20A - RANDOM - rejestr liczby losowej (O)
 $D20B - POTG0 - znacznik przetwornika analogowo-cyfrowego (Z)
-$D20D - SEROUT - szeregowy rejestr wyjœciowy (Z)
-$D20D - SERIN - szeregowy rejestr wejœciowy (O)
-$D20E - IRQEN - zezwolenia przerwañ IRQ (Z)
-$D20E - IRQST - status przerwañ IRQ (O)
-$D20F - SKCTL - rejestr kontroli z³¹cza szeregowego (Z)
-$D20F - SKSTAT - rejestr statusu z³¹cza szeregowego (O)
-$D300 - PORTA - port A uk³adu PIA
-$D301 - PORTB - port B uk³adu PIA
+$D20D - SEROUT - szeregowy rejestr wyjï¿½ciowy (Z)
+$D20D - SERIN - szeregowy rejestr wejï¿½ciowy (O)
+$D20E - IRQEN - zezwolenia przerwaï¿½ IRQ (Z)
+$D20E - IRQST - status przerwaï¿½ IRQ (O)
+$D20F - SKCTL - rejestr kontroli zï¿½ï¿½cza szeregowego (Z)
+$D20F - SKSTAT - rejestr statusu zï¿½ï¿½cza szeregowego (O)
+$D300 - PORTA - port A ukï¿½adu PIA
+$D301 - PORTB - port B ukï¿½adu PIA
 $D302 - PACTL - rejestr kontroli portu A
 $D303 - PBCTL - rejestr kontroli portu B
-$D400 - DMACTL - rejestr kontroli dostêpu do pamiêci
-$D401 - CHRCTL - rejestr kontroli wyœwietlania znaków
+$D400 - DMACTL - rejestr kontroli dostï¿½pu do pamiï¿½ci
+$D401 - CHRCTL - rejestr kontroli wyï¿½wietlania znakï¿½w
 $D402 - DLPTR - adres programu ANTIC-a
 $D404 - HSCROL - znacznik poziomego przesuwu obrazu
 $D405 - VSCROL - znacznik pionowego przesuwu obrazu
-$D407 - PMBASE - adres pamiêci graczy i pocisków
-$D409 - CHBASE - adres zestawu znaków
-$D40A - WSYNC - znacznik oczekiwania na synchronizacjê poziom¹
+$D407 - PMBASE - adres pamiï¿½ci graczy i pociskï¿½w
+$D409 - CHBASE - adres zestawu znakï¿½w
+$D40A - WSYNC - znacznik oczekiwania na synchronizacjï¿½ poziomï¿½
 $D40B - VCOUNT - licznik linii obrazu
-$D40C - LPENH - poziome po³o¿enie pióra œwietlengo
-$D40D - LPENV - pionowe po³o¿enie pióra œwietlnego
-$D40E - NMIEN - rejestr zezwoleñ na przerwania NMI
-$D40F - NMIST - rejestr statusu przerwañ NMI
+$D40C - LPENH - poziome poï¿½oï¿½enie piï¿½ra ï¿½wietlengo
+$D40D - LPENV - pionowe poï¿½oï¿½enie piï¿½ra ï¿½wietlnego
+$D40E - NMIEN - rejestr zezwoleï¿½ na przerwania NMI
+$D40F - NMIST - rejestr statusu przerwaï¿½ NMI
 */

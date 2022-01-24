@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=program.asm
+;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 
@@ -239,7 +239,7 @@ DrawLen
     
 DrawCheck .proc
 ;    lda SmokeTracerFlag
-;	bne yestrace	; jakie to g³upie....
+;	bne yestrace	; jakie to gï¿½upie....
 	lda tracerflag
 	ora SmokeTracerFlag
 yestrace

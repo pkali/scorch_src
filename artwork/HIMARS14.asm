@@ -1,3 +1,4 @@
+;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 /***************************************/
 /*  Use MADS http://mads.atari8.info/  */
 /*  Mode: DLI (char mode)              */
