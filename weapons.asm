@@ -34,6 +34,12 @@ leapfrog
     jsr xmissile
 
     ; soil must fall down now! there is no other way...
+    
+    ;first clean the offensive text...
+    ldy TankNr
+    mva #0 plot4x4color
+    jsr DisplayOffensiveTextNr
+    
     ; hide tanks or they fall down with soil
 
     lda TankNr
@@ -98,7 +104,6 @@ mirv ;  the whole mirv is performed by Flight routine
     rts
 ; ------------------------
 funkybomb ;
-    mva #1 tracerflag
     mwa xtraj+1 xtrajfb
     mwa ytraj+1 ytrajfb
     inc FallDown2
@@ -107,12 +112,16 @@ funkybomb ;
     jsr CalculateExplosionRange0
     jsr xmissile
 
+    ldy TankNr
+    mva #0 plot4x4color
+    jsr DisplayOffensiveTextNr 
+    
     lda TankNr
     pha
     mva #1 Erase
     jsr drawtanks
     mva #0 Erase
-
+    
     jsr SoilDown2
     ;
     mva #1 Erase
@@ -123,11 +132,11 @@ funkybomb ;
 
     mva #5 FunkyBombCounter
 FunkyBombLoop
+    mva #1 tracerflag
     ;force randomization (range: 256-511)
     lda random
     sta Force
-    lda #1
-    sta Force+1
+    mva #1 Force+1
     ;Angle randomization Range: (-16..+16)
     lda random
     lsr
@@ -1617,8 +1626,8 @@ EndOfFlight2
 .endp
 
 SecondFlight .proc
-; ----------------  przekopiowany fragment sprzed odpalenie strza�u malo kulturalne.....
-; ---------------- ponownie wyznacza parametry strza�u
+; ---------------- copied code fragment from before firing. not too elegant.
+; ---------------- get fire parameters again
     ldx TankNr
     lda EnergyTableL,x
     sta Force
@@ -1660,8 +1669,8 @@ SecondFlight .proc
     sta ytraj+2
 	
     ldy #100
-	lda #1			; nie wiem (to znaczy wydaje mi sie ze wiem ;) )
-	sta tracerflag	; .....
+	lda #1			; I do not know (I mean I think I know ;) )
+	sta tracerflag	; 10 years later - I do not know!!!
 	jmp Flight.RepeatIfSmokeTracer
 .endp
 
@@ -1771,7 +1780,7 @@ mrLoopix
     sbc vy+3
     sta ytraj+2
 
-    ;vy=vy-g (also without least significan byte of vy)
+    ;vy=vy-g (also without least significant byte of vy)
     sec
     lda vy+1
     sbc gravity
@@ -1783,9 +1792,8 @@ mrLoopix
     sbc #0
     sta vy+3
 
-    ; 3 waits for 5 bullets (will be faster)
+    ; 2 waits for 5 bullets
     wait
-    ;wait
     wait
 
 MIRVdoNotChangeY
@@ -1993,6 +2001,11 @@ MIRValreadyAll
     mva ycircle ydraw
 
     ; we must do it manually because of the VOID pointer
+
+    ;first clean the offensive text...
+    ldy TankNr
+    mva #0 plot4x4color
+    jsr DisplayOffensiveTextNr
 
     ; temporary removing tanks from the screen (otherwise they will fall down with soil)
     mva TankNr tempor2

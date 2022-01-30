@@ -1175,7 +1175,7 @@ DisplayOffensiveTextNr ;
 
     ;now we have HALF length in pixels
     ;stored in temp2
-    sbw temp  temp2 ; here begin of the text is in TEMP !!!!
+    sbw temp temp2 ; here begin of the text is in TEMP !!!!
     ;now we should check overflows
     lda temp+1
     bpl DOTNnotLessThanZero

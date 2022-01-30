@@ -14,7 +14,7 @@ Known bugs (+ means bug is fixed)
      (and uses one parachute more than necessary)
 005. tank stands still on a one pixel spike - it should fall
      (possibly all that is necessary is adjust of WhereToSlideTable)
-006. After some attacks (like MIRV and leapfrog    the OffensiveText 
++006. After some attacks (like MIRV and leapfrog the OffensiveText 
      stays on the screen (and becomes a static decoration)
      It possibly happens when a tank kills itself with mirv or leapfrog.
 007. Decreasing of number of bullets after a shoot does not work correctly
@@ -29,9 +29,9 @@ Known bugs (+ means bug is fixed)
 +012. (newly introduced) Death explosions are offset right and possibly up.
 +013. sometimes demo mode does not work (it stops on results display)
 +014: FunkyBomb shoots with too high angle
-015: Only first shoot of FunkyBomb is correct (with smoke and fast), 
++015: Only first shoot of FunkyBomb is correct (with smoke and fast), 
      the next are like missiles
-016: Additional explosions after Frogger are not fallen down
++016: Additional explosions after Frogger do not have falling soil (?)
 017: Observed MIRV loops - it shoots and shoots MIRV all over the screen. Very rare.
 -018: MINOR: ydraw, yhit, ybyte variable is sometimes treated as WORD, sometimes as BYTE. 
      Making it consistent would save both time and space (not much)
@@ -50,7 +50,7 @@ To do
 	 Another - stickman tankmen
 005. Add number of rounds to the options menu
 006. Add sound effects (maybe sampled? or mp0 (sound based on fft))
-007. There is no deffensive weapon handling (only parachute works,
+007. There is no defensive weapon handling (only parachute works,
      but also provisionally
 +008. No computer operated opponents - make a frame for AI!!!
 009. Make AI in the existing frame

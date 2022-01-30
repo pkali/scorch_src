@@ -36,12 +36,20 @@ we decided it must go in 'English' to let other people work on it
 
 ## Changes:
 
-Build 125
+
+###### Build 126
+2022-01-30
+- fixed bug 006 (After some attacks the OffensiveText stays on the screen)
+- fixed bug 015 (Only first shoot of FunkyBomb is correct
+- fixed bug 016 (No falling soil after leapfrog)
+
+
+##### Build 125
 2022-01-23
 - included splash screen by KAZ
 
 
-Build 124
+##### Build 124
 2013-12-21
 - removed large chunk of redundant 4x4 print code and table generation code,
   over 1kb gained.
@@ -51,7 +59,7 @@ Build 124
 - screen memory moved to low area ($1010), making the game start at $3010 and easier
   to be loaded. Other minor memory layout modifications.
 
-Build 123
+##### Build 123
 2013-12-10
 - fixed bug 013: sometimes demo mode does not work (it stops on results display)
 - fixed bug 012: (newly introduced) Death explosions are offset right and possibly up.
@@ -63,108 +71,108 @@ Build 123
   funkyBomb angle changed from -8..+8 to -16..+16
 - speeded up explosions by drawing only odd circles. Not bad visually and 2x faster.
 
-Build 122
+##### Build 122
 2013-11-17
 - tank expend 1 energy with each shoot to avoid endless shooting loops
 - small visual glitch with background colour fixed
 - death messages "defensive texts" in source do not stay on screen after some explosions
 
-Build 121
+##### Build 121
 2013-11-10
 - Poolshark and Shooter can buy weapons
 - Purchase screen moved to the beginning of the round
 
-Build 120
+##### Build 120
 2013-11-09
 SillyVenture 2K13 joint effort to bring artificial intelligence into life:
 - Shooter and Poolshark shooting programmed
 - several small bugfixes and improvements as proposed by SillyVenture crowd 
 
-Build 119
+##### Build 119
 2012-06-17
 Scorch sources translated to MADS with the sweet repl.sh script.
 
 MISSING UPDATE INFORMATION... POSSIBLY NOTHING IMPORTANT HAPPENED HERE.
 
-Build 115
+##### Build 115
 2009-08-25
 - fixed bug 001 (lack of explosions on the empty ground)
 - fixed bug 003 (wrapping death's head explosions)
 - fixed plot (faster explosions)
 - fukk, just 6 years and we are back!!! This game is pretty addictive :)
+
 TO DO:
 - send our wives and kids away much more often :))))
 
-Build 114
+##### Build 114
 2003-08-22
 - Results after each round are displayed in the right
   sequence, i.e. the best one is on the top
 - during second and following rounds shooting sequence
   is such that the worst tank shoots first
+
 The above changes does not look terrific, but there was
 a lot of thinking to do it correctly. What is the most
 important the overall game feeling improved a lot!
 
 program.s65
-    * added routine SortSequence
-textproc.s65
-    * changed routine DisplayResults to show
-      round results in correct order
+- added routine SortSequence
 
-Build 113
+textproc.s65
+- changed routine DisplayResults to show round results in correct order
+
+##### Build 113
 2003-08-17
 - AI Opponents move barrels to the right position
   before firing a bullet.
 - Purchase screen is not displayed for AI opponents.
 - There is 2 sec delay after displaying
-  "Deffensive" text i.e. text before death
+  "Defensive" text i.e. text before death
 
 program.s65
-    * added routine MoveBarrelToNewPosition
-      which rotates barrel of the tank until
-      it sits at the right (newly randomized) angle
+- added routine MoveBarrelToNewPosition which rotates barrel of the tank until it sits at the right (newly randomized) angle
+
 textproc.s65
-    * added routine PurchaseAI
-      it is a framework for all AI purchases
+- added routine PurchaseAI it is a framework for all AI purchases
+
 SHORTSYS.S65
-    * new macro PAUSE (waits given number of frames)
+- new macro PAUSE (waits given number of frames)
 
 
-Bulid 112
+##### Build 112
 2003-08-15
 
 First attempts to create a framework for intelligent
 opponents (AI). Right now there is only one level
-of "intelligence" - Moron. Moron shoots at random angle
-with random force.
+of "intelligence" - Moron. 
+
+Moron shoots at random angle with random force.
 
 program.s65
-    * routine Round checks the Skill level
-      and if it is not human branches to
-      ArtificialIntelligence routine.
-    * new routines:
-      - ArtificialIntelligence
-      - RandomizeForce
-      - RandomizeAngle
+- routine Round checks the Skill level and if it is not human branches to ArtificialIntelligence routine.
+- new routines:
+    - ArtificialIntelligence
+    - RandomizeForce
+    - RandomizeAngle
 
 TO DO:
-    * nice rotating barrel of AI tank
-    * AI weapon purchase and usage
-    * AI better than Moronic... (but how...)
-    * tanks' shooting seqence shoud be from
-      weakest to the strongest, not random
+- nice rotating barrel of AI tank
+- AI weapon purchase and usage
+- AI better than Moronic... (but how...)
+- tanks' shooting sequence should be from weakest to the strongest, not random
 
-Bulid 111
+##### Build 111
 2003-07-27
 
 program.s65:
-    * added sequentional shooting
-      (not necessarily tank no. 1 shoots first)
-    * added routine "RandomizeSequence" that is called
-      before each round
-    * initial angle of the tank's barrel is randomized
-      (was always 45 degrees right)
+- added sequential shooting (not necessarily tank no. 1 shoots first)
+- added routine "RandomizeSequence" that is called before each round
+- initial angle of the tank's barrel is randomized (was always 45 degrees right)
+
 variables.s65
-    * added table "TankSequence"
+- added table "TankSequence"
+
 grafproc.s65
-    * shorter delay during Flight
+- shorter delay during Flight
+
+...older history missing...
