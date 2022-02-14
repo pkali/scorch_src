@@ -37,6 +37,12 @@ we decided it must go in 'English' to let other people work on it
 ## Changes:
 
 
+###### Build 127
+2022-02-14
+- option to select number of rounds in a game
+- rudimentary game over message (in results screen)
+- game restarts
+
 ###### Build 126
 2022-01-30
 - fixed bug 006 (After some attacks the OffensiveText stays on the screen)

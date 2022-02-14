@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=program.asm
+;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 
     .IF *>0
@@ -69,7 +69,7 @@ Options .proc
 ; this function returns:
 ; - number of players (NumberOfPlayers)
 ; - money each player has on the beginning of the game (moneyL i moneyH)
-; - and I am sure maxwind, gravity, ????
+; - and I am sure maxwind, gravity, no_of_rounds in a game
 
     mva #0 OptionsY
 
@@ -82,7 +82,7 @@ OptionsMainLoop
     inc:lda OptionsY
     cmp #maxoptions
     bne OptionsMainLoop
-    mva #3 OptionsY
+    mva #maxoptions-1 OptionsY
     jmp OptionsMainLoop
 
 OptionsNoDown
@@ -153,9 +153,15 @@ skip10
     ldy OptionsTable+3
     lda MaxWindTable,y
     sta MaxWind
+    
+    ;fifth option (no of rounds)
+    ldy OptionsTable+4
+    lda RoundsTable,y
+    sta RoundsInTheGame
+    
     rts
 ;--------
-; inversing choosed option (cursor)
+; inversing selected option (cursor)
 ;--------
 OptionsInversion
     mwa #OptionsHere temp
@@ -191,7 +197,7 @@ OptionSetLoop
 ; next option
     adw temp  #40 ;jump to next line
     inc:lda temp2
-    cmp #4 ;number of options
+    cmp #maxoptions ;number of options
     bne OptionsSetMainLoop
 
 ;inversing the first few chars of the selected line (OptionsY)
@@ -1349,6 +1355,9 @@ DisplayResults ;
     ;Header1
     ;Displays round number
     lda CurrentRoundNr
+    cmp RoundsInTheGame
+    beq GameOver4x4
+    
     sta decimal
     mwa #RoundNrDisplay displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
@@ -1358,7 +1367,17 @@ DisplayResults ;
     mva ResultY LineYdraw
     mva #1 plot4x4color
     jsr TypeLine4x4
+    beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
+GameOver4x4
+    mwa #LineGameOver LineAddress4x4
+    mwa ResultX LineXdraw
+    mva ResultY LineYdraw
+    mva #1 plot4x4color
+    jsr TypeLine4x4
+    mva #1 GameIsOver
+    
+@
     adw ResultY  #4 ;next line
 
     ;Empty line

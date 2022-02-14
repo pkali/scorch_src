@@ -44,11 +44,11 @@ To do
 +003. Add colour of the given tank to the screen
      E.g. when a given tank is shooting it's colour could be behind
      tank name on the text screen
-004. The game has no end!!! Add ending!!!
+*004. The game has no end!!! Add ending!!!
      A good idea for an ending - a TIP pic - Red Army taking Berlin :)
 	 Another - vector tanks like in BattleZone
 	 Another - stickman tankmen
-005. Add number of rounds to the options menu
++005. Add number of rounds to the options menu
 006. Add sound effects (maybe sampled? or mp0 (sound based on fft))
 007. There is no defensive weapon handling (only parachute works,
      but also provisionally
@@ -61,7 +61,7 @@ To do
 +014. Demo mode - when all tanks are CPUs let them play non-stop!
      (replace waiting for a key-press after a round with a small delay)
 +015. Switch to mads for easier development (mads speeds it up, no doubt)
-016. Speed up death's head (e.g.: draw each second circle)
++016. Speed up death's head (e.g.: draw each second circle)
 -017. Wide screen mode (with scroll?)
 018. Speed up soil down after soil eating weapons - correctly calculate 
      ranges as now range is very broad even when very little soil is eaten.

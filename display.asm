@@ -29,7 +29,7 @@ OptionsDL
         :5 .byte $70
         .byte $42
         .word OptionsScreen
-        .byte $02,$02,$70,$02,0,$02,0,$2,0,$2
+        .byte $30,$02,$02,$70,$02,0,$02,0,$2,0,$2,0,$2
         .byte $41
         .word OptionsDL
 ;------------------------
@@ -77,7 +77,7 @@ PlotLine = display + screenHeight*screenBytes ; the last line is plot pointer
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. 126 (un)2000-2022"
+ dta d"Welcome to Scorch ver. 127 (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   
@@ -86,6 +86,7 @@ OptionsHere
  dta d"Cash    :  none   2K   5K   8K  10K     "
  dta d"Gravity :  0.2G 0.5G  1G   2G   4G      "
  dta d"Wind    :   1B   3B   5B   7B   9B      "
+ dta d"Rounds  :   10   20   30   40   50      "
 OptionsScreenEnd
 ; -------------------------------------------------
 NameScreen

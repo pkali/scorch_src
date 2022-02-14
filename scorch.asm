@@ -149,7 +149,7 @@ MainGameLoop
     jsr GetRandomWind
 
     jsr Round
-
+    
     jsr SortSequence
     
     ; Hide all (easier than hide last ;) ) tanks
@@ -168,11 +168,11 @@ MainGameLoop
     ; add gains and substract looses
     ; gain is what player gets for lost energy of opponents
     ; energy lost by opponents is added during Round and
-    ; little below in source multiplied by 2 to get "dollars".
-    ; By analogy, loose is energy that given player looses during
+    ; little below in source, multiplied by 2 to get "dollars".
+    ; By analogy, loss is energy that given player looses during
     ; each Round.
     ; Important! If player has 10 energy and gets central hit
-    ; from nuke that would take 90 energy point his loose
+    ; from nuke that would take 90 energy points his loss
     ; is 90, not 10
     jsr DisplayResults
 
@@ -246,6 +246,8 @@ skipzeroing
     dex
     bpl CalculateGains
 
+    lda GameIsOver
+    jne START
 
 
     inc CurrentRoundNr
@@ -787,6 +789,7 @@ Initialize .proc
     sta tracerflag
     sta oldPlotPointerX
     sta oldPlotPointerX+1
+    sta GameIsOver
 
     mva #$2 colpf2s
     mva #12 colpf3s

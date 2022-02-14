@@ -8,6 +8,7 @@
 ;=====================================================
 NumberOfPlayers .byte 0  ;current number of players (counted from 1)
 TankSequence :MaxPlayers .by 0 ;sequence of shooting during the Round
+GameIsOver .byte 0 ; 1 - it was the last round in the game
 ;-----------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human
     :MaxPlayers .by 0
@@ -257,15 +258,17 @@ OffsetDL1 ; offset of the list screen (how many lines)....
 
 ; -------------------------------------------------
 ;Options
-OptionsTable  .byte 0,0,2,2
+OptionsTable  .byte 0,0,2,2,0
 OptionsY  .byte 0 ;vertical position of cursor on Options screen
-maxoptions = 4  ;number of all options (4 in 0.01)
+maxoptions = 5  ;number of all options (4 in 0.01)
 CashOptionH   ;(one zero less than on the screen)
     .byte 0,>200,>500,>800,>1000
 CashOptionL
     .byte 0,<200,<500,<800,<1000
 GravityTable   .byte 10,20,25,30,40
 MaxWindTable   .byte 5,20,40,60,80
+RoundsTable    .byte 10,20,30,40,50
+RoundsInTheGame .byte 10 ;how many rounds in the current game
 ;------------------------------------------------
 
 ;mark the level
@@ -354,6 +357,8 @@ TextNumberOff .byte 0
 TankTempY
     .byte 0
 ;----------------------------------------------
+; 4x4 texts
+;----------------------------------------------
 LineAddress4x4
     .word 0
 LineCharNr
@@ -380,7 +385,9 @@ RoundNrDisplay
 LineHeader2
     dta d"#  RESULTS  #"
     .byte $ff
-
+LineGameOver
+    dta d"# GAME OVER #"
+    .byte $ff
 
 
 ;-----------
@@ -803,7 +810,7 @@ WeaponSymbols
     .byte $02,$03,$06,$1d,$0a,$1b,$1c,$1e
     .byte $3b,$3c,$3d,$3e,$3f,$5e,$5f,$00
 
-; Names of weapons (16 chars lon)
+; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
     dta d"Baby Missile    " ; 0
     dta d"Missile         " ; 1
