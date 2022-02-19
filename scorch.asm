@@ -35,7 +35,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
     .zpvar xdraw .word = $80 ;variable X for plot
-    .zpvar ydraw   .word;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
+    .zpvar ydraw   .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte   .word
 
     .zpvar ybyte   .word
@@ -46,8 +46,8 @@
     .zpvar oldplot .word
     .zpvar xc .word
     .zpvar temp .word ;temporary word for the most embeded loops only
-    .zpvar temp2  .word;same as above
-    .zpvar tempXROLLER .word;same as above for XROLLER routine
+    .zpvar temp2  .word ;same as above
+    .zpvar tempXROLLER .word ;same as above for XROLLER routine
     ;(used also in result display routine)
     .zpvar xtempDRAW .word ;same as above for XDRAW routine
     .zpvar ytempDRAW .word ;same as above for XDRAW routine
@@ -84,7 +84,7 @@ MaxPlayers = 6
 
 	icl 'artwork/HIMARS14.asm'
     ;Game loading address
-    ORG  $3010 ;two hex thousands for screen
+    ORG  $3010 ;one hex thousands for screen
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------

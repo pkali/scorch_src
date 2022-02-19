@@ -32,10 +32,19 @@ where you want to have y=ax+b :)
 originally most variables were in Polish, comments were sparse
 but we wanted to release this piece of code to public
 and due to being always short of time/energy (to finish the game)
-we decided it must go in 'English' to let other people work on it
+we decided it must go in 'English' to let other people work on it.
+it never happened, but we got some encouraging comments and we are still
+trying to do something from time to time.
+
+with the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. we'll see.
 
 ## Changes:
 
+###### Build 127
+2022-02-19
+- fixed a bug making it harder to select AI level, unfortunately now player names can not include hyphen
+- fixed numerous mistakes in handling bytes and words - possibly some of the crashes eliminated 
+- adw addr #1 --> inw addr. 200 bytes shorter code (and maybe very slightly faster)
 
 ###### Build 127
 2022-02-14

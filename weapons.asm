@@ -182,7 +182,7 @@ deathshead
     bcs NoUpperCircle
     jsr xmissile
 NoUpperCircle
-    adw ydraw #70
+    adb ydraw #70
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
@@ -593,7 +593,7 @@ PositiveVelocity
 
     adw tempXROLLER xdraw
 SeekLeft
-    sbw tempXROLLER #1
+    dew tempXROLLER
     lda (tempXROLLER),y    ;fukk! beware of Y value
     cmp HeightRol
     bne HowMuchToFallLeft
@@ -610,7 +610,7 @@ GoRightNow
     mwa #mountaintable tempXROLLER
     adw tempXROLLER xdraw
 SeekRight
-    adw tempXROLLER #1
+    inw tempXROLLER
     lda (tempXROLLER),y
     cmp HeightRol
     bne HowMuchToFallRight
@@ -673,14 +673,14 @@ UpNotYet
     lda HowMuchToFall
     cmp #1
     beq HowMuchToFallRight2
-    sbw xdraw #1
+    dew xdraw
     lda xdraw
     bne RollinContinues
     lda xdraw+1
     jne RollinContinues
     beq ExplodeNow
 HowMuchToFallRight2
-    adw xdraw #1
+    inw xdraw
     cpw xdraw screenwidth
     jne RollinContinues
 ExplodeNow
@@ -717,7 +717,7 @@ NextLine
     jsr plot
     ldy magic+1
 DoNotPlot
-    adw xdraw #1
+    inw xdraw
     dey
     bne NextLine
     dec ydraw     ; 1 line up
@@ -1086,7 +1086,7 @@ EmptyPoint2
     clc
 ROLPoint2
     rol mask1
-    adw xdraw #1
+    inw xdraw
     dec mask2
     bne ByteBelowTank
     ldx mask1

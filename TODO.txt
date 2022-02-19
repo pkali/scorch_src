@@ -36,6 +36,10 @@ Known bugs (+ means bug is fixed)
 -018: MINOR: ydraw, yhit, ybyte variable is sometimes treated as WORD, sometimes as BYTE. 
      Making it consistent would save both time and space (not much)
      REJECTED: too much work - different routines depend on checking high byte. 
++019: AI menu does not recognize keyboard up (prints "-" in tank name)
+020: sometimes leftmost or rightmost remains of the funkybomb smoke do not get cleared
+021: check MWA, ADW, SBW macros - bad modifications of bytes found!!!
+022: shooting funkybomb decreases number of bombs too much! (2 instead of 1?)
 ---------------------------------------------------------
 To do
 +001. Start each round with a)worst tank or b)random tank
@@ -65,3 +69,7 @@ To do
 -017. Wide screen mode (with scroll?)
 018. Speed up soil down after soil eating weapons - correctly calculate 
      ranges as now range is very broad even when very little soil is eaten.
+019. Purchase impossible with joystick only. Add buy on e.g. joystick right.
+020. Not a bug per se, but ydraw variable is word, possibly it can be switched to byte
+021. Add player colors to purchase screen
+022. Make colors more contrasting

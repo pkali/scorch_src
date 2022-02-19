@@ -113,7 +113,7 @@ CheckDirectionFactor
     ; 'a' factor is fire, so we copy parameters
     ; XK=DX
     mwa DX XK
-    ; i kasowanie bitu 2
+    ; and clearing bit 2
     ; and bit 2 clear
     ; (is not needed because already cleared)
     ;lda HowToDraw
@@ -168,7 +168,7 @@ DrawLoop
     ;     DI=DI+DD
     ;     YI=YI+1
     adw DI DD
-    adw YI #1
+    inw YI
     jmp drplot
 DINegative
     ;   ELSE
@@ -219,7 +219,7 @@ PutPixelinDraw
 
     ; XI=XI+1
     ; UNTIL XI=XK
-    adw XI #1
+    inw XI
     cpw XI XK
     jne DrawLoop
 
@@ -234,7 +234,7 @@ DrawJumpPad
 Drawplot
     jmp plot
 DrawLen
-    adw LineLength #1
+    inw LineLength
     rts
     
 DrawCheck .proc
@@ -729,8 +729,8 @@ drawmountainsloop
     lda (modify),y
     sta ydraw
     jsr DrawLine
-    adw modify #1
-    adw xdraw #1
+    inw modify
+    inw xdraw
     cpw xdraw #screenwidth
     bne drawmountainsloop
 
@@ -747,8 +747,8 @@ drawmountainspixelloop
     lda (modify),y
     sta ydraw
     jsr plot
-    adw modify #1
-    adw xdraw #1
+    inw modify
+    inw xdraw
     cpw xdraw #screenwidth
     bne drawmountainspixelloop
 
@@ -807,9 +807,9 @@ StillNothing
     cmp #screenheight
     bne NextPoint1
 FoundPeek1
-    adw tempor2 #1
-    adw tempor3 #1
-    adw xdraw #1
+    inw tempor2
+    inw tempor3
+    inw xdraw
     ;vcmp xdraw,screenwidth,NextColumn1
     cpw xdraw RangeRight
     bcc NextColumn1
@@ -823,7 +823,7 @@ MainFallout2
     adw RangeLeft #mountaintable2 tempor2
     adw RangeLeft #mountaintable3 tempor3
 
-    mwa #1 IsEndOfTheFallFlag
+    mva #1 IsEndOfTheFallFlag
 FalloutOfLine
     ldy #0
 
@@ -860,10 +860,10 @@ FalloutOfLine
 
 ThereIsPixelHere
 ColumnIsReady
-    adw temp #1
-    adw tempor2 #1
-    adw tempor3 #1
-    adw xdraw #1
+    inw temp
+    inw tempor2
+    inw tempor3
+    inw xdraw
     ;vcmp xdraw,screenwidth,FalloutOfLine
     cpw xdraw RangeRight
     bcc FalloutOfLine
@@ -883,9 +883,9 @@ ColumnIsReady
 CopyHeights
     lda (tempor3),y
     sta (temp),y
-    adw temp #1
-    adw tempor3 #1
-    adw xdraw #1
+    inw temp
+    inw tempor3
+    inw xdraw
     ;vcmp xdraw,screenwidth,CopyHeights
     cpw xdraw RangeRight
     bcc CopyHeights
@@ -981,7 +981,7 @@ ToBottom
 Skip01
     sta ydraw
 
-    adw xdraw #1
+    inw xdraw
 
     cpw xdraw #screenwidth
     beq EndDrawing
@@ -1430,13 +1430,13 @@ EmptyPixel
     ;anyway we assume the text is being drawn
     ;over an empty space
 Loop4x4Continued
-    adw xdraw #1
+    inw xdraw
     lda StoreA4x4
     dec Xcounter4x4
     ldx Xcounter4x4
     bne uppernibble
     ; here we have on screen one line of the char
-    adw ydraw #1
+    inw ydraw
     sbw xdraw #4
     sbw y4x4 #32
     dec:lda LoopCounter4x4
@@ -1494,13 +1494,13 @@ EmptyPixelFULL
     ;of course it is slower
 
 Loop4x4ContinuedFULL
-    adw xdraw #1
+    inw xdraw
     lda StoreA4x4
     dec Xcounter4x4
     ldx Xcounter4x4
     bne uppernibbleFULL
     ; here we have on screen one line of the char
-    adw ydraw #1
+    inw ydraw
     sbw xdraw #4
     sbw y4x4 #32
     dec:lda LoopCounter4x4

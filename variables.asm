@@ -96,18 +96,19 @@ ytankstable ;Y positions of tanks (lower left point)
 LowResDistances ; coarse stank positions divided by 4 (to be in just one byte)
     :MaxPlayers .by 0
 ;-----------------------------------
-keycodes ;tables for calculating KeyCode to Screen Code (38 characters)
+keycodes ;tables for calculating KeyCode to Screen Code (38 -1  characters)
     .byte $3f,$15,$12,$3a,$2a,$38,$3d,$39
     .byte $0d,$01,$05,$00,$25,$23,$08,$0a
     .byte $2f,$28,$3e,$2d,$0b,$10,$2e,$16
     .byte $2b,$17,$1f,$1e,$1a,$18,$1d,$1b
-    .byte $33,$35,$30,$32,$22,$0e
+    .byte $33,$35,$30,$32,$22 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
+keycodesEnd
 scrcodes
     dta d"abcdefgh"
     dta d"ijklmnop"
     dta d"qrstuvwx"
     dta d"yz123456"
-    dta d"7890.-"
+    dta d"7890." ; "-"
 ;-----------------------------------
 Erase    .byte 0 ; if 1 only mask of the character is printed
                  ; on the graphics screen. if 0 character is printed normally

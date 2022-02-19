@@ -164,16 +164,18 @@ skip10
 ; inversing selected option (cursor)
 ;--------
 OptionsInversion
+    ;clean options loop
+    ;TODO: (optionally) - convert to single byte loop if no new options
     mwa #OptionsHere temp
     ldy #0
 OptionsInversionLoop1
     lda (temp),y
     and #$7F
     sta (temp),y
-    adw temp #1
+    inw temp
     cpw temp #OptionsScreenEnd
     bne OptionsInversionLoop1
-;here all past inversions are gone...
+    ;here all past inversions are gone...
 
     mwa #OptionsHere temp
     mva #0 temp2  ;option number pointer
@@ -202,7 +204,7 @@ OptionSetLoop
 
 ;inversing the first few chars of the selected line (OptionsY)
     mva OptionsY temp
-    mwa #0 temp+1
+    mva #0 temp+1
     asl temp
     rol temp+1
     asl temp
@@ -215,7 +217,7 @@ OptionSetLoop
     asl temp
     rol temp+1
     ;here is 32*OptionsY
-    adw temp  temp2
+    adw temp temp2
     ;in temp is 40*OptionsY
     adw temp #OptionsHere
     ;now in temp is adres of the line to be inversed
@@ -877,8 +879,8 @@ LoopName01
     sta NameAdr
 CheckKeys
     jsr getkey
-    ; is if the char to be recorded?
-    ldx #37 ; table is 38 chars long
+    ; is the char to be recorded?
+    ldx #keycodesEnd-keycodes ;table was 38 chars long
 IsLetter
     cmp keycodes,x
     beq YesLetter
@@ -905,7 +907,7 @@ NotFirstLetter
     jmp CheckKeys
 CheckFurtherX01 ; here we check Tab, Return and Del
     cmp #$0c ; Return
-    beq EndOfNick
+    jeq EndOfNick
     cmp #$2c ; Tab
     beq ChangeOfLevelUp
     cmp #$7 ;cursor right
@@ -914,6 +916,8 @@ CheckFurtherX01 ; here we check Tab, Return and Del
     beq ChangeOfLevelDown
     cmp #$f ;cursor down
     beq ChangeOfLevel3Up
+    cmp #$e ;cursor up
+    beq ChangeOfLevel3Down
 
     cmp #$34 ; Backspace (del)
     bne CheckKeys
@@ -947,18 +951,22 @@ DoNotLoopLevelDown
     jmp CheckKeys
 ;----
 ChangeOfLevel3Up
-    ;adw DifficultyLevel #3
-    clc
-    lda DifficultyLevel
-    adc #3
-    sta DifficultyLevel
+    adb DifficultyLevel #3
 
     cmp #9
     bcc DoNotLoopLevel3Up
 
-    sbw DifficultyLevel #9
+    sbb DifficultyLevel #9
 
 DoNotLoopLevel3Up
+    jsr SelectLevel
+    jmp CheckKeys
+;----
+ChangeOfLevel3Down
+    sbb DifficultyLevel #3
+    bpl @+
+      adb DifficultyLevel #9
+@
     jsr SelectLevel
     jmp CheckKeys
 ;----
@@ -1185,8 +1193,8 @@ DisplayOffensiveTextNr ;
     ;now we should check overflows
     lda temp+1
     bpl DOTNnotLessThanZero
-    ;less than zero, so should be zero
-    mwa #0 temp
+      ;less than zero, so should be zero
+      mwa #0 temp
     beq DOTNnoOverflow
 
 DOTNnotLessThanZero
@@ -1350,7 +1358,7 @@ DisplayResults ;
     mva #1 plot4x4color
     jsr TypeLine4x4
 
-    adw ResultY  #4 ;next line
+    adb ResultY  #4 ;next line
 
     ;Header1
     ;Displays round number
@@ -1378,7 +1386,7 @@ GameOver4x4
     mva #1 GameIsOver
     
 @
-    adw ResultY  #4 ;next line
+    adb ResultY  #4 ;next line
 
     ;Empty line
     mwa #LineEmpty LineAddress4x4
@@ -1387,7 +1395,7 @@ GameOver4x4
     mva #1 plot4x4color
     jsr TypeLine4x4
 
-    adw ResultY  #2 ;next line
+    adb ResultY  #2 ;next line
 
 
     ;Header2
@@ -1397,7 +1405,7 @@ GameOver4x4
     mva #1 plot4x4color
     jsr TypeLine4x4
 
-    adw ResultY  #4 ;next line
+    adb ResultY  #4 ;next line
 
     ;Empty line
     mwa #LineEmpty LineAddress4x4
@@ -1406,7 +1414,7 @@ GameOver4x4
     mva #1 plot4x4color
     jsr TypeLine4x4
 
-    sbw ResultY  #2 ;next line (was empty)
+    sbb ResultY  #2 ;next line (was empty)
 
     ldx NumberOfPlayers  ;we start from the highest (best) tank
     dex   ;and it is the last one
@@ -1422,7 +1430,7 @@ ResultOfTheNextPlayer
 
 
 
-    adw ResultY  #4 ;next line
+    adb ResultY  #4 ;next line
 
     ;there are at least 2 players, so we can safely
     ;start displaying the result
@@ -1474,7 +1482,7 @@ TankNameCopyLoop
     mva #1 plot4x4color
     jsr TypeLine4x4
 
-    adw ResultY  #4 ;next line
+    adb ResultY  #4 ;next line
 
     ;Empty line
     mwa #LineEmpty LineAddress4x4
@@ -1489,7 +1497,7 @@ TankNameCopyLoop
 
     bmi FinishResultDisplay
 
-    sbw ResultY  #2 ;distance between lines is smaller
+    sbb ResultY  #2 ;distance between lines is smaller
 
     jmp ResultOfTheNextPlayer
 
