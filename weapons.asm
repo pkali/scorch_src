@@ -593,7 +593,7 @@ PositiveVelocity
 
     adw tempXROLLER xdraw
 SeekLeft
-    dew tempXROLLER
+.nowarn    dew tempXROLLER
     lda (tempXROLLER),y    ;fukk! beware of Y value
     cmp HeightRol
     bne HowMuchToFallLeft
@@ -673,7 +673,7 @@ UpNotYet
     lda HowMuchToFall
     cmp #1
     beq HowMuchToFallRight2
-    dew xdraw
+.nowarn    dew xdraw
     lda xdraw
     bne RollinContinues
     lda xdraw+1

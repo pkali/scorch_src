@@ -288,7 +288,6 @@ LevelNameBeginH
 ;-------------------------------------------------
 ;displaydecimal
 decimal  .word 0
-displayposition .word 0
 decimalresult  dta d"0000"
 
 ;xmissile
@@ -369,25 +368,25 @@ LineXdraw
 LineYdraw
     .byte 0
 LineTop
-    dta d"(%%%%%%%%%%%)"
+    dta d"(%%%%%%%%%%%%)"
     .byte $ff
 ;# - vertical, () * +, % - horizontal
 LineBottom
-    dta d"*%%%%%%%%%%%+"
+    dta d"*%%%%%%%%%%%%+"
     .byte $ff
 LineEmpty
-    dta d"#           #"
+    dta d"#            #"
     .byte $ff
 LineHeader1
     dta d"# ROUND: "
 RoundNrDisplay
-    dta d"   #"
+    dta d"    #"
     .byte $ff
 LineHeader2
-    dta d"#  RESULTS  #"
+    dta d"#  RESULTS   #"
     .byte $ff
 LineGameOver
-    dta d"# GAME OVER #"
+    dta d"# GAME  OVER #"
     .byte $ff
 
 

@@ -40,7 +40,12 @@ with the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
-###### Build 127
+###### Build 129
+2022-03-06
+- added tune by emkay, lzss player by dmsc
+- fixed bug "When result in points is >99 then only 2 first digits are displayed"
+
+###### Build 128
 2022-02-19
 - fixed a bug making it harder to select AI level, unfortunately now player names can not include hyphen
 - fixed numerous mistakes in handling bytes and words - possibly some of the crashes eliminated 

@@ -69,6 +69,7 @@
     .zpvar modify .word
     .zpvar weaponPointer .word
 
+displayposition = modify
 ;-------------------------------
 ;constants
 FlyDelay = 150
@@ -158,21 +159,21 @@ MainGameLoop
     mva #0 Erase
     jsr PMoutofScreen ;let P/M disappear
 
-    ; here gains and looses should be displayed (dollars)
+    ; here gains and losses should be displayed (dollars)
     ; finally we have changed our minds and money of players
     ; is displayed only in weapons shop
 
     ; Results are number of other deaths
     ; before the player dies itself
 
-    ; add gains and substract looses
+    ; add gains and substract losses
     ; gain is what player gets for lost energy of opponents
     ; energy lost by opponents is added during Round and
     ; little below in source, multiplied by 2 to get "dollars".
-    ; By analogy, loss is energy that given player looses during
+    ; By analogy, loss is energy that given player losses during
     ; each Round.
-    ; Important! If player has 10 energy and gets central hit
-    ; from nuke that would take 90 energy points his loss
+    ; Important! If player has 10 energy and gets a central hit
+    ; from nuke that would take 90 energy points, his loss
     ; is 90, not 10
     jsr DisplayResults
 

@@ -1097,11 +1097,10 @@ rightnumber
 
 DecimalEnd
     ; displaying
-    mwa displayposition modify
     ldy #3
 displayloop
     lda decimalresult,y
-    sta (modify),y
+    sta (displayposition),y
     dey
     bpl displayloop
 
@@ -1147,11 +1146,10 @@ TooLittle001 dex
 
 decimalend1
     ; displaying
-    mwa displayposition modify
     ldy #1
 displayloop1
     lda decimalresult,y
-    sta (modify),y
+    sta (displayposition),y
     dey
     bpl displayloop1
 
@@ -1342,12 +1340,12 @@ EndOfTypeLine4x4
     rts
 
 ;--------------------------------
-DisplayResults ;
+.proc DisplayResults ;
 ;displays results of the round
 ;using 4x4 font
 
     ;centering the result screen
-    mwa #((ScreenWidth/2)-(7*4)) ResultX
+    mwa #((ScreenWidth/2)-(8*4)) ResultX
     mva #((ScreenHeight/2)-(8*4)) ResultY
 
 
@@ -1455,25 +1453,25 @@ TankNameCopyLoop
     cpx #8 ; end of name
     bne TankNameCopyLoop
 
-    inx
-    lda #26 ;it means ":"
-    sta ResultLineBuffer,x
-
     ldy TankNr
     lda ResultsTable,y
     sta decimal
-    mwa #(ResultLineBuffer+10) displayposition
-    jsr displaybyte ;decimal (byte), displayposition  (word)
-
-    ldx #12 ;justafter the digits
-    lda #3 ;it means |
-    sta ResultLineBuffer,x
-
-    inx
-    lda #$ff ;it means end of line
-    sta ResultLineBuffer,x
+    mva #0 decimal+1
+    mwa #(ResultLineBuffer+9) displayposition
+    jsr displaydec ;decimal (byte), displayposition  (word)
 
 
+    ; overwrite the first digit of the points (max 255)
+    ;it means ":"
+    mva #26 ResultLineBuffer+9
+
+    ;just after the digits
+    ;it means |
+    mva #$3 ResultLineBuffer+13
+
+
+    ;it means end of line
+    mva #$ff ResultLineBuffer+14
 
     ;result line display
     mwa #ResultLineBuffer LineAddress4x4
@@ -1510,10 +1508,10 @@ FinishResultDisplay
     mva #1 plot4x4color
     jsr TypeLine4x4
     rts
-
+.endp
 
 ;-------------------------------------------------
-DisplayingSymbols
+.proc DisplayingSymbols
 ;-------------------------------------------------
 
     ;---------------------
@@ -1647,8 +1645,9 @@ DisplayWindValue
     mwa #textbuffer+77 displayposition
     jsr displaybyte
     rts
+.endp
 ;-------------------------------------------------
-PutTankNameOnScreen
+.proc PutTankNameOnScreen
 ; puts name of the tan on the screen
     ldy #$00
     lda tanknr
@@ -1664,6 +1663,7 @@ NextChar02
     cpy #$08
     bne NextChar02
     rts
+.endp
 ;-------------------------------------------------
 
 .endif
