@@ -1289,17 +1289,17 @@ CopyMask
     and #$7
     sta ybit
 
-    lsrw xbyte
+    lsrw xbyte ; div 8
     rorw xbyte
     rorw xbyte
 
 ;---
     ldy xbyte
 
-    ldx ydraw
-    .rept 7
-    dex
-    .endr
+    lda ydraw ; y = y - 7 because left lower. shouldn't it be 8?
+    sec
+    sbc #7
+    tax
 
     lda linetableL,x
     sta xbyte

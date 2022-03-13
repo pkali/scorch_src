@@ -3,31 +3,35 @@
     .IF *>0 ;this is a trick that prevents compiling this file alone
 
 ; ------------------------
-babymissile
+.proc babymissile
     inc FallDown2
     mva #11 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
+.endp
 ; ------------------------
-missile ;
+.proc missile ;
     inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
+.endp
 ; ------------------------
-babynuke
+.proc babynuke
     inc FallDown2
     mva #25 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
+.endp
 ; ------------------------
-nuke
+.proc nuke
     inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
+.endp
 ; ------------------------
-leapfrog
+.proc leapfrog
     inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
@@ -98,12 +102,14 @@ leapfrog
     jmp xmissile
 EndOfLeapping
     rts
+.endp
 ; ------------------------
-mirv ;  the whole mirv is performed by Flight routine
+.proc mirv ;  the whole mirv is performed by Flight routine
     inc FallDown2
     rts
+.endp
 ; ------------------------
-funkybomb ;
+.proc funkybomb ;
     mwa xtraj+1 xtrajfb
     mwa ytraj+1 ytrajfb
     inc FallDown2
@@ -162,8 +168,9 @@ NoExplosionInFunkyBomb
     bne FunkyBombLoop
     mva #0 tracerflag
     rts
+.endp
 ; ------------------------
-deathshead
+.proc deathshead
     inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
@@ -189,59 +196,69 @@ NoUpperCircle
     jsr xmissile
 NoLowerCircle
     rts
+.endp
 ; ------------------------
-tracer
+.proc tracer
     rts
+.endp
 ; ------------------------
-babyroller
+.proc babyroller
     inc FallDown2
     mva #11 ExplosionRadius
     jmp xroller
+.endp
 ; ------------------------
-roller ;
+.proc roller ;
     inc FallDown2
     mva #21 ExplosionRadius
     jmp xroller
+.endp
 ; ------------------------
-heavyroller
+.proc heavyroller
     inc FallDown2
     mva #31 ExplosionRadius
     jmp xroller
+.endp
 ; ------------------------
-riotbomb
+.proc riotbomb
     inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
+.endp
 ; ------------------------
-heavyriotbomb
+.proc heavyriotbomb
     inc FallDown2
     mva #29 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
+.endp
 ; ------------------------
-babydigger
+.proc babydigger
     mva #0 sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
     jmp xdigger
+.endp
 ; ------------------------
-digger ;
+.proc digger ;
     mva #0 sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
     jmp xdigger
+.endp
 ; ------------------------
-heavydigger
+.proc heavydigger
     mva #0 sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #7 diggery  ; how many branches  (-1)
     jmp xdigger
+.endp
 ; ------------------------
-xdigger
+.proc xdigger
     mwa xdraw digstartx
     mwa ydraw digstarty
     ldx diggery
@@ -294,7 +311,7 @@ DigRandomize
     lda random
     and #$87
     bmi DigUp
-digwdol
+DigDown
     and #$07
     clc
     adc digtabyL,x
@@ -302,7 +319,14 @@ digwdol
     lda digtabyH,x
     adc #$00
     sta digtabyH,x
-    jmp DigCalculateNext
+    ;crashing bug here - if too much added to digtaby, it gets over screenheight and starts writing over random areas
+    ;WARNING! fix for 1 byte screenheight. TODO
+    lda digtabyL,x
+    cmp #screenheight
+    bcc @+ ; branch if less
+      lda #screenheight-1
+      sta digtabyL,x
+@   jmp DigCalculateNext
 DigUp
     and #$07
     sta temp
@@ -334,6 +358,7 @@ DigDrawing
     bpl DigDrawing
     dec:lda DigLong
     jpl BranchNotFinished
+DoNotPutDig
     rts
 DiggerCharacter
     lda random
@@ -345,55 +370,61 @@ DiggerCharacter
     cpw xdraw #(screenwidth-6)
     bcs DoNotPutDig
     jmp TypeChar
-DoNotPutDig
-    rts
+.endp
 ; ------------------------
-babysandhog
+.proc babysandhog
     mva #8 sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
     jmp xdigger
+.endp
 ; ------------------------
-sandhog
+.proc sandhog
     mva #8 sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
     jmp xdigger
+.endp
 ; ------------------------
-heavysandhog
+.proc heavysandhog
     mva #8 sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #5 diggery  ; how many branches (-1)
     jmp xdigger
+.endp
 ; ------------------------
-dirtclod
+.proc dirtclod
     inc FallDown2
     mva #12 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
+.endp
 ; ------------------------
-dirtball
+.proc dirtball
     inc FallDown2
     mva #22 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
+.endp
 ; ------------------------
-tonofdirt
+.proc tonofdirt
     inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
+.endp
 ; ------------------------
-dirtcharge
+.proc dirtcharge
     inc FallDown2
     mva #61 ExplosionRadius
     jsr CalculateExplosionRange
     jmp ofdirt
+.endp
 ; ------------------------
-laser
+.proc laser
     ldx TankNr
     lda AngleTable,x
     tay
@@ -447,9 +478,9 @@ laser
     jsr DecreaseEnergyX
 LaserMisses
     rts
-
+.endp
 ; -----------------
-xmissile ;
+.proc xmissile ;
 ; -----------------
     lda #1
     sta radius
@@ -533,8 +564,9 @@ EndOfDistanceCheckLoop
     txa
     bne DistanceCheckLoop
     rts
+.endp
 ; -----------------
-xdirt ;
+.proc xdirt ;
 ; -----------------
     lda #1
     sta radius
@@ -549,8 +581,9 @@ dirtLoop
     cmp ExplosionRadius
     bne dirtLoop
     rts
+.endp
 ; -----------------
-xriotbomb ;
+.proc xriotbomb ;
 ; -----------------
     lda #0
     sta radius
@@ -563,10 +596,10 @@ rbombLoop
     bne rbombLoop
     mva #1 color
     rts
-
+.endp
 ; ----------------
 
-xroller ;
+.proc xroller ;
     ; now collisions are detected with modified draw routine
     ; therefore YDRAW value must be taken from mountaintable
     ldy #0
@@ -696,8 +729,9 @@ ExplodeNow
     jsr CalculateExplosionRange
     jmp xmissile
     rts
+.endp
 ; --------------------------------------------------
-ofdirt ;
+.proc ofdirt ;
 ; --------------------------------------------------
 ; makes dirt on xdraw,ydraw position and of ExplosionRadius height
     mwa xdraw xcircle
@@ -742,6 +776,7 @@ EndOfTheDirt
     mwa xcircle xdraw
     mva ycircle ydraw
     rts
+.endp
 ;--------------------------------------------------
 BeforeFire .proc ;TankNr (byte)
 ;--------------------------------------------------
@@ -2108,7 +2143,7 @@ RangesChecked
 .endp    
     
 ;--------------------------------------------------
-DecreaseWeaponAfterShoot .proc
+DecreaseWeaponBeforeShoot .proc
 ;--------------------------------------------------
     ldx TankNr
     lda ActiveWeapon,x

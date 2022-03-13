@@ -405,6 +405,9 @@ ManualShooting
     jsr BeforeFire
 
 AfterManualShooting
+    jsr DecreaseWeaponBeforeShoot
+    jsr DisplayingSymbols
+
 	; lower energy to eventually let tanks commit suicide
 	ldx TankNr
 	dec Energy,x
@@ -454,7 +457,6 @@ missed
     mva #0 plot4x4color
     jsr DisplayOffensiveTextNr
 
-    jsr DecreaseWeaponAfterShoot   ; or before???
 NextPlayerShoots
     mva #1 Erase
     jsr drawtanks
@@ -523,7 +525,7 @@ PlayersAgain .proc
 ; additionally this tank just have had LASTeXistenZ set to 0,
 ; otherwise it would explode again and again.
 ; OK, text how to do it is ready, now comes coding .
-; Aaaah! - in main loop we have to set eXistenZ and LASTeXistenZ
+; Aaaah! - in the main loop we have to set eXistenZ and LASTeXistenZ
 
     ldx NumberOfPlayers
     dex

@@ -8,11 +8,9 @@ Known bugs (+ means bug is fixed)
      (and uses one parachute more than necessary)
 005. tank stands still on a one pixel spike - it should fall
      (possibly all that is necessary is adjust of WhereToSlideTable)
-007. Decreasing of number of bullets after a shoot does not work correctly
-     (e.g. 2 bullets are deducted instead of 1)
 017: Observed MIRV loops - it shoots and shoots MIRV all over the screen. Very rare.
 020: sometimes leftmost or rightmost remains of the funkybomb smoke do not get cleared
-022: shooting funkybomb decreases number of bombs too much! (2 instead of 1?)
+     I think it happens when one of the bombs goes out of the screen
 
 Fixed:
 +001. when bullet goes straight down very fast it misses the tank
@@ -42,7 +40,11 @@ Fixed:
 +019: AI menu does not recognize keyboard up (prints "-" in tank name)
 +021: check MWA, ADW, SBW macros - bad modifications of bytes found!!!
 +009. When result in points is >99 then only 2 first digits are displayed
-
+-022: shooting funkybomb decreases number of bombs too much! (2 instead of 1?)
++007. Decreasing of number of bullets after a shoot does not work correctly
+     (e.g. 2 bullets are deducted instead of 1) FUNKYBOMB!!!
+     it looks like it is fixed, although what I did was moving decreasing before jsr shoot
++000, Game crashes from time to time, code and/or screen gets corrupted
 
 
 ---------------------------------------------------------
@@ -64,6 +66,7 @@ To do
 020. Not a bug per se, but ydraw variable is word, possibly it can be switched to byte
 021. Add player colors to purchase screen
 022. Make colors more contrasting
+023. Make not implemented weapons raise NotImplementedError :]
 
 Done:
 

@@ -149,7 +149,6 @@ skip10
     sta gravity
 
     ;fourth option (wind)
-
     ldy OptionsTable+3
     lda MaxWindTable,y
     sta MaxWind

@@ -40,6 +40,11 @@ with the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 130
+2022-03-13
+- fixed bug: Decreasing of number of bullets after a shoot does not work correctly. It does look like it is fixed, although all  I did was moving decreasing before shooting. Displaying number of bullets immediately after shoot.
+- fixed a very difficult bug - game was crashing from time to time, with corrupted code and/or screen. It was digger digging lower and lower, finally digging through the code. Right now the game is not crashing on me.
+
 ###### Build 129
 2022-03-06
 - added tune by emkay, lzss player by dmsc
