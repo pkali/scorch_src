@@ -1,5 +1,6 @@
+MOVED TO: https://github.com/pkali/scorch_src/issues
+
 TODO and BUGS file
-rev. 2013-11-17
 
 ---------------------------------------------------------
 Known bugs (+ means bug is fixed)
@@ -11,11 +12,13 @@ Known bugs (+ means bug is fixed)
 017: Observed MIRV loops - it shoots and shoots MIRV all over the screen. Very rare.
 020: sometimes leftmost or rightmost remains of the funkybomb smoke do not get cleared
      I think it happens when one of the bombs goes out of the screen
+023: NEW BUG. After the last change (bug 007) now the last shell of any weapon gets removed and 
+     the game switches to Baby missile.
 
 Fixed:
 +001. when bullet goes straight down very fast it misses the tank
      it happens only when tank is standing on the bottom of
-     the screen (no groud below)
+     the screen (no ground below)
 +002. points after the round are not calculated correctly
 +003. if death's head explodes low, the lowest explosion wraps
      and appears on the top of the screen
@@ -56,17 +59,15 @@ To do
 006. Add sound effects (maybe sampled? or mp0 (sound based on fft))
 007. There is no defensive weapon handling (only parachute works,
      but also provisionally
-009. Make AI in the existing frame
+009. Make AI in the existing framework (ongoing)
 010. It is impossible to look up a number of parachutes left.
-012. Decreased number of bullets should be displayed just after the shoot.
-013. Check LineTable - possibly it is unnecessarily long
 018. Speed up soil down after soil eating weapons - correctly calculate 
      ranges as now range is very broad even when very little soil is eaten.
 019. Purchase impossible with joystick only. Add buy on e.g. joystick right.
 020. Not a bug per se, but ydraw variable is word, possibly it can be switched to byte
 021. Add player colors to purchase screen
 022. Make colors more contrasting
-023. Make not implemented weapons raise NotImplementedError :]
+024. no visual indication of using defensive weapons
 
 Done:
 
@@ -77,10 +78,13 @@ Done:
      E.g. when a given tank is shooting it's colour could be behind
      tank name on the text screen
 +005. Add number of rounds to the options menu
-+008. No computer operated opponents - make a frame for AI!!!
++008. No computer operated opponents - make a framework for AI!!!
 +011. Colouring the top status lines in a colour of the active tank.
 +014. Demo mode - when all tanks are CPUs let them play non-stop!
      (replace waiting for a key-press after a round with a small delay)
 +015. Switch to mads for easier development (mads speeds it up, no doubt)
 +016. Speed up death's head (e.g.: draw each second circle)
 -017. Wide screen mode (with scroll?)
++012. Decreased number of bullets should be displayed just after the shoot.
++013. Check LineTable - possibly it is unnecessarily long. Checked. It is OK
++023. Make not implemented weapons raise NotImplementedError :] Done by making it impossible to purchase free weapons (price == $0)

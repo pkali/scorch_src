@@ -777,6 +777,7 @@ EndOfTheDirt
     mva ycircle ydraw
     rts
 .endp
+
 ;--------------------------------------------------
 BeforeFire .proc ;TankNr (byte)
 ;--------------------------------------------------
@@ -798,14 +799,12 @@ BeforeFire .proc ;TankNr (byte)
     lda MaxEnergyTableL,x
     cmp EnergyTableL,x
 ContinueToCheckMaxForce2
-    bcs skip15
-
-    lda MaxEnergyTableH,x
-    sta EnergyTableH,x
-    lda MaxEnergyTableL,x
-    sta EnergyTableL,x
-
-skip15
+    bcs @+
+      lda MaxEnergyTableH,x
+      sta EnergyTableH,x
+      lda MaxEnergyTableL,x
+      sta EnergyTableL,x
+@
     jsr DisplayingSymbols ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
 
@@ -911,14 +910,14 @@ pressedDown
     dec EnergyTableL,x
     lda EnergyTableL,x
     cmp #$ff
-    bne skip04
-    dec EnergyTableH,x
-    bpl skip04
+    bne @+
+      dec EnergyTableH,x
+      bpl @+
 ForceGoesZero
-    lda #0
-    sta EnergyTableH,x
-    sta EnergyTableL,x
-skip04
+        lda #0
+        sta EnergyTableH,x
+        sta EnergyTableL,x
+@
     jmp BeforeFire
 
 CTRLPressedDown
@@ -966,10 +965,10 @@ pressedTAB
     inc ActiveWeapon,x
     lda ActiveWeapon,x
     cmp #$30 ; number of offensive weapons
-    bne skip14
-    lda #0
-    sta ActiveWeapon,x
-skip14
+    bne @+
+      lda #0
+      sta ActiveWeapon,x
+@
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....
     beq pressedTAB
@@ -979,10 +978,10 @@ skip14
 CTRLpressedTAB
     ldx TankNr
     dec ActiveWeapon,x
-    bpl skip14CT
-    lda #$2f ; the last possible offensive weapon
-    sta ActiveWeapon,x
-skip14CT
+    bpl @+
+      lda #$2f ; the last possible offensive weapon
+      sta ActiveWeapon,x
+@
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....
     beq CTRLpressedTAB
@@ -1023,11 +1022,11 @@ RandomizeOffensiveText
     lda ActiveWeapon,x
     cmp #$20 ; laser
     bne NotStrongShoot
-    mva #0 color
-    lda #7
-    sta Force
-    sta Force+1
-    bne AfterStrongShoot
+      mva #0 color
+      lda #7
+      sta Force
+      sta Force+1
+      bne AfterStrongShoot
 NotStrongShoot
     lda EnergyTableL,x
     sta Force
@@ -1316,10 +1315,10 @@ EndOfFall
 ThereWasNoParachute
     rts
 .endp
+
 ;--------------------------------------------------
 Flight .proc ;Force(byte.byte), Angle(byte), Wind(.byte) 128=0, 255=maxright, 0=maxleft
 ;--------------------------------------------------
-
 ;g=-0.1
 ;vx=Force*sin(Angle)
 ;vy=Force*cos(Angle)
@@ -1358,8 +1357,7 @@ RepeatIfSmokeTracer
     sta ydraw+1
 
     ;vx calculation
-    aslw Force ;Force=Force*4 ... *2
-    ;aslw Force
+    aslw Force ;Force = Force * 2
 
     ;sin(Angle)
     ldx Angle
@@ -1522,21 +1520,21 @@ StillUp
     lda xtraj+2
     adc vx+3
     sta xtraj+2
-    jmp skip07 ;skipping substracting for Flight to left
+    jmp @+ ;skipping substracting for Flight to left
 
 FlightLeft
-    sec ;xtraj=xtraj-vx (skipping least significant byte of vx)
-    lda xtraj ;here of course Fight to left
-    sbc vx+1
-    sta xtraj
-    lda xtraj+1
-    sbc vx+2
-    sta xtraj+1
-    lda xtraj+2
-    sbc vx+3
-    sta xtraj+2
+      sec ;xtraj=xtraj-vx (skipping least significant byte of vx)
+      lda xtraj ;here of course Fight to left
+      sbc vx+1
+      sta xtraj
+      lda xtraj+1
+      sbc vx+2
+      sta xtraj+1
+      lda xtraj+2
+      sbc vx+3
+      sta xtraj+2
 
-skip07
+@
     ;vx=vx-Wind (also without least significan byte of vx)
     lda goleft
     bne FlightsLeft ;blow on bullet flighting left
@@ -1563,26 +1561,25 @@ LWindToLeft
     lda vx+3
     adc #0
     sta vx+3
-    Jmp skip08
+    jmp @+
 WindToLeft
 LWindToRight
-
-    ;Wind to left, bullet right, so vx=vx-Wind
-    ;Wind to right, bullet left, so vx=vx-Wind
-    sec
-    lda vx
-    sbc Wind
-    sta vx
-    lda vx+1
-    sbc Wind+1
-    sta vx+1
-    lda vx+2
-    sbc #0
-    sta vx+2
-    lda vx+3
-    sbc #0
-    sta vx+3
-skip08
+      ;Wind to left, bullet right, so vx=vx-Wind
+      ;Wind to right, bullet left, so vx=vx-Wind
+      sec
+      lda vx
+      sbc Wind
+      sta vx
+      lda vx+1
+      sbc Wind+1
+      sta vx+1
+      lda vx+2
+      sbc #0
+      sta vx+2
+      lda vx+3
+      sbc #0
+      sta vx+3
+@
     mwa xtrajold+1 xdraw
     mwa ytrajold+1 ydraw
     mwa xtraj+1 xbyte
@@ -1829,7 +1826,7 @@ mrLoopix
 
     ; 2 waits for 5 bullets
     wait
-    wait
+    ;wait  ; speeded up build 131
 
 MIRVdoNotChangeY
 
@@ -2149,37 +2146,41 @@ DecreaseWeaponBeforeShoot .proc
     lda ActiveWeapon,x
     jsr DecreaseWeapon
     ; and here we have amount of possessed ammo for given weapon
-
-    cmp #0
-    bne AmmunitionDecreased
-    lda #0   ;if ammo for given weapon ends
-    sta ActiveWeapon,x ;then set to default weapon (baby missile)
-AmmunitionDecreased
-    lda #99
-    ldy #0
-    sta (weaponPointer),y  ;baby missile - always 99 pieces
-
-    ;there is a good value in temp after jsr DecreaseWeapon
-
+    sta WeaponDepleted
+;    ;cmp #0
+;    bne AmmunitionDecreased
+;      ;lda #0   ;if ammo for given weapon ends
+;      sta ActiveWeapon,x ;then set to default weapon (baby missile)
+;AmmunitionDecreased
+;    lda #99
+;    ldy #0
+;    sta (weaponPointer),y  ;baby missile - always 99 pieces
+;
+;    ;there is a good value in weaponPointer after jsr DecreaseWeapon
+;
     rts
 .endp
 
 ;--------------------------------------------------
 DecreaseWeapon .proc
-; in: A <-- Weapon number, TankNr
+; in: A: Weapon number, TankNr
+; out: A: number of shells left, Y: weapon number
 ; decreases 1 bullet from a weapon(A) of tank(TankNr)
 ;--------------------------------------------------
     jsr HowManyBullets
-    sec
-    sbc #1
-    sta (weaponPointer),y ; we have good values after HowManyBullets
+    cpy #0
+    beq defaultWeapon  ; no decreasing Baby Missile
+      sec
+      sbc #1
+      sta (weaponPointer),y ; we have good values after HowManyBullets
+defaultWeapon
     rts
 .endp
 
 ;--------------------------------------------------
 HowManyBullets .proc
 ; in: A <-- Weapon number, TankNr
-; out: A <-- How many bullets in the weapon
+; out: A <-- How many bullets in the weapon, Y: weapon number
 ; how many bullets weapon of tank(TankNr) has, Result w A 
 ;--------------------------------------------------
     tay
@@ -2189,7 +2190,6 @@ HowManyBullets .proc
     lda TanksWeaponsTableH,x
     sta weaponPointer+1
     
-    ;ldy #$35 ; parachute
     lda (weaponPointer),y  ; and we have number of bullets in A
     rts
 .endp

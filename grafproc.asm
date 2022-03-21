@@ -229,6 +229,7 @@ EndOfDraw
     rts
 .endp
 
+;-------------JumpPad-------------
 DrawJumpPad
     jmp (DrawJumpAddr)
 Drawplot
@@ -236,10 +237,9 @@ Drawplot
 DrawLen
     inw LineLength
     rts
+;-------------JumpPad-------------
     
 DrawCheck .proc
-;    lda SmokeTracerFlag
-;	bne yestrace	; jakie to g�upie....
 	lda tracerflag
 	ora SmokeTracerFlag
 yestrace
@@ -260,14 +260,7 @@ CheckCollisionDraw
     bne StopHitChecking
 
     mwa xdraw temp
-    ;adw temp --- it does not work!!!!!!!! and should? OMC ??? #mountaintable
-    clc
-    lda temp
-    adc #<mountaintable
-    sta temp
-    lda temp+1
-    adc #>mountaintable
-    sta temp+1
+    adw temp #mountaintable
 
     ldy #0
     lda ydraw
@@ -504,20 +497,20 @@ placetanks .proc
 ;--------------------------------------------------
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
     lda #0
-skip09
-    ; clearing the tables with coordinates of the tank
-    ; it is necessary, because randomizing checks
-    ; if the given tank is already placed
-    ; after check if its position is not (0,0)
-
-    ; I will be honest with you - I have no idea
-    ; what the above comment was intending to mean :)
-
-    sta XtankstableL,x
-    sta XtankstableH,x
-    sta Ytankstable,x
-    dex
-    bpl skip09
+@
+      ; clearing the tables with coordinates of the tank
+      ; it is necessary, because randomizing checks
+      ; if the given tank is already placed
+      ; after check if its position is not (0,0)
+  
+      ; I will be honest with you - I have no idea
+      ; what the above comment was intending to mean :)
+  
+      sta XtankstableL,x
+      sta XtankstableH,x
+      sta Ytankstable,x
+      dex
+    bpl @-
 
 
     mwa #0 temptankX
@@ -635,10 +628,10 @@ drawtanknr
     lda eXistenZ,x
     bne SkipRemovigPM ; if energy=0 then no tank
 
-    ; hide P/M
-    lda #0
-    sta hposp0,x
-    jmp DoNotDrawTankNr
+      ; hide P/M
+      lda #0
+      sta hposp0,x
+      jmp DoNotDrawTankNr
 SkipRemovigPM
 
 
@@ -964,21 +957,21 @@ ToTop  ;it means substracting
     sbw yfloat delta
     lda yfloat+1
     cmp #margin
-    bcs Skip01
-    ; if smaller than 10
-    ldx #$00
-    stx UpNdown
-    jmp Skip01
+    bcs @+
+      ; if smaller than 10
+      ldx #$00
+      stx UpNdown
+      jmp @+
 
 ToBottom
-    adw yfloat delta
-    lda yfloat+1
-    cmp #screenheight-margin
-    bcc Skip01
-    ; if higher than screen
-    ldx #$01
-    stx UpNdown
-Skip01
+      adw yfloat delta
+      lda yfloat+1
+      cmp #screenheight-margin
+      bcc @+
+        ; if higher than screen
+        ldx #$01
+        stx UpNdown
+@
     sta ydraw
 
     inw xdraw
@@ -1096,7 +1089,9 @@ EndOfUnPlot
     rts
 .endp
 ; -----------------------------------------
-plot .proc ;plot (xdraw, ydraw)
+plot .proc ;plot (xdraw, ydraw, color)
+; color == 1 --> put pixel
+; color == 0 --> erase pixel
 ; this is one of the most important routines in the whole
 ; game. If you are going to speed up the game, start with
 ; plot - it is used by every single effect starting from explosions
@@ -1123,7 +1118,7 @@ MakePlot
     ;xbyte = xbyte/8
     lda xbyte
     lsr xbyte+1
-    ror ;just one bit over 256. Max screenwidht = 512!!!
+    ror ;just one bit over 256. Max screenwidth = 512!!!
     lsr  
     lsr
     tay ;save

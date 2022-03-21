@@ -68,10 +68,11 @@ NewAngle
 
 ActiveWeapon ;number of the selected weapon
     :MaxPlayers .by 0
+WeaponDepleted .by 0  ; if 0 deactivate the weapon and switch to Baby Missile
 ;-----------------------------------
 
-;format of the static point number used in the game
-;  20203.5 = 128 : <20203 : >20203
+;format of the 3-byte static point number used in the game
+;  20203.5 => 128 : <20203 : >20203
 ;-----------------------------------
 
 L1       .by 0 ; variable used in multiplications (by 10:)
@@ -772,20 +773,204 @@ TanksNamesDefault
     dta d"5th Tank"
     dta d"6th Tank"
 
+;Weapon prices (*10 on screen)
+price_Baby_Missile___ = 0      ;_0
+price_Missile________ = 96     ;_1
+price_Baby_Nuke______ = 111    ;_2
+price_Nuke___________ = 144    ;_3
+price_LeapFrog_______ = 192    ;_4
+price_Funky_Bomb_____ = 293    ;_5
+price_MIRV___________ = 456    ;_6
+price_Death_s_Head___ = 337    ;_7
+price_Napalm_________ = 0 ;496    ;_8
+price_Hot_Napalm_____ = 0 ;511    ;_9
+price_Tracer_________ = 102    ;_10
+price_Smoke_Tracer___ = 291    ;_11
+price_Baby_Roller____ = 689    ;_12
+price_Roller_________ = 600    ;_13
+price_Heavy_Roller___ = 592    ;_14
+price_Riot_Charge____ = 0 ;330    ;_15
+price_Riot_Blast_____ = 0 ;341    ;_16
+price_Riot_Bomb______ = 369    ;_17
+price_Heavy_Riot_Bomb = 322    ;_18
+price_Baby_Digger____ = 336    ;_19
+price_Digger_________ = 276    ;_20
+price_Heavy_Digger___ = 253    ;_21
+price_Baby_Sandhog___ = 218    ;_22
+price_Sandhog________ = 191    ;_23
+price_Heavy_Sandhog__ = 305    ;_24
+price_Dirt_Clod______ = 104    ;_25
+price_Dirt_Ball______ = 130    ;_26
+price_Ton_of_Dirt____ = 171    ;_27
+price_Liquid_Dirt____ = 0 ;530    ;_28
+price_Dirt_Charge____ = 581    ;_29
+price_Earth_Disrupter = 0 ;430    ;_30
+price_Plasma_Blast___ = 0 ;274    ;_31
+price_Laser__________ = 577    ;_32
+price______________33 = 0
+price______________34 = 0
+price______________35 = 0
+price______________36 = 0
+price______________37 = 0
+price______________38 = 0
+price______________39 = 0
+price______________40 = 0
+price______________41 = 0
+price______________42 = 0
+price______________43 = 0
+price______________44 = 0
+price______________45 = 0
+price______________46 = 0
+price______________47 = 0   
+price_Heat_Guidance__ = 0    ;_48_($30)
+price_Bal_Guidance___ = 0    ;_49
+price_Horz_Guidance__ = 0    ;_50
+price_Vert_Guidance__ = 0    ;_51
+price_Lazy_Boy_______ = 0    ;_52
+price_Parachute______ = 1100 ;_53
+price_Battery________ = 0    ;_54
+price_Mag_Deflector__ = 0    ;_55
+price_Shield_________ = 0    ;_56
+price_Force_Shield___ = 0    ;_57
+price_Heavy_Shield___ = 0    ;_58
+price_Super_Mag______ = 0    ;_59
+price_Auto_Defense___ = 0    ;_60
+price_Fuel_Tank______ = 0    ;_61
+price_Contact_Trigger = 0    ;_62
+price______________63 = 0
+
 WeaponPriceH ; weapons prices (tables with prices of weapons)
-    .byte $00,$00,$00,$00,$00,$01,$01,$01
-    .byte $01,$01,$00,$01,$02,$02,$02,$01
-    .byte $01,$01,$01,$01,$01,$00,$00,$00
-    .byte $01,$00,$00,$00,$02,$02,$01,$01
-    .byte $02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-    .byte 0,0,0,0,0,$04,0,0,0,0,0,0,0,0,0,0
+  .by >price_Baby_Missile___
+  .by >price_Missile________
+  .by >price_Baby_Nuke______
+  .by >price_Nuke___________
+  .by >price_LeapFrog_______
+  .by >price_Funky_Bomb_____
+  .by >price_MIRV___________
+  .by >price_Death_s_Head___
+  .by >price_Napalm_________
+  .by >price_Hot_Napalm_____
+  .by >price_Tracer_________
+  .by >price_Smoke_Tracer___
+  .by >price_Baby_Roller____
+  .by >price_Roller_________
+  .by >price_Heavy_Roller___
+  .by >price_Riot_Charge____
+  .by >price_Riot_Blast_____
+  .by >price_Riot_Bomb______
+  .by >price_Heavy_Riot_Bomb
+  .by >price_Baby_Digger____
+  .by >price_Digger_________
+  .by >price_Heavy_Digger___
+  .by >price_Baby_Sandhog___
+  .by >price_Sandhog________
+  .by >price_Heavy_Sandhog__
+  .by >price_Dirt_Clod______
+  .by >price_Dirt_Ball______
+  .by >price_Ton_of_Dirt____
+  .by >price_Liquid_Dirt____
+  .by >price_Dirt_Charge____
+  .by >price_Earth_Disrupter
+  .by >price_Plasma_Blast___
+  .by >price_Laser__________
+  .by >price______________33
+  .by >price______________34
+  .by >price______________35
+  .by >price______________36
+  .by >price______________37
+  .by >price______________38
+  .by >price______________39
+  .by >price______________40
+  .by >price______________41
+  .by >price______________42
+  .by >price______________43
+  .by >price______________44
+  .by >price______________45
+  .by >price______________46
+  .by >price______________47
+  .by >price_Heat_Guidance__
+  .by >price_Bal_Guidance___
+  .by >price_Horz_Guidance__
+  .by >price_Vert_Guidance__
+  .by >price_Lazy_Boy_______
+  .by >price_Parachute______
+  .by >price_Battery________
+  .by >price_Mag_Deflector__
+  .by >price_Shield_________
+  .by >price_Force_Shield___
+  .by >price_Heavy_Shield___
+  .by >price_Super_Mag______
+  .by >price_Auto_Defense___
+  .by >price_Fuel_Tank______
+  .by >price_Contact_Trigger
+  .by >price______________63
+
 WeaponPriceL
-    .byte $00,$60,$6F,$90,$c0,$25,$c8,$51
-    .byte $f0,$ff,$66,$23,$b1,$58,$50,$4A
-    .byte $55,$71,$42,$50,$14,$fd,$da,$bf
-    .byte $31,$68,$82,$ab,$12,$45,$ae,$12
-    .byte $41,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-    .byte 0,0,0,0,0,$4c,0,0,0,0,0,0,0,0,0,0
+  .by <price_Baby_Missile___
+  .by <price_Missile________
+  .by <price_Baby_Nuke______
+  .by <price_Nuke___________
+  .by <price_LeapFrog_______
+  .by <price_Funky_Bomb_____
+  .by <price_MIRV___________
+  .by <price_Death_s_Head___
+  .by <price_Napalm_________
+  .by <price_Hot_Napalm_____
+  .by <price_Tracer_________
+  .by <price_Smoke_Tracer___
+  .by <price_Baby_Roller____
+  .by <price_Roller_________
+  .by <price_Heavy_Roller___
+  .by <price_Riot_Charge____
+  .by <price_Riot_Blast_____
+  .by <price_Riot_Bomb______
+  .by <price_Heavy_Riot_Bomb
+  .by <price_Baby_Digger____
+  .by <price_Digger_________
+  .by <price_Heavy_Digger___
+  .by <price_Baby_Sandhog___
+  .by <price_Sandhog________
+  .by <price_Heavy_Sandhog__
+  .by <price_Dirt_Clod______
+  .by <price_Dirt_Ball______
+  .by <price_Ton_of_Dirt____
+  .by <price_Liquid_Dirt____
+  .by <price_Dirt_Charge____
+  .by <price_Earth_Disrupter
+  .by <price_Plasma_Blast___
+  .by <price_Laser__________
+  .by <price______________33
+  .by <price______________34
+  .by <price______________35
+  .by <price______________36
+  .by <price______________37
+  .by <price______________38
+  .by <price______________39
+  .by <price______________40
+  .by <price______________41
+  .by <price______________42
+  .by <price______________43
+  .by <price______________44
+  .by <price______________45
+  .by <price______________46
+  .by <price______________47
+  .by <price_Heat_Guidance__
+  .by <price_Bal_Guidance___
+  .by <price_Horz_Guidance__
+  .by <price_Vert_Guidance__
+  .by <price_Lazy_Boy_______
+  .by <price_Parachute______
+  .by <price_Battery________
+  .by <price_Mag_Deflector__
+  .by <price_Shield_________
+  .by <price_Force_Shield___
+  .by <price_Heavy_Shield___
+  .by <price_Super_Mag______
+  .by <price_Auto_Defense___
+  .by <price_Fuel_Tank______
+  .by <price_Contact_Trigger
+  .by <price______________63
+
 ;-------------------------------------------------
 ; how many units (bulletd) of a given weapon we get for a given price
 ; This is a table of constans.
@@ -793,10 +978,70 @@ WeaponPriceL
 ; is not present in the game.
 ; This is the slot for adding new weapons.
 WeaponUnits
-    .byte 10,5,3,1,2,2,3,1,10,2,20,10,10,5,2,10
-    .byte 5,5,2,10,5,2,10,5,2,10,5,2,2,10,10,5
-    .byte 5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-    .byte 6,2,5,5,2,8,10,2,3,3,2,2,1,10,25,0
+  .by 10 ;Baby_Missile___
+  .by 5  ;Missile________
+  .by 3  ;Baby_Nuke______
+  .by 1  ;Nuke___________
+  .by 2  ;LeapFrog_______
+  .by 2  ;Funky_Bomb_____
+  .by 3  ;MIRV___________
+  .by 1  ;Death_s_Head___
+  .by 10 ;Napalm_________
+  .by 2  ;Hot_Napalm_____
+  .by 20 ;Tracer_________
+  .by 10 ;Smoke_Tracer___
+  .by 10 ;Baby_Roller____
+  .by 5  ;Roller_________
+  .by 2  ;Heavy_Roller___
+  .by 1  ;Riot_Charge____
+  .by 5  ;Riot_Blast_____
+  .by 5  ;Riot_Bomb______
+  .by 2  ;Heavy_Riot_Bomb
+  .by 10 ;Baby_Digger____
+  .by 5  ;Digger_________
+  .by 2  ;Heavy_Digger___
+  .by 10 ;Baby_Sandhog___
+  .by 5  ;Sandhog________
+  .by 2  ;Heavy_Sandhog__
+  .by 10 ;Dirt_Clod______
+  .by 5  ;Dirt_Ball______
+  .by 2  ;Ton_of_Dirt____
+  .by 2  ;Liquid_Dirt____
+  .by 10 ;Dirt_Charge____
+  .by 10 ;Earth_Disrupter
+  .by 5  ;Plasma_Blast___
+  .by 5  ;Laser__________
+  .by 0  ;_____________33
+  .by 0  ;_____________34
+  .by 0  ;_____________35
+  .by 0  ;_____________36
+  .by 0  ;_____________37
+  .by 0  ;_____________38
+  .by 0  ;_____________39
+  .by 0  ;_____________40
+  .by 0  ;_____________41
+  .by 0  ;_____________42
+  .by 0  ;_____________43
+  .by 0  ;_____________44
+  .by 0  ;_____________45
+  .by 0  ;_____________46
+  .by 0  ;_____________47
+  .by 6  ;Heat_Guidance__
+  .by 2  ;Bal_Guidance___
+  .by 5  ;Horz_Guidance__
+  .by 5  ;Vert_Guidance__
+  .by 2  ;Lazy_Boy_______
+  .by 8  ;Parachute______
+  .by 10 ;Battery________
+  .by 2  ;Mag_Deflector__
+  .by 3  ;Shield_________
+  .by 3  ;Force_Shield___
+  .by 2  ;Heavy_Shield___
+  .by 2  ;Super_Mag______
+  .by 1  ;Auto_Defense___
+  .by 10 ;Fuel_Tank______
+  .by 25 ;Contact_Trigger
+  .by 0  ;_____________63
 
 ;-------------------------------------------------
 ; Screen codes of icons (chars) representing a given weapon

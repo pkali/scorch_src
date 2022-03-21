@@ -40,6 +40,13 @@ with the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 131
+2022-03-20
+- fixed bug: https://github.com/pkali/scorch_src/issues/4 It was really hard one, because I had to unspaghetti our own lousy code :]
+- it is now impossible to purchase non-existing weapons.
+- numerous edits / optimizations during debugging process
+- bug tracker moved to https://github.com/pkali/scorch_src/issues
+
 ###### Build 130
 2022-03-13
 - fixed bug: Decreasing of number of bullets after a shoot does not work correctly. It does look like it is fixed, although all  I did was moving decreasing before shooting. Displaying number of bullets immediately after shoot.

@@ -53,7 +53,7 @@
     .zpvar ytempDRAW .word ;same as above for XDRAW routine
     ;--------------temps used in circle routine
     .zpvar xi .word ;X (word) in draw routine
-    .zpvar fx  .byte ;circle drawing variables
+    .zpvar fx .byte ;circle drawing variables
     .zpvar yi .word ;Y (word) in draw routine
     .zpvar fy .byte
     .zpvar xk .word
@@ -75,7 +75,7 @@ displayposition = modify
 FlyDelay = 150
 screenheight = 200
 screenBytes = 40
-screenwidth = screenBytes*8
+screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 margin = 48 ;mountain drawing Y variable margin
 display = $1010 ;kill dos with the casette recorder!
 MaxPlayers = 6
@@ -272,7 +272,6 @@ loop
 	inx
 	cpx #(clearEnd-PreviousAngle)
 	bne loop
-	.endp
 
     ldx #5
 SettingEnergies
@@ -317,6 +316,8 @@ SettingEnergies
     jsr calculatemountains ;let mountains be nice for the eye
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
+
+.endp  ; not really end of the procedure, but just for now. revisit.
 
 ;--------------------round screen is ready---------
 
@@ -408,12 +409,12 @@ AfterManualShooting
     jsr DecreaseWeaponBeforeShoot
     jsr DisplayingSymbols
 
-	; lower energy to eventually let tanks commit suicide
 	ldx TankNr
-	dec Energy,x
+	dec Energy,x   ; lower energy to eventually let tanks commit suicide
     lda ActiveWeapon,x
 
     jsr Shoot
+    
     lda HitFlag ;0 if missed
     beq missed
     lda #0
@@ -428,6 +429,13 @@ AfterManualShooting
 
 
 AfterExplode
+    ldy WeaponDepleted
+    bne @+
+      ldx TankNr
+      tya
+      sta ActiveWeapon,x 
+@
+
     ;temporary tanks removal (would fall down with soil)
     mva TankNr tempor2
     mva #1 Erase
@@ -773,10 +781,10 @@ loop05
     sta TanksWeapon5,x
     sta TanksWeapon6,x
     dex
-    bne skip13
-    lda #99
-    bne loop05
-skip13 bpl loop05
+    bne @+
+      lda #99
+      bne loop05
+@ bpl loop05
     rts
 .endp
 

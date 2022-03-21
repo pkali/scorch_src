@@ -134,14 +134,14 @@ OptionsFinished
 
     ldy OptionsTable+1
     ldx #0
-skip10
-    lda CashOptionL,y
-    sta moneyL,x
-    lda CashOptionH,y
-    sta moneyH,x
-    inx
-    cpx NumberOfPlayers
-    bne skip10
+@
+      lda CashOptionL,y
+      sta moneyL,x
+      lda CashOptionH,y
+      sta moneyH,x
+      inx
+      cpx NumberOfPlayers
+    bne @-
 
     ;third option (gravity)
     ldy OptionsTable+2
@@ -234,7 +234,7 @@ OptionsYLoop
 
 ;-------------------------------------------
 ; call of the purchase screens for each tank
-CallPurchaseForEveryTank
+.proc CallPurchaseForEveryTank
     mva #$2 colpf2s   ; set normal color
     mwa #PurchaseDL dlptrs
     lda dmactls
@@ -259,9 +259,10 @@ AfterManualPurchase
     cmp NumberOfPlayers
     bne loop03
     rts
+.endp
 
 ;--------------------------------------------------
-Purchase ;
+.proc Purchase ;
 ;--------------------------------------------------
 ; In tanknr there is a number of the tank (player)
 ; that is buying weapons now (from 0).
@@ -359,7 +360,7 @@ CheckWeapon01
     ldy #$4  ; 4 chars from the beginning of the line
     sta (xbyte),y
 
-    ;now number of purchased units (bullets)
+    ;now number of purchased units (shells)
     clc
     lda xbyte
     adc #23  ; 23 chars from the beginning of the line
@@ -409,24 +410,22 @@ CheckWeapon01
     mva #0 temp+1  ; this number is only in X
     ; times 16 (it's length of the names of weapons)
     ldy #3 ; Rotate 4 times
-Rotate02
+@
     asl temp
     rol temp+1
     dey
-    bpl Rotate02
-    ; Hmmm..... Interesting why there is no CLC here?
+    bpl @-
 
-    adw temp #NamesOfWeapons modify
-    sbw modify  #6 ; from 6th char
+    adw temp #NamesOfWeapons-6 modify
 
     ldy #6 ; from 6th char
 
-modyf1
+@
     lda (modify),y
     sta (xbyte),y
     iny
     cpy #(16+6)
-    bne modyf1
+    bne @-
 
 
     ; in X there is what we need
@@ -506,8 +505,8 @@ WeHaveOffset
 Rotate04
     lsr xbyte+1
     bcc DoNotAddX01
-    clc
-    adc #40
+      clc
+      adc #40
 DoNotAddX01
     ror
     ror xbyte
@@ -668,20 +667,23 @@ ListChange
     sta WhichList
     bne SecondSelected
     mwa #ListOfWeapons WeaponsListDL
-    jmp dalejx01
+    jmp @+
 SecondSelected
     mwa #ListOfDefensiveWeapons WeaponsListDL
-dalejx01
+@
     lda #$00
     sta PositionOnTheList
     sta OffsetDL1
     jmp ChoosingItemForPurchase
 
+.endp
 ; weapon purchase routne increases number of possessed bullets
 ; decreases cash and jumps to screen refresh
 ;--------------------------------------------------
-PurchaseWeaponNow
+.proc PurchaseWeaponNow
 ;--------------------------------------------------
+isPriceZero = tempXRoller
+
     lda WhichList
     bne PurchaseDeffensive
 
@@ -696,6 +698,7 @@ PurchaseAll
     ; after getting weapon number the routine is common for all
     ldx tanknr
     tay  ; weapon number is in Y
+    beq @+
     sec
     lda moneyL,x ; substracting from posessed money
     sbc WeaponPriceL,y ; of price of the given weapon
@@ -703,25 +706,20 @@ PurchaseAll
     lda moneyH,x
     sbc WeaponPriceH,y
     sta moneyH,x
-    ; now we have get address of
+    
+    ; save info about price == 0
+    lda WeaponPriceL,y
+    ora WeaponPriceH,y
+    sta isPriceZero    
+
+
+    ; now we have to get address of
     ; the table of the weapon of the tank
-    ; and add appropriate number of bullets
-    stx temp ;we will multiply by 64
-    mva #0 temp+1
-    ; times 64
-    ; (because it is the lenght of one record in weapon table)
-    ldx #5 ; Rotate 6 times
-    ; (in Y there is a weapon number, we do not touch it!!!)
-Rotate03
-    asl temp
-    rol temp+1
-    dex
-    bpl Rotate03
-    lda #<TanksWeapon1
-    adc temp
+    ; and add appropriate number of shells
+    
+    lda TanksWeaponsTableL,x
     sta temp
-    lda #>TanksWeapon1
-    adc temp+1
+    lda TanksWeaponsTableH,x
     sta temp+1
 
     lda (temp),y  ; and we have number of posessed bullets of the weapon
@@ -729,15 +727,24 @@ Rotate03
     sta (temp),y ; and we added appropriate number of bullets
     cmp #100 ; but there should be no more than 99 bullets
     bcc LessThan100
-    lda #99
-    sta (temp),y
+      lda #99
+      sta (temp),y
 LessThan100
     sty LastWeapon ; store last purchased weapon
     ; because we must put screen pointer next to it
-    jmp AfterPurchase
 
+    ; additional check for unfinished game
+    ; if weapon was free (price == $0)
+    ; then have nothing...
+    lda isPriceZero
+    bne @+
+      lda #0
+      sta (temp),y
+@
+    jmp Purchase.AfterPurchase
+.endp
 
-PutLitteChar
+.proc PutLitteChar
     ; first let's cleat both lists from little chars
     mwa #ListOfWeapons xbyte
     ldx #52 ; there are 52 lines total
@@ -846,9 +853,9 @@ NoArrowDown
     stx MoreDowndl
     sty MoreDowndl+1
     rts
-
+.endp
 ; -----------------------------------------------------
-EnterPlayerName
+.proc EnterPlayerName
 ; in: TankNr
 ; Out: TanksNames, SkillTable
 
@@ -1008,11 +1015,10 @@ nextchar05
     cpy #$08
     bne nextchar05
     rts
+.endp
 
 
-
-
-SelectLevel
+.proc SelectLevel
     ; this routine highlights the choosen
     ; level of the computer opponent
     ldx #$9 ; 9 possible levels
@@ -1042,8 +1048,10 @@ CheckNextLevel
     dex
     bpl CheckNextLevel01
     rts
+.endp
+
 ;--------------------------------------------------
-displaydec ;decimal (word), displayposition  (word)
+.proc displaydec ;decimal (word), displayposition  (word)
 ;--------------------------------------------------
 ; displays decimal number as in parameters (in text mode)
 ; leading zeores are removed
@@ -1104,10 +1112,10 @@ displayloop
     bpl displayloop
 
     rts
-
+.endp
 
 ;--------------------------------------------------
-displaybyte ;decimal (byte), displayposition  (word)
+.proc displaybyte ;decimal (byte), displayposition  (word)
 ;--------------------------------------------------
 ; displays decimal number as in parameters (in text mode)
 ; leading zeores are removed
@@ -1153,6 +1161,7 @@ displayloop1
     bpl displayloop1
 
     rts
+.endp
 ;-------decimal constans
 zero
 digits   dta d"0123456789"
@@ -1160,7 +1169,7 @@ nineplus dta d"9"+1
 space    dta d" "
 
 ;--------------------------------------------------------
-DisplayOffensiveTextNr ;
+.proc DisplayOffensiveTextNr ;
     ;This routine displays texts using PutChar4x4
     ;pretty cool, eh
     ;parameters are:
@@ -1306,9 +1315,9 @@ DOTNcharloop
     bne DOTNcharloop
 
     rts
-
+.endp
 ;-------------------------------
-TypeLine4x4 ;
+.proc TypeLine4x4 ;
 ;-------------------------------
     ;this routine prints line ending with $ff
     ;address in LineAddress4x4
@@ -1337,6 +1346,7 @@ TypeLine4x4Loop
 
 EndOfTypeLine4x4
     rts
+.endp
 
 ;--------------------------------
 .proc DisplayResults ;
