@@ -11,13 +11,14 @@
 ;(https://github.com/pkali/omc65)
 ;and on 2012-06-21 translated to mads
 ;
-;game source code is split into 5+1 parts:
+;game source code is split into 5+2 parts:
 ;scorch.asm is the main game code (with many assorted routines)
 ;grafproc.asm - graphics routines like line or circle
 ;textproc.asm - text routines like list of weapons and shop
 ;variables.asm - all non-zero page variables and constans
 ;display.asm - display lists and text screen definitions
 ;ai.asm - artificial stupidity of computer opponents
+;weapons.asm - general arsenal of tankies
 
 ;we were trying to use as much macros and pseudoops as possible
 ;they are defined in atari.hea and macro.hea files together with many
@@ -91,6 +92,7 @@ MaxPlayers = 6
 ;-----------------------------------------------
     icl 'display.asm'
 ;----------------------------------------------
+    icl 'constants.asm'
     icl 'variables.asm'
 ;--------------------------------------------------
 OffensiveTexts
@@ -120,12 +122,11 @@ START
 
     mva #0 TankNr
 
-loop01
-    jsr EnterPlayerName
-    inc TankNr
-    lda TankNr
-    cmp NumberOfPlayers
-    bne loop01
+@     jsr EnterPlayerName
+      inc TankNr
+      lda TankNr
+      cmp NumberOfPlayers
+    bne @-
 
     mwa #dl dlptrs
     lda dmactls
@@ -185,27 +186,12 @@ checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
     beq peopleAreHere
     dex
     bpl checkForHuman
-    tay
     ; no people, just wait a bit
     pause 150
     jmp noKey
 
 peopleAreHere
-    ;key ; only if there is a human player
-    lda SKSTAT
-    cmp #$ff
-    beq checkFire
-    cmp #$f7
-    beq checkFire
-    jmp noKey ;key pressed, so go
-checkFire
-    ;------------JOY-------------
-    ;happy happy joy joy
-    ;check for joystick now
-    ;fire
-    lda TRIG0
-    bne peopleAreHere ;fire not pressed, so loop
-
+    jsr getkey
 noKey
     ldx NumberOfPlayers
     dex
@@ -267,11 +253,11 @@ Round .proc ;
 
 	lda #0
 	tax
-loop
+@
 	sta previousAngle,x
 	inx
-	cpx #(clearEnd-PreviousAngle)
-	bne loop
+	cpx #(singleRoundVarsEnd-PreviousAngle)
+	bne @-
 
     ldx #5
 SettingEnergies
@@ -317,11 +303,10 @@ SettingEnergies
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
-.endp  ; not really end of the procedure, but just for now. revisit.
+.endp  ; not really end of the procedure, but just for now. TODO: revisit.
 
 ;--------------------round screen is ready---------
 
-    ;mva #0 TankNr
     mva #0 TankSequencePointer
 
 MainRoundLoop
@@ -628,69 +613,7 @@ PlayerXdeath .proc
 
     jmp AfterExplode
 
-
-;--------------------------------------------------
-Explosion .proc
-;--------------------------------------------------
-    ;cleanup of the soil fall down ranges (left and right)
-    mwa #screenwidth RangeLeft
-    lda #0
-    sta RangeRight
-    sta RangeRight+1
-
-    ldx TankNr
-    lda ActiveWeapon,x
-    asl
-.endp
-Explosion2 .proc
-	tax
-	lda ExplosionRoutines+1,x
-    	pha
-    	lda ExplosionRoutines,x
-    	pha
-	rts
-ExplosionRoutines
-    .word babymissile-1
-    .word missile-1
-    .word babynuke-1
-    .word nuke-1
-    .word leapfrog-1
-    .word funkybomb-1
-    .word mirv-1
-    .word deathshead-1
-    .word VOID-1 ;napalm
-    .word VOID-1 ;hotnapalm
-    .word tracer-1
-    .word VOID-1 ;smoketracer
-    .word babyroller-1
-    .word roller-1
-    .word heavyroller-1
-    .word VOID-1 ;riotcharge
-    .word VOID-1 ;riotblast
-    .word riotbomb-1
-    .word heavyriotbomb-1
-    .word babydigger-1
-    .word digger-1
-    .word heavydigger-1
-    .word babysandhog-1
-    .word sandhog-1
-    .word heavysandhog-1
-    .word dirtclod-1
-    .word dirtball-1
-    .word tonofdirt-1
-    .word VOID-1 ;liquiddirt
-    .word dirtcharge-1
-    .word VOID-1 ;earthdisrupter
-    .word VOID-1 ;plasmablast
-    .word laser-1
-
-VOID
-    rts
-.endp
-; ------------------------
-
 	icl 'weapons.asm'
-
 
 ;--------------------------------------------------
 DecreaseEnergyX .proc
@@ -767,7 +690,7 @@ PMoutofScreen .proc
 .endp
 
 ;--------------------------------------------------
-.nowarn .proc WeaponCleanup;
+.proc WeaponCleanup;
 ; cleaning of the weapon possesion tables
 ; (99 of Baby Missles, all other weapons=0)
 ;--------------------------------------------------
@@ -792,8 +715,7 @@ loop05
 Initialize .proc
 ;Initialization sequence
 ;--------------------------------------------------
-    ;jsr GenerateOffensiveTextTables
-    ;jsr GenerateDeffensiveTextTables
+deletePtr = temp
 
     lda #0 
     sta Erase
@@ -802,6 +724,33 @@ Initialize .proc
     sta oldPlotPointerX+1
     sta GameIsOver
 
+
+    ; clean variables
+    tay
+    mwa #variablesStart deletePtr
+@     tya
+      sta (deletePtr),y
+      inw deletePtr
+      cpw deletePtr #variablesEnd
+    bne @-
+    
+    lda #2
+    sta OptionsTable+2
+    sta OptionsTable+3
+    
+    mwa #1024 RandBoundaryHigh
+    mva #$ff LastWeapon
+    sta HowMuchToFall
+    mva #1 color
+    mva #$40 MaxWind
+    mwa #$0080 Wind
+    mva #25 gravity
+    
+    
+    
+    jsr WeaponCleanup    
+    
+    
     mva #$2 colpf2s
     mva #12 colpf3s
     mva #>WeaponFont chbas
@@ -1121,6 +1070,61 @@ nextishigher
 
     rts
 .endp
+
+;--------------------------------------------------
+getkey .proc; waits for pressing a key and returns pressed value in A
+;--------------------------------------------------
+    jsr WaitForKeyRelease
+@
+      lda SKSTAT
+      cmp #$ff
+      beq checkJoyGetKey ; key not pressed, check Joy
+  
+      lda kbcode
+      and #$3f ;CTRL and SHIFT ellimination
+    rts
+checkJoyGetKey
+      ;------------JOY-------------
+      ;happy happy joy joy
+      ;check for joystick now
+      lda JSTICK0
+      and #$0f
+      cmp #$0f
+      beq notpressedJoyGetKey
+      tay 
+      lda joyToKeyTable,y
+    rts
+notpressedJoyGetKey
+      ;fire
+      lda TRIG0
+    bne @-
+    lda #$0c ;Return key
+    rts
+.endp
+;--------------------------------------------------
+getkeynowait .proc;
+;--------------------------------------------------
+    jsr WaitForKeyRelease 
+    lda kbcode
+    and #$3f ;CTRL and SHIFT ellimination
+    rts
+.endp
+;--------------------------------------------------
+WaitForKeyRelease .proc
+;--------------------------------------------------
+    lda JSTICK0
+    and #$0f
+    cmp #$0f
+    bne WaitForKeyRelease
+    lda TRIG0
+    beq WaitForKeyRelease
+    lda SKSTAT
+    cmp #$ff
+    bne WaitForKeyRelease
+KeyIsReleased
+    rts
+.endp
+
 ;----------------------------------------------
     icl 'textproc.asm'
 ;----------------------------------------------

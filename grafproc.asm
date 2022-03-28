@@ -439,18 +439,6 @@ splot8 .proc
 .endp
 
 ;--------------------------------------------------
-WaitForKeyRelease .proc
-;--------------------------------------------------
-    lda SKSTAT
-    cmp #$ff
-    beq KeyIsReleased
-    cmp #$f7
-    bne WaitForKeyRelease
-KeyIsReleased
-    rts
-.endp
-
-;--------------------------------------------------
 clearscreen .proc
 ;--------------------------------------------------
     lda #0

@@ -6,62 +6,7 @@
 ; this module contains routines used in text mode
 ; like shop and start-up options
 ;----------------------------------------
-;--------------------------------------------------
-getkey .proc; waits for pressing a key and returns pressed value in A
-;--------------------------------------------------
-    pause 5
-    lda SKSTAT
-    cmp #$ff
-    beq lopx01
-    cmp #$f7
-    bne getkey ; I guess it waits for RELEASING a key
-	lda JSTICK0
-	and #$0f
-	cmp #$0f
-	bne getkey ; waits for not moving the joy
-	lda TRIG0
-	beq getkey ; waits for releasing FIRE
 
-
-lopx01 lda SKSTAT
-    cmp #$ff
-    beq checkJoyGetKey ; key not pressed, check Joy
-    cmp #$f7
-    beq checkJoyGetKey ; key not pressed, check Joy
-
-    lda kbcode
-    and #$3f ;CTRL and SHIFT ellimination
-    rts
-checkJoyGetKey
-    ;------------JOY-------------
-    ;happy happy joy joy
-    ;check for joystick now
-    lda JSTICK0
-    and #$0f
-    cmp #$0f
-    beq notpressedJoyGetKey
-    tay 
-    lda joyToKeyTable,y
-    rts
-notpressedJoyGetKey
-    ;fire
-    lda TRIG0
-    bne lopx01
-    lda #$0c ;Return key
-    rts
-.endp
-;--------------------------------------------------
-getkeynowait .proc;
-;--------------------------------------------------
-    lda SKSTAT
-    cmp #$ff
-    beq getkeynowait
-    cmp #$f7
-    beq getkeynowait ; I guess it waits for RELEASING a key
-    lda kbcode
-    and #$3f ;CTRL and SHIFT ellimination
-    rts
-.endp
 ;--------------------------------------------------
 Options .proc
 ;--------------------------------------------------
@@ -682,6 +627,7 @@ SecondSelected
 ;--------------------------------------------------
 .proc PurchaseWeaponNow
 ;--------------------------------------------------
+weaponPtr = temp
 isPriceZero = tempXRoller
 
     lda WhichList
@@ -718,17 +664,18 @@ PurchaseAll
     ; and add appropriate number of shells
     
     lda TanksWeaponsTableL,x
-    sta temp
+    sta weaponPtr
     lda TanksWeaponsTableH,x
-    sta temp+1
+    sta weaponPtr+1
 
-    lda (temp),y  ; and we have number of posessed bullets of the weapon
+    clc
+    lda (weaponPtr),y  ; and we have number of posessed bullets of the weapon
     adc WeaponUnits,y
-    sta (temp),y ; and we added appropriate number of bullets
+    sta (weaponPtr),y ; and we added appropriate number of bullets
     cmp #100 ; but there should be no more than 99 bullets
     bcc LessThan100
       lda #99
-      sta (temp),y
+      sta (weaponPtr),y
 LessThan100
     sty LastWeapon ; store last purchased weapon
     ; because we must put screen pointer next to it
@@ -739,7 +686,7 @@ LessThan100
     lda isPriceZero
     bne @+
       lda #0
-      sta (temp),y
+      sta (weaponPtr),y
 @
     jmp Purchase.AfterPurchase
 .endp
@@ -1021,7 +968,7 @@ nextchar05
 .proc SelectLevel
     ; this routine highlights the choosen
     ; level of the computer opponent
-    ldx #$9 ; 9 possible levels
+    ldx #8 ; 9 possible levels
 CheckNextLevel01
     lda LevelNameBeginL,x ; address on the screen
     sta temp

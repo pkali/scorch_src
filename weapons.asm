@@ -1,6 +1,65 @@
 ;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
+;--------------------------------------------------
+Explosion .proc
+;--------------------------------------------------
+    ;cleanup of the soil fall down ranges (left and right)
+    mwa #screenwidth RangeLeft
+    lda #0
+    sta RangeRight
+    sta RangeRight+1
+
+    ldx TankNr
+    lda ActiveWeapon,x
+    asl
+.endp
+Explosion2 .proc
+    tax
+    lda ExplosionRoutines+1,x
+        pha
+        lda ExplosionRoutines,x
+        pha
+    rts
+ExplosionRoutines
+    .word babymissile-1
+    .word missile-1
+    .word babynuke-1
+    .word nuke-1
+    .word leapfrog-1
+    .word funkybomb-1
+    .word mirv-1
+    .word deathshead-1
+    .word VOID-1 ;napalm
+    .word VOID-1 ;hotnapalm
+    .word tracer-1
+    .word VOID-1 ;smoketracer
+    .word babyroller-1
+    .word roller-1
+    .word heavyroller-1
+    .word VOID-1 ;riotcharge
+    .word VOID-1 ;riotblast
+    .word riotbomb-1
+    .word heavyriotbomb-1
+    .word babydigger-1
+    .word digger-1
+    .word heavydigger-1
+    .word babysandhog-1
+    .word sandhog-1
+    .word heavysandhog-1
+    .word dirtclod-1
+    .word dirtball-1
+    .word tonofdirt-1
+    .word VOID-1 ;liquiddirt
+    .word dirtcharge-1
+    .word VOID-1 ;earthdisrupter
+    .word VOID-1 ;plasmablast
+    .word laser-1
+
+VOID
+    rts
+.endp
+; ------------------------
 
 ; ------------------------
 .proc babymissile
@@ -811,7 +870,6 @@ ContinueToCheckMaxForce2
     jsr DrawTankNr
 
     wait ; best after drawing a tank
-    ;wait
 
 
 ;keyboard reading
@@ -822,6 +880,8 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
+    lda TRIG0
+    beq notpressed
     lda SKSTAT
     cmp #$ff
     beq checkJoy
@@ -866,11 +926,9 @@ checkJoy
 notpressedJoy
     ;fire
     lda TRIG0
-    bne JNotFire
-    lda #$21
-    jmp jumpFromStick
-JNotFire
-    jmp notpressed
+    jeq pressedSpace
+   jmp notpressed
+
 ;
 pressedUp
     ;force increaseeee!
@@ -1060,7 +1118,6 @@ AfterStrongShoot
     clc
     lda xtraj+1
     adc EndOfTheBarrelX,y   ; correction of X
-    ;adc #4
     sta xtraj+1
     lda xtraj+2
     adc #0
@@ -1068,7 +1125,6 @@ AfterStrongShoot
     sec
     lda ytraj+1
     sbc EndOfTheBarrelY,y   ; correction of Y
-    ;sbc #7
     sta ytraj+1
     lda ytraj+2
     sbc #0
@@ -1078,7 +1134,6 @@ AfterStrongShoot
 
     jsr Flight
     mva #1 color
-    ;jsr WaitForKeyRelease
     rts
 .endp
 

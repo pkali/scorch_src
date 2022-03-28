@@ -4,41 +4,50 @@ by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
 
-you can contact us at pecus@poczta.fm or pirx@5oft.pl
+You can contact us at pecus@poczta.fm or pirx@5oft.pl
 home page of this project is https://github.com/pkali/scorch_src
 
-this source code was compiled under OMC65 crossassembler 
+This source code was originally compiled under OMC65 crossassembler 
 (https://github.com/pkali/omc65)
 and on 2012-06-21 translated to mads
 
-game source code is split into 5+1 parts:
+Game source code is split into 5+3 parts:
 - scorch.asm is the main game code (with many assorted routines)
 - grafproc.asm - graphics routines like line or circle
 - textproc.asm - text routines like list of weapons and shop
-- variables.asm - all non-zero page variables and constants
+- variables.asm - all non-zero page variables
+- constants.asm - various tables of constants 
 - display.asm - display lists and text screen definitions
 - ai.asm - artificial stupidity of computer opponents
+- weapons.asm - general arsenal of tankies
 
-we were trying to use as much macros and pseudo-ops as possible
-they are defined in atari.hea and macro.hea files together with many
+We were trying to use as much macros and pseudo-ops as possible.
+They are defined in atari.hea and macro.hea files together with many
 atari constants. This way it should be relatively easy to
 port this code to e.g. C64
 
 After those N years of working on this piece of code
 we are sure it would be much wiser to write it in C, Action!
 or MadPascal but on the other hand it is so much fun to type 150 chars
-where you want to have y=ax+b :)
+where all you want to have y=ax+b :)
 
-originally most variables were in Polish, comments were sparse
+Originally most variables were in Polish, comments were sparse
 but we wanted to release this piece of code to public
 and due to being always short of time/energy (to finish the game)
 we decided it must go in 'English' to let other people work on it.
-it never happened, but we got some encouraging comments and we are still
+It never happened, but we got some encouraging comments and we are still
 trying to do something from time to time.
 
-with the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. we'll see.
+With the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changes:
+
+###### Build 132
+2022-03-27
+- fixed bug: https://github.com/pkali/scorch_src/issues/21 Wrong number of shells purchased
+- fixed bug: https://github.com/pkali/scorch_src/issues/19 Inventory not cleared on next match. When fixing in a general way (cleaning all variables on game restart) I encountered a very old and nasty bug that made the game running basically by pure chance.
+- fixed bug: https://github.com/pkali/scorch_src/issues/18 selecting players using fire sometimes selects more than one. Rewritten keyboard handling to prepare for enhancements like #17
+- tables of constants moved to a separate file, variables declared with .DS directive in preparation for memory map optimization.
 
 ###### Build 131
 2022-03-20

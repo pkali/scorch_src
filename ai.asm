@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=program.asm
+;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 ; artificial intelligence of tanks goes here!
 ; in A there is a level of tank's intelligence
