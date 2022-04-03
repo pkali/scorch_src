@@ -42,6 +42,16 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 133
+2022-04-03
+- bug: https://github.com/pkali/scorch_src/issues/7 tank stands on a single pixel spike. `WhereToSlideTable` vastly improved. 
+- enhancement: https://github.com/pkali/scorch_src/issues/15 Add player colors to purchase screen. Still room to improvement!
+- enhancement: https://github.com/pkali/scorch_src/issues/22 Redesign information panel (top 2 lines of the game screen). Now game might make some sense for a newcomer :)
+- change: https://github.com/pkali/scorch_src/issues/28 remove white lines around out-of-the-screen point tracker. Now it is visible and looks better!
+- enhancement: https://github.com/pkali/scorch_src/issues/25 Missiles are too fast. Thanks @bocianu and @miker for the hint. Speed of the shell is configurable now, 5 speeds available.
+- enhancement: https://github.com/pkali/scorch_src/issues/27 Remember game settings between games.
+- enhancement: https://github.com/pkali/scorch_src/issues/24 Remember player names between games. Thanks @bocianu
+
 ###### Build 132
 2022-03-27
 - fixed bug: https://github.com/pkali/scorch_src/issues/21 Wrong number of shells purchased

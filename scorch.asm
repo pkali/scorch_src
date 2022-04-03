@@ -77,7 +77,7 @@ screenheight = 200
 screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 margin = 48 ;mountain drawing Y variable margin
-display = $1010 ;kill dos with the casette recorder!
+display = $1010 ;screen takes $2K due to clearing routine
 MaxPlayers = 6
 maxOptions = 6  ;number of all options
 PMOffset = $23 ; P/M to graphics offset
@@ -87,7 +87,7 @@ PMOffset = $23 ; P/M to graphics offset
 
 	icl 'artwork/HIMARS14.asm'
     ;Game loading address
-    ORG  $3010 ;one hex thousands for screen
+    ORG  $3010 ;must be $2K after screen, because screen cleaning erases $2K
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
