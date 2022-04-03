@@ -1648,19 +1648,9 @@ LWindToRight
     bne nowait
     lda color
     beq nowait
-    ;wait
-    ;this is where program slows down the flight of a missile
-    ;possibly it is too slow to wait till next frame...
-    ;we will see.
-    ;---2003-08-01 yes, it is too slow!!! shorter delay
-    ;              must be here like few sta wsync's
-    ; half a frame would be the best...
-    ldx #FlyDelay
-DelayLoop
-    sta wsync
-    dex
-    bne DelayLoop
-
+ 
+    jsr shellDelay
+    
 nowait
     lda HitFlag
     bne Hit
@@ -1879,10 +1869,8 @@ mrLoopix
     sbc #0
     sta vy+3
 
-    ; 2 waits for 5 bullets
-    wait
-    ;wait  ; speeded up build 131
-
+    jsr ShellDelay
+    
 MIRVdoNotChangeY
 
     lda MirvDown,x ; if bullet is already down we go with the next one
@@ -2249,7 +2237,16 @@ HowManyBullets .proc
     rts
 .endp
 
-
+;--------------------------------------------------
+ShellDelay .proc
+    ldx flyDelay
+DelayLoop
+    sta wsync
+    sta wsync
+    dex
+    bne DelayLoop
+    rts
+.endp
     
     .ENDIF
     

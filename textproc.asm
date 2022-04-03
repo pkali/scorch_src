@@ -14,7 +14,7 @@ Options .proc
 ; this function returns:
 ; - number of players (NumberOfPlayers)
 ; - money each player has on the beginning of the game (moneyL i moneyH)
-; - and I am sure maxwind, gravity, no_of_rounds in a game
+; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
     mva #0 OptionsY
 
@@ -103,6 +103,11 @@ OptionsFinished
     lda RoundsTable,y
     sta RoundsInTheGame
     
+    ;6th option (shell speed)
+    ldy OptionsTable+5
+    lda flyDelayTable,y
+    sta flyDelay
+    
     rts
 ;--------
 ; inversing selected option (cursor)
@@ -131,7 +136,7 @@ OptionsSetMainLoop
     asl
     adc OptionsTable,x  ;OptionsTable value * 5
     tay
-    ldx #4
+    ldx #MaxOptions-1
 OptionSetLoop
     lda (temp),y
     ora #$80
@@ -180,7 +185,6 @@ OptionsYLoop
 ;-------------------------------------------
 ; call of the purchase screens for each tank
 .proc CallPurchaseForEveryTank
-    mva #$2 colpf2s   ; set normal color
     mwa #PurchaseDL dlptrs
     lda dmactls
     and #$fc
@@ -217,6 +221,10 @@ AfterManualPurchase
 
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
     jsr PMoutofScreen
+    
+    ldx tankNr
+    lda TankColoursTable,x
+    sta colpf2s 
 
 ; we are clearing list of the weapons
     mva #$ff LastWeapon
@@ -820,16 +828,35 @@ NoArrowDown
     mwa #(NameScreen+41) displayposition
     jsr displaybyte
     jsr SelectLevel ; setting choosen level of the opponent (Moron, etc)
-    ; clear the name and place cursor at position 0
+
+    ; clear tank name editor field
+    ldx #8
     lda #0
-    sta PositionInName
-    ldx #$08 ; one more because cursor could be there
-LoopName01
-    sta NameAdr,x
-    dex
-    bne LoopName01
-    lda #$80 ; place cursor on the beginning
-    sta NameAdr
+@     sta NameAdr,x
+      dex
+    bpl @-
+    
+    ; copy existing name and place cursor at end
+    lda TankNr
+    :3 asl
+    tax
+    
+    ldy #0
+@     lda TanksNames,x
+      beq endOfTankName
+      sta NameAdr,y
+      inx
+      iny
+      cpy #8
+    bne @-
+endOfTankName
+    
+
+    lda #$80 ; place cursor on the end
+    sta NameAdr,y
+    sty PositionInName
+
+
 CheckKeys
     jsr getkey
     ; is the char to be recorded?
@@ -1492,7 +1519,7 @@ FinishResultDisplay
     lda Energy,x
 
     sta decimal
-    mwa #textbuffer+40 displayposition
+    mwa #textbuffer+48 displayposition
     jsr displaybyte
     ;---------------------
     ;displaying quantity of the given weapon
@@ -1535,7 +1562,7 @@ loop06
     sta decimal
     lda EnergyTableH,x
     sta decimal+1
-    mwa #textbuffer+63 displayposition
+    mwa #textbuffer+40+34 displayposition
     jsr displaydec
 
     ;=========================
@@ -1547,9 +1574,9 @@ loop06
     lda AngleTable,x
     bmi AngleToLeft
     lda #$7f  ; (tab) character
-    sta textbuffer+52
+    sta textbuffer+40+23
     lda #0  ;space
-    sta textbuffer+49
+    sta textbuffer+40+20
     lda #90
     sec
     sbc AngleTable,x
@@ -1557,7 +1584,7 @@ loop06
     tay
     lda BarrelTableR,y
     sta CharCode
-    jmp AngleDisplay ;like jp, because code always <>0
+    bne AngleDisplay ;like jmp, because code always <>0
 AngleToLeft
     sec
     sbc #(255-90)
@@ -1566,12 +1593,12 @@ AngleToLeft
     lda BarrelTableL,y
     sta CharCode
     lda #$7e  ;(del) char
-    sta textbuffer+49
+    sta textbuffer+40+20
     lda #0 ;space
-    sta textbuffer+52
+    sta textbuffer+40+23
 
 AngleDisplay
-    mwa #textbuffer+50 displayposition
+    mwa #textbuffer+40+21 displayposition
     jsr displaybyte
 
 
@@ -1581,15 +1608,15 @@ AngleDisplay
     lda WindOrientation
     bne DisplayLeftWind
     lda #$7f  ; (tab) char
-    sta textbuffer+79
+    sta textbuffer+80+28
     lda #0  ;space
-    sta textbuffer+76
+    sta textbuffer+80+25
     beq DisplayWindValue
 DisplayLeftWind
     lda #$7e  ;(del) char
-    sta textbuffer+76
+    sta textbuffer+80+25
     lda #0 ;space
-    sta textbuffer+79
+    sta textbuffer+80+28
 DisplayWindValue
     mwa Wind temp
     lsrw temp ;divide by 16 to have
@@ -1598,8 +1625,16 @@ DisplayWindValue
     lsrw temp
     lda temp
     sta decimal
-    mwa #textbuffer+77 displayposition
+    mwa #textbuffer+80+26 displayposition
     jsr displaybyte
+    
+    
+    ;display round number
+    lda CurrentRoundNr
+    sta decimal
+    mwa #textbuffer+80+14 displayposition
+    jsr displaybyte ;decimal (byte), displayposition  (word)
+    
     rts
 .endp
 ;-------------------------------------------------

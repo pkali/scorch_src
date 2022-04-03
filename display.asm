@@ -7,7 +7,7 @@
 ;-----------------------------------------------------
 PurchaseDL
         .byte $70,$70,$20
-        .byte $42
+        .byte $42+$80
         .word textbuffer2
         .byte $02,$10,$42
 MoreUpdl
@@ -29,7 +29,8 @@ OptionsDL
         :5 .byte $70
         .byte $42
         .word OptionsScreen
-        .byte $30,$02,$02,$70,$02,0,$02,0,$2,0,$2,0,$2
+        .byte $30,$02,$02,$70
+        :maxOptions .by $02,0
         .byte $41
         .word OptionsDL
 ;------------------------
@@ -46,18 +47,14 @@ NameDL
 ; -------------------------------------------------
 
 dl ; MAIN game display list
-        .byte $70,$00
+        .byte 0
         .byte $42 
         .word textbuffer
-        .byte $02 +$80 ;DLI
+        .byte $02, $02 +$80 ;DLI
         .byte $00 
 
-        .byte $4f
-        .word WhiteLine
 	.byte $4f
 	.word PlotLine
-        .byte $4f
-        .word WhiteLine
 
         .byte $4f
         .word display
@@ -69,24 +66,22 @@ dl ; MAIN game display list
         :97 .byte $0f
         .byte $41
         .word dl
-; horizontal line
-WhiteLine
- :screenBytes .by $ff
 PlotLine = display + screenHeight*screenBytes ; the last line is plot pointer 
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. 132 (un)2000-2022"
+ dta d"Welcome to Scorch ver. 133 (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   
      ; 0123456789012345678901234567890123456789
- dta d"Players :    2    3    4    5    6      "
- dta d"Cash    :  none   2K   5K   8K  10K     "
- dta d"Gravity :  0.2G 0.5G  1G   2G   4G      "
- dta d"Wind    :   1B   3B   5B   7B   9B      "
- dta d"Rounds  :   10   20   30   40   50      "
+ dta d"Players :     2    3    4    5    6     "
+ dta d"Cash    :   none  2K   5K   8K  10K     "
+ dta d"Gravity :   0.2G 0.5G  1G   2G   4G     "
+ dta d"Wind    :    1B   3B   5B   7B   9B     "
+ dta d"Rounds  :    10   20   30   40   50     "
+ dta d"Shells  :   slug slow norm fast hare    "
 OptionsScreenEnd
 ; -------------------------------------------------
 NameScreen
@@ -138,8 +133,10 @@ EmptyLine
  dta d"                                        "
 ;-----------------------------------------------
 textbuffer
+     ; 0123456789012345678901234567890123456789
  dta d"Player:                                 "
- dta d"                                        "
+ dta d"Energy: 99   Angle: <32>   Force: 1000  "
+ dta d"       Round: 50   Wind: <22>           "
 textbuffer2
  dta d"Player: ********       Cash: 00000      "
  dta d"----------------------------------------"

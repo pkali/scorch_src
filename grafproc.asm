@@ -674,7 +674,7 @@ NoMissile
     ; calculate start position of the tank
     lda ydraw
     clc
-    adc #$25 ; P/M to graphics offset
+    adc #PMOffset
     sta temp
     ; clear sprite and put 3 lines on the tank at the same time
     ldy #$00

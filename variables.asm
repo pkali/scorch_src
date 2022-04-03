@@ -10,9 +10,18 @@
 ;=====================================================
 ;--------------------------------------------------
 ;Variables 
+;--------------
+TanksNames  ; DO NOT ZERO - ticket #24
+    :6 dta d"        "
+;----------------------------
+;Options DO NOT ZERO - ticket #27
+OptionsTable .by 0,0,2,2,0,1
 ;--------------------------------------------------
 variablesStart  ; zeroing starts here
-
+;--------------
+OptionsY  .ds 0 ;vertical position of cursor on Options screen
+flyDelay .ds 1
+;--------------
 NumberOfPlayers .DS 1  ;current number of players (counted from 1)
 TankSequence .DS [MaxPlayers] ;sequence of shooting during the Round
 GameIsOver .DS 1 ; 1 - it was the last round in the game
@@ -358,10 +367,6 @@ CharCode4x4 .DS 1
 plot4x4color .DS 1 ;1-white, 0-background
 
 
-;----------------------------
-;Options
-OptionsTable  .ds 5
-OptionsY  .DS 1 ;vertical position of cursor on Options screen
 
 variablesEnd
 ;----------------------------

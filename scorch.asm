@@ -73,13 +73,14 @@
 displayposition = modify
 ;-------------------------------
 ;constants
-FlyDelay = 150
 screenheight = 200
 screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 margin = 48 ;mountain drawing Y variable margin
 display = $1010 ;kill dos with the casette recorder!
 MaxPlayers = 6
+maxOptions = 6  ;number of all options
+PMOffset = $23 ; P/M to graphics offset
 
     icl 'lib/atari.hea'
     icl 'lib/macro.hea'
@@ -91,12 +92,6 @@ MaxPlayers = 6
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
     icl 'display.asm'
-;----------------------------------------------
-    icl 'constants.asm'
-    icl 'variables.asm'
-;--------------------------------------------------
-OffensiveTexts
-    icl 'artwork/talk.asm'
 ;--------------------------------------------------
 ; Game Code
 ;--------------------------------------------------
@@ -139,9 +134,10 @@ START
 
 MainGameLoop
 	
+    VDLI DLIinterrupt  ; jsr SetDLI
+
 	jsr CallPurchaseForEveryTank
 	
-    jsr SetDLI
     mwa #dl dlptrs
     lda dmactls
     and #$fc
@@ -251,6 +247,7 @@ Round .proc ;
 ; the default shooting angle to 45 degrees
 ; of course gains an looses are zeroed
 
+	jsr DisplayingSymbols
 	lda #0
 	tax
 @
@@ -479,7 +476,7 @@ LP0
     BCC B0
     CLC
     ADC #10 ; multiplication by 10
-B0 DEy
+B0  DEY
     BNE LP0
     ror
     ROR L1
@@ -613,8 +610,6 @@ PlayerXdeath .proc
 
     jmp AfterExplode
 
-	icl 'weapons.asm'
-
 ;--------------------------------------------------
 DecreaseEnergyX .proc
 ;Decreases energy of player nr X
@@ -734,19 +729,10 @@ deletePtr = temp
       cpw deletePtr #variablesEnd
     bne @-
     
-    lda #2
-    sta OptionsTable+2
-    sta OptionsTable+3
-    
     mwa #1024 RandBoundaryHigh
     mva #$ff LastWeapon
     sta HowMuchToFall
     mva #1 color
-    mva #$40 MaxWind
-    mwa #$0080 Wind
-    mva #25 gravity
-    
-    
     
     jsr WeaponCleanup    
     
@@ -820,10 +806,6 @@ ClearResults
     rts
 .endp
     
-SetDLI .proc
-    VDLI DLIinterrupt
-    rts
-.endp
 DLIinterrupt .proc
     pha
     lda #$02 ; color of playground
@@ -865,9 +847,9 @@ GetRandomAgainX
     stx temp
     ldy temp
 UsageLoop
-    cmp TankSequence,y
-    beq GetRandomAgainX ;apparently we have already used this value
-    dey
+      cmp TankSequence,y
+      beq GetRandomAgainX ;apparently we have already used this value
+      dey
     bpl UsageLoop
 
     ;well, looks like this value is new!
@@ -913,7 +895,6 @@ RandomizeForce  .proc
 ; RandBoundaryLow
 ; RandBoundaryHigh
 ;----------------------------------------------
-	
 
     lda MaxEnergyTableL,x
     sta temp
@@ -939,7 +920,6 @@ GetRandomAgain
     mwa temp temp2 
     
 EnergyInRange
-
     lda temp2
     sta EnergyTableL,x
     lda temp2+1
@@ -1121,10 +1101,14 @@ WaitForKeyRelease .proc
     lda SKSTAT
     cmp #$ff
     bne WaitForKeyRelease
-KeyIsReleased
     rts
 .endp
 
+;----------------------------------------------
+OffensiveTexts
+    icl 'artwork/talk.asm'
+;----------------------------------------------
+    icl 'weapons.asm'
 ;----------------------------------------------
     icl 'textproc.asm'
 ;----------------------------------------------
@@ -1132,8 +1116,10 @@ KeyIsReleased
 ;----------------------------------------------
     icl 'ai.asm'
 ;----------------------------------------------
+    icl 'constants.asm'
+;----------------------------------------------
+    icl 'variables.asm'
     
-TankColoursTable  .BYTE $52,$32,$72,$92,$B2,$02
 
 font4x4
     ins 'artwork/font4x4s.bmp',+62
