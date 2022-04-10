@@ -977,6 +977,7 @@ EndDrawing
 .endp
 ; -----------------------------------------
 unPlot .proc
+; plots a point and saves the plotted byte, reverts the previous plot.
 ; -----------------------------------------
     ldx #0 ; only one pixel
 unPlotAfterX
@@ -996,7 +997,8 @@ unPlotAfterX
 
     ; is it not out of the screen ????
     cpw ydraw #screenheight
-    jcs EndOfUnPlot
+    jcc CheckX
+    mwa #0 ydraw
 CheckX
     cpw xdraw #screenwidth
     jcs EndOfUnPlot
@@ -1032,6 +1034,7 @@ MakeUnPlot
     lda color
     beq ClearUnPlot
 
+    ;plotting here
     lda (xbyte),y
     sta OldOraTemp
     ora bittable,x
@@ -1174,33 +1177,6 @@ point .proc
     rts
 .endp
 
-; -----------------------------------------
-PlotPointer .proc
-; -----------------------------------------
-; draws pointer that shows where is the bullet
-; when it is over the screen
-; (it is on the top of the screen)
-
-   
-	mwa xdraw tempCir
-	
-	mva #0 color
-	mwa #screenHeight ydraw	
-	mwa oldPlotPointerX xdraw
-	jsr plot
-	
-	
-	mwa tempCir xdraw
-	
-	mva #1 color
-	mwa #screenHeight ydraw	
-	jsr plot
-	
-	mwa xdraw oldPlotPointerX
-
-    rts
-
-.endp
 ;--------------------------------------------------
 DrawLine .proc
 ;--------------------------------------------------

@@ -7,7 +7,15 @@
 	;icl "HIMARS14.h"
 	;ICL '../lib/atari.hea'
 
-	org $80
+
+WIDTH	= 40
+HEIGHT	= 30
+
+; ---	BASIC switch OFF
+	org $2000\ mva #$ff portb\ rts\ ini $2000
+
+; --- dmsc LZSS player routine on zero page
+    org $80
 
 chn_copy    .ds     9
 chn_pos     .ds     9
@@ -26,22 +34,15 @@ skip
     rts
 .endp
 song_ptr = get_byte + 1
-	
+    
 
-fcnt	.ds 2
-fadr	.ds 2
-fhlp	.ds 2
-cloc	.ds 1
-regA	.ds 1
-regX	.ds 1
-regY	.ds 1
-
-WIDTH	= 40
-HEIGHT	= 30
-
-; ---	BASIC switch OFF
-	org $2000\ mva #$ff portb\ rts\ ini $2000
-
+fcnt    .ds 2
+fadr    .ds 2
+fhlp    .ds 2
+cloc    .ds 1
+regA    .ds 1
+regX    .ds 1
+regY    .ds 1
 ; ---	MAIN PROGRAM
 	org $2000
 ant	dta $F0

@@ -51,10 +51,7 @@ dl ; MAIN game display list
         .byte $42 
         .word textbuffer
         .byte $02, $02 +$80 ;DLI
-        .byte $00 
-
-	.byte $4f
-	.word PlotLine
+        .byte $10  ; 2 blank lines 
 
         .byte $4f
         .word display
@@ -66,12 +63,11 @@ dl ; MAIN game display list
         :97 .byte $0f
         .byte $41
         .word dl
-PlotLine = display + screenHeight*screenBytes ; the last line is plot pointer 
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. 133 (un)2000-2022"
+ dta d"Welcome to Scorch ver. 134 (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   

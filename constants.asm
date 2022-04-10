@@ -13,7 +13,6 @@ CashOptionH
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,60,80
 RoundsTable    .by 10,20,30,40,50
-RoundsInTheGame .by 10 ;how many rounds in the current game
 flyDelayTable .by 255,150,75,35,1
 ;------------------------------------------------
 
@@ -284,12 +283,8 @@ costable
 
 linetableL
     :screenheight .by <(display+screenBytes*#)
-    ;:20 .by <(display+screenBytes*#)
-    .by <PlotLine
 linetableH
     :screenheight .by >(display+screenBytes*#)
-    ;:20 .by >(display+screenBytes*#)
-    .by >PlotLine
 ;----------------------------
 bittable
     .by $80,$40,$20,$10,$08,$04,$02,$01
@@ -327,7 +322,7 @@ WhereToSlideTable
     .BY %000  ; 00001001
     .BY %000  ; 00001010
     .BY %000  ; 00001011
-    .BY %000  ; 00001100
+    .BY %100  ; 00001100
     .BY %000  ; 00001101
     .BY %000  ; 00001110
     .BY %000  ; 00001111
@@ -630,12 +625,12 @@ EndOfTheBarrelY
 ;-------------------------------------------------
 
 TanksNamesDefault
-    dta d"1st Tank"
-    dta d"2nd Tank"
-    dta d"3rd Tank"
-    dta d"4th Tank"
-    dta d"5th Tank"
-    dta d"6th Tank"
+    dta d"1st.Tank"
+    dta d"2nd.Tank"
+    dta d"3rd.Tank"
+    dta d"4th.Tank"
+    dta d"5th.Tank"
+    dta d"6th.Tank"
 
 ;Weapon prices (*10 on screen)
 price_Baby_Missile___ = 0      ;_0
@@ -906,6 +901,58 @@ WeaponUnits
   .by 10 ;Fuel_Tank______
   .by 25 ;Contact_Trigger
   .by 0  ;_____________63
+
+PurchaseMeTable ;weapons good to be purchased by the robot 
+                ;the comment is an index in the tables
+    dta 1 ;"Baby Missile    " ; 0
+    dta 1 ;"Missile         " ; 1
+    dta 1 ;"Baby Nuke       " ; 2
+    dta 1 ;"Nuke            " ; 3
+    dta 1 ;"LeapFrog        " ; 4
+    dta 1 ;"Funky Bomb      " ; 5
+    dta 1 ;"MIRV            " ; 6
+    dta 1 ;"Death's Head    " ; 7
+    dta 0 ;"Napalm          " ; 8
+    dta 0 ;"Hot Napalm      " ; 9
+    dta 0 ;"Tracer          " ; 10
+    dta 0 ;"Smoke Tracer    " ; 11
+    dta 1 ;"Baby Roller     " ; 12
+    dta 1 ;"Roller          " ; 13
+    dta 1 ;"Heavy Roller    " ; 14
+    dta 0 ;"Riot Charge     " ; 15
+    dta 0 ;"Riot Blast      " ; 16
+    dta 0 ;"Riot Bomb       " ; 17
+    dta 0 ;"Heavy Riot Bomb " ; 18
+    dta 0 ;"Baby Digger     " ; 19
+    dta 0 ;"Digger          " ; 20
+    dta 0 ;"Heavy Digger    " ; 21
+    dta 0 ;"Baby Sandhog    " ; 22
+    dta 0 ;"Sandhog         " ; 23
+    dta 0 ;"Heavy Sandhog   " ; 24
+    dta 0 ;"Dirt Clod       " ; 25
+    dta 0 ;"Dirt Ball       " ; 26
+    dta 0 ;"Ton of Dirt     " ; 27
+    dta 0 ;"Liquid Dirt     " ; 28
+    dta 0 ;"Dirt Charge     " ; 29
+    dta 0 ;"Earth Disrupter " ; 30
+    dta 0 ;"Plasma Blast    " ; 31
+    dta 1 ;"Laser           " ; 32
+    dta 0 ;"----------------" ; 33
+    dta 0 ;"----------------" ; 34
+    dta 0 ;"----------------" ; 35
+    dta 0 ;"----------------" ; 36
+    dta 0 ;"----------------" ; 37
+    dta 0 ;"----------------" ; 38
+    dta 0 ;"----------------" ; 39
+    dta 0 ;"----------------" ; 40
+    dta 0 ;"----------------" ; 41
+    dta 0 ;"----------------" ; 42
+    dta 0 ;"----------------" ; 43
+    dta 0 ;"----------------" ; 44
+    dta 0 ;"----------------" ; 45
+    dta 0 ;"----------------" ; 46
+    dta 0 ;"----------------" ; 47
+ 
 
 ;-------------------------------------------------
 ; Screen codes of icons (chars) representing a given weapon

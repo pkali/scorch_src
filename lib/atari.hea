@@ -103,8 +103,8 @@ CONSOL	=	$D01F		; rejestr stanu klawiszy konsoli Start (bit 0), Select (bit 1), 
 * ---	POKEY
 * ---------------------------------------------------------------------------------------------
 
-IRQENS	=	$0010		; rejestr-cie� IRQEN
-IRQSTAT	=	$0011		; rejestr-cie� IRQST
+IRQENS	=	$0010		; shadow register IRQEN
+IRQSTAT	=	$0011		; shadow register IRQST
 
 AUDF3	=	$D204		; cz�stotliwo�� pracy generatora 3 (Z)
 AUDCTL	=	$D208		; rejestr kontroli generator�w d�wi�ku (Z)
@@ -147,22 +147,22 @@ NMIST	=	$D40F		; rejestr statusu przerwa� NMI
 ;-------------------------------------
 ;additional system variables
 ;-------------------------------------
-COLPM0S = $02C0 ;- - rejestr-cie� COLPM0
-COLPM1S = $02C1 ;- - rejestr-cie� COLPM1
-COLPM2S = $02C2 ;- - rejestr-cie� COLPM2
-COLPM3S = $02C3 ;- - rejestr-cie� COLPM3
-COLPF0S = $02C4 ;- - rejestr-cie� COLPF0
-COLPF1S = $02C5 ;- - rejestr-cie� COLPF1
-COLPF2S = $02C6 ;- - rejestr-cie� COLPF2
-COLPF3S = $02C7 ;- - rejestr-cie� COLPF3
+COLPM0S = $02C0 ;- - shadow register COLPM0
+COLPM1S = $02C1 ;- - shadow register COLPM1
+COLPM2S = $02C2 ;- - shadow register COLPM2
+COLPM3S = $02C3 ;- - shadow register COLPM3
+COLPF0S = $02C4 ;- - shadow register COLPF0
+COLPF1S = $02C5 ;- - shadow register COLPF1
+COLPF2S = $02C6 ;- - shadow register COLPF2
+COLPF3S = $02C7 ;- - shadow register COLPF3
 
 COLBAKS = $02C8
-GTICTLS = $026F ;- - rejestr-cie� GTIACTL
+GTICTLS = $026F ;- - shadow register GTIACTL
 
 DMACTLS = $022F ;- - rejestr kontroli dost�pu do pami�ci - cie�
 DLPTRS  = $0230 ;- - adres programu ANTIC-a - cie�
-CHBAS   = $02F4 ;- - rejestr-cie� CHBASE
-KBCODES = $02FC ;- - rejestr-cie� KBCODE
+CHBAS   = $02F4 ;- - shadow register CHBASE
+KBCODES = $02FC ;- - shadow register KBCODE
 
 SETVBV  =   $E45C
 XITVBV  =   $E462
@@ -178,10 +178,10 @@ JSTICK2 = $027A ;- JSTICK2 - po�o�enie joysticka 0
 JSTICK3 = $027B ;- JSTICK3 - po�o�enie joysticka 1
 PTRIG0  = $027C ;- PTRIG0 - przycisk potencjometru 0
 PTRIG1  = $027D ;- PTRIG1 - przycisk potencjometru 1
-TRIG0S  = $0284 ;- TRIG0S - przycisk joysticka 0, rejestr-cie� TRIG0
-TRIG1S  = $0285 ;- TRIG1S - przycisk joysticka 1, rejestr-cie� TRIG1
-TRIG2S  = $0286 ;- TRIG2S - rejestr-cie� TRIG0
-TRIG3S  = $0287 ;- TRIG3S - rejestr-cie� TRIG1
+TRIG0S  = $0284 ;- TRIG0S - przycisk joysticka 0, shadow register TRIG0
+TRIG1S  = $0285 ;- TRIG1S - przycisk joysticka 1, shadow register TRIG1
+TRIG2S  = $0286 ;- TRIG2S - shadow register TRIG0
+TRIG3S  = $0287 ;- TRIG3S - shadow register TRIG1
 
 
 /*
@@ -189,8 +189,8 @@ Rejestry OS w pami�ci RAM
 
   $08 - WARMST - znacznik gor�cego startu
   $0E - APPMHI - najwy�szy adres RAM zaj�ty przez program
-  $10 - IRQENS - rejestr-cie� IRQEN
-  $11 - IRQSTAT - rejestr-cie� IRQST
+  $10 - IRQENS - shadow register IRQEN
+  $11 - IRQSTAT - shadow register IRQST
   $12 - RTCLOK - zegar czasu rzeczywistego
   $15 - BUFADR - adres bufora dla operacji dyskowych
   $17 - ICCOMT - rejestr przej�ciowy kodu operacji I/O
@@ -267,12 +267,12 @@ $0214 - VTIMR4 - wektor przerwania licznika 4 POKEY-a
 $0218 - TIMCNT1 - pierwszy licznik systemu
 $0226 - TIMVEC1 - wektor przerwania licznika TIMCNT1
 $022A - TIMFLG3 - znacznik wyzerowania licznika TIMCNT3
-$022F - DMACTLS - rejestr-cie� DMACTL
-$0230 - DLPTRS - rejestr-cie� DLPTR
-$0232 - SKCTLS - rejestr-cie� SKCTL
+$022F - DMACTLS - shadow register DMACTL
+$0230 - DLPTRS - shadow register DLPTR
+$0232 - SKCTLS - shadow register SKCTL
 $0233 - LCOUNT - licznik odczytu dla nowego urz�dzenia
-$0234 - LPENHS - rejestr-cie� LPENH
-$0235 - LPENVS - rejestr-cie� LPENV
+$0234 - LPENHS - shadow register LPENH
+$0235 - LPENVS - shadow register LPENV
 $023A - CDEVIC - kod urz�dzenia dla SIO
 $023B - CCMND - kod operacji dla SIO
 $023C - CAUX1 - pierwszy bajt pomocniczy dla SIO
@@ -283,25 +283,25 @@ $0244 - COLDST - znacznik zimnego startu systemu
 $0245 - RECLEN - d�ugo�� rekordu z nowego urz�dzenia
 $0246 - DSKTIM - warto�� Timeout dla stacji dysk�w
 $0247 - PDVMSK - maska obecno�ci nowych urz�dze�
-$0248 - PDVRS - rejestr-cie� PDVREG
+$0248 - PDVRS - shadow register PDVREG
 $024A - RELADR - adres procedury przemieszczalnej
 $024C - PPTMPA - rejestr przechowania zawarto�ci akumulatora
 $024D - PPTMPX - rejestr przechowania zawarto�ci rejestru X
 $026B - CHSPTR - wektor nieu�ywanego zestawu znak�w
 $026C - VSFLAG - znacznik przesuwu pionowego obrazu
 $026E - FINE - znacznik delikatnego przesuwu obrazu
-$026F - GTICTLS - rejestr-cie� GTIACTL
-$0270 - PADDL0 - rejestr-cie� POT0
+$026F - GTICTLS - shadow register GTIACTL
+$0270 - PADDL0 - shadow register POT0
 $0278 - JSTICK0 - po�o�enie joysticka 0
 $0279 - JSTICK1 - po�o�enie joysticka 1
 $027A - JSTICK2 - po�o�enie joysticka 0
 $027B - JSTICK3 - po�o�enie joysticka 1
 $027C - PTRIG0 - przycisk potencjometru 0
 $027D - PTRIG1 - przycisk potencjometru 1
-$0284 - TRIG0S - przycisk joysticka 0, rejestr-cie� TRIG0
-$0285 - TRIG1S - przycisk joysticka 1, rejestr-cie� TRIG1
-$0286 - TRIG2S - rejestr-cie� TRIG0
-$0287 - TRIG3S - rejestr-cie� TRIG1
+$0284 - TRIG0S - przycisk joysticka 0, shadow register TRIG0
+$0285 - TRIG1S - przycisk joysticka 1, shadow register TRIG1
+$0286 - TRIG2S - shadow register TRIG0
+$0287 - TRIG3S - shadow register TRIG1
 $0288 - HIBYTE - indeks operacji nowego urz�dzenia
 $0289 - WMODE - znacznik sposobu dost�pu do magnetofonu
 $028A - BLIM - d�ugo�� bufora magnetofonu
@@ -326,15 +326,15 @@ $02BC - HOLD4 - pomocniczy rejestr przej�ciowy
 $02BD - DRETRY - liczba powt�rze� wywo�a� urz�dzenia
 $02BE - SHFLOK - znacznik klawiszy SHIFT i CONTROL
 $02BF - BOTSCR - liczba wierszy tekstu
-$02C0 - COLPM0S - rejestr-cie� COLPM0
-$02C1 - COLPM1S - rejestr-cie� COLPM1
-$02C2 - COLPM2S - rejestr-cie� COLPM2
-$02C3 - COLPM3S - rejestr-cie� COLPM3
-$02C4 - COLPF0S - rejestr-cie� COLPF0
-$02C5 - COLPF1S - rejestr-cie� COLPF1 ;gr.8 letters
-$02C6 - COLPF2S - rejestr-cie� COLPF2 ;gr.8 background
-$02C7 - COLPF3S - rejestr-cie� COLPF3
-$02C8 - COLBAKS - rejestr-cie� COLBAK
+$02C0 - COLPM0S - shadow register COLPM0
+$02C1 - COLPM1S - shadow register COLPM1
+$02C2 - COLPM2S - shadow register COLPM2
+$02C3 - COLPM3S - shadow register COLPM3
+$02C4 - COLPF0S - shadow register COLPF0
+$02C5 - COLPF1S - shadow register COLPF1 ;gr.8 letters
+$02C6 - COLPF2S - shadow register COLPF2 ;gr.8 background
+$02C7 - COLPF3S - shadow register COLPF3
+$02C8 - COLBAKS - shadow register COLBAK
 $02C9 - RUNADR - adres procedury nowego urz�dzenia
 $02CB - HIUSED - adres ko�cowy procedury nowego urz�dzenia
 $02CF - GBYTEA - adres procedury nowego urz�dzenia
@@ -352,15 +352,15 @@ $02EC - DVTMOT - dodatkowy rejestr Timeout urz�dzenia
 $02ED - REVNUM - numer wersji nowego urz�dzenia
 $02EE - CBAUD - pr�dko�� transmisji z magnetofonu
 $02F0 - CRSINH - znacznik widoczno�ci kursora
-$02F3 - CHACT - rejestr-cie� CHRCTL
-$02F4 - CHBAS - rejestr-cie� CHBASE
+$02F3 - CHACT - shadow register CHRCTL
+$02F4 - CHBAS - shadow register CHBASE
 $02F5 - NEWROW - nowa pozycja pionowa kursora
 $02F6 - NEWCOL - nowa pozycja pozioma kursora
 $02F8 - ROWINC - zmiana pionowej pozycji kursora
 $02F9 - COLINC - zmiana poziomej pozycji kursora
 $02FA - CHAR - kod wewn�trzny znaku
 $02FB - ATACHR - kod ATASCII znaku
-$02FC - KBCODES - rejestr-cie� KBCODE
+$02FC - KBCODES - shadow register KBCODE
 $02FD - FILDAT - numer koloru dla wype�niania
 $02FE - DSPFLG - znacznik wy�wietlania znak�w kontrolnych
 $02FF - SSFLAG - znacznik start/stop dla przesuwu obrazu

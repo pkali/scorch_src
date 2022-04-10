@@ -218,10 +218,10 @@ DoNotEor
     mwa ytrajfb ytraj+1
     jsr Flight
 
+    jsr CalculateExplosionRange
     lda HitFlag
     beq NoExplosionInFunkyBomb
-    jsr CalculateExplosionRange
-    jsr xmissile
+      jsr xmissile
 NoExplosionInFunkyBomb
     dec FunkyBombCounter
     bne FunkyBombLoop
@@ -1673,7 +1673,7 @@ SkipCollisionCheck
     jsr UnPlot
 
 NoUnPlot
-    jsr PlotPointer
+    ; jsr PlotPointer
   
     jmp Loopi
 
@@ -2020,7 +2020,6 @@ mrSkipCollisionCheck
     jsr unPlot.unPlotAfterX
     ldx MirvMissileCounter
     jne mrLoopi
-    jsr PlotPointer ; pointer only for bullet nr 0
 
     jmp mrLoopi
 
@@ -2241,9 +2240,10 @@ HowManyBullets .proc
 ShellDelay .proc
     ldx flyDelay
 DelayLoop
-    sta wsync
-    sta wsync
-    dex
+      lda VCOUNT
+@       cmp VCOUNT
+      beq @-
+      dex
     bne DelayLoop
     rts
 .endp

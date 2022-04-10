@@ -16,7 +16,13 @@ TanksNames  ; DO NOT ZERO - ticket #24
 ;----------------------------
 ;Options DO NOT ZERO - ticket #27
 OptionsTable .by 0,0,2,2,0,1
+RoundsInTheGame .by 10 ;how many rounds in the current game
 ;--------------------------------------------------
+skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
+    .DS [MaxPlayers]
+;-----------------------------------
+
+
 variablesStart  ; zeroing starts here
 ;--------------
 OptionsY  .ds 0 ;vertical position of cursor on Options screen
@@ -25,9 +31,6 @@ flyDelay .ds 1
 NumberOfPlayers .DS 1  ;current number of players (counted from 1)
 TankSequence .DS [MaxPlayers] ;sequence of shooting during the Round
 GameIsOver .DS 1 ; 1 - it was the last round in the game
-;-----------------------------------
-skilltable   ; computer controlled players' skills (1-8), 0 - human
-    .DS [MaxPlayers]
 ;-----------------------------------
 moneyH ;we place zero at the end of prices and money
     ;and have range from 0 to 99990 (not too much)
@@ -353,9 +356,6 @@ ResultY
 ResultOfTankNr
     .DS 1
 
-;----------------------------
-oldPlotPointerX
-	.ds 2
 ;----------------------------
 ;PutChar4x4
 LoopCounter4x4 .DS 1

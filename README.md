@@ -1,5 +1,8 @@
-# Atari 8-bit Scorched Earth source code
+# Scorch - Atari 8-bit Scorched Earth clone source code
 ---------------------------------------------------
+
+Scorch is a multi-player, turn-based, artillery video game. Tanks do turn-based battle in two-dimensional terrain, with each player adjusting the angle and power of their tank turret before each shot.
+
 by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
@@ -7,9 +10,10 @@ Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
 You can contact us at pecus@poczta.fm or pirx@5oft.pl
 home page of this project is https://github.com/pkali/scorch_src
 
-This source code was originally compiled under OMC65 crossassembler 
-(https://github.com/pkali/omc65)
-and on 2012-06-21 translated to mads
+This source code was originally compiled under [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
+
+Compilation: `mads scorch.asm -o:scorch.xex`
+
 
 Game source code is split into 5+3 parts:
 - scorch.asm is the main game code (with many assorted routines)

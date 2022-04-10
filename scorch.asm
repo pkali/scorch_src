@@ -715,8 +715,6 @@ deletePtr = temp
     lda #0 
     sta Erase
     sta tracerflag
-    sta oldPlotPointerX
-    sta oldPlotPointerX+1
     sta GameIsOver
 
 

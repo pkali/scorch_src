@@ -823,11 +823,13 @@ NoArrowDown
     jsr PMoutofScreen
     ; display tank number
     ldx tanknr
+    lda skillTable,x
+    sta difficultyLevel
     inx
     stx decimal
     mwa #(NameScreen+41) displayposition
     jsr displaybyte
-    jsr SelectLevel ; setting choosen level of the opponent (Moron, etc)
+    jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 
     ; clear tank name editor field
     ldx #8
@@ -919,7 +921,7 @@ ChangeOfLevelUp ; change difficulty level of computer opponent
     bne DoNotLoopLevelUp
     mva #$0 DifficultyLevel
 DoNotLoopLevelUp
-    jsr SelectLevel
+    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevelDown
@@ -927,7 +929,7 @@ ChangeOfLevelDown
     bpl DoNotLoopLevelDown
     mva #$8 DifficultyLevel
 DoNotLoopLevelDown
-    jsr SelectLevel
+    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevel3Up
@@ -939,7 +941,7 @@ ChangeOfLevel3Up
     sbb DifficultyLevel #9
 
 DoNotLoopLevel3Up
-    jsr SelectLevel
+    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevel3Down
@@ -947,7 +949,7 @@ ChangeOfLevel3Down
     bpl @+
       adb DifficultyLevel #9
 @
-    jsr SelectLevel
+    jsr HighlightLevel
     jmp CheckKeys
 ;----
 EndOfNick
@@ -992,7 +994,7 @@ nextchar05
 .endp
 
 
-.proc SelectLevel
+.proc HighlightLevel
     ; this routine highlights the choosen
     ; level of the computer opponent
     ldx #8 ; 9 possible levels
