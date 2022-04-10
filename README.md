@@ -46,6 +46,14 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 134
+2022-04-10
+- https://github.com/pkali/scorch_src/issues/34 - plot pointer visible only when missile is out of the screen
+- https://github.com/pkali/scorch_src/issues/33 - Poor AIs do not purchase non-working weapons
+- https://github.com/pkali/scorch_src/issues/32 - Basic is turned off right on the beginning of loading. Dracon reported problems with running the game in Altirra, this was the best idea I had about it. Maybe next will be removing from zero page LZSS routine by @dmsc
+- https://github.com/pkali/scorch_src/issues/31 - STA WSYNC removed from missile flight delay
+- https://github.com/pkali/scorch_src/issues/30 - player level remembered between rounds, thx @KrzysRog
+
 ###### Build 133
 2022-04-03
 - bug: https://github.com/pkali/scorch_src/issues/7 tank stands on a single pixel spike. `WhereToSlideTable` vastly improved. 
