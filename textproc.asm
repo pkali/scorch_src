@@ -108,6 +108,11 @@ OptionsFinished
     lda flyDelayTable,y
     sta flyDelay
     
+    ;7th option (Airstrike after how many missess)
+    ldy OptionsTable+6
+    lda seppukuTable,y
+    sta seppukuVal
+    
     rts
 ;--------
 ; inversing selected option (cursor)
@@ -136,7 +141,7 @@ OptionsSetMainLoop
     asl
     adc OptionsTable,x  ;OptionsTable value * 5
     tay
-    ldx #MaxOptions-1
+    ldx #6-1  ; width of the highlight bar (6 chars)
 OptionSetLoop
     lda (temp),y
     ora #$80
@@ -170,7 +175,7 @@ OptionSetLoop
     ;in temp is 40*OptionsY
     adw temp #OptionsHere
     ;now in temp is adres of the line to be inversed
-    ldy #7 ;8 letters to invers
+    ldy #8 ;9 letters to invers
 OptionsYLoop
     lda (temp),y
     ora #$80
@@ -1324,6 +1329,64 @@ EndOfTypeLine4x4
     rts
 .endp
 
+
+;--------------------------------
+.proc DisplaySeppuku
+;using 4x4 font
+    
+    ;save vars (messed in TypeLine4x4)
+    mwa Xdraw xk
+    mva Ydraw yc
+
+    mva #15 fs  ; temp, how many times blink the billboard
+@
+      lda fs
+      and #$01
+      sta plot4x4color
+      mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
+      
+      ;top frame
+      mwa #LineTop LineAddress4x4
+      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+      mva ResultY LineYdraw
+      jsr TypeLine4x4
+      adb ResultY  #4 ;next line
+      
+      ;seppuku
+      mwa #seppukuText LineAddress4x4
+      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+      mva ResultY LineYdraw
+      jsr TypeLine4x4
+      adb ResultY  #4 ;next line
+      
+      ;bottom frame
+      mwa #LineBottom LineAddress4x4
+      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+      mva ResultY LineYdraw
+      jsr TypeLine4x4
+      
+      dec fs
+    bne @-
+   
+    ;clean seppuku
+    mva #3 fs
+    mva #4 ResultY
+@
+      mva #1 plot4x4color
+      mwa #lineClear LineAddress4x4
+      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+      mva ResultY LineYdraw
+      jsr TypeLine4x4
+      adb ResultY  #4 ;next line
+  
+      dec fs
+    bne @-
+
+    ;restore vars
+    mva yc Ydraw
+    mwa xk Xdraw
+    rts
+.endp
 ;--------------------------------
 .proc DisplayResults ;
 ;displays results of the round
@@ -1496,8 +1559,13 @@ FinishResultDisplay
 .endp
 
 ;-------------------------------------------------
-.proc DisplayingSymbols
+.proc StatusDisplay
 ;-------------------------------------------------
+
+    ;lda noDeathCounter
+    ;sta decimal
+    ;mwa #textbuffer+80+37 displayposition
+    ;jsr displaybyte    
 
     ;---------------------
     ;displaying symbol of the weapon
@@ -1506,10 +1574,7 @@ FinishResultDisplay
     ;textbuffer+18  - symbol (1 char)
     ;textbuffer+20  - quantity left
     ;textbuffer+23  - name
-
-
-
-    ;ldx TankNr
+    ldx TankNr
     ldy ActiveWeapon,x
     lda WeaponSymbols,y
     sta TextBuffer+18

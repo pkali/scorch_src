@@ -26,25 +26,25 @@ Game source code is split into 5+3 parts:
 - weapons.asm - general arsenal of tankies
 
 We were trying to use as much macros and pseudo-ops as possible.
-They are defined in atari.hea and macro.hea files together with many
-atari constants. This way it should be relatively easy to
-port this code to e.g. C64
+They are defined in atari.hea and macro.hea files together with many atari constants. This way it should be relatively easy to port this code to e.g. C64
 
-After those N years of working on this piece of code
-we are sure it would be much wiser to write it in C, Action!
-or MadPascal but on the other hand it is so much fun to type 150 chars
-where all you want to have y=ax+b :)
+After those N years of working on this piece of code we are sure it would be much wiser to write it in C, Action! or MadPascal but on the other hand it is so much fun to type 150 chars where all you want to have y=ax+b :)
 
-Originally most variables were in Polish, comments were sparse
-but we wanted to release this piece of code to public
-and due to being always short of time/energy (to finish the game)
-we decided it must go in 'English' to let other people work on it.
-It never happened, but we got some encouraging comments and we are still
-trying to do something from time to time.
+Originally most variables were in Polish, comments were sparse, but we wanted to release this piece of code to public.
+Because of being always short of time/energy (to finish the game) we decided it must go in 'English' to let other people work on it.
+It never happened, but we got some encouraging comments and we are still trying to do something from time to time.
 
 With the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changes:
+
+###### Build 135
+2022-04-17
+Happy Easter! This is a "premature ejacu.." err... "premature optimization" build. I got into an optimization fewer and got the code messed up, having to revert to the base. One important ticket closed:
+- https://github.com/pkali/scorch_src/issues/35 Two morons shooting each other for more than 5 minutes. Added a new option "Seppuku". It causes one of the tanks ashamed with their inefficiency to detonate the weapon on itself. This was quite a difficult addition, requiring me to understand large swaths of the code, always a great challenge. Smoother gameplay with AIs guaranteed or money back.
+Other small fixes:
+- https://github.com/pkali/scorch_src/issues/23 High flying MIRV leaves traces. Not anymore.
+- https://github.com/pkali/scorch_src/issues/12 Make soil fall down faster after soil eating weapons. Soil eating range is OK, it is the soil down routine that is slow (but visually attractive).
 
 ###### Build 134
 2022-04-10
@@ -53,6 +53,7 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 - https://github.com/pkali/scorch_src/issues/32 - Basic is turned off right on the beginning of loading. Dracon reported problems with running the game in Altirra, this was the best idea I had about it. Maybe next will be removing from zero page LZSS routine by @dmsc
 - https://github.com/pkali/scorch_src/issues/31 - STA WSYNC removed from missile flight delay
 - https://github.com/pkali/scorch_src/issues/30 - player level remembered between rounds, thx @KrzysRog
+- https://github.com/pkali/scorch_src/issues/5 - funkybomb smoke stays on the edges of the screen
 
 ###### Build 133
 2022-04-03
@@ -106,11 +107,9 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 - fixed bug 015 (Only first shoot of FunkyBomb is correct
 - fixed bug 016 (No falling soil after leapfrog)
 
-
 ##### Build 125
 2022-01-23
 - included splash screen by KAZ
-
 
 ##### Build 124
 2013-12-21
@@ -162,7 +161,7 @@ MISSING UPDATE INFORMATION... POSSIBLY NOTHING IMPORTANT HAPPENED HERE.
 - fixed bug 001 (lack of explosions on the empty ground)
 - fixed bug 003 (wrapping death's head explosions)
 - fixed plot (faster explosions)
-- fukk, just 6 years and we are back!!! This game is pretty addictive :)
+- fokk, just 6 years and we are back!!! This game is pretty addictive :)
 
 TO DO:
 - send our wives and kids away much more often :))))
@@ -201,7 +200,6 @@ textproc.s65
 SHORTSYS.S65
 - new macro PAUSE (waits given number of frames)
 
-
 ##### Build 112
 2003-08-15
 
@@ -238,4 +236,4 @@ variables.s65
 grafproc.s65
 - shorter delay during Flight
 
-...older history missing...
+...transmission error...former history missing...

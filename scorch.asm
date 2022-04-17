@@ -79,7 +79,7 @@ screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 margin = 48 ;mountain drawing Y variable margin
 display = $1010 ;screen takes $2K due to clearing routine
 MaxPlayers = 6
-maxOptions = 6  ;number of all options
+maxOptions = 7  ;number of all options
 PMOffset = $23 ; P/M to graphics offset
 
     icl 'lib/atari.hea'
@@ -247,7 +247,7 @@ Round .proc ;
 ; the default shooting angle to 45 degrees
 ; of course gains an looses are zeroed
 
-	jsr DisplayingSymbols
+	jsr StatusDisplay
 	lda #0
 	tax
 @
@@ -310,7 +310,7 @@ MainRoundLoop
     ; here we must check if by a chance there is only one
     ; tank with energy greater than 0 left
 
-    ldy #0  ; number of tanks with energy greater than zero
+    ldy #0  ; in Y - number of tanks with energy greater than zero
     ldx NumberOfPlayers
     dex
 CheckingIfRoundIsFinished
@@ -337,7 +337,7 @@ WhichTankWonLoop
     ; somehow I believed program will be never here
     ; but it was a bad assumption
     ; god knows when there is such a situation
-    ; (we've got a SITUATION here, it you know what I mean)
+    ; (we've got a SITUATION here, if you know what I mean)
     ; there are two tanks left.
     ; one of them is killed by the second tank
     ; second tank explodes and kills the first one.
@@ -355,8 +355,22 @@ ThisOneWon
     rts  ; this Round is finished
 
 DoNotFinishTheRound
-    ;ldx TankNr
+    ; Seppuku here
+    lda noDeathCounter
+    cmp seppukuVal
+    bcc @+
+    
+    mva #0 noDeathCounter
+    
+    jsr DisplaySeppuku
+    
+    jmp Seppuku
 
+
+
+
+    ;ldx TankNr
+@
     ldx TankSequencePointer
     lda TankSequence,x
     sta TankNr
@@ -373,10 +387,11 @@ DoNotFinishTheRound
     lda SkillTable,x
     beq ManualShooting
 
+RoboTanks    
 	; robotanks shoot here
     jsr ArtificialIntelligence
     jsr MoveBarrelToNewPosition
-    jsr DisplayingSymbols ;all digital values like force, angle, wind, etc.
+    jsr StatusDisplay ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
     ; let's move the tank's barrel so it points the right
     ; direction
@@ -388,17 +403,20 @@ ManualShooting
     jsr BeforeFire
 
 AfterManualShooting
+    inc noDeathCounter
+
     jsr DecreaseWeaponBeforeShoot
-    jsr DisplayingSymbols
+    jsr StatusDisplay
 
 	ldx TankNr
 	dec Energy,x   ; lower energy to eventually let tanks commit suicide
-    lda ActiveWeapon,x
 
+ShootNow
     jsr Shoot
     
     lda HitFlag ;0 if missed
     beq missed
+Seppuku
     lda #0
     sta FallDown1
     sta FallDown2
@@ -532,12 +550,17 @@ NoPlayerNoDeath
 	.endp
 ;---------------------------------
 PlayerXdeath .proc
-    ; first we inform that this tank should not explode anymore:
-    ; there is 0 in A, and Tank Number in X, so...
 
+
+    ; this tank should not explode anymore:
+    ; there is 0 in A, and Tank Number in X, so...
     sta LASTeXistenZ,x
     ; save x somewhere
     stx TankTempY
+
+    ;clear NoDeathCounter here
+    sta noDeathCounter
+
 
     ; display defensive text here (well, defensive
     ; is not the real meaning, it should be pre-death,
@@ -659,10 +682,7 @@ GetRandomWind .proc
     sta Wind
     mva #$00 Wind+1
     ; multiply Wind by 16 and take it as a decimal part (0.Wind)
-    aslw Wind
-    aslw Wind
-    aslw Wind
-    aslw Wind
+    :4 aslw Wind
     lda random
     and #$01
     sta WindOrientation
@@ -673,14 +693,7 @@ GetRandomWind .proc
 PMoutofScreen .proc
 ;--------------------------------------------------
     lda #$00 ; let all P/M disappear
-    sta hposp0
-    sta hposp0+1
-    sta hposp0+2
-    sta hposp0+3
-    sta hposp0+4
-    sta hposp0+5
-    sta hposp0+6
-    sta hposp0+7
+    :8 sta hposp0+#
     rts
 .endp
 

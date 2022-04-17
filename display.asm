@@ -30,7 +30,7 @@ OptionsDL
         .byte $42
         .word OptionsScreen
         .byte $30,$02,$02,$70
-        :maxOptions .by $02,0
+        :maxOptions .by $02,$10
         .byte $41
         .word OptionsDL
 ;------------------------
@@ -60,24 +60,25 @@ dl ; MAIN game display list
         .by $0f
         .by $4f
         .wo display+$0ff0
-        :97 .byte $0f
+        :100 .byte $0f ;97
         .byte $41
         .word dl
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. 134 (un)2000-2022"
+ dta d"Welcome to Scorch ver. 135 (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   
      ; 0123456789012345678901234567890123456789
- dta d"Players :     2    3    4    5    6     "
- dta d"Cash    :   none  2K   5K   8K  10K     "
- dta d"Gravity :   0.2G 0.5G  1G   2G   4G     "
- dta d"Wind    :    1B   3B   5B   7B   9B     "
- dta d"Rounds  :    10   20   30   40   50     "
- dta d"Shells  :   slug slow norm fast hare    "
+ dta d"Players  :    2    3    4    5    6     "
+ dta d"Cash     :  none  2K   5K   8K  10K     "
+ dta d"Gravity  :  0.2G 0.5G  1G   2G   4G     "
+ dta d"Wind     :   1B   3B   5B   7B   9B     "
+ dta d"Rounds   :   10   20   30   40   50     "
+ dta d"Missiles :  slug slow norm fast hare    "
+ dta d"Seppuku  :  nevr rare norm oftn alws    "
 OptionsScreenEnd
 ; -------------------------------------------------
 NameScreen

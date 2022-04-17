@@ -15,17 +15,24 @@ TanksNames  ; DO NOT ZERO - ticket #24
     :6 dta d"        "
 ;----------------------------
 ;Options DO NOT ZERO - ticket #27
-OptionsTable .by 0,0,2,2,0,1
+OptionsTable .by 0,0,2,2,0,1,4
 RoundsInTheGame .by 10 ;how many rounds in the current game
+seppukuVal .by 75
 ;--------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS [MaxPlayers]
 ;-----------------------------------
+; 4x4 text buffer
+ResultLineBuffer
+    dta d"                  "
+    .byte $ff
 
 
 variablesStart  ; zeroing starts here
+;-------------- 
+noDeathCounter .ds 1
 ;--------------
-OptionsY  .ds 0 ;vertical position of cursor on Options screen
+OptionsY  .ds 1 ;vertical position of cursor on Options screen
 flyDelay .ds 1
 ;--------------
 NumberOfPlayers .DS 1  ;current number of players (counted from 1)
@@ -307,7 +314,7 @@ mountaintable2 ;table of mountains (size=screenwidth)
     .DS 1 ; additional byte for fallout (sometimes 1 pixel)
 mountaintable3
     .ds [screenwidth]
-    .ds 0 ; additional byte for fallout (sometimes 1 pixel)
+    .ds 1 ; additional byte for fallout (sometimes 1 pixel)
 MountaintableEnd ;good for table clearing
 ;----------------------------------------------
 TextPositionX .DS 2

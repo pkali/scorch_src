@@ -13,7 +13,8 @@ CashOptionH
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,60,80
 RoundsTable    .by 10,20,30,40,50
-flyDelayTable .by 255,150,75,35,1
+flyDelayTable  .by 255,150,75,35,1
+seppukuTable   .by 255, 45,25,15,9
 ;------------------------------------------------
 
 LevelNameBeginL ; begins of level names
@@ -30,9 +31,7 @@ TanksWeaponsTableL
 TanksWeaponsTableH
     .by >TanksWeapon1,>TanksWeapon2,>TanksWeapon3,>TanksWeapon4,>TanksWeapon5,>TanksWeapon6
 ;-----4x4 texts-----
-ResultLineBuffer
-    dta d"                  "
-    .byte $ff
+
 LineTop
     dta d"(%%%%%%%%%%%%)"
     .byte $ff
@@ -54,6 +53,13 @@ LineHeader2
 LineGameOver
     dta d"# GAME  OVER #"
     .byte $ff
+seppukuText
+    dta d"#  SEPPUKU!  #"
+    .byte $ff
+lineClear
+    dta d"              "
+    .byte $ff
+
 
 ;-----------
 pmtableL ; addressess of the P/M memory for 5 tanks (6th is without P/M background)
@@ -1038,7 +1044,7 @@ joyToKeyTable
     .by $ff,$ff,$ff,$ff,$ff,$ff,$ff,$07,$ff,$ff,$ff,$06,$ff,$0f,$0e,$ff
 
 ;-----------------------------------
-keycodes ;tables for calculating KeyCode to Screen Code (38 -1  characters)
+keycodes ;tables for converting KeyCode to Screen Code (38 -1  characters)
     .by $3f,$15,$12,$3a,$2a,$38,$3d,$39
     .by $0d,$01,$05,$00,$25,$23,$08,$0a
     .by $2f,$28,$3e,$2d,$0b,$10,$2e,$16

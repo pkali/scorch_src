@@ -1409,8 +1409,6 @@ PutChar4x4FULL .proc;
 ;but this time all pixels are being drawn
 ;(empty and not empty)
 ;--------------------------------------------------
-    lda plot4x4color
-    sta color
 
 ; calculating address of the first byte
     mva #4 LoopCounter4x4
@@ -1461,7 +1459,7 @@ Loop4x4ContinuedFULL
     ; here we have on screen one line of the char
     inw ydraw
     sbw xdraw #4
-    sbw y4x4 #32
+    sbw y4x4 #32  ; why? possibly because of width of the 4x4 font
     dec:lda LoopCounter4x4
     bne nextline4x4FULL
 

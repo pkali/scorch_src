@@ -864,7 +864,7 @@ ContinueToCheckMaxForce2
       lda MaxEnergyTableL,x
       sta EnergyTableL,x
 @
-    jsr DisplayingSymbols ;all digital values like force, angle, wind, etc.
+    jsr StatusDisplay ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
 
     jsr DrawTankNr
@@ -1129,8 +1129,6 @@ AfterStrongShoot
     lda ytraj+2
     sbc #0
     sta ytraj+2
-
-    ldy #100
 
     jsr Flight
     mva #1 color
@@ -1697,8 +1695,7 @@ EndOfFlight
 	sty SmokeTracerFlag
 	jmp SecondFlight
 EndOfFlight2
-	lda #0			;  nie wiem czemu
-	sta tracerflag	;
+	mva #0 tracerflag ;  don't know why
     rts
 .endp
 
@@ -1746,8 +1743,9 @@ SecondFlight .proc
     sta ytraj+2
 	
     ldy #100
-	lda #1			; I do not know (I mean I think I know ;) )
-	sta tracerflag	; 10 years later - I do not know!!!
+	mva #1 tracerflag  ; I do not know (I mean I think I know ;) )
+	                   ; 10 years later - I do not know!!!
+                       ; 20 years later - still do not know :]
 	jmp Flight.RepeatIfSmokeTracer
 .endp
 
