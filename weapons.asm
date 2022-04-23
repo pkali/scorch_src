@@ -12,14 +12,14 @@ Explosion .proc
 
     ldx TankNr
     lda ActiveWeapon,x
-    asl
 .endp
-Explosion2 .proc
+ExplosionDirect .proc
+    asl
     tax
     lda ExplosionRoutines+1,x
-        pha
-        lda ExplosionRoutines,x
-        pha
+    pha
+    lda ExplosionRoutines,x
+    pha
     rts
 ExplosionRoutines
     .word babymissile-1
@@ -115,10 +115,19 @@ VOID
     pla
     sta TankNr
 
+    
+    ; this is to fix bug MIRV loops #6
+    ; the issue was that after MIRV the flight routine called here
+    ; was mirving. This happened when a tank dies by MIRV and then
+    ; leapfrogs
+    tax
+    lda #4  ; leapfrog
+    sta ActiveWeapon,x
+        
+    
     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
     ; so, we have Force divided by 2 here (not accurately)
-
     lsr Force+1
     ror Force
     ;lsr Force+1
@@ -195,6 +204,13 @@ EndOfLeapping
     pla
     sta TankNr
 
+    ; this is to fix bug MIRV loops #6
+    ; the issue was that after MIRV the flight routine called here
+    ; was mirving. This happened when a tank dies by MIRV and then
+    ; leapfrogs
+    tax
+    lda #5  ; fynkybomb
+    sta ActiveWeapon,x
     mva #5 FunkyBombCounter
 FunkyBombLoop
     mva #1 tracerflag
@@ -677,7 +693,7 @@ rbombLoop
 PositiveVelocity
     ; first we look for the left slope
     ; then righ slope and set the flag
-    ; $FF - we are in a hole (flighting in missile direction)
+    ; $FF - we are in a hole (flying in missile direction)
     ; 1 - right, 2 - left
     mva #$ff HowMuchToFall
     mva ydraw HeightRol

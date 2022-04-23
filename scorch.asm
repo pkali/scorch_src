@@ -35,6 +35,9 @@
 ;and due to being always short of time/energy (to finish the game)
 ;we decided it must go in 'English' to let other people work on it
 
+    icl 'definitions.asm'
+    
+    
     .zpvar xdraw .word = $80 ;variable X for plot
     .zpvar ydraw   .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte   .word
@@ -72,15 +75,6 @@
 
 displayposition = modify
 ;-------------------------------
-;constants
-screenheight = 200
-screenBytes = 40
-screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
-margin = 48 ;mountain drawing Y variable margin
-display = $1010 ;screen takes $2K due to clearing routine
-MaxPlayers = 6
-maxOptions = 7  ;number of all options
-PMOffset = $23 ; P/M to graphics offset
 
     icl 'lib/atari.hea'
     icl 'lib/macro.hea'
@@ -92,6 +86,12 @@ PMOffset = $23 ; P/M to graphics offset
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
     icl 'display.asm'
+    ;----------------------------------------------
+    .ALIGN $400
+WeaponFont
+    ins 'artwork/weapons_AW4.fnt'  ; 'artwork/weapons.fnt'
+    
+    
 ;--------------------------------------------------
 ; Game Code
 ;--------------------------------------------------
@@ -590,7 +590,7 @@ PlayerXdeath .proc
     jsr DisplayOffensiveTextNr
 
 
-    ; calculate position of the explosion (the post-death one?)
+    ; calculate position of the explosion (the post-death one)
     ldx TankTempY
     clc
     lda xtankstableL,x
@@ -604,7 +604,7 @@ PlayerXdeath .proc
     sbc #4
     sta ydraw
     lda #0
-    sta ydraw+1   ; there is 0 left in A, so...
+    sta ydraw+1   ; there is 0 left in A, so... TODO: bad code above. revisit when transitioning ydraw to byte
 
     ;cleanup of the soil fall down ranges (left and right)
     sta RangeRight
@@ -616,14 +616,12 @@ PlayerXdeath .proc
 
 
     ; We are randomizing the weapon now.
-    ; As we are jumping into the middle of the weapon
-    ; routine we are preparing the number *2 -
-    ; - to make it easier and because we are using only
-    ; first 32 weapons we are doing this with just one AND
+    ; jumping into the middle of the explosion
+    ; routine
 
     lda random
-    and #$3e  ;  range (0-31 number multiplied by 2)
-    jsr Explosion2
+    and #%00011111  ;  range 0-31
+    jsr ExplosionDirect
 
     ; jump to after explosion routines (soil fallout, etc.)
     ; After going through these routines we are back
@@ -1115,9 +1113,7 @@ WaitForKeyRelease .proc
     rts
 .endp
 
-;----------------------------------------------
-OffensiveTexts
-    icl 'artwork/talk.asm'
+
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------
@@ -1129,35 +1125,26 @@ OffensiveTexts
 ;----------------------------------------------
     icl 'constants.asm'
 ;----------------------------------------------
-    icl 'variables.asm'
-    
-
+    icl 'artwork/talk.asm'
+;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
 ;----------------------------------------------
 TankFont
     ins 'artwork/tanks.fnt'
-TankFontend
-    .if TankFontEnd>$9800
+;----------------------------------------------
+    icl 'variables.asm'
+;----------------------------------------------
+TheEnd
+    .if TheEnd > PMGraph + $300
         .error memory conflict
-        ;this is to warn if code and P/M graphics
-        ;overlap!
+
     .endif
 ;----------------------------------------------
 ; Player/missile memory
-    ORG $9800
-pmgraph
+    org $b800
+PMGraph
 
-;----------------------------------------------
-    ORG $a400
-WeaponFont
-    ins 'artwork/weapons.fnt'
-;----------------------------------------------
-TheEnd
-    .if TheEnd>$c000
-        .error memory conflict
-
-    .endif
 
 
     run START

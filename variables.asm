@@ -26,7 +26,11 @@ skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning
 ResultLineBuffer
     dta d"                  "
     .byte $ff
-
+LineHeader1
+    dta d"# ROUND: "
+RoundNrDisplay
+    dta d"    #"
+    .byte $ff
 
 variablesStart  ; zeroing starts here
 ;-------------- 
