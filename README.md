@@ -3,7 +3,7 @@
 
 Scorch is a multi-player, turn-based, artillery video game. Tanks do turn-based battle in two-dimensional terrain, with each player adjusting the angle and power of their tank turret before each shot.
 
-by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
+by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
 
@@ -15,7 +15,7 @@ This source code was originally compiled under [OMC65 crossassembler](https://gi
 Compilation: `mads scorch.asm -o:scorch.xex`
 
 
-Game source code is split into 5+3 parts:
+Game source code is split into 5+4 parts:
 - scorch.asm is the main game code (with many assorted routines)
 - grafproc.asm - graphics routines like line or circle
 - textproc.asm - text routines like list of weapons and shop
@@ -24,6 +24,7 @@ Game source code is split into 5+3 parts:
 - display.asm - display lists and text screen definitions
 - ai.asm - artificial stupidity of computer opponents
 - weapons.asm - general arsenal of tankies
+- definitions.asm - label definitions, moved to make it work better with Altirra debug.
 
 We were trying to use as much macros and pseudo-ops as possible.
 They are defined in atari.hea and macro.hea files together with many atari constants. This way it should be relatively easy to port this code to e.g. C64
@@ -37,6 +38,16 @@ It never happened, but we got some encouraging comments and we are still trying 
 With the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changes:
+
+###### Build 136
+2022-04-24
+This is a very important release because we had a chance to work a bit as an original team (Pecus and pirx). Let's cheer for Pecus for joining the task force again! Changes:
+- another sneaky memory corrupting bug found and fixed. The game seems to be as stable as an Ikea table! No bug number because it was super elusive.
+- MIRV loops https://github.com/pkali/scorch_src/issues/6 - a very interesting one. It happened when MIRV killed tank exploded with LeapFrog or FunkyBomb.
+- Nicer font https://github.com/pkali/scorch_src/issues/37 - Thank you Adam for dugging up the font you made in 2008 :)
+- Explosions are 2 times faster and look equally good or maybe even a bit better. This was a drag because of the Death's Head
+- Memory map reorganized to extract some free RAM. Currentish map here: https://github.com/pkali/scorch_src/wiki
+- Adam shared an archive that preserved a couple of the old build comments! Added below.
 
 ###### Build 135
 2022-04-17
@@ -185,10 +196,11 @@ textproc.s65
 
 ##### Build 113
 2003-08-17
+Again you dear reader made us to do a significant improvement in Atari 8-bit Scorch. Build 113 released! There is a framework for AI ready and you can play with the most stupid opponent - the Mighty Moron!!! Give him a kick and play a little bit! 
 - AI Opponents move barrels to the right position
   before firing a bullet.
 - Purchase screen is not displayed for AI opponents.
-- There is 2 sec delay after displaying
+- There is a 2 sec delay after displaying
   "Defensive" text i.e. text before death
 
 program.s65
@@ -235,5 +247,15 @@ variables.s65
 
 grafproc.s65
 - shorter delay during Flight
+
+##### Build 110
+2003-07-21
+Previous release was a mistake. Build 110 is more or less playable, the "only" problem for now is such: in every round there is the same sequence of shooting (1st, 2nd, 3rd tank and so on). It should be like the weakest tank shoots first.
+
+##### Build 103
+2003-07-09
+For the first time Scorched Earth for Atari XL/XE (build 103) published.
+Together with Pecus we were working on this piece of code for four years and it does not look like it is accelerating so we decided to publish what we have. Last few weeks I was translating source code comments and labels to English to let other people work on this project with us. In other words Scorched Earth becomes an open source project :)
+Now it's your turn to help this idea happen!
 
 ...transmission error...former history missing...

@@ -679,7 +679,8 @@ NoMissile
     ; clear sprite and put 3 lines on the tank at the same time
     ldy #$00
     tya
-ClearPM     cpy temp
+ClearPM     
+    cpy temp
     bne ZeroesToGo
     lda #$03 ; (2 bits set) we set on two pixels in three lines
     sta (xbyte),y
@@ -701,6 +702,7 @@ DoNotDrawTankNr
 ;--------------------------------------------------
 drawmountains .proc
 ;--------------------------------------------------
+
     mwa #0 xdraw
     mwa #mountaintable modify
 

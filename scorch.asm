@@ -86,7 +86,7 @@ displayposition = modify
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
     icl 'display.asm'
-    ;----------------------------------------------
+;----------------------------------------------
     .ALIGN $400
 WeaponFont
     ins 'artwork/weapons_AW4.fnt'  ; 'artwork/weapons.fnt'
@@ -620,7 +620,7 @@ PlayerXdeath .proc
     ; routine
 
     lda random
-    and #%00011111  ;  range 0-31
+    and #%00011011  ;  range 0-31, no Funkybomb, no leapfrog, no others as well :]
     jsr ExplosionDirect
 
     ; jump to after explosion routines (soil fallout, etc.)

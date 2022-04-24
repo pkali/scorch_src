@@ -319,7 +319,7 @@ WhereToSlideTable
     .BY %100  ; 00000101
     .BY %100  ; 00000110
     .BY %100  ; 00000111
-    .BY %100  ; 00001000
+    .BY %000  ; 00001000
     .BY %000  ; 00001001
     .BY %000  ; 00001010
     .BY %000  ; 00001011
@@ -327,7 +327,7 @@ WhereToSlideTable
     .BY %000  ; 00001101
     .BY %000  ; 00001110
     .BY %000  ; 00001111
-    .BY %010  ; 00010000
+    .BY %000  ; 00010000
     .BY %000  ; 00010001
     .BY %000  ; 00010010
     .BY %000  ; 00010011
@@ -632,6 +632,7 @@ TanksNamesDefault
     dta d"4th.Tank"
     dta d"5th.Tank"
     dta d"6th.Tank"
+
 
 WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Baby_Missile___

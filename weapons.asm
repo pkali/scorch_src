@@ -115,16 +115,6 @@ VOID
     pla
     sta TankNr
 
-    
-    ; this is to fix bug MIRV loops #6
-    ; the issue was that after MIRV the flight routine called here
-    ; was mirving. This happened when a tank dies by MIRV and then
-    ; leapfrogs
-    tax
-    lda #4  ; leapfrog
-    sta ActiveWeapon,x
-        
-    
     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
     ; so, we have Force divided by 2 here (not accurately)
@@ -204,13 +194,6 @@ EndOfLeapping
     pla
     sta TankNr
 
-    ; this is to fix bug MIRV loops #6
-    ; the issue was that after MIRV the flight routine called here
-    ; was mirving. This happened when a tank dies by MIRV and then
-    ; leapfrogs
-    tax
-    lda #5  ; fynkybomb
-    sta ActiveWeapon,x
     mva #5 FunkyBombCounter
 FunkyBombLoop
     mva #1 tracerflag
@@ -560,24 +543,16 @@ LaserMisses
     lda #1
     sta radius
     sta color
-    ;ora ExplosionRadius ;making sure the ExplosionRadius is odd
-    ;sta ExplosionRadius
 ExplosionLoop
     jsr circle
-    inc ydraw
-    jsr circle
-    dec ydraw
-    inc:inc radius
+    :2 inc radius
     lda radius
     cmp ExplosionRadius
-    bne ExplosionLoop
+    bcc ExplosionLoop
     lda #0
     sta color
 ExplosionLoop2
     jsr circle
-    inc ydraw
-    jsr circle
-    dec ydraw
     dec radius
     lda radius
     bne ExplosionLoop2
