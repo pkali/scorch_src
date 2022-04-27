@@ -742,8 +742,8 @@ SoilDown2 .proc
 ; both tables
 
     mwa RangeLeft xdraw
+    adw RangeLeft #mountaintable temp
     adw RangeLeft #mountaintable2 tempor2
-    adw RangeLeft #mountaintable3 tempor3
 
 NextColumn1
     mva #0 ydraw
@@ -753,7 +753,7 @@ NextPoint1
     ldy #0
     lda ydraw
     sta (tempor2),y
-    sta (tempor3),y
+    sta (temp),y
     jmp FoundPeek1
 StillNothing
     inc ydraw
@@ -762,7 +762,7 @@ StillNothing
     bne NextPoint1
 FoundPeek1
     inw tempor2
-    inw tempor3
+    inw temp
     inw xdraw
     ;vcmp xdraw,screenwidth,NextColumn1
     cpw xdraw RangeRight
@@ -775,7 +775,6 @@ MainFallout2
     mwa RangeLeft xdraw
     adw RangeLeft #mountaintable temp
     adw RangeLeft #mountaintable2 tempor2
-    adw RangeLeft #mountaintable3 tempor3
 
     mva #1 IsEndOfTheFallFlag
 FalloutOfLine
@@ -803,12 +802,12 @@ FalloutOfLine
     ; zeroing pixel from the second table
     ; and increase Y in second table
     ldy #0
-    lda (tempor3),y
+    lda (temp),y
     sta ydraw
-    lda (tempor3),y
+    lda (temp),y
     clc
     adc #1
-    sta (tempor3),y
+    sta (temp),y
     sty color
     jsr plot.MakePlot
 
@@ -816,7 +815,6 @@ ThereIsPixelHere
 ColumnIsReady
     inw temp
     inw tempor2
-    inw tempor3
     inw xdraw
     ;vcmp xdraw,screenwidth,FalloutOfLine
     cpw xdraw RangeRight
@@ -827,23 +825,7 @@ ColumnIsReady
 ; we repeat untill at some point first table reaches
 ; level of the mountains
     jeq MainFallout2
-; now correct heights are in the second temporary table
-; so we copy
-    mwa RangeLeft xdraw
-    adw RangeLeft #mountaintable temp
-    adw RangeLeft #mountaintable3 tempor3
-
-    ldy #0
-CopyHeights
-    lda (tempor3),y
-    sta (temp),y
-    inw temp
-    inw tempor3
-    inw xdraw
-    ;vcmp xdraw,screenwidth,CopyHeights
-    cpw xdraw RangeRight
-    bcc CopyHeights
-    beq CopyHeights
+; now correct heights are in the mountaintable
     mva #1 color
     rts
 .endp
