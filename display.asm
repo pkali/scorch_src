@@ -55,12 +55,10 @@ dl ; MAIN game display list
 
         .byte $4f
         .word display
-
-        :100 .by $0f
-        .by $0f
+        :101 .by $0f
         .by $4f
         .wo display+$0ff0
-        :100 .byte $0f ;97
+        :97 .byte $0f ;1+101+1+97 = 200
         .byte $41
         .word dl
 ;-----------------------------------------------

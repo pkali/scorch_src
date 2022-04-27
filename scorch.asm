@@ -81,16 +81,14 @@ displayposition = modify
 
 	icl 'artwork/HIMARS14.asm'
     ;Game loading address
-    ORG  $3010 ;must be $2K after screen, because screen cleaning erases $2K
+    ORG  $3000
+WeaponFont
+    ins 'artwork/weapons_AW4.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
-;Screen displays go first to avoid crossing 4kb barrier
+;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
     icl 'display.asm'
 ;----------------------------------------------
-    .ALIGN $400
-WeaponFont
-    ins 'artwork/weapons_AW4.fnt'  ; 'artwork/weapons.fnt'
-    
     
 ;--------------------------------------------------
 ; Game Code

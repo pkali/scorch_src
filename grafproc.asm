@@ -443,41 +443,12 @@ clearscreen .proc
 ;--------------------------------------------------
     lda #0
     tax
-Loopi1
-    sta display,x
-    sta display+$100,x
-    sta display+$200,x
-    sta display+$300,x
-    sta display+$400,x
-    sta display+$500,x
-    sta display+$600,x
-    sta display+$700,x
-    sta display+$800,x
-    sta display+$900,x
-    sta display+$a00,x
-    sta display+$b00,x
-    sta display+$c00,x
-    sta display+$d00,x
-    sta display+$e00,x
-    sta display+$f00,x
-    sta display+$1000,x
-    sta display+$1100,x
-    sta display+$1200,x
-    sta display+$1300,x
-    sta display+$1400,x
-    sta display+$1500,x
-    sta display+$1600,x
-    sta display+$1700,x
-    sta display+$1800,x
-    sta display+$1900,x
-    sta display+$1a00,x
-    sta display+$1b00,x
-    sta display+$1c00,x
-    sta display+$1d00,x
-    sta display+$1e00,x
-    sta display+$1f00,x
+@
+    :31 sta display+($100*#),x
+    sta display+$1e50,x  ; this is so no space outside of the screen is cleared
+                         ; of course we are clearing $100 instead of $50, but who cares :]
     inx
-    bne Loopi1
+    bne @-
     rts
 .endp
 ;-------------------------------*------------------

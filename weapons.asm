@@ -549,16 +549,20 @@ ExplosionLoop
     lda radius
     cmp ExplosionRadius
     bcc ExplosionLoop
-    lda #0
-    sta color
+
+    ldx #0
+    stx color
+    inx
+    stx radius
 ExplosionLoop2
     jsr circle
-    dec radius
+    inc radius
     lda radius
-    bne ExplosionLoop2
-    lda #1
-    sta color
+    cmp ExplosionRadius
+    bcc ExplosionLoop2
 
+    mva #1 color
+        
 ;check tanks' distance from the centre of the explosion
 
     mwa #DrawLen DrawJumpAddr
