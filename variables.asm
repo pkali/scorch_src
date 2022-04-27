@@ -316,9 +316,6 @@ mountaintable ;table of mountains (size=screenwidth)
 mountaintable2 ;table of mountains (size=screenwidth)
     .DS [screenwidth]
     .DS 1 ; additional byte for fallout (sometimes 1 pixel)
-mountaintable3
-    .ds [screenwidth]
-    .ds 1 ; additional byte for fallout (sometimes 1 pixel)
 MountaintableEnd ;good for table clearing
 ;----------------------------------------------
 TextPositionX .DS 2
