@@ -239,10 +239,10 @@ skipzeroing
 Round .proc ; 
 ;--------------------------------------------------
 ; at the beginning of each Round we set energy
-; of all players to 100
-; the maximum shooting energy to 1000 (it is 10*energy)
+; of all players to 99
+; the maximum shooting energy to 990 (it is 10*energy)
 ; the default shooting energy to 350
-; the default shooting angle to 45 degrees
+; the shooting angle is randomized
 ; of course gains an looses are zeroed
 
 	jsr StatusDisplay
@@ -361,11 +361,7 @@ DoNotFinishTheRound
     mva #0 noDeathCounter
     
     jsr DisplaySeppuku
-    
     jmp Seppuku
-
-
-
 
     ;ldx TankNr
 @

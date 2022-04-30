@@ -788,8 +788,8 @@ WeaponUnits
   .by 10 ;Baby_Roller____
   .by 5  ;Roller_________
   .by 2  ;Heavy_Roller___
-  .by 1  ;Riot_Charge____
-  .by 5  ;Riot_Blast_____
+  .by 5  ;Riot_Charge____
+  .by 2  ;Riot_Blast_____
   .by 5  ;Riot_Bomb______
   .by 2  ;Heavy_Riot_Bomb
   .by 10 ;Baby_Digger____
@@ -802,7 +802,7 @@ WeaponUnits
   .by 5  ;Dirt_Ball______
   .by 2  ;Ton_of_Dirt____
   .by 2  ;Liquid_Dirt____
-  .by 10 ;Dirt_Charge____
+  .by 2  ;Dirt_Charge____
   .by 10 ;Earth_Disrupter
   .by 5  ;Plasma_Blast___
   .by 5  ;Laser__________

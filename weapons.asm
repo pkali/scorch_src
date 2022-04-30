@@ -37,8 +37,8 @@ ExplosionRoutines
     .word babyroller-1
     .word roller-1
     .word heavyroller-1
-    .word VOID-1 ;riotcharge
-    .word VOID-1 ;riotblast
+    .word riotcharge-1
+    .word riotblast-1
     .word riotbomb-1
     .word heavyriotbomb-1
     .word babydigger-1
@@ -482,6 +482,20 @@ DiggerCharacter
     jmp ofdirt
 .endp
 ; ------------------------
+.proc riotcharge
+    inc FallDown2
+    mva #31 ExplosionRadius
+    jsr CalculateExplosionRange
+    jmp cleanDirt
+.endp
+; ------------------------
+.proc riotblast
+    inc FallDown2
+    mva #61 ExplosionRadius
+    jsr CalculateExplosionRange
+    jmp cleanDirt
+.endp
+; ------------------------
 .proc laser
     ldx TankNr
     lda AngleTable,x
@@ -785,15 +799,21 @@ ExplodeNow
     rts
 .endp
 ; --------------------------------------------------
+.proc cleanDirt
+    mva #0 color
+    jmp ofdirt.NoColor
+.endp
+; --------------------------------------------------
 .proc ofdirt ;
 ; --------------------------------------------------
 ; makes dirt on xdraw,ydraw position and of ExplosionRadius height
+    mva #1 color
+NoColor ; jump here with color=0 to clean dirt
     mwa xdraw xcircle
     mva ydraw ycircle
     lda #1
 ; current dirt width
     sta magic
-    sta color
 NextRow
     wait
     ldy magic

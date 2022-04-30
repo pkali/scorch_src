@@ -65,7 +65,7 @@ dl ; MAIN game display list
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. 136 (un)2000-2022"
+ dta d"Welcome to Scorch ver. 137 (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   

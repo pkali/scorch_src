@@ -77,11 +77,12 @@
 ;	WAIT
 ;	waits one frame (1/50 s(PAL) or 1/60s(NTSC))
          LDA VCOUNT
-         STA WSYNC
-         STA WSYNC
-         STA WSYNC
-?WA      CMP VCOUNT
-         BNE ?WA
+         ldy vcount
+?WA      cpy VCOUNT
+         BEQ ?WA
+?wframe
+         cmp vcount
+         bne ?wframe
          .ENDM
 ;-------------------------------------
     .macro negw
