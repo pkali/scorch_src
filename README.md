@@ -39,7 +39,7 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
-###### Build 136
+###### Build 137
 2022-04-29
 Premature release due to a trip to Atlanta on weekend.
 - https://github.com/pkali/scorch_src/issues/41 Make Riot Charge and Riot Blast weapons. YAY a new weapon after so many years! And it is really useful when you get covered by a ton of dirt
