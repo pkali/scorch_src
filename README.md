@@ -40,6 +40,15 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 ## Changes:
 
 ###### Build 136
+2022-04-29
+Premature release due to a trip to Atlanta on weekend.
+- https://github.com/pkali/scorch_src/issues/41 Make Riot Charge and Riot Blast weapons. YAY a new weapon after so many years! And it is really useful when you get covered by a ton of dirt
+- land-slide optimization by @Pecusx: ~400 bytes and some cycles saved!
+- nicer explosions (say that to the target)
+- improved `wait` macro to be non-blocking (moving towards asynchronous code :)))
+- various memory optimizations - over 9KiB free RAM for further use!
+
+###### Build 136
 2022-04-24
 This is a very important release because we had a chance to work a bit as an original team (Pecus and pirx). Let's cheer for Pecus for joining the task force again! Changes:
 - another sneaky memory corrupting bug found and fixed. The game seems to be as stable as an Ikea table! No bug number because it was super elusive.
