@@ -55,17 +55,47 @@ dl ; MAIN game display list
 
         .byte $4f
         .word display
-        :101 .by $0f
+        :76 .by $0f
+		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:13 .by $0f
+		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:8 .by $0f
         .by $4f
         .wo display+$0ff0
-        :97 .byte $0f ;1+101+1+97 = 200
+		:2 .by $0f
+ 		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:9 .by $0f
+ 		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:8 .by $0f
+ 		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:7 .by $0f
+ 		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:6 .by $0f
+ 		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:5 .by $0f
+ 		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:4 .by $0f
+ 		.by $0f+$80 ; DLI (black bar)
+		.by $0f+$80 ; DLI
+		:3 .by $0f
+ 		.by $0f+$80 ; DLI (black to end)
+
+       :34 .byte $0f ;1+101+1+97 = 200
         .byte $41
         .word dl
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. 137 (un)2000-2022"
+ dta d"Welcome to Scorch ver. 138 (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   
