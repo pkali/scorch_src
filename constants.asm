@@ -987,5 +987,7 @@ scrcodes
     dta d"qrstuvwx"
     dta d"yz123456"
     dta d"7890." ; "-"
+dliColors
+	:10 .by $02,$00
 
 .endif

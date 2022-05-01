@@ -66,12 +66,12 @@
     .zpvar dx .word
     .zpvar tempor2 .byte
     .zpvar dy .word
-    .zpvar tempor3 .word
     .zpvar dd .word
     .zpvar di .word
     .zpvar dp .word
     .zpvar modify .word
     .zpvar weaponPointer .word
+	.zpvar dliCounter .byte
 
 displayposition = modify
 ;-------------------------------
@@ -83,7 +83,7 @@ displayposition = modify
     ;Game loading address
     ORG  $3000
 WeaponFont
-    ins 'artwork/weapons_AW4.fnt'  ; 'artwork/weapons.fnt'
+    ins 'artwork/weapons_AW5.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
@@ -131,7 +131,7 @@ START
     ; for the round #1 shooting sequence is random
 
 MainGameLoop
-	
+	VMAIN VBLinterrupt,6  ; jsr SetVBL
     VDLI DLIinterrupt  ; jsr SetDLI
 
 	jsr CallPurchaseForEveryTank
@@ -613,8 +613,13 @@ PlayerXdeath .proc
     ; jumping into the middle of the explosion
     ; routine
 
+MetodOfDeath
     lda random
-    and #%00011011  ;  range 0-31, no Funkybomb, no leapfrog, no others as well :]
+    and #%00011111  ;  range 0-31 (reduced to 0 - 15 - why??? )
+	cmp #4 ; no leapfrog
+	beq MetodOfDeath
+	cmp #5 ; no Funkybomb
+	beq MetodOfDeath
     jsr ExplosionDirect
 
     ; jump to after explosion routines (soil fallout, etc.)
@@ -811,11 +816,23 @@ ClearResults
     
 DLIinterrupt .proc
     pha
-    lda #$02 ; color of playground
+	phy
+	ldy dliCounter
+	lda dliColors,y
+    ;lda #$02 ; color of playground
     sta WSYNC
     sta COLPF2
+	inc dliCounter
+	ply
     pla
     rti
+.endp
+
+VBLinterrupt .proc
+	pha
+	mva #0 dliCounter
+	pla
+	jmp SYSVBV
 .endp
 ;----------------------------------------------
 RandomizeSequence .proc
