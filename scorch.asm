@@ -35,6 +35,10 @@
 ;and due to being always short of time/energy (to finish the game)
 ;we decided it must go in 'English' to let other people work on it
 
+.macro build
+	dta d"138" ; number of this build (3 bytes)
+.endm
+
     icl 'definitions.asm'
     
     
@@ -616,11 +620,11 @@ PlayerXdeath .proc
 MetodOfDeath
     lda random
     and #%00011111  ;  range 0-31 (reduced to 0 - 15 - why??? )
-	cmp #4 ; no leapfrog
-	beq MetodOfDeath
-	cmp #5 ; no Funkybomb
-	beq MetodOfDeath
-    jsr ExplosionDirect
+	cmp #19 ; we have 19 weapons in table
+	bcs MetodOfDeath
+	tay
+	lda weaponsOfDeath,y
+   jsr ExplosionDirect
 
     ; jump to after explosion routines (soil fallout, etc.)
     ; After going through these routines we are back

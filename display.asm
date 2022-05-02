@@ -54,48 +54,51 @@ dl ; MAIN game display list
         .byte $10  ; 2 blank lines 
 
         .byte $4f
-        .word display
-        :76 .by $0f
-		.by $0f+$80 ; DLI (black bar)
+        .word display					; 1 line
+        :76 .by $0f						;76
+		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:13 .by $0f
-		.by $0f+$80 ; DLI (black bar)
+		:13 .by $0f						;13
+		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:8 .by $0f
-        .by $4f
+		:8 .by $0f						;8
+        .by $4f							;1
         .wo display+$0ff0
-		:2 .by $0f
- 		.by $0f+$80 ; DLI (black bar)
+		:2 .by $0f						;2
+ 		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:9 .by $0f
- 		.by $0f+$80 ; DLI (black bar)
+		:9 .by $0f						;9
+ 		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:8 .by $0f
- 		.by $0f+$80 ; DLI (black bar)
+		:8 .by $0f						;8
+ 		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:7 .by $0f
- 		.by $0f+$80 ; DLI (black bar)
+		:7 .by $0f						;7
+ 		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:6 .by $0f
- 		.by $0f+$80 ; DLI (black bar)
+		:6 .by $0f						;6
+ 		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:5 .by $0f
- 		.by $0f+$80 ; DLI (black bar)
+		:5 .by $0f						;5
+ 		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:4 .by $0f
- 		.by $0f+$80 ; DLI (black bar)
+		:4 .by $0f						;4
+ 		.by $0f+$80 ; DLI (black bar)	;2
 		.by $0f+$80 ; DLI
-		:3 .by $0f
- 		.by $0f+$80 ; DLI (black to end)
-
-       :34 .byte $0f ;1+101+1+97 = 200
+		:3 .by $0f						;3
+ 		.by $0f+$80 ; DLI (black to end);1
+       :38 .byte $0f 					;35 ..... = 200
+        .by $4f
+        .wo LastLine	; additional line of ground
         .byte $41
         .word dl
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. 138 (un)2000-2022"
+ dta d"Welcome to Scorch ver. "
+ build  ; 3 bytes from scorch.asm (fancy method) :) 
+ dta d" (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   
@@ -156,6 +159,8 @@ WeaponsDescription
  dta d" - Finish    "
 EmptyLine
  dta d"                                        "
+LastLine
+ :40 dta $ff
 ;-----------------------------------------------
 textbuffer
      ; 0123456789012345678901234567890123456789
