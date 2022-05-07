@@ -299,6 +299,7 @@ SettingEnergies
     jsr clearscreen   ;let the screen be clean
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be nice for the eye
+;    jsr calculatemountains0 ;only fort tests - makes mountains flat and one pixel height
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 

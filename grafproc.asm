@@ -759,7 +759,13 @@ StillNothing
     inc ydraw
     lda ydraw
     cmp #screenheight
-    bne NextPoint1
+	bne NextPoint1
+	; no pixels on whole column !!!
+	ldy #0
+    lda ydraw
+    sta (tempor2),y
+    sta (temp),y
+    jmp FoundPeek1
 FoundPeek1
     inw tempor2
     inw temp
@@ -930,6 +936,32 @@ EndDrawing
 
     rts
 .endp
+; ****************************************************
+;--------------------------------------------------
+calculatemountains0 .proc
+; Only for testing - makes ground flat (one pixel)
+; and places tanks on it
+; remember to remove in final compilation :)
+;--------------------------------------------------
+    mwa #0 xdraw
+nextPointDrawing
+	adw xdraw #mountaintable modify
+    lda #screenheight-1
+    ldy #0
+    sta (modify),y
+    inw xdraw
+    cpw xdraw #screenwidth
+    bne nextPointDrawing
+	ldx NumberOfPlayers
+    dex
+SetYofNextTank
+    lda #screenheight-2
+    sta ytankstable,x
+    dex
+    bpl SetYofNextTank
+   rts
+.endp
+; ****************************************************
 ; -----------------------------------------
 unPlot .proc
 ; plots a point and saves the plotted byte, reverts the previous plot.
