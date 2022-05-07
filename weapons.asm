@@ -882,8 +882,6 @@ UpNotYet2
     sta HeightRol
     sbc #1
     sta ydraw
-	jsr unPlot
-    ; let's go the right direction
     lda HowMuchToFall
     cmp #1
     beq HowMuchToFallRight3
@@ -898,15 +896,7 @@ HowMuchToFallRight3
     cpw xdraw screenwidth
     jne RollinContinuesLiquid
 FillNow
-    mwa xdraw xcircle  ; we must store somewhere (BAD)
-    mva ydraw ycircle  ; xdraw and ydraw (BAD)
-    mwa #0 xdraw
-    mva #screenheight-1 ydraw
-    jsr unPlot
-    mwa xcircle xdraw ;(bad)
-    mva ycircle ydraw ;(bad)
-
-    ; finally one pixel more
+     ; finally one pixel more
     ldy #0
 	lda HowMuchToFall
 	bmi FillHole
