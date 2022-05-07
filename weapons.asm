@@ -855,7 +855,7 @@ EndOfTheDirt
 ; ----------------
 .proc liquiddirt ;
 	mva xdraw TempXfill
-	mva #200 FillCounter
+	mva #254 FillCounter
 RepeatFill
 	mva TempXfill xdraw
 	jsr checkRollDirection
@@ -885,7 +885,8 @@ UpNotYet2
     lda HowMuchToFall
     cmp #1
     beq HowMuchToFallRight3
-.nowarn    dew xdraw
+.nowarn    
+    dew xdraw
     lda xdraw
     bne RollinContinuesLiquid
     lda xdraw+1
