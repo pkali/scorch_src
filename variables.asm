@@ -148,6 +148,9 @@ digtabxL .DS [8]
 digtabxH .DS [8]
 digtabyL .DS [8]
 digtabyH .DS [8]
+; liquiddirt
+TempXfill .ds 2
+FillCounter .ds 1
 ;sandhog
 sandhogflag .DS 1 ; (0 digger, 8 sandhog)
 ;ofdirt

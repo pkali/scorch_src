@@ -50,7 +50,7 @@ ExplosionRoutines
     .word dirtclod-1
     .word dirtball-1
     .word tonofdirt-1
-    .word VOID-1 ;liquiddirt
+    .word liquiddirt-1 ;liquiddirt
     .word dirtcharge-1
     .word VOID-1 ;earthdisrupter
     .word VOID-1 ;plasmablast
@@ -666,77 +666,13 @@ rbombLoop
     rts
 .endp
 ; ----------------
-
 .proc xroller ;
     ; now collisions are detected with modified draw routine
     ; therefore YDRAW value must be taken from mountaintable
-    ldy #0
-    mwa #mountaintable tempXROLLER
-
-    adw tempXROLLER xdraw
-    lda (tempXROLLER),y
-    sta ydraw
-
-    lda vx+3
-    ; if horizontal velocity is negative then change the direction
-    bpl PositiveVelocity
-    lda goleft
-    ora #$01
-    sta goleft
-PositiveVelocity
-    ; first we look for the left slope
-    ; then righ slope and set the flag
+	jsr checkRollDirection
+	; HowMuchToFall - direction
     ; $FF - we are in a hole (flying in missile direction)
     ; 1 - right, 2 - left
-    mva #$ff HowMuchToFall
-    mva ydraw HeightRol
-    mwa #mountaintable tempXROLLER
-
-    adw tempXROLLER xdraw
-SeekLeft
-.nowarn    dew tempXROLLER
-    lda (tempXROLLER),y    ;fukk! beware of Y value
-    cmp HeightRol
-    bne HowMuchToFallLeft
-    lda tempXROLLER
-    cmp #<mountaintable
-    bne SeekLeft
-    lda tempXROLLER+1
-    cmp #>mountaintable
-    beq GoRightNow
-HowMuchToFallLeft
-    bcs GoRightNow
-    mva #1 HowMuchToFall
-GoRightNow
-    mwa #mountaintable tempXROLLER
-    adw tempXROLLER xdraw
-SeekRight
-    inw tempXROLLER
-    lda (tempXROLLER),y
-    cmp HeightRol
-    bne HowMuchToFallRight
-    lda tempXROLLER
-    cmp #<(mountaintable+screenwidth)
-    bne SeekRight
-    lda tempXROLLER+1
-    cmp #>(mountaintable+screenwidth)
-    beq HowMuchToFallKnown
-HowMuchToFallRight
-    ; check if up or down
-    bcs HowMuchToFallKnown
-    lda HowMuchToFall
-    bpl ItIsLeftAlready
-    mva #2 HowMuchToFall
-    bne HowMuchToFallKnown
-ItIsLeftAlready
-    mva #$ff HowMuchToFall
-HowMuchToFallKnown
-    lda HowMuchToFall
-    bpl Rollin
-    lda #1
-    clc
-    adc goleft
-    sta HowMuchToFall
 Rollin
     adw xdraw #mountaintable tempXROLLER
     ldy #0
@@ -799,6 +735,71 @@ ExplodeNow
     rts
 .endp
 ; --------------------------------------------------
+.proc checkRollDirection
+; check rolling direction (for roller and other rolling weapons)
+    ldy #0
+    mwa #mountaintable tempXROLLER
+
+    adw tempXROLLER xdraw
+    lda (tempXROLLER),y
+    sta ydraw
+
+    lda vx+3
+    ; if horizontal velocity is negative then change the direction
+    bpl PositiveVelocity
+    lda goleft
+    ora #$01
+    sta goleft
+PositiveVelocity
+    ; first we look for the left slope
+    ; then righ slope and set the flag
+    ; $FF - we are in a hole (flying in missile direction)
+    ; 1 - right, 2 - left
+    mva #$ff HowMuchToFall
+    mva ydraw HeightRol
+    ;mwa #mountaintable tempXROLLER - It's already done  !!!
+    ;adw tempXROLLER xdraw
+SeekLeft
+	cpw tempXROLLER #mountaintable
+    beq GoRightNow		; "bounce" if we have on left end
+.nowarn    dew tempXROLLER
+    lda (tempXROLLER),y    ;fukk! beware of Y value
+    cmp HeightRol
+    bne HowMuchToFallLeft
+HowMuchToFallLeft
+    bcs GoRightNow
+    mva #1 HowMuchToFall
+GoRightNow
+    mwa #mountaintable tempXROLLER
+    adw tempXROLLER xdraw
+SeekRight
+	cpw tempXROLLER #(mountaintable+screenwidth)
+    beq HowMuchToFallKnown	; "stop" if we have on left end
+    inw tempXROLLER
+    lda (tempXROLLER),y
+    cmp HeightRol
+    bne HowMuchToFallRight
+HowMuchToFallRight
+    ; check if up or down
+    bcs HowMuchToFallKnown
+    lda HowMuchToFall
+    bpl ItIsLeftAlready
+    mva #2 HowMuchToFall
+    bne HowMuchToFallKnown
+ItIsLeftAlready
+    mva #$ff HowMuchToFall
+HowMuchToFallKnown
+    lda HowMuchToFall
+    bpl DirectionChecked
+    lda #1
+    clc
+    adc goleft
+    sta HowMuchToFall
+DirectionChecked
+	rts
+.endp
+
+; --------------------------------------------------
 .proc cleanDirt
     mva #0 color
     jmp ofdirt.NoColor
@@ -849,6 +850,83 @@ DoNotPlot
 EndOfTheDirt
     mwa xcircle xdraw
     mva ycircle ydraw
+    rts
+.endp
+; ----------------
+.proc liquiddirt ;
+	mva xdraw TempXfill
+	mva #200 FillCounter
+RepeatFill
+	mva TempXfill xdraw
+	jsr checkRollDirection
+	; HowMuchToFall - direction
+    ; $FF - we are in a hole (flying in missile direction)
+    ; 1 - right, 2 - left
+   adw xdraw #mountaintable tempXROLLER
+    ldy #0
+    lda (tempXROLLER),y
+    sta HeightRol ; relative point
+ 
+RollinContinuesLiquid
+    ; new point is set
+    adw xdraw #mountaintable tempXROLLER
+    ldy #0
+    lda (tempXROLLER),y
+    sta ydraw
+    beq FillNow
+    cmp HeightRol
+    beq UpNotYet2
+    bcc FillNow
+UpNotYet2
+    sec ;clc
+    sta HeightRol
+    sbc #1
+    sta ydraw
+	jsr unPlot
+    ; let's go the right direction
+    lda HowMuchToFall
+    cmp #1
+    beq HowMuchToFallRight3
+.nowarn    dew xdraw
+    lda xdraw
+    bne RollinContinuesLiquid
+    lda xdraw+1
+    jne RollinContinuesLiquid
+    beq FillNow
+HowMuchToFallRight3
+    inw xdraw
+    cpw xdraw screenwidth
+    jne RollinContinuesLiquid
+FillNow
+    mwa xdraw xcircle  ; we must store somewhere (BAD)
+    mva ydraw ycircle  ; xdraw and ydraw (BAD)
+    mwa #0 xdraw
+    mva #screenheight-1 ydraw
+    jsr unPlot
+    mwa xcircle xdraw ;(bad)
+    mva ycircle ydraw ;(bad)
+
+    ; finally one pixel more
+    ldy #0
+	lda HowMuchToFall
+	bmi FillHole
+	cmp#1
+	beq FillLeft
+	inw xdraw
+	inw xdraw	; tricky but we must rollback xdraw in proper direction
+FillLeft
+.nowarn	dew xdraw
+FillHole
+    adw xdraw #mountaintable tempXROLLER
+	lda (tempXROLLER),y
+	sta ydraw
+	dec ydraw	; one pixel up
+	lda ydraw
+    sta (tempXROLLER),y	;mountaintable update
+	mva #1 color
+	jsr plot
+    dec FillCounter
+	jne RepeatFill
     rts
 .endp
 
