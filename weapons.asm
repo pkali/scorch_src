@@ -2,7 +2,7 @@
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 ;--------------------------------------------------
-Explosion .proc
+.proc Explosion
 ;--------------------------------------------------
     ;cleanup of the soil fall down ranges (left and right)
     mwa #screenwidth RangeLeft

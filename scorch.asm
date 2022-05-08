@@ -430,12 +430,13 @@ ShootNow
     
     lda HitFlag ;0 if missed
     beq missed
-Seppuku
+    
     lda #0
     sta FallDown1
     sta FallDown2
     jsr Explosion
 
+continueMainRoundLoopAfterSeppuku
     ;here we clear offensive text (after a shoot)
     ldy TankNr
     mva #0 plot4x4color
@@ -562,6 +563,16 @@ NoPlayerNoDeath
     ; if processor is here it means there are no more explosions
     jmp MainRoundLoop
 	.endp
+	
+;---------------------------------
+.proc Seppuku
+    lda #0
+    sta FallDown1
+    sta FallDown2
+    lda #1
+    jsr ExplosionDirect
+    jmp continueMainRoundLoopAfterSeppuku
+.endp
 ;---------------------------------
 PlayerXdeath .proc
 
