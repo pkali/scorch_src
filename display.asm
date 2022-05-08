@@ -120,7 +120,7 @@ NameAdr
  dta d" Human/Atari (difficulty level) "
  dta d" "
 NamesOfLevels
- dta d" HUMAN     Moron     Shooter   "
+ dta  d" HUMAN     Moron     Shooter   "
  dta d"  Poolshark Toosser   Chooser   "
  dta d"  Spoiler   Cyborg    Unknown   "
  dta d"  "
@@ -165,10 +165,10 @@ LastLine
 textbuffer
      ; 0123456789012345678901234567890123456789
  dta d"Player:                                 "
- dta d"Energy: 99   Angle: <32>   Force: 1000  "
- dta d"       Round: 50   Wind: <22>           "
+ dta d"Energy: 99   Angle: <99>   Force: 9999  "
+ dta d"       Round: 99   Wind: <99>           "
 textbuffer2
- dta d"Player: ********       Cash: 00000      "
+ dta d"Player: ********       Cash: 99999      "
  dta d"----------------------------------------"
 
 

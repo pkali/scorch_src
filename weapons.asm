@@ -77,6 +77,7 @@ VOID
 .endp
 ; ------------------------
 .proc babynuke
+    mva #sfx_nuke sfx_effect 
     inc FallDown2
     mva #25 ExplosionRadius
     jsr CalculateExplosionRange
@@ -84,6 +85,7 @@ VOID
 .endp
 ; ------------------------
 .proc nuke
+    mva #sfx_nuke sfx_effect 
     inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
@@ -91,6 +93,7 @@ VOID
 .endp
 ; ------------------------
 .proc leapfrog
+    mva #sfx_funky_hit sfx_effect
     inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
@@ -129,6 +132,7 @@ VOID
     beq EndOfLeapping
     mva #15 ExplosionRadius
     jsr CalculateExplosionRange0
+    mva #sfx_funky_hit sfx_effect
     jsr xmissile
 
     ; soil must fall down now! there is no other way...
@@ -157,6 +161,7 @@ VOID
     beq EndOfLeapping
     mva #13 ExplosionRadius
     jsr CalculateExplosionRange0
+    mva #sfx_funky_hit sfx_effect
     jmp xmissile
 EndOfLeapping
     rts
@@ -168,6 +173,7 @@ EndOfLeapping
 .endp
 ; ------------------------
 .proc funkybomb ;
+    mva #sfx_funky_hit sfx_effect
     mwa xtraj+1 xtrajfb
     mwa ytraj+1 ytrajfb
     inc FallDown2
@@ -220,6 +226,7 @@ DoNotEor
     jsr CalculateExplosionRange
     lda HitFlag
     beq NoExplosionInFunkyBomb
+      mva #sfx_funky_hit sfx_effect
       jsr xmissile
 NoExplosionInFunkyBomb
     dec FunkyBombCounter
@@ -232,12 +239,16 @@ NoExplosionInFunkyBomb
     inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
+
+    mva #sfx_nuke sfx_effect 
     jsr xmissile
     sbw xdraw #35
     jsr CalculateExplosionRange
+    mva #sfx_nuke sfx_effect 
     jsr xmissile
     adw xdraw #70
     jsr CalculateExplosionRange
+    mva #sfx_nuke sfx_effect 
     jsr xmissile
     sbw xdraw #35
     ;
@@ -245,12 +256,14 @@ NoExplosionInFunkyBomb
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoUpperCircle
+    mva #sfx_nuke sfx_effect 
     jsr xmissile
 NoUpperCircle
     adb ydraw #70
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
+    mva #sfx_nuke sfx_effect 
     jsr xmissile
 NoLowerCircle
     rts
@@ -317,6 +330,7 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc xdigger
+    mva #sfx_digger sfx_effect
     mwa xdraw digstartx
     mwa ydraw digstarty
     ldx diggery
@@ -431,6 +445,7 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc babysandhog
+    mva #sfx_sandhog sfx_effect
     mva #8 sandhogflag
     inc FallDown2
     mva #13 DigLong
@@ -439,6 +454,7 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc sandhog
+    mva #sfx_sandhog sfx_effect
     mva #8 sandhogflag
     inc FallDown2
     mva #13 DigLong
@@ -447,6 +463,7 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc heavysandhog
+    mva #sfx_sandhog sfx_effect
     mva #8 sandhogflag
     inc FallDown2
     mva #13 DigLong
@@ -490,6 +507,7 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc riotblast
+    mva #sfx_riot_blast sfx_effect
     inc FallDown2
     mva #61 ExplosionRadius
     jsr CalculateExplosionRange
@@ -808,6 +826,8 @@ DirectionChecked
 .proc ofdirt ;
 ; --------------------------------------------------
 ; makes dirt on xdraw,ydraw position and of ExplosionRadius height
+    mva #sfx_dirt_char_s sfx_effect
+    
     mva #1 color
 NoColor ; jump here with color=0 to clean dirt
     mwa xdraw xcircle
@@ -885,8 +905,7 @@ UpNotYet2
     lda HowMuchToFall
     cmp #1
     beq HowMuchToFallRight3
-.nowarn    
-    dew xdraw
+.NOWARN    dew xdraw
     lda xdraw
     bne RollinContinuesLiquid
     lda xdraw+1
@@ -1021,6 +1040,9 @@ pressedUp
     bne CheckingMaxForce
     inc EnergyTableH,x
 CheckingMaxForce
+
+    mva #sfx_set_power_2 sfx_effect
+
     lda MaxEnergyTableH,x
     cmp EnergyTableH,x
     bne FurtherCheckMaxForce
@@ -1048,6 +1070,8 @@ CTRLPressedUp
 
 
 pressedDown
+    mva #sfx_set_power_1 sfx_effect
+
     ldx TankNr
     dec EnergyTableL,x
     lda EnergyTableL,x
@@ -1063,6 +1087,8 @@ ForceGoesZero
     jmp BeforeFire
 
 CTRLPressedDown
+    mva #sfx_set_power_1 sfx_effect
+
     ldx TankNr
     sec
     lda EnergyTableL,x

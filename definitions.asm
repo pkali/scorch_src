@@ -75,3 +75,29 @@ price_Auto_Defense___ = 0    ;_60
 price_Fuel_Tank______ = 0    ;_61
 price_Contact_Trigger = 0    ;_62
 price______________63 = 0
+;--------------------------------
+; names of RMT instruments (sfx)
+;--------------------------------
+sfx_set_power_1 = $00
+sfx_set_power_2 = $01
+sfx_lightning   = $02
+sfx_dunno       = $03
+sfx_nuke        = $04
+sfx_hit         = $05
+sfx_death_beg   = $06
+sfx_plasma_1_2  = $07
+sfx_plasma_2_2  = $08
+sfx_napalm      = $09
+sfx_dirt_charge = $0a
+sfx_missile_hit = $0b
+sfx_funky_hit   = $0c
+sfx_shield_on   = $0d
+sfx_shield_off  = $0e
+sfx_parachute   = $0f
+sfx_smoke_cloud = $10
+sfx_riot_blast  = $11
+sfx_sandhog     = $12
+sfx_dirt_char_s = $13
+sfx_digger      = $14
+sfx_key         = $15
+

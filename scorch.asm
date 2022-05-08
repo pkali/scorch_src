@@ -40,44 +40,59 @@
 .endm
 
     icl 'definitions.asm'
+    icl 'artwork/sfx/rmt_feat.asm'
     
     
-    .zpvar xdraw .word = $80 ;variable X for plot
-    .zpvar ydraw   .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
-    .zpvar xbyte   .word
-
-    .zpvar ybyte   .word
-    .zpvar CharCode .byte
-    .zpvar fontind .word
-    .zpvar tanknr  .byte
+    .zpvar xdraw            .word = $80 ;variable X for plot
+    .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
+    .zpvar xbyte            .word
+    .zpvar ybyte            .word
+    .zpvar CharCode         .byte
+    .zpvar fontind          .word
+    .zpvar tanknr           .byte
     .zpvar TankSequencePointer .byte
-    .zpvar oldplot .word
-    .zpvar xc .word
-    .zpvar temp .word ;temporary word for the most embeded loops only
-    .zpvar temp2  .word ;same as above
-    .zpvar tempXROLLER .word ;same as above for XROLLER routine
-    ;(used also in result display routine)
-    .zpvar xtempDRAW .word ;same as above for XDRAW routine
-    .zpvar ytempDRAW .word ;same as above for XDRAW routine
+    .zpvar oldplot          .word
+    .zpvar xc               .word
+    .zpvar temp             .word ;temporary word for the most embeded loops only
+    .zpvar temp2            .word ;same as above
+    .zpvar tempXROLLER      .word ;same as above for XROLLER routine (used also in result display routine)
+    .zpvar xtempDRAW        .word ;same as above for XDRAW routine
+    .zpvar ytempDRAW        .word ;same as above for XDRAW routine
     ;--------------temps used in circle routine
-    .zpvar xi .word ;X (word) in draw routine
-    .zpvar fx .byte ;circle drawing variables
-    .zpvar yi .word ;Y (word) in draw routine
-    .zpvar fy .byte
-    .zpvar xk .word
-    .zpvar fs .byte
-    .zpvar yc .byte ;ycircle - temporary for circle
-    .zpvar dx .word
-    .zpvar tempor2 .byte
-    .zpvar dy .word
-    .zpvar dd .word
-    .zpvar di .word
-    .zpvar dp .word
-    .zpvar modify .word
-    .zpvar weaponPointer .word
-	.zpvar dliCounter .byte
+    .zpvar xi               .word ;X (word) in draw routine
+    .zpvar fx               .byte ;circle drawing variables
+    .zpvar yi               .word ;Y (word) in draw routine
+    .zpvar fy               .byte
+    .zpvar xk               .word
+    .zpvar fs               .byte
+    .zpvar yc               .byte ;ycircle - temporary for circle
+    .zpvar dx               .word
+    .zpvar tempor2          .byte
+    .zpvar dy               .word
+    .zpvar dd               .word
+    .zpvar di               .word
+    .zpvar dp               .word
+    .zpvar modify           .word
+    .zpvar weaponPointer    .word
+	.zpvar dliCounter       .byte
+    ;* RMT ZeroPage addresses
+    .zpvar p_tis            .word
+    .zpvar p_trackslbstable .word
+    .zpvar p_trackshbstable .word
+    .zpvar p_song           .word
+    .zpvar ns               .word
+    .zpvar nr               .word
+    .zpvar nt               .word
+    .zpvar reg1             .byte
+    .zpvar reg2             .byte
+    .zpvar reg3             .byte
+    .zpvar tmp              .byte
+    IFT FEAT_COMMAND2
+      .zpvar frqaddcmd2     .byte
+    EIF
+    p_instrstable = p_tis
 
-displayposition = modify
+    displayposition = modify
 ;-------------------------------
 
     icl 'lib/atari.hea'
@@ -101,6 +116,7 @@ START
 
     ; Startup sequence
     jsr Initialize
+    VMAIN VBLinterrupt,6  ; jsr SetVBL
 
     mwa #OptionsDL dlptrs
     lda dmactls
@@ -135,7 +151,6 @@ START
     ; for the round #1 shooting sequence is random
 
 MainGameLoop
-	VMAIN VBLinterrupt,6  ; jsr SetVBL
     VDLI DLIinterrupt  ; jsr SetDLI
 
 	jsr CallPurchaseForEveryTank
@@ -574,6 +589,9 @@ PlayerXdeath .proc
     inc CurrentResult
     .endp
 
+
+    mva #sfx_death_beg sfx_effect
+
 ;RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
     sta TextNumberOff
@@ -589,6 +607,7 @@ PlayerXdeath .proc
     jsr DisplayOffensiveTextNr
 
 
+  
     ; calculate position of the explosion (the post-death one)
     ldx TankTempY
     clc
@@ -625,8 +644,10 @@ MetodOfDeath
 	bcs MetodOfDeath
 	tay
 	lda weaponsOfDeath,y
-   jsr ExplosionDirect
+    jsr ExplosionDirect
+    mva #$15 sfx_effect
 
+    
     ; jump to after explosion routines (soil fallout, etc.)
     ; After going through these routines we are back
     ; to checking if a tank exploded and maybe we have
@@ -816,6 +837,19 @@ ClearResults
 
     mva #1 CurrentRoundNr ;we start from round 1
 
+    ; RMT INIT
+    lda #$f0                    ;initial value
+    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
+;
+    lda #$ff                    ;initial value
+    sta sfx_effect
+;
+    ldx #<MODUL                 ;low byte of RMT module to X reg
+    ldy #>MODUL                 ;hi byte of RMT module to Y reg
+    lda #0                      ;starting song line 0-255 to A reg
+    jsr RASTERMUSICTRACKER      ;Init
+;
+
     rts
 .endp
     
@@ -835,7 +869,26 @@ DLIinterrupt .proc
 
 VBLinterrupt .proc
 	pha
+	phx
+	phy
 	mva #0 dliCounter
+	
+	lda sfx_effect
+    bmi lab2
+    asl @                       ; * 2
+    tay                         ;Y = 2,4,..,16  instrument number * 2 (0,2,4,..,126)
+    ldx #0                      ;X = 0          channel (0..3 or 0..7 for stereo module)
+    lda #0                      ;A = 12         note (0..60)
+    jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
+;
+    lda #$ff
+    sta sfx_effect              ;reinit value
+;
+lab2
+    jsr RASTERMUSICTRACKER+3    ;1 play
+	   
+    ply
+    plx
 	pla
 	jmp SYSVBV
 .endp
@@ -1084,7 +1137,8 @@ getkey .proc; waits for pressing a key and returns pressed value in A
       lda SKSTAT
       cmp #$ff
       beq checkJoyGetKey ; key not pressed, check Joy
-  
+        
+      mva #sfx_key sfx_effect
       lda kbcode
       and #$3f ;CTRL and SHIFT ellimination
     rts
@@ -1151,7 +1205,19 @@ TankFont
 ;----------------------------------------------
     icl 'variables.asm'
 ;----------------------------------------------
+; reserved space for RMT player
+    .ds $0320
+    .align $100
+    .ECHO 'PLAYER: ',*
+    icl 'artwork/sfx/rmtplayr_game.asm'
+    opt h-                      ;RMT module is standard Atari binary file already
+    ins "artwork/sfx/scorch_trial07_stripped.rmt"               ;include music RMT module
+    opt h+
+;
+;
+MODUL   equ $a000               ;address of RMT module
 TheEnd
+    .ECHO 'TheEnd:',TheEnd
     .if TheEnd > PMGraph + $300
         .error memory conflict
 

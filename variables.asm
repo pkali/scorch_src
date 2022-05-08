@@ -34,6 +34,8 @@ RoundNrDisplay
 
 variablesStart  ; zeroing starts here
 ;-------------- 
+sfx_effect .ds 1
+;-------------- 
 noDeathCounter .ds 1
 ;--------------
 OptionsY  .ds 1 ;vertical position of cursor on Options screen
