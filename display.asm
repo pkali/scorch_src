@@ -111,25 +111,7 @@ OptionsHere
  dta d"Missiles :  slug slow norm fast hare    "
  dta d"Seppuku  :  nevr rare norm oftn alws    "
 OptionsScreenEnd
-; -------------------------------------------------
-NameScreen
- dta d"    Enter names of players      "
- dta d"   Tank  01    Name:"
-NameAdr
- dta d"            "
- dta d" Human/Atari (difficulty level) "
- dta d" "
-NamesOfLevels
- dta  d" HUMAN     Moron     Shooter   "
- dta d"  Poolshark Toosser   Chooser   "
- dta d"  Spoiler   Cyborg    Unknown   "
- dta d"  "
- dta d"Tab"*
- dta d" - Player/Difficulty level "
- dta d"       "
- dta d"Return"*
- dta d" - Proceed         "
-;---------------------------------------------------
+;-----------------------------------------------
 MoreUp
  dta d"             "
  dta 92,92,92
@@ -161,7 +143,26 @@ EmptyLine
  dta d"                                        "
 LastLine
  :40 dta $ff
-;-----------------------------------------------
+; -------------------------------------------------
+    .ALIGN $1000
+NameScreen
+ dta d"    Enter names of players      "
+ dta d"   Tank  01    Name:"
+NameAdr
+ dta d"            "
+ dta d" Human/Atari (difficulty level) "
+ dta d" "
+NamesOfLevels
+ dta  d" HUMAN     Moron     Shooter   "
+ dta d"  Poolshark Toosser   Chooser   "
+ dta d"  Spoiler   Cyborg    Unknown   "
+ dta d"  "
+ dta d"Tab"*
+ dta d" - Player/Difficulty level "
+ dta d"       "
+ dta d"Return"*
+ dta d" - Proceed         "
+;---------------------------------------------------
 textbuffer
      ; 0123456789012345678901234567890123456789
  dta d"Player:                                 "

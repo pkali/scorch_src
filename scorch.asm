@@ -1224,7 +1224,7 @@ TankFont
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0d_stripped.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_trial0d1_stripped.rmt"  ;include music RMT module
     opt h+
 ;
 ;
