@@ -816,6 +816,7 @@ FalloutOfLine
     sta (temp),y
     sty color
     jsr plot.MakePlot
+    mva #sfx_silencer sfx_effect
 
 ThereIsPixelHere
 ColumnIsReady
@@ -833,6 +834,7 @@ ColumnIsReady
     jeq MainFallout2
 ; now correct heights are in the mountaintable
     mva #1 color
+    mva #sfx_silencer sfx_effect
     rts
 .endp
 ;--------------------------------------------------

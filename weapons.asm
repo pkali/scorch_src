@@ -71,6 +71,7 @@ VOID
 .endp
 ; ------------------------
 .proc missile ;
+    mva #sfx_baby_missile sfx_effect
     inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
@@ -126,14 +127,15 @@ VOID
     ror Force
     ;lsr Force+1
     ;ror Force
-    lda LeapFrogAngle
-    sta Angle
+    mva LeapFrogAngle Angle
+    
+    mva #sfx_funky_hit sfx_effect
     jsr Flight
     lda HitFlag
     beq EndOfLeapping
     mva #15 ExplosionRadius
     jsr CalculateExplosionRange0
-    mva #sfx_funky_hit sfx_effect
+    mva #sfx_baby_missile sfx_effect
     jsr xmissile
 
     ; soil must fall down now! there is no other way...
@@ -155,14 +157,14 @@ VOID
     ;ror Force
     lsr Force+1
     ror Force
-    lda LeapFrogAngle
-    sta Angle
+    mva LeapFrogAngle Angle
+    mva #sfx_funky_hit sfx_effect
     jsr Flight
     lda HitFlag
     beq EndOfLeapping
     mva #13 ExplosionRadius
     jsr CalculateExplosionRange0
-    mva #sfx_funky_hit sfx_effect
+    mva #sfx_baby_missile sfx_effect
     jmp xmissile
 EndOfLeapping
     rts
@@ -174,7 +176,7 @@ EndOfLeapping
 .endp
 ; ------------------------
 .proc funkybomb ;
-    mva #sfx_funky_hit sfx_effect
+    mva #sfx_baby_missile sfx_effect
     mwa xtraj+1 xtrajfb
     mwa ytraj+1 ytrajfb
     inc FallDown2
@@ -222,12 +224,13 @@ DoNotEor
     sta ytraj
     mwa xtrajfb xtraj+1
     mwa ytrajfb ytraj+1
+    mva #sfx_funky_hit sfx_effect
     jsr Flight
 
     jsr CalculateExplosionRange
     lda HitFlag
     beq NoExplosionInFunkyBomb
-      mva #sfx_funky_hit sfx_effect
+      mva #sfx_baby_missile sfx_effect
       jsr xmissile
 NoExplosionInFunkyBomb
     dec FunkyBombCounter
@@ -267,6 +270,7 @@ NoUpperCircle
     mva #sfx_nuke sfx_effect 
     jsr xmissile
 NoLowerCircle
+    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; ------------------------
@@ -432,6 +436,7 @@ DigDrawing
     dec:lda DigLong
     jpl BranchNotFinished
 DoNotPutDig
+    mva #sfx_silencer sfx_effect
     rts
 DiggerCharacter
     lda random
@@ -536,6 +541,7 @@ DiggerCharacter
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
     mwa ybyte LaserCoordinate+6
+    mva #sfx_lightning sfx_effect
 
     jsr draw
     mva #0 color
@@ -543,18 +549,21 @@ DiggerCharacter
     mwa LaserCoordinate+2 ydraw
     mwa LaserCoordinate+4 xbyte
     mwa LaserCoordinate+6 ybyte
+    mva #sfx_lightning sfx_effect
     jsr draw
     mva #1 color
     mwa LaserCoordinate xdraw
     mwa LaserCoordinate+2 ydraw
     mwa LaserCoordinate+4 xbyte
     mwa LaserCoordinate+6 ybyte
+    mva #sfx_lightning sfx_effect
     jsr draw
     mva #0 color
     mwa LaserCoordinate xdraw
     mwa LaserCoordinate+2 ydraw
     mwa LaserCoordinate+4 xbyte
     mwa LaserCoordinate+6 ybyte
+    mva #sfx_lightning sfx_effect
     jsr draw
     mva #1 color
     mwa LaserCoordinate xdraw
@@ -650,6 +659,7 @@ TankIsNotWithinTheRange
 EndOfDistanceCheckLoop
     txa
     bne DistanceCheckLoop
+    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; -----------------
@@ -1042,7 +1052,7 @@ pressedUp
     inc EnergyTableH,x
 CheckingMaxForce
 
-    mva #sfx_set_power_2 sfx_effect
+    mva #sfx_set_power_1 sfx_effect
 
     lda MaxEnergyTableH,x
     cmp EnergyTableH,x
@@ -1101,6 +1111,7 @@ CTRLPressedDown
     jmp BeforeFire
 
 pressedLeft
+    mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     dec AngleTable,x
     lda AngleTable,x
@@ -1116,6 +1127,7 @@ NotThrough90DegreesLeft
     jmp BeforeFire
 
 pressedRight
+    mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     INC AngleTable,x
     lda AngleTable,x
@@ -1250,6 +1262,7 @@ AfterStrongShoot
 ;--------------------------------------------------
 TankFalls .proc;
 ;--------------------------------------------------
+    mva #sfx_shield_off sfx_effect
     lda #0
     sta PreviousFall
     sta EndOfTheFallFlag
@@ -1477,6 +1490,7 @@ EndOfFall
     lda #$35 ; parachute
     jsr DecreaseWeapon
 ThereWasNoParachute
+    mva #sfx_silencer sfx_effect
     rts
 .endp
 

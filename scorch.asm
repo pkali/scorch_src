@@ -590,7 +590,7 @@ PlayerXdeath .proc
     .endp
 
 
-    mva #sfx_death_beg sfx_effect
+    mva #sfx_death_begin sfx_effect
 
 ;RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
@@ -1215,7 +1215,7 @@ TankFont
     opt h+
 ;
 ;
-MODUL   equ $a000               ;address of RMT module
+MODUL   equ $b000               ;address of RMT module
 TheEnd
     .ECHO 'TheEnd:',TheEnd
     .if TheEnd > PMGraph + $300
