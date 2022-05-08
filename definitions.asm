@@ -103,4 +103,5 @@ sfx_silencer    = $15
 sfx_next_player = $16
 sfx_purchase    = $17
 sfx_keyclick    = $18
-
+sfx_shoot       = $19
+sfx_seppuku     = $1a

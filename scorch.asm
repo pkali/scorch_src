@@ -379,7 +379,7 @@ DoNotFinishTheRound
     bcc @+
     
     mva #0 noDeathCounter
-    
+    mva #sfx_seppuku sfx_effect
     jsr DisplaySeppuku
     jmp Seppuku
 
@@ -1210,14 +1210,15 @@ TankFont
     .align $100
     .ECHO 'PLAYER: ',*
     icl 'artwork/sfx/rmtplayr_game.asm'
-    opt h-                      ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial09_stripped.rmt"               ;include music RMT module
+
+MODUL    equ $b000                                 ;address of RMT module
+    opt h-                                         ;RMT module is standard Atari binary file already
+    ins "artwork/sfx/scorch_trial0d_stripped.rmt"  ;include music RMT module
     opt h+
 ;
 ;
-MODUL   equ $b000               ;address of RMT module
 TheEnd
-    .ECHO 'TheEnd:',TheEnd
+    .ECHO 'TheEnd: ',TheEnd
     .if TheEnd > PMGraph + $300
         .error memory conflict
 

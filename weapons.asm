@@ -1173,6 +1173,7 @@ CTRLpressedTAB
 pressedSpace
     ;=================================
     ;we shoot here!!!
+    mva #sfx_shoot sfx_effect
     RTS
 .endp
 

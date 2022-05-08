@@ -29,7 +29,6 @@ TRACKS		equ 4
 ;	EIF
 ;*
 PLAYER = *
-    .ECHO 'PLAYER addr:',*
 	IFT TRACKS>4
 	org PLAYER-$400+$40
 	ELS
