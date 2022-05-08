@@ -1138,7 +1138,7 @@ getkey .proc; waits for pressing a key and returns pressed value in A
       cmp #$ff
       beq checkJoyGetKey ; key not pressed, check Joy
         
-      mva #sfx_key sfx_effect
+      mva #sfx_keyclick sfx_effect
       lda kbcode
       and #$3f ;CTRL and SHIFT ellimination
     rts
@@ -1211,7 +1211,7 @@ TankFont
     .ECHO 'PLAYER: ',*
     icl 'artwork/sfx/rmtplayr_game.asm'
     opt h-                      ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial07_stripped.rmt"               ;include music RMT module
+    ins "artwork/sfx/scorch_trial09_stripped.rmt"               ;include music RMT module
     opt h+
 ;
 ;

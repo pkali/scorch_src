@@ -63,6 +63,7 @@ VOID
 
 ; ------------------------
 .proc babymissile
+    mva #sfx_baby_missile sfx_effect 
     inc FallDown2
     mva #11 ExplosionRadius
     jsr CalculateExplosionRange
@@ -826,7 +827,7 @@ DirectionChecked
 .proc ofdirt ;
 ; --------------------------------------------------
 ; makes dirt on xdraw,ydraw position and of ExplosionRadius height
-    mva #sfx_dirt_char_s sfx_effect
+    mva #sfx_dirt_chrg_s sfx_effect
     
     mva #1 color
 NoColor ; jump here with color=0 to clean dirt
