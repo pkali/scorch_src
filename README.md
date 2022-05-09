@@ -7,6 +7,13 @@ by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
 
+Contributors:
+Kaz - splash screen, ideas
+Adam - font, ideas
+Emkay - splash screen music
+Miker - game sfx, ideas
+Bocianu - important ideas, FujiNet implementation
+
 You can contact us at pecus@poczta.fm or pirx@5oft.pl
 home page of this project is https://github.com/pkali/scorch_src
 
@@ -38,6 +45,20 @@ It never happened, but we got some encouraging comments and we are still trying 
 With the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changes:
+
+###### Build 138
+2022-05-09
+The post midnight release with great, heavy new features:
+- https://github.com/pkali/scorch_src/issues/48, https://github.com/pkali/scorch_src/issues/10 - thanks to Miker we have a bunch of fresh sound effects. Not everything is perfectly implemented, but the game definitely got nicer! Thank you again Miker!
+- https://github.com/pkali/scorch_src/issues/42 New weapon - Liquid Dirt by Pecus. Try it from directly from the weapon store!
+- (fix) https://github.com/pkali/scorch_src/issues/53 - non-existing weapons are not displayed. This makes the defense menu empty when you are poor, but it is still better than the old way with "$0" prices
+- (fix) https://github.com/pkali/scorch_src/issues/49 - seppuku should always kill now
+
+###### Build 138
+2022-05-02
+- new version of font from Adam
+- 80's style background gradient
+- roller procedure refactored in preparation to liquid dirt
 
 ###### Build 137
 2022-04-29

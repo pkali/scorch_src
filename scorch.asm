@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"138" ; number of this build (3 bytes)
+	dta d"139" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -550,6 +550,8 @@ PlayersAgain .proc
 ; OK, text how to do it is ready, now comes coding .
 ; Aaaah! - in the main loop we have to set eXistenZ and LASTeXistenZ
 
+    mva #sfx_next_player sfx_effect
+    
     ldx NumberOfPlayers
     dex
 CheckingPlayersDeath
@@ -1224,7 +1226,7 @@ TankFont
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0d1_stripped.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_trial0e_stripped.rmt"  ;include music RMT module
     opt h+
 ;
 ;

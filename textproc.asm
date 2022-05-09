@@ -257,6 +257,7 @@ NextChar03
 ; here we must jump in after each purchase
 ; to generate again list of available weapons
 AfterPurchase
+    mva #sfx_purchase sfx_effect
     ldx tanknr
     lda moneyL,x
     sta decimal
@@ -995,6 +996,7 @@ nextchar05
     iny
     cpy #$08
     bne nextchar05
+    mva #sfx_next_player sfx_effect
     rts
 .endp
 

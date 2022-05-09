@@ -95,7 +95,7 @@ VOID
 .endp
 ; ------------------------
 .proc leapfrog
-    mva #sfx_funky_hit sfx_effect
+    mva #sfx_baby_missile sfx_effect
     inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
@@ -311,6 +311,7 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc babydigger
+    mva #sfx_digger sfx_effect
     mva #0 sandhogflag
     inc FallDown2
     mva #13 DigLong
@@ -319,6 +320,7 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc digger ;
+    mva #sfx_digger sfx_effect
     mva #0 sandhogflag
     inc FallDown2
     mva #13 DigLong
@@ -327,6 +329,7 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc heavydigger
+    mva #sfx_digger sfx_effect
     mva #0 sandhogflag
     inc FallDown2
     mva #13 DigLong
@@ -335,7 +338,6 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc xdigger
-    mva #sfx_digger sfx_effect
     mwa xdraw digstartx
     mwa ydraw digstarty
     ldx diggery
@@ -506,6 +508,7 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc riotcharge
+    mva #sfx_riot_blast sfx_effect
     inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
@@ -665,6 +668,7 @@ EndOfDistanceCheckLoop
 ; -----------------
 .proc xdirt ;
 ; -----------------
+    mva #sfx_dirt_charge sfx_effect
     lda #1
     sta radius
     sta color
@@ -703,6 +707,7 @@ rbombLoop
     ; $FF - we are in a hole (flying in missile direction)
     ; 1 - right, 2 - left
 Rollin
+    mva #sfx_shield_off sfx_effect
     adw xdraw #mountaintable tempXROLLER
     ldy #0
     lda (tempXROLLER),y
@@ -760,6 +765,7 @@ ExplodeNow
 
     ; finally a little explosion
     jsr CalculateExplosionRange
+    mva #sfx_baby_missile sfx_effect
     jmp xmissile
     rts
 .endp
@@ -885,6 +891,7 @@ EndOfTheDirt
 .endp
 ; ----------------
 .proc liquiddirt ;
+    mva #sfx_liquid_dirt sfx_effect
 	mva xdraw TempXfill
 	mva #254 FillCounter
 RepeatFill
@@ -952,7 +959,7 @@ FillHole
 .endp
 
 ;--------------------------------------------------
-BeforeFire .proc ;TankNr (byte)
+.proc BeforeFire ;TankNr (byte)
 ;--------------------------------------------------
 ;this nice routine makes the whole shooting
 ;preparation: aiming and displaying
@@ -1173,12 +1180,11 @@ CTRLpressedTAB
 pressedSpace
     ;=================================
     ;we shoot here!!!
-    mva #sfx_shoot sfx_effect
     RTS
 .endp
 
 ;--------------------------------------------------
-Shoot .proc ;TankNr (byte)
+.proc Shoot  ;TankNr (byte)
 ;--------------------------------------------------
 ;it looks like this routine is too big -
 ;- more and more functions were being added...
@@ -1224,6 +1230,7 @@ AfterStrongShoot
     sta xtraj
     sta ytraj
 
+    mva #sfx_shoot sfx_effect
     ; Shoots tank nr X !!! :)
     ;ldx TankNr
     lda xtankstableL,x
@@ -1496,7 +1503,7 @@ ThereWasNoParachute
 .endp
 
 ;--------------------------------------------------
-Flight .proc ;Force(byte.byte), Angle(byte), Wind(.byte) 128=0, 255=maxright, 0=maxleft
+.proc Flight  ; Force(byte.byte), Angle(byte), Wind(.byte) 128=0, 255=maxright, 0=maxleft
 ;--------------------------------------------------
 ;g=-0.1
 ;vx=Force*sin(Angle)

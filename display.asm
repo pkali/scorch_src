@@ -144,7 +144,7 @@ EmptyLine
 LastLine
  :40 dta $ff
 ; -------------------------------------------------
-    .ALIGN $1000
+    .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 NameScreen
  dta d"    Enter names of players      "
  dta d"   Tank  01    Name:"
@@ -169,7 +169,7 @@ textbuffer
  dta d"Energy: 99   Angle: <99>   Force: 9999  "
  dta d"       Round: 99   Wind: <99>           "
 textbuffer2
- dta d"Player: ********       Cash: 99999      "
+ dta d"Player: ********       Cash: 99990      "
  dta d"----------------------------------------"
 
 

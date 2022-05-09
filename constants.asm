@@ -801,7 +801,7 @@ WeaponUnits
   .by 10 ;Dirt_Clod______
   .by 5  ;Dirt_Ball______
   .by 2  ;Ton_of_Dirt____
-  .by 2  ;Liquid_Dirt____
+  .by 4  ;Liquid_Dirt____
   .by 2  ;Dirt_Charge____
   .by 10 ;Earth_Disrupter
   .by 5  ;Plasma_Blast___
