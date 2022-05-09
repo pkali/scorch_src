@@ -676,7 +676,7 @@ drawmountains .proc
 
     mwa #0 xdraw
     mwa #mountaintable modify
-
+	mva #1 color
 
 drawmountainsloop
     ldy #0
