@@ -523,6 +523,12 @@ DiggerCharacter
     jmp cleanDirt
 .endp
 ; ------------------------
+.proc liquiddirt
+    mva #sfx_liquid_dirt sfx_effect
+	mwa #254 FillCounter
+	jmp xliquiddirt
+.endp
+; ------------------------
 .proc laser
     ldx TankNr
     lda AngleTable,x
@@ -746,13 +752,13 @@ UpNotYet
     beq HowMuchToFallRight2
 .nowarn    dew xdraw
     lda xdraw
-    bne RollinContinues
+    bne RollinContinues		; like cpw xdraw #0
     lda xdraw+1
     jne RollinContinues
     beq ExplodeNow
 HowMuchToFallRight2
     inw xdraw
-    cpw xdraw screenwidth
+    cpw xdraw #screenwidth
     jne RollinContinues
 ExplodeNow
     mwa xdraw xcircle  ; we must store somewhere (BAD)
@@ -890,17 +896,15 @@ EndOfTheDirt
     rts
 .endp
 ; ----------------
-.proc liquiddirt ;
-    mva #sfx_liquid_dirt sfx_effect
+.proc xliquiddirt ;
 	mva xdraw TempXfill
-	mva #254 FillCounter
 RepeatFill
 	mva TempXfill xdraw
 	jsr checkRollDirection
 	; HowMuchToFall - direction
     ; $FF - we are in a hole (flying in missile direction)
     ; 1 - right, 2 - left
-   adw xdraw #mountaintable tempXROLLER
+    adw xdraw #mountaintable tempXROLLER
     ldy #0
     lda (tempXROLLER),y
     sta HeightRol ; relative point
@@ -911,7 +915,6 @@ RollinContinuesLiquid
     ldy #0
     lda (tempXROLLER),y
     sta ydraw
-    beq FillNow
     cmp HeightRol
     beq UpNotYet2
     bcc FillNow
@@ -924,14 +927,12 @@ UpNotYet2
     cmp #1
     beq HowMuchToFallRight3
 .NOWARN    dew xdraw
-    lda xdraw
-    bne RollinContinuesLiquid
-    lda xdraw+1
+	cpw xdraw #$ffff
     jne RollinContinuesLiquid
     beq FillNow
 HowMuchToFallRight3
     inw xdraw
-    cpw xdraw screenwidth
+    cpw xdraw #(screenwidth+1)
     jne RollinContinuesLiquid
 FillNow
      ; finally one pixel more
@@ -953,7 +954,8 @@ FillHole
     sta (tempXROLLER),y	;mountaintable update
 	mva #1 color
 	jsr plot
-    dec FillCounter
+.nowarn dew FillCounter
+	cpw FillCounter #0
 	jne RepeatFill
     rts
 .endp
