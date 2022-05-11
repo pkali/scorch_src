@@ -797,6 +797,7 @@ SetunPlots
     sta oldplotH,x
     lda #0
     sta oldply,x
+	lda #$ff	; INVERSE
     sta oldora,x
     dex
     bpl SetunPlots
@@ -870,10 +871,18 @@ DLIinterrupt .proc
     pha
 	phy
 	ldy dliCounter
-	lda dliColors,y
-    ;lda #$02 ; color of playground
-    sta WSYNC
-    sta COLPF2
+;	bne NoFColorChange
+;	lda dliColorsFore
+;	sta COLPF2
+;NoFColorChange
+	lda dliColorsBack,y
+	ldy dliColorsFore
+	nop
+	nop
+	nop
+;    sta WSYNC
+    sta COLPF1
+	sty COLPF2
 	inc dliCounter
 	ply
     pla

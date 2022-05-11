@@ -441,8 +441,8 @@ splot8 .proc
 ;--------------------------------------------------
 clearscreen .proc
 ;--------------------------------------------------
-    lda #0
-    tax
+    lda #$ff	; INVERSE
+    ldx #0
 @
     :31 sta display+($100*#),x
     sta display+$1e50,x  ; this is so no space outside of the screen is cleared
@@ -1021,7 +1021,7 @@ MakeUnPlot
 
 
     lda color
-    beq ClearUnPlot
+    bne ClearUnPlot		; INVERSE
 
     ;plotting here
     lda (xbyte),y
@@ -1033,7 +1033,7 @@ ClearUnPlot
     lda (xbyte),y
     sta OldOraTemp
     and bittable2,x
-;    sta (xbyte),y
+    sta (xbyte),y
 ContinueUnPlot
     ldx WhichUnPlot
     lda OldOraTemp
@@ -1115,7 +1115,7 @@ MakePlot
 
     ldx ybit
     lda color
-    beq ClearPlot
+    bne ClearPlot	; INVERSE
 
     lda (xbyte),y
     ora bittable,x
@@ -1163,6 +1163,7 @@ point .proc
 
     lda (xbyte),y
     and bittable,x
+	eor bittable,x	; INVERSE
     rts
 .endp
 
@@ -1183,7 +1184,8 @@ DrawLine .proc
 loopdraw
 
     lda (xbyte),y
-    ora bittable,x
+    ;ora bittable,x
+	and bittable2,x		; INVERSE
     sta (xbyte),y
 IntoDraw   adw xbyte #screenBytes
 
@@ -1214,8 +1216,9 @@ TypeChar .proc
     ldy #7
 CopyChar
     lda (fontind),y
+	eor #$ff		; INVERSE
     sta char1,y
-    lda #$00
+    lda #$ff		; INVERSE
     sta char2,y
     dey
     bpl CopyChar
@@ -1224,8 +1227,9 @@ CopyChar
     ldy #7
 CopyMask
     lda (fontind),y
+	eor #$ff		; INVERSE
     sta mask1,y
-    lda #$ff
+    lda #$00		; INVERSE
     sta mask2,y
     dey
     bpl CopyMask
@@ -1257,44 +1261,52 @@ CopyMask
     ldx ybit
     beq MaskOK00
 MakeMask00
-    sec
+    clc		; INVERSE
     ror mask1
     ror mask2
-    sec
+    clc		; INVERSE
     ror mask1+1
     ror mask2+1
-    sec
+    clc		; INVERSE
     ror mask1+2
     ror mask2+2
-    sec
+    clc		; INVERSE
     ror mask1+3
     ror mask2+3
-    sec
+    clc		; INVERSE
     ror mask1+4
     ror mask2+4
-    sec
+    clc		; INVERSE
     ror mask1+5
     ror mask2+5
-    sec
+    clc		; INVERSE
     ror mask1+6
     ror mask2+6
-    sec
+    clc		; INVERSE
     ror mask1+7
     ror mask2+7
-    lsr char1
+    sec		; INVERSE
+    ror char1
     ror char2
+    sec		; INVERSE
     ror char1+1
     ror char2+1
+    sec		; INVERSE
     ror char1+2
     ror char2+2
+    sec		; INVERSE
     ror char1+3
     ror char2+3
+    sec		; INVERSE
     ror char1+4
     ror char2+4
+    sec		; INVERSE
     ror char1+5
     ror char2+5
+    sec		; INVERSE
     ror char1+6
     ror char2+6
+    sec		; INVERSE
     ror char1+7
     ror char2+7
     dex
@@ -1303,7 +1315,7 @@ MaskOK00
     ; here x=0
     lda Erase
     beq CharLoopi  ; it works, because x=0
-    lda #0
+    lda #$ff	; INVERSE
     ldx #7
 EmptyChar
     sta char1,x
@@ -1313,13 +1325,17 @@ EmptyChar
     ldx #0
 CharLoopi
     lda (xbyte),y
-    and mask1,x
-    ora char1,x
+    ;and mask1,x
+    ;ora char1,x
+    ora mask1,x		; INVERSE
+    and char1,x		; INVERSE
     sta (xbyte),y
     iny
     lda (xbyte),y
-    and mask2,x
-    ora char2,x
+    ;and mask2,x
+    ;ora char2,x
+    ora mask2,x		; INVERSE
+    and char2,x		; INVERSE
     sta (xbyte),y
     dey
     adw xbyte #screenBytes
