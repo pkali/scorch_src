@@ -3,7 +3,7 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000,2001,2002,2003,2009,2012,2013
-;Miami 2022
+;Miami&Warsaw 2022
 ;you can contact us at pecus@poczta.fm or pirx@5oft.pl
 ;home page of this project is https://github.com/pkali/scorch_src
 
