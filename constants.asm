@@ -5,7 +5,11 @@
 ;===================================================================================
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
-TankColoursTable  .BYTE $52,$32,$72,$92,$B2,$02
+TankColoursTable  .BYTE $5a,$dc,$88,$26,$a8,$02
+dliColorsBack
+    :10 .by $04,$02
+dliColorsFore
+    .by $0e
 CashOptionL ;(one zero less than on the screen)
     .by 0,<200,<500,<800,<1000
 CashOptionH   
@@ -989,9 +993,5 @@ scrcodes
     dta d"qrstuvwx"
     dta d"yz123456"
     dta d"7890." ; "-"
-dliColorsBack
-	:10 .by $04,$02
-dliColorsFore
-	.by $0a
 
 .endif
