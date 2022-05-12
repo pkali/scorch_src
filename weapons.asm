@@ -949,11 +949,13 @@ FillHole
     adw xdraw #mountaintable tempXROLLER
 	lda (tempXROLLER),y
 	sta ydraw
+	beq ToHighFill	; if we filled all playfield (very rare but possible)
 	dec ydraw	; one pixel up
+ToHighFill
 	lda ydraw
     sta (tempXROLLER),y	;mountaintable update
 	mva #1 color
-	jsr plot
+	jsr plot.MakePlot
 .nowarn dew FillCounter
 	cpw FillCounter #0
 	jne RepeatFill

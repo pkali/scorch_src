@@ -1175,7 +1175,7 @@ DrawLine .proc
     sec
     sbc ydraw
     sta tempbyte01
-    jsr plot
+    jsr plot.MakePlot
     ;rts
     jmp IntoDraw    ; jumps inside Draw routine
     ; because one pixel is already plotted
@@ -1261,29 +1261,21 @@ CopyMask
     ldx ybit
     beq MaskOK00
 MakeMask00
-    clc		; INVERSE
-    ror mask1
+    lsr mask1	; INVERSE
     ror mask2
-    clc		; INVERSE
-    ror mask1+1
+    lsr mask1+1	; INVERSE
     ror mask2+1
-    clc		; INVERSE
-    ror mask1+2
+    lsr mask1+2	; INVERSE
     ror mask2+2
-    clc		; INVERSE
-    ror mask1+3
+    lsr mask1+3	; INVERSE
     ror mask2+3
-    clc		; INVERSE
-    ror mask1+4
+    lsr mask1+4	; INVERSE
     ror mask2+4
-    clc		; INVERSE
-    ror mask1+5
+    lsr mask1+5	; INVERSE
     ror mask2+5
-    clc		; INVERSE
-    ror mask1+6
+    lsr mask1+6	; INVERSE
     ror mask2+6
-    clc		; INVERSE
-    ror mask1+7
+    lsr mask1+7	; INVERSE
     ror mask2+7
     sec		; INVERSE
     ror char1
