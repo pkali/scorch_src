@@ -228,7 +228,7 @@ AfterManualPurchase
     jsr PMoutofScreen
     
     ldx tankNr
-    lda TankColoursTable,x
+    lda TankStatusColoursTable,x
     sta colpf2s 
 
 ; we are clearing list of the weapons

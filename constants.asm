@@ -6,10 +6,13 @@
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
 TankColoursTable  .BYTE $5a,$dc,$88,$26,$a8,$02
+TankStatusColoursTable  .BYTE $52,$d2,$82,$22,$a2,$02
 dliColorsBack
     :10 .by $04,$02
 dliColorsFore
     .by $0e
+TextBackgroundColor = $02	; REAL constans - use: LDA #TextBackgroundColor
+TextForegroundColor = $0c
 CashOptionL ;(one zero less than on the screen)
     .by 0,<200,<500,<800,<1000
 CashOptionH   
