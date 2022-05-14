@@ -3,7 +3,7 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000,2001,2002,2003,2009,2012,2013
-;Miami 2022
+;Miami&Warsaw 2022
 ;you can contact us at pecus@poczta.fm or pirx@5oft.pl
 ;home page of this project is https://github.com/pkali/scorch_src
 
@@ -151,10 +151,12 @@ START
     ; for the round #1 shooting sequence is random
 
 MainGameLoop
-    VDLI DLIinterrupt  ; jsr SetDLI
+    VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
 
 	jsr CallPurchaseForEveryTank
 	
+    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
+
     mwa #dl dlptrs
     lda dmactls
     and #$fc
@@ -395,7 +397,7 @@ DoNotFinishTheRound
 
     mva #1 color ;to display flying point
 
-    lda TankColoursTable,x
+    lda TankStatusColoursTable,x
     sta colpf2s  ; set color of status line
 
     lda SkillTable,x
@@ -784,8 +786,8 @@ deletePtr = temp
     jsr WeaponCleanup    
     
     
-    mva #$2 colpf2s
-    mva #12 colpf3s
+    mva #TextBackgroundColor colpf2s
+    mva #TextForegroundColor colpf3s
     mva #>WeaponFont chbas
 
     ;parameter for old plot (unPlot) max 5 points
@@ -819,16 +821,16 @@ SetunPlots
     lda #$10 ; P/M priorities (bit 4 joins missiles)
     sta gtictls
     jsr PMoutofScreen
-    lda #$50 ; temporary colours of sprites under tanks
+    lda TankColoursTable ; temporary colours of sprites under tanks
     sta $2c0
-    lda #$30
+    lda TankColoursTable+1
     sta $2c1
-    lda #$70
+    lda TankColoursTable+2
     sta $2c2
-    lda #$90
+    lda TankColoursTable+3
     sta $2c3
-    LDA #$B0
-    STA COLPF3S
+    LDA TankColoursTable+4
+    STA COLPF3S		; WHAT THE FUCK ???? !!!! ????
     mva #0 hscrol
 
 
@@ -867,7 +869,7 @@ ClearResults
     rts
 .endp
     
-DLIinterrupt .proc
+DLIinterruptGraph .proc
     pha
 	phy
 	ldy dliCounter
@@ -887,6 +889,15 @@ DLIinterrupt .proc
 	ply
     pla
     rti
+.endp
+
+DLIinterruptText .proc
+	pha
+	sta WSYNC
+    mva #TextBackgroundColor colpf2
+    mva #TextForegroundColor colpf3
+	pla
+	rti
 .endp
 
 VBLinterrupt .proc
