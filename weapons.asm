@@ -1153,6 +1153,7 @@ NotThrough90DegreesRight
     jmp BeforeFire
 
 pressedTAB
+    mva #sfx_purchase sfx_effect
     ldx TankNr
     inc ActiveWeapon,x
     lda ActiveWeapon,x
