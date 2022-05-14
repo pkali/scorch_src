@@ -40,8 +40,8 @@ NameDL
         .byte $42
         .word NameScreen
         .byte $30
-        .byte $02,$30,$2
-        .byte $10,2,2,2,$30,2,2
+        .byte $02,$30+$80,$02
+        .byte $10,$02,$02,$02,$30,$02,$02
         .byte $41
         .word NameDL
 ; -------------------------------------------------
@@ -154,7 +154,7 @@ NameAdr
  dta d" "
 NamesOfLevels
  dta  d" HUMAN     Moron     Shooter   "
- dta d"  Poolshark Toosser   Chooser   "
+ dta d"  Poolshark Tosser    Chooser   "
  dta d"  Spoiler   Cyborg    Unknown   "
  dta d"  "
  dta d"Tab"*

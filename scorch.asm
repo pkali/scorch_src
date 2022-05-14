@@ -116,13 +116,14 @@ START
 
     ; Startup sequence
     jsr Initialize
-    VMAIN VBLinterrupt,6  ; jsr SetVBL
 
     mwa #OptionsDL dlptrs
     lda dmactls
     and #$fc
     ora #$02     ; normal screen width
     sta dmactls
+	
+    VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
 
     jsr Options  ;startup screen
 
@@ -132,10 +133,13 @@ START
     and #$fc
     ora #$01     ; narrow screen (32 chars)
     sta dmactls
+    VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
 
     mva #0 TankNr
-
-@     jsr EnterPlayerName
+@	  tax
+      lda TankStatusColoursTable,x
+      sta colpf2s  ; set color of player name line
+      jsr EnterPlayerName
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -830,7 +834,7 @@ SetunPlots
     lda TankColoursTable+3
     sta $2c3
     LDA TankColoursTable+4
-    STA COLPF3S		; WHAT THE FUCK ???? !!!! ????
+    STA COLPF3S		; joined missiles (5th tank)
     mva #0 hscrol
 
 
@@ -865,6 +869,7 @@ ClearResults
     lda #0                      ;starting song line 0-255 to A reg
     jsr RASTERMUSICTRACKER      ;Init
 ;
+    VMAIN VBLinterrupt,6  		;jsr SetVBL
 
     rts
 .endp
@@ -873,10 +878,6 @@ DLIinterruptGraph .proc
     pha
 	phy
 	ldy dliCounter
-;	bne NoFColorChange
-;	lda dliColorsFore
-;	sta COLPF2
-;NoFColorChange
 	lda dliColorsBack,y
 	ldy dliColorsFore
 	nop
@@ -897,6 +898,7 @@ DLIinterruptText .proc
     mva #TextBackgroundColor colpf2
     mva #TextForegroundColor colpf3
 	pla
+DLIinterruptNone
 	rti
 .endp
 
