@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"139" ; number of this build (3 bytes)
+	dta d"140" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -1190,7 +1190,7 @@ checkJoyGetKey
     rts
 notpressedJoyGetKey
       ;fire
-      lda TRIG0
+      lda TRIG0S
     bne @-
     lda #$0c ;Return key
     rts
@@ -1210,7 +1210,7 @@ WaitForKeyRelease .proc
     and #$0f
     cmp #$0f
     bne WaitForKeyRelease
-    lda TRIG0
+    lda TRIG0S
     beq WaitForKeyRelease
     lda SKSTAT
     cmp #$ff

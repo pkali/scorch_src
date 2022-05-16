@@ -692,6 +692,7 @@ dirtLoop
 ; -----------------
 .proc xriotbomb ;
 ; -----------------
+    mva #sfx_riot_blast sfx_effect
     lda #0
     sta radius
     sta color
@@ -1005,7 +1006,7 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
-    lda TRIG0
+    lda TRIG0S
     beq notpressed
     lda SKSTAT
     cmp #$ff
@@ -1050,7 +1051,7 @@ checkJoy
     jmp jumpFromStick
 notpressedJoy
     ;fire
-    lda TRIG0
+    lda TRIG0S
     jeq pressedSpace
    jmp notpressed
 

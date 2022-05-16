@@ -46,6 +46,15 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 140
+2022-05-15
+Huge internal changes by @Pecusx. The whole game screen has been inverted - ground is now background color, "sky" and empty areas are in fact pixels. This allowed for introducing better tank colorization, fully devised and lead by Adam. The process started and results are already promising - the colors of tanks and the status bar are closer. We might get even better ones in the next builds.
+- few new sfx added (end of round, weapon change, soil eating weapons)
+- added colors to tank name and level selection screen
+- Bug https://github.com/pkali/scorch_src/issues/57 possibly alleviated by using TRIG0S instead of TRIG0. Please test - it did not show for me.
+Other unlisted minor bugs and typos fixed.
+"Nightly" version moved to `develop` branch. `master` will be updated with stablish and playablish builds only.
+
 ###### Build 139
 2022-05-09
 The post midnight release with great, heavy new features:
