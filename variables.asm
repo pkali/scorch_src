@@ -15,7 +15,7 @@ TanksNames  ; DO NOT ZERO - ticket #24
     :6 dta d"        "
 ;----------------------------
 ;Options DO NOT ZERO - ticket #27
-OptionsTable .by 0,0,2,2,0,1,4
+OptionsTable .by 0,0,2,2,0,1,3
 RoundsInTheGame .by 10 ;how many rounds in the current game
 seppukuVal .by 75
 ;--------------------------------------------------
@@ -43,7 +43,7 @@ flyDelay .ds 1
 ;--------------
 NumberOfPlayers .DS 1  ;current number of players (counted from 1)
 TankSequence .DS [MaxPlayers] ;sequence of shooting during the Round
-GameIsOver .DS 1 ; 1 - it was the last round in the game
+GameIsOver .DS 1 ; 1 means it was the last round in the game
 ;-----------------------------------
 moneyH ;we place zero at the end of prices and money
     ;and have range from 0 to 99990 (not too much)

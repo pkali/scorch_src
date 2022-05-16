@@ -6,7 +6,7 @@
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
 TankColoursTable        .BYTE $88,$cc,$38,$1c,$6a,$02
-TankStatusColoursTable  .BYTE $82,$c2,$32,$12,$62,$02
+TankStatusColoursTable  .BYTE $80,$c0,$30,$10,$60,$00
 dliColorsBack
     :10 .by $02,$00
 dliColorsFore

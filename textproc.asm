@@ -1393,6 +1393,8 @@ EndOfTypeLine4x4
 .proc DisplayResults ;
 ;displays results of the round
 ;using 4x4 font
+    
+    mva #sfx_smoke_cloud sfx_effect
 
     ;centering the result screen
     mwa #((ScreenWidth/2)-(8*4)) ResultX
