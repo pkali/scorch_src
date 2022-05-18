@@ -1816,17 +1816,19 @@ NoUnPlot
 
 Hit
     mwa XHit xdraw
-    mwa YHit ydraw
+    mva YHit ydraw	; one byte now
 
     jsr unPlot
 EndOfFlight
-    mwa xdraw xcircle  ; we must store for a little while
-    mva ydraw ycircle  ; xdraw and ydraw
+;    mwa xdraw xcircle  ; we must store for a little while
+;    mva ydraw ycircle  ; xdraw and ydraw .... but this values are in YHit and XHit !!!
     mwa #0 xdraw
     mva #screenheight-1 ydraw
     jsr unPlot
-    mwa xcircle xdraw
-    mva ycircle ydraw
+;    mwa xcircle xdraw
+;    mva ycircle ydraw
+    mwa XHit xdraw
+    mva YHit ydraw
 
 	ldy SmokeTracerFlag
 	beq EndOfFlight2

@@ -681,8 +681,11 @@ drawmountains .proc
 drawmountainsloop
     ldy #0
     lda (modify),y
+	cmp #screenheight
+	beq NoMountain
     sta ydraw
     jsr DrawLine
+NoMountain
     inw modify
     inw xdraw
     cpw xdraw #screenwidth
@@ -941,14 +944,14 @@ EndDrawing
 ; ****************************************************
 ;--------------------------------------------------
 calculatemountains0 .proc
-; Only for testing - makes ground flat (one pixel)
+; Only for testing - makes ground flat (0 pixels)
 ; and places tanks on it
 ; remember to remove in final compilation :)
 ;--------------------------------------------------
     mwa #0 xdraw
 nextPointDrawing
 	adw xdraw #mountaintable modify
-    lda #screenheight-1
+    lda #screenheight
     ldy #0
     sta (modify),y
     inw xdraw
@@ -957,7 +960,7 @@ nextPointDrawing
 	ldx NumberOfPlayers
     dex
 SetYofNextTank
-    lda #screenheight-2
+    lda #screenheight-1
     sta ytankstable,x
     dex
     bpl SetYofNextTank
