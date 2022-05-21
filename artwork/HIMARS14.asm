@@ -249,6 +249,11 @@ stop
 @   sta POKEY,x
     dex
     bpl @-
+        
+    ;no glitching please (issue #67)
+    lda #0
+    sta $D400 ;dmactl
+    sta $022F ;dmactls
 	rts			;return to ... DOS
 
 ; ---	DLI PROGRAM
