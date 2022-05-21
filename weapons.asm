@@ -1629,7 +1629,7 @@ DoNotAdd
     sta Result+1
     sta Result+2
 ;--
-    lda #255
+    lda #90
     sec
     sbc Angle
     tax
