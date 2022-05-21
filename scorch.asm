@@ -1165,18 +1165,20 @@ nextishigher
 .endp
 
 ;--------------------------------------------------
-getkey .proc; waits for pressing a key and returns pressed value in A
+.proc getkey  ; waits for pressing a key and returns pressed value in A
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @
       lda SKSTAT
       cmp #$ff
       beq checkJoyGetKey ; key not pressed, check Joy
+      cmp #$f7  ; SHIFT
+      beq checkJoyGetKey
         
-      mva #sfx_keyclick sfx_effect
       lda kbcode
       and #$3f ;CTRL and SHIFT ellimination
-    rts
+      bne getkeyend
+
 checkJoyGetKey
       ;------------JOY-------------
       ;happy happy joy joy
@@ -1187,13 +1189,19 @@ checkJoyGetKey
       beq notpressedJoyGetKey
       tay 
       lda joyToKeyTable,y
-    rts
+      bne getkeyend
+
 notpressedJoyGetKey
       ;fire
       lda TRIG0S
     bne @-
     lda #$0c ;Return key
+    
+getkeyend
+    mvx #sfx_keyclick sfx_effect
     rts
+    
+
 .endp
 ;--------------------------------------------------
 getkeynowait .proc;
