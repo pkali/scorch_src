@@ -612,7 +612,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Auto_Defense___
   .by >price_Fuel_Tank______
   .by >price_Contact_Trigger
-  .by >price______________63
+  .by >price_White_Flag_____
 
 WeaponPriceL
   .by <price_Baby_Missile___
@@ -678,7 +678,7 @@ WeaponPriceL
   .by <price_Auto_Defense___
   .by <price_Fuel_Tank______
   .by <price_Contact_Trigger
-  .by <price______________63
+  .by <price_White_Flag_____
 
 ;-------------------------------------------------
 ; how many units (bulletd) of a given weapon we get for a given price
@@ -750,7 +750,7 @@ WeaponUnits
   .by 1  ;Auto_Defense___
   .by 10 ;Fuel_Tank______
   .by 25 ;Contact_Trigger
-  .by 0  ;_____________63
+  .by 1  ;_____________63
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
                 ;the comment is an index in the tables
@@ -882,7 +882,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Auto Defense    " ; 60
     dta d"Fuel Tank       " ; 61
     dta d"Contact Trigger " ; 62
-    dta d"----------------" ; 63
+    dta d"White Flag      " ; 63
 weaponsOfDeath
 	dta 0,1,2,3,7,8,9,15,16,17,18,19,20,21,22,23,24,25,26,27
 joyToKeyTable

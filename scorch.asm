@@ -664,7 +664,7 @@ MetodOfDeath
 	tay
 	lda weaponsOfDeath,y
     jsr ExplosionDirect
-    mva #$15 sfx_effect
+    mva #sfx_silencer sfx_effect
 
     
     ; jump to after explosion routines (soil fallout, etc.)
