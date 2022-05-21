@@ -1629,8 +1629,11 @@ DoNotAdd
     sta Result+1
     sta Result+2
 ;--
-    ldx Angle
-    lda costable,x
+    lda #255
+    sec
+    sbc Angle
+    tax
+    lda sintable,x
 
     sta Multiplee ;cos(Angle)*Force
     mwa Force Multiplier
