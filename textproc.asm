@@ -190,6 +190,7 @@ OptionsYLoop
 ;-------------------------------------------
 ; call of the purchase screens for each tank
 .proc CallPurchaseForEveryTank
+    jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
     lda dmactls
     and #$fc
@@ -197,21 +198,20 @@ OptionsYLoop
     sta dmactls
 
     mva #0 TankNr
-loop03
-    ldx TankNr
-    lda SkillTable,x
-    beq ManualPurchase
-    jsr PurchaseAI
-    jmp AfterManualPurchase
+@
+      ldx TankNr
+      lda SkillTable,x
+      beq ManualPurchase
+      jsr PurchaseAI
+      jmp AfterManualPurchase
 
 ManualPurchase
-    jsr Purchase
+      jsr Purchase
 AfterManualPurchase
 
-    inc TankNr
-    lda TankNr
-    cmp NumberOfPlayers
-    bne loop03
+      inc:lda TankNr
+      cmp NumberOfPlayers
+    bne @-
     rts
 .endp
 
@@ -223,9 +223,7 @@ AfterManualPurchase
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
-
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
-    jsr PMoutofScreen
     
     ldx tankNr
     lda TankStatusColoursTable,x

@@ -50,7 +50,7 @@ ExplosionRoutines
     .word dirtclod-1
     .word dirtball-1
     .word tonofdirt-1
-    .word liquiddirt-1 ;liquiddirt
+    .word liquiddirt-1
     .word dirtcharge-1
     .word VOID-1 ;earthdisrupter
     .word VOID-1 ;plasmablast

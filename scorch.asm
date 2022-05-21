@@ -145,12 +145,6 @@ START
       cmp NumberOfPlayers
     bne @-
 
-    mwa #dl dlptrs
-    lda dmactls
-    and #$fc
-    ora #$02     ; normal screen width
-    sta dmactls
-
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 
@@ -158,14 +152,16 @@ MainGameLoop
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
 
 	jsr CallPurchaseForEveryTank
-	
-    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
-
-    mwa #dl dlptrs
+    ; issue #72 (glitches when switches)
+    mva #0 dmactl
     lda dmactls
     and #$fc
-    ora #$02     ; 2=normal, 3 = wide screen width
+    ;ora #$02     ; 2=normal, 3 = wide screen width, 0 = no screen (?)
     sta dmactls
+
+
+	
+    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
 
     jsr GetRandomWind
 
@@ -255,8 +251,8 @@ skipzeroing
     lda GameIsOver
     jne START
 
-
     inc CurrentRoundNr
+    mva #0 dmactl  ; issue #72
     jmp MainGameLoop
  
 
@@ -321,6 +317,13 @@ SettingEnergies
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be nice for the eye
 ;    jsr calculatemountains0 ;only fort tests - makes mountains flat and 0 height
+    mwa #dl dlptrs  ; issue #72 (glitches when switches)
+    lda dmactls
+    and #$fc
+    ora #$02     ; 2=normal, 3 = wide screen width
+    sta dmactls
+
+
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
@@ -500,7 +503,6 @@ SeteXistenZ
     sta L1
 
     ;DATA L1,L2
-    ;RESULT WH*256+L1
     ;Multiplication 8bit*8bit,
     ;result 16bit
     ;this algiorithm is a little longer than in Ruszczyc 6502 book
@@ -514,7 +516,7 @@ LP0
     ROR L1
     BCC B0
     CLC
-    ADC #10 ; multiplication by 10
+    ADC #10 ; multiplication by 10 (L2)
 B0  DEY
     BNE LP0
     ror
@@ -536,7 +538,6 @@ B0  DEY
     inc:lda TankSequencePointer
     cmp NumberOfPlayers
     bne PlayersAgain
-    ;mva 0 TankNr
     mva #0 TankSequencePointer
 
 PlayersAgain .proc
@@ -577,13 +578,12 @@ NoPlayerNoDeath
     lda #0
     sta FallDown1
     sta FallDown2
-    lda #1
+    lda #1  ; Missile
     jsr ExplosionDirect
     jmp continueMainRoundLoopAfterSeppuku
 .endp
 ;---------------------------------
 PlayerXdeath .proc
-
 
     ; this tank should not explode anymore:
     ; there is 0 in A, and Tank Number in X, so...
