@@ -142,7 +142,7 @@ WeaponsDescription
 EmptyLine
  dta d"                                        "
 LastLine
- :40 dta $00	; INVERSE
+ :40 dta $00
 ; -------------------------------------------------
     .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 NameScreen
