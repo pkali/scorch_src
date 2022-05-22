@@ -1011,7 +1011,7 @@ notpressed
     lda SKSTAT
     cmp #$ff
     beq checkJoy
-    cmp #$f7
+    cmp #$f7  ; SHIFT
     beq checkJoy
 
     lda kbcode

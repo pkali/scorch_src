@@ -141,7 +141,10 @@ MainGameLoop
 	
     jsr GetRandomWind
 
-    jsr Round
+    jsr RoundInit
+    
+    jsr MainRoundLoop
+    mva #0 TankNr  ; 
     
     jsr SortSequence
     
@@ -158,15 +161,7 @@ MainGameLoop
     ; Results are number of other deaths
     ; before the player dies itself
 
-    ; add gains and substract losses
-    ; gain is what player gets for lost energy of opponents
-    ; energy lost by opponents is added during Round and
-    ; little below in source, multiplied by 2 to get "dollars".
-    ; By analogy, loss is energy that given player losses during
-    ; each Round.
-    ; Important! If player has 10 energy and gets a central hit
-    ; from nuke that would take 90 energy points, his loss
-    ; is 90, not 10
+
     jsr DisplayResults
 
     ;check demo mode
@@ -187,6 +182,16 @@ noKey
     ldx NumberOfPlayers
     dex
 CalculateGains
+    ; add gains and substract losses
+    ; gain is what player gets for lost energy of opponents
+    ; energy lost by opponents is added during Round and
+    ; little below in source, multiplied by 2 to get "dollars".
+    ; By analogy, loss is energy that given player losses during
+    ; each Round.
+    ; Important! If player has 10 energy and gets a central hit
+    ; from nuke that would take 90 energy points, his loss
+    ; is 90, not 10
+
     ; add gain * 2
     asl gainL,x
     rol gainH,x
@@ -233,7 +238,7 @@ skipzeroing
  
 
 ;--------------------------------------------------
-Round .proc ; 
+.proc RoundInit 
 ;--------------------------------------------------
 ; at the beginning of each Round we set energy
 ; of all players to 99
@@ -242,7 +247,7 @@ Round .proc ;
 ; the shooting angle is randomized
 ; of course gains an looses are zeroed
 
-	jsr StatusDisplay
+	;jsr StatusDisplay
 	lda #0
 	tax
 @
@@ -264,20 +269,20 @@ SettingEnergies
     sta LASTeXistenZ,x
     ; anything in eXistenZ table means that this tank exist
     ; in the given round
-    lda #232
+    lda #<1000
     sta MaxEnergyTableL,x
-    lda #3
+    lda #>1000
     sta MaxEnergyTableH,x
-    lda #94
+    lda #<350
     sta EnergyTableL,x
-    lda #1
+    lda #>350
     sta EnergyTableH,x
+
     ;lda #(255-45)
     ;it does not look good when all tanks have
     ;barrels pointing the same direction
     ;so it would be nice to have more or less random
     ;angles
-
     jsr RandomizeAngle
     sta AngleTable,x
 
@@ -291,8 +296,8 @@ SettingEnergies
     jsr PMoutofScreen ;let P/M disappear
     jsr clearscreen   ;let the screen be clean
     jsr placetanks    ;let the tanks be evenly placed
-    jsr calculatemountains ;let mountains be nice for the eye
-;    jsr calculatemountains0 ;only fort tests - makes mountains flat and 0 height
+    jsr calculatemountains ;let mountains be easy for the eye
+;    jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
 
     VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
     mwa #dl dlptrs  ; issue #72 (glitches when switches)
@@ -305,13 +310,13 @@ SettingEnergies
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
-.endp  ; not really end of the procedure, but just for now. TODO: revisit.
-
-;--------------------round screen is ready---------
-
     mva #0 TankSequencePointer
+;--------------------round screen is ready---------
+    rts
+.endp
 
-MainRoundLoop
+;--------------------------------------------------
+.proc MainRoundLoop
     ; here we must check if by a chance there is only one
     ; tank with energy greater than 0 left
 
@@ -518,7 +523,7 @@ B0  DEY
     bne PlayersAgain
     mva #0 TankSequencePointer
 
-PlayersAgain .proc
+PlayersAgain
 
 ; In LASTeXistenZ there are values of eXistenZ before shoot
 ; from the next tank.
@@ -549,7 +554,7 @@ NoPlayerNoDeath
     bpl CheckingPlayersDeath
     ; if processor is here it means there are no more explosions
     jmp MainRoundLoop
-	.endp
+.endp
 	
 ;---------------------------------
 .proc Seppuku
@@ -558,10 +563,10 @@ NoPlayerNoDeath
     sta FallDown2
     lda #1  ; Missile
     jsr ExplosionDirect
-    jmp continueMainRoundLoopAfterSeppuku
+    jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
 .endp
 ;---------------------------------
-PlayerXdeath .proc
+PlayerXdeath
 
     ; this tank should not explode anymore:
     ; there is 0 in A, and Tank Number in X, so...
@@ -584,11 +589,9 @@ PlayerXdeath .proc
     adc ResultsTable,x
     sta ResultsTable,x
     inc CurrentResult
-    .endp
 
 
     mva #sfx_death_begin sfx_effect
-
 ;RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
     sta TextNumberOff
@@ -651,10 +654,10 @@ MetodOfDeath
     ; a deadly shot here again.
 
 
-    jmp AfterExplode
+    jmp MainRoundLoop.AfterExplode
 
 ;--------------------------------------------------
-DecreaseEnergyX .proc
+.proc DecreaseEnergyX
 ;Decreases energy of player nr X
 ;increases his financial loss
 ;increases gain of tank TankNr
