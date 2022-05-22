@@ -297,7 +297,7 @@ SettingEnergies
     jsr clearscreen   ;let the screen be clean
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
-;    jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
+    ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
 
     VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
     mwa #dl dlptrs  ; issue #72 (glitches when switches)
