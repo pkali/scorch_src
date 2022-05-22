@@ -753,7 +753,7 @@ UpNotYet
     beq HowMuchToFallRight2
 .nowarn    dew xdraw
     lda xdraw
-    bne RollinContinues		; like cpw xdraw #0
+    jne RollinContinues		; like cpw xdraw #0
     lda xdraw+1
     jne RollinContinues
     beq ExplodeNow
@@ -1274,7 +1274,7 @@ AfterStrongShoot
 
 
 ;--------------------------------------------------
-TankFalls .proc;
+.proc TankFalls;
 ;--------------------------------------------------
     mva #sfx_shield_off sfx_effect
     lda #0
@@ -2380,6 +2380,9 @@ HowManyBullets .proc
 
 ;--------------------------------------------------
 ShellDelay .proc
+    lda CONSOL
+    cmp #6
+    beq noShellDelay
     ldx flyDelay
 DelayLoop
       lda VCOUNT
@@ -2387,6 +2390,7 @@ DelayLoop
       beq @-
       dex
     bne DelayLoop
+noShellDelay
     rts
 .endp
     

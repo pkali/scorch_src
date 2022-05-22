@@ -76,6 +76,9 @@
          .MACRO WAIT
 ;	WAIT
 ;	waits one frame (1/50 s(PAL) or 1/60s(NTSC))
+        lda CONSOL
+        cmp #6  ; START KEY
+        beq ?nowait
          LDA VCOUNT
          ldy vcount
 ?WA      cpy VCOUNT
@@ -83,6 +86,7 @@
 ?wframe
          cmp vcount
          bne ?wframe
+?nowait
          .ENDM
 ;-------------------------------------
     .macro negw

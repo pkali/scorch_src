@@ -1582,15 +1582,6 @@ FinishResultDisplay
     sta TextBuffer+18
 
     ;---------------------
-    ;displaying the energy of a tank
-    ;---------------------
-
-    lda Energy,x
-
-    sta decimal
-    mwa #textbuffer+48 displayposition
-    jsr displaybyte
-    ;---------------------
     ;displaying quantity of the given weapon
     ;---------------------
     ldx TankNr
@@ -1608,20 +1599,31 @@ FinishResultDisplay
     sta temp ;get back number of the weapon
     mva #0 temp+1
     ; times 16 (because this is length of weapon name)
-    ldy #3 ; rotate 4 times
-RotateDISP02
-    aslw temp
-    dey
-    bpl RotateDISP02
+    ldy #3 ; shift left 4 times
+@
+      aslw temp
+      dey
+    bpl @-
+ 
     adw temp #NamesOfWeapons
     ldy #6 ; from 6th character
 
     ldy #15
-loop06
-    lda (temp),y
-    sta textbuffer+23,y
-    dey
-    bpl loop06
+@
+      lda (temp),y
+      sta textbuffer+23,y
+      dey
+    bpl @-
+
+    ;---------------------
+    ;displaying the energy of a tank
+    ;---------------------
+
+    lda Energy,x
+
+    sta decimal
+    mwa #textbuffer+48 displayposition
+    jsr displaybyte
 
     ;=========================
     ;display Force
