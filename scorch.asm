@@ -117,15 +117,11 @@ START
     ; Startup sequence
     jsr Initialize
 
-    mwa #OptionsDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$02     ; normal screen width
-    sta dmactls
-	
-    VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
+
 
     jsr Options  ;startup screen
+    lda escFlag
+    bne START
 
     ;entering names of players
     mwa #NameDL dlptrs
@@ -140,6 +136,8 @@ START
       lda TankStatusColoursTable,x
       sta colpf2s  ; set color of player name line
       jsr EnterPlayerName
+      lda escFlag
+      bne START
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -762,7 +760,7 @@ loop05
 .endp
 
 ;--------------------------------------------------
-Initialize .proc
+.proc Initialize
 ;Initialization sequence
 ;--------------------------------------------------
 deletePtr = temp
@@ -771,7 +769,7 @@ deletePtr = temp
     sta Erase
     sta tracerflag
     sta GameIsOver
-
+    sta escFlag
 
     ; clean variables
     tay
@@ -1042,7 +1040,7 @@ EnergyInRange
 .endp
 
 ;----------------------------------------------
-MoveBarrelToNewPosition .proc
+.proc MoveBarrelToNewPosition
 	jsr DrawTankNr
 	ldx TankNr
 	lda AngleTable,x
@@ -1077,7 +1075,7 @@ BarrelPositionIsFine
 	.endp
 
 ;----------------------------------------------
-SortSequence .proc ;
+.proc SortSequence ;
 ;----------------------------------------------
 ; here we try to get a sequence of tanks for two
 ; purposes:

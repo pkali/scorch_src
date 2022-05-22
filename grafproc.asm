@@ -629,7 +629,7 @@ DrawTankNrX
     rorw xbyte ; divide by 2 (carry does not matter)
     lda xbyte
     clc
-    adc #$24 ; P/M to graphics offser
+    adc #$24 ; P/M to graphics offset
     cpx #$4 ; 5th tank are joined missiles and offset is defferent
     bne NoMissile
     clc

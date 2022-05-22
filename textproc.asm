@@ -16,13 +16,27 @@ Options .proc
 ; - money each player has on the beginning of the game (moneyL i moneyH)
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
+    mwa #OptionsDL dlptrs
+    lda dmactls
+    and #$fc
+    ora #$02     ; normal screen width
+    sta dmactls
+    
+    VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
+
     mva #0 OptionsY
 
 OptionsMainLoop
 
     jsr OptionsInversion
     jsr getkey
-    cmp #$f ;cursor down
+    cmp #28  ; ESC
+
+    bne @+
+      mva #1 escFlag
+      rts
+       
+@   cmp #$f  ;cursor down
     bne OptionsNoDown
     inc:lda OptionsY
     cmp #maxoptions
@@ -865,6 +879,11 @@ endOfTankName
 
 CheckKeys
     jsr getkey
+    cmp #28  ; ESC
+    bne @+
+    mva #1 escFlag
+    rts
+@
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
 IsLetter
