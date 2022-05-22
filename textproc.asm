@@ -825,6 +825,29 @@ NoArrowDown
     rts
 .endp
 ; -----------------------------------------------------
+.proc EnterPlayerNames
+    ;entering names of players
+    mwa #NameDL dlptrs
+    lda dmactls
+    and #$fc
+    ora #$01     ; narrow screen (32 chars)
+    sta dmactls
+    VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
+
+    mva #0 TankNr
+@     tax
+      lda TankStatusColoursTable,x
+      sta colpf2s  ; set color of player name line
+      jsr EnterPlayerName
+      lda escFlag
+      jne START
+      inc TankNr
+      lda TankNr
+      cmp NumberOfPlayers
+    bne @-
+    rts
+.endp
+; -----------------------------------------------------
 .proc EnterPlayerName
 ; in: TankNr
 ; Out: TanksNames, SkillTable

@@ -123,26 +123,7 @@ START
     lda escFlag
     bne START
 
-    ;entering names of players
-    mwa #NameDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$01     ; narrow screen (32 chars)
-    sta dmactls
-    VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
-
-    mva #0 TankNr
-@	  tax
-      lda TankStatusColoursTable,x
-      sta colpf2s  ; set color of player name line
-      jsr EnterPlayerName
-      lda escFlag
-      bne START
-      inc TankNr
-      lda TankNr
-      cmp NumberOfPlayers
-    bne @-
-
+    jsr EnterPlayerNames
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 
@@ -150,17 +131,14 @@ MainGameLoop
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
 
 	jsr CallPurchaseForEveryTank
+
     ; issue #72 (glitches when switches)
     mva #0 dmactl
     lda dmactls
     and #$fc
-    ;ora #$02     ; 2=normal, 3 = wide screen width, 0 = no screen (?)
+    ;ora #$02     ; 2=normal, 3 = wide screen width, 0 = no screen
     sta dmactls
-
-
 	
-    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
-
     jsr GetRandomWind
 
     jsr Round
@@ -315,6 +293,8 @@ SettingEnergies
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be nice for the eye
 ;    jsr calculatemountains0 ;only fort tests - makes mountains flat and 0 height
+
+    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
     mwa #dl dlptrs  ; issue #72 (glitches when switches)
     lda dmactls
     and #$fc
