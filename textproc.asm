@@ -30,13 +30,10 @@ OptionsMainLoop
 
     jsr OptionsInversion
     jsr getkey
-    cmp #28  ; ESC
-
-    bne @+
-      mva #1 escFlag
-      rts
+    ldx escFlag
+    seq:rts
        
-@   cmp #$f  ;cursor down
+    cmp #$f  ;cursor down
     bne OptionsNoDown
     inc:lda OptionsY
     cmp #maxoptions
@@ -879,11 +876,9 @@ endOfTankName
 
 CheckKeys
     jsr getkey
-    cmp #28  ; ESC
-    bne @+
-    mva #1 escFlag
-    rts
-@
+    ldx escFlag
+    seq:rts
+    
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
 IsLetter

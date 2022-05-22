@@ -1175,6 +1175,9 @@ nextishigher
         
       lda kbcode
       and #$3f ;CTRL and SHIFT ellimination
+      cmp #28  ; ESC
+      bne getkeyend
+        mvx #1 escFlag
       bne getkeyend
 
 checkJoyGetKey
