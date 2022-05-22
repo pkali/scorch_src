@@ -38,10 +38,14 @@ draw .proc ;;fuxxing good draw :)
     bcs DrawOutOfTheScreen
     cpw xbyte #screenwidth
     bcs DrawOutOfTheScreen
-    cpw ydraw #screenheight
-    bcs DrawOutOfTheScreen
-    cpw ybyte #screenheight
-    bcc DrawOnTheScreen
+    ;cpw ydraw #screenheight
+    ;bcs DrawOutOfTheScreen
+    ;cpw ybyte #screenheight
+    ;bcc DrawOnTheScreen
+    lda ydraw+1
+    bne DrawOutOfTheScreen
+    lda ybyte+1
+    beq DrawOnTheScreen
 DrawOutOfTheScreen
     ;jsr DrawJumpPad
     rts
@@ -221,7 +225,7 @@ PutPixelinDraw
 
 EndOfDraw
     mwa xtempDRAW xdraw
-    mwa ytempDRAW ydraw
+    mva ytempDRAW ydraw
     rts
 .endp
 
@@ -294,7 +298,7 @@ circle .proc ;fxxxing good circle drawing :)
 ; splot8
 
     mwa xdraw xcircle
-    mwa ydraw ycircle
+    mva ydraw ycircle
 
     mwa #0 xc
     mva radius yc
@@ -350,7 +354,7 @@ endcircleloop
     jsr splot8
 
     mwa xcircle xdraw
-    mwa ycircle ydraw
+    mva ycircle ydraw
     rts
 .endp
 ;----
@@ -375,14 +379,14 @@ splot8 .proc
     ;clc
     lda ycircle
     adc YC
-    sta ydraw	; lower byte only !!!
+    sta ydraw
     sta tempcir
     jsr plot
 
     sec
     lda ycircle
     sbc YC
-    sta ydraw	; lower byte only !!!
+    sta ydraw
     jsr plot
 
     sec
@@ -395,7 +399,7 @@ splot8 .proc
     jsr plot
 
     lda tempcir
-    sta ydraw	; lower byte only !!!
+    sta ydraw
     jsr plot
 ;---
     clc
@@ -408,14 +412,14 @@ splot8 .proc
     ;clc
     lda ycircle
     adc xC
-    sta ydraw	; lower byte only !!!
+    sta ydraw
     sta tempcir
     jsr plot
 
     sec
     lda ycircle
     sbc xC
-    sta ydraw	; lower byte only !!!
+    sta ydraw
     jsr plot
 
     sec
@@ -428,7 +432,7 @@ splot8 .proc
     jsr plot
 
     lda tempcir
-    sta ydraw	; lower byte only !!!
+    sta ydraw
     jsr plot
 
     RTS
@@ -545,7 +549,7 @@ CheckNextTank
     lda xtankstableH,x
     cmp xdraw+1
     bne UnequalTanks
-    lda ydraw	; lower byte only !!!
+    lda ydraw
     ;sec
     ;sbc #$01 ; minus 1, because it was 1 pixel too high
     sta ytankstable,x     ; what's the heck is that????!!!!
@@ -614,7 +618,6 @@ DrawTankNrX
     sta xdraw+1
     lda ytankstable,x
     sta ydraw
-	mva #0 ydraw+1
 
     jsr TypeChar
 
@@ -641,7 +644,7 @@ NoMissile
     sta xbyte+1
 
     ; calculate start position of the tank
-    lda ydraw	; lower byte only !!!!
+    lda ydraw
     clc
     adc #PMOffset
     sta temp
@@ -672,11 +675,7 @@ DoNotDrawTankNr
 drawmountains .proc
 ;--------------------------------------------------
 
-	lda #0
-    sta xdraw
-    sta xdraw+1
-    sta ydraw	; not necessary but....
-    sta ydraw+1
+    mwa #0 xdraw
     mwa #mountaintable modify
 	mva #1 color
 
@@ -697,11 +696,7 @@ NoMountain
 ;--------------------------------------------------
 drawmountainspixel
 ;--------------------------------------------------
-	lda #0
-    sta xdraw
-    sta xdraw+1
-    sta ydraw	; not necessary but....
-    sta ydraw+1
+    mwa #0 xdraw
     mwa #mountaintable modify
 
 
@@ -755,23 +750,23 @@ SoilDown2 .proc
     adw RangeLeft #mountaintable2 tempor2
 
 NextColumn1
-    mwa #0 ydraw
+    mva #0 ydraw
 NextPoint1
     jsr point
     beq StillNothing
     ldy #0
-    lda ydraw	; lower byte only !!!
+    lda ydraw
     sta (tempor2),y
     sta (temp),y
     jmp FoundPeek1
 StillNothing
-    inc ydraw	; lower byte only !!!
+    inc ydraw
     lda ydraw
     cmp #screenheight
 	bne NextPoint1
 	; no pixels on whole column !!!
 	ldy #0
-    lda ydraw	; lower byte only !!!
+    lda ydraw
     sta (tempor2),y
     sta (temp),y
     jmp FoundPeek1
@@ -808,7 +803,7 @@ FalloutOfLine
     adc #1
     sta (tempor2),y
     ; and checking if there is a pixel there
-    sta ydraw	; lower byte only !!!
+    sta ydraw
     jsr point
     bne ThereIsPixelHere
     ; if no pixel we plot it
@@ -819,6 +814,7 @@ FalloutOfLine
     ldy #0
     lda (temp),y
     sta ydraw
+    lda (temp),y
     clc
     adc #1
     sta (temp),y
@@ -858,7 +854,7 @@ getrandomY   ;getting random Y coordinate
     bcs getrandomY
     clc
     adc #(margin*2)
-    sta ydraw	; lower byte only !!!
+    sta ydraw
     sta yfloat+1
     mva #0 yfloat ;yfloat equals to e.g. 140.0
 
@@ -1018,7 +1014,7 @@ MakeUnPlot
     sta oldply,x
 
 
-    ldx ydraw	; lower byte only !!!
+    ldx ydraw
     lda linetableL,x
     sta xbyte
     sta oldplot
@@ -1115,7 +1111,7 @@ MakePlot
 
 
 
-    ldx ydraw	; lower byte only !!!
+    ldx ydraw
     lda linetableL,x
     sta xbyte
     lda linetableH,x
@@ -1161,7 +1157,7 @@ point .proc
 
 ;---
 
-    ldx ydraw	; lower byte only !!!
+    ldx ydraw
     lda linetableL,x
     sta xbyte
     lda linetableH,x
@@ -1255,7 +1251,7 @@ CopyMask
 ;---
     ldy xbyte
 
-    lda ydraw ; y = y - 7 because left lower. shouldn't it be 8? - lower byte only !!!
+    lda ydraw ; y = y - 7 because left lower. shouldn't it be 8?
     sec
     sbc #7
     tax
