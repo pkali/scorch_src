@@ -784,7 +784,7 @@ SetunPlots
     sta oldplotH,x
     lda #0
     sta oldply,x
-	lda #$ff	; INVERSE
+	lda #$ff
     sta oldora,x
     dex
     bpl SetunPlots
@@ -864,7 +864,6 @@ DLIinterruptGraph .proc
 	nop
 	nop
 	nop
-;    sta WSYNC
     sta COLPF1
 	sty COLPF2
 	inc dliCounter
