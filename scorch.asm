@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"140" ; number of this build (3 bytes)
+	dta d"141" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -117,40 +117,13 @@ START
     ; Startup sequence
     jsr Initialize
 
-    mwa #OptionsDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$02     ; normal screen width
-    sta dmactls
-	
-    VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
+
 
     jsr Options  ;startup screen
+    lda escFlag
+    bne START
 
-    ;entering names of players
-    mwa #NameDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$01     ; narrow screen (32 chars)
-    sta dmactls
-    VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
-
-    mva #0 TankNr
-@	  tax
-      lda TankStatusColoursTable,x
-      sta colpf2s  ; set color of player name line
-      jsr EnterPlayerName
-      inc TankNr
-      lda TankNr
-      cmp NumberOfPlayers
-    bne @-
-
-    mwa #dl dlptrs
-    lda dmactls
-    and #$fc
-    ora #$02     ; normal screen width
-    sta dmactls
-
+    jsr EnterPlayerNames
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 
@@ -158,18 +131,20 @@ MainGameLoop
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
 
 	jsr CallPurchaseForEveryTank
-	
-    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
 
-    mwa #dl dlptrs
+    ; issue #72 (glitches when switches)
+    mva #0 dmactl
     lda dmactls
     and #$fc
-    ora #$02     ; 2=normal, 3 = wide screen width
+    ;ora #$02     ; 2=normal, 3 = wide screen width, 0 = no screen
     sta dmactls
-
+	
     jsr GetRandomWind
 
-    jsr Round
+    jsr RoundInit
+    
+    jsr MainRoundLoop
+    mva #0 TankNr  ; 
     
     jsr SortSequence
     
@@ -186,15 +161,7 @@ MainGameLoop
     ; Results are number of other deaths
     ; before the player dies itself
 
-    ; add gains and substract losses
-    ; gain is what player gets for lost energy of opponents
-    ; energy lost by opponents is added during Round and
-    ; little below in source, multiplied by 2 to get "dollars".
-    ; By analogy, loss is energy that given player losses during
-    ; each Round.
-    ; Important! If player has 10 energy and gets a central hit
-    ; from nuke that would take 90 energy points, his loss
-    ; is 90, not 10
+
     jsr DisplayResults
 
     ;check demo mode
@@ -215,6 +182,16 @@ noKey
     ldx NumberOfPlayers
     dex
 CalculateGains
+    ; add gains and substract losses
+    ; gain is what player gets for lost energy of opponents
+    ; energy lost by opponents is added during Round and
+    ; little below in source, multiplied by 2 to get "dollars".
+    ; By analogy, loss is energy that given player losses during
+    ; each Round.
+    ; Important! If player has 10 energy and gets a central hit
+    ; from nuke that would take 90 energy points, his loss
+    ; is 90, not 10
+
     ; add gain * 2
     asl gainL,x
     rol gainH,x
@@ -255,13 +232,14 @@ skipzeroing
     lda GameIsOver
     jne START
 
-
     inc CurrentRoundNr
+    mva #0 dmactl  ; issue #72
+    mva #sfx_silencer sfx_effect
     jmp MainGameLoop
  
 
 ;--------------------------------------------------
-Round .proc ; 
+.proc RoundInit 
 ;--------------------------------------------------
 ; at the beginning of each Round we set energy
 ; of all players to 99
@@ -270,7 +248,7 @@ Round .proc ;
 ; the shooting angle is randomized
 ; of course gains an looses are zeroed
 
-	jsr StatusDisplay
+	;jsr StatusDisplay
 	lda #0
 	tax
 @
@@ -292,20 +270,20 @@ SettingEnergies
     sta LASTeXistenZ,x
     ; anything in eXistenZ table means that this tank exist
     ; in the given round
-    lda #232
+    lda #<1000
     sta MaxEnergyTableL,x
-    lda #3
+    lda #>1000
     sta MaxEnergyTableH,x
-    lda #94
+    lda #<350
     sta EnergyTableL,x
-    lda #1
+    lda #>350
     sta EnergyTableH,x
+
     ;lda #(255-45)
     ;it does not look good when all tanks have
     ;barrels pointing the same direction
     ;so it would be nice to have more or less random
     ;angles
-
     jsr RandomizeAngle
     sta AngleTable,x
 
@@ -319,18 +297,27 @@ SettingEnergies
     jsr PMoutofScreen ;let P/M disappear
     jsr clearscreen   ;let the screen be clean
     jsr placetanks    ;let the tanks be evenly placed
-    jsr calculatemountains ;let mountains be nice for the eye
-;    jsr calculatemountains0 ;only fort tests - makes mountains flat and one pixel height
+    jsr calculatemountains ;let mountains be easy for the eye
+    ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
+
+    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
+    mwa #dl dlptrs  ; issue #72 (glitches when switches)
+    lda dmactls
+    and #$fc
+    ora #$02     ; 2=normal, 3 = wide screen width
+    sta dmactls
+
+
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
-.endp  ; not really end of the procedure, but just for now. TODO: revisit.
-
-;--------------------round screen is ready---------
-
     mva #0 TankSequencePointer
+;--------------------round screen is ready---------
+    rts
+.endp
 
-MainRoundLoop
+;--------------------------------------------------
+.proc MainRoundLoop
     ; here we must check if by a chance there is only one
     ; tank with energy greater than 0 left
 
@@ -500,7 +487,6 @@ SeteXistenZ
     sta L1
 
     ;DATA L1,L2
-    ;RESULT WH*256+L1
     ;Multiplication 8bit*8bit,
     ;result 16bit
     ;this algiorithm is a little longer than in Ruszczyc 6502 book
@@ -514,7 +500,7 @@ LP0
     ROR L1
     BCC B0
     CLC
-    ADC #10 ; multiplication by 10
+    ADC #10 ; multiplication by 10 (L2)
 B0  DEY
     BNE LP0
     ror
@@ -536,10 +522,9 @@ B0  DEY
     inc:lda TankSequencePointer
     cmp NumberOfPlayers
     bne PlayersAgain
-    ;mva 0 TankNr
     mva #0 TankSequencePointer
 
-PlayersAgain .proc
+PlayersAgain
 
 ; In LASTeXistenZ there are values of eXistenZ before shoot
 ; from the next tank.
@@ -570,20 +555,19 @@ NoPlayerNoDeath
     bpl CheckingPlayersDeath
     ; if processor is here it means there are no more explosions
     jmp MainRoundLoop
-	.endp
+.endp
 	
 ;---------------------------------
 .proc Seppuku
     lda #0
     sta FallDown1
     sta FallDown2
-    lda #1
+    lda #1  ; Missile
     jsr ExplosionDirect
-    jmp continueMainRoundLoopAfterSeppuku
+    jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
 .endp
 ;---------------------------------
-PlayerXdeath .proc
-
+PlayerXdeath
 
     ; this tank should not explode anymore:
     ; there is 0 in A, and Tank Number in X, so...
@@ -606,11 +590,9 @@ PlayerXdeath .proc
     adc ResultsTable,x
     sta ResultsTable,x
     inc CurrentResult
-    .endp
 
 
     mva #sfx_death_begin sfx_effect
-
 ;RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
     sta TextNumberOff
@@ -664,7 +646,7 @@ MetodOfDeath
 	tay
 	lda weaponsOfDeath,y
     jsr ExplosionDirect
-    mva #$15 sfx_effect
+    mva #sfx_silencer sfx_effect
 
     
     ; jump to after explosion routines (soil fallout, etc.)
@@ -673,10 +655,10 @@ MetodOfDeath
     ; a deadly shot here again.
 
 
-    jmp AfterExplode
+    jmp MainRoundLoop.AfterExplode
 
 ;--------------------------------------------------
-DecreaseEnergyX .proc
+.proc DecreaseEnergyX
 ;Decreases energy of player nr X
 ;increases his financial loss
 ;increases gain of tank TankNr
@@ -762,7 +744,7 @@ loop05
 .endp
 
 ;--------------------------------------------------
-Initialize .proc
+.proc Initialize
 ;Initialization sequence
 ;--------------------------------------------------
 deletePtr = temp
@@ -771,7 +753,7 @@ deletePtr = temp
     sta Erase
     sta tracerflag
     sta GameIsOver
-
+    sta escFlag
 
     ; clean variables
     tay
@@ -803,7 +785,7 @@ SetunPlots
     sta oldplotH,x
     lda #0
     sta oldply,x
-	lda #$ff	; INVERSE
+	lda #$ff
     sta oldora,x
     dex
     bpl SetunPlots
@@ -883,7 +865,6 @@ DLIinterruptGraph .proc
 	nop
 	nop
 	nop
-;    sta WSYNC
     sta COLPF1
 	sty COLPF2
 	inc dliCounter
@@ -1042,7 +1023,7 @@ EnergyInRange
 .endp
 
 ;----------------------------------------------
-MoveBarrelToNewPosition .proc
+.proc MoveBarrelToNewPosition
 	jsr DrawTankNr
 	ldx TankNr
 	lda AngleTable,x
@@ -1077,7 +1058,7 @@ BarrelPositionIsFine
 	.endp
 
 ;----------------------------------------------
-SortSequence .proc ;
+.proc SortSequence ;
 ;----------------------------------------------
 ; here we try to get a sequence of tanks for two
 ; purposes:
@@ -1165,18 +1146,23 @@ nextishigher
 .endp
 
 ;--------------------------------------------------
-getkey .proc; waits for pressing a key and returns pressed value in A
+.proc getkey  ; waits for pressing a key and returns pressed value in A
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @
       lda SKSTAT
       cmp #$ff
       beq checkJoyGetKey ; key not pressed, check Joy
+      cmp #$f7  ; SHIFT
+      beq checkJoyGetKey
         
-      mva #sfx_keyclick sfx_effect
       lda kbcode
       and #$3f ;CTRL and SHIFT ellimination
-    rts
+      cmp #28  ; ESC
+      bne getkeyend
+        mvx #1 escFlag
+      bne getkeyend
+
 checkJoyGetKey
       ;------------JOY-------------
       ;happy happy joy joy
@@ -1187,13 +1173,19 @@ checkJoyGetKey
       beq notpressedJoyGetKey
       tay 
       lda joyToKeyTable,y
-    rts
+      bne getkeyend
+
 notpressedJoyGetKey
       ;fire
       lda TRIG0S
     bne @-
     lda #$0c ;Return key
+    
+getkeyend
+    mvx #sfx_keyclick sfx_effect
     rts
+    
+
 .endp
 ;--------------------------------------------------
 getkeynowait .proc;

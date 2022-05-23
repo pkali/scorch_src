@@ -74,7 +74,7 @@ price_Super_Mag______ = $ffff    ;_59
 price_Auto_Defense___ = $ffff    ;_60
 price_Fuel_Tank______ = $ffff    ;_61
 price_Contact_Trigger = $ffff    ;_62
-price______________63 = $ffff
+price_White_Flag_____ = $0       ;_63
 ;--------------------------------
 ; names of RMT instruments (sfx)
 ;--------------------------------

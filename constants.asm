@@ -196,99 +196,6 @@ sintable
     .by 255
     .by 255 ;anti self destruction byte
 
-costable
-    .by 255 ;anti self destruction byte
-    .by 255
-    .by 255
-    .by 255
-    .by 255
-    .by 255
-    .by 254
-    .by 254
-    .by 253
-    .by 252
-    .by 252
-    .by 251
-    .by 250
-    .by 249
-    .by 248
-    .by 247
-    .by 246
-    .by 244
-    .by 243
-    .by 242
-    .by 240
-    .by 238
-    .by 237
-    .by 235
-    .by 233
-    .by 232
-    .by 230
-    .by 228
-    .by 226
-    .by 223
-    .by 221
-    .by 219
-    .by 217
-    .by 214
-    .by 212
-    .by 209
-    .by 207
-    .by 204
-    .by 201
-    .by 198
-    .by 196
-    .by 193
-    .by 190
-    .by 187
-    .by 184
-    .by 181
-    .by 177
-    .by 174
-    .by 171
-    .by 167
-    .by 164
-    .by 161
-    .by 157
-    .by 154
-    .by 150
-    .by 146
-    .by 143
-    .by 139
-    .by 135
-    .by 131
-    .by 128
-    .by 124
-    .by 120
-    .by 116
-    .by 112
-    .by 108
-    .by 104
-    .by 100
-    .by 95
-    .by 91
-    .by 87
-    .by 83
-    .by 79
-    .by 74
-    .by 70
-    .by 66
-    .by 61
-    .by 57
-    .by 53
-    .by 48
-    .by 44
-    .by 40
-    .by 35
-    .by 31
-    .by 26
-    .by 22
-    .by 17
-    .by 13
-    .by 8
-    .by 4
-    .by 0
-
 linetableL
     :screenheight+1 .by <(display+screenBytes*#)
 linetableH
@@ -705,7 +612,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Auto_Defense___
   .by >price_Fuel_Tank______
   .by >price_Contact_Trigger
-  .by >price______________63
+  .by >price_White_Flag_____
 
 WeaponPriceL
   .by <price_Baby_Missile___
@@ -771,7 +678,7 @@ WeaponPriceL
   .by <price_Auto_Defense___
   .by <price_Fuel_Tank______
   .by <price_Contact_Trigger
-  .by <price______________63
+  .by <price_White_Flag_____
 
 ;-------------------------------------------------
 ; how many units (bulletd) of a given weapon we get for a given price
@@ -843,7 +750,7 @@ WeaponUnits
   .by 1  ;Auto_Defense___
   .by 10 ;Fuel_Tank______
   .by 25 ;Contact_Trigger
-  .by 0  ;_____________63
+  .by 1  ;_____________63
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
                 ;the comment is an index in the tables
@@ -975,7 +882,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Auto Defense    " ; 60
     dta d"Fuel Tank       " ; 61
     dta d"Contact Trigger " ; 62
-    dta d"----------------" ; 63
+    dta d"White Flag      " ; 63
 weaponsOfDeath
 	dta 0,1,2,3,7,8,9,15,16,17,18,19,20,21,22,23,24,25,26,27
 joyToKeyTable

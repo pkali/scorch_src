@@ -33,6 +33,7 @@ RoundNrDisplay
     .byte $ff
 
 variablesStart  ; zeroing starts here
+escFlag .ds 1
 ;-------------- 
 sfx_effect .ds 1
 ;-------------- 

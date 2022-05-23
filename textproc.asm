@@ -16,13 +16,24 @@ Options .proc
 ; - money each player has on the beginning of the game (moneyL i moneyH)
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
+    mwa #OptionsDL dlptrs
+    lda dmactls
+    and #$fc
+    ora #$02     ; normal screen width
+    sta dmactls
+    
+    VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
+
     mva #0 OptionsY
 
 OptionsMainLoop
 
     jsr OptionsInversion
     jsr getkey
-    cmp #$f ;cursor down
+    ldx escFlag
+    seq:rts
+       
+    cmp #$f  ;cursor down
     bne OptionsNoDown
     inc:lda OptionsY
     cmp #maxoptions
@@ -190,6 +201,7 @@ OptionsYLoop
 ;-------------------------------------------
 ; call of the purchase screens for each tank
 .proc CallPurchaseForEveryTank
+    jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
     lda dmactls
     and #$fc
@@ -197,21 +209,20 @@ OptionsYLoop
     sta dmactls
 
     mva #0 TankNr
-loop03
-    ldx TankNr
-    lda SkillTable,x
-    beq ManualPurchase
-    jsr PurchaseAI
-    jmp AfterManualPurchase
+@
+      ldx TankNr
+      lda SkillTable,x
+      beq ManualPurchase
+      jsr PurchaseAI
+      jmp AfterManualPurchase
 
 ManualPurchase
-    jsr Purchase
+      jsr Purchase
 AfterManualPurchase
 
-    inc TankNr
-    lda TankNr
-    cmp NumberOfPlayers
-    bne loop03
+      inc:lda TankNr
+      cmp NumberOfPlayers
+    bne @-
     rts
 .endp
 
@@ -223,9 +234,7 @@ AfterManualPurchase
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
-
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
-    jsr PMoutofScreen
     
     ldx tankNr
     lda TankStatusColoursTable,x
@@ -238,12 +247,9 @@ AfterManualPurchase
 
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
-
-    tay  ; from 0 to y
+    tay  ; 0 to y
     lda tanknr
-    asl
-    asl
-    asl ; 8 chars per name
+    :3 asl  ; 8 chars per name
     tax
 NextChar03
     lda tanksnames,x
@@ -553,16 +559,17 @@ ChoosingItemForPurchase
     cmp #$2c ; Tab
     jeq ListChange
     cmp #$0c ; Return
-    beq EndOfPurchase
+    sne:rts
     cmp #$e
     beq PurchaseKeyUp
     cmp #$f
     beq PurchaseKeyDown
     cmp #$21 ; Space
+    jeq PurchaseWeaponNow
+    cmp #$07 ; cursor right
+    jeq PurchaseWeaponNow
     bne ChoosingItemForPurchase
-    jmp PurchaseWeaponNow
-EndOfPurchase
-    rts
+
 PurchaseKeyUp
     lda WhichList
     beq GoUp1
@@ -816,6 +823,29 @@ NoArrowDown
     rts
 .endp
 ; -----------------------------------------------------
+.proc EnterPlayerNames
+    ;entering names of players
+    mwa #NameDL dlptrs
+    lda dmactls
+    and #$fc
+    ora #$01     ; narrow screen (32 chars)
+    sta dmactls
+    VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
+
+    mva #0 TankNr
+@     tax
+      lda TankStatusColoursTable,x
+      sta colpf2s  ; set color of player name line
+      jsr EnterPlayerName
+      lda escFlag
+      jne START
+      inc TankNr
+      lda TankNr
+      cmp NumberOfPlayers
+    bne @-
+    rts
+.endp
+; -----------------------------------------------------
 .proc EnterPlayerName
 ; in: TankNr
 ; Out: TanksNames, SkillTable
@@ -867,6 +897,9 @@ endOfTankName
 
 CheckKeys
     jsr getkey
+    ldx escFlag
+    seq:rts
+    
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
 IsLetter
@@ -1584,15 +1617,6 @@ FinishResultDisplay
     sta TextBuffer+18
 
     ;---------------------
-    ;displaying the energy of a tank
-    ;---------------------
-
-    lda Energy,x
-
-    sta decimal
-    mwa #textbuffer+48 displayposition
-    jsr displaybyte
-    ;---------------------
     ;displaying quantity of the given weapon
     ;---------------------
     ldx TankNr
@@ -1610,20 +1634,31 @@ FinishResultDisplay
     sta temp ;get back number of the weapon
     mva #0 temp+1
     ; times 16 (because this is length of weapon name)
-    ldy #3 ; rotate 4 times
-RotateDISP02
-    aslw temp
-    dey
-    bpl RotateDISP02
+    ldy #3 ; shift left 4 times
+@
+      aslw temp
+      dey
+    bpl @-
+ 
     adw temp #NamesOfWeapons
     ldy #6 ; from 6th character
 
     ldy #15
-loop06
-    lda (temp),y
-    sta textbuffer+23,y
-    dey
-    bpl loop06
+@
+      lda (temp),y
+      sta textbuffer+23,y
+      dey
+    bpl @-
+
+    ;---------------------
+    ;displaying the energy of a tank
+    ;---------------------
+
+    lda Energy,x
+
+    sta decimal
+    mwa #textbuffer+48 displayposition
+    jsr displaybyte
 
     ;=========================
     ;display Force

@@ -8,14 +8,15 @@ by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
 
 Contributors:
-Kaz - splash screen, ideas
-Adam - font, ideas
-Emkay - splash screen music
-Miker - game sfx, ideas
-Bocianu - important ideas, FujiNet implementation
+- Kaz - splash screen, ideas
+- Miker (@mikerro) - game sfx, ideas, QA
+- Adam (@6502adam) - font, ideas, QA
+- Bocianu (@bocianu) - important ideas, FujiNet implementation, QA
+- Emkay - splash screen music
+
+QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert
 
 You can contact us at pecus@poczta.fm or pirx@5oft.pl
-home page of this project is https://github.com/pkali/scorch_src
 
 This source code was originally compiled under [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
 
@@ -31,12 +32,12 @@ Game source code is split into 5+4 parts:
 - display.asm - display lists and text screen definitions
 - ai.asm - artificial stupidity of computer opponents
 - weapons.asm - general arsenal of tankies
-- definitions.asm - label definitions, moved to make it work better with Altirra debug.
+- definitions.asm - label definitions, moved to make it work better with Altirra debug (it doesn't).
 
-We were trying to use as much macros and pseudo-ops as possible.
-They are defined in atari.hea and macro.hea files together with many atari constants. This way it should be relatively easy to port this code to e.g. C64
+We were trying to use macros, pseudo-ops and simple graphics primitives as much as possible.
+This way it should be relatively easy to port this code to e.g. C64
 
-After those N years of working on this piece of code we are sure it would be much wiser to write it in C, Action! or MadPascal but on the other hand it is so much fun to type 150 chars where all you want to have y=ax+b :)
+After those N years of working on this piece of code we are sure it would be much wiser to write it in C, Action! or MadPascal but on the other hand it is so much fun to type 150 chars where all you want to have y=a*x+b :)
 
 Originally most variables were in Polish, comments were sparse, but we wanted to release this piece of code to public.
 Because of being always short of time/energy (to finish the game) we decided it must go in 'English' to let other people work on it.
@@ -45,6 +46,20 @@ It never happened, but we got some encouraging comments and we are still trying 
 With the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changes:
+
+###### Build 141
+2022-05-22
+Debug build. Thanks to all testers for finding numerous bugs. We tried to fix some of them and we have introduced some new for your enjoyment.
+- #73 Fast forward. Press [START] to speed up the game where it can be sped up. Not in many places, mind you.
+- #72 Screen glitches improved
+- #70 AI shoot with more force than their energy allows. We might still have to revise this one
+- #69 Explosions wrapping around the screen
+- #67 Screen glitches after intro
+- #65 Saved ~90 bytes by removing cosinus table
+- #62 Empty list of defensive weapons gets corrupted. Plunged it with a new defensive weapon - "White Flag". Honor of the tank crew prohibits them from buying it (yet)
+- #61 [SHIFT] was repeating the last key
+- #57 Fire too sensitive on a real machine. Switched to shadow registers. First recorded use of Atari OS :O
+- #55 Glitches in the status bar. This one was surprisingly tough.
 
 ###### Build 140
 2022-05-15
@@ -58,7 +73,7 @@ Other unlisted minor bugs and typos fixed.
 ###### Build 139
 2022-05-09
 The post midnight release with great, heavy new features:
-- https://github.com/pkali/scorch_src/issues/48, https://github.com/pkali/scorch_src/issues/10 - thanks to Miker we have a bunch of fresh sound effects. Not everything is perfectly implemented, but the game definitely got nicer! Thank you again Miker!
+- https://github.com/pkali/scorch_src/issues/48, https://github.com/pkali/scorch_src/issues/10 - thanks to @mikerro we have a bunch of fresh sound effects. Not everything is perfectly implemented, but the game definitely got nicer! Thank you again Miker!
 - https://github.com/pkali/scorch_src/issues/42 New weapon - Liquid Dirt by Pecus. Try it from directly from the weapon store!
 - (fix) https://github.com/pkali/scorch_src/issues/53 - non-existing weapons are not displayed. This makes the defense menu empty when you are poor, but it is still better than the old way with "$0" prices
 - (fix) https://github.com/pkali/scorch_src/issues/49 - seppuku should always kill now
@@ -100,7 +115,7 @@ Other small fixes:
 2022-04-10
 - https://github.com/pkali/scorch_src/issues/34 - plot pointer visible only when missile is out of the screen
 - https://github.com/pkali/scorch_src/issues/33 - Poor AIs do not purchase non-working weapons
-- https://github.com/pkali/scorch_src/issues/32 - Basic is turned off right on the beginning of loading. Dracon reported problems with running the game in Altirra, this was the best idea I had about it. Maybe next will be removing from zero page LZSS routine by @dmsc
+- https://github.com/pkali/scorch_src/issues/32 - Basic is turned off right on the beginning of loading. Dracon reported problems with running the game in Altirra, this was the best idea I had about it. Maybe next will be removing LZSS routine by @dmsc from zero page 
 - https://github.com/pkali/scorch_src/issues/31 - STA WSYNC removed from missile flight delay
 - https://github.com/pkali/scorch_src/issues/30 - player level remembered between rounds, thx @KrzysRog
 - https://github.com/pkali/scorch_src/issues/5 - funkybomb smoke stays on the edges of the screen
@@ -111,7 +126,7 @@ Other small fixes:
 - enhancement: https://github.com/pkali/scorch_src/issues/15 Add player colors to purchase screen. Still room to improvement!
 - enhancement: https://github.com/pkali/scorch_src/issues/22 Redesign information panel (top 2 lines of the game screen). Now game might make some sense for a newcomer :)
 - change: https://github.com/pkali/scorch_src/issues/28 remove white lines around out-of-the-screen point tracker. Now it is visible and looks better!
-- enhancement: https://github.com/pkali/scorch_src/issues/25 Missiles are too fast. Thanks @bocianu and @miker for the hint. Speed of the shell is configurable now, 5 speeds available.
+- enhancement: https://github.com/pkali/scorch_src/issues/25 Missiles are too fast. Thanks @bocianu and @mikerro for the hint. Speed of the shell is configurable now, 5 speeds available.
 - enhancement: https://github.com/pkali/scorch_src/issues/27 Remember game settings between games.
 - enhancement: https://github.com/pkali/scorch_src/issues/24 Remember player names between games. Thanks @bocianu
 

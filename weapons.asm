@@ -50,7 +50,7 @@ ExplosionRoutines
     .word dirtclod-1
     .word dirtball-1
     .word tonofdirt-1
-    .word liquiddirt-1 ;liquiddirt
+    .word liquiddirt-1
     .word dirtcharge-1
     .word VOID-1 ;earthdisrupter
     .word VOID-1 ;plasmablast
@@ -753,7 +753,7 @@ UpNotYet
     beq HowMuchToFallRight2
 .nowarn    dew xdraw
     lda xdraw
-    bne RollinContinues		; like cpw xdraw #0
+    jne RollinContinues		; like cpw xdraw #0
     lda xdraw+1
     jne RollinContinues
     beq ExplodeNow
@@ -1011,7 +1011,7 @@ notpressed
     lda SKSTAT
     cmp #$ff
     beq checkJoy
-    cmp #$f7
+    cmp #$f7  ; SHIFT
     beq checkJoy
 
     lda kbcode
@@ -1274,7 +1274,7 @@ AfterStrongShoot
 
 
 ;--------------------------------------------------
-TankFalls .proc;
+.proc TankFalls;
 ;--------------------------------------------------
     mva #sfx_shield_off sfx_effect
     lda #0
@@ -1629,8 +1629,11 @@ DoNotAdd
     sta Result+1
     sta Result+2
 ;--
-    ldx Angle
-    lda costable,x
+    lda #90
+    sec
+    sbc Angle
+    tax
+    lda sintable,x
 
     sta Multiplee ;cos(Angle)*Force
     mwa Force Multiplier
@@ -1816,17 +1819,19 @@ NoUnPlot
 
 Hit
     mwa XHit xdraw
-    mwa YHit ydraw
+    mva YHit ydraw	; one byte now
 
     jsr unPlot
 EndOfFlight
-    mwa xdraw xcircle  ; we must store for a little while
-    mva ydraw ycircle  ; xdraw and ydraw
+;    mwa xdraw xcircle  ; we must store for a little while
+;    mva ydraw ycircle  ; xdraw and ydraw .... but this values are in YHit and XHit !!!
     mwa #0 xdraw
     mva #screenheight-1 ydraw
     jsr unPlot
-    mwa xcircle xdraw
-    mva ycircle ydraw
+;    mwa xcircle xdraw
+;    mva ycircle ydraw
+    mwa XHit xdraw
+    mva YHit ydraw
 
 	ldy SmokeTracerFlag
 	beq EndOfFlight2
@@ -2375,6 +2380,9 @@ HowManyBullets .proc
 
 ;--------------------------------------------------
 ShellDelay .proc
+    lda CONSOL
+    cmp #6
+    beq noShellDelay
     ldx flyDelay
 DelayLoop
       lda VCOUNT
@@ -2382,6 +2390,7 @@ DelayLoop
       beq @-
       dex
     bne DelayLoop
+noShellDelay
     rts
 .endp
     

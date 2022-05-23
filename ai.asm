@@ -126,7 +126,7 @@ forceNow
     jsr RandomizeForce
 
 endo
-	ldx TankNr ;this is possibly not necessary
+	;ldx TankNr ;this is possibly not necessary
 	lda NewAngle
 	sta PreviousAngle,x
 	lda EnergyTableL,x
@@ -214,6 +214,7 @@ skipThisPlayer
 forceNow
     mwa #300 RandBoundaryLow
     mwa #700 RandBoundaryHigh 
+    ldx TankNr
     jsr RandomizeForce
 
 endo
