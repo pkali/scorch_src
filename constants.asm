@@ -483,6 +483,7 @@ WhereToSlideTable
     .BY %000  ; 11111111
 
 EndOfTheBarrelX
+	; right angles from 0 (vertically up) to 90 (horizontally to the right)
     .by 4,4,4,4,4,4,4,4,4,4,4
     .by 5,5,5,5,5,5,5,5,5,5
     .by 6,6,6,6,6,6,6,6,6
@@ -492,15 +493,16 @@ EndOfTheBarrelX
     .by 7,7,7,7,7,7,7,7,7,7,7,7,7
     .by 7,7,7,7,7,7,7,7,7,7,7,7,7,7
 
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0					; not used
 
+	; left angles from 90 (horizontally to the left) to 1 (vertically up)
     .by 0,0,0,0,0,0,0,0,0,0,0,0,0,0
     .by 0,0,0,0,0,0,0,0,0,0,0,0,0
     .by 0,0,0,0,0,0,0,0,0,0
@@ -511,6 +513,7 @@ EndOfTheBarrelX
     .by 3,3,3,3,3,3,3,3,3,3,3
 
 EndOfTheBarrelY
+	; right angles from 0 (vertically up) to 90 (horizontally to the right)
     .by 7,7,7,7,7,7,7,7,7,7,7
     .by 7,7,7,7,7,7,7,7,7,7
     .by 7,7,7,7,7,7,7,7,7
@@ -520,15 +523,16 @@ EndOfTheBarrelY
     .by 4,4,4,4,4,4,4,4,4,4,4,4,4
     .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
 
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0					; not used
 
+	; left angles from 90 (horizontally to the left) to 1 (vertically up)
     .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
     .by 4,4,4,4,4,4,4,4,4,4,4,4,4
     .by 5,5,5,5,5,5,5,5,5,5
