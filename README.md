@@ -47,6 +47,20 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 141
+2022-05-22
+Debug build. Thanks to all testers for finding numerous bugs. We tried to fix some of them and we have introduced some new for your enjoyment.
+- #73 Fast forward. Press [START] to speed up the game where it can be sped up. Not in many places, mind you.
+- #72 Screen glitches improved
+- #70 AI shoot with more force than their energy allows. We might still have to revise this one
+- #69 Explosions wrapping around the screen
+- #67 Screen glitches after intro
+- #65 Saved ~90 bytes by removing cosinus table
+- #62 Empty list of defensive weapons gets corrupted. Plunged it with a new defensive weapon - "White Flag". Honor of the tank crew prohibits them from buying it (yet)
+- #61 [SHIFT] was repeating the last key
+- #57 Fire too sensitive on a real machine. Switched to shadow registers. First recorded use of Atari OS :O
+- #55 Glitches in the status bar. This one was surprisingly tough.
+
 ###### Build 140
 2022-05-15
 Huge internal changes by @Pecusx. The whole game screen has been inverted - ground is now background color, "sky" and empty areas are in fact pixels. This allowed for introducing better tank colorization, fully devised and lead by Adam. The process started and results are already promising - the colors of tanks and the status bar are closer. We might get even better ones in the next builds.
