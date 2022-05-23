@@ -234,6 +234,7 @@ skipzeroing
 
     inc CurrentRoundNr
     mva #0 dmactl  ; issue #72
+    mva #sfx_silencer sfx_effect
     jmp MainGameLoop
  
 

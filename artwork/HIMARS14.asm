@@ -45,10 +45,15 @@ regX    .ds 1
 regY    .ds 1
 ; ---	MAIN PROGRAM
 	org $2000
-ant	dta $F0
+ant	dta $80
 	dta $42,a(scr),$02,$02,$02,$02,$02,$02,$02,$02,$02,$82,$02,$02,$02,$02,$82
-	dta $02,$02,$02,$82,$82,$82,$02,$82,$02,$02,$02,$82,$70
+	dta $02,$02,$02,$82,$82,$82,$02,$82,$02,$02,$02,$82
+	dta $42,a(verline)
 	dta $41,a(ant)
+
+verline
+    :37 dta d" "
+    build
 
 scr	ins "HIMARS14.scr"
 
@@ -202,6 +207,19 @@ main
 
 	lda:cmp:req $14		;wait 1 frame
 
+    ; copy system font to $a000
+    ldx #0
+@   lda $e000,x
+    sta $a000,x
+    ;lda $e100,x  ; i need digits only :]
+    ;sta $a100,x
+    ;lda $e200,x
+    ;sta $a200,x
+    ;lda $e300,x
+    ;sta $a300,x
+    inx
+    bne @-
+
 	sei			;stop IRQ interrupts
 	mva #$00 nmien		;stop NMI interrupts
 	sta dmactl
@@ -344,8 +362,10 @@ dli7
 dli11
 	sta regA
 
-	lda #$01
+    lda #>$a000  ; system font
 	sta wsync		;line=232
+    sta chbase
+    lda #$01
 	sta gtictl
 
 	lda regA

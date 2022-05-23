@@ -247,12 +247,9 @@ AfterManualPurchase
 
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
-
-    tay  ; from 0 to y
+    tay  ; 0 to y
     lda tanknr
-    asl
-    asl
-    asl ; 8 chars per name
+    :3 asl  ; 8 chars per name
     tax
 NextChar03
     lda tanksnames,x
@@ -562,16 +559,17 @@ ChoosingItemForPurchase
     cmp #$2c ; Tab
     jeq ListChange
     cmp #$0c ; Return
-    beq EndOfPurchase
+    sne:rts
     cmp #$e
     beq PurchaseKeyUp
     cmp #$f
     beq PurchaseKeyDown
     cmp #$21 ; Space
+    jeq PurchaseWeaponNow
+    cmp #$07 ; cursor right
+    jeq PurchaseWeaponNow
     bne ChoosingItemForPurchase
-    jmp PurchaseWeaponNow
-EndOfPurchase
-    rts
+
 PurchaseKeyUp
     lda WhichList
     beq GoUp1
