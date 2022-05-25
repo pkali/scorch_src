@@ -1198,7 +1198,7 @@ IntoDraw   adw xbyte #screenBytes
 .endp
 ;
 ; ------------------------------------------
-TypeChar .proc
+.proc TypeChar
 ; puts char on the graphics screen
 ; in: CharCode
 ; in: left LOWER corner of the char coordinates (xdraw, ydraw)
@@ -1336,7 +1336,8 @@ CharLoopi
     rts
 .endp
 ; ------------------------------------------
-PutChar4x4 .proc ;puts 4x4 pixels char on the graphics screen
+.proc PutChar4x4  
+; puts 4x4 pixels char on the graphics screen
 ; in: xdraw, ydraw (upper left corner of the char)
 ; in: CharCode4x4 (.sbyte)
 ;--------------------------------------------------
@@ -1399,66 +1400,135 @@ Loop4x4Continued
 
     rts
 .endp
-; ------------------------------------------
-PutChar4x4FULL .proc;
-;this routine works just like PutChar4x4,
-;but this time all pixels are being drawn
-;(empty and not empty)
 ;--------------------------------------------------
-
-; calculating address of the first byte
-    mva #4 LoopCounter4x4
+.proc PutChar4x4FULL
+; puts 4x4 pixels char on the graphics screen
+; in: xdraw, ydraw (upper left corner of the char)
+; in: CharCode4x4 (.sbyte)
+; this routine works just like PutChar4x4,
+; but this time all pixels are being drawn
+; (empty and not empty)
+;--------------------------------------------------
+    cpw ydraw #(screenheight-4)
+    jcs EndPut4x4
+    cpw xdraw #(screenwidth-4)
+    jcs EndPut4x4 ;nearest RTS
+    ; char to the table
     lda CharCode4x4
     and #1
+	beq Upper4bits
+	lda #$ff 		; better option to check (nibbler4x4 = $00 or $ff)
+Upper4bits
     sta nibbler4x4
     lda CharCode4x4
-    ror
-    ; in carry there is which nibble of the byte is to be taken clc
-    clc
-    adc #(3*32)
-    sta y4x4
-nextline4x4FULL
-    mva #4 Xcounter4x4
-    ldy y4x4
-    lda font4x4,y
+    lsr
+    sta fontind
+    lda #$00
+    sta fontind+1
+	
+    adw fontind #font4x4
 
-    ldx nibbler4x4
-    beq uppernibbleFULL
+    ; and 4 bytes to the table
+	ldy #0
+    ldx #3
+CopyChar
+    lda (fontind),y	; Y must be 0 !!!!
+	bit nibbler4x4
+	bmi GetLower4bits
+	ror
+	ror
+	ror
+	ror
+GetLower4bits
+	ora #$f0
+    sta char1,x
+    lda #$ff
+    sta char2,x
+    ; and 4  bytes as a mask
+	lda #$0f
+    sta mask1,x
+    lda #$00
+    sta mask2,x
+	adw fontind #32		; next byte of 4x4 font
+    dex
+    bpl CopyChar
 
-    asl
-    asl
-    asl
-    asl
-uppernibbleFULL
-    rol
-    sta StoreA4x4
-    bcs EmptyPixelFULL
-    lda plot4x4color  ;these lines are not necessary
-    sta color  ;if a plots are one color only
-    jsr plot
-    jmp Loop4x4ContinuedFULL
-EmptyPixelFULL
-    lda #1   ;reverse color (color==1-color)
+    ; calculating coordinates from xdraw and ydraw
+    mwa xdraw xbyte
+
+    lda xbyte
+    and #$7
+    sta ybit
+
+    lsrw xbyte ; div 8
+    rorw xbyte
+    rorw xbyte
+
+;---
+    ldy xbyte
+    lda ydraw ; y = y - 7 because left lower. shouldn't it be 8?
     sec
-    sbc plot4x4color
-    sta color
-    jsr plot
-    ;this is turned on now
-    ;of course it is slower
+    sbc #7
+    tax
 
-Loop4x4ContinuedFULL
-    inw xdraw
-    lda StoreA4x4
-    dec Xcounter4x4
-    ldx Xcounter4x4
-    bne uppernibbleFULL
-    ; here we have on screen one line of the char
-    inw ydraw
-    sbw xdraw #4
-    sbw y4x4 #32  ; why? possibly because of width of the 4x4 font
-    dec:lda LoopCounter4x4
-    bne nextline4x4FULL
-
+    lda linetableL,x
+    sta xbyte
+    lda linetableH,x
+    sta xbyte+1
+    ; mask preparation and character shifting
+    ldx ybit
+    beq MaskOK01
+MakeMask01
+    lsr mask1
+    ror mask2
+    lsr mask1+1
+    ror mask2+1
+    lsr mask1+2
+    ror mask2+2
+    lsr mask1+3
+    ror mask2+3
+    sec
+    ror char1
+    ror char2
+    sec
+    ror char1+1
+    ror char2+1
+    sec
+    ror char1+2
+    ror char2+2
+    sec
+    ror char1+3
+    ror char2+3
+    dex
+    bne MakeMask01
+MaskOK01
+    ; here x=0
+;    lda Erase
+;    beq CharLoopi  ; it works, because x=0
+;    lda #$ff
+;    ldx #3
+;EmptyChar
+;    sta char1,x
+;    sta char2,x
+;    dex
+;    bpl EmptyChar
+	ldx #0
+CharLoopi4x4
+    lda (xbyte),y
+    ora mask1,x	
+    and char1,x
+    sta (xbyte),y
+    iny
+    lda (xbyte),y
+    ora mask2,x	
+    and char2,x
+    sta (xbyte),y
+    dey
+    adw xbyte #screenBytes
+    inx
+	cpx #4
+    bne CharLoopi4x4
+EndPut4x4
     rts
 .endp
 
