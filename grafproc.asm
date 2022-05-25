@@ -1333,86 +1333,26 @@ CharLoopi
     inx
     cpx #8
     bne CharLoopi
+EndPutChar
     rts
 .endp
 ; ------------------------------------------
-.proc PutChar4x4  
+.proc PutChar4x4
 ; puts 4x4 pixels char on the graphics screen
 ; in: xdraw, ydraw (upper left corner of the char)
 ; in: CharCode4x4 (.sbyte)
-;--------------------------------------------------
-    lda plot4x4color
-    sta color
-
-
-; calculating address of the first byte
-    mva #4 LoopCounter4x4
-    lda CharCode4x4
-    and #1
-    sta nibbler4x4
-    lda CharCode4x4
-    ror
-    ; in carry there is which nibble of the byte is to be taken
-    clc
-    adc #(3*32)
-    sta y4x4
-nextline4x4
-    mva #4 Xcounter4x4
-    ldy y4x4
-    lda font4x4,y ;there was a problem with OMC here, but it works now
-
-    ldx nibbler4x4
-    beq uppernibble
-
-    asl
-    asl
-    asl
-    asl
-uppernibble
-    rol
-    sta StoreA4x4
-    bcs EmptyPixel ; the font I drawn is in inverse ...
-    ;lda plot4x4color  ;these lines are not necessary
-    ;sta color  ;if a plots are one color only
-    jsr plot
-    ;jmp Loop4x4Continued
-EmptyPixel
-    ;lda #1   ;reverse color (color==1-color)
-    ;sec
-    ;sbc plot4x4color
-    ;sta color
-    ;jsr plot
-    ;this is turned off for speed
-    ;anyway we assume the text is being drawn
-    ;over an empty space
-Loop4x4Continued
-    inw xdraw
-    lda StoreA4x4
-    dec Xcounter4x4
-    ldx Xcounter4x4
-    bne uppernibble
-    ; here we have on screen one line of the char
-    inw ydraw
-    sbw xdraw #4
-    sbw y4x4 #32
-    dec:lda LoopCounter4x4
-    bne nextline4x4
-
-    rts
-.endp
-;--------------------------------------------------
-.proc PutChar4x4FULL
-; puts 4x4 pixels char on the graphics screen
-; in: xdraw, ydraw (upper left corner of the char)
-; in: CharCode4x4 (.sbyte)
-; this routine works just like PutChar4x4,
-; but this time all pixels are being drawn
+; all pixels are being drawn
 ; (empty and not empty)
 ;--------------------------------------------------
     cpw ydraw #(screenheight-4)
-    jcs EndPut4x4
+    jcs TypeChar.EndPutChar ;nearest RTS
     cpw xdraw #(screenwidth-4)
-    jcs EndPut4x4 ;nearest RTS
+    jcs TypeChar.EndPutChar ;nearest RTS
+	lda plot4x4color
+	beq FontColor0
+	lda #$ff		; better option to check (plot4x4color = $00 or $ff)
+	sta plot4x4color
+FontColor0
     ; char to the table
     lda CharCode4x4
     and #1
@@ -1502,26 +1442,22 @@ MakeMask01
     dex
     bne MakeMask01
 MaskOK01
-    ; here x=0
-;    lda Erase
-;    beq CharLoopi  ; it works, because x=0
-;    lda #$ff
-;    ldx #3
-;EmptyChar
-;    sta char1,x
-;    sta char2,x
-;    dex
-;    bpl EmptyChar
 	ldx #0
 CharLoopi4x4
     lda (xbyte),y
     ora mask1,x	
+	bit plot4x4color
+	bpl PutInColor0_1	; only mask - no char
     and char1,x
+PutInColor0_1
     sta (xbyte),y
     iny
     lda (xbyte),y
     ora mask2,x	
+ 	bit plot4x4color
+	bpl PutInColor0_2	; only mask - no char
     and char2,x
+PutInColor0_2
     sta (xbyte),y
     dey
     adw xbyte #screenBytes

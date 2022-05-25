@@ -1355,7 +1355,8 @@ TypeLine4x4Loop
     sta CharCode4x4
     mwa LineXdraw Xdraw
     mva LineYdraw Ydraw
-    jsr PutChar4x4FULL ;type empty pixels as well!
+	mva #1 plot4x4color
+    jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
     inc LineCharNr
     jmp TypeLine4x4Loop
