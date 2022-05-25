@@ -1466,9 +1466,9 @@ GetLower4bits
 
 ;---
     ldy xbyte
-    lda ydraw ; y = y - 7 because left lower. shouldn't it be 8?
+    lda ydraw ; y = y - 3 because left lower.
     sec
-    sbc #7
+    sbc #3
     tax
 
     lda linetableL,x
