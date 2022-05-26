@@ -1374,8 +1374,8 @@ EndOfTypeLine4x4
     mwa Xdraw xk
     mva Ydraw yc
 
-    mva #15 fs  ; temp, how many times blink the billboard
-@
+    mva #20 fs  ; temp, how many times blink the billboard
+seppuku_loop
       lda fs
       and #$01
       sta plot4x4color
@@ -1400,12 +1400,10 @@ EndOfTypeLine4x4
       mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
       jsr TypeLine4x4
-      
-      dec fs
-    bne @-
-   
+
     ;clean seppuku
-    mva #3 fs
+    
+    mva #3 dx
     mva #4 ResultY
 @
       mva #1 plot4x4color
@@ -1415,8 +1413,11 @@ EndOfTypeLine4x4
       jsr TypeLine4x4
       adb ResultY  #4 ;next line
   
-      dec fs
-    bne @-
+      dec dx
+      bne @-
+
+     dec fs
+    jne seppuku_loop
 
     ;restore vars
     mva yc Ydraw
