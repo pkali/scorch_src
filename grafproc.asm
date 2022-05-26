@@ -672,7 +672,7 @@ DoNotDrawTankNr
     rts
 
 ;--------------------------------------------------
-drawmountains .proc
+.proc drawmountains 
 ;--------------------------------------------------
 
     mwa #0 xdraw
@@ -691,7 +691,6 @@ NoMountain
     inw xdraw
     cpw xdraw #screenwidth
     bne drawmountainsloop
-
     rts
 ;--------------------------------------------------
 drawmountainspixel
@@ -713,7 +712,7 @@ drawmountainspixelloop
     rts
 .endp
 ;--------------------------------------------------
-SoilDown2 .proc
+.proc SoilDown2
 ;--------------------------------------------------
 
 ; how it is supposed to work:
@@ -842,7 +841,7 @@ ColumnIsReady
     rts
 .endp
 ;--------------------------------------------------
-calculatemountains .proc
+.proc calculatemountains
 ;--------------------------------------------------
     mwa #0 xdraw
 
@@ -944,7 +943,7 @@ EndDrawing
 .endp
 ; ****************************************************
 ;--------------------------------------------------
-calculatemountains0 .proc
+.proc calculatemountains0
 ; Only for testing - makes ground flat (0 pixels)
 ; and places tanks on it
 ; remember to remove in final compilation :)
@@ -969,7 +968,7 @@ SetYofNextTank
 .endp
 ; ****************************************************
 ; -----------------------------------------
-unPlot .proc
+.proc unPlot
 ; plots a point and saves the plotted byte, reverts the previous plot.
 ; -----------------------------------------
     ldx #0 ; only one pixel
@@ -1073,7 +1072,7 @@ EndOfUnPlot
     rts
 .endp
 ; -----------------------------------------
-plot .proc ;plot (xdraw, ydraw, color)
+.proc plot  ;plot (xdraw, ydraw, color)
 ; color == 1 --> put pixel
 ; color == 0 --> erase pixel
 ; this is one of the most important routines in the whole
@@ -1133,11 +1132,10 @@ ClearPlot
     rts
 .endp
 ; -----------------------------------------
-point .proc
+.proc point
 ; -----------------------------------------
     ; checks state of the pixel (coordinates in xdraw and ydraw)
     ; result is in A (zero or appropriate bit is set)
-
 
     ; let's calculate coordinates from xdraw and ydraw
     mwa xdraw xbyte
@@ -1170,9 +1168,8 @@ point .proc
 	eor bittable,x
     rts
 .endp
-
 ;--------------------------------------------------
-DrawLine .proc
+.proc DrawLine
 ;--------------------------------------------------
     mva #0 ydraw+1
     lda #screenheight
@@ -1184,14 +1181,13 @@ DrawLine .proc
     jmp IntoDraw    ; jumps inside Draw routine
     ; because one pixel is already plotted
 
-
 loopdraw
 
     lda (xbyte),y
 	and bittable2,x
     sta (xbyte),y
-IntoDraw   adw xbyte #screenBytes
-
+IntoDraw
+	adw xbyte #screenBytes
     dec tempbyte01
     bne loopdraw
     rts
@@ -1339,8 +1335,9 @@ EndPutChar
 ; ------------------------------------------
 .proc PutChar4x4
 ; puts 4x4 pixels char on the graphics screen
-; in: xdraw, ydraw (upper left corner of the char)
+; in: xdraw, ydraw (LOWER left corner of the char)
 ; in: CharCode4x4 (.sbyte)
+; in: plot4x4color (0/1)
 ; all pixels are being drawn
 ; (empty and not empty)
 ;--------------------------------------------------
@@ -1374,18 +1371,18 @@ Upper4bits
 CopyChar
     lda (fontind),y	; Y must be 0 !!!!
 	bit nibbler4x4
-	bmi GetLower4bits
-	ror
-	ror
-	ror
-	ror
-GetLower4bits
-	ora #$f0
+	bpl GetUpper4bits
+	rol
+	rol
+	rol
+	rol
+GetUpper4bits
+	ora #$0f
     sta char1,x
     lda #$ff
     sta char2,x
     ; and 4  bytes as a mask
-	lda #$0f
+	lda #$f0
     sta mask1,x
     lda #$00
     sta mask2,x
