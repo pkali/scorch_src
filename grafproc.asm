@@ -1341,10 +1341,11 @@ EndPutChar
 ; all pixels are being drawn
 ; (empty and not empty)
 ;--------------------------------------------------
-    cpw ydraw #(screenheight-4)
-    jcs TypeChar.EndPutChar ;nearest RTS
-    cpw xdraw #(screenwidth-4)
-    jcs TypeChar.EndPutChar ;nearest RTS
+    ; cpw ydraw #(screenheight-4)
+    ; jcs TypeChar.EndPutChar ;nearest RTS
+    ; cpw xdraw #(screenwidth-4)
+    ; jcs TypeChar.EndPutChar ;nearest RTS
+	; checks ommited.
 	lda plot4x4color
 	beq FontColor0
 	lda #$ff		; better option to check (plot4x4color = $00 or $ff)
