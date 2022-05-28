@@ -214,9 +214,7 @@ FunkyBombLoop
     lda random
     lsr
     and #%00011111
-    bcc DoNotEor
-    eor #$ff
-DoNotEor
+    scc:eor #$ff
     sta Angle
 
     lda #0
@@ -231,6 +229,7 @@ DoNotEor
     lda HitFlag
     beq NoExplosionInFunkyBomb
       mva #sfx_baby_missile sfx_effect
+      mva #11 ExplosionRadius
       jsr xmissile
 NoExplosionInFunkyBomb
     dec FunkyBombCounter
@@ -1556,7 +1555,7 @@ RepeatIfSmokeTracer
     stx LeapFrogAngle ; we will need it later
 
     ;Angle works like this:
-    ;0 'degrees' is sraight up
+    ;0 'degrees' is straight up
     ;90 'degrees' is horizontally right
     ;255 is straight up (same as 0)
     ;255-90 (165) horizontally left
@@ -1734,13 +1733,13 @@ FlightLeft
     lda goleft
     bne FlightsLeft ;blow on bullet flighting left
     lda WindOrientation
-    bne WindToLeft
+    bne LWindToRight
     beq LWindToLeft
 FlightsLeft
     lda WindOrientation
     beq LWindToRight
-LWindToLeft
 
+LWindToLeft
     ; here Wind to right, bullet goes right as well, so vx=vx+Wind
     ; here Wind to left, bullet goes left as well, so vx=vx+Wind
     clc
@@ -1757,23 +1756,23 @@ LWindToLeft
     adc #0
     sta vx+3
     jmp @+
-WindToLeft
+
 LWindToRight
-      ;Wind to left, bullet right, so vx=vx-Wind
-      ;Wind to right, bullet left, so vx=vx-Wind
-      sec
-      lda vx
-      sbc Wind
-      sta vx
-      lda vx+1
-      sbc Wind+1
-      sta vx+1
-      lda vx+2
-      sbc #0
-      sta vx+2
-      lda vx+3
-      sbc #0
-      sta vx+3
+    ;Wind to left, bullet right, so vx=vx-Wind
+    ;Wind to right, bullet left, so vx=vx-Wind
+    sec
+    lda vx
+    sbc Wind
+    sta vx
+    lda vx+1
+    sbc Wind+1
+    sta vx+1
+    lda vx+2
+    sbc #0
+    sta vx+2
+    lda vx+3
+    sbc #0
+    sta vx+3
 @
     mwa xtrajold+1 xdraw
     mwa ytrajold+1 ydraw
@@ -1813,8 +1812,7 @@ SkipCollisionCheck
     jsr UnPlot
 
 NoUnPlot
-    ; jsr PlotPointer
-  
+
     jmp Loopi
 
 Hit
@@ -1886,7 +1884,7 @@ SecondFlight .proc
     sbc #0
     sta ytraj+2
 	
-    ldy #100
+    ldy #100           ; ???
 	mva #1 tracerflag  ; I do not know (I mean I think I know ;) )
 	                   ; 10 years later - I do not know!!!
                        ; 20 years later - still do not know :]
@@ -1975,12 +1973,10 @@ MIRVcopyParameters
     ldx #$FF ; it will turn 0 in a moment anyway
     stx MirvMissileCounter
 mrLoopi
-    inc MirvMissileCounter
-    lda MirvMissileCounter
+    inc:lda MirvMissileCounter
     cmp #5
-    bne mrLoopix
-    mva #0 MirvMissileCounter
-mrLoopix
+    sne:mva #0 MirvMissileCounter
+
     ldx MirvMissileCounter
     ; Y changes only for bullet number 0
     ; because rest of the bullets have the same Y (height)
@@ -2142,7 +2138,7 @@ MIRVcheckCollision
     lda xtraj02,x
     adc #>mountaintable
     sta temp+1
-    ; adw mountaintable --- it does not work!!!!!!!! and should! (OMC bug?) #temp
+
     ldy #0
     lda ytraj+1
     cmp (temp),y
@@ -2290,9 +2286,9 @@ CalculateExplosionRange0
     lda #0
     sta RangeRight
     sta RangeRight+1
-    mva #11 ExplosionRadius
+    mva #11 ExplosionRadius  ; what is this magic value?
 ;--------------------------------------------------
-CalculateExplosionRange .proc
+.proc CalculateExplosionRange
 ;--------------------------------------------------
 ;calculates total horizontal range of explosion by
 ;"summing up" ranges of all separate explosions

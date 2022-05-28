@@ -18,7 +18,7 @@ CashOptionL ;(one zero less than on the screen)
 CashOptionH   
     .by 0,>200,>500,>800,>1000
 GravityTable   .by 10,20,25,30,40
-MaxWindTable   .by 5,20,40,60,80
+MaxWindTable   .by 5,20,40,70,99
 RoundsTable    .by 10,20,30,40,50
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
