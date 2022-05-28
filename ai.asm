@@ -123,6 +123,7 @@ tankIsOnTheRight
 forceNow
     mwa #100 RandBoundaryLow
     mwa #800 RandBoundaryHigh 
+    ldx TankNr
     jsr RandomizeForce
 
 endo
