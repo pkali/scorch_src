@@ -123,11 +123,11 @@ tankIsOnTheRight
 forceNow
     mwa #100 RandBoundaryLow
     mwa #800 RandBoundaryHigh 
-    ldx TankNr
+    ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce
 
 endo
-	;ldx TankNr ;this is possibly not necessary
+	ldx TankNr ;this is possibly not necessary
 	lda NewAngle
 	sta PreviousAngle,x
 	lda EnergyTableL,x

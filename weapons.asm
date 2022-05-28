@@ -544,7 +544,7 @@ DiggerCharacter
     sbc EndOfTheBarrelY,y
     sta ybyte
     mva #0 ybyte+1
-    mwa #Drawplot DrawJumpAddr
+    mva #0 drawFunction
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
@@ -615,7 +615,7 @@ ExplosionLoop2
         
 ;check tanks' distance from the centre of the explosion
 
-    mwa #DrawLen DrawJumpAddr
+    mva #%10000000 drawFunction
     ;the above switches Draw to measuring length
     ;trick is easy - how many pixels does it take to draw
     ;a line from one point to another
@@ -1535,7 +1535,7 @@ noSmokeTracer
 RepeatIfSmokeTracer		
     mwa ytraj+1 Ytrajold+1
     mwa xtraj+1 Xtrajold+1
-    mwa #DrawCheck DrawJumpAddr
+    mwa #%01000000 drawFunction
 
     lda #0  
     sta Result

@@ -214,37 +214,20 @@ LineGoesLeft
     ; line goes left - we are reversing X
     sbw xtempDRAW temp xdraw ; XI
 PutPixelinDraw
-    jsr DrawJumpPad
-; end of the special PLOT for DRAW
-
-    ; XI=XI+1
-    ; UNTIL XI=XK
-    inw XI
-    cpw XI XK
-    jne DrawLoop
-
-EndOfDraw
-    mwa xtempDRAW xdraw
-    mva ytempDRAW ydraw
-    rts
-.endp
-
-;-------------JumpPad-------------
-DrawJumpPad
-    jmp (DrawJumpAddr)
-Drawplot
-    jmp plot
-DrawLen
-    inw LineLength
-    rts
-;-------------JumpPad-------------
     
-DrawCheck .proc
-	lda tracerflag
-	ora SmokeTracerFlag
+    ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
+    bit drawFunction
+    bpl @+
+    inw LineLength
+    bne ContinueDraw  ; ==jmp
+@
+    bvc @+
+DrawCheck
+    lda tracerflag
+    ora SmokeTracerFlag
 yestrace
-	beq notrace
-	jsr plot
+    beq notrace
+    jsr plot
 notrace
 ;aftertrace
     lda HitFlag
@@ -267,14 +250,26 @@ CheckCollisionDraw
     cmp (temp),y
     bcc StopHitChecking
 
-    mva #1 HitFlag
     mwa xdraw XHit
     mwa ydraw YHit
-
-
+    mva #1 HitFlag
 StopHitChecking
+    jmp ContinueDraw
+@
+    jsr plot   
+
+ContinueDraw
+    ; XI=XI+1
+    ; UNTIL XI=XK
+    inw XI
+    cpw XI XK
+    jne DrawLoop
+
+EndOfDraw
+    mwa xtempDRAW xdraw
+    mva ytempDRAW ydraw
     rts
-.endp 
+.endp
 
 ;--------------------------------------------------
 circle .proc ;fxxxing good circle drawing :) 

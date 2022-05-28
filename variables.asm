@@ -33,6 +33,8 @@ RoundNrDisplay
     .byte $ff
 
 variablesStart  ; zeroing starts here
+drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
+;-------------- 
 escFlag .ds 1
 ;-------------- 
 sfx_effect .ds 1
@@ -159,7 +161,6 @@ sandhogflag .DS 1 ; (0 digger, 8 sandhog)
 ;ofdirt
 magic  .DS 2 ; was tempor2, but it was not compiling!!! (bug in OMC65)
 ;draw
-DrawJumpAddr .DS 2
 HowToDraw .DS 1
     ; bits here mean
     ; 0 - negative X (go up)
