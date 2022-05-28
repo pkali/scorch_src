@@ -1376,9 +1376,10 @@ EndOfTypeLine4x4
 
     mva #20 fs  ; temp, how many times blink the billboard
 seppuku_loop
-      lda fs
-      and #$01
-      sta plot4x4color
+      lda CONSOL  ; turbo mode
+      cmp #6  ; START
+      sne:mva #1 fs  ; finish it     
+
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
       
       ;top frame
@@ -1419,6 +1420,7 @@ seppuku_loop
      dec fs
     jne seppuku_loop
 
+quit_seppuku
     ;restore vars
     mva yc Ydraw
     mwa xk Xdraw
