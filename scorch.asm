@@ -124,7 +124,7 @@ START
     bne START
 
     jsr EnterPlayerNames
-    jsr RandomizeSequence
+    jsr RandomizeSequence0
     ; for the round #1 shooting sequence is random
 
 MainGameLoop
@@ -257,7 +257,7 @@ skipzeroing
 	cpx #(singleRoundVarsEnd-singleRoundVars)
 	bne @-
 
-    ldx #5
+    ldx #(MaxPlayers-1)
 SettingEnergies
     lda #$00
     sta gainL,x
@@ -480,7 +480,7 @@ NextPlayerShoots
     ;before it shoots, the eXistenZ table must be
     ;updated accordingly to actual energy (was forgotten, sorry to ourselves)
 
-    ldx #5
+    ldx #(MaxPlayers-1)
 SeteXistenZ
     lda Energy,x
     sta eXistenZ,x
@@ -500,7 +500,7 @@ LP0
     ROR L1
     BCC B0
     CLC
-    ADC #10 ; multiplication by 10 (L2)
+    ADC #10 ; (L2) multiplication by 10
 B0  DEY
     BNE LP0
     ror
@@ -567,7 +567,7 @@ NoPlayerNoDeath
     jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
 .endp
 ;---------------------------------
-PlayerXdeath
+.proc PlayerXdeath
 
     ; this tank should not explode anymore:
     ; there is 0 in A, and Tank Number in X, so...
@@ -591,7 +591,6 @@ PlayerXdeath
     sta ResultsTable,x
     inc CurrentResult
 
-
     mva #sfx_death_begin sfx_effect
 ;RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
@@ -607,8 +606,6 @@ PlayerXdeath
     mva #0 plot4x4color
     jsr DisplayOffensiveTextNr
 
-
-  
     ; calculate position of the explosion (the post-death one)
     ldx TankTempY
     clc
@@ -656,6 +653,7 @@ MetodOfDeath
 
 
     jmp MainRoundLoop.AfterExplode
+.endp
 
 ;--------------------------------------------------
 .proc DecreaseEnergyX
@@ -909,6 +907,18 @@ lab2
 	jmp SYSVBV
 .endp
 ;----------------------------------------------
+.proc RandomizeSequence0
+    ldx #0
+@     txa
+      sta TankSequence,x
+      inx
+      cpx #MaxPlayers
+    bne @-
+    rts
+.endp
+
+
+
 .proc RandomizeSequence
 ; in: NumberOfPlayers
 ; out: TankSequence
