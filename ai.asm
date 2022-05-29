@@ -83,10 +83,13 @@ Shooter .proc
 	lda #(-90)
 @
 	sta NewAngle
-	
+
+	sec
 	lda PreviousEnergyL,x 
+	sbc #5
 	sta ForceTableL,x
-	lda PreviousEnergyH,x 
+	lda PreviousEnergyH,x
+	sbc #0 
 	sta ForceTableH,x
 	jmp endo
 

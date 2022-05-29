@@ -808,20 +808,20 @@ SetunPlots
     sta gtictls
     jsr PMoutofScreen
     lda TankColoursTable ; temporary colours of sprites under tanks
-    sta $2c0
+    sta COLPM0S
     lda TankColoursTable+1
-    sta $2c1
+    sta COLPM1S
     lda TankColoursTable+2
-    sta $2c2
+    sta COLPM2S
     lda TankColoursTable+3
-    sta $2c3
+    sta COLPM3S
     LDA TankColoursTable+4
     STA COLPF3S		; joined missiles (5th tank)
     mva #0 hscrol
 
 
     ;let the tanks be visible!
-    ldx #5
+    ldx #(maxPlayers-1)
     lda #1 ; tank is visible
 MakeTanksVisible
     sta eXistenZ,x
@@ -909,7 +909,7 @@ lab2
 	jmp SYSVBV
 .endp
 ;----------------------------------------------
-RandomizeSequence .proc
+.proc RandomizeSequence
 ; in: NumberOfPlayers
 ; out: TankSequence
 ; how: get random number lower than NumberOfPlayers
