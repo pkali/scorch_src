@@ -977,17 +977,17 @@ ToHighFill
     ldx TankNr
 
     ;Checking the maximal force
-    lda MaxEnergyTableH,x
-    cmp EnergyTableH,x
+    lda MaxForceTableH,x
+    cmp ForceTableH,x
     bne ContinueToCheckMaxForce2
-    lda MaxEnergyTableL,x
-    cmp EnergyTableL,x
+    lda MaxForceTableL,x
+    cmp ForceTableL,x
 ContinueToCheckMaxForce2
     bcs @+
-      lda MaxEnergyTableH,x
-      sta EnergyTableH,x
-      lda MaxEnergyTableL,x
-      sta EnergyTableL,x
+      lda MaxForceTableH,x
+      sta ForceTableH,x
+      lda MaxForceTableL,x
+      sta ForceTableL,x
 @
     jsr StatusDisplay ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
@@ -1058,36 +1058,36 @@ notpressedJoy
 pressedUp
     ;force increaseeee!
     ldx TankNr
-    inc EnergyTableL,x
+    inc ForceTableL,x
     bne CheckingMaxForce
-    inc EnergyTableH,x
+    inc ForceTableH,x
 CheckingMaxForce
 
     mva #sfx_set_power_1 sfx_effect
 
-    lda MaxEnergyTableH,x
-    cmp EnergyTableH,x
+    lda MaxForceTableH,x
+    cmp ForceTableH,x
     bne FurtherCheckMaxForce
-    lda MaxEnergyTableL,x
-    cmp EnergyTableL,x
+    lda MaxForceTableL,x
+    cmp ForceTableL,x
 FurtherCheckMaxForce
     jcs BeforeFire
 
-    lda MaxEnergyTableH,x
-    sta EnergyTableH,x
-    lda MaxEnergyTableL,x
-    sta EnergyTableL,x
+    lda MaxForceTableH,x
+    sta ForceTableH,x
+    lda MaxForceTableL,x
+    sta ForceTableL,x
 
     jmp BeforeFire
 
 CTRLPressedUp
     ldx TankNr
-    lda EnergyTableL,x
+    lda ForceTableL,x
     clc
     adc #10
-    sta EnergyTableL,x
+    sta ForceTableL,x
     bcc CheckingMaxForce
-    inc EnergyTableH,x
+    inc ForceTableH,x
     jmp CheckingMaxForce
 
 
@@ -1095,16 +1095,16 @@ pressedDown
     mva #sfx_set_power_1 sfx_effect
 
     ldx TankNr
-    dec EnergyTableL,x
-    lda EnergyTableL,x
+    dec ForceTableL,x
+    lda ForceTableL,x
     cmp #$ff
     bne @+
-      dec EnergyTableH,x
+      dec ForceTableH,x
       bpl @+
 ForceGoesZero
         lda #0
-        sta EnergyTableH,x
-        sta EnergyTableL,x
+        sta ForceTableH,x
+        sta ForceTableL,x
 @
     jmp BeforeFire
 
@@ -1113,11 +1113,11 @@ CTRLPressedDown
 
     ldx TankNr
     sec
-    lda EnergyTableL,x
+    lda ForceTableL,x
     sbc #10
-    sta EnergyTableL,x
+    sta ForceTableL,x
     jcs BeforeFire
-    dec EnergyTableH,x
+    dec ForceTableH,x
     bmi ForceGoesZero
     jmp BeforeFire
 
@@ -1221,9 +1221,9 @@ RandomizeOffensiveText
       sta Force+1
       bne AfterStrongShoot
 NotStrongShoot
-    lda EnergyTableL,x
+    lda ForceTableL,x
     sta Force
-    lda EnergyTableH,x
+    lda ForceTableH,x
     sta Force+1
 AfterStrongShoot
     lda #$0
@@ -1845,9 +1845,9 @@ SecondFlight .proc
 ; ---------------- copied code fragment from before firing. not too elegant.
 ; ---------------- get fire parameters again
     ldx TankNr
-    lda EnergyTableL,x
+    lda ForceTableL,x
     sta Force
-    lda EnergyTableH,x
+    lda ForceTableH,x
     sta Force+1
     lda #$0
     sta Force+2

@@ -84,14 +84,14 @@ TempResults
 CurrentResult
     .DS 1
 ;-----------------------------------
-EnergyTableL ;shooting Force of the tank during the round
+ForceTableL ;shooting Force of the tank during the round
     .DS [MaxPlayers]
-EnergyTableH
+ForceTableH
     .DS [MaxPlayers]  ;maxplayers=6
-MaxEnergyTableL ;Energy of the tank during the round
+MaxForceTableL ;Energy of the tank during the round
     ;(limes superior force of the Shoot)
     .DS [MaxPlayers] ;1000 is the default
-MaxEnergyTableH
+MaxForceTableH
     .DS [MaxPlayers]
 ;-----------------------------------
 
@@ -334,6 +334,7 @@ TextNumberOff .DS 1
 TankTempY
     .DS 1
 ;-------------- single round variables --------------
+singleRoundVars
 previousAngle
     .DS [MaxPlayers]
 previousEnergyL

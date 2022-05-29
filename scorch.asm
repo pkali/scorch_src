@@ -252,9 +252,9 @@ skipzeroing
 	lda #0
 	tax
 @
-	sta previousAngle,x
+	sta singleRoundVars,x
 	inx
-	cpx #(singleRoundVarsEnd-PreviousAngle)
+	cpx #(singleRoundVarsEnd-singleRoundVars)
 	bne @-
 
     ldx #5
@@ -271,13 +271,13 @@ SettingEnergies
     ; anything in eXistenZ table means that this tank exist
     ; in the given round
     lda #<1000
-    sta MaxEnergyTableL,x
+    sta MaxForceTableL,x
     lda #>1000
-    sta MaxEnergyTableH,x
+    sta MaxForceTableH,x
     lda #<350
-    sta EnergyTableL,x
+    sta ForceTableL,x
     lda #>350
-    sta EnergyTableH,x
+    sta ForceTableH,x
 
     ;lda #(255-45)
     ;it does not look good when all tanks have
@@ -505,9 +505,9 @@ B0  DEY
     BNE LP0
     ror
     ROR L1
-    STA MaxEnergyTableH,x
+    STA MaxForceTableH,x
     lda L1
-    sta MaxEnergyTableL,x
+    sta MaxForceTableL,x
 
     dex
     bpl SeteXistenZ
@@ -982,7 +982,7 @@ RandomizeAngle .proc ;
 .endp
 ;----------------------------------------------
 RandomizeForce  .proc
-; routine returns in EnergyTable/L/H
+; routine returns in ForceTable/L/H
 ; valid force of shooting for TankNr
 ; in X must be TankNr
 ; low and high randomize boundary passed as word value
@@ -990,36 +990,41 @@ RandomizeForce  .proc
 ; RandBoundaryHigh
 ;----------------------------------------------
 
-    lda MaxEnergyTableL,x
-    sta temp
-    lda MaxEnergyTableH,x
-    sta temp+1
-GetRandomAgain
     lda RANDOM
-    ; gets values in range(256,765)
     sta temp2
-    lda RANDOM   ; :)
+    lda RANDOM
     and #%00000011 ;(0..1023)
     sta temp2+1
 	
     cpw RandBoundaryLow temp2
-    bcs GetRandomAgain
+    bcs RandomizeForce
 
     cpw RandBoundaryHigh temp2
-    bcc GetRandomAgain
+    bcc RandomizeForce
 
-    cpw temp temp2
-    bcs EnergyInRange
-   
-    mwa temp temp2 
-    
-EnergyInRange
     lda temp2
-    sta EnergyTableL,x
+    sta ForceTableL,x
     lda temp2+1
-    sta EnergyTableH,x
-
+    sta ForceTableH,x
+    
+;---------
+LimitForce 
+; in X must be TankNr
+; cuts force to MaxForceTable
+    lda MaxForceTableH,x
+    cmp ForceTableH,x
+    bne @+
+    lda MaxForceTableL,x
+    cmp ForceTableL,x
+@   bcs @+
+   
+    lda MaxForceTableL,x
+    sta ForceTableL,x
+    lda MaxForceTableH,x
+    sta ForceTableH,x
+@
     rts
+
 .endp
 
 ;----------------------------------------------

@@ -1668,9 +1668,9 @@ FinishResultDisplay
     ;display Force
     ;=========================
     ldx TankNr
-    lda EnergyTableL,x
+    lda ForceTableL,x
     sta decimal
-    lda EnergyTableH,x
+    lda ForceTableH,x
     sta decimal+1
     mwa #textbuffer+40+34 displayposition
     jsr displaydec
