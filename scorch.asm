@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"141" ; number of this build (3 bytes)
+	dta d"142" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -124,7 +124,7 @@ START
     bne START
 
     jsr EnterPlayerNames
-    jsr RandomizeSequence0
+    jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 
 MainGameLoop

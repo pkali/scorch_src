@@ -47,6 +47,15 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 142
+2022-05-30
+Late build. The bugs we tried to squelch turned out to be more difficult than usual. Some progress has been made though even if it is not yet visible.
+- 4x4 font rewritten by @Pecusx as a prep for Y standarization. It makes the messages to appear faster. This is a good change.
+- https://github.com/pkali/scorch_src/issues/5 and #80 fixed (again) - no funkybomb traces staying on the screen
+- https://github.com/pkali/scorch_src/issues/70 too strong Shooters fixed
+- https://github.com/pkali/scorch_src/issues/63 - tank say goodbye when (mostly) visible
+- several other small changes and improvements that will pay off in the following releases.
+
 ###### Build 141
 2022-05-22
 Debug build. Thanks to all testers for finding numerous bugs. We tried to fix some of them and we have introduced some new for your enjoyment.
