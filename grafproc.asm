@@ -4,7 +4,7 @@
 
 
 ;--------------------------------------------------
-draw .proc ;;fuxxing good draw :) 
+.proc draw ;;fuxxing good draw :) 
 ;--------------------------------------------------
 ;creditz to Dr Jankowski / MIM U.W.
 ; (xi,yi)-----(xk,yk)

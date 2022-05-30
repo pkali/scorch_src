@@ -2091,7 +2091,7 @@ mrskip08
     bmi MIRVcheckX   ;but not that accurately....
     lda ytraj+1
     cmp #screenheight
-    jcs mrEndOfFlight ; if smaller than screenheight then continue (and it will always fall down...)
+    jcs MIRVcheckCollision ; if smaller than screenheight then continue (and it will always hit...)
 MIRVcheckX
     lda xtraj02,x
     cmp #>screenwidth
