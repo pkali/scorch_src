@@ -252,6 +252,8 @@ CheckCollisionDraw
 
     mwa xdraw XHit
 	lda (temp),y
+	sec
+	sbc #1
 	sta YHit
 	mva #0 YHit+1
     ;mwa ydraw YHit

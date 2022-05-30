@@ -1815,7 +1815,7 @@ NoUnPlot
 
 Hit
     mwa XHit xdraw
-    mva YHit ydraw	; one byte now
+    mwa YHit ydraw
 
     jsr unPlot
 EndOfFlight
@@ -2163,7 +2163,7 @@ mrHit
     ; we have to make unPlot over the screen (to initialise it)
     ; before actual explosion
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     jsr unPlot.unPlotAfterX
     ldx MirvMissileCounter
     ldy #0
@@ -2178,6 +2178,8 @@ mrHit
     adc #>mountaintable
     sta temp+1
     lda (temp),y
+	sec
+	sbc #1
     sta ydraw
     sty ydraw+1  ;we know that y=0
     jsr missile ; explode ....
