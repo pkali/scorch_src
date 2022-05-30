@@ -560,6 +560,15 @@ NoPlayerNoDeath
     lda #0
     sta FallDown1
     sta FallDown2
+    sta ydraw+1
+    ; get position of the tank
+    ldx TankNr
+    lda xtankstableL,x
+    sta xdraw
+    lda xtankstableH,x
+    sta xdraw+1
+    lda yTanksTable,x
+    sta ydraw
     lda #1  ; Missile
     jsr ExplosionDirect
     jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku

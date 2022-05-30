@@ -272,7 +272,7 @@ EndOfDraw
 .endp
 
 ;--------------------------------------------------
-circle .proc ;fxxxing good circle drawing :) 
+.proc circle ;fxxxing good circle drawing :) 
 ;--------------------------------------------------
 ;Turbo Basic source
 ; R=30

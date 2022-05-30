@@ -13,7 +13,7 @@
     ldx TankNr
     lda ActiveWeapon,x
 .endp
-ExplosionDirect .proc
+.proc ExplosionDirect
     asl
     tax
     lda ExplosionRoutines+1,x
@@ -657,9 +657,7 @@ DistanceCheckLoop
     ;multiply difference by 8
     clc
     adc #1
-    asl
-    asl
-    asl
+    :3 asl
     tay
     jsr DecreaseEnergyX
 

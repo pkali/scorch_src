@@ -128,11 +128,11 @@ xtankstableH
     .DS [MaxPlayers]
 ytankstable ;Y positions of tanks (lower left point)
     .DS [MaxPlayers]
-LowResDistances ; coarse stank positions divided by 4 (to be in just one byte)
+LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS [MaxPlayers]
 ;-----------------------------------
 Erase    .DS 1 ; if 1 only mask of the character is printed
-                 ; on the graphics screen. if 0 character is printed normally
+               ; on the graphics screen. if 0 character is printed normally
 
 ;-----------------------------------
 RangeLeft  .DS 2 ;range of the soil to be fallen down
