@@ -1129,7 +1129,7 @@ pressedLeft
     cmp #$ff ; if angle goes through 0 we clear the barrel
     bne NotThrough90DegreesLeft
     mva #$2e CharCode
-    jsr drawtankNrX
+    jsr DrawTankNr.drawtankNrX
 NotThrough90DegreesLeft
     cmp #(255-91)
     jne BeforeFire
@@ -1144,7 +1144,7 @@ pressedRight
     lda AngleTable,x
     bne NotThrough90DegreesRight
     mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    jsr drawtankNrX
+    jsr DrawTankNr.drawtankNrX
 NotThrough90DegreesRight
     cmp #91
     jne BeforeFire

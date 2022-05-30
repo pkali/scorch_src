@@ -555,11 +555,10 @@ UnequalTanks
     bpl CheckNextTank
     rts
 .endp
-;-------------------------------------------------
-drawtanks
-;-------------------------------------------------
 
-
+;-------------------------------------------------
+.proc drawtanks
+;-------------------------------------------------
     lda tanknr
     pha
     ldx #$00
@@ -576,8 +575,9 @@ DrawNextTank
     sta tankNr
 
     rts
+.endp
 ;---------
-drawtanknr
+.proc DrawTankNr
     ldx tanknr
     ; let's check the energy
     lda eXistenZ,x
@@ -665,11 +665,11 @@ ZeroesToGo
 NoPlayerMissile
 DoNotDrawTankNr
     rts
+.endp
 
 ;--------------------------------------------------
 .proc drawmountains 
 ;--------------------------------------------------
-
     mwa #0 xdraw
     mwa #mountaintable modify
 	mva #1 color
@@ -835,6 +835,7 @@ ColumnIsReady
     mva #sfx_silencer sfx_effect
     rts
 .endp
+
 ;--------------------------------------------------
 .proc calculatemountains
 ;--------------------------------------------------
@@ -962,6 +963,7 @@ SetYofNextTank
    rts
 .endp
 ; ****************************************************
+
 ; -----------------------------------------
 .proc unPlot
 ; plots a point and saves the plotted byte, reverts the previous plot.
@@ -1066,6 +1068,7 @@ SkipThisPlot
 EndOfUnPlot
     rts
 .endp
+
 ; -----------------------------------------
 .proc plot  ;plot (xdraw, ydraw, color)
 ; color == 1 --> put pixel
@@ -1100,11 +1103,7 @@ MakePlot
     lsr  
     lsr
     tay ;save
-;---
-     
-
-
-
+    ;---
     ldx ydraw
     lda linetableL,x
     sta xbyte
@@ -1126,6 +1125,7 @@ ClearPlot
     sta (xbyte),y
     rts
 .endp
+
 ; -----------------------------------------
 .proc point
 ; -----------------------------------------
@@ -1134,7 +1134,6 @@ ClearPlot
 
     ; let's calculate coordinates from xdraw and ydraw
     mwa xdraw xbyte
-
 
     lda xbyte
     and #$7
@@ -1147,9 +1146,7 @@ ClearPlot
     lsr  
     lsr
     tay ;save
-
-;---
-
+    ;---
     ldx ydraw
     lda linetableL,x
     sta xbyte
@@ -1163,6 +1160,7 @@ ClearPlot
 	eor bittable,x
     rts
 .endp
+
 ;--------------------------------------------------
 .proc DrawLine
 ;--------------------------------------------------
@@ -1174,20 +1172,19 @@ ClearPlot
     jsr plot.MakePlot
     ;rts
     jmp IntoDraw    ; jumps inside Draw routine
-    ; because one pixel is already plotted
+                    ; because one pixel is already plotted
 
-loopdraw
-
-    lda (xbyte),y
-	and bittable2,x
-    sta (xbyte),y
+@
+      lda (xbyte),y
+	  and bittable2,x
+      sta (xbyte),y
 IntoDraw
-	adw xbyte #screenBytes
-    dec tempbyte01
-    bne loopdraw
+	  adw xbyte #screenBytes
+      dec tempbyte01
+      bne @-
     rts
 .endp
-;
+
 ; ------------------------------------------
 .proc TypeChar
 ; puts char on the graphics screen
@@ -1238,7 +1235,6 @@ CopyMask
     lsrw xbyte ; div 8
     rorw xbyte
     rorw xbyte
-
 ;---
     ldy xbyte
 
@@ -1255,46 +1251,15 @@ CopyMask
     ldx ybit
     beq MaskOK00
 MakeMask00
-    lsr mask1
-    ror mask2
-    lsr mask1+1
-    ror mask2+1
-    lsr mask1+2
-    ror mask2+2
-    lsr mask1+3
-    ror mask2+3
-    lsr mask1+4	
-    ror mask2+4
-    lsr mask1+5
-    ror mask2+5
-    lsr mask1+6	
-    ror mask2+6
-    lsr mask1+7
-    ror mask2+7
-    sec
-    ror char1
-    ror char2
-    sec
-    ror char1+1
-    ror char2+1
-    sec
-    ror char1+2
-    ror char2+2
-    sec
-    ror char1+3
-    ror char2+3
-    sec
-    ror char1+4
-    ror char2+4
-    sec
-    ror char1+5
-    ror char2+5
-    sec
-    ror char1+6
-    ror char2+6
-    sec
-    ror char1+7
-    ror char2+7
+    .rept 8
+      lsr mask1+#
+      ror mask2+#
+    .endr
+    .rept 8
+      sec
+      ror char1+#
+      ror char2+#
+    .endr
     dex
     bne MakeMask00
 MaskOK00
@@ -1327,6 +1292,7 @@ CharLoopi
 EndPutChar
     rts
 .endp
+
 ; ------------------------------------------
 .proc PutChar4x4
 ; puts 4x4 pixels char on the graphics screen
@@ -1368,10 +1334,7 @@ CopyChar
     lda (fontind),y	; Y must be 0 !!!!
 	bit nibbler4x4
 	bpl GetUpper4bits
-	rol
-	rol
-	rol
-	rol
+	:4 rol
 GetUpper4bits
 	ora #$0f
     sta char1,x
@@ -1396,7 +1359,6 @@ GetUpper4bits
     lsrw xbyte ; div 8
     rorw xbyte
     rorw xbyte
-
 ;---
     ldy xbyte
     lda ydraw ; y = y - 3 because left lower.
@@ -1412,26 +1374,15 @@ GetUpper4bits
     ldx ybit
     beq MaskOK01
 MakeMask01
-    lsr mask1
-    ror mask2
-    lsr mask1+1
-    ror mask2+1
-    lsr mask1+2
-    ror mask2+2
-    lsr mask1+3
-    ror mask2+3
-    sec
-    ror char1
-    ror char2
-    sec
-    ror char1+1
-    ror char2+1
-    sec
-    ror char1+2
-    ror char2+2
-    sec
-    ror char1+3
-    ror char2+3
+    .rept 4
+      lsr mask1+#
+      ror mask2+#
+    .endr
+    .rept 4
+      sec
+      ror char1+#
+      ror char2+#
+    .endr
     dex
     bne MakeMask01
 MaskOK01

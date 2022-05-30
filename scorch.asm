@@ -474,8 +474,8 @@ missed
     jsr DisplayOffensiveTextNr
 
 NextPlayerShoots
-    mva #1 Erase
-    jsr drawtanks
+    ;mva #1 Erase
+    ;jsr drawtanks
 
     ;before it shoots, the eXistenZ table must be
     ;updated accordingly to actual energy (was forgotten, sorry to ourselves)
@@ -514,11 +514,9 @@ B0  DEY
 
     ;was setup of maximum energy for players
 
-    mva #0 Erase
-    jsr drawtanks
+    ;mva #0 Erase
+    ;jsr drawtanks
 
-    ;inc TankNr
-    ;lda TankNr
     inc:lda TankSequencePointer
     cmp NumberOfPlayers
     bne PlayersAgain
@@ -1056,14 +1054,14 @@ rotateRight;older is lower
 	bne MoveBarrelToNewPosition
 
     mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    jsr drawtankNrX
+    jsr DrawTankNr.drawtankNrX
 	
 	jmp MoveBarrelToNewPosition
 rotateLeft
 	dec angleTable,x
 	bpl MoveBarrelToNewPosition
     	mva #$2e CharCode
-   	jsr drawtankNrX	
+   	jsr DrawTankNr.drawtankNrX	
 
 	jmp MoveBarrelToNewPosition
 	
