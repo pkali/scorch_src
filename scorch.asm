@@ -645,7 +645,7 @@ NoPlayerNoDeath
 MetodOfDeath
     lda random
     and #%00011111  ;  range 0-31
-	cmp #20 ; we have 20 weapons in table (from 0 to 19)
+	cmp #(weaponsOfDeathEnd-weaponsOfDeath) ; we have 20 weapons in table (from 0 to 19)
 	bcs MetodOfDeath
 	tay
 	lda weaponsOfDeath,y
