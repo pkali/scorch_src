@@ -1533,7 +1533,7 @@ noSmokeTracer
 RepeatIfSmokeTracer		
     mwa ytraj+1 Ytrajold+1
     mwa xtraj+1 Xtrajold+1
-    mwa #%01000000 drawFunction
+    mva #%01000000 drawFunction
 
     lda #0  
     sta Result

@@ -251,7 +251,10 @@ CheckCollisionDraw
     bcc StopHitChecking
 
     mwa xdraw XHit
-    mwa ydraw YHit
+	lda (temp),y
+	sta YHit
+	mva #0 YHit+1
+    ;mwa ydraw YHit
     mva #1 HitFlag
 StopHitChecking
     jmp ContinueDraw
