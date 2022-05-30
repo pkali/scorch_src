@@ -33,7 +33,7 @@ loop
 ArtificialIntelligence .proc ;
 ; A - skill of the TankNr
 ; returns shoot energy and angle in
-; EnergyTable/L/H and AngleTable
+; ForceTable/L/H and AngleTable
 ;----------------------------------------------
     asl
     tax
@@ -77,24 +77,22 @@ Shooter .proc
 	lda PreviousAngle,x
 	clc
 	adc #5
-	bmi leftQuadrant
+	bmi @+
 	cmp #90
-	bcc continue
+	bcc @+
 	lda #(-90)
-	bne continue
-leftQuadrant
-	
-
-
-continue
+@
 	sta NewAngle
-	
+
+	sec
 	lda PreviousEnergyL,x 
-	sta EnergyTableL,x
-	lda PreviousEnergyH,x 
-	sta EnergyTableH,x
-	
+	sbc #5
+	sta ForceTableL,x
+	lda PreviousEnergyH,x
+	sbc #0 
+	sta ForceTableH,x
 	jmp endo
+
 firstShoot
 	; compare the x position with the middle of the screen
 	lda xTanksTableL,x
@@ -108,7 +106,6 @@ firstShoot
 	and #$1F
 	clc
 	adc #5
-	;lda #45	
 
 	sta NewAngle
 	jmp forceNow
@@ -123,15 +120,17 @@ tankIsOnTheRight
 forceNow
     mwa #100 RandBoundaryLow
     mwa #800 RandBoundaryHigh 
+    ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce
 
 endo
-	;ldx TankNr ;this is possibly not necessary
+	ldx TankNr ;this is possibly not necessary
+    jsr RandomizeForce.LimitForce
 	lda NewAngle
 	sta PreviousAngle,x
-	lda EnergyTableL,x
+	lda ForceTableL,x
 	sta PreviousEnergyL,x 
-	lda EnergyTableH,x
+	lda ForceTableH,x
 	sta PreviousEnergyH,x
 	
 	; choose the best weapon

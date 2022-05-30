@@ -1355,7 +1355,8 @@ TypeLine4x4Loop
     sta CharCode4x4
     mwa LineXdraw Xdraw
     mva LineYdraw Ydraw
-    jsr PutChar4x4FULL ;type empty pixels as well!
+	mva #1 plot4x4color
+    jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
     inc LineCharNr
     jmp TypeLine4x4Loop
@@ -1373,11 +1374,12 @@ EndOfTypeLine4x4
     mwa Xdraw xk
     mva Ydraw yc
 
-    mva #15 fs  ; temp, how many times blink the billboard
-@
-      lda fs
-      and #$01
-      sta plot4x4color
+    mva #20 fs  ; temp, how many times blink the billboard
+seppuku_loop
+      lda CONSOL  ; turbo mode
+      cmp #6  ; START
+      sne:mva #1 fs  ; finish it     
+
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
       
       ;top frame
@@ -1399,12 +1401,10 @@ EndOfTypeLine4x4
       mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
       jsr TypeLine4x4
-      
-      dec fs
-    bne @-
-   
+
     ;clean seppuku
-    mva #3 fs
+    
+    mva #3 dx
     mva #4 ResultY
 @
       mva #1 plot4x4color
@@ -1414,9 +1414,13 @@ EndOfTypeLine4x4
       jsr TypeLine4x4
       adb ResultY  #4 ;next line
   
-      dec fs
-    bne @-
+      dec dx
+      bne @-
 
+     dec fs
+    jne seppuku_loop
+
+quit_seppuku
     ;restore vars
     mva yc Ydraw
     mwa xk Xdraw
@@ -1664,9 +1668,9 @@ FinishResultDisplay
     ;display Force
     ;=========================
     ldx TankNr
-    lda EnergyTableL,x
+    lda ForceTableL,x
     sta decimal
-    lda EnergyTableH,x
+    lda ForceTableH,x
     sta decimal+1
     mwa #textbuffer+40+34 displayposition
     jsr displaydec

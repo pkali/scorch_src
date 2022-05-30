@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"141" ; number of this build (3 bytes)
+	dta d"142" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -252,12 +252,12 @@ skipzeroing
 	lda #0
 	tax
 @
-	sta previousAngle,x
+	sta singleRoundVars,x
 	inx
-	cpx #(singleRoundVarsEnd-PreviousAngle)
+	cpx #(singleRoundVarsEnd-singleRoundVars)
 	bne @-
 
-    ldx #5
+    ldx #(MaxPlayers-1)
 SettingEnergies
     lda #$00
     sta gainL,x
@@ -271,13 +271,13 @@ SettingEnergies
     ; anything in eXistenZ table means that this tank exist
     ; in the given round
     lda #<1000
-    sta MaxEnergyTableL,x
+    sta MaxForceTableL,x
     lda #>1000
-    sta MaxEnergyTableH,x
+    sta MaxForceTableH,x
     lda #<350
-    sta EnergyTableL,x
+    sta ForceTableL,x
     lda #>350
-    sta EnergyTableH,x
+    sta ForceTableH,x
 
     ;lda #(255-45)
     ;it does not look good when all tanks have
@@ -474,13 +474,13 @@ missed
     jsr DisplayOffensiveTextNr
 
 NextPlayerShoots
-    mva #1 Erase
-    jsr drawtanks
+    ;mva #1 Erase
+    ;jsr drawtanks
 
     ;before it shoots, the eXistenZ table must be
     ;updated accordingly to actual energy (was forgotten, sorry to ourselves)
 
-    ldx #5
+    ldx #(MaxPlayers-1)
 SeteXistenZ
     lda Energy,x
     sta eXistenZ,x
@@ -500,25 +500,23 @@ LP0
     ROR L1
     BCC B0
     CLC
-    ADC #10 ; multiplication by 10 (L2)
+    ADC #10 ; (L2) multiplication by 10
 B0  DEY
     BNE LP0
     ror
     ROR L1
-    STA MaxEnergyTableH,x
+    STA MaxForceTableH,x
     lda L1
-    sta MaxEnergyTableL,x
+    sta MaxForceTableL,x
 
     dex
     bpl SeteXistenZ
 
     ;was setup of maximum energy for players
 
-    mva #0 Erase
-    jsr drawtanks
+    ;mva #0 Erase
+    ;jsr drawtanks
 
-    ;inc TankNr
-    ;lda TankNr
     inc:lda TankSequencePointer
     cmp NumberOfPlayers
     bne PlayersAgain
@@ -562,12 +560,21 @@ NoPlayerNoDeath
     lda #0
     sta FallDown1
     sta FallDown2
+    sta ydraw+1
+    ; get position of the tank
+    ldx TankNr
+    lda xtankstableL,x
+    sta xdraw
+    lda xtankstableH,x
+    sta xdraw+1
+    lda yTanksTable,x
+    sta ydraw
     lda #1  ; Missile
     jsr ExplosionDirect
     jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
 .endp
 ;---------------------------------
-PlayerXdeath
+.proc PlayerXdeath
 
     ; this tank should not explode anymore:
     ; there is 0 in A, and Tank Number in X, so...
@@ -591,7 +598,6 @@ PlayerXdeath
     sta ResultsTable,x
     inc CurrentResult
 
-
     mva #sfx_death_begin sfx_effect
 ;RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
@@ -607,8 +613,6 @@ PlayerXdeath
     mva #0 plot4x4color
     jsr DisplayOffensiveTextNr
 
-
-  
     ; calculate position of the explosion (the post-death one)
     ldx TankTempY
     clc
@@ -641,7 +645,7 @@ PlayerXdeath
 MetodOfDeath
     lda random
     and #%00011111  ;  range 0-31
-	cmp #20 ; we have 20 weapons in table (from 0 to 19)
+	cmp #(weaponsOfDeathEnd-weaponsOfDeath) ; we have 20 weapons in table (from 0 to 19)
 	bcs MetodOfDeath
 	tay
 	lda weaponsOfDeath,y
@@ -656,6 +660,7 @@ MetodOfDeath
 
 
     jmp MainRoundLoop.AfterExplode
+.endp
 
 ;--------------------------------------------------
 .proc DecreaseEnergyX
@@ -808,20 +813,20 @@ SetunPlots
     sta gtictls
     jsr PMoutofScreen
     lda TankColoursTable ; temporary colours of sprites under tanks
-    sta $2c0
+    sta COLPM0S
     lda TankColoursTable+1
-    sta $2c1
+    sta COLPM1S
     lda TankColoursTable+2
-    sta $2c2
+    sta COLPM2S
     lda TankColoursTable+3
-    sta $2c3
+    sta COLPM3S
     LDA TankColoursTable+4
     STA COLPF3S		; joined missiles (5th tank)
     mva #0 hscrol
 
 
     ;let the tanks be visible!
-    ldx #5
+    ldx #(maxPlayers-1)
     lda #1 ; tank is visible
 MakeTanksVisible
     sta eXistenZ,x
@@ -909,7 +914,19 @@ lab2
 	jmp SYSVBV
 .endp
 ;----------------------------------------------
-RandomizeSequence .proc
+.proc RandomizeSequence0
+    ldx #0
+@     txa
+      sta TankSequence,x
+      inx
+      cpx #MaxPlayers
+    bne @-
+    rts
+.endp
+
+
+
+.proc RandomizeSequence
 ; in: NumberOfPlayers
 ; out: TankSequence
 ; how: get random number lower than NumberOfPlayers
@@ -982,7 +999,7 @@ RandomizeAngle .proc ;
 .endp
 ;----------------------------------------------
 RandomizeForce  .proc
-; routine returns in EnergyTable/L/H
+; routine returns in ForceTable/L/H
 ; valid force of shooting for TankNr
 ; in X must be TankNr
 ; low and high randomize boundary passed as word value
@@ -990,36 +1007,41 @@ RandomizeForce  .proc
 ; RandBoundaryHigh
 ;----------------------------------------------
 
-    lda MaxEnergyTableL,x
-    sta temp
-    lda MaxEnergyTableH,x
-    sta temp+1
-GetRandomAgain
     lda RANDOM
-    ; gets values in range(256,765)
     sta temp2
-    lda RANDOM   ; :)
+    lda RANDOM
     and #%00000011 ;(0..1023)
     sta temp2+1
 	
     cpw RandBoundaryLow temp2
-    bcs GetRandomAgain
+    bcs RandomizeForce
 
     cpw RandBoundaryHigh temp2
-    bcc GetRandomAgain
+    bcc RandomizeForce
 
-    cpw temp temp2
-    bcs EnergyInRange
-   
-    mwa temp temp2 
-    
-EnergyInRange
     lda temp2
-    sta EnergyTableL,x
+    sta ForceTableL,x
     lda temp2+1
-    sta EnergyTableH,x
-
+    sta ForceTableH,x
+    
+;---------
+LimitForce 
+; in X must be TankNr
+; cuts force to MaxForceTable
+    lda MaxForceTableH,x
+    cmp ForceTableH,x
+    bne @+
+    lda MaxForceTableL,x
+    cmp ForceTableL,x
+@   bcs @+
+   
+    lda MaxForceTableL,x
+    sta ForceTableL,x
+    lda MaxForceTableH,x
+    sta ForceTableH,x
+@
     rts
+
 .endp
 
 ;----------------------------------------------
@@ -1041,14 +1063,14 @@ rotateRight;older is lower
 	bne MoveBarrelToNewPosition
 
     mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    jsr drawtankNrX
+    jsr DrawTankNr.drawtankNrX
 	
 	jmp MoveBarrelToNewPosition
 rotateLeft
 	dec angleTable,x
 	bpl MoveBarrelToNewPosition
     	mva #$2e CharCode
-   	jsr drawtankNrX	
+   	jsr DrawTankNr.drawtankNrX	
 
 	jmp MoveBarrelToNewPosition
 	

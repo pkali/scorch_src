@@ -18,7 +18,7 @@ CashOptionL ;(one zero less than on the screen)
 CashOptionH   
     .by 0,>200,>500,>800,>1000
 GravityTable   .by 10,20,25,30,40
-MaxWindTable   .by 5,20,40,60,80
+MaxWindTable   .by 5,20,40,70,99
 RoundsTable    .by 10,20,30,40,50
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
@@ -483,6 +483,7 @@ WhereToSlideTable
     .BY %000  ; 11111111
 
 EndOfTheBarrelX
+	; right angles from 0 (vertically up) to 90 (horizontally to the right)
     .by 4,4,4,4,4,4,4,4,4,4,4
     .by 5,5,5,5,5,5,5,5,5,5
     .by 6,6,6,6,6,6,6,6,6
@@ -492,15 +493,16 @@ EndOfTheBarrelX
     .by 7,7,7,7,7,7,7,7,7,7,7,7,7
     .by 7,7,7,7,7,7,7,7,7,7,7,7,7,7
 
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0					; not used
 
+	; left angles from 90 (horizontally to the left) to 1 (vertically up)
     .by 0,0,0,0,0,0,0,0,0,0,0,0,0,0
     .by 0,0,0,0,0,0,0,0,0,0,0,0,0
     .by 0,0,0,0,0,0,0,0,0,0
@@ -511,6 +513,7 @@ EndOfTheBarrelX
     .by 3,3,3,3,3,3,3,3,3,3,3
 
 EndOfTheBarrelY
+	; right angles from 0 (vertically up) to 90 (horizontally to the right)
     .by 7,7,7,7,7,7,7,7,7,7,7
     .by 7,7,7,7,7,7,7,7,7,7
     .by 7,7,7,7,7,7,7,7,7
@@ -520,15 +523,16 @@ EndOfTheBarrelY
     .by 4,4,4,4,4,4,4,4,4,4,4,4,4
     .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
 
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0,0,0,0,0,0,0
-    .by 0,0,0,0
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0,0,0,0,0,0,0		; not used
+    .by 0,0,0,0					; not used
 
+	; left angles from 90 (horizontally to the left) to 1 (vertically up)
     .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
     .by 4,4,4,4,4,4,4,4,4,4,4,4,4
     .by 5,5,5,5,5,5,5,5,5,5
@@ -884,7 +888,8 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Contact Trigger " ; 62
     dta d"White Flag      " ; 63
 weaponsOfDeath
-	dta 0,1,2,3,7,8,9,15,16,17,18,19,20,21,22,23,24,25,26,27
+	dta 1,2,3,7,15,16,17,18,19,20,21,22,23,24,25,26,27
+weaponsOfDeathEnd	
 joyToKeyTable
   ; .by  00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15
     .by $ff,$ff,$ff,$ff,$ff,$ff,$ff,$07,$ff,$ff,$ff,$06,$ff,$0f,$0e,$ff

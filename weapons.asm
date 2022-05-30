@@ -13,7 +13,7 @@
     ldx TankNr
     lda ActiveWeapon,x
 .endp
-ExplosionDirect .proc
+.proc ExplosionDirect
     asl
     tax
     lda ExplosionRoutines+1,x
@@ -214,9 +214,7 @@ FunkyBombLoop
     lda random
     lsr
     and #%00011111
-    bcc DoNotEor
-    eor #$ff
-DoNotEor
+    scc:eor #$ff
     sta Angle
 
     lda #0
@@ -231,6 +229,7 @@ DoNotEor
     lda HitFlag
     beq NoExplosionInFunkyBomb
       mva #sfx_baby_missile sfx_effect
+      mva #11 ExplosionRadius
       jsr xmissile
 NoExplosionInFunkyBomb
     dec FunkyBombCounter
@@ -545,7 +544,7 @@ DiggerCharacter
     sbc EndOfTheBarrelY,y
     sta ybyte
     mva #0 ybyte+1
-    mwa #Drawplot DrawJumpAddr
+    mva #0 drawFunction
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
@@ -616,7 +615,7 @@ ExplosionLoop2
         
 ;check tanks' distance from the centre of the explosion
 
-    mwa #DrawLen DrawJumpAddr
+    mva #%10000000 drawFunction
     ;the above switches Draw to measuring length
     ;trick is easy - how many pixels does it take to draw
     ;a line from one point to another
@@ -658,9 +657,7 @@ DistanceCheckLoop
     ;multiply difference by 8
     clc
     adc #1
-    asl
-    asl
-    asl
+    :3 asl
     tay
     jsr DecreaseEnergyX
 
@@ -978,17 +975,17 @@ ToHighFill
     ldx TankNr
 
     ;Checking the maximal force
-    lda MaxEnergyTableH,x
-    cmp EnergyTableH,x
+    lda MaxForceTableH,x
+    cmp ForceTableH,x
     bne ContinueToCheckMaxForce2
-    lda MaxEnergyTableL,x
-    cmp EnergyTableL,x
+    lda MaxForceTableL,x
+    cmp ForceTableL,x
 ContinueToCheckMaxForce2
     bcs @+
-      lda MaxEnergyTableH,x
-      sta EnergyTableH,x
-      lda MaxEnergyTableL,x
-      sta EnergyTableL,x
+      lda MaxForceTableH,x
+      sta ForceTableH,x
+      lda MaxForceTableL,x
+      sta ForceTableL,x
 @
     jsr StatusDisplay ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
@@ -1059,36 +1056,36 @@ notpressedJoy
 pressedUp
     ;force increaseeee!
     ldx TankNr
-    inc EnergyTableL,x
+    inc ForceTableL,x
     bne CheckingMaxForce
-    inc EnergyTableH,x
+    inc ForceTableH,x
 CheckingMaxForce
 
     mva #sfx_set_power_1 sfx_effect
 
-    lda MaxEnergyTableH,x
-    cmp EnergyTableH,x
+    lda MaxForceTableH,x
+    cmp ForceTableH,x
     bne FurtherCheckMaxForce
-    lda MaxEnergyTableL,x
-    cmp EnergyTableL,x
+    lda MaxForceTableL,x
+    cmp ForceTableL,x
 FurtherCheckMaxForce
     jcs BeforeFire
 
-    lda MaxEnergyTableH,x
-    sta EnergyTableH,x
-    lda MaxEnergyTableL,x
-    sta EnergyTableL,x
+    lda MaxForceTableH,x
+    sta ForceTableH,x
+    lda MaxForceTableL,x
+    sta ForceTableL,x
 
     jmp BeforeFire
 
 CTRLPressedUp
     ldx TankNr
-    lda EnergyTableL,x
+    lda ForceTableL,x
     clc
     adc #10
-    sta EnergyTableL,x
+    sta ForceTableL,x
     bcc CheckingMaxForce
-    inc EnergyTableH,x
+    inc ForceTableH,x
     jmp CheckingMaxForce
 
 
@@ -1096,16 +1093,16 @@ pressedDown
     mva #sfx_set_power_1 sfx_effect
 
     ldx TankNr
-    dec EnergyTableL,x
-    lda EnergyTableL,x
+    dec ForceTableL,x
+    lda ForceTableL,x
     cmp #$ff
     bne @+
-      dec EnergyTableH,x
+      dec ForceTableH,x
       bpl @+
 ForceGoesZero
         lda #0
-        sta EnergyTableH,x
-        sta EnergyTableL,x
+        sta ForceTableH,x
+        sta ForceTableL,x
 @
     jmp BeforeFire
 
@@ -1114,11 +1111,11 @@ CTRLPressedDown
 
     ldx TankNr
     sec
-    lda EnergyTableL,x
+    lda ForceTableL,x
     sbc #10
-    sta EnergyTableL,x
+    sta ForceTableL,x
     jcs BeforeFire
-    dec EnergyTableH,x
+    dec ForceTableH,x
     bmi ForceGoesZero
     jmp BeforeFire
 
@@ -1130,7 +1127,7 @@ pressedLeft
     cmp #$ff ; if angle goes through 0 we clear the barrel
     bne NotThrough90DegreesLeft
     mva #$2e CharCode
-    jsr drawtankNrX
+    jsr DrawTankNr.drawtankNrX
 NotThrough90DegreesLeft
     cmp #(255-91)
     jne BeforeFire
@@ -1145,7 +1142,7 @@ pressedRight
     lda AngleTable,x
     bne NotThrough90DegreesRight
     mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    jsr drawtankNrX
+    jsr DrawTankNr.drawtankNrX
 NotThrough90DegreesRight
     cmp #91
     jne BeforeFire
@@ -1222,9 +1219,9 @@ RandomizeOffensiveText
       sta Force+1
       bne AfterStrongShoot
 NotStrongShoot
-    lda EnergyTableL,x
+    lda ForceTableL,x
     sta Force
-    lda EnergyTableH,x
+    lda ForceTableH,x
     sta Force+1
 AfterStrongShoot
     lda #$0
@@ -1536,7 +1533,7 @@ noSmokeTracer
 RepeatIfSmokeTracer		
     mwa ytraj+1 Ytrajold+1
     mwa xtraj+1 Xtrajold+1
-    mwa #DrawCheck DrawJumpAddr
+    mva #%01000000 drawFunction
 
     lda #0  
     sta Result
@@ -1556,7 +1553,7 @@ RepeatIfSmokeTracer
     stx LeapFrogAngle ; we will need it later
 
     ;Angle works like this:
-    ;0 'degrees' is sraight up
+    ;0 'degrees' is straight up
     ;90 'degrees' is horizontally right
     ;255 is straight up (same as 0)
     ;255-90 (165) horizontally left
@@ -1734,13 +1731,13 @@ FlightLeft
     lda goleft
     bne FlightsLeft ;blow on bullet flighting left
     lda WindOrientation
-    bne WindToLeft
+    bne LWindToRight
     beq LWindToLeft
 FlightsLeft
     lda WindOrientation
     beq LWindToRight
-LWindToLeft
 
+LWindToLeft
     ; here Wind to right, bullet goes right as well, so vx=vx+Wind
     ; here Wind to left, bullet goes left as well, so vx=vx+Wind
     clc
@@ -1757,23 +1754,23 @@ LWindToLeft
     adc #0
     sta vx+3
     jmp @+
-WindToLeft
+
 LWindToRight
-      ;Wind to left, bullet right, so vx=vx-Wind
-      ;Wind to right, bullet left, so vx=vx-Wind
-      sec
-      lda vx
-      sbc Wind
-      sta vx
-      lda vx+1
-      sbc Wind+1
-      sta vx+1
-      lda vx+2
-      sbc #0
-      sta vx+2
-      lda vx+3
-      sbc #0
-      sta vx+3
+    ;Wind to left, bullet right, so vx=vx-Wind
+    ;Wind to right, bullet left, so vx=vx-Wind
+    sec
+    lda vx
+    sbc Wind
+    sta vx
+    lda vx+1
+    sbc Wind+1
+    sta vx+1
+    lda vx+2
+    sbc #0
+    sta vx+2
+    lda vx+3
+    sbc #0
+    sta vx+3
 @
     mwa xtrajold+1 xdraw
     mwa ytrajold+1 ydraw
@@ -1813,25 +1810,24 @@ SkipCollisionCheck
     jsr UnPlot
 
 NoUnPlot
-    ; jsr PlotPointer
-  
+
     jmp Loopi
 
 Hit
     mwa XHit xdraw
-    mva YHit ydraw	; one byte now
+    mwa YHit ydraw
 
     jsr unPlot
 EndOfFlight
-;    mwa xdraw xcircle  ; we must store for a little while
-;    mva ydraw ycircle  ; xdraw and ydraw .... but this values are in YHit and XHit !!!
+    mwa xdraw xcircle  ; we must store for a little while
+    mva ydraw ycircle  ; xdraw and ydraw .... but this values are in YHit and XHit !!!
     mwa #0 xdraw
     mva #screenheight-1 ydraw
     jsr unPlot
-;    mwa xcircle xdraw
-;    mva ycircle ydraw
-    mwa XHit xdraw
-    mva YHit ydraw
+    mwa xcircle xdraw
+    mva ycircle ydraw
+;    mwa XHit xdraw
+;    mva YHit ydraw
 
 	ldy SmokeTracerFlag
 	beq EndOfFlight2
@@ -1847,9 +1843,9 @@ SecondFlight .proc
 ; ---------------- copied code fragment from before firing. not too elegant.
 ; ---------------- get fire parameters again
     ldx TankNr
-    lda EnergyTableL,x
+    lda ForceTableL,x
     sta Force
-    lda EnergyTableH,x
+    lda ForceTableH,x
     sta Force+1
     lda #$0
     sta Force+2
@@ -1886,7 +1882,7 @@ SecondFlight .proc
     sbc #0
     sta ytraj+2
 	
-    ldy #100
+    ldy #100           ; ???
 	mva #1 tracerflag  ; I do not know (I mean I think I know ;) )
 	                   ; 10 years later - I do not know!!!
                        ; 20 years later - still do not know :]
@@ -1975,12 +1971,10 @@ MIRVcopyParameters
     ldx #$FF ; it will turn 0 in a moment anyway
     stx MirvMissileCounter
 mrLoopi
-    inc MirvMissileCounter
-    lda MirvMissileCounter
+    inc:lda MirvMissileCounter
     cmp #5
-    bne mrLoopix
-    mva #0 MirvMissileCounter
-mrLoopix
+    sne:mva #0 MirvMissileCounter
+
     ldx MirvMissileCounter
     ; Y changes only for bullet number 0
     ; because rest of the bullets have the same Y (height)
@@ -2142,7 +2136,7 @@ MIRVcheckCollision
     lda xtraj02,x
     adc #>mountaintable
     sta temp+1
-    ; adw mountaintable --- it does not work!!!!!!!! and should! (OMC bug?) #temp
+
     ldy #0
     lda ytraj+1
     cmp (temp),y
@@ -2169,7 +2163,7 @@ mrHit
     ; we have to make unPlot over the screen (to initialise it)
     ; before actual explosion
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     jsr unPlot.unPlotAfterX
     ldx MirvMissileCounter
     ldy #0
@@ -2184,6 +2178,8 @@ mrHit
     adc #>mountaintable
     sta temp+1
     lda (temp),y
+	sec
+	sbc #1
     sta ydraw
     sty ydraw+1  ;we know that y=0
     jsr missile ; explode ....
@@ -2290,9 +2286,9 @@ CalculateExplosionRange0
     lda #0
     sta RangeRight
     sta RangeRight+1
-    mva #11 ExplosionRadius
+    mva #11 ExplosionRadius  ; what is this magic value?
 ;--------------------------------------------------
-CalculateExplosionRange .proc
+.proc CalculateExplosionRange
 ;--------------------------------------------------
 ;calculates total horizontal range of explosion by
 ;"summing up" ranges of all separate explosions

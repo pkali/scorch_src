@@ -214,37 +214,20 @@ LineGoesLeft
     ; line goes left - we are reversing X
     sbw xtempDRAW temp xdraw ; XI
 PutPixelinDraw
-    jsr DrawJumpPad
-; end of the special PLOT for DRAW
-
-    ; XI=XI+1
-    ; UNTIL XI=XK
-    inw XI
-    cpw XI XK
-    jne DrawLoop
-
-EndOfDraw
-    mwa xtempDRAW xdraw
-    mva ytempDRAW ydraw
-    rts
-.endp
-
-;-------------JumpPad-------------
-DrawJumpPad
-    jmp (DrawJumpAddr)
-Drawplot
-    jmp plot
-DrawLen
-    inw LineLength
-    rts
-;-------------JumpPad-------------
     
-DrawCheck .proc
-	lda tracerflag
-	ora SmokeTracerFlag
+    ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
+    bit drawFunction
+    bpl @+
+    inw LineLength
+    bne ContinueDraw  ; ==jmp
+@
+    bvc @+
+DrawCheck
+    lda tracerflag
+    ora SmokeTracerFlag
 yestrace
-	beq notrace
-	jsr plot
+    beq notrace
+    jsr plot
 notrace
 ;aftertrace
     lda HitFlag
@@ -267,17 +250,34 @@ CheckCollisionDraw
     cmp (temp),y
     bcc StopHitChecking
 
-    mva #1 HitFlag
     mwa xdraw XHit
-    mwa ydraw YHit
-
-
+	lda (temp),y
+	sec
+	sbc #1
+	sta YHit
+	mva #0 YHit+1
+    ;mwa ydraw YHit
+    mva #1 HitFlag
 StopHitChecking
+    jmp ContinueDraw
+@
+    jsr plot   
+
+ContinueDraw
+    ; XI=XI+1
+    ; UNTIL XI=XK
+    inw XI
+    cpw XI XK
+    jne DrawLoop
+
+EndOfDraw
+    mwa xtempDRAW xdraw
+    mva ytempDRAW ydraw
     rts
-.endp 
+.endp
 
 ;--------------------------------------------------
-circle .proc ;fxxxing good circle drawing :) 
+.proc circle ;fxxxing good circle drawing :) 
 ;--------------------------------------------------
 ;Turbo Basic source
 ; R=30
@@ -560,11 +560,10 @@ UnequalTanks
     bpl CheckNextTank
     rts
 .endp
-;-------------------------------------------------
-drawtanks
-;-------------------------------------------------
 
-
+;-------------------------------------------------
+.proc drawtanks
+;-------------------------------------------------
     lda tanknr
     pha
     ldx #$00
@@ -581,8 +580,9 @@ DrawNextTank
     sta tankNr
 
     rts
+.endp
 ;---------
-drawtanknr
+.proc DrawTankNr
     ldx tanknr
     ; let's check the energy
     lda eXistenZ,x
@@ -670,11 +670,11 @@ ZeroesToGo
 NoPlayerMissile
 DoNotDrawTankNr
     rts
+.endp
 
 ;--------------------------------------------------
-drawmountains .proc
+.proc drawmountains 
 ;--------------------------------------------------
-
     mwa #0 xdraw
     mwa #mountaintable modify
 	mva #1 color
@@ -691,7 +691,6 @@ NoMountain
     inw xdraw
     cpw xdraw #screenwidth
     bne drawmountainsloop
-
     rts
 ;--------------------------------------------------
 drawmountainspixel
@@ -713,7 +712,7 @@ drawmountainspixelloop
     rts
 .endp
 ;--------------------------------------------------
-SoilDown2 .proc
+.proc SoilDown2
 ;--------------------------------------------------
 
 ; how it is supposed to work:
@@ -841,8 +840,9 @@ ColumnIsReady
     mva #sfx_silencer sfx_effect
     rts
 .endp
+
 ;--------------------------------------------------
-calculatemountains .proc
+.proc calculatemountains
 ;--------------------------------------------------
     mwa #0 xdraw
 
@@ -944,7 +944,7 @@ EndDrawing
 .endp
 ; ****************************************************
 ;--------------------------------------------------
-calculatemountains0 .proc
+.proc calculatemountains0
 ; Only for testing - makes ground flat (0 pixels)
 ; and places tanks on it
 ; remember to remove in final compilation :)
@@ -968,8 +968,9 @@ SetYofNextTank
    rts
 .endp
 ; ****************************************************
+
 ; -----------------------------------------
-unPlot .proc
+.proc unPlot
 ; plots a point and saves the plotted byte, reverts the previous plot.
 ; -----------------------------------------
     ldx #0 ; only one pixel
@@ -1072,8 +1073,9 @@ SkipThisPlot
 EndOfUnPlot
     rts
 .endp
+
 ; -----------------------------------------
-plot .proc ;plot (xdraw, ydraw, color)
+.proc plot  ;plot (xdraw, ydraw, color)
 ; color == 1 --> put pixel
 ; color == 0 --> erase pixel
 ; this is one of the most important routines in the whole
@@ -1106,11 +1108,7 @@ MakePlot
     lsr  
     lsr
     tay ;save
-;---
-     
-
-
-
+    ;---
     ldx ydraw
     lda linetableL,x
     sta xbyte
@@ -1132,16 +1130,15 @@ ClearPlot
     sta (xbyte),y
     rts
 .endp
+
 ; -----------------------------------------
-point .proc
+.proc point
 ; -----------------------------------------
     ; checks state of the pixel (coordinates in xdraw and ydraw)
     ; result is in A (zero or appropriate bit is set)
 
-
     ; let's calculate coordinates from xdraw and ydraw
     mwa xdraw xbyte
-
 
     lda xbyte
     and #$7
@@ -1154,9 +1151,7 @@ point .proc
     lsr  
     lsr
     tay ;save
-
-;---
-
+    ;---
     ldx ydraw
     lda linetableL,x
     sta xbyte
@@ -1172,7 +1167,7 @@ point .proc
 .endp
 
 ;--------------------------------------------------
-DrawLine .proc
+.proc DrawLine
 ;--------------------------------------------------
     mva #0 ydraw+1
     lda #screenheight
@@ -1182,23 +1177,21 @@ DrawLine .proc
     jsr plot.MakePlot
     ;rts
     jmp IntoDraw    ; jumps inside Draw routine
-    ; because one pixel is already plotted
+                    ; because one pixel is already plotted
 
-
-loopdraw
-
-    lda (xbyte),y
-	and bittable2,x
-    sta (xbyte),y
-IntoDraw   adw xbyte #screenBytes
-
-    dec tempbyte01
-    bne loopdraw
+@
+      lda (xbyte),y
+	  and bittable2,x
+      sta (xbyte),y
+IntoDraw
+	  adw xbyte #screenBytes
+      dec tempbyte01
+      bne @-
     rts
 .endp
-;
+
 ; ------------------------------------------
-TypeChar .proc
+.proc TypeChar
 ; puts char on the graphics screen
 ; in: CharCode
 ; in: left LOWER corner of the char coordinates (xdraw, ydraw)
@@ -1247,7 +1240,6 @@ CopyMask
     lsrw xbyte ; div 8
     rorw xbyte
     rorw xbyte
-
 ;---
     ldy xbyte
 
@@ -1264,46 +1256,15 @@ CopyMask
     ldx ybit
     beq MaskOK00
 MakeMask00
-    lsr mask1
-    ror mask2
-    lsr mask1+1
-    ror mask2+1
-    lsr mask1+2
-    ror mask2+2
-    lsr mask1+3
-    ror mask2+3
-    lsr mask1+4	
-    ror mask2+4
-    lsr mask1+5
-    ror mask2+5
-    lsr mask1+6	
-    ror mask2+6
-    lsr mask1+7
-    ror mask2+7
-    sec
-    ror char1
-    ror char2
-    sec
-    ror char1+1
-    ror char2+1
-    sec
-    ror char1+2
-    ror char2+2
-    sec
-    ror char1+3
-    ror char2+3
-    sec
-    ror char1+4
-    ror char2+4
-    sec
-    ror char1+5
-    ror char2+5
-    sec
-    ror char1+6
-    ror char2+6
-    sec
-    ror char1+7
-    ror char2+7
+    .rept 8
+      lsr mask1+#
+      ror mask2+#
+    .endr
+    .rept 8
+      sec
+      ror char1+#
+      ror char2+#
+    .endr
     dex
     bne MakeMask00
 MaskOK00
@@ -1333,132 +1294,126 @@ CharLoopi
     inx
     cpx #8
     bne CharLoopi
+EndPutChar
     rts
 .endp
+
 ; ------------------------------------------
-PutChar4x4 .proc ;puts 4x4 pixels char on the graphics screen
-; in: xdraw, ydraw (upper left corner of the char)
+.proc PutChar4x4
+; puts 4x4 pixels char on the graphics screen
+; in: xdraw, ydraw (LOWER left corner of the char)
 ; in: CharCode4x4 (.sbyte)
+; in: plot4x4color (0/1)
+; all pixels are being drawn
+; (empty and not empty)
 ;--------------------------------------------------
-    lda plot4x4color
-    sta color
-
-
-; calculating address of the first byte
-    mva #4 LoopCounter4x4
+    ; cpw ydraw #(screenheight-4)
+    ; jcs TypeChar.EndPutChar ;nearest RTS
+    ; cpw xdraw #(screenwidth-4)
+    ; jcs TypeChar.EndPutChar ;nearest RTS
+	; checks ommited.
+	lda plot4x4color
+	beq FontColor0
+	lda #$ff		; better option to check (plot4x4color = $00 or $ff)
+	sta plot4x4color
+FontColor0
+    ; char to the table
     lda CharCode4x4
     and #1
+	beq Upper4bits
+	lda #$ff 		; better option to check (nibbler4x4 = $00 or $ff)
+Upper4bits
     sta nibbler4x4
     lda CharCode4x4
-    ror
-    ; in carry there is which nibble of the byte is to be taken
-    clc
-    adc #(3*32)
-    sta y4x4
-nextline4x4
-    mva #4 Xcounter4x4
-    ldy y4x4
-    lda font4x4,y ;there was a problem with OMC here, but it works now
+    lsr
+    sta fontind
+    lda #$00
+    sta fontind+1
+	
+    adw fontind #font4x4
 
-    ldx nibbler4x4
-    beq uppernibble
+    ; and 4 bytes to the table
+	ldy #0
+    ldx #3
+CopyChar
+    lda (fontind),y	; Y must be 0 !!!!
+	bit nibbler4x4
+	bpl GetUpper4bits
+	:4 rol
+GetUpper4bits
+	ora #$0f
+    sta char1,x
+    lda #$ff
+    sta char2,x
+    ; and 4  bytes as a mask
+	lda #$f0
+    sta mask1,x
+    lda #$00
+    sta mask2,x
+	adw fontind #32		; next byte of 4x4 font
+    dex
+    bpl CopyChar
 
-    asl
-    asl
-    asl
-    asl
-uppernibble
-    rol
-    sta StoreA4x4
-    bcs EmptyPixel ; the font I drawn is in inverse ...
-    ;lda plot4x4color  ;these lines are not necessary
-    ;sta color  ;if a plots are one color only
-    jsr plot
-    ;jmp Loop4x4Continued
-EmptyPixel
-    ;lda #1   ;reverse color (color==1-color)
-    ;sec
-    ;sbc plot4x4color
-    ;sta color
-    ;jsr plot
-    ;this is turned off for speed
-    ;anyway we assume the text is being drawn
-    ;over an empty space
-Loop4x4Continued
-    inw xdraw
-    lda StoreA4x4
-    dec Xcounter4x4
-    ldx Xcounter4x4
-    bne uppernibble
-    ; here we have on screen one line of the char
-    inw ydraw
-    sbw xdraw #4
-    sbw y4x4 #32
-    dec:lda LoopCounter4x4
-    bne nextline4x4
+    ; calculating coordinates from xdraw and ydraw
+    mwa xdraw xbyte
 
-    rts
-.endp
-; ------------------------------------------
-PutChar4x4FULL .proc;
-;this routine works just like PutChar4x4,
-;but this time all pixels are being drawn
-;(empty and not empty)
-;--------------------------------------------------
+    lda xbyte
+    and #$7
+    sta ybit
 
-; calculating address of the first byte
-    mva #4 LoopCounter4x4
-    lda CharCode4x4
-    and #1
-    sta nibbler4x4
-    lda CharCode4x4
-    ror
-    ; in carry there is which nibble of the byte is to be taken clc
-    clc
-    adc #(3*32)
-    sta y4x4
-nextline4x4FULL
-    mva #4 Xcounter4x4
-    ldy y4x4
-    lda font4x4,y
-
-    ldx nibbler4x4
-    beq uppernibbleFULL
-
-    asl
-    asl
-    asl
-    asl
-uppernibbleFULL
-    rol
-    sta StoreA4x4
-    bcs EmptyPixelFULL
-    lda plot4x4color  ;these lines are not necessary
-    sta color  ;if a plots are one color only
-    jsr plot
-    jmp Loop4x4ContinuedFULL
-EmptyPixelFULL
-    lda #1   ;reverse color (color==1-color)
+    lsrw xbyte ; div 8
+    rorw xbyte
+    rorw xbyte
+;---
+    ldy xbyte
+    lda ydraw ; y = y - 3 because left lower.
     sec
-    sbc plot4x4color
-    sta color
-    jsr plot
-    ;this is turned on now
-    ;of course it is slower
+    sbc #3
+    tax
 
-Loop4x4ContinuedFULL
-    inw xdraw
-    lda StoreA4x4
-    dec Xcounter4x4
-    ldx Xcounter4x4
-    bne uppernibbleFULL
-    ; here we have on screen one line of the char
-    inw ydraw
-    sbw xdraw #4
-    sbw y4x4 #32  ; why? possibly because of width of the 4x4 font
-    dec:lda LoopCounter4x4
-    bne nextline4x4FULL
-
+    lda linetableL,x
+    sta xbyte
+    lda linetableH,x
+    sta xbyte+1
+    ; mask preparation and character shifting
+    ldx ybit
+    beq MaskOK01
+MakeMask01
+    .rept 4
+      lsr mask1+#
+      ror mask2+#
+    .endr
+    .rept 4
+      sec
+      ror char1+#
+      ror char2+#
+    .endr
+    dex
+    bne MakeMask01
+MaskOK01
+	ldx #0
+CharLoopi4x4
+    lda (xbyte),y
+    ora mask1,x	
+	bit plot4x4color
+	bpl PutInColor0_1	; only mask - no char
+    and char1,x
+PutInColor0_1
+    sta (xbyte),y
+    iny
+    lda (xbyte),y
+    ora mask2,x	
+ 	bit plot4x4color
+	bpl PutInColor0_2	; only mask - no char
+    and char2,x
+PutInColor0_2
+    sta (xbyte),y
+    dey
+    adw xbyte #screenBytes
+    inx
+	cpx #4
+    bne CharLoopi4x4
+EndPut4x4
     rts
 .endp
 
