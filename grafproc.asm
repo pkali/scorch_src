@@ -583,7 +583,7 @@ DrawNextTank
 .endp
 ;---------
 .proc DrawTankNr
-    ldx tanknr
+    ldx tankNr
     ; let's check the energy
     lda eXistenZ,x
     bne SkipRemovigPM ; if energy=0 then no tank
@@ -670,6 +670,28 @@ ZeroesToGo
 NoPlayerMissile
 DoNotDrawTankNr
     rts
+.endp
+
+; -------------------------------------
+.proc FlashTank
+; -------------------------------------
+; number of blinking tank in TankNr
+	mva #18 fs  ; temp, how many times flash the tank
+tankflash_loop
+    lda CONSOL  ; turbo mode
+    cmp #6  ; START
+    sne:mva #1 fs  ; finish it     
+    mva #1 Erase
+	ldx TankNr
+    jsr DrawTankNr.SkipRemovigPM	; it's necessary becouse DrawTankNr skips tanks with no energy !
+	PAUSE 2
+    mva #0 Erase
+	ldx TankNr
+    jsr DrawTankNr.SkipRemovigPM
+	PAUSE 2
+    dec fs
+    jne tankflash_loop
+	rts
 .endp
 
 ;--------------------------------------------------
@@ -1260,9 +1282,9 @@ MakeMask00
       lsr mask1+#
       ror mask2+#
     .endr
-    .rept 8
       sec
-      ror char1+#
+    .rept 8
+      ror char1+#	; in second (and next) lines we have C=1 - one SEC enough
       ror char2+#
     .endr
     dex
@@ -1383,9 +1405,9 @@ MakeMask01
       lsr mask1+#
       ror mask2+#
     .endr
-    .rept 4
       sec
-      ror char1+#
+    .rept 4
+      ror char1+#	; in second (and next) lines we have C=1 - one SEC enough
       ror char2+#
     .endr
     dex

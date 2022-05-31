@@ -605,8 +605,13 @@ NoPlayerNoDeath
     ldy TankTempY
     mva #1 plot4x4color
     jsr DisplayOffensiveTextNr
+	; tank flash
+    ldy TankTempY
+	mva TankNr temp2 ; not elegant, and probably unnecessary
+	sty TankNr
+	jsr FlashTank ; blinkink and pausing (like PAUSE 72 - 18x(2+2) )
+	mva temp2 TankNr 
 
-    PAUSE 75
     ;Deffensive text cleanup
     ;here we clear Deffensive text (after a shoot)
     ldy TankTempY
