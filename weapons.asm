@@ -2086,36 +2086,63 @@ mrLWindToRight
     sta vx03,x
 mrskip08
 
-    ; isn't it over the screen????
-    lda ytraj+2    ;attention! this checks getting out of the screen through bottom
-    bmi MIRVcheckX   ;but not that accurately....
-    lda ytraj+1
-    cmp #screenheight
-    jcs MIRVcheckCollision ; if smaller than screenheight then continue (and it will always hit...)
-MIRVcheckX
-    lda xtraj02,x
+	; rules for a falling MIRV bulets.
+	; if Y is negative and any X (bullet over the screen) - continue flying
+	; if (Y>=0 and Y<=screenhight) and X>screenwidth (bullet off-screen on the left or right side) - continue flying
+	; if (Y>=0 and Y<=screenhight) and X<=screenwidth (bullet on the screen) - check collision
+	; if Y>screenhight and X>screenwidth (bullet under the screen on the left or right side) - stop flying without hit
+	; if Y>screenhight and X<=screenwidth (bullet under the screen) - check collision (allways hit)
+	
+	; check bullet position and set flags: 
+	; XposFlag - bullet positon X (0 - on screen , %1000000 - off-screen)
+	; YposFlag - bullet positon Y (0 - on screen , %1000000 - over the screen , %0100000 - under the screen)
+	lda #$00
+	sta XposFlag
+	sta YposFlag
+	lda ytraj+2		; Y high byte 
+	bpl @+
+	mva #%10000000 YposFlag	; bullet over the screen (Y)
+	bmi MIRVsetXflag
+@
+	lda ytraj+1		; Y low byte
+	cmp #screenheight
+	bcc MIRVsetXflag	; bullet on screen (Y)
+	mva #%01000000 YposFlag	; bullet under the screen (Y)
+MIRVsetXflag
+	lda xtraj02,x	; X high byte
     cmp #>screenwidth
-    beq MIRVcheckLowerX
-    bcc MIRVcheckCollision
-    ; it's over the screen horizontally (to the left or right)
-    mwa #0 xdraw
-    mva #screenheight-1 ydraw
-    jsr unPlot.unPlotAfterX
-    jmp mrLoopi
-MIRVcheckLowerX
-    lda xtraj01,x
+	bne @+
+    lda xtraj01,x	; X low byte
     cmp #<screenwidth
-    bcc MIRVcheckCollision
-    ; it's over the screen horizontally (to the left or right)
+@
+	bcc MIRVXonscreen
+	mva #%10000000 XposFlag	; bullet off-screen (X)
+MIRVXonscreen
+
+	; X and Y position flags sets
+	; then realize rules
+
+	lda YposFlag
+	jmi MIRVcontinueFly		; Y over the screen
+	bne MIRVYunderscreen	; Y under the screen
+	; Y on screen
+	bit XposFlag
+	jmi MIRVcontinueFly		; Y on screen and X off-screen
+	jpl MIRVcheckCollision	; X and Y on screen
+MIRVYunderscreen
+	bit XposFlag
+	jpl MIRVcheckCollision	; X on screen and Y under screen
+	; Y under screen and X off-screen
+	; stop flying
+	jmi mrEndOfFlight
+
+MIRVcontinueFly
     mwa #0 xdraw
     mva #screenheight-1 ydraw
     jsr unPlot.unPlotAfterX
     jmp mrLoopi
 
 MIRVcheckCollision
-    ; checking the collision!
-    lda ytraj+2
-    bne mrSkipCollisionCheck
 
     ; checking works only with xtraj so copy there all we need
     lda xtraj01,x
@@ -2142,10 +2169,7 @@ MIRVcheckCollision
     cmp (temp),y
     bcs mrHit
 
-
-
 mrSkipCollisionCheck
-
     ;mwa xtraj01 xdraw
     lda xtraj01,x
     sta xdraw
@@ -2183,6 +2207,7 @@ mrHit
     sta ydraw
     sty ydraw+1  ;we know that y=0
     jsr missile ; explode ....
+
 mrEndOfFlight
     ldx MirvMissileCounter
     mwa #0 xdraw
