@@ -2139,6 +2139,16 @@ MIRVYunderscreen
 MIRVcontinueFly
     mwa #0 xdraw
     mva #screenheight-1 ydraw
+	bit XposFlag
+	bmi @+	; no pixels to plot
+	; plot bullets over the screen
+	mwa #0 ydraw
+    ;mwa xtraj01 xdraw
+    lda xtraj01,x
+    sta xdraw
+    lda xtraj02,x
+    sta xdraw+1
+@
     jsr unPlot.unPlotAfterX
     jmp mrLoopi
 
