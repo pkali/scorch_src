@@ -738,8 +738,6 @@ UpNotYet
     ;check tank collision prior to PLOT
     sty HitFlag
 
-    mwa xdraw xtraj+1
-    mwa ydraw ytraj+1
     jsr CheckCollisionWithTank
 
     lda HitFlag
@@ -2144,11 +2142,12 @@ MIRVcontinueFly
 
 MIRVcheckCollision
 
-    ; checking works only with xtraj so copy there all we need
+    ; checking works only with xdraw and ydraw so copy there all we need
     lda xtraj01,x
-    sta xtraj+1
+    sta xdraw
     lda xtraj02,x
-    sta xtraj+2
+    sta xdraw+1
+    mwa ytraj+1 ydraw
     mva #0 HitFlag
     jsr CheckCollisionWithTank
     ldx MirvMissileCounter
@@ -2259,14 +2258,22 @@ MIRValreadyAll
 ; -------------------------------------------------
 .proc CheckCollisionWithTank
 ; -------------------------------------------------
+; Check collision with Tank :)
+; xdraw , ydraw - coordinates of the checked point
+; results:
+; HitFlag - 1 - hit, 0 - no hit
+; XHit , YHit - coordinates of hit
+; X - index of the hit tank
+
     ldx #0
 CheckCollisionWithTankLoop
-
+	lda eXistenZ,x
+	beq DeadTank
     lda xtankstableH,x
-    cmp xtraj+2
+    cmp xdraw+1
     bne Condition01
     lda xtankstableL,x
-    cmp xtraj+1
+    cmp xdraw
 Condition01
     bcs LeftFromTheTank ;add 8 double byte
     clc
@@ -2274,26 +2281,27 @@ Condition01
     tay
     lda xtankstableH,x
     adc #0
-    cmp xtraj+2
+    cmp xdraw+1
     bne Condition02
-    cpy xtraj+1
+    cpy xdraw
 Condition02
     bcc RightFromTheTank
 
     lda ytankstable,x
-    cmp ytraj+1  ; check range
+    cmp ydraw  ; check range
     bcc BelowTheTank ;(ytankstable,ytankstable+3)
     sbc #4
-    cmp ytraj+1
+    cmp ydraw
     bcs OverTheTank
     mva #1 HitFlag
-    mwa xtraj+1 XHit
-    mwa ytraj+1 YHit
+    mwa xdraw XHit
+    mwa ydraw YHit
     rts ; in X there is an index of the hit tank
 RightFromTheTank
 LeftFromTheTank
 OverTheTank
 BelowTheTank
+DeadTank
     inx
     cpx NumberOfPlayers
     bne CheckCollisionWithTankLoop

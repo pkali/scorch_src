@@ -242,8 +242,13 @@ CheckCollisionDraw
     lda HitFlag
     bne StopHitChecking
 
-    mwa xdraw temp
-    adw temp #mountaintable
+	clc
+	lda xdraw
+	adc #<mountaintable
+	sta temp
+	lda xdraw+1
+	adc #>mountaintable
+	sta temp+1
 
     ldy #0
     lda ydraw
@@ -255,7 +260,7 @@ CheckCollisionDraw
 	sec
 	sbc #1
 	sta YHit
-	mva #0 YHit+1
+	sty YHit+1
     ;mwa ydraw YHit
     mva #1 HitFlag
 StopHitChecking
