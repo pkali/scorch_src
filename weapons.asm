@@ -1536,9 +1536,9 @@ RepeatIfSmokeTracer
     mva #%01000000 drawFunction
 
     lda #0  
-    sta Result
-    sta Result+1
-    sta Result+2
+    sta vx
+    sta vx+1
+    sta vx+2
     sta HitFlag
     sta xdraw
     sta xdraw+1
@@ -1595,14 +1595,14 @@ MultiplyLoop
     bcc DoNotAdd
     clc
     lda Multiplier
-    adc Result
-    sta Result
+    adc vx
+    sta vx
     lda Multiplier+1
-    adc Result+1
-    sta Result+1
+    adc vx+1
+    sta vx+1
     lda Multiplier+2
-    adc Result+2
-    sta Result+2
+    adc vx+2
+    sta vx+2
 DoNotAdd
     ;clc ;carry always cleared here (anyway we hope so :)
     rol Multiplier
@@ -1610,21 +1610,15 @@ DoNotAdd
     rol Multiplier+2
     dex
     bne MultiplyLoop
-    ; here in Result there is a number xxxx.yyy = sin(Angle)*Force
+    ; here in vx there is a number xxxx.yyy = sin(Angle)*Force
 
-    lda Result ;vx=sin(Angle)*Force
-    sta vx
-    lda Result+1
-    sta vx+1
-    lda Result+2
-    sta vx+2
-    mva #0 vx+3
+    mva #0 vx+3 ;vx=sin(Angle)*Force
 
 ;======vy
     lda #0  ;cos(Angle)
-    sta Result
-    sta Result+1
-    sta Result+2
+    sta vy
+    sta vy+1
+    sta vy+2
 ;--
     lda #90
     sec
@@ -1642,14 +1636,14 @@ MultiplyLoopY
     bcc DoNotAddY
     clc
     lda Multiplier
-    adc Result
-    sta Result
+    adc vy
+    sta vy
     lda Multiplier+1
-    adc Result+1
-    sta Result+1
+    adc vy+1
+    sta vy+1
     lda Multiplier+2
-    adc Result+2
-    sta Result+2
+    adc vy+2
+    sta vy+2
 DoNotAddY
     ;clc ;carry always cleared here (anyway we hope so :)
     rol Multiplier
@@ -1657,15 +1651,9 @@ DoNotAddY
     rol Multiplier+2
     dex
     bne MultiplyLoopY
-    ; here in Result there is a number xxxx.yyy=cos(Angle)*Force
+    ; here in vy there is a number xxxx.yyy=cos(Angle)*Force
 
-    lda Result ;vy=cos(Angle)*Force
-    sta vy
-    lda Result+1
-    sta vy+1
-    lda Result+2
-    sta vy+2
-    mva #0 vy+3
+    mva #0 vy+3 ;vy=cos(Angle)*Force
 
 Loopi
     ;ytraj=ytraj-vy (skipping least significant byte of vy)
@@ -1839,7 +1827,7 @@ EndOfFlight2
     rts
 .endp
 
-SecondFlight .proc
+.proc SecondFlight
 ; ---------------- copied code fragment from before firing. not too elegant.
 ; ---------------- get fire parameters again
     ldx TankNr
@@ -1890,7 +1878,7 @@ SecondFlight .proc
 .endp
 
 ; -------------------------------------------------
-MIRVdownLoop .proc
+.proc MIRVdownLoop
 ; MIRV loop - here mirv bullets fall down
 ; -------------------------------------------------
 ; copy Flight parameters to the table
@@ -2176,7 +2164,7 @@ MIRVcheckCollision
 
     ldy #0
     lda ytraj+1
-    cmp (temp),y
+    cmp (temp),y	; check collision witch mountains
     bcs mrHit
 
 mrSkipCollisionCheck
@@ -2267,7 +2255,7 @@ MIRValreadyAll
 .endp
 
 ; -------------------------------------------------
-CheckCollisionWithTank .proc
+.proc CheckCollisionWithTank
 ; -------------------------------------------------
     ldx #0
 CheckCollisionWithTankLoop
@@ -2355,7 +2343,7 @@ RangesChecked
 .endp    
     
 ;--------------------------------------------------
-DecreaseWeaponBeforeShoot .proc
+.proc DecreaseWeaponBeforeShoot
 ;--------------------------------------------------
     ldx TankNr
     lda ActiveWeapon,x
@@ -2377,7 +2365,7 @@ DecreaseWeaponBeforeShoot .proc
 .endp
 
 ;--------------------------------------------------
-DecreaseWeapon .proc
+.proc DecreaseWeapon
 ; in: A: Weapon number, TankNr
 ; out: A: number of shells left, Y: weapon number
 ; decreases 1 bullet from a weapon(A) of tank(TankNr)
@@ -2393,10 +2381,10 @@ defaultWeapon
 .endp
 
 ;--------------------------------------------------
-HowManyBullets .proc
+.proc HowManyBullets
 ; in: A <-- Weapon number, TankNr
 ; out: A <-- How many bullets in the weapon, Y: weapon number
-; how many bullets weapon of tank(TankNr) has, Result w A 
+; how many bullets weapon of tank(TankNr) has, Result in A 
 ;--------------------------------------------------
     tay
     ldx TankNr
@@ -2410,7 +2398,7 @@ HowManyBullets .proc
 .endp
 
 ;--------------------------------------------------
-ShellDelay .proc
+.proc ShellDelay
     lda CONSOL
     cmp #6
     beq noShellDelay

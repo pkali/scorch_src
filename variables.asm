@@ -207,7 +207,6 @@ Angle  .DS 1
 Force  .ds 3 ; 0,0,0
 Multiplier .ds 3 ; 0,0,0
 Multiplee .ds 2 ; 0,0
-Result  .ds 3 ; 0,0,0
 goleft  .DS 1 ;if 1 then flights left
 ;--------------------------------------------------
 ;SoilDown2
