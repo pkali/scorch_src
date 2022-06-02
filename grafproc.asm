@@ -43,9 +43,9 @@
     ;cpw ybyte #screenheight
     ;bcc DrawOnTheScreen
     lda ydraw+1
-    bne DrawOutOfTheScreen
+    bmi DrawOutOfTheScreen
     lda ybyte+1
-    beq DrawOnTheScreen
+    bpl DrawOnTheScreen
 DrawOutOfTheScreen
     ;jsr DrawJumpPad
     rts
@@ -230,13 +230,14 @@ yestrace
     jsr plot
 notrace
 ;aftertrace
+	;key
     lda HitFlag
     bne StopHitChecking
 
 CheckCollisionDraw
     ; checking collision!
     lda ydraw+1
-    bne StopHitChecking
+    bmi StopHitChecking
 
     jsr CheckCollisionWithTank
     lda HitFlag
