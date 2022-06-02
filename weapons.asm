@@ -1780,7 +1780,7 @@ nowait
     lda HitFlag
     bne Hit
 
-    cpw ytraj+1 #screenheight
+    cpw ytraj+1 #screenheight+1
     bcc YTrayLowerThanScreenHeight
     lda ytraj+2
     bpl EndOfFlight
