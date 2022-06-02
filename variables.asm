@@ -173,7 +173,7 @@ LineLength .DS 2
 ;circle
 radius .DS 1
 xcircle .DS 2
-ycircle .DS 1
+ycircle .DS 2
 tempcir .DS 2
 ;TankFalls
 IfFallDown  .DS 1

@@ -272,7 +272,7 @@ ContinueDraw
 
 EndOfDraw
     mwa xtempDRAW xdraw
-    mva ytempDRAW ydraw
+    mwa ytempDRAW ydraw
     rts
 .endp
 
@@ -298,7 +298,7 @@ EndOfDraw
 ; splot8
 
     mwa xdraw xcircle
-    mva ydraw ycircle
+    mwa ydraw ycircle
 
     mwa #0 xc
     mva radius yc
@@ -354,7 +354,7 @@ endcircleloop
     jsr splot8
 
     mwa xcircle xdraw
-    mva ycircle ydraw
+    mwa ycircle ydraw
     rts
 .endp
 ;----
@@ -381,12 +381,19 @@ splot8 .proc
     adc YC
     sta ydraw
     sta tempcir
+	lda ycircle+1
+	adc #$00
+	sta ydraw+1
+	sta tempcir+1
     jsr plot
 
     sec
     lda ycircle
     sbc YC
     sta ydraw
+	lda ycircle+1
+	sbc #$00
+	sta ydraw+1
     jsr plot
 
     sec
@@ -400,6 +407,8 @@ splot8 .proc
 
     lda tempcir
     sta ydraw
+	lda tempcir+1
+	sta ydraw+1
     jsr plot
 ;---
     clc
@@ -414,12 +423,19 @@ splot8 .proc
     adc xC
     sta ydraw
     sta tempcir
+	lda ycircle+1
+	adc #$00
+	sta ydraw+1
+	sta tempcir+1
     jsr plot
 
     sec
     lda ycircle
     sbc xC
     sta ydraw
+	lda ycircle+1
+	sbc #$00
+	sta ydraw+1
     jsr plot
 
     sec
@@ -433,6 +449,8 @@ splot8 .proc
 
     lda tempcir
     sta ydraw
+	lda tempcir+1
+	sta ydraw+1
     jsr plot
 
     RTS
@@ -707,6 +725,7 @@ drawmountainsloop
 	cmp #screenheight
 	beq NoMountain
     sta ydraw
+	sty ydraw+1
     jsr DrawLine
 NoMountain
     inw modify
@@ -725,6 +744,7 @@ drawmountainspixelloop
     ldy #0
     lda (modify),y
     sta ydraw
+	sty ydraw+1
     jsr plot
     inw modify
     inw xdraw
@@ -771,7 +791,7 @@ drawmountainspixelloop
     adw RangeLeft #mountaintable2 tempor2
 
 NextColumn1
-    mva #0 ydraw
+    mwa #0 ydraw
 NextPoint1
     jsr point
     beq StillNothing

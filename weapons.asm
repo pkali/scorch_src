@@ -262,7 +262,7 @@ NoExplosionInFunkyBomb
     mva #sfx_nuke sfx_effect 
     jsr xmissile
 NoUpperCircle
-    adb ydraw #70
+    adw ydraw #70
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
@@ -677,9 +677,9 @@ EndOfDistanceCheckLoop
     sta color
 dirtLoop
     jsr circle
-    inc ydraw
+    inw ydraw
     jsr circle
-    dec ydraw
+    dew ydraw
     inc radius
     lda radius
     cmp ExplosionRadius
@@ -725,6 +725,7 @@ RollinContinues
     ldy #0
     lda (tempXROLLER),y
     sta ydraw
+	sty ydraw+1
     beq ExplodeNow
     cmp HeightRol
     beq UpNotYet
@@ -760,12 +761,12 @@ HowMuchToFallRight2
     jne RollinContinues
 ExplodeNow
     mwa xdraw xcircle  ; we must store somewhere (BAD)
-    mva ydraw ycircle  ; xdraw and ydraw (BAD)
+    mwa ydraw ycircle  ; xdraw and ydraw (BAD)
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     jsr unPlot
     mwa xcircle xdraw ;(bad)
-    mva ycircle ydraw ;(bad)
+    mwa ycircle ydraw ;(bad)
 
     ; finally a little explosion
     jsr CalculateExplosionRange
@@ -782,6 +783,7 @@ ExplodeNow
     adw tempXROLLER xdraw
     lda (tempXROLLER),y
     sta ydraw
+	sty ydraw+1
 
     lda vx+3
     ; if horizontal velocity is negative then change the direction
@@ -852,7 +854,7 @@ DirectionChecked
     mva #1 color
 NoColor ; jump here with color=0 to clean dirt
     mwa xdraw xcircle
-    mva ydraw ycircle
+    mwa ydraw ycircle
     lda #1
 ; current dirt width
     sta magic
@@ -890,7 +892,7 @@ DoNotPlot
     bne NextRow
 EndOfTheDirt
     mwa xcircle xdraw
-    mva ycircle ydraw
+    mwa ycircle ydraw
     rts
 .endp
 ; ----------------
@@ -1808,12 +1810,12 @@ Hit
     jsr unPlot
 EndOfFlight
     mwa xdraw xcircle  ; we must store for a little while
-    mva ydraw ycircle  ; xdraw and ydraw .... but this values are in YHit and XHit !!!
+    mwa ydraw ycircle  ; xdraw and ydraw .... but this values are in YHit and XHit !!!
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     jsr unPlot
     mwa xcircle xdraw
-    mva ycircle ydraw
+    mwa ycircle ydraw
 ;    mwa XHit xdraw
 ;    mva YHit ydraw
 
@@ -2126,7 +2128,7 @@ MIRVYunderscreen
 
 MIRVcontinueFly
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
 	bit XposFlag
 	bmi @+	; no pixels to plot
 	; plot bullets over the screen
@@ -2209,7 +2211,7 @@ mrHit
 mrEndOfFlight
     ldx MirvMissileCounter
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     jsr unPlot.unPlotAfterX
     ldx MirvMissileCounter
     lda #1
@@ -2227,13 +2229,13 @@ MIRVstillNotAll
     jmp mrLoopi
 MIRValreadyAll
     mwa xdraw xcircle  ; we must store them (for a while)
-    mva ydraw ycircle  ; xdraw and ydraw
+    mwa ydraw ycircle  ; xdraw and ydraw
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     ldx MirvMissileCounter
     jsr unPlot.unPlotAfterX
     mwa xcircle xdraw
-    mva ycircle ydraw
+    mwa ycircle ydraw
 
     ; we must do it manually because of the VOID pointer
 
