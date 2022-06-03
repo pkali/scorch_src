@@ -322,6 +322,7 @@ SettingEnergies
     ; tank with energy greater than 0 left
 
     ldy #0  ; in Y - number of tanks with energy greater than zero
+	sty ATRACT	; reset atract mode
     ldx NumberOfPlayers
     dex
 CheckingIfRoundIsFinished
