@@ -679,7 +679,7 @@ dirtLoop
     jsr circle
     inw ydraw
     jsr circle
-    dew ydraw
+.nowarn    dew ydraw
     inc radius
     lda radius
     cmp ExplosionRadius
@@ -895,9 +895,9 @@ EndOfTheDirt
 .endp
 ; ----------------
 .proc xliquiddirt ;
-	mva xdraw TempXfill
+	mwa xdraw TempXfill
 RepeatFill
-	mva TempXfill xdraw
+	mwa TempXfill xdraw
 	jsr checkRollDirection
 	; HowMuchToFall - direction
     ; $FF - we are in a hole (flying in missile direction)
@@ -1235,33 +1235,24 @@ AfterStrongShoot
 
     mva #sfx_shoot sfx_effect
     ; Shoots tank nr X !!! :)
-    ;ldx TankNr
-    lda xtankstableL,x
-    sta xtraj+1
-    lda xtankstableH,x
-    sta xtraj+2
-    lda ytankstable,x
-    sta ytraj+1
-    lda #$00
-    sta ytraj+2
-
-    ; correction of the starting coordinates of bullet
+    ; set the starting coordinates of bullet with correction
     ; to start where the tank's barrel ends
     ; (without it bullet would go from the left lower corner of the tank)
-    ldy Angle
-    clc
-    lda xtraj+1
-    adc EndOfTheBarrelX,y   ; correction of X
+    ;ldx TankNr
+	ldy Angle
+	clc
+    lda xtankstableL,x
+	adc EndOfTheBarrelX,y   ; correction of X
     sta xtraj+1
-    lda xtraj+2
-    adc #0
+    lda xtankstableH,x
+	adc #$00
     sta xtraj+2
-    sec
-    lda ytraj+1
-    sbc EndOfTheBarrelY,y   ; correction of Y
+	sec
+    lda ytankstable,x
+	sbc EndOfTheBarrelY,y   ; correction of Y
     sta ytraj+1
-    lda ytraj+2
-    sbc #0
+    lda #$00
+	sbc #$00
     sta ytraj+2
 
     jsr Flight
