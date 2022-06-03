@@ -2372,12 +2372,14 @@ RangesChecked
 ; decreases 1 bullet from a weapon(A) of tank(TankNr)
 ;--------------------------------------------------
     jsr HowManyBullets
+	beq noBullets	 ; no bullets - no decreasing (additional check)
     cpy #0
     beq defaultWeapon  ; no decreasing Baby Missile
       sec
       sbc #1
       sta (weaponPointer),y ; we have good values after HowManyBullets
 defaultWeapon
+noBullets
     rts
 .endp
 
