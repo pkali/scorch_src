@@ -529,21 +529,25 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc laser
+; but where are xdraw and ydraw ???? !!!!
+; ------------------------
     ldx TankNr
     lda AngleTable,x
     tay
     clc
     lda xtankstableL,x
-    adc EndOfTheBarrelX,y ; correction of the end of the barrel point
+    adc EndOfTheBarrelX,y ; correction of the end of the barrel point (X)
     sta xbyte
     lda xtankstableH,x
     adc #0
     sta xbyte+1
     sec
     lda ytankstable,x
-    sbc EndOfTheBarrelY,y
+    sbc EndOfTheBarrelY,y ; correction of the end of the barrel point (Y)
     sta ybyte
-    mva #0 ybyte+1
+	lda #$00
+	sbc #$00
+    sta ybyte+1
     mva #0 drawFunction
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
