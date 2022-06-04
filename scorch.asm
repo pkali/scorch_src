@@ -752,18 +752,16 @@ PMoutofScreen .proc
 ;--------------------------------------------------
     ldx #$3f
     lda #$0
-loop05
-    sta TanksWeapon1,x
-    sta TanksWeapon2,x
-    sta TanksWeapon3,x
-    sta TanksWeapon4,x
-    sta TanksWeapon5,x
-    sta TanksWeapon6,x
-    dex
-    bne @+
-      lda #99
-      bne loop05
-@ bpl loop05
+@
+      sta TanksWeapon1,x
+      sta TanksWeapon2,x
+      sta TanksWeapon3,x
+      sta TanksWeapon4,x
+      sta TanksWeapon5,x
+      sta TanksWeapon6,x
+      dex
+      sne:lda #99
+    bpl @-
     rts
 .endp
 
