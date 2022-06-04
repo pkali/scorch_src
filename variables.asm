@@ -113,8 +113,9 @@ L1       .DS 1 ; variable used in multiplications (by 10:)
 gravity  .DS 1 ;only the decimal part (1/10 = 25)
 ;-----------------------------------
 
-Wind  .ds 2 ;walue displayed on the screen
-    ;multiplied by 16 (decimal part only)
+Wind  .ds 4 ;format: 0000.hhll
+            ;walue displayed on the screen is
+            ;decimal portion divided by 16 (>>4)
 ;-----------------------------------
 MaxWind   .ds 1 ;
 WindOrientation  .DS 1 ;(0-right,1-left)

@@ -991,7 +991,7 @@ ContinueToCheckMaxForce2
       lda MaxForceTableL,x
       sta ForceTableL,x
 @
-    jsr StatusDisplay ;all digital values like force, angle, wind, etc.
+    jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
 
     jsr DrawTankNr
@@ -1501,7 +1501,8 @@ ThereWasNoParachute
 .endp
 
 ;--------------------------------------------------
-.proc Flight  ; Force(byte.byte), Angle(byte), Wind(.byte) 128=0, 255=maxright, 0=maxleft
+.proc Flight  ; Force(byte.byte), Wind(0.word)
+; Angle(byte) 128=0, 255=maxright, 0=maxleft
 ;--------------------------------------------------
 ;g=-0.1
 ;vx=Force*sin(Angle)
@@ -1554,7 +1555,7 @@ RepeatIfSmokeTracer
     ;255-90 (165) horizontally left
 
     bpl FlightRight
-
+    
     ;and if the highest bit is set then
     ;Flight to LEFT
     ;calculate Angle with this formula:
@@ -1563,12 +1564,14 @@ RepeatIfSmokeTracer
     sec
     txa
     sbc #165 ;(Angle-165)
-    sta temp ;dirty trick with selfmodifying code (REMOVED)
-    lda #90  ;
+    sta temp 
+    lda #90  
     sbc temp ;90-(Angle-165)
     ;and we have rady angle here ... and we go LEFT!
     tax
     sta Angle
+    
+    ;
     mva #1 goleft
     ; and now we contine as if nothing happened
     ; (but we have goleft set to 1!!!)
@@ -1580,7 +1583,7 @@ FlightRight
 dontzerogoleft
 
     lda sintable,x  ;sin(Angle)
-    sta Multiplee ;sin(Angle)*Force
+    sta Multiplee   ;sin(Angle)*Force
     mwa Force Multiplier
     lda #$0
     sta Multiplier+2
@@ -1605,10 +1608,19 @@ DoNotAdd
     rol Multiplier+2
     dex
     bne MultiplyLoop
-    ; here in vx there is a number xxxx.yyy = sin(Angle)*Force
-
-    mva #0 vx+3 ;vx=sin(Angle)*Force
-
+    
+    mva #0 vx+3
+    ; here in vx there is a number 
+    ; xxxx.xx00 = sin(Angle)*Force
+    ; negate it if going left
+    lda goleft
+    beq @+
+      .rept 4
+        lda #$00
+        sbc vx+#
+        sta vx+#
+      .endr
+@
 ;======vy
     lda #0  ;cos(Angle)
     sta vy
@@ -1646,7 +1658,8 @@ DoNotAddY
     rol Multiplier+2
     dex
     bne MultiplyLoopY
-    ; here in vy there is a number xxxx.yyy=cos(Angle)*Force
+    ; here in vy there is a number 
+    ; yyyy.yy=cos(Angle)*Force
 
     mva #0 vy+3 ;vy=cos(Angle)*Force
 
@@ -1682,8 +1695,7 @@ Loopi
     cmp #6 ; MIRV
     jeq MIRVdownLoop
 StillUp
-    lda goleft
-    bne FlightLeft
+
 
     clc ;xtraj=xtraj+vx (skipping least significant byte of vx)
     lda xtraj ;here of course Fight to right
@@ -1695,66 +1707,13 @@ StillUp
     lda xtraj+2
     adc vx+3
     sta xtraj+2
-    jmp @+ ;skipping substracting for Flight to left
 
-FlightLeft
-      sec ;xtraj=xtraj-vx (skipping least significant byte of vx)
-      lda xtraj ;here of course Fight to left
-      sbc vx+1
-      sta xtraj
-      lda xtraj+1
-      sbc vx+2
-      sta xtraj+1
-      lda xtraj+2
-      sbc vx+3
-      sta xtraj+2
-
-@
-    ;vx=vx-Wind (also without least significan byte of vx)
-    lda goleft
-    bne FlightsLeft ;blow on bullet flighting left
-    lda WindOrientation
-    bne LWindToRight
-    beq LWindToLeft
-FlightsLeft
-    lda WindOrientation
-    beq LWindToRight
-
-LWindToLeft
-    ; here Wind to right, bullet goes right as well, so vx=vx+Wind
-    ; here Wind to left, bullet goes left as well, so vx=vx+Wind
     clc
-    lda vx
-    adc Wind
-    sta vx
-    lda vx+1
-    adc Wind+1
-    sta vx+1
-    lda vx+2
-    adc #0
-    sta vx+2
-    lda vx+3
-    adc #0
-    sta vx+3
-    jmp @+
-
-LWindToRight
-    ;Wind to left, bullet right, so vx=vx-Wind
-    ;Wind to right, bullet left, so vx=vx-Wind
-    sec
-    lda vx
-    sbc Wind
-    sta vx
-    lda vx+1
-    sbc Wind+1
-    sta vx+1
-    lda vx+2
-    sbc #0
-    sta vx+2
-    lda vx+3
-    sbc #0
-    sta vx+3
-@
+    .rept 4
+      lda vx+#
+      adc Wind+#
+      sta vx+#
+    .endr
     mwa xtrajold+1 xdraw
     mwa ytrajold+1 ydraw
     mwa xtraj+1 xbyte
@@ -2023,51 +1982,14 @@ mrFlightLeft
 
 
 mrskip07
-    ;vx=vx-Wind (also without least significan byte of vx)
+    ;vx=vx+Wind
 
-    lda goleft
-    bne mrFlightsLeft ;blow on bullet flighting left
-    lda WindOrientation
-    bne mrWindToLeft
-    beq mrLWindToLeft
-mrFlightsLeft
-    lda WindOrientation
-    beq mrLWindToRight
-mrLWindToLeft
-    ; here Wind to right, bullet goes right as well, so vx=vx+Wind
-    ; here Wind to left, bullet goes left as well, so vx=vx+Wind
     clc
-    lda vx00,x
-    adc Wind
-    sta vx00,x
-    lda vx01,x
-    adc Wind+1
-    sta vx01,x
-    lda vx02,x
-    adc #0
-    sta vx02,x
-    lda vx03,x
-    adc #0
-    sta vx03,x
-    Jmp mrskip08
-mrWindToLeft
-mrLWindToRight
-    ;Wind to left, bullet right, so vx=vx-Wind
-    ;Wind to right, bullet left, so vx=vx-Wind
-    sec
-    lda vx00,x
-    sbc Wind
-    sta vx00,x
-    lda vx01,x
-    sbc Wind+1
-    sta vx01,x
-    lda vx02,x
-    sbc #0
-    sta vx02,x
-    lda vx03,x
-    sbc #0
-    sta vx03,x
-mrskip08
+    .rept 4
+      lda vx+#
+      adc Wind+#
+      sta vx+#
+    .endr
 
 	; rules for a falling MIRV bulets.
 	; if Y is negative and any X (bullet over the screen) - continue flying

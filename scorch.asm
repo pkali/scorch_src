@@ -399,7 +399,7 @@ RoboTanks
 	; robotanks shoot here
     jsr ArtificialIntelligence
     jsr MoveBarrelToNewPosition
-    jsr StatusDisplay ;all digital values like force, angle, wind, etc.
+    jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
     ; let's move the tank's barrel so it points the right
     ; direction
@@ -414,7 +414,7 @@ AfterManualShooting
     inc noDeathCounter
 
     jsr DecreaseWeaponBeforeShoot
-    jsr StatusDisplay
+    jsr DisplayStatus
 
 	ldx TankNr
 	dec Energy,x   ; lower energy to eventually let tanks commit suicide
@@ -710,18 +710,31 @@ NotNegativeEnergy
 
 ;--------------------------------------------------
 GetRandomWind .proc
+;in: MaxWind (byte)
+;out: Wind (word)
+;uses: _
 ;--------------------------------------------------
     lda random
     cmp MaxWind
     bcs GetRandomWind ; if more than MaxWind then randomize again
     sta Wind
     mva #$00 Wind+1
-    ; multiply Wind by 16 and take it as a decimal part (0.Wind)
+    sta Wind+2
+    sta Wind+3
+    ; multiply Wind by 16
+    ; two bytes of Wind are treated as a decimal part of vx variable
     :4 aslw Wind
+    ; decide the direction
     lda random
     and #$01
-    sta WindOrientation
-    rts
+    beq @+
+      sec  ; Wind = -Wind
+      .rept 4
+        lda #$00
+        sbc Wind+#
+        sta Wind+#
+      .endr
+@   rts
 .endp
 
 ;--------------------------------------------------

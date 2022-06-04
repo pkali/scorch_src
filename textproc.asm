@@ -1600,7 +1600,7 @@ FinishResultDisplay
 .endp
 
 ;-------------------------------------------------
-.proc StatusDisplay
+.proc DisplayStatus
 ;-------------------------------------------------
 
     ;lda noDeathCounter
@@ -1715,24 +1715,28 @@ AngleDisplay
     ;=========================
     ;display Wind
     ;=========================
-    lda WindOrientation
-    bne DisplayLeftWind
+    mwa Wind temp
+    lda Wind+3 ; highest byte of 4 byte wind
+    bmi DisplayLeftWind
     lda #$7f  ; (tab) char
     sta textbuffer+80+28
     lda #0  ;space
     sta textbuffer+80+25
     beq DisplayWindValue
 DisplayLeftWind
+      sec  ; Wind = -Wind
+      lda #$00
+      sbc temp
+      sta temp
+      lda #$00
+      sbc temp+1
+      sta temp+1
     lda #$7e  ;(del) char
     sta textbuffer+80+25
     lda #0 ;space
     sta textbuffer+80+28
 DisplayWindValue
-    mwa Wind temp
-    lsrw temp ;divide by 16 to have
-    lsrw temp ;a nice view on a screen
-    lsrw temp
-    lsrw temp
+    :4 lsrw temp ;divide by 16 to have a nice value on a screen
     lda temp
     sta decimal
     mwa #textbuffer+80+26 displayposition
