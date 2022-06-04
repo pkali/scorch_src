@@ -1953,8 +1953,6 @@ MIRVdoNotChangeY
 
     lda MirvDown,x ; if bullet is already down we go with the next one
     jne MIRVnextBullet
-    lda goleft
-    bne mrFlightLeft
 
     clc ;xtraj=xtraj+vx (skipping the least significant byte of vx)
     lda xtraj00,x ;and here of course Flight to the right
@@ -1966,22 +1964,7 @@ MIRVdoNotChangeY
     lda xtraj02,x
     adc vx03,x
     sta xtraj02,x
-    jmp mrskip07 ;skip substracting for Flight to the left
 
-mrFlightLeft
-    sec ;xtraj=xtraj-vx (skipping the least significant byte of vx)
-    lda xtraj00,x ;here of course Flight to the left
-    sbc vx01,x
-    sta xtraj00,x
-    lda xtraj01,x
-    sbc vx02,x
-    sta xtraj01,x
-    lda xtraj02,x
-    sbc vx03,x
-    sta xtraj02,x
-
-
-mrskip07
     ;vx=vx+Wind
 
     clc
