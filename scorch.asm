@@ -394,12 +394,20 @@ DoNotFinishTheRound
     lda SkillTable,x
     beq ManualShooting
 
-RoboTanks    
+RoboTanks
 	; robotanks shoot here
     jsr ArtificialIntelligence
     jsr MoveBarrelToNewPosition
     jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
+    lda kbcode
+    cmp #28  ; ESC
+    bne @+
+    jsr AreYouSure
+    lda escFlag
+    seq:rts
+@
+
     ; let's move the tank's barrel so it points the right
     ; direction
     jmp AfterManualShooting
