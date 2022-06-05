@@ -98,6 +98,7 @@
     icl 'lib/atari.hea'
     icl 'lib/macro.hea'
 
+    ;splash screen and musix
 	icl 'artwork/HIMARS14.asm'
     ;Game loading address
     ORG  $3000
@@ -117,13 +118,14 @@ START
     ; Startup sequence
     jsr Initialize
 
-
-
     jsr Options  ;startup screen
     lda escFlag
     bne START
 
     jsr EnterPlayerNames
+    lda escFlag
+    bne START
+
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 
@@ -144,6 +146,9 @@ MainGameLoop
     jsr RoundInit
     
     jsr MainRoundLoop
+    lda escFlag
+    bne START
+    
     mva #0 TankNr  ; 
     
     jsr SortSequence
@@ -248,50 +253,45 @@ skipzeroing
 ; the shooting angle is randomized
 ; of course gains an looses are zeroed
 
-	;jsr StatusDisplay
 	lda #0
 	tax
-@
-	sta singleRoundVars,x
-	inx
-	cpx #(singleRoundVarsEnd-singleRoundVars)
+@	  sta singleRoundVars,x
+	  inx
+	  cpx #(singleRoundVarsEnd-singleRoundVars)
 	bne @-
 
     ldx #(MaxPlayers-1)
 SettingEnergies
-    lda #$00
-    sta gainL,x
-    sta gainH,x
-    sta looseL,x
-    sta looseH,x
-    lda #99
-    sta Energy,x
-    sta eXistenZ,x
-    sta LASTeXistenZ,x
-    ; anything in eXistenZ table means that this tank exist
-    ; in the given round
-    lda #<1000
-    sta MaxForceTableL,x
-    lda #>1000
-    sta MaxForceTableH,x
-    lda #<350
-    sta ForceTableL,x
-    lda #>350
-    sta ForceTableH,x
-
-    ;lda #(255-45)
-    ;it does not look good when all tanks have
-    ;barrels pointing the same direction
-    ;so it would be nice to have more or less random
-    ;angles
-    jsr RandomizeAngle
-    sta AngleTable,x
-
-
-    dex
+      lda #$00
+      sta gainL,x
+      sta gainH,x
+      sta looseL,x
+      sta looseH,x
+      lda #99
+      sta Energy,x
+      sta eXistenZ,x
+      sta LASTeXistenZ,x
+      ; anything in eXistenZ table means that this tank exist
+      ; in the given round
+      lda #<1000
+      sta MaxForceTableL,x
+      lda #>1000
+      sta MaxForceTableH,x
+      lda #<350
+      sta ForceTableL,x
+      lda #>350
+      sta ForceTableH,x
+  
+      ;lda #(255-45)
+      ;it does not look good when all tanks have
+      ;barrels pointing the same direction
+      ;so it would be nice to have more or less random
+      ;angles
+      jsr RandomizeAngle
+      sta AngleTable,x
+  
+      dex
     bpl SettingEnergies
-
-    mva #0 CurrentResult
 
 ;generating the new landscape
     jsr PMoutofScreen ;let P/M disappear
@@ -344,8 +344,7 @@ WhichTankWonLoop
     bne ThisOneWon
     dex
     bpl WhichTankWonLoop
-    ;error here!!!
-    ;stop
+    ;error was here!!!
     ; somehow I believed program will be never here
     ; but it was a bad assumption
     ; god knows when there is such a situation
@@ -409,6 +408,8 @@ ManualShooting
 
     jsr WaitForKeyRelease
     jsr BeforeFire
+    lda escFlag
+    seq:rts
 
 AfterManualShooting
     inc noDeathCounter
@@ -768,16 +769,12 @@ PMoutofScreen .proc
 ;--------------------------------------------------
 .proc Initialize
 ;Initialization sequence
+;uses: temp, ...
 ;--------------------------------------------------
 deletePtr = temp
 
-    lda #0 
-    sta Erase
-    sta tracerflag
-    sta GameIsOver
-    sta escFlag
-
     ; clean variables
+    lda #0 
     tay
     mwa #variablesStart deletePtr
 @     tya
@@ -1185,7 +1182,8 @@ nextishigher
 .endp
 
 ;--------------------------------------------------
-.proc getkey  ; waits for pressing a key and returns pressed value in A
+.proc GetKey  ; waits for pressing a key and returns pressed value in A
+; when [ESC] is pressed, escFlag is set to 1
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @

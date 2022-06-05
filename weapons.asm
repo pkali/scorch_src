@@ -1016,7 +1016,17 @@ notpressed
     beq checkJoy
 
     lda kbcode
-    and #$Bf
+    and #%10111111 ; SHIFT elimination
+
+    cmp #28  ; ESC
+    bne @+
+    jsr AreYouSure
+    lda escFlag
+    beq notpressed
+    ;---esc pressed-quit game---
+    rts
+
+@
     cmp #$8e
     jeq CTRLPressedUp
     cmp #$8f
@@ -1104,9 +1114,9 @@ pressedDown
       dec ForceTableH,x
       bpl @+
 ForceGoesZero
-        lda #0
-        sta ForceTableH,x
-        sta ForceTableL,x
+      lda #0
+      sta ForceTableH,x
+      sta ForceTableL,x
 @
     jmp BeforeFire
 
@@ -1571,17 +1581,14 @@ RepeatIfSmokeTracer
     tax
     sta Angle
     
-    ;
-    mva #1 goleft
     ; and now we contine as if nothing happened
     ; (but we have goleft set to 1!!!)
-    bne dontzerogoleft
+    mva #1 goleft
+    bne @+
 
 FlightRight
     mva #0 goleft
-
-dontzerogoleft
-
+@
     lda sintable,x  ;sin(Angle)
     sta Multiplee   ;sin(Angle)*Force
     mwa Force Multiplier

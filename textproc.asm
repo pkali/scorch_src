@@ -218,6 +218,8 @@ OptionsYLoop
 
 ManualPurchase
       jsr Purchase
+      ldx escFlag
+      seq:rts
 AfterManualPurchase
 
       inc:lda TankNr
@@ -556,6 +558,8 @@ ChoosingItemForPurchase
 ;--------------------------------------------------
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
+    ldx escFlag
+    seq:rts
     cmp #$2c ; Tab
     jeq ListChange
     cmp #$0c ; Return
@@ -838,7 +842,7 @@ NoArrowDown
       sta colpf2s  ; set color of player name line
       jsr EnterPlayerName
       lda escFlag
-      jne START
+      seq:rts
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -1366,6 +1370,66 @@ EndOfTypeLine4x4
 .endp
 
 
+;--------------------------------
+.proc AreYouSure
+;using 4x4 font
+    
+    ;save vars (messed in TypeLine4x4)
+    mwa Xdraw xk
+    mva Ydraw yc
+
+    mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
+    
+    ;top frame
+    mwa #LineTop LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+    mva ResultY LineYdraw
+    jsr TypeLine4x4
+    adb ResultY  #4 ;next line
+    
+    ;seppuku
+    mwa #areYouSureText LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+    mva ResultY LineYdraw
+    jsr TypeLine4x4
+    adb ResultY  #4 ;next line
+    
+    ;bottom frame
+    mwa #LineBottom LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+    mva ResultY LineYdraw
+    jsr TypeLine4x4
+
+    jsr GetKey
+    cmp #$2b  ; "Y"
+    bne @+
+    mva #1 escFlag
+    bne skip01
+@    mva #0 escFlag
+     jsr WaitForKeyRelease
+skip01
+    
+    ;clean
+    mva #3 dx
+    mva #4 ResultY
+@
+      mva #1 plot4x4color
+      mwa #lineClear LineAddress4x4
+      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+      mva ResultY LineYdraw
+      jsr TypeLine4x4
+      adb ResultY  #4 ;next line
+  
+      dec dx
+      bne @-
+
+
+quit_areyousure
+    ;restore vars
+    mva yc Ydraw
+    mwa xk Xdraw
+    rts
+.endp
 ;--------------------------------
 .proc DisplaySeppuku
 ;using 4x4 font

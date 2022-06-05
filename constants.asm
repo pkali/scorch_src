@@ -23,7 +23,6 @@ RoundsTable    .by 10,20,30,40,50
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
 ;------------------------------------------------
-
 LevelNameBeginL ; begins of level names
     .by <NamesOfLevels,<(NamesOfLevels+10),<(NamesOfLevels+20)
     .by <(NamesOfLevels+32),<(NamesOfLevels+42),<(NamesOfLevels+52)
@@ -37,31 +36,25 @@ TanksWeaponsTableL
     .by <TanksWeapon1,<TanksWeapon2,<TanksWeapon3,<TanksWeapon4,<TanksWeapon5,<TanksWeapon6
 TanksWeaponsTableH
     .by >TanksWeapon1,>TanksWeapon2,>TanksWeapon3,>TanksWeapon4,>TanksWeapon5,>TanksWeapon6
-;-----4x4 texts-----
 
+;-----4x4 texts-----
 LineTop
-    dta d"(%%%%%%%%%%%%)"
-    .byte $ff
+    dta d"(%%%%%%%%%%%%)", $ff
 ;# - vertical, () * +, % - horizontal
 LineBottom
-    dta d"*%%%%%%%%%%%%+"
-    .byte $ff
+    dta d"*%%%%%%%%%%%%+", $ff
 LineEmpty
-    dta d"#            #"
-    .byte $ff
+    dta d"#            #", $ff
 LineHeader2
-    dta d"#  RESULTS   #"
-    .byte $ff
+    dta d"#  RESULTS   #", $ff
 LineGameOver
-    dta d"# GAME  OVER #"
-    .byte $ff
+    dta d"# GAME  OVER #", $ff
 seppukuText
-    dta d"#  SEPPUKU!  #"
-    .byte $ff
+    dta d"#  SEPPUKU!  #", $ff
+areYouSureText
+    dta d"# SURE?  Y/N #", $ff
 lineClear
-    dta d"              "
-    .byte $ff
-
+    dta d"              ", $ff
 
 ;-----------
 pmtableL ; addressess of the P/M memory for 5 tanks (6th is without P/M background)
@@ -541,8 +534,8 @@ EndOfTheBarrelY
     .by 7,7,7,7,7,7,7,7,7
     .by 7,7,7,7,7,7,7,7,7,7
     .by 7,7,7,7,7,7,7,7,7,7,7
-;-------------------------------------------------
 
+;-------------------------------------------------
 TanksNamesDefault
     dta d"1st.Tank"
     dta d"2nd.Tank"
@@ -550,7 +543,6 @@ TanksNamesDefault
     dta d"4th.Tank"
     dta d"5th.Tank"
     dta d"6th.Tank"
-
 
 WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Baby_Missile___

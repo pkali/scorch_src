@@ -8,34 +8,29 @@
 ; compilation to e.g. cartridge
 ; zero page variables are declared in program.s65 module
 ;=====================================================
-;--------------------------------------------------
-;Variables 
-;--------------
 TanksNames  ; DO NOT ZERO - ticket #24
     :6 dta d"        "
-;----------------------------
+;----------------------------------------------------
 ;Options DO NOT ZERO - ticket #27
 OptionsTable .by 0,0,2,2,0,1,3
 RoundsInTheGame .by 10 ;how many rounds in the current game
 seppukuVal .by 75
-;--------------------------------------------------
+;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS [MaxPlayers]
-;-----------------------------------
+;----------------------------------------------------
 ; 4x4 text buffer
 ResultLineBuffer
-    dta d"                  "
-    .byte $ff
+    dta d"                  ", $ff
 LineHeader1
     dta d"# ROUND: "
 RoundNrDisplay
-    dta d"    #"
-    .byte $ff
+    dta d"    #", $ff
 
+;=====================================================
 variablesStart  ; zeroing starts here
+;=====================================================
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
-;-------------- 
-escFlag .ds 1
 ;-------------- 
 sfx_effect .ds 1
 ;-------------- 
@@ -47,28 +42,28 @@ flyDelay .ds 1
 NumberOfPlayers .DS 1  ;current number of players (counted from 1)
 TankSequence .DS [MaxPlayers] ;sequence of shooting during the Round
 GameIsOver .DS 1 ; 1 means it was the last round in the game
-;-----------------------------------
+;----------------------------------------------------
 moneyH ;we place zero at the end of prices and money
     ;and have range from 0 to 99990 (not too much)
     ;money players have (maybe one more byte is needed?)
     .DS [MaxPlayers]
 moneyL 
     .DS [MaxPlayers]
-;-----------------------------------
+;----------------------------------------------------
 gainH ;how much money player gets after the round
     ;it is gathered during the round basing on energy
     ;opponents loose after player's shoots
     .DS [MaxPlayers]
 gainL
     .DS [MaxPlayers]
-;-----------------------------------
+;----------------------------------------------------
 looseH ;how much player looses after the round
     ;calculated from REAL energy loss
     ;(not only to zero energy)
     .DS [MaxPlayers]
 looseL
     .DS [MaxPlayers]
-;-----------------------------------
+;----------------------------------------------------
 Energy
     .DS [MaxPlayers]
 EnergyDecrease  .DS 1
@@ -81,9 +76,7 @@ ResultsTable ;the results in the gameeeeee
     .DS [MaxPlayers]
 TempResults
     .DS [MaxPlayers]
-CurrentResult
-    .DS 1
-;-----------------------------------
+;----------------------------------------------------
 ForceTableL ;shooting Force of the tank during the round
     .DS [MaxPlayers]
 ForceTableH
@@ -93,36 +86,36 @@ MaxForceTableL ;Energy of the tank during the round
     .DS [MaxPlayers] ;1000 is the default
 MaxForceTableH
     .DS [MaxPlayers]
-;-----------------------------------
+;----------------------------------------------------
 
 AngleTable ;Angle of the barrel of each tank during the round
     .DS [MaxPlayers]
 NewAngle .DS 1
-;-----------------------------------
+;----------------------------------------------------
 
 ActiveWeapon ;number of the selected weapon
     .DS [MaxPlayers]
 WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
-;-----------------------------------
+;----------------------------------------------------
 
 ;format of the 3-byte static point number used in the game
 ;  20203.5 => 128 : <20203 : >20203
-;-----------------------------------
+;----------------------------------------------------
 
 L1       .DS 1 ; variable used in multiplications (by 10:)
 gravity  .DS 1 ;only the decimal part (1/10 = 25)
-;-----------------------------------
+;----------------------------------------------------
 
 Wind  .ds 4 ;format: 0000.hhll
             ;walue displayed on the screen is
             ;decimal portion divided by 16 (>>4)
-;-----------------------------------
+;----------------------------------------------------
 MaxWind   .ds 1 ;
 WindOrientation  .DS 1 ;(0-right,1-left)
-;-----------------------------------
+;----------------------------------------------------
 Counter  .DS 1  ;temporary Counter for outside loops
 HitFlag  .DS 1 ;1 when missile hit anything
-;-----------------------------------
+;----------------------------------------------------
 xtankstableL ;X positions of tanks (lower left point)
     .DS [MaxPlayers]
 xtankstableH
@@ -131,17 +124,17 @@ ytankstable ;Y positions of tanks (lower left point)
     .DS [MaxPlayers]
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS [MaxPlayers]
-;-----------------------------------
+;----------------------------------------------------
 Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally
 
-;-----------------------------------
+;----------------------------------------------------
 RangeLeft  .DS 2 ;range of the soil to be fallen down
 RangeRight .DS 2 ;it is being set by all Explosions
-;-----------------------------------
+;----------------------------------------------------
 WeaponRangeLeft  .DS 2 ;Range of the Explosion of the given weapon
 WeaponRangeRight .DS 2
-;--------------------------------------------------
+;----------------------------------------------------
 ;xroller
 HowMuchToFall   .ds 1
 HeightRol .DS 1
@@ -181,7 +174,7 @@ IfFallDown  .DS 1
 PreviousFall  .DS 1
 EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 Parachute .DS 1 ; are you insured with parachute?
-; -------------------------------------------------
+;----------------------------------------------------
 ;Flight
 ;variables for 5 missiles (used for mirv)
 xtraj00   .DS [5]  ; 3 bytes of xtraj times 5. Lowest byte
@@ -196,7 +189,7 @@ MirvMissileCounter .DS 1 ; missile Counter (mainly for X)
 SmokeTracerFlag .DS 1 ; if Smoketracer
 XposFlag .DS 1	; bullet positon X (0 - on screen , %1000000 - off-screen)
 YposFlag .DS 1  ; bullet positon Y (0 - on screen , %1000000 - over the screen , %0100000 - under the screen)
-; -------------------------------------------------
+;----------------------------------------------------
 ;CheckCollisionWithTank
 vx  .ds 4 ; 0,0,0,0 ;two decimal bytes, two whole bytes (DC.BA)
 vy  .ds 4 ;0,0,0,0
@@ -209,10 +202,10 @@ Force  .ds 3 ; 0,0,0
 Multiplier .ds 3 ; 0,0,0
 Multiplee .ds 2 ; 0,0
 goleft  .DS 1 ;if 1 then flights left
-;--------------------------------------------------
+;----------------------------------------------------
 ;SoilDown2
 IsEndOfTheFallFlag .DS 1
-; -------------------------------------------------
+;----------------------------------------------------
 ;unPlot
 WhichUnPlot .DS 1
     ; max 5 concurrent unPlots
@@ -226,7 +219,7 @@ xtrajfb  .DS 2
 ytrajfb  .DS 2
 ;
 tracerflag .DS 1
-; -------------------------------------------------
+;----------------------------------------------------
 ;TypeChar
 mask1  .DS [8]
 mask2  .DS [8]
@@ -244,7 +237,7 @@ UpNdown  .DS 1
 temptankX .DS 2
 temptankNr .DS 1
 
-; -------------------------------------------------
+;----------------------------------------------------
 ;Variables from textproc.s65
     ; tables with numbers of weapons on the right lists
     ; to be honest - I do not know at the moment what the above
@@ -254,7 +247,7 @@ NubersOfWeaponsL1
     .ds 8*5 ; :(8*5) .by $ff
 NubersOfWeaponsL2
     .ds 8*2 ; :(8*2) .by $ff
-; -------------------------------------------------
+;----------------------------------------------------
 
 ; variables storing amount of weapons on the first and second
 ; list and pointer position
@@ -277,14 +270,14 @@ WhichList ; list currently on the screen
 OffsetDL1 ; offset of the list screen (how many lines)....
     .DS 1
 
-; -------------------------------------------------
+;----------------------------------------------------
 
 ;mark the level
 PositionInName ; cursor position in name of the player when name input
     .DS 1
 DifficultyLevel ; Difficulty Level (human/cpu)
     .DS 1
-;-------------------------------------------------
+;----------------------------------------------------
 ;displaydecimal
 decimal  .DS 2
 decimalresult  .DS 4
@@ -299,7 +292,7 @@ FallDown2  .DS 1
 LeapFrogAngle  .DS 1
 ;laser
 LaserCoordinate .DS 8 ; 2,2,2,2
-; -------------------------------------------------
+;----------------------------------------------------
 ; Here go tables with weapons possesed by a given tank
 ; Index in the table means weapon type
 ; number entered means ammo for given weapon possessed (max 99)
@@ -326,7 +319,7 @@ mountaintable2 ;table of mountains (size=screenwidth)
     .DS [screenwidth]
     .DS 1 ; additional byte for fallout (sometimes 1 pixel)
 MountaintableEnd ;good for table clearing
-;----------------------------------------------
+;----------------------------------------------------
 TextPositionX .DS 2
 TextPositionY .DS 1
 TextAddress .DS 2
@@ -335,8 +328,16 @@ TextNumberOff .DS 1
 ;--------------
 TankTempY
     .DS 1
+;----------------------------------------------------
 ;-------------- single round variables --------------
+;----------------------------------------------------
 singleRoundVars
+;-------------- 
+escFlag .ds 1
+;-------------- 
+CurrentResult
+    .DS 1
+;-------------- 
 previousAngle
     .DS [MaxPlayers]
 previousEnergyL
@@ -354,9 +355,9 @@ RandBoundaryHigh
 AngleTablePointer
     .DS 1
 singleRoundVarsEnd
-;----------------------------------------------
+;----------------------------------------------------
 ; 4x4 texts
-;----------------------------------------------
+;----------------------------------------------------
 LineAddress4x4
     .DS 2
 LineCharNr
@@ -374,8 +375,9 @@ ResultY
 ResultOfTankNr
     .DS 1
 
-;----------------------------
+;----------------------------------------------------
 ;PutChar4x4
+;----------------------------------------------------
 LoopCounter4x4 .DS 1
 y4x4 .DS 1
 StoreA4x4 .DS 1
@@ -387,6 +389,6 @@ plot4x4color .DS 1 ;1-white, 0-background
 
 
 variablesEnd
-;----------------------------
+;----------------------------------------------------
 
 .endif
