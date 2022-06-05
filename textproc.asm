@@ -1395,10 +1395,9 @@ EndOfTypeLine4x4
     adb ResultY  #4 ;next line
     
     ;bottom frame
-    mwa #LineBottom LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
     mva ResultY LineYdraw
-    jsr TypeLine4x4
+    jsr TL4x4_bottom  ; just go
+    
 
     jsr GetKey
     cmp #$2b  ; "Y"
@@ -1461,10 +1460,8 @@ seppuku_loop
       adb ResultY  #4 ;next line
       
       ;bottom frame
-      mwa #LineBottom LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
-      jsr TypeLine4x4
+      jsr TL4x4_bottom  ; just go
 
     ;clean seppuku
     
@@ -1496,17 +1493,16 @@ quit_seppuku
 ;using 4x4 font
     
     mva #sfx_smoke_cloud sfx_effect
-
+    mva #1 plot4x4color
+        
     ;centering the result screen
-    mwa #((ScreenWidth/2)-(8*4)) ResultX
     mva #((ScreenHeight/2)-(8*4)) ResultY
 
 
     ;upper frame
     mwa #LineTop LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
 
     adb ResultY  #4 ;next line
@@ -1522,17 +1518,15 @@ quit_seppuku
     jsr displaybyte ;decimal (byte), displayposition  (word)
 
     mwa #LineHeader1 LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
     mwa #LineGameOver LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
     mva #1 GameIsOver
     
@@ -1540,30 +1534,23 @@ GameOver4x4
     adb ResultY  #4 ;next line
 
     ;Empty line
-    mwa #LineEmpty LineAddress4x4
-    mwa ResultX LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
+    jsr TL4x4_empty
 
     adb ResultY  #2 ;next line
 
 
     ;Header2
     mwa #LineHeader2 LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
 
     adb ResultY  #4 ;next line
 
     ;Empty line
-    mwa #LineEmpty LineAddress4x4
-    mwa ResultX LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
+    jsr TL4x4_empty
 
     sbb ResultY  #2 ;next line (was empty)
 
@@ -1628,24 +1615,17 @@ TankNameCopyLoop
 
     ;result line display
     mwa #ResultLineBuffer LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
 
     adb ResultY  #4 ;next line
 
     ;Empty line
-    mwa #LineEmpty LineAddress4x4
-    mwa ResultX LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
-
-
+    jsr TL4x4_empty
 
     dec ResultOfTankNr
-
     bmi FinishResultDisplay
 
     sbb ResultY  #2 ;distance between lines is smaller
@@ -1653,15 +1633,24 @@ TankNameCopyLoop
     jmp ResultOfTheNextPlayer
 
 FinishResultDisplay
+    mva ResultY LineYdraw
+    ;jmp TL4x4_bottom  ; just go
+.endp
 
+.proc TL4x4_bottom
     ;bottom of the frame
     mwa #LineBottom LineAddress4x4
-    mwa ResultX LineXdraw
-    mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
-    rts
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
 .endp
+
+.proc TL4x4_empty
+    ;empty frame
+    mwa #LineEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
+.endp
+
 
 ;-------------------------------------------------
 .proc DisplayStatus

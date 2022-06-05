@@ -403,9 +403,9 @@ RoboTanks
     lda kbcode
     cmp #28  ; ESC
     bne @+
-    jsr AreYouSure
-    lda escFlag
-    seq:rts
+      jsr AreYouSure
+      lda escFlag
+      seq:rts
 @
 
     ; let's move the tank's barrel so it points the right
