@@ -130,6 +130,7 @@ VOID
     mva LeapFrogAngle Angle
     
     mva #sfx_funky_hit sfx_effect
+    sbw ytraj+1 #$05	; next missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
     jsr Flight
     lda HitFlag
     beq EndOfLeapping
@@ -159,6 +160,7 @@ VOID
     ror Force
     mva LeapFrogAngle Angle
     mva #sfx_funky_hit sfx_effect
+    sbw ytraj+1 #$05	; next missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
     jsr Flight
     lda HitFlag
     beq EndOfLeapping
@@ -178,7 +180,7 @@ EndOfLeapping
 .proc funkybomb ;
     mva #sfx_baby_missile sfx_effect
     mwa xtraj+1 xtrajfb
-    mwa ytraj+1 ytrajfb
+    sbw ytraj+1 #$05 ytrajfb	; funky missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
     inc FallDown2
     ;central Explosion
     mva #21 ExplosionRadius
