@@ -47,6 +47,16 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 143
+2022-06-05
+Rewrite build. We redone several important parts of the game to allow for bug fixes and requested features. Generally it was a great success, but some new bugs appeared. This build is nice for the eye, but beware, no mercy for testers again :)
+Only visible changes listed, because you are possibly not as excited as we are for the new Flight routine and ground collisions by @Pecusx.
+- https://github.com/pkali/scorch_src/issues/84, https://github.com/pkali/scorch_src/issues/63 - tanks now say good bye properly!
+- https://github.com/pkali/scorch_src/issues/74 - Press [ESC] to quit the game at any point, with a confirmation when the round has already started. Please note the keyboard is not checked all the time, so press it for a while, especially when AI tanks are ru(i/n)ning the show.
+- https://github.com/pkali/scorch_src/issues/56 - there should be no occurrences of frivolous weapon purchases. Please report all tanks getting their munitions from uncertified sources!
+- https://github.com/pkali/scorch_src/issues/47 - It seems that the bad sequence of turns has been ameliorated. Fix is trivial, finding the culprit - far from it. Please pay special attention to fairness of shooting in case the fix is still longing for the fjords.
+- ATTRACT mode works how it should - screensaver saves screen only when HUMAN should input something.
+
 ###### Build 142
 2022-05-30
 Late build. The bugs we tried to squelch turned out to be more difficult than usual. Some progress has been made though even if it is not yet visible.

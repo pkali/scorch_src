@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"142" ; number of this build (3 bytes)
+	dta d"143" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -126,7 +126,7 @@ START
     lda escFlag
     bne START
 
-    jsr RandomizeSequence0
+    jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 
 MainGameLoop
