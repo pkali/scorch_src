@@ -1271,9 +1271,20 @@ AfterStrongShoot
 	sbc #$00
     sta ytraj+2
 
+	; checking if the shot is underground (no Flight but Hit :) )
+	ldy #0
+	adw xtraj+1 #mountaintable temp
+    lda ytraj+1
+    cmp (temp),y	; check collision witch mountains
+    bcs ShotUnderGround
     jsr Flight
     mva #1 color
     rts
+ShotUnderGround
+	mwa xtraj+1 xdraw	; but why not XHit and YHit !!!???
+	mwa ytraj+1 ydraw
+	mva #1 HitFlag
+	rts
 .endp
 
 
