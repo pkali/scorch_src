@@ -1346,10 +1346,8 @@ DOTNcharloop
     ldy #0
     sty LineCharNr
 
-
 TypeLine4x4Loop
     ldy LineCharNr
-
 
     mwa LineAddress4x4 temp
     lda (temp),y
@@ -1381,10 +1379,8 @@ EndOfTypeLine4x4
     mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
     
     ;top frame
-    mwa #LineTop LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
     mva ResultY LineYdraw
-    jsr TypeLine4x4
+    jsr TL4x4_top
     adb ResultY  #4 ;next line
     
     ;seppuku
@@ -1396,7 +1392,7 @@ EndOfTypeLine4x4
     
     ;bottom frame
     mva ResultY LineYdraw
-    jsr TL4x4_bottom  ; just go
+    jsr TL4x4_bottom
     
 
     jsr GetKey
@@ -1446,10 +1442,8 @@ seppuku_loop
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
       
       ;top frame
-      mwa #LineTop LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
-      jsr TypeLine4x4
+      jsr TL4x4_top
       adb ResultY  #4 ;next line
       
       ;seppuku
@@ -1468,7 +1462,6 @@ seppuku_loop
     mva #3 dx
     mva #4 ResultY
 @
-      mva #1 plot4x4color
       mwa #lineClear LineAddress4x4
       mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
@@ -1500,10 +1493,8 @@ quit_seppuku
 
 
     ;upper frame
-    mwa #LineTop LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    jsr TypeLine4x4
+    jsr TL4x4_top
 
     adb ResultY  #4 ;next line
 
@@ -1647,6 +1638,13 @@ FinishResultDisplay
 .proc TL4x4_empty
     ;empty frame
     mwa #LineEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
+.endp
+
+.proc TL4x4_top
+    ;bottom of the frame
+    mwa #LineTop LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     jmp TypeLine4x4  ; jsr:rts
 .endp
