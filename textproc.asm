@@ -1635,13 +1635,6 @@ FinishResultDisplay
     jmp TypeLine4x4  ; jsr:rts
 .endp
 
-.proc TL4x4_empty
-    ;empty frame
-    mwa #LineEmpty LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
-    jmp TypeLine4x4  ; jsr:rts
-.endp
-
 .proc TL4x4_top
     ;bottom of the frame
     mwa #LineTop LineAddress4x4
@@ -1649,15 +1642,16 @@ FinishResultDisplay
     jmp TypeLine4x4  ; jsr:rts
 .endp
 
+.proc TL4x4_empty
+    ;empty frame
+    mwa #LineEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
+.endp
 
 ;-------------------------------------------------
 .proc DisplayStatus
 ;-------------------------------------------------
-
-    ;lda noDeathCounter
-    ;sta decimal
-    ;mwa #textbuffer+80+37 displayposition
-    ;jsr displaybyte    
 
     ;---------------------
     ;displaying symbol of the weapon
@@ -1762,7 +1756,6 @@ AngleDisplay
     mwa #textbuffer+40+21 displayposition
     jsr displaybyte
 
-
     ;=========================
     ;display Wind
     ;=========================
@@ -1793,8 +1786,9 @@ DisplayWindValue
     mwa #textbuffer+80+26 displayposition
     jsr displaybyte
     
-    
+    ;=========================
     ;display round number
+    ;=========================
     lda CurrentRoundNr
     sta decimal
     mwa #textbuffer+80+14 displayposition

@@ -126,7 +126,7 @@ START
     lda escFlag
     bne START
 
-    jsr RandomizeSequence
+    jsr RandomizeSequence0
     ; for the round #1 shooting sequence is random
 
 MainGameLoop
@@ -354,7 +354,6 @@ WhichTankWonLoop
     ; second tank explodes and kills the first one.
     ; and code lands here...
     ; looks like no one won!
-
     rts
 
 ThisOneWon
@@ -376,7 +375,6 @@ DoNotFinishTheRound
     jsr DisplaySeppuku
     jmp Seppuku
 
-    ;ldx TankNr
 @
     ldx TankSequencePointer
     lda TankSequence,x
@@ -447,6 +445,7 @@ continueMainRoundLoopAfterSeppuku
 
 
 AfterExplode
+    ; TODO: IS IT OK??? possibly a fix here needed for #56
     ldy WeaponDepleted
     bne @+
       ldx TankNr
@@ -484,11 +483,8 @@ missed
     jsr DisplayOffensiveTextNr
 
 NextPlayerShoots
-    ;mva #1 Erase
-    ;jsr drawtanks
-
-    ;before it shoots, the eXistenZ table must be
-    ;updated accordingly to actual energy (was forgotten, sorry to ourselves)
+    ;before it shoots, the eXistenZ table must be updated
+    ;accordingly to actual energy (was forgotten, sorry to ourselves)
 
     ldx #(MaxPlayers-1)
 SeteXistenZ
@@ -499,7 +495,7 @@ SeteXistenZ
     ;DATA L1,L2
     ;Multiplication 8bit*8bit,
     ;result 16bit
-    ;this algiorithm is a little longer than in Ruszczyc 6502 book
+    ;this algiorithm is a little longer than one in Ruszczyc 6502 book
     ;but it is faster
 
     LDy #8
@@ -524,13 +520,6 @@ B0  DEY
 
     ;was setup of maximum energy for players
 
-    ;mva #0 Erase
-    ;jsr drawtanks
-
-    inc:lda TankSequencePointer
-    cmp NumberOfPlayers
-    bne PlayersAgain
-    mva #0 TankSequencePointer
 
 PlayersAgain
 
@@ -562,27 +551,14 @@ NoPlayerNoDeath
     dex
     bpl CheckingPlayersDeath
     ; if processor is here it means there are no more explosions
+
+    inc:lda TankSequencePointer
+    cmp NumberOfPlayers
+    sne:mva #0 TankSequencePointer
+
     jmp MainRoundLoop
 .endp
 	
-;---------------------------------
-.proc Seppuku
-    lda #0
-    sta FallDown1
-    sta FallDown2
-    sta ydraw+1
-    ; get position of the tank
-    ldx TankNr
-    lda xtankstableL,x
-    sta xdraw
-    lda xtankstableH,x
-    sta xdraw+1
-    lda yTanksTable,x
-    sta ydraw
-    lda #1  ; Missile
-    jsr ExplosionDirect
-    jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
-.endp
 ;---------------------------------
 .proc PlayerXdeath
 
@@ -619,7 +595,7 @@ NoPlayerNoDeath
     ldy TankTempY
 	mva TankNr temp2 ; not elegant, and probably unnecessary
 	sty TankNr
-	jsr FlashTank ; blinkink and pausing (like PAUSE 72 - 18x(2+2) )
+	jsr FlashTank ; blinking and pausing (like PAUSE 72 - 18x(2+2) )
 	mva temp2 TankNr 
 
     ;Deffensive text cleanup
@@ -642,7 +618,7 @@ NoPlayerNoDeath
     sbc #4
     sta ydraw
     lda #0
-    sta ydraw+1   ; there is 0 left in A, so... TODO: bad code above. revisit when transitioning ydraw to byte
+    sta ydraw+1   ; there is 0 left in A, so... TODO: bad code above. revisit
 
     ;cleanup of the soil fall down ranges (left and right)
     sta RangeRight
@@ -651,12 +627,9 @@ NoPlayerNoDeath
     sta FallDown2
     mwa #screenwidth RangeLeft
 
-
-
     ; We are randomizing the weapon now.
     ; jumping into the middle of the explosion
     ; routine
-
 MetodOfDeath
     lda random
     and #%00011111  ;  range 0-31
@@ -667,13 +640,10 @@ MetodOfDeath
     jsr ExplosionDirect
     mva #sfx_silencer sfx_effect
 
-    
     ; jump to after explosion routines (soil fallout, etc.)
     ; After going through these routines we are back
     ; to checking if a tank exploded and maybe we have
     ; a deadly shot here again.
-
-
     jmp MainRoundLoop.AfterExplode
 .endp
 
@@ -715,6 +685,25 @@ NotNegativeEnergy
     sta gainH,x
     plx
     rts
+.endp
+
+;---------------------------------
+.proc Seppuku
+    lda #0
+    sta FallDown1
+    sta FallDown2
+    sta ydraw+1
+    ; get position of the tank
+    ldx TankNr
+    lda xtankstableL,x
+    sta xdraw
+    lda xtankstableH,x
+    sta xdraw+1
+    lda yTanksTable,x
+    sta ydraw
+    lda #1  ; Missile
+    jsr ExplosionDirect
+    jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
 .endp
 
 ;--------------------------------------------------
