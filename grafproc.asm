@@ -4,7 +4,7 @@
 
 
 ;--------------------------------------------------
-draw .proc ;;fuxxing good draw :) 
+.proc draw ;;fuxxing good draw :) 
 ;--------------------------------------------------
 ;creditz to Dr Jankowski / MIM U.W.
 ; (xi,yi)-----(xk,yk)
@@ -43,9 +43,9 @@ draw .proc ;;fuxxing good draw :)
     ;cpw ybyte #screenheight
     ;bcc DrawOnTheScreen
     lda ydraw+1
-    bne DrawOutOfTheScreen
+    bmi DrawOutOfTheScreen
     lda ybyte+1
-    beq DrawOnTheScreen
+    bpl DrawOnTheScreen
 DrawOutOfTheScreen
     ;jsr DrawJumpPad
     rts
@@ -230,20 +230,26 @@ yestrace
     jsr plot
 notrace
 ;aftertrace
+	;key
     lda HitFlag
     bne StopHitChecking
 
 CheckCollisionDraw
     ; checking collision!
     lda ydraw+1
-    bne StopHitChecking
+    bmi StopHitChecking
 
     jsr CheckCollisionWithTank
     lda HitFlag
     bne StopHitChecking
 
-    mwa xdraw temp
-    adw temp #mountaintable
+	clc
+	lda xdraw
+	adc #<mountaintable
+	sta temp
+	lda xdraw+1
+	adc #>mountaintable
+	sta temp+1
 
     ldy #0
     lda ydraw
@@ -255,7 +261,7 @@ CheckCollisionDraw
 	sec
 	sbc #1
 	sta YHit
-	mva #0 YHit+1
+	sty YHit+1
     ;mwa ydraw YHit
     mva #1 HitFlag
 StopHitChecking
@@ -272,7 +278,7 @@ ContinueDraw
 
 EndOfDraw
     mwa xtempDRAW xdraw
-    mva ytempDRAW ydraw
+    mwa ytempDRAW ydraw
     rts
 .endp
 
@@ -298,7 +304,7 @@ EndOfDraw
 ; splot8
 
     mwa xdraw xcircle
-    mva ydraw ycircle
+    mwa ydraw ycircle
 
     mwa #0 xc
     mva radius yc
@@ -354,7 +360,7 @@ endcircleloop
     jsr splot8
 
     mwa xcircle xdraw
-    mva ycircle ydraw
+    mwa ycircle ydraw
     rts
 .endp
 ;----
@@ -381,12 +387,19 @@ splot8 .proc
     adc YC
     sta ydraw
     sta tempcir
+	lda ycircle+1
+	adc #$00
+	sta ydraw+1
+	sta tempcir+1
     jsr plot
 
     sec
     lda ycircle
     sbc YC
     sta ydraw
+	lda ycircle+1
+	sbc #$00
+	sta ydraw+1
     jsr plot
 
     sec
@@ -400,6 +413,8 @@ splot8 .proc
 
     lda tempcir
     sta ydraw
+	lda tempcir+1
+	sta ydraw+1
     jsr plot
 ;---
     clc
@@ -414,12 +429,19 @@ splot8 .proc
     adc xC
     sta ydraw
     sta tempcir
+	lda ycircle+1
+	adc #$00
+	sta ydraw+1
+	sta tempcir+1
     jsr plot
 
     sec
     lda ycircle
     sbc xC
     sta ydraw
+	lda ycircle+1
+	sbc #$00
+	sta ydraw+1
     jsr plot
 
     sec
@@ -433,6 +455,8 @@ splot8 .proc
 
     lda tempcir
     sta ydraw
+	lda tempcir+1
+	sta ydraw+1
     jsr plot
 
     RTS
@@ -583,7 +607,7 @@ DrawNextTank
 .endp
 ;---------
 .proc DrawTankNr
-    ldx tanknr
+    ldx tankNr
     ; let's check the energy
     lda eXistenZ,x
     bne SkipRemovigPM ; if energy=0 then no tank
@@ -672,6 +696,28 @@ DoNotDrawTankNr
     rts
 .endp
 
+; -------------------------------------
+.proc FlashTank
+; -------------------------------------
+; number of blinking tank in TankNr
+	mva #18 fs  ; temp, how many times flash the tank
+tankflash_loop
+    lda CONSOL  ; turbo mode
+    cmp #6  ; START
+    sne:mva #1 fs  ; finish it     
+    mva #1 Erase
+	ldx TankNr
+    jsr DrawTankNr.SkipRemovigPM	; it's necessary becouse DrawTankNr skips tanks with no energy !
+	PAUSE 2
+    mva #0 Erase
+	ldx TankNr
+    jsr DrawTankNr.SkipRemovigPM
+	PAUSE 2
+    dec fs
+    jne tankflash_loop
+	rts
+.endp
+
 ;--------------------------------------------------
 .proc drawmountains 
 ;--------------------------------------------------
@@ -685,6 +731,7 @@ drawmountainsloop
 	cmp #screenheight
 	beq NoMountain
     sta ydraw
+	sty ydraw+1
     jsr DrawLine
 NoMountain
     inw modify
@@ -703,6 +750,7 @@ drawmountainspixelloop
     ldy #0
     lda (modify),y
     sta ydraw
+	sty ydraw+1
     jsr plot
     inw modify
     inw xdraw
@@ -749,7 +797,7 @@ drawmountainspixelloop
     adw RangeLeft #mountaintable2 tempor2
 
 NextColumn1
-    mva #0 ydraw
+    mwa #0 ydraw
 NextPoint1
     jsr point
     beq StillNothing
@@ -1260,9 +1308,9 @@ MakeMask00
       lsr mask1+#
       ror mask2+#
     .endr
-    .rept 8
       sec
-      ror char1+#
+    .rept 8
+      ror char1+#	; in second (and next) lines we have C=1 - one SEC enough
       ror char2+#
     .endr
     dex
@@ -1383,9 +1431,9 @@ MakeMask01
       lsr mask1+#
       ror mask2+#
     .endr
-    .rept 4
       sec
-      ror char1+#
+    .rept 4
+      ror char1+#	; in second (and next) lines we have C=1 - one SEC enough
       ror char2+#
     .endr
     dex

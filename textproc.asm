@@ -218,6 +218,8 @@ OptionsYLoop
 
 ManualPurchase
       jsr Purchase
+      ldx escFlag
+      seq:rts
 AfterManualPurchase
 
       inc:lda TankNr
@@ -556,6 +558,8 @@ ChoosingItemForPurchase
 ;--------------------------------------------------
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
+    ldx escFlag
+    seq:rts
     cmp #$2c ; Tab
     jeq ListChange
     cmp #$0c ; Return
@@ -838,7 +842,7 @@ NoArrowDown
       sta colpf2s  ; set color of player name line
       jsr EnterPlayerName
       lda escFlag
-      jne START
+      seq:rts
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -1342,10 +1346,8 @@ DOTNcharloop
     ldy #0
     sty LineCharNr
 
-
 TypeLine4x4Loop
     ldy LineCharNr
-
 
     mwa LineAddress4x4 temp
     lda (temp),y
@@ -1367,6 +1369,63 @@ EndOfTypeLine4x4
 
 
 ;--------------------------------
+.proc AreYouSure
+;using 4x4 font
+    
+    ;save vars (messed in TypeLine4x4)
+    mwa Xdraw xk
+    mva Ydraw yc
+
+    mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
+    
+    ;top frame
+    mva ResultY LineYdraw
+    jsr TL4x4_top
+    adb ResultY  #4 ;next line
+    
+    ;seppuku
+    mwa #areYouSureText LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+    mva ResultY LineYdraw
+    jsr TypeLine4x4
+    adb ResultY  #4 ;next line
+    
+    ;bottom frame
+    mva ResultY LineYdraw
+    jsr TL4x4_bottom
+    
+
+    jsr GetKey
+    cmp #$2b  ; "Y"
+    bne @+
+    mva #1 escFlag
+    bne skip01
+@    mva #0 escFlag
+     jsr WaitForKeyRelease
+skip01
+    
+    ;clean
+    mva #3 dx
+    mva #4 ResultY
+@
+      mva #1 plot4x4color
+      mwa #lineClear LineAddress4x4
+      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+      mva ResultY LineYdraw
+      jsr TypeLine4x4
+      adb ResultY  #4 ;next line
+  
+      dec dx
+      bne @-
+
+
+quit_areyousure
+    ;restore vars
+    mva yc Ydraw
+    mwa xk Xdraw
+    rts
+.endp
+;--------------------------------
 .proc DisplaySeppuku
 ;using 4x4 font
     
@@ -1383,10 +1442,8 @@ seppuku_loop
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
       
       ;top frame
-      mwa #LineTop LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
-      jsr TypeLine4x4
+      jsr TL4x4_top
       adb ResultY  #4 ;next line
       
       ;seppuku
@@ -1397,17 +1454,14 @@ seppuku_loop
       adb ResultY  #4 ;next line
       
       ;bottom frame
-      mwa #LineBottom LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
-      jsr TypeLine4x4
+      jsr TL4x4_bottom  ; just go
 
     ;clean seppuku
     
     mva #3 dx
     mva #4 ResultY
 @
-      mva #1 plot4x4color
       mwa #lineClear LineAddress4x4
       mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
@@ -1432,18 +1486,15 @@ quit_seppuku
 ;using 4x4 font
     
     mva #sfx_smoke_cloud sfx_effect
-
+    mva #1 plot4x4color
+        
     ;centering the result screen
-    mwa #((ScreenWidth/2)-(8*4)) ResultX
     mva #((ScreenHeight/2)-(8*4)) ResultY
 
 
     ;upper frame
-    mwa #LineTop LineAddress4x4
-    mwa ResultX LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
+    jsr TL4x4_top
 
     adb ResultY  #4 ;next line
 
@@ -1458,17 +1509,15 @@ quit_seppuku
     jsr displaybyte ;decimal (byte), displayposition  (word)
 
     mwa #LineHeader1 LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
     mwa #LineGameOver LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
     mva #1 GameIsOver
     
@@ -1476,30 +1525,23 @@ GameOver4x4
     adb ResultY  #4 ;next line
 
     ;Empty line
-    mwa #LineEmpty LineAddress4x4
-    mwa ResultX LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
+    jsr TL4x4_empty
 
     adb ResultY  #2 ;next line
 
 
     ;Header2
     mwa #LineHeader2 LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
 
     adb ResultY  #4 ;next line
 
     ;Empty line
-    mwa #LineEmpty LineAddress4x4
-    mwa ResultX LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
+    jsr TL4x4_empty
 
     sbb ResultY  #2 ;next line (was empty)
 
@@ -1564,24 +1606,17 @@ TankNameCopyLoop
 
     ;result line display
     mwa #ResultLineBuffer LineAddress4x4
-    mwa ResultX LineXdraw
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
     jsr TypeLine4x4
 
     adb ResultY  #4 ;next line
 
     ;Empty line
-    mwa #LineEmpty LineAddress4x4
-    mwa ResultX LineXdraw
     mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
-
-
+    jsr TL4x4_empty
 
     dec ResultOfTankNr
-
     bmi FinishResultDisplay
 
     sbb ResultY  #2 ;distance between lines is smaller
@@ -1589,24 +1624,34 @@ TankNameCopyLoop
     jmp ResultOfTheNextPlayer
 
 FinishResultDisplay
+    mva ResultY LineYdraw
+    ;jmp TL4x4_bottom  ; just go
+.endp
 
+.proc TL4x4_bottom
     ;bottom of the frame
     mwa #LineBottom LineAddress4x4
-    mwa ResultX LineXdraw
-    mva ResultY LineYdraw
-    mva #1 plot4x4color
-    jsr TypeLine4x4
-    rts
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
+.endp
+
+.proc TL4x4_top
+    ;bottom of the frame
+    mwa #LineTop LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
+.endp
+
+.proc TL4x4_empty
+    ;empty frame
+    mwa #LineEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
 .endp
 
 ;-------------------------------------------------
-.proc StatusDisplay
+.proc DisplayStatus
 ;-------------------------------------------------
-
-    ;lda noDeathCounter
-    ;sta decimal
-    ;mwa #textbuffer+80+37 displayposition
-    ;jsr displaybyte    
 
     ;---------------------
     ;displaying symbol of the weapon
@@ -1711,35 +1756,39 @@ AngleDisplay
     mwa #textbuffer+40+21 displayposition
     jsr displaybyte
 
-
     ;=========================
     ;display Wind
     ;=========================
-    lda WindOrientation
-    bne DisplayLeftWind
+    mwa Wind temp
+    lda Wind+3 ; highest byte of 4 byte wind
+    bmi DisplayLeftWind
     lda #$7f  ; (tab) char
     sta textbuffer+80+28
     lda #0  ;space
     sta textbuffer+80+25
     beq DisplayWindValue
 DisplayLeftWind
+      sec  ; Wind = -Wind
+      lda #$00
+      sbc temp
+      sta temp
+      lda #$00
+      sbc temp+1
+      sta temp+1
     lda #$7e  ;(del) char
     sta textbuffer+80+25
     lda #0 ;space
     sta textbuffer+80+28
 DisplayWindValue
-    mwa Wind temp
-    lsrw temp ;divide by 16 to have
-    lsrw temp ;a nice view on a screen
-    lsrw temp
-    lsrw temp
+    :4 lsrw temp ;divide by 16 to have a nice value on a screen
     lda temp
     sta decimal
     mwa #textbuffer+80+26 displayposition
     jsr displaybyte
     
-    
+    ;=========================
     ;display round number
+    ;=========================
     lda CurrentRoundNr
     sta decimal
     mwa #textbuffer+80+14 displayposition

@@ -262,7 +262,7 @@ NoExplosionInFunkyBomb
     mva #sfx_nuke sfx_effect 
     jsr xmissile
 NoUpperCircle
-    adb ydraw #70
+    adw ydraw #70
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
@@ -529,21 +529,25 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc laser
+; but where are xdraw and ydraw ???? !!!!
+; ------------------------
     ldx TankNr
     lda AngleTable,x
     tay
     clc
     lda xtankstableL,x
-    adc EndOfTheBarrelX,y ; correction of the end of the barrel point
+    adc EndOfTheBarrelX,y ; correction of the end of the barrel point (X)
     sta xbyte
     lda xtankstableH,x
     adc #0
     sta xbyte+1
     sec
     lda ytankstable,x
-    sbc EndOfTheBarrelY,y
+    sbc EndOfTheBarrelY,y ; correction of the end of the barrel point (Y)
     sta ybyte
-    mva #0 ybyte+1
+	lda #$00
+	sbc #$00
+    sta ybyte+1
     mva #0 drawFunction
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
@@ -677,9 +681,9 @@ EndOfDistanceCheckLoop
     sta color
 dirtLoop
     jsr circle
-    inc ydraw
+    inw ydraw
     jsr circle
-    dec ydraw
+.nowarn    dew ydraw
     inc radius
     lda radius
     cmp ExplosionRadius
@@ -725,6 +729,7 @@ RollinContinues
     ldy #0
     lda (tempXROLLER),y
     sta ydraw
+	sty ydraw+1
     beq ExplodeNow
     cmp HeightRol
     beq UpNotYet
@@ -737,8 +742,6 @@ UpNotYet
     ;check tank collision prior to PLOT
     sty HitFlag
 
-    mwa xdraw xtraj+1
-    mwa ydraw ytraj+1
     jsr CheckCollisionWithTank
 
     lda HitFlag
@@ -760,12 +763,12 @@ HowMuchToFallRight2
     jne RollinContinues
 ExplodeNow
     mwa xdraw xcircle  ; we must store somewhere (BAD)
-    mva ydraw ycircle  ; xdraw and ydraw (BAD)
+    mwa ydraw ycircle  ; xdraw and ydraw (BAD)
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     jsr unPlot
     mwa xcircle xdraw ;(bad)
-    mva ycircle ydraw ;(bad)
+    mwa ycircle ydraw ;(bad)
 
     ; finally a little explosion
     jsr CalculateExplosionRange
@@ -782,6 +785,7 @@ ExplodeNow
     adw tempXROLLER xdraw
     lda (tempXROLLER),y
     sta ydraw
+	sty ydraw+1
 
     lda vx+3
     ; if horizontal velocity is negative then change the direction
@@ -852,7 +856,7 @@ DirectionChecked
     mva #1 color
 NoColor ; jump here with color=0 to clean dirt
     mwa xdraw xcircle
-    mva ydraw ycircle
+    mwa ydraw ycircle
     lda #1
 ; current dirt width
     sta magic
@@ -890,14 +894,14 @@ DoNotPlot
     bne NextRow
 EndOfTheDirt
     mwa xcircle xdraw
-    mva ycircle ydraw
+    mwa ycircle ydraw
     rts
 .endp
 ; ----------------
 .proc xliquiddirt ;
-	mva xdraw TempXfill
+	mwa xdraw TempXfill
 RepeatFill
-	mva TempXfill xdraw
+	mwa TempXfill xdraw
 	jsr checkRollDirection
 	; HowMuchToFall - direction
     ; $FF - we are in a hole (flying in missile direction)
@@ -987,7 +991,7 @@ ContinueToCheckMaxForce2
       lda MaxForceTableL,x
       sta ForceTableL,x
 @
-    jsr StatusDisplay ;all digital values like force, angle, wind, etc.
+    jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
 
     jsr DrawTankNr
@@ -1012,7 +1016,17 @@ notpressed
     beq checkJoy
 
     lda kbcode
-    and #$Bf
+    and #%10111111 ; SHIFT elimination
+
+    cmp #28  ; ESC
+    bne @+
+    jsr AreYouSure
+    lda escFlag
+    beq notpressed
+    ;---esc pressed-quit game---
+    rts
+
+@
     cmp #$8e
     jeq CTRLPressedUp
     cmp #$8f
@@ -1100,9 +1114,9 @@ pressedDown
       dec ForceTableH,x
       bpl @+
 ForceGoesZero
-        lda #0
-        sta ForceTableH,x
-        sta ForceTableL,x
+      lda #0
+      sta ForceTableH,x
+      sta ForceTableL,x
 @
     jmp BeforeFire
 
@@ -1235,33 +1249,24 @@ AfterStrongShoot
 
     mva #sfx_shoot sfx_effect
     ; Shoots tank nr X !!! :)
-    ;ldx TankNr
-    lda xtankstableL,x
-    sta xtraj+1
-    lda xtankstableH,x
-    sta xtraj+2
-    lda ytankstable,x
-    sta ytraj+1
-    lda #$00
-    sta ytraj+2
-
-    ; correction of the starting coordinates of bullet
+    ; set the starting coordinates of bullet with correction
     ; to start where the tank's barrel ends
     ; (without it bullet would go from the left lower corner of the tank)
-    ldy Angle
-    clc
-    lda xtraj+1
-    adc EndOfTheBarrelX,y   ; correction of X
+    ;ldx TankNr
+	ldy Angle
+	clc
+    lda xtankstableL,x
+	adc EndOfTheBarrelX,y   ; correction of X
     sta xtraj+1
-    lda xtraj+2
-    adc #0
+    lda xtankstableH,x
+	adc #$00
     sta xtraj+2
-    sec
-    lda ytraj+1
-    sbc EndOfTheBarrelY,y   ; correction of Y
+	sec
+    lda ytankstable,x
+	sbc EndOfTheBarrelY,y   ; correction of Y
     sta ytraj+1
-    lda ytraj+2
-    sbc #0
+    lda #$00
+	sbc #$00
     sta ytraj+2
 
     jsr Flight
@@ -1506,7 +1511,8 @@ ThereWasNoParachute
 .endp
 
 ;--------------------------------------------------
-.proc Flight  ; Force(byte.byte), Angle(byte), Wind(.byte) 128=0, 255=maxright, 0=maxleft
+.proc Flight  ; Force(byte.byte), Wind(0.word)
+; Angle(byte) 128=0, 255=maxright, 0=maxleft
 ;--------------------------------------------------
 ;g=-0.1
 ;vx=Force*sin(Angle)
@@ -1536,9 +1542,9 @@ RepeatIfSmokeTracer
     mva #%01000000 drawFunction
 
     lda #0  
-    sta Result
-    sta Result+1
-    sta Result+2
+    sta vx
+    sta vx+1
+    sta vx+2
     sta HitFlag
     sta xdraw
     sta xdraw+1
@@ -1559,7 +1565,7 @@ RepeatIfSmokeTracer
     ;255-90 (165) horizontally left
 
     bpl FlightRight
-
+    
     ;and if the highest bit is set then
     ;Flight to LEFT
     ;calculate Angle with this formula:
@@ -1568,24 +1574,23 @@ RepeatIfSmokeTracer
     sec
     txa
     sbc #165 ;(Angle-165)
-    sta temp ;dirty trick with selfmodifying code (REMOVED)
-    lda #90  ;
+    sta temp 
+    lda #90  
     sbc temp ;90-(Angle-165)
     ;and we have rady angle here ... and we go LEFT!
     tax
     sta Angle
-    mva #1 goleft
+    
     ; and now we contine as if nothing happened
     ; (but we have goleft set to 1!!!)
-    bne dontzerogoleft
+    mva #1 goleft
+    bne @+
 
 FlightRight
     mva #0 goleft
-
-dontzerogoleft
-
+@
     lda sintable,x  ;sin(Angle)
-    sta Multiplee ;sin(Angle)*Force
+    sta Multiplee   ;sin(Angle)*Force
     mwa Force Multiplier
     lda #$0
     sta Multiplier+2
@@ -1595,14 +1600,14 @@ MultiplyLoop
     bcc DoNotAdd
     clc
     lda Multiplier
-    adc Result
-    sta Result
+    adc vx
+    sta vx
     lda Multiplier+1
-    adc Result+1
-    sta Result+1
+    adc vx+1
+    sta vx+1
     lda Multiplier+2
-    adc Result+2
-    sta Result+2
+    adc vx+2
+    sta vx+2
 DoNotAdd
     ;clc ;carry always cleared here (anyway we hope so :)
     rol Multiplier
@@ -1610,21 +1615,24 @@ DoNotAdd
     rol Multiplier+2
     dex
     bne MultiplyLoop
-    ; here in Result there is a number xxxx.yyy = sin(Angle)*Force
-
-    lda Result ;vx=sin(Angle)*Force
-    sta vx
-    lda Result+1
-    sta vx+1
-    lda Result+2
-    sta vx+2
+    
     mva #0 vx+3
-
+    ; here in vx there is a number 
+    ; xxxx.xx00 = sin(Angle)*Force
+    ; negate it if going left
+    lda goleft
+    beq @+
+      .rept 4
+        lda #$00
+        sbc vx+#
+        sta vx+#
+      .endr
+@
 ;======vy
     lda #0  ;cos(Angle)
-    sta Result
-    sta Result+1
-    sta Result+2
+    sta vy
+    sta vy+1
+    sta vy+2
 ;--
     lda #90
     sec
@@ -1642,14 +1650,14 @@ MultiplyLoopY
     bcc DoNotAddY
     clc
     lda Multiplier
-    adc Result
-    sta Result
+    adc vy
+    sta vy
     lda Multiplier+1
-    adc Result+1
-    sta Result+1
+    adc vy+1
+    sta vy+1
     lda Multiplier+2
-    adc Result+2
-    sta Result+2
+    adc vy+2
+    sta vy+2
 DoNotAddY
     ;clc ;carry always cleared here (anyway we hope so :)
     rol Multiplier
@@ -1657,15 +1665,10 @@ DoNotAddY
     rol Multiplier+2
     dex
     bne MultiplyLoopY
-    ; here in Result there is a number xxxx.yyy=cos(Angle)*Force
+    ; here in vy there is a number 
+    ; yyyy.yy=cos(Angle)*Force
 
-    lda Result ;vy=cos(Angle)*Force
-    sta vy
-    lda Result+1
-    sta vy+1
-    lda Result+2
-    sta vy+2
-    mva #0 vy+3
+    mva #0 vy+3 ;vy=cos(Angle)*Force
 
 Loopi
     ;ytraj=ytraj-vy (skipping least significant byte of vy)
@@ -1699,8 +1702,7 @@ Loopi
     cmp #6 ; MIRV
     jeq MIRVdownLoop
 StillUp
-    lda goleft
-    bne FlightLeft
+
 
     clc ;xtraj=xtraj+vx (skipping least significant byte of vx)
     lda xtraj ;here of course Fight to right
@@ -1712,66 +1714,13 @@ StillUp
     lda xtraj+2
     adc vx+3
     sta xtraj+2
-    jmp @+ ;skipping substracting for Flight to left
 
-FlightLeft
-      sec ;xtraj=xtraj-vx (skipping least significant byte of vx)
-      lda xtraj ;here of course Fight to left
-      sbc vx+1
-      sta xtraj
-      lda xtraj+1
-      sbc vx+2
-      sta xtraj+1
-      lda xtraj+2
-      sbc vx+3
-      sta xtraj+2
-
-@
-    ;vx=vx-Wind (also without least significan byte of vx)
-    lda goleft
-    bne FlightsLeft ;blow on bullet flighting left
-    lda WindOrientation
-    bne LWindToRight
-    beq LWindToLeft
-FlightsLeft
-    lda WindOrientation
-    beq LWindToRight
-
-LWindToLeft
-    ; here Wind to right, bullet goes right as well, so vx=vx+Wind
-    ; here Wind to left, bullet goes left as well, so vx=vx+Wind
     clc
-    lda vx
-    adc Wind
-    sta vx
-    lda vx+1
-    adc Wind+1
-    sta vx+1
-    lda vx+2
-    adc #0
-    sta vx+2
-    lda vx+3
-    adc #0
-    sta vx+3
-    jmp @+
-
-LWindToRight
-    ;Wind to left, bullet right, so vx=vx-Wind
-    ;Wind to right, bullet left, so vx=vx-Wind
-    sec
-    lda vx
-    sbc Wind
-    sta vx
-    lda vx+1
-    sbc Wind+1
-    sta vx+1
-    lda vx+2
-    sbc #0
-    sta vx+2
-    lda vx+3
-    sbc #0
-    sta vx+3
-@
+    .rept 4
+      lda vx+#
+      adc Wind+#
+      sta vx+#
+    .endr
     mwa xtrajold+1 xdraw
     mwa ytrajold+1 ydraw
     mwa xtraj+1 xbyte
@@ -1792,7 +1741,7 @@ nowait
     lda HitFlag
     bne Hit
 
-    cpw ytraj+1 #screenheight
+    cpw ytraj+1 #screenheight+1
     bcc YTrayLowerThanScreenHeight
     lda ytraj+2
     bpl EndOfFlight
@@ -1820,12 +1769,12 @@ Hit
     jsr unPlot
 EndOfFlight
     mwa xdraw xcircle  ; we must store for a little while
-    mva ydraw ycircle  ; xdraw and ydraw .... but this values are in YHit and XHit !!!
+    mwa ydraw ycircle  ; xdraw and ydraw .... but this values are in YHit and XHit !!!
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     jsr unPlot
     mwa xcircle xdraw
-    mva ycircle ydraw
+    mwa ycircle ydraw
 ;    mwa XHit xdraw
 ;    mva YHit ydraw
 
@@ -1839,7 +1788,7 @@ EndOfFlight2
     rts
 .endp
 
-SecondFlight .proc
+.proc SecondFlight
 ; ---------------- copied code fragment from before firing. not too elegant.
 ; ---------------- get fire parameters again
     ldx TankNr
@@ -1890,7 +1839,7 @@ SecondFlight .proc
 .endp
 
 ; -------------------------------------------------
-MIRVdownLoop .proc
+.proc MIRVdownLoop
 ; MIRV loop - here mirv bullets fall down
 ; -------------------------------------------------
 ; copy Flight parameters to the table
@@ -2011,8 +1960,6 @@ MIRVdoNotChangeY
 
     lda MirvDown,x ; if bullet is already down we go with the next one
     jne MIRVnextBullet
-    lda goleft
-    bne mrFlightLeft
 
     clc ;xtraj=xtraj+vx (skipping the least significant byte of vx)
     lda xtraj00,x ;and here of course Flight to the right
@@ -2024,104 +1971,90 @@ MIRVdoNotChangeY
     lda xtraj02,x
     adc vx03,x
     sta xtraj02,x
-    jmp mrskip07 ;skip substracting for Flight to the left
 
-mrFlightLeft
-    sec ;xtraj=xtraj-vx (skipping the least significant byte of vx)
-    lda xtraj00,x ;here of course Flight to the left
-    sbc vx01,x
-    sta xtraj00,x
-    lda xtraj01,x
-    sbc vx02,x
-    sta xtraj01,x
-    lda xtraj02,x
-    sbc vx03,x
-    sta xtraj02,x
+    ;vx=vx+Wind
 
-
-mrskip07
-    ;vx=vx-Wind (also without least significan byte of vx)
-
-    lda goleft
-    bne mrFlightsLeft ;blow on bullet flighting left
-    lda WindOrientation
-    bne mrWindToLeft
-    beq mrLWindToLeft
-mrFlightsLeft
-    lda WindOrientation
-    beq mrLWindToRight
-mrLWindToLeft
-    ; here Wind to right, bullet goes right as well, so vx=vx+Wind
-    ; here Wind to left, bullet goes left as well, so vx=vx+Wind
     clc
-    lda vx00,x
-    adc Wind
-    sta vx00,x
-    lda vx01,x
-    adc Wind+1
-    sta vx01,x
-    lda vx02,x
-    adc #0
-    sta vx02,x
-    lda vx03,x
-    adc #0
-    sta vx03,x
-    Jmp mrskip08
-mrWindToLeft
-mrLWindToRight
-    ;Wind to left, bullet right, so vx=vx-Wind
-    ;Wind to right, bullet left, so vx=vx-Wind
-    sec
-    lda vx00,x
-    sbc Wind
-    sta vx00,x
-    lda vx01,x
-    sbc Wind+1
-    sta vx01,x
-    lda vx02,x
-    sbc #0
-    sta vx02,x
-    lda vx03,x
-    sbc #0
-    sta vx03,x
-mrskip08
+    .rept 4
+      lda vx+#
+      adc Wind+#
+      sta vx+#
+    .endr
 
-    ; isn't it over the screen????
-    lda ytraj+2    ;attention! this checks getting out of the screen through bottom
-    bmi MIRVcheckX   ;but not that accurately....
-    lda ytraj+1
-    cmp #screenheight
-    jcs mrEndOfFlight ; if smaller than screenheight then continue (and it will always fall down...)
-MIRVcheckX
-    lda xtraj02,x
+	; rules for a falling MIRV bulets.
+	; if Y is negative and any X (bullet over the screen) - continue flying
+	; if (Y>=0 and Y<=screenhight) and X>screenwidth (bullet off-screen on the left or right side) - continue flying
+	; if (Y>=0 and Y<=screenhight) and X<=screenwidth (bullet on the screen) - check collision
+	; if Y>screenhight and X>screenwidth (bullet under the screen on the left or right side) - stop flying without hit
+	; if Y>screenhight and X<=screenwidth (bullet under the screen) - check collision (allways hit)
+	
+	; check bullet position and set flags: 
+	; XposFlag - bullet positon X (0 - on screen , %1000000 - off-screen)
+	; YposFlag - bullet positon Y (0 - on screen , %1000000 - over the screen , %0100000 - under the screen)
+	lda #$00
+	sta XposFlag
+	sta YposFlag
+	lda ytraj+2		; Y high byte 
+	bpl @+
+	mva #%10000000 YposFlag	; bullet over the screen (Y)
+	bmi MIRVsetXflag
+@
+	lda ytraj+1		; Y low byte
+	cmp #screenheight
+	bcc MIRVsetXflag	; bullet on screen (Y)
+	mva #%01000000 YposFlag	; bullet under the screen (Y)
+MIRVsetXflag
+	lda xtraj02,x	; X high byte
     cmp #>screenwidth
-    beq MIRVcheckLowerX
-    bcc MIRVcheckCollision
-    ; it's over the screen horizontally (to the left or right)
-    mwa #0 xdraw
-    mva #screenheight-1 ydraw
-    jsr unPlot.unPlotAfterX
-    jmp mrLoopi
-MIRVcheckLowerX
-    lda xtraj01,x
+	bne @+
+    lda xtraj01,x	; X low byte
     cmp #<screenwidth
-    bcc MIRVcheckCollision
-    ; it's over the screen horizontally (to the left or right)
+@
+	bcc MIRVXonscreen
+	mva #%10000000 XposFlag	; bullet off-screen (X)
+MIRVXonscreen
+
+	; X and Y position flags sets
+	; then realize rules
+
+	lda YposFlag
+	jmi MIRVcontinueFly		; Y over the screen
+	bne MIRVYunderscreen	; Y under the screen
+	; Y on screen
+	bit XposFlag
+	jmi MIRVcontinueFly		; Y on screen and X off-screen
+	jpl MIRVcheckCollision	; X and Y on screen
+MIRVYunderscreen
+	bit XposFlag
+	jpl MIRVcheckCollision	; X on screen and Y under screen
+	; Y under screen and X off-screen
+	; stop flying
+	jmi mrEndOfFlight
+
+MIRVcontinueFly
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
+	bit XposFlag
+	bmi @+	; no pixels to plot
+	; plot bullets over the screen
+	mwa #0 ydraw
+    ;mwa xtraj01 xdraw
+    lda xtraj01,x
+    sta xdraw
+    lda xtraj02,x
+    sta xdraw+1
+@
     jsr unPlot.unPlotAfterX
     jmp mrLoopi
 
 MIRVcheckCollision
-    ; checking the collision!
-    lda ytraj+2
-    bne mrSkipCollisionCheck
 
-    ; checking works only with xtraj so copy there all we need
+    ; checking works only with xdraw and ydraw so copy there all we need
     lda xtraj01,x
-    sta xtraj+1
+    sta xdraw
     lda xtraj02,x
-    sta xtraj+2
+    sta xdraw+1
+    mwa ytraj+1 ydraw
     mva #0 HitFlag
     jsr CheckCollisionWithTank
     ldx MirvMissileCounter
@@ -2139,13 +2072,10 @@ MIRVcheckCollision
 
     ldy #0
     lda ytraj+1
-    cmp (temp),y
+    cmp (temp),y	; check collision witch mountains
     bcs mrHit
 
-
-
 mrSkipCollisionCheck
-
     ;mwa xtraj01 xdraw
     lda xtraj01,x
     sta xdraw
@@ -2183,10 +2113,11 @@ mrHit
     sta ydraw
     sty ydraw+1  ;we know that y=0
     jsr missile ; explode ....
+
 mrEndOfFlight
     ldx MirvMissileCounter
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     jsr unPlot.unPlotAfterX
     ldx MirvMissileCounter
     lda #1
@@ -2204,13 +2135,13 @@ MIRVstillNotAll
     jmp mrLoopi
 MIRValreadyAll
     mwa xdraw xcircle  ; we must store them (for a while)
-    mva ydraw ycircle  ; xdraw and ydraw
+    mwa ydraw ycircle  ; xdraw and ydraw
     mwa #0 xdraw
-    mva #screenheight-1 ydraw
+    mwa #screenheight-1 ydraw
     ldx MirvMissileCounter
     jsr unPlot.unPlotAfterX
     mwa xcircle xdraw
-    mva ycircle ydraw
+    mwa ycircle ydraw
 
     ; we must do it manually because of the VOID pointer
 
@@ -2232,16 +2163,24 @@ MIRValreadyAll
 .endp
 
 ; -------------------------------------------------
-CheckCollisionWithTank .proc
+.proc CheckCollisionWithTank
 ; -------------------------------------------------
+; Check collision with Tank :)
+; xdraw , ydraw - coordinates of the checked point
+; results:
+; HitFlag - 1 - hit, 0 - no hit
+; XHit , YHit - coordinates of hit
+; X - index of the hit tank
+
     ldx #0
 CheckCollisionWithTankLoop
-
+	lda eXistenZ,x
+	beq DeadTank
     lda xtankstableH,x
-    cmp xtraj+2
+    cmp xdraw+1
     bne Condition01
     lda xtankstableL,x
-    cmp xtraj+1
+    cmp xdraw
 Condition01
     bcs LeftFromTheTank ;add 8 double byte
     clc
@@ -2249,26 +2188,27 @@ Condition01
     tay
     lda xtankstableH,x
     adc #0
-    cmp xtraj+2
+    cmp xdraw+1
     bne Condition02
-    cpy xtraj+1
+    cpy xdraw
 Condition02
     bcc RightFromTheTank
 
     lda ytankstable,x
-    cmp ytraj+1  ; check range
+    cmp ydraw  ; check range
     bcc BelowTheTank ;(ytankstable,ytankstable+3)
     sbc #4
-    cmp ytraj+1
+    cmp ydraw
     bcs OverTheTank
     mva #1 HitFlag
-    mwa xtraj+1 XHit
-    mwa ytraj+1 YHit
+    mwa xdraw XHit
+    mwa ydraw YHit
     rts ; in X there is an index of the hit tank
 RightFromTheTank
 LeftFromTheTank
 OverTheTank
 BelowTheTank
+DeadTank
     inx
     cpx NumberOfPlayers
     bne CheckCollisionWithTankLoop
@@ -2320,7 +2260,7 @@ RangesChecked
 .endp    
     
 ;--------------------------------------------------
-DecreaseWeaponBeforeShoot .proc
+.proc DecreaseWeaponBeforeShoot
 ;--------------------------------------------------
     ldx TankNr
     lda ActiveWeapon,x
@@ -2342,26 +2282,28 @@ DecreaseWeaponBeforeShoot .proc
 .endp
 
 ;--------------------------------------------------
-DecreaseWeapon .proc
+.proc DecreaseWeapon
 ; in: A: Weapon number, TankNr
 ; out: A: number of shells left, Y: weapon number
 ; decreases 1 bullet from a weapon(A) of tank(TankNr)
 ;--------------------------------------------------
     jsr HowManyBullets
+	beq noBullets	 ; no bullets - no decreasing (additional check)
     cpy #0
     beq defaultWeapon  ; no decreasing Baby Missile
       sec
       sbc #1
       sta (weaponPointer),y ; we have good values after HowManyBullets
 defaultWeapon
+noBullets
     rts
 .endp
 
 ;--------------------------------------------------
-HowManyBullets .proc
+.proc HowManyBullets
 ; in: A <-- Weapon number, TankNr
 ; out: A <-- How many bullets in the weapon, Y: weapon number
-; how many bullets weapon of tank(TankNr) has, Result w A 
+; how many bullets weapon of tank(TankNr) has, Result in A 
 ;--------------------------------------------------
     tay
     ldx TankNr
@@ -2375,7 +2317,7 @@ HowManyBullets .proc
 .endp
 
 ;--------------------------------------------------
-ShellDelay .proc
+.proc ShellDelay
     lda CONSOL
     cmp #6
     beq noShellDelay

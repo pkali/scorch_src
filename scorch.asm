@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"142" ; number of this build (3 bytes)
+	dta d"143" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -98,6 +98,7 @@
     icl 'lib/atari.hea'
     icl 'lib/macro.hea'
 
+    ;splash screen and musix
 	icl 'artwork/HIMARS14.asm'
     ;Game loading address
     ORG  $3000
@@ -117,13 +118,14 @@ START
     ; Startup sequence
     jsr Initialize
 
-
-
     jsr Options  ;startup screen
     lda escFlag
     bne START
 
     jsr EnterPlayerNames
+    lda escFlag
+    bne START
+
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 
@@ -144,6 +146,9 @@ MainGameLoop
     jsr RoundInit
     
     jsr MainRoundLoop
+    lda escFlag
+    bne START
+    
     mva #0 TankNr  ; 
     
     jsr SortSequence
@@ -248,50 +253,45 @@ skipzeroing
 ; the shooting angle is randomized
 ; of course gains an looses are zeroed
 
-	;jsr StatusDisplay
 	lda #0
 	tax
-@
-	sta singleRoundVars,x
-	inx
-	cpx #(singleRoundVarsEnd-singleRoundVars)
+@	  sta singleRoundVars,x
+	  inx
+	  cpx #(singleRoundVarsEnd-singleRoundVars)
 	bne @-
 
     ldx #(MaxPlayers-1)
 SettingEnergies
-    lda #$00
-    sta gainL,x
-    sta gainH,x
-    sta looseL,x
-    sta looseH,x
-    lda #99
-    sta Energy,x
-    sta eXistenZ,x
-    sta LASTeXistenZ,x
-    ; anything in eXistenZ table means that this tank exist
-    ; in the given round
-    lda #<1000
-    sta MaxForceTableL,x
-    lda #>1000
-    sta MaxForceTableH,x
-    lda #<350
-    sta ForceTableL,x
-    lda #>350
-    sta ForceTableH,x
-
-    ;lda #(255-45)
-    ;it does not look good when all tanks have
-    ;barrels pointing the same direction
-    ;so it would be nice to have more or less random
-    ;angles
-    jsr RandomizeAngle
-    sta AngleTable,x
-
-
-    dex
+      lda #$00
+      sta gainL,x
+      sta gainH,x
+      sta looseL,x
+      sta looseH,x
+      lda #99
+      sta Energy,x
+      sta eXistenZ,x
+      sta LASTeXistenZ,x
+      ; anything in eXistenZ table means that this tank exist
+      ; in the given round
+      lda #<1000
+      sta MaxForceTableL,x
+      lda #>1000
+      sta MaxForceTableH,x
+      lda #<350
+      sta ForceTableL,x
+      lda #>350
+      sta ForceTableH,x
+  
+      ;lda #(255-45)
+      ;it does not look good when all tanks have
+      ;barrels pointing the same direction
+      ;so it would be nice to have more or less random
+      ;angles
+      jsr RandomizeAngle
+      sta AngleTable,x
+  
+      dex
     bpl SettingEnergies
-
-    mva #0 CurrentResult
 
 ;generating the new landscape
     jsr PMoutofScreen ;let P/M disappear
@@ -322,6 +322,7 @@ SettingEnergies
     ; tank with energy greater than 0 left
 
     ldy #0  ; in Y - number of tanks with energy greater than zero
+	sty ATRACT	; reset atract mode
     ldx NumberOfPlayers
     dex
 CheckingIfRoundIsFinished
@@ -343,8 +344,7 @@ WhichTankWonLoop
     bne ThisOneWon
     dex
     bpl WhichTankWonLoop
-    ;error here!!!
-    ;stop
+    ;error was here!!!
     ; somehow I believed program will be never here
     ; but it was a bad assumption
     ; god knows when there is such a situation
@@ -354,7 +354,6 @@ WhichTankWonLoop
     ; second tank explodes and kills the first one.
     ; and code lands here...
     ; looks like no one won!
-
     rts
 
 ThisOneWon
@@ -376,7 +375,6 @@ DoNotFinishTheRound
     jsr DisplaySeppuku
     jmp Seppuku
 
-    ;ldx TankNr
 @
     ldx TankSequencePointer
     lda TankSequence,x
@@ -394,12 +392,20 @@ DoNotFinishTheRound
     lda SkillTable,x
     beq ManualShooting
 
-RoboTanks    
+RoboTanks
 	; robotanks shoot here
     jsr ArtificialIntelligence
     jsr MoveBarrelToNewPosition
-    jsr StatusDisplay ;all digital values like force, angle, wind, etc.
+    jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
+    lda kbcode
+    cmp #28  ; ESC
+    bne @+
+      jsr AreYouSure
+      lda escFlag
+      seq:rts
+@
+
     ; let's move the tank's barrel so it points the right
     ; direction
     jmp AfterManualShooting
@@ -408,12 +414,14 @@ ManualShooting
 
     jsr WaitForKeyRelease
     jsr BeforeFire
+    lda escFlag
+    seq:rts
 
 AfterManualShooting
     inc noDeathCounter
 
     jsr DecreaseWeaponBeforeShoot
-    jsr StatusDisplay
+    jsr DisplayStatus
 
 	ldx TankNr
 	dec Energy,x   ; lower energy to eventually let tanks commit suicide
@@ -437,6 +445,7 @@ continueMainRoundLoopAfterSeppuku
 
 
 AfterExplode
+    ; TODO: IS IT OK??? possibly a fix here needed for #56
     ldy WeaponDepleted
     bne @+
       ldx TankNr
@@ -474,11 +483,8 @@ missed
     jsr DisplayOffensiveTextNr
 
 NextPlayerShoots
-    ;mva #1 Erase
-    ;jsr drawtanks
-
-    ;before it shoots, the eXistenZ table must be
-    ;updated accordingly to actual energy (was forgotten, sorry to ourselves)
+    ;before it shoots, the eXistenZ table must be updated
+    ;accordingly to actual energy (was forgotten, sorry to ourselves)
 
     ldx #(MaxPlayers-1)
 SeteXistenZ
@@ -489,7 +495,7 @@ SeteXistenZ
     ;DATA L1,L2
     ;Multiplication 8bit*8bit,
     ;result 16bit
-    ;this algiorithm is a little longer than in Ruszczyc 6502 book
+    ;this algiorithm is a little longer than one in Ruszczyc 6502 book
     ;but it is faster
 
     LDy #8
@@ -514,13 +520,6 @@ B0  DEY
 
     ;was setup of maximum energy for players
 
-    ;mva #0 Erase
-    ;jsr drawtanks
-
-    inc:lda TankSequencePointer
-    cmp NumberOfPlayers
-    bne PlayersAgain
-    mva #0 TankSequencePointer
 
 PlayersAgain
 
@@ -552,27 +551,14 @@ NoPlayerNoDeath
     dex
     bpl CheckingPlayersDeath
     ; if processor is here it means there are no more explosions
+
+    inc:lda TankSequencePointer
+    cmp NumberOfPlayers
+    sne:mva #0 TankSequencePointer
+
     jmp MainRoundLoop
 .endp
 	
-;---------------------------------
-.proc Seppuku
-    lda #0
-    sta FallDown1
-    sta FallDown2
-    sta ydraw+1
-    ; get position of the tank
-    ldx TankNr
-    lda xtankstableL,x
-    sta xdraw
-    lda xtankstableH,x
-    sta xdraw+1
-    lda yTanksTable,x
-    sta ydraw
-    lda #1  ; Missile
-    jsr ExplosionDirect
-    jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
-.endp
 ;---------------------------------
 .proc PlayerXdeath
 
@@ -605,8 +591,13 @@ NoPlayerNoDeath
     ldy TankTempY
     mva #1 plot4x4color
     jsr DisplayOffensiveTextNr
+	; tank flash
+    ldy TankTempY
+	mva TankNr temp2 ; not elegant, and probably unnecessary
+	sty TankNr
+	jsr FlashTank ; blinking and pausing (like PAUSE 72 - 18x(2+2) )
+	mva temp2 TankNr 
 
-    PAUSE 75
     ;Deffensive text cleanup
     ;here we clear Deffensive text (after a shoot)
     ldy TankTempY
@@ -627,7 +618,7 @@ NoPlayerNoDeath
     sbc #4
     sta ydraw
     lda #0
-    sta ydraw+1   ; there is 0 left in A, so... TODO: bad code above. revisit when transitioning ydraw to byte
+    sta ydraw+1   ; there is 0 left in A, so... TODO: bad code above. revisit
 
     ;cleanup of the soil fall down ranges (left and right)
     sta RangeRight
@@ -636,12 +627,9 @@ NoPlayerNoDeath
     sta FallDown2
     mwa #screenwidth RangeLeft
 
-
-
     ; We are randomizing the weapon now.
     ; jumping into the middle of the explosion
     ; routine
-
 MetodOfDeath
     lda random
     and #%00011111  ;  range 0-31
@@ -652,13 +640,10 @@ MetodOfDeath
     jsr ExplosionDirect
     mva #sfx_silencer sfx_effect
 
-    
     ; jump to after explosion routines (soil fallout, etc.)
     ; After going through these routines we are back
     ; to checking if a tank exploded and maybe we have
     ; a deadly shot here again.
-
-
     jmp MainRoundLoop.AfterExplode
 .endp
 
@@ -702,20 +687,52 @@ NotNegativeEnergy
     rts
 .endp
 
+;---------------------------------
+.proc Seppuku
+    lda #0
+    sta FallDown1
+    sta FallDown2
+    sta ydraw+1
+    ; get position of the tank
+    ldx TankNr
+    lda xtankstableL,x
+    sta xdraw
+    lda xtankstableH,x
+    sta xdraw+1
+    lda yTanksTable,x
+    sta ydraw
+    lda #1  ; Missile
+    jsr ExplosionDirect
+    jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
+.endp
+
 ;--------------------------------------------------
 GetRandomWind .proc
+;in: MaxWind (byte)
+;out: Wind (word)
+;uses: _
 ;--------------------------------------------------
     lda random
     cmp MaxWind
     bcs GetRandomWind ; if more than MaxWind then randomize again
     sta Wind
     mva #$00 Wind+1
-    ; multiply Wind by 16 and take it as a decimal part (0.Wind)
+    sta Wind+2
+    sta Wind+3
+    ; multiply Wind by 16
+    ; two bytes of Wind are treated as a decimal part of vx variable
     :4 aslw Wind
+    ; decide the direction
     lda random
     and #$01
-    sta WindOrientation
-    rts
+    beq @+
+      sec  ; Wind = -Wind
+      .rept 4
+        lda #$00
+        sbc Wind+#
+        sta Wind+#
+      .endr
+@   rts
 .endp
 
 ;--------------------------------------------------
@@ -733,34 +750,28 @@ PMoutofScreen .proc
 ;--------------------------------------------------
     ldx #$3f
     lda #$0
-loop05
-    sta TanksWeapon1,x
-    sta TanksWeapon2,x
-    sta TanksWeapon3,x
-    sta TanksWeapon4,x
-    sta TanksWeapon5,x
-    sta TanksWeapon6,x
-    dex
-    bne @+
-      lda #99
-      bne loop05
-@ bpl loop05
+@
+      sta TanksWeapon1,x
+      sta TanksWeapon2,x
+      sta TanksWeapon3,x
+      sta TanksWeapon4,x
+      sta TanksWeapon5,x
+      sta TanksWeapon6,x
+      dex
+      sne:lda #99
+    bpl @-
     rts
 .endp
 
 ;--------------------------------------------------
 .proc Initialize
 ;Initialization sequence
+;uses: temp, ...
 ;--------------------------------------------------
 deletePtr = temp
 
-    lda #0 
-    sta Erase
-    sta tracerflag
-    sta GameIsOver
-    sta escFlag
-
     ; clean variables
+    lda #0 
     tay
     mwa #variablesStart deletePtr
 @     tya
@@ -1168,7 +1179,8 @@ nextishigher
 .endp
 
 ;--------------------------------------------------
-.proc getkey  ; waits for pressing a key and returns pressed value in A
+.proc GetKey  ; waits for pressing a key and returns pressed value in A
+; when [ESC] is pressed, escFlag is set to 1
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @

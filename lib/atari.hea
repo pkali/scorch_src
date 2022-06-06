@@ -147,6 +147,7 @@ NMIST	=	$D40F		; rejestr statusu przerwa� NMI
 ;-------------------------------------
 ;additional system variables
 ;-------------------------------------
+ATRACT	= $004D
 COLPM0S = $02C0 ;- - shadow register COLPM0
 COLPM1S = $02C1 ;- - shadow register COLPM1
 COLPM2S = $02C2 ;- - shadow register COLPM2
