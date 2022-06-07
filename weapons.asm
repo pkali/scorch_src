@@ -1298,9 +1298,10 @@ ShotUnderGround
     sta Parachute
 
     ; let's check if the given tank has got the parachute
-    lda #$35 ; parachute
-    jsr HowManyBullets
-    beq TankFallsX
+	ldx TankNr
+	lda ActiveDefenceWeapon,x
+    cmp #$35 ; parachute
+    bne TankFallsX
     inc Parachute
 TankFallsX
     ; coordinates of the first pixel under the tank
@@ -1502,6 +1503,7 @@ EndOfFall
     ; first we clear parachute on the screen
     mva #1 Erase
     ldx TankNr
+	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
     lda #$34
     sta CharCode
     lda Ytankstable,x
@@ -1514,10 +1516,6 @@ EndOfFall
     sta xdraw+1
     jsr TypeChar
     mva #0 Erase
-    ; now we can deduct one parachute from the list of weapons
-
-    lda #$35 ; parachute
-    jsr DecreaseWeapon
 ThereWasNoParachute
     mva #sfx_silencer sfx_effect
     rts

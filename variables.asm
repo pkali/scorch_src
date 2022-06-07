@@ -95,6 +95,8 @@ NewAngle .DS 1
 
 ActiveWeapon ;number of the selected weapon
     .DS [MaxPlayers]
+ActiveDefenceWeapon ;number of the activated defence weapon - 0 
+    .DS [MaxPlayers]	
 WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;----------------------------------------------------
 
