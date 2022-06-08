@@ -1709,6 +1709,28 @@ FinishResultDisplay
     mwa #textbuffer+48 displayposition
     jsr displaybyte
 
+    ;---------------------
+    ;displaying the energy of a tank shield (if exist)
+    ;---------------------
+	; clear (if no shield)
+	lda #$00	; space
+	sta textbuffer+40+10
+	sta textbuffer+40+11
+	sta textbuffer+40+12
+	sta textbuffer+40+13
+	; check shield energy and display it
+	ldx TankNr
+	lda ShieldEnergy,x
+	beq NoShieldEnergy
+	sta decimal	; displayed value
+	lda #$08 ; (
+	sta textbuffer+40+10
+	mwa #textbuffer+40+11 displayposition
+    jsr displaybyte
+	lda #$09	; )
+	sta textbuffer+40+13	
+NoShieldEnergy
+
     ;=========================
     ;display Force
     ;=========================
@@ -1717,7 +1739,7 @@ FinishResultDisplay
     sta decimal
     lda ForceTableH,x
     sta decimal+1
-    mwa #textbuffer+40+34 displayposition
+    mwa #textbuffer+40+36 displayposition
     jsr displaydec
 
     ;=========================
@@ -1729,9 +1751,9 @@ FinishResultDisplay
     lda AngleTable,x
     bmi AngleToLeft
     lda #$7f  ; (tab) character
-    sta textbuffer+40+23
+    sta textbuffer+40+25
     lda #0  ;space
-    sta textbuffer+40+20
+    sta textbuffer+40+22
     lda #90
     sec
     sbc AngleTable,x
@@ -1748,12 +1770,12 @@ AngleToLeft
     lda BarrelTableL,y
     sta CharCode
     lda #$7e  ;(del) char
-    sta textbuffer+40+20
+    sta textbuffer+40+22
     lda #0 ;space
-    sta textbuffer+40+23
+    sta textbuffer+40+25
 
 AngleDisplay
-    mwa #textbuffer+40+21 displayposition
+    mwa #textbuffer+40+23 displayposition
     jsr displaybyte
 
     ;=========================

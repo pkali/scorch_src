@@ -642,6 +642,7 @@ DrawTankNrX
     sta xdraw+1
     lda ytankstable,x
     sta ydraw
+	mva #0 ydraw+1
 
     jsr TypeChar
 
@@ -694,9 +695,12 @@ NoPlayerMissile
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
 	lda ActiveDefenceWeapon,x
-	cmp #56		; check shield activation
+	cmp #56		; check one shot shield activation
+	beq ShieldDraw
+	cmp #58		; check shield with energy activation
 	bne NoShieldDraw
-	jsr DrawTankShield
+ShieldDraw
+	jsr DrawTankShield.DrawInPosition
 NoShieldDraw
 DoNotDrawTankNr
     rts
@@ -726,11 +730,21 @@ tankflash_loop
 
 ;--------------------------------------------------
 .proc DrawTankShield
+; X - tank number
+; if use DrawInPosition entry point then:
 ; xdraw, ydraw - coordinates left LOWER corner of Tank char
 ; values remain there after a DrawTankNr proc.
+; 
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
-
+    lda xtankstableL,x
+    sta xdraw
+    lda xtankstableH,x
+    sta xdraw+1
+    lda ytankstable,x
+    sta ydraw
+	mva #0 ydraw+1
+DrawInPosition
 	mva #1 color
 	lda erase
 	beq ShieldVisible

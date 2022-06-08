@@ -667,11 +667,26 @@ DistanceCheckLoop
     tay
 	; check shields
 	lda ActiveDefenceWeapon,x
-	cmp #56		; shield
+	cmp #56		; one hit shield
 	beq UseShield
+	cmp #58		; shield with energy
+	beq UseShieldWithEnergy
     jsr DecreaseEnergyX
 	jmp EndOfDistanceCheckLoop
+UseShieldWithEnergy
+	jsr DecreaseShieldEnergyX
+	cpy #0	; is necessary to reduce tenk energy ?
+	beq ShieldCoveredTank
+    jsr DecreaseEnergyX
+ShieldCoveredTank	
+	lda ShieldEnergy,x
+	jne EndOfDistanceCheckLoop
+ShieldEnergy0	; deactivate if no energy. it's like use one hit shield :) 
 UseShield
+	mva #1 Erase
+	phx
+	jsr DrawTankShield
+	plx
 	mva #0 ActiveDefenceWeapon,x	; deactivate defense weapons
 TankIsNotWithinTheRange
 EndOfDistanceCheckLoop

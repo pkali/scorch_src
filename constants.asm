@@ -871,9 +871,9 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Parachute       " ; 53
     dta d"Battery         " ; 54
     dta d"Mag Deflector   " ; 55
-    dta d"Shield          " ; 56
+    dta d"Shield          " ; 56	- shield for one shot
     dta d"Force Shield    " ; 57
-    dta d"Heavy Shield    " ; 58
+    dta d"Heavy Shield    " ; 58	- shield with energy
     dta d"Super Mag       " ; 59
     dta d"Auto Defense    " ; 60
     dta d"Fuel Tank       " ; 61

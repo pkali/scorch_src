@@ -66,6 +66,8 @@ looseL
 ;----------------------------------------------------
 Energy
     .DS [MaxPlayers]
+ShieldEnergy
+    .DS [MaxPlayers]
 EnergyDecrease  .DS 1
 eXistenZ
     .DS [MaxPlayers]

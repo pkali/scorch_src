@@ -129,12 +129,12 @@ START
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 	
-	; activate shield for all players (test)
-	lda #56
+	; activate shield with energy for all players (test)
     ldx numberOfPlayers
     dex
 @
-	sta ActiveDefenceWeapon,x
+	mva #58 ActiveDefenceWeapon,x
+	mva #99 ShieldEnergy,x		; set energy of shield
 	dex
 	bpl @-
 	; shield activated! (test)
@@ -658,7 +658,7 @@ MetodOfDeath
 
 ;--------------------------------------------------
 .proc DecreaseEnergyX
-;Decreases energy of player nr X
+;Decreases energy of player nr X by the value Y
 ;increases his financial loss
 ;increases gain of tank TankNr
 ;--------------------------------------------------
@@ -693,6 +693,33 @@ NotNegativeEnergy
     adc #$00
     sta gainH,x
     plx
+    rts
+.endp
+
+;--------------------------------------------------
+.proc DecreaseShieldEnergyX
+; Decreases energy of shield player nr X by the value Y
+; if shield energy is 0 after decrease then in Y we have
+; rest of the energy - to decrease tank energy
+;--------------------------------------------------
+    sty EnergyDecrease
+	ldy #0	; if Shield survive then no decrease tank anergy
+    ; Energy cannot be less than 0
+    lda ShieldEnergy,x
+    cmp EnergyDecrease
+    bcc ldahashzero
+    ;sec
+    sbc EnergyDecrease
+    bpl NotNegativeEnergy
+ldahashzero
+	; now calculate rest of energy for future tank energy decrease
+	sec
+	lda EnergyDecrease
+	sbc ShieldEnergy,x
+	tay
+    lda #0
+NotNegativeEnergy
+    sta ShieldEnergy,x
     rts
 .endp
 
