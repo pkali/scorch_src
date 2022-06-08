@@ -690,6 +690,7 @@ ZeroesToGo
     sta (xbyte),y
     dey
     bne ClearPM
+NoPlayerMissile
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
 	lda ActiveDefenceWeapon,x
@@ -697,7 +698,6 @@ ZeroesToGo
 	bne NoShieldDraw
 	jsr DrawTankShield
 NoShieldDraw
-NoPlayerMissile
 DoNotDrawTankNr
     rts
 .endp
@@ -737,7 +737,7 @@ tankflash_loop
 	dec color
 ShieldVisible
 	sbw xdraw #$03		; 3 pixels to left
-	; draw left vertical line of scheld ( | )
+	; draw left vertical line of shield ( | )
 	mva #6 temp			; strange !!!
 @
 	jsr plot
