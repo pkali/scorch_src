@@ -665,8 +665,14 @@ DistanceCheckLoop
     adc #1
     :3 asl
     tay
+	; check shields
+	lda ActiveDefenceWeapon,x
+	cmp #56		; shield
+	beq UseShield
     jsr DecreaseEnergyX
-
+	jmp EndOfDistanceCheckLoop
+UseShield
+	mva #0 ActiveDefenceWeapon,x	; deactivate defense weapons
 TankIsNotWithinTheRange
 EndOfDistanceCheckLoop
     txa

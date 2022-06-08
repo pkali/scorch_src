@@ -129,15 +129,15 @@ START
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 	
-	; activate parachutes for all players (test)
-	lda #$35
+	; activate shield for all players (test)
+	lda #56
     ldx numberOfPlayers
     dex
 @
 	sta ActiveDefenceWeapon,x
 	dex
 	bpl @-
-	; parachutes activated! (test)
+	; shield activated! (test)
 MainGameLoop
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
 

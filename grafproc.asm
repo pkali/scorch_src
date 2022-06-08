@@ -690,7 +690,13 @@ ZeroesToGo
     sta (xbyte),y
     dey
     bne ClearPM
-
+	; draw defensive weapons like shield ( tank number in X )
+	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
+	lda ActiveDefenceWeapon,x
+	cmp #56		; check shield activation
+	bne NoShieldDraw
+	jsr DrawTankShield
+NoShieldDraw
 NoPlayerMissile
 DoNotDrawTankNr
     rts
@@ -715,6 +721,59 @@ tankflash_loop
 	PAUSE 2
     dec fs
     jne tankflash_loop
+	rts
+.endp
+
+;--------------------------------------------------
+.proc DrawTankShield
+; xdraw, ydraw - coordinates left LOWER corner of Tank char
+; values remain there after a DrawTankNr proc.
+; this proc change xdraw, ydraw  and temp!
+;--------------------------------------------------
+
+	mva #1 color
+	lda erase
+	beq ShieldVisible
+	dec color
+ShieldVisible
+	sbw xdraw #$03		; 3 pixels to left
+	; draw left vertical line of scheld ( | )
+	mva #6 temp			; strange !!!
+@
+	jsr plot
+.nowarn	dew ydraw
+	dec temp
+	bne @-
+	; draw left oblique line of shield ( / )
+	mva #4 temp
+@
+	jsr plot
+.nowarn	dew ydraw
+	inw xdraw
+	dec temp
+	bne @-
+	; draw top horizontal line of shield ( _ )
+	mva #5 temp
+@
+	jsr plot
+	inw xdraw
+	dec temp
+	bne @-
+	; draw right oblique line of shield ( \ )
+	mva #4 temp
+@
+	jsr plot
+	inw ydraw
+	inw xdraw
+	dec temp
+	bne @-
+	; draw right vertical line of shield ( | )
+	mva #7 temp
+@
+	jsr plot
+	inw ydraw
+	dec temp
+	bne @-
 	rts
 .endp
 
