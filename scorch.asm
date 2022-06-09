@@ -707,18 +707,18 @@ NotNegativeEnergy
     ; Energy cannot be less than 0
     lda ShieldEnergy,x
     cmp EnergyDecrease
-    bcc ldahashzero
+    bcc UseAllShieldEnergy
     ;sec
     sbc EnergyDecrease
-    bpl NotNegativeEnergy
-ldahashzero
+    bpl NotNegativeShieldEnergy	; jump allways
+UseAllShieldEnergy
 	; now calculate rest of energy for future tank energy decrease
 	sec
 	lda EnergyDecrease
 	sbc ShieldEnergy,x
 	tay
     lda #0
-NotNegativeEnergy
+NotNegativeShieldEnergy
     sta ShieldEnergy,x
     rts
 .endp
