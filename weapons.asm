@@ -669,6 +669,8 @@ DistanceCheckLoop
 	lda ActiveDefenceWeapon,x
 	cmp #56		; one hit shield
 	beq UseShield
+	cmp #57		; shield with energy and parachute
+	beq UseShieldWithEnergy
 	cmp #58		; shield with energy
 	beq UseShieldWithEnergy
     jsr DecreaseEnergyX
@@ -1321,8 +1323,11 @@ ShotUnderGround
     ; let's check if the given tank has got the parachute
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
-    cmp #$35 ; parachute
+    cmp #53 ; parachute
+	beq ParachuteActive
+	cmp #57 ; scheld witch energy and parachute
     bne TankFallsX
+ParachuteActive
     inc Parachute
 TankFallsX
     ; coordinates of the first pixel under the tank
@@ -1524,7 +1529,11 @@ EndOfFall
     ; first we clear parachute on the screen
     mva #1 Erase
     ldx TankNr
+	lda ActiveDefenceWeapon,x
+	cmp #53		; deactivate weapon only if parachute (53)
+	bne NoParachuteWeapon
 	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
+NoParachuteWeapon
     lda #$34
     sta CharCode
     lda Ytankstable,x
@@ -1537,6 +1546,8 @@ EndOfFall
     sta xdraw+1
     jsr TypeChar
     mva #0 Erase
+    ldx TankNr	
+    jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
 ThereWasNoParachute
     mva #sfx_silencer sfx_effect
     rts

@@ -1690,12 +1690,43 @@ FinishResultDisplay
     bpl @-
  
     adw temp #NamesOfWeapons
-    ldy #6 ; from 6th character
-
     ldy #15
 @
       lda (temp),y
       sta textbuffer+23,y
+      dey
+    bpl @-
+
+    ;---------------------
+    ;displaying name of the defence weapon (if active)
+    ;---------------------
+	lda #$08 ; (
+	sta textbuffer+80+22
+	lda #$09	; )
+	sta textbuffer+80+39
+	lda ActiveDefenceWeapon,x
+	bne ActiveDefence
+	; clear brackets
+	lda #$00 ; space
+	sta textbuffer+80+22
+	sta textbuffer+80+39
+	lda #47	; no weapon name
+ActiveDefence
+    sta temp ;get back number of the weapon
+    mva #0 temp+1
+    ; times 16 (because this is length of weapon name)
+    ldy #3 ; shift left 4 times
+@
+      aslw temp
+      dey
+    bpl @-
+ 
+    adw temp #NamesOfWeapons
+
+    ldy #15
+@
+      lda (temp),y
+      sta textbuffer+40+40+23,y
       dey
     bpl @-
 
@@ -1785,9 +1816,9 @@ AngleDisplay
     lda Wind+3 ; highest byte of 4 byte wind
     bmi DisplayLeftWind
     lda #$7f  ; (tab) char
-    sta textbuffer+80+28
+    sta textbuffer+80+20
     lda #0  ;space
-    sta textbuffer+80+25
+    sta textbuffer+80+17
     beq DisplayWindValue
 DisplayLeftWind
       sec  ; Wind = -Wind
@@ -1798,14 +1829,14 @@ DisplayLeftWind
       sbc temp+1
       sta temp+1
     lda #$7e  ;(del) char
-    sta textbuffer+80+25
+    sta textbuffer+80+17
     lda #0 ;space
-    sta textbuffer+80+28
+    sta textbuffer+80+20
 DisplayWindValue
     :4 lsrw temp ;divide by 16 to have a nice value on a screen
     lda temp
     sta decimal
-    mwa #textbuffer+80+26 displayposition
+    mwa #textbuffer+80+18 displayposition
     jsr displaybyte
     
     ;=========================
@@ -1813,7 +1844,7 @@ DisplayWindValue
     ;=========================
     lda CurrentRoundNr
     sta decimal
-    mwa #textbuffer+80+14 displayposition
+    mwa #textbuffer+80+7 displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
     
     rts

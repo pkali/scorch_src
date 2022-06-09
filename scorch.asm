@@ -129,11 +129,11 @@ START
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 	
-	; activate shield with energy for all players (test)
+	; activate shield with energy and parachute for all players (test)
     ldx numberOfPlayers
     dex
 @
-	mva #58 ActiveDefenceWeapon,x
+	mva #57 ActiveDefenceWeapon,x
 	mva #99 ShieldEnergy,x		; set energy of shield
 	dex
 	bpl @-

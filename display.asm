@@ -167,7 +167,7 @@ textbuffer
      ; 0123456789012345678901234567890123456789
  dta d"Player:                                 "
  dta d"Energy:        Angle:        Force:     "
- dta d"       Round:      Wind:                "
+ dta d"Round:     Wind:                        "
 textbuffer2
  dta d"Player:                Cash:            "
  dta d"----------------------------------------"

@@ -861,7 +861,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"----------------" ; 44
     dta d"----------------" ; 45
     dta d"----------------" ; 46
-    dta d"----------------" ; 47
+    dta d"                " ; 47 ; special (no weapon) name for simplify display
 
     dta d"Heat Guidance   " ; 48 ($30)
     dta d"Bal Guidance    " ; 49
@@ -872,7 +872,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Battery         " ; 54
     dta d"Mag Deflector   " ; 55
     dta d"Shield          " ; 56	- shield for one shot
-    dta d"Force Shield    " ; 57
+    dta d"Force Shield    " ; 57	- shield with energy and parachute 
     dta d"Heavy Shield    " ; 58	- shield with energy
     dta d"Super Mag       " ; 59
     dta d"Auto Defense    " ; 60
