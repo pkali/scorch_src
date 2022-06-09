@@ -792,6 +792,25 @@ ShieldVisible
 	bne @-
 	rts
 .endp
+;--------------------------------------------------
+.proc DrawTankShieldHorns
+; use only directly after DrawTankShield
+; this proc draws a little "horns" on shield.
+; Symbol of defensive but aggressive :) weapon
+;--------------------------------------------------
+	dew xdraw			; 1 pixel left
+	sbw ydraw #$0a		; 10 pixels up
+	jsr plot
+	dew ydraw
+	inw xdraw
+	jsr plot
+	sbw xdraw #$0d		; 13 pixels left
+	jsr plot
+	inw xdraw
+	inw ydraw
+	jsr plot
+	rts
+.endp
 
 ;--------------------------------------------------
 .proc drawmountains 
