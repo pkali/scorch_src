@@ -765,7 +765,7 @@ UpNotYet
     sbc #1
     sta ydraw
     ;check tank collision prior to PLOT
-    sty HitFlag
+    sty HitFlag		; set to 0
 
     jsr CheckCollisionWithTank
 
@@ -1306,7 +1306,7 @@ AfterStrongShoot
 ShotUnderGround
 	mwa xtraj+1 xdraw	; but why not XHit and YHit !!!???
 	mwa ytraj+1 ydraw
-	mva #1 HitFlag
+	mva #$ff HitFlag
 	rts
 .endp
 
@@ -2200,7 +2200,7 @@ MIRValreadyAll
     mva tempor2 TankNr
     mva #0 Erase
     jsr SoilDown2
-    mva #1 HitFlag
+    mva #$ff HitFlag		; but why ??
     ;jsr drawtanks
     rts
 .endp
@@ -2211,7 +2211,7 @@ MIRValreadyAll
 ; Check collision with Tank :)
 ; xdraw , ydraw - coordinates of the checked point
 ; results:
-; HitFlag - 1 - hit, 0 - no hit
+; HitFlag - $ff - hit ground, 0 - no hit, 1-6 - hit tank (index+1)
 ; XHit , YHit - coordinates of hit
 ; X - index of the hit tank
 
@@ -2243,7 +2243,9 @@ Condition02
     sbc #4
     cmp ydraw
     bcs OverTheTank
-    mva #1 HitFlag
+	inx
+    stx HitFlag		; index of hit tank+1
+	dex
     mwa xdraw XHit
     mwa ydraw YHit
     rts ; in X there is an index of the hit tank

@@ -118,7 +118,7 @@ MaxWind   .ds 1 ;
 WindOrientation  .DS 1 ;(0-right,1-left)
 ;----------------------------------------------------
 Counter  .DS 1  ;temporary Counter for outside loops
-HitFlag  .DS 1 ;1 when missile hit anything
+HitFlag  .DS 1 ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank 
 ;----------------------------------------------------
 xtankstableL ;X positions of tanks (lower left point)
     .DS [MaxPlayers]

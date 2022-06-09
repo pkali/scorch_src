@@ -262,8 +262,7 @@ CheckCollisionDraw
 	sbc #1
 	sta YHit
 	sty YHit+1
-    ;mwa ydraw YHit
-    mva #1 HitFlag
+    mva #$ff HitFlag
 StopHitChecking
     jmp ContinueDraw
 @
@@ -798,10 +797,10 @@ ShieldVisible
 ; this proc draws a little "horns" on shield.
 ; Symbol of defensive but aggressive :) weapon
 ;--------------------------------------------------
-	dew xdraw			; 1 pixel left
+.nowarn	dew xdraw			; 1 pixel left
 	sbw ydraw #$0a		; 10 pixels up
 	jsr plot
-	dew ydraw
+.nowarn	dew ydraw
 	inw xdraw
 	jsr plot
 	sbw xdraw #$0d		; 13 pixels left
