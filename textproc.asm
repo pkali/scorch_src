@@ -1751,6 +1751,8 @@ ActiveDefence
 	sta textbuffer+40+13
 	; check shield energy and display it
 	ldx TankNr
+	lda ActiveDefenceWeapon,x
+	beq NoDefenceWeapon
 	lda ShieldEnergy,x
 	beq NoShieldEnergy
 	sta decimal	; displayed value
@@ -1759,7 +1761,8 @@ ActiveDefence
 	mwa #textbuffer+40+11 displayposition
     jsr displaybyte
 	lda #$09	; )
-	sta textbuffer+40+13	
+	sta textbuffer+40+13
+NoDefenceWeapon	
 NoShieldEnergy
 
     ;=========================
