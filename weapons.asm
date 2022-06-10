@@ -673,6 +673,8 @@ DistanceCheckLoop
 	beq UseShieldWithEnergy
 	cmp #58		; shield with energy
 	beq UseShieldWithEnergy
+	cmp #60		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	beq UseShieldWithEnergy
     jsr DecreaseEnergyX
 	jmp EndOfDistanceCheckLoop
 UseShieldWithEnergy
@@ -1579,7 +1581,8 @@ ThereWasNoParachute
 noSmokeTracer
 	sty SmokeTracerFlag
 
-RepeatIfSmokeTracer		
+RepeatIfSmokeTracer
+RepeatFlight	
     mwa ytraj+1 Ytrajold+1
     mwa xtraj+1 Xtrajold+1
     mva #%01000000 drawFunction
@@ -1828,6 +1831,40 @@ EndOfFlight
 	jmp SecondFlight
 EndOfFlight2
 	mva #0 tracerflag ;  don't know why
+	
+	; and now check for defensive-aggressive weapon
+	lda HitFlag
+	beq NoHitAtEndOfFight
+	bmi NoTankHitAtEndOfFight
+	; tank hit - check defensive weapon of this tank
+	tax
+	dex		; index of tank in X
+	lda ActiveDefenceWeapon,x
+	cmp #60		; Auto Defence
+	bne NoDefence
+	; now run defensive-aggressive weapon - Auto Defence!
+	sbb #255 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
+	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
+	mva #1 Erase		; now erase shield 
+	phx
+	jsr DrawTankShield
+	jsr DrawTankShieldHorns
+	plx
+	lda #$00
+	sta Erase
+	sta ActiveDefenceWeapon,x	; deactivate used Auto Defence
+	sta ShieldEnergy,x
+    sta xtraj		; prepare coordinates
+    sta ytraj
+	sta xtraj+2
+	sta ytraj+2
+	mwa XHit xtraj+1
+	sbw YHit #5 ytraj+1
+	mva #1 color
+	jmp RepeatFlight		; and repeat Fight
+NoTankHitAtEndOfFight
+NoHitAtEndOfFight
+NoDefence
     rts
 .endp
 

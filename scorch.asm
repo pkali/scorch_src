@@ -133,7 +133,7 @@ START
     ldx numberOfPlayers
     dex
 @
-	mva #57 ActiveDefenceWeapon,x
+	mva #60 ActiveDefenceWeapon,x
 	mva #99 ShieldEnergy,x		; set energy of shield
 	dex
 	bpl @-

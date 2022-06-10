@@ -699,12 +699,19 @@ NoPlayerMissile
 	cmp #57		; shield with energy and parachute activation
 	beq ShieldDraw
 	cmp #58		; shield with energy activation
+	beq ShieldDraw
+	cmp #60		; Auto Defence
+	beq DrawTankShieldWihHorns
 	bne NoShieldDraw
 ShieldDraw
 	jsr DrawTankShield.DrawInPosition
 NoShieldDraw
 DoNotDrawTankNr
     rts
+DrawTankShieldWihHorns
+	jsr DrawTankShield.DrawInPosition
+	jsr DrawTankShieldHorns
+	rts
 .endp
 
 ; -------------------------------------
