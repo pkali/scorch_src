@@ -702,6 +702,8 @@ NoPlayerMissile
 	beq ShieldDraw
 	cmp #60		; Auto Defence
 	beq DrawTankShieldWihHorns
+	cmp #55		; Mag Deflector
+	beq DrawTankShieldWihHorns	
 	bne NoShieldDraw
 ShieldDraw
 	jsr DrawTankShield.DrawInPosition

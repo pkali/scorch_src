@@ -868,14 +868,14 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Horz Guidance   " ; 50
     dta d"Vert Guidance   " ; 51
     dta d"Lazy Boy        " ; 52
-    dta d"Parachute       " ; 53
+    dta d"Parachute       " ; 53	- no energy
     dta d"Battery         " ; 54
-    dta d"Mag Deflector   " ; 55
-    dta d"Shield          " ; 56	- shield for one shot
+    dta d"Mag Deflector   " ; 55	- witch shield and energy	
+    dta d"Shield          " ; 56	- shield for one shot - no energy
     dta d"Force Shield    " ; 57	- shield with energy and parachute 
     dta d"Heavy Shield    " ; 58	- shield with energy
     dta d"Super Mag       " ; 59
-    dta d"Auto Defense    " ; 60
+    dta d"Auto Defense    " ; 60	- witch shield and energy
     dta d"Fuel Tank       " ; 61
     dta d"Contact Trigger " ; 62
     dta d"White Flag      " ; 63

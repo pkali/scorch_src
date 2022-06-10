@@ -675,6 +675,8 @@ DistanceCheckLoop
 	beq UseShieldWithEnergy
 	cmp #60		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
 	beq UseShieldWithEnergy
+	cmp #55		; Mag deflector  (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	beq UseShieldWithEnergy
     jsr DecreaseEnergyX
 	jmp EndOfDistanceCheckLoop
 UseShieldWithEnergy
@@ -695,7 +697,7 @@ UseShield
 TankIsNotWithinTheRange
 EndOfDistanceCheckLoop
     txa
-    bne DistanceCheckLoop
+    jne DistanceCheckLoop
     mva #sfx_silencer sfx_effect
     rts
 .endp
@@ -1834,14 +1836,48 @@ EndOfFlight2
 	
 	; and now check for defensive-aggressive weapon
 	lda HitFlag
-	beq NoHitAtEndOfFight
-	bmi NoTankHitAtEndOfFight
+	jeq NoHitAtEndOfFight		; RTS only !!!
+	jmi NoTankHitAtEndOfFight
 	; tank hit - check defensive weapon of this tank
 	tax
 	dex		; index of tank in X
 	lda ActiveDefenceWeapon,x
 	cmp #60		; Auto Defence
+	beq AutoDefence
+	cmp #55		; Mag Deflector
 	bne NoDefence
+MagDeflector
+	; now run defensive-aggressive weapon - Mag Deflector!
+	; get tank position
+	clc
+	lda xtankstableL,x
+	adc #$04	; almost in tak center :)
+	sta XHit
+	lda xtankstableH,x
+	adc #$00
+	sta XHit+1
+	lda #$ff	; change to ground hit (we hope)
+	sta HitFlag
+	bit random	; left or right deflection ?
+	bpl RightDeflection
+LeftDeflection
+	sbw XHit #18	; 18 pixels to right and explode...
+	bit XHit+1	; if off-screen ...
+	bpl EndOfMagDeflector	; hit of course but we need RTS
+	adw XHit #36	; change to right :)
+	jmp EndOfMagDeflector
+RightDeflection
+	adw XHit #18	; 18 pixels to right and explode...
+	cpw XHit screenwidth	; if off-screen ...
+	bcs EndOfMagDeflector	; hit of course but we need RTS
+	sbw XHit #36	; change to left
+EndOfMagDeflector
+	mwa XHit xdraw	; why? !!!
+NoTankHitAtEndOfFight
+NoHitAtEndOfFight
+NoDefence
+    rts		; END !!!	
+AutoDefence
 	; now run defensive-aggressive weapon - Auto Defence!
 	sbb #255 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
 	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
@@ -1862,10 +1898,6 @@ EndOfFlight2
 	sbw YHit #5 ytraj+1
 	mva #1 color
 	jmp RepeatFlight		; and repeat Fight
-NoTankHitAtEndOfFight
-NoHitAtEndOfFight
-NoDefence
-    rts
 .endp
 
 .proc SecondFlight

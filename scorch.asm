@@ -129,15 +129,15 @@ START
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 	
-	; activate shield with energy and parachute for all players (test)
+	; activate mag deflector for all players (test)
     ldx numberOfPlayers
     dex
 @
-	mva #60 ActiveDefenceWeapon,x
+	mva #55 ActiveDefenceWeapon,x
 	mva #99 ShieldEnergy,x		; set energy of shield
 	dex
 	bpl @-
-	; shield activated! (test)
+	; mag deflector activated! (test)
 MainGameLoop
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
 
