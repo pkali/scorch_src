@@ -2288,6 +2288,8 @@ MIRValreadyAll
 CheckCollisionWithTankLoop
 	lda eXistenZ,x
 	beq DeadTank
+	lda ShieldEnergy,x
+	bne CheckCollisionWithShieldedTank	; tank with shield is bigger :)
     lda xtankstableH,x
     cmp xdraw+1
     bne Condition01
@@ -2327,6 +2329,39 @@ DeadTank
     cpx NumberOfPlayers
     bne CheckCollisionWithTankLoop
     rts
+CheckCollisionWithShieldedTank
+    lda xtankstableH,x
+    cmp xdraw+1
+    bne Condition01a
+    lda xtankstableL,x
+	sec
+	sbc #4		; 5 pixels more on left side
+    cmp xdraw
+Condition01a
+    bcs LeftFromTheTank ;add 8 double byte
+    clc
+    adc #16
+    tay
+    lda xtankstableH,x
+    adc #0
+    cmp xdraw+1
+    bne Condition02a
+    cpy xdraw
+Condition02a
+    bcc RightFromTheTank
+
+    lda ytankstable,x
+    cmp ydraw  ; check range
+    bcc BelowTheTank ;(ytankstable,ytankstable+3)
+    sbc #4			; we must rewrite EndOfTheBarrelY table or remove Y correction completely to "bold" tank !!!
+    cmp ydraw
+    bcs OverTheTank
+	inx
+    stx HitFlag		; index of hit tank+1
+	dex
+    mwa xdraw XHit
+    mwa ydraw YHit
+    rts ; in X there is an index of the hit tank
 .endp
 ;--------------------------------------------------
 CalculateExplosionRange0

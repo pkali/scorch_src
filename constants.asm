@@ -514,7 +514,8 @@ EndOfTheBarrelY
     .by 6,6,6,6,6,6,6,6,6
     .by 5,5,5,5,5,5,5,5,5,5
     .by 4,4,4,4,4,4,4,4,4,4,4,4,4
-    .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
+    .by 4,4,4,4,4,4,4,4,4,4,4,4,4,4	; one pixel Up for fix problems with colision check
+;    .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
 
     .by 0,0,0,0,0,0,0,0,0,0		; not used
     .by 0,0,0,0,0,0,0,0,0,0		; not used
@@ -526,7 +527,8 @@ EndOfTheBarrelY
     .by 0,0,0,0					; not used
 
 	; left angles from 90 (horizontally to the left) to 1 (vertically up)
-    .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
+;    .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
+    .by 4,4,4,4,4,4,4,4,4,4,4,4,4,4	; one pixel Up for fix problems with colision check
     .by 4,4,4,4,4,4,4,4,4,4,4,4,4
     .by 5,5,5,5,5,5,5,5,5,5
     .by 6,6,6,6,6,6,6,6,6
