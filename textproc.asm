@@ -269,6 +269,8 @@ NextChar03
 ; here we must jump in after each purchase
 ; to generate again list of available weapons
 AfterPurchase
+
+    ; current cash display
     mva #sfx_purchase sfx_effect
     ldx tanknr
     lda moneyL,x
@@ -297,7 +299,7 @@ CreateList
     ldy tanknr
     lda moneyH,y
     cmp WeaponPriceH,x
-    bcc @+
+    bne @+
     lda moneyL,y
     cmp WeaponPriceL,x
 @
@@ -682,11 +684,6 @@ PurchaseAll
     sta moneyL,x
     lda moneyH,x
     sbc WeaponPriceH,y
-    sta moneyH,x
-    bpl positiveMoney
-    ; zero money if money negative... not the fix you are looking for
-    lda #0
-    sta moneyL,x
     sta moneyH,x
     
 positiveMoney    
