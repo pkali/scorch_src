@@ -1040,9 +1040,9 @@ notpressed
     beq notpressed
     lda SKSTAT
     cmp #$ff
-    beq checkJoy
+    jeq checkJoy
     cmp #$f7  ; SHIFT
-    beq checkJoy
+    jeq checkJoy
 
     lda kbcode
     and #%10111111 ; SHIFT elimination
@@ -1055,6 +1055,13 @@ notpressed
     ;---esc pressed-quit game---
     rts
 
+@
+    cmp #$0d  ; I
+    bne @+
+    jsr Purchase
+    mva #0 escFlag
+    jsr SetMainScreen    
+    jsr DrawTanks   
 @
     cmp #$8e
     jeq CTRLPressedUp

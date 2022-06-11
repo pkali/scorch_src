@@ -14,9 +14,9 @@ dliColorsFore
 TextBackgroundColor = $02	; REAL constans - use: LDA #TextBackgroundColor
 TextForegroundColor = $0c
 CashOptionL ;(one zero less than on the screen)
-    .by 0,<200,<500,<800,<1000
+    .by 0,<200,<800,<1200,<2000
 CashOptionH   
-    .by 0,>200,>500,>800,>1000
+    .by 0,>200,>800,>1200,>2000
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,70,99
 RoundsTable    .by 10,20,30,40,50
@@ -863,7 +863,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"----------------" ; 44
     dta d"----------------" ; 45
     dta d"----------------" ; 46
-    dta d"                " ; 47 ; special (no weapon) name for simplify display
+    dta d"                " ; 47 ; special (no weapon) name to simplify display
 
     dta d"Heat Guidance   " ; 48 ($30)
     dta d"Bal Guidance    " ; 49

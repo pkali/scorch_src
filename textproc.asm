@@ -201,12 +201,6 @@ OptionsYLoop
 ;-------------------------------------------
 ; call of the purchase screens for each tank
 .proc CallPurchaseForEveryTank
-    jsr PMoutofScreen
-    mwa #PurchaseDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$02     ; normal screen width
-    sta dmactls
 
     mva #0 TankNr
 @
@@ -236,12 +230,22 @@ AfterManualPurchase
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
+    VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
+    jsr PMoutofScreen
+    mwa #PurchaseDL dlptrs
+    lda dmactls
+    and #$fc
+    ora #$02     ; normal screen width
+    sta dmactls
+    
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
     
     ldx tankNr
     lda TankStatusColoursTable,x
-    sta colpf2s 
-
+    sta colpf2s
+    lda activeWeapon,x
+    sta PositionOnTheList
+    
 ; we are clearing list of the weapons
     mva #$ff LastWeapon
     mva #$00 WhichList
@@ -280,7 +284,6 @@ AfterPurchase
     ldx #$00  ; number of the checked weapon
     stx HowManyOnTheList1 ; amounts of weapons (shells, bullets) in both lists
     stx HowManyOnTheList2
-    stx PositionOnTheList
 
 ; Creating full list of the available weapons for displaying
 ; in X there is a number of the weapon to be checked,
@@ -559,7 +562,10 @@ ChoosingItemForPurchase
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
     ldx escFlag
-    seq:rts
+    beq @+
+    jsr WaitForKeyRelease
+    rts
+@
     cmp #$2c ; Tab
     jeq ListChange
     cmp #$0c ; Return
@@ -717,22 +723,17 @@ LessThan100
 .endp
 
 .proc PutLitteChar
-    ; first let's cleat both lists from little chars
+    ; first let's clear both lists from little chars
     mwa #ListOfWeapons xbyte
     ldx #52 ; there are 52 lines total
     ldy #$00
 EraseLoop
     lda #$00
     sta (xbyte),y
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc ominx02
-    inc xbyte+1
-ominx02
+    adw xbyte #40 xbyte
     dex
     bpl EraseLoop
+
     ; now let's check which list is active now
     lda WhichList
     beq CharToList1

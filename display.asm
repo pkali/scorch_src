@@ -104,7 +104,7 @@ OptionsScreen
 OptionsHere   
      ; 0123456789012345678901234567890123456789
  dta d"Players  :    2    3    4    5    6     "
- dta d"Cash     :  none  2K   5K   8K  10K     "
+ dta d"Cash     :  none  2K   8K   12K  20K    "
  dta d"Gravity  :  0.2G 0.5G  1G   2G   4G     "
  dta d"Wind     :   1B   3B   5B   7B   9B     "
  dta d"Rounds   :   10   20   30   40   50     "

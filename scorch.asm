@@ -139,8 +139,6 @@ START
 	bpl @-
 	; mag deflector activated! (test)
 MainGameLoop
-    VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
-
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
@@ -309,13 +307,7 @@ SettingEnergies
     jsr calculatemountains ;let mountains be easy for the eye
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
 
-    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
-    mwa #dl dlptrs  ; issue #72 (glitches when switches)
-    lda dmactls
-    and #$fc
-    ora #$02     ; 2=normal, 3 = wide screen width
-    sta dmactls
-
+    jsr SetMainScreen
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
