@@ -244,8 +244,6 @@ AfterManualPurchase
     ldx tankNr
     lda TankStatusColoursTable,x
     sta colpf2s
-    lda activeWeapon,x
-    sta PositionOnTheList
     
 ; we are clearing list of the weapons
     mva #$ff LastWeapon
@@ -284,24 +282,27 @@ AfterPurchase
     ; in xbyte there is the address of the line that
     ; is being processed now
     mwa #ListOfWeapons xbyte
-    ldx #$00  ; number of the checked weapon
+    ldx #$00  ; index of the checked weapon
     stx HowManyOnTheList1 ; amounts of weapons (shells, bullets) in both lists
     stx HowManyOnTheList2
 
 ; Creating full list of the available weapons for displaying
-; in X there is a number of the weapon to be checked,
+; in X there is an index of the weapon to be checked,
 ; in 'Xbyte' address of the first char in filled screen line
 
 CreateList
+    stx temp ; number of weapon will be necessary later
     ; checking if the weapon of the given number is present
     lda WeaponUnits,x
     jeq NoWeapon
+
+    ldy tanknr    
     
     bit isInventory
-    ;bmi itIsInventory
+    bmi itIsInventory
     
     ; checking if we can afford buying this weapon
-    ldy tanknr
+
     lda moneyH,y
     cmp WeaponPriceH,x
     bne @+
@@ -312,11 +313,23 @@ CreateList
     bcs notInventory
 
 itIsInventory
-
+    lda TanksWeaponsTableL,y
+    sta temp2
+    lda TanksWeaponsTableH,y
+    sta temp2+1
+    ldy temp
+    lda (temp2),y
+    jeq noWeapon
+    
+    txa  ; lda weapon index
+    cmp activeWeapon,y
+    sne:sta PositionOnTheList
+    
+    
+        
 notInventory
     ; we have enough cash and the weapon can be
     ; added to the list
-    stx temp ; number of weapon will be necessary later
 
     ; first parentheses and other special chars
     ; (it's easier this way)
@@ -341,53 +354,31 @@ notInventory
     ldy #$4  ; 4 chars from the beginning of the line
     sta (xbyte),y
 
-    ;now number of purchased units (shells)
-    clc
-    lda xbyte
-    adc #23  ; 23 chars from the beginning of the line
-    sta displayposition
-    lda xbyte+1
-    adc #$00
-    sta displayposition+1
+    ;now number of units (shells) to be purchased
+    
+    adw xbyte #23 displayposition  ; 23 chars from the beginning of the line
     lda WeaponUnits,x
     sta decimal
     jsr displaybyte
     ldx temp ;getting back number of the weapon
 
     ; and now price of the weapon
-    clc
-    lda xbyte
-    adc #27  ; 27 chars from the beginning of the line
-    sta displayposition
-    lda xbyte+1
-    adc #$00
-    sta displayposition+1
+    adw xbyte #27 displayposition  ; 27 chars from the beginning of the line
     lda WeaponPriceL,x
     sta decimal
     lda WeaponPriceH,x
     sta decimal+1
     jsr displaydec
 
-    lda temp ;getting back number of the weapon
-    pha  ;and saving it on the stack
-
+    lda temp ; weapon number again
     jsr HowManyBullets
     sta decimal
 
-    pla
-    sta temp ; let's store weapon number again
-
-    clc
-    lda xbyte
-    adc #1  ; 1 char from the beginning of the screen
-    sta displayposition
-    lda xbyte+1
-    adc #$00
-    sta displayposition+1
+    adw xbyte #1 displayposition 
     jsr displaybyte
 
     ; and now name of the weapon and finisheeeedd !!!!
-    ldx temp ;weapon number
+    ldx temp ;weapon index
     mva #0 temp+1  ; this number is only in X
     ; times 16 (it's length of the names of weapons)
     ldy #3 ; Rotate 4 times
@@ -399,7 +390,7 @@ notInventory
 
     adw temp #NamesOfWeapons-6 modify
 
-    ldy #6 ; from 6th char
+    ldy #6 ; from 6th char on screen
 
 @
     lda (modify),y
@@ -409,7 +400,7 @@ notInventory
     bne @-
 
 
-    ; in X there is what we need
+    ; in X there is what we need (weapon index)
 
     ; If on screen after the purchase there is still
     ; present the weapon purchased recently,
@@ -440,12 +431,7 @@ SecondList
     inc HowManyOnTheList2
     ; If everything is copied then next line
 NextLineOfTheList
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc TooLittleCash
-    inc xbyte+1
+    adw xbyte #40
 TooLittleCash
 NoWeapon
 
@@ -671,6 +657,8 @@ SecondSelected
 ;--------------------------------------------------
 weaponPtr = temp
 isPriceZero = tempXRoller
+    bit isInventory
+    bmi @+
 
     lda WhichList
     bne PurchaseDeffensive
