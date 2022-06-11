@@ -245,6 +245,10 @@ AfterManualPurchase
     lda TankStatusColoursTable,x
     sta colpf2s
     
+    ;    ldy PositionOnTheList
+    ;    lda IndexesOfWeaponsL1,y
+    
+    
 ; we are clearing list of the weapons
     mva #$ff LastWeapon
     mva #$00 WhichList
@@ -291,8 +295,8 @@ AfterPurchase
 ; in 'Xbyte' address of the first char in filled screen line
 
 CreateList
-    stx temp ; number of weapon will be necessary later
-    ; checking if the weapon of the given number is present
+    stx temp ; index of a weapon will be necessary later
+    ; checking if the weapon of the given index is present
     lda WeaponUnits,x
     jeq NoWeapon
 
@@ -310,7 +314,7 @@ CreateList
     cmp WeaponPriceL,x
 @
     jcc TooLittleCash
-    bcs notInventory
+    bcs notInventory  ; jmp
 
 itIsInventory
     lda TanksWeaponsTableL,y
@@ -321,12 +325,6 @@ itIsInventory
     lda (temp2),y
     jeq noWeapon
     
-    txa  ; lda weapon index
-    cmp activeWeapon,y
-    sne:sta PositionOnTheList
-    
-    
-        
 notInventory
     ; we have enough cash and the weapon can be
     ; added to the list
@@ -409,11 +407,11 @@ notInventory
     cpx LastWeapon
     bne NotTheSameAsLastTime
     lda WhichList
-    bne ominx06
+    bne @+
     lda HowManyOnTheList1
     sta PositionOnTheList
     jmp NotTheSameAsLastTime
-ominx06
+@
     lda HowManyOnTheList2
     sta PositionOnTheList
 NotTheSameAsLastTime
@@ -422,12 +420,12 @@ NotTheSameAsLastTime
     cpx #$30
     bcs SecondList
     ldy HowManyOnTheList1
-    sta NubersOfWeaponsL1,y
+    sta IndexesOfWeaponsL1,y
     inc HowManyOnTheList1
     bne NextLineOfTheList
 SecondList
     ldy HowManyOnTheList2
-    sta NubersOfWeaponsL2,y
+    sta IndexesOfWeaponsL2,y
     inc HowManyOnTheList2
     ; If everything is copied then next line
 NextLineOfTheList
@@ -551,18 +549,32 @@ DoNotIncHigher2
 ; (it was very ugly - I checked it :)
 
 
+; calculate positionOnTheList
+    ldx tankNr
+    lda activeWeapon,x
+    ldy #0
+@
+      cmp IndexesOfWeaponsL1,y
+      beq weaponfound
+      iny
+      cpy #40  ; maxOffensiveWeapons
+    bne @-
+    ; not found apparently?
+    ; TODO: check border case (the last weapon)
+    ldy #0
+weaponFound
+    ; weapon index in Y
+    sty positionOnTheList
 ; Here we have all we need
 ; So choose the weapon for purchase ......
 ;--------------------------------------------------
 ChoosingItemForPurchase
 ;--------------------------------------------------
+    
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
     ldx escFlag
-    beq @+
-    jsr WaitForKeyRelease
-    rts
-@
+    seq:jmp WaitForKeyRelease  ; like jsr ... : rts
     cmp #$2c ; Tab
     jeq ListChange
     cmp #$0c ; Return
@@ -603,8 +615,7 @@ EndUpX
 PurchaseKeyDown
     lda WhichList
     beq GoDown1
-    inc PositionOnTheList
-    lda PositionOnTheList
+    inc:lda PositionOnTheList
     cmp HowManyOnTheList2
     bne EndGoDownX
     ldy HowManyOnTheList2
@@ -612,8 +623,7 @@ PurchaseKeyDown
     sty PositionOnTheList
     jmp ChoosingItemForPurchase
 GoDown1
-    inc PositionOnTheList
-    lda PositionOnTheList
+    inc:lda PositionOnTheList
     cmp HowManyOnTheList1
     bne MakeOffsetDown
     ldy HowManyOnTheList1
@@ -665,15 +675,15 @@ isPriceZero = tempXRoller
 
     ; here we purchase the offensive weapon
     ldy PositionOnTheList
-    lda NubersOfWeaponsL1,y
+    lda IndexesOfWeaponsL1,y
     jmp PurchaseAll
 PurchaseDeffensive
     ldy PositionOnTheList
-    lda NubersOfWeaponsL2,y
+    lda IndexesOfWeaponsL2,y
 PurchaseAll
-    ; after getting weapon number the routine is common for all
+    ; after getting weapon index the routine is common for all
     ldx tanknr
-    tay  ; weapon number is in Y
+    tay  ; weapon index is in Y
     beq @+  ; baby missile skips all
     sec
     lda moneyL,x ; substracting from posessed money

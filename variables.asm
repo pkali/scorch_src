@@ -245,14 +245,12 @@ temptankNr .DS 1
 
 ;----------------------------------------------------
 ;Variables from textproc.s65
-    ; tables with numbers of weapons on the right lists
-    ; to be honest - I do not know at the moment what the above
-    ; comment was supposed to mean...
+    ; tables with indexes of weapons on the right lists
     ; OK (2022) so, L1 is list of offensive weapons, L2 - defensive
-NubersOfWeaponsL1
-    .ds 8*5 ; :(8*5) .by $ff
-NubersOfWeaponsL2
-    .ds 8*2 ; :(8*2) .by $ff
+IndexesOfWeaponsL1
+    .ds 8*5 ;  max 40 offensive weapons. this is wrong, should be 48, still only 32 defined.
+IndexesOfWeaponsL2
+    .ds 8*2 ;  max 16 defensive weapons. 
 ;----------------------------------------------------
 
 ; variables storing amount of weapons on the first and second
