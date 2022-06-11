@@ -169,7 +169,7 @@ textbuffer
  dta d"Energy:        Angle:        Force:     "
  dta d"Round:     Wind:                        "
 textbuffer2
- dta d"Player:                Cash:            "
+ dta d"Player:                Cash:     0      "  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
  dta d"----------------------------------------"
 
 

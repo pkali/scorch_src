@@ -297,10 +297,10 @@ CreateList
     ldy tanknr
     lda moneyH,y
     cmp WeaponPriceH,x
-    bne CheckWeapon01
+    bcc @+
     lda moneyL,y
     cmp WeaponPriceL,x
-CheckWeapon01
+@
     jcc TooLittleCash
 
     ; we have enough cash and the weapon can be
@@ -675,7 +675,7 @@ PurchaseAll
     ; after getting weapon number the routine is common for all
     ldx tanknr
     tay  ; weapon number is in Y
-    beq @+
+    beq @+  ; baby missile skips all
     sec
     lda moneyL,x ; substracting from posessed money
     sbc WeaponPriceL,y ; of price of the given weapon
@@ -683,7 +683,13 @@ PurchaseAll
     lda moneyH,x
     sbc WeaponPriceH,y
     sta moneyH,x
+    bpl positiveMoney
+    ; zero money if money negative... not the fix you are looking for
+    lda #0
+    sta moneyL,x
+    sta moneyH,x
     
+positiveMoney    
     ; save info about price == 0
     lda WeaponPriceL,y
     ora WeaponPriceH,y
@@ -719,6 +725,7 @@ LessThan100
       lda #0
       sta (weaponPtr),y
 @
+    mva #0 PositionOnTheList  ; to move the pointer to the top
     jmp Purchase.AfterPurchase
 .endp
 
@@ -730,7 +737,7 @@ LessThan100
 EraseLoop
     lda #$00
     sta (xbyte),y
-    adw xbyte #40 xbyte
+    adw xbyte #40
     dex
     bpl EraseLoop
 
@@ -743,13 +750,7 @@ EraseLoop
     ldx PositionOnTheList
     beq SelectList2 ; if there is 0 we add nothing
 AddLoop2
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc ominx03
-    inc xbyte+1
-ominx03
+    adw xbyte #40
     dex
     bne AddLoop2
 SelectList2
@@ -771,13 +772,7 @@ CharToList1
     ldx PositionOnTheList
     beq SelectList1 ; if there is 0 we add nothing
 AddLoop1
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc ominx04
-    inc xbyte+1
-ominx04
+    adw xbyte #40
     dex
     bne AddLoop1
 SelectList1
@@ -788,13 +783,7 @@ SelectList1
     ldx OffsetDL1
     beq SetWindowList1 ; if zero then add nothing
 LoopWindow1
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc ominx05
-    inc xbyte+1
-ominx05
+    adw xbyte #40
     dex
     bne LoopWindow1
 SetWindowList1
@@ -806,8 +795,8 @@ SetWindowList1
     ldy #>EmptyLine
     lda OffsetDL1
     beq NoArrowUp
-    ldx #<MoreUp
-    ldy #>MoreUp
+      ldx #<MoreUp
+      ldy #>MoreUp
 NoArrowUp
     stx MoreUpdl
     sty MoreUpdl+1
@@ -820,8 +809,8 @@ NoArrowUp
     bmi NoArrowDown
     cmp OffsetDL1
     bcc NoArrowDown
-    ldx #<MoreDown
-    ldy #>MoreDown
+      ldx #<MoreDown
+      ldy #>MoreDown
 NoArrowDown
     stx MoreDowndl
     sty MoreDowndl+1
