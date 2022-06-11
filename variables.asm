@@ -30,6 +30,8 @@ RoundNrDisplay
 ;=====================================================
 variablesStart  ; zeroing starts here
 ;=====================================================
+isInventory .ds 1  ; 0 - purchase, $ff - inventory
+;-------------- 
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
 ;-------------- 
 sfx_effect .ds 1

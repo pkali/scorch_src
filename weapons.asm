@@ -1058,6 +1058,7 @@ notpressed
 @
     cmp #$0d  ; I
     bne @+
+    mva #$ff isInventory
     jsr Purchase
     mva #0 escFlag
     jsr SetMainScreen    

@@ -203,6 +203,7 @@ OptionsYLoop
 .proc CallPurchaseForEveryTank
 
     mva #0 TankNr
+    sta isInventory
 @
       ldx TankNr
       lda SkillTable,x
@@ -295,6 +296,10 @@ CreateList
     ; checking if the weapon of the given number is present
     lda WeaponUnits,x
     jeq NoWeapon
+    
+    bit isInventory
+    ;bmi itIsInventory
+    
     ; checking if we can afford buying this weapon
     ldy tanknr
     lda moneyH,y
@@ -304,7 +309,11 @@ CreateList
     cmp WeaponPriceL,x
 @
     jcc TooLittleCash
+    bcs notInventory
 
+itIsInventory
+
+notInventory
     ; we have enough cash and the weapon can be
     ; added to the list
     stx temp ; number of weapon will be necessary later
