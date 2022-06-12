@@ -774,21 +774,26 @@ PMoutofScreen .proc
 ;--------------------------------------------------
 .proc WeaponCleanup;
 ; cleaning of the weapon possesion tables
-; (99 of Baby Missles, all other weapons=0)
+; 99 of Baby Missles(index==0), all other weapons=0)
 ;--------------------------------------------------
-    ldx #$3f
-    lda #$0
-@
-      sta TanksWeapon1,x
+    ldx #$3f  ; TODO: maxweapons
+@    lda #$0
+      cpx #48  ; White Flag
+      bne @+
+       lda #99     
+@     sta TanksWeapon1,x
       sta TanksWeapon2,x
       sta TanksWeapon3,x
       sta TanksWeapon4,x
       sta TanksWeapon5,x
       sta TanksWeapon6,x
       dex
-      sne:lda #99
-    bpl @-
+      beq setBmissile
+    bpl @-1
     rts
+setBmissile
+    lda #99
+    bne @-
 .endp
 
 ;--------------------------------------------------

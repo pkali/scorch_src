@@ -670,7 +670,7 @@ SecondSelected
 weaponPtr = temp
 isPriceZero = tempXRoller
     bit isInventory
-    bmi @+
+    bmi inventorySelect
 
     lda WhichList
     bne PurchaseDeffensive
@@ -726,13 +726,21 @@ LessThan100
     ; additional check for unfinished game
     ; if weapon was free (price == $0)
     ; then have nothing...
-    lda isPriceZero
-    bne @+
-      lda #0
-      sta (weaponPtr),y
-@
-    mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
+;    lda isPriceZero
+;    bne @+
+;      lda #0
+;      sta (weaponPtr),y
+@   mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
     jmp Purchase.AfterPurchase
+
+inventorySelect
+    ldy PositionOnTheList
+    lda IndexesOfWeaponsL1,y
+    ldx tankNr
+    sta activeWeapon,x
+    
+    rts
+
 .endp
 
 .proc PutLitteChar
