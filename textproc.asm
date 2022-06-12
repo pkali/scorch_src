@@ -579,6 +579,8 @@ ChoosingItemForPurchase
     seq:jmp WaitForKeyRelease  ; like jsr ... : rts
     cmp #$2c ; Tab
     jeq ListChange
+    cmp #$06  ; cursor left
+    jeq ListChange
     cmp #$0c ; Return
     sne:rts
     cmp #$e
