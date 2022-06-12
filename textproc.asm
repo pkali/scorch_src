@@ -318,11 +318,11 @@ CreateList
 
 itIsInventory
     lda TanksWeaponsTableL,y
-    sta temp2
+    sta weaponPointer
     lda TanksWeaponsTableH,y
-    sta temp2+1
+    sta weaponPointer+1
     ldy temp
-    lda (temp2),y
+    lda (weaponPointer),y
     jeq noWeapon
     
 notInventory
@@ -548,8 +548,10 @@ DoNotIncHigher2
 ; screen clearing at each list refresh
 ; (it was very ugly - I checked it :)
 
-
-; calculate positionOnTheList
+    bit isInventory  ; 
+    bpl ChoosingItemForPurchase
+     
+; calculate positionOnTheList from the activeWeapon
     ldx tankNr
     lda activeWeapon,x
     ldy #0
@@ -729,7 +731,7 @@ LessThan100
       lda #0
       sta (weaponPtr),y
 @
-    mva #0 PositionOnTheList  ; to move the pointer to the top
+    mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
     jmp Purchase.AfterPurchase
 .endp
 
@@ -739,7 +741,7 @@ LessThan100
     ldx #52 ; there are 52 lines total
     ldy #$00
 EraseLoop
-    lda #$00
+    tya  ; lda #$00
     sta (xbyte),y
     adw xbyte #40
     dex
