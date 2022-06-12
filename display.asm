@@ -136,7 +136,9 @@ WeaponsDescription
  dta d" - Defensive/Offensive weapon    "
  dta d"   "
  dta d"Space"*
- dta d" - Purchase  "
+ dta d" - "
+purchaseActivate 
+ dta d"Purchase  "
  dta d"Return"*
  dta d" - Finish    "
 EmptyLine
@@ -171,6 +173,12 @@ textbuffer
 textbuffer2
  dta d"Player:                Cash:     0      "  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
  dta d"----------------------------------------"
-
+;---------------------------------------------------
+activateText
+ dta d"Activate"
+activateTextEnd
+purchaseText
+ dta d"Purchase"
+purchaseTextEnd
 
 .endif

@@ -245,9 +245,6 @@ AfterManualPurchase
     lda TankStatusColoursTable,x
     sta colpf2s
     
-    ;    ldy PositionOnTheList
-    ;    lda IndexesOfWeaponsL1,y
-    
     
 ; we are clearing list of the weapons
     mva #$ff LastWeapon
@@ -305,8 +302,15 @@ CreateList
     bit isInventory
     bmi itIsInventory
     
-    ; checking if we can afford buying this weapon
+    ; put "Purchase" on the screen
+     ldx #[purchaseTextEnd-purchaseText-1]
+@     lda purchaseText,x
+      sta purchaseActivate,x
+      dex
+    bpl @-
 
+    ; checking if we can afford buying this weapon
+    ldx temp
     lda moneyH,y
     cmp WeaponPriceH,x
     bne @+
@@ -317,6 +321,14 @@ CreateList
     bcs notInventory  ; jmp
 
 itIsInventory
+    ; put "Activate" on the screen
+     ldx #[purchaseTextEnd-purchaseText-1]
+@     lda activateText,x
+      sta purchaseActivate,x
+      dex
+    bpl @-
+
+    ldx temp
     lda TanksWeaponsTableL,y
     sta weaponPointer
     lda TanksWeaponsTableH,y
