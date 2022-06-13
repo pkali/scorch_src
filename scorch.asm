@@ -133,8 +133,10 @@ START
 ;    ldx numberOfPlayers
 ;    dex
 ;@
-;	mva #55 ActiveDefenceWeapon,x
-;	mva #99 ShieldEnergy,x		; set energy of shield
+;	mva #56 ActiveDefenceWeapon,x
+;	tay
+;	lda DefensiveEnergy,y
+;	sta ShieldEnergy,x		; set energy of shield
 ;	dex
 ;	bpl @-
 	; mag deflector activated! (test)

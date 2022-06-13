@@ -667,15 +667,15 @@ DistanceCheckLoop
     tay
 	; check shields
 	lda ActiveDefenceWeapon,x
-	cmp #56		; one hit shield
+	cmp #57		; one hit shield
 	beq UseShield
-	cmp #57		; shield with energy and parachute
+	cmp #58		; shield with energy and parachute
 	beq UseShieldWithEnergy
-	cmp #58		; shield with energy
+	cmp #59		; shield with energy
 	beq UseShieldWithEnergy
-	cmp #60		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	cmp #61		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
 	beq UseShieldWithEnergy
-	cmp #55		; Mag deflector  (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	cmp #56		; Mag deflector  (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
 	beq UseShieldWithEnergy
     jsr DecreaseEnergyX
 	jmp EndOfDistanceCheckLoop
@@ -1335,9 +1335,9 @@ ShotUnderGround
     ; let's check if the given tank has got the parachute
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
-    cmp #53 ; parachute
+    cmp #54 ; parachute
 	beq ParachuteActive
-	cmp #57 ; scheld witch energy and parachute
+	cmp #58 ; scheld witch energy and parachute
     bne TankFallsX
 ParachuteActive
     inc Parachute
@@ -1542,7 +1542,7 @@ EndOfFall
     mva #1 Erase
     ldx TankNr
 	lda ActiveDefenceWeapon,x
-	cmp #53		; deactivate weapon only if parachute (53)
+	cmp #54		; deactivate weapon only if parachute (53)
 	bne NoParachuteWeapon
 	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
 NoParachuteWeapon
