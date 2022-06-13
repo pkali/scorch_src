@@ -130,13 +130,13 @@ START
     ; for the round #1 shooting sequence is random
 	
 	; activate mag deflector for all players (test)
-    ldx numberOfPlayers
-    dex
-@
-	mva #55 ActiveDefenceWeapon,x
-	mva #99 ShieldEnergy,x		; set energy of shield
-	dex
-	bpl @-
+;    ldx numberOfPlayers
+;    dex
+;@
+;	mva #55 ActiveDefenceWeapon,x
+;	mva #99 ShieldEnergy,x		; set energy of shield
+;	dex
+;	bpl @-
 	; mag deflector activated! (test)
 MainGameLoop
 	jsr CallPurchaseForEveryTank

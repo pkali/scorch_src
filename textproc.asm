@@ -300,7 +300,7 @@ CreateList
     ldy tanknr    
     
     bit isInventory
-    bmi itIsInventory
+    jmi itIsInventory
     
     ; put "Purchase" on the screen
      ldx #[purchaseTextEnd-purchaseText-1]
@@ -318,26 +318,7 @@ CreateList
     cmp WeaponPriceL,x
 @
     jcc TooLittleCash
-    bcs notInventory  ; jmp
-
-itIsInventory
-    ; put "Activate" on the screen
-     ldx #[purchaseTextEnd-purchaseText-1]
-@     lda activateText,x
-      sta purchaseActivate,x
-      dex
-    bpl @-
-
-    ldx temp
-    lda TanksWeaponsTableL,y
-    sta weaponPointer
-    lda TanksWeaponsTableH,y
-    sta weaponPointer+1
-    ldy temp
-    lda (weaponPointer),y
-    jeq noWeapon
     
-notInventory
     ; we have enough cash and the weapon can be
     ; added to the list
 
@@ -359,18 +340,12 @@ notInventory
     lda #16 ; "0"
     sta (xbyte),y
 
-    ; now symbol of the weapon
-    lda WeaponSymbols,x
-    ldy #$4  ; 4 chars from the beginning of the line
-    sta (xbyte),y
-
     ;now number of units (shells) to be purchased
-    
     adw xbyte #23 displayposition  ; 23 chars from the beginning of the line
     lda WeaponUnits,x
     sta decimal
     jsr displaybyte
-    ldx temp ;getting back number of the weapon
+    ldx temp ;getting back index of the weapon
 
     ; and now price of the weapon
     adw xbyte #27 displayposition  ; 27 chars from the beginning of the line
@@ -380,15 +355,47 @@ notInventory
     sta decimal+1
     jsr displaydec
 
-    lda temp ; weapon number again
+    lda temp ; weapon index again
     jsr HowManyBullets
     sta decimal
 
     adw xbyte #1 displayposition 
     jsr displaybyte
+    jmp notInventory
+
+itIsInventory
+    ; put "Activate" on the screen
+     ldx #[purchaseTextEnd-purchaseText-1]
+@     lda activateText,x
+      sta purchaseActivate,x
+      dex
+    bpl @-
+
+    ldx temp
+    lda TanksWeaponsTableL,y
+    sta weaponPointer
+    lda TanksWeaponsTableH,y
+    sta weaponPointer+1
+    ldy temp
+    lda (weaponPointer),y
+    jeq noWeapon
+
+    ; clear price area
+    ldy #22  ; beginning of the price area
+    lda #0
+@     sta (XBYTE),y
+      iny
+      cpy #32+1  ; end of price
+    bne @-
+
+notInventory
+    ldx temp ;weapon index
+    ; now symbol of the weapon
+    lda WeaponSymbols,x
+    ldy #$4  ; 4 chars from the beginning of the line
+    sta (xbyte),y
 
     ; and now name of the weapon and finisheeeedd !!!!
-    ldx temp ;weapon index
     mva #0 temp+1  ; this number is only in X
     ; times 16 (it's length of the names of weapons)
     ldy #3 ; Rotate 4 times
