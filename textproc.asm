@@ -355,12 +355,6 @@ CreateList
     sta decimal+1
     jsr displaydec
 
-    lda temp ; weapon index again
-    jsr HowManyBullets
-    sta decimal
-
-    adw xbyte #1 displayposition 
-    jsr displaybyte
     jmp notInventory
 
 itIsInventory
@@ -389,6 +383,15 @@ itIsInventory
     bne @-
 
 notInventory
+
+    ; number of posessed shells
+    lda temp ; weapon index again
+    jsr HowManyBullets
+    sta decimal
+
+    adw xbyte #1 displayposition 
+    jsr displaybyte
+
     ldx temp ;weapon index
     ; now symbol of the weapon
     lda WeaponSymbols,x
