@@ -145,11 +145,7 @@ MainGameLoop
 
     ; issue #72 (glitches when switches)
     mva #0 dmactl
-    lda dmactls
-    and #$fc
-    ;ora #$02     ; 2=normal, 3 = wide screen width, 0 = no screen
-    sta dmactls
-	
+
     jsr GetRandomWind
 
     jsr RoundInit

@@ -1567,7 +1567,8 @@ EndPut4x4
     rts
 .endp
 
-.proc SetMainScreen 
+.proc SetMainScreen
+    mva #0 dmactl 
     VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
     mwa #dl dlptrs  ; issue #72 (glitches when switches)
     lda dmactls

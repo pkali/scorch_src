@@ -226,11 +226,14 @@ AfterManualPurchase
 ;--------------------------------------------------
 .proc Purchase ;
 ;--------------------------------------------------
+; TODO: when round ends with a weapon depleted the pointer points to an empty line
+
 ; In tanknr there is a number of the tank (player)
 ; that is buying weapons now (from 0).
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
+    mva #0 dmactl
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
     jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
@@ -572,8 +575,11 @@ DoNotIncHigher2
 
     bit isInventory  ; 
     bpl ChoosingItemForPurchase
+    
+    lda whichList
+    bne calcPosDefensive
      
-; calculate positionOnTheList from the activeWeapon
+; calculate positionOnTheList from the activeWeapon (offensives)
     ldx tankNr
     lda activeWeapon,x
     ldy #0
@@ -581,7 +587,24 @@ DoNotIncHigher2
       cmp IndexesOfWeaponsL1,y
       beq weaponfound
       iny
-      cpy #40  ; maxOffensiveWeapons
+      cpy #48  ; maxOffensiveWeapons
+    bne @-
+    ; not found apparently?
+    ; TODO: check border case (the last weapon)
+    ldy #0
+    beq weaponFound  ; jmp
+
+
+calcPosDefensive
+; calculate positionOnTheList from the activeWeapon (defensives)
+    ldx tankNr
+    lda ActiveDefenceWeapon,x
+    ldy #48  ; min defensive weapon
+@
+      cmp IndexesOfWeaponsL2,y
+      beq weaponfound
+      iny
+      cpy #64  ; maxDefensiveWeapon+1
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -589,6 +612,7 @@ DoNotIncHigher2
 weaponFound
     ; weapon index in Y
     sty positionOnTheList
+
 ; Here we have all we need
 ; So choose the weapon for purchase ......
 ;--------------------------------------------------
@@ -691,7 +715,7 @@ SecondSelected
 ;--------------------------------------------------
 .proc PurchaseWeaponNow
 ;--------------------------------------------------
-weaponPtr = temp
+weaponPtr = temp  ; could be weaponPointer... we have this 
 isPriceZero = tempXRoller
     bit isInventory
     bmi inventorySelect
@@ -758,11 +782,23 @@ LessThan100
     jmp Purchase.AfterPurchase
 
 inventorySelect
+    lda whichList
+    bne invSelectDef
+
     ldy PositionOnTheList
     lda IndexesOfWeaponsL1,y
     ldx tankNr
     sta activeWeapon,x
+    rts
     
+invSelectDef
+    ldy PositionOnTheList
+    lda IndexesOfWeaponsL2,y
+    tay
+    ldx tankNr
+    sta ActiveDefenceWeapon,x
+    lda DefensiveEnergy,y
+    sta ShieldEnergy,x
     rts
 
 .endp
