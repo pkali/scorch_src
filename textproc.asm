@@ -577,7 +577,7 @@ DoNotIncHigher2
     bpl ChoosingItemForPurchase
     
     lda whichList
-    bne calcPosDefensive
+    bne PositionDefensive
      
 ; calculate positionOnTheList from the activeWeapon (offensives)
     ldx tankNr
@@ -585,31 +585,19 @@ DoNotIncHigher2
     ldy #0
 @
       cmp IndexesOfWeaponsL1,y
-      beq weaponfound
+      beq ?weaponfound
       iny
       cpy #48  ; maxOffensiveWeapons
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
     ldy #0
-    beq weaponFound  ; jmp
+    beq ?weaponFound  ; jmp
+PositionDefensive
+    jsr calcPosDefensive
+    
 
-
-calcPosDefensive
-; calculate positionOnTheList from the activeWeapon (defensives)
-    ldx tankNr
-    lda ActiveDefenceWeapon,x
-    ldy #48  ; min defensive weapon
-@
-      cmp IndexesOfWeaponsL2,y
-      beq weaponfound
-      iny
-      cpy #64  ; maxDefensiveWeapon+1
-    bne @-
-    ; not found apparently?
-    ; TODO: check border case (the last weapon)
-    ldy #0
-weaponFound
+?weaponFound
     ; weapon index in Y
     sty positionOnTheList
 
@@ -695,18 +683,20 @@ EndGoDownX
 
 ; swapping the displayed list and setting pointer to position 0
 ListChange
+    mva #0 OffsetDL1
+
     lda WhichList
     eor #$01
     sta WhichList
     bne SecondSelected
+
     mwa #ListOfWeapons WeaponsListDL
-    jmp @+
+    jsr calcPosOffensive
+    jmp ChoosingItemForPurchase
+
 SecondSelected
     mwa #ListOfDefensiveWeapons WeaponsListDL
-@
-    lda #$00
-    sta PositionOnTheList
-    sta OffsetDL1
+    jsr calcPosDefensive
     jmp ChoosingItemForPurchase
 
 .endp
@@ -771,13 +761,6 @@ LessThan100
     sty LastWeapon ; store last purchased weapon
     ; because we must put screen pointer next to it
 
-    ; additional check for unfinished game
-    ; if weapon was free (price == $0)
-    ; then have nothing...
-;    lda isPriceZero
-;    bne @+
-;      lda #0
-;      sta (weaponPtr),y
 @   mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
     jmp Purchase.AfterPurchase
 
@@ -800,9 +783,50 @@ invSelectDef
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
     rts
-
+.endp
+; -----------------------------------------------------
+.proc calcPosDefensive
+; calculate positionOnTheList from the activeWeapon (defensives)
+    ldx tankNr
+    lda ActiveDefenceWeapon,x
+    beq ?noWeaponActive
+    ldy #0  ; min defensive weapon
+@
+      cmp IndexesOfWeaponsL2,y
+      beq ?weaponfound
+      iny
+      cpy #8*2  ; maxDefensiveWeapon
+    bne @-
+    ; not found apparently?
+    ; TODO: check border case (the last weapon)
+?noWeaponActive
+    ldy #0
+?weaponFound
+    sty positionOnTheList
+    rts
 .endp
 
+.proc calcPosOffensive
+; calculate positionOnTheList from the activeWeapon (defensives)
+    ldx tankNr
+    lda ActiveWeapon,x
+    ;beq ?noWeaponActive
+    ldy #0  ; min defensive weapon
+@
+      cmp IndexesOfWeaponsL1,y
+      beq ?weaponfound
+      iny
+      cpy #8*5  ; maxOffensiveWeapon
+    bne @-
+    ; not found apparently?
+    ; TODO: check border case (the last weapon)
+?noWeaponActive
+    ldy #0
+?weaponFound
+    sty positionOnTheList
+    rts
+.endp
+; -----------------------------------------------------
 .proc PutLitteChar
     ; first let's clear both lists from little chars
     mwa #ListOfWeapons xbyte
