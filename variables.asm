@@ -49,7 +49,7 @@ moneyH ;we place zero at the end of prices and money
     ;and have range from 0 to 99990 (not too much)
     ;money players have (maybe one more byte is needed?)
     .DS [MaxPlayers]
-moneyL 
+moneyL
     .DS [MaxPlayers]
 ;----------------------------------------------------
 gainH ;how much money player gets after the round

@@ -780,6 +780,16 @@ invSelectDef
     tay
     ldx tankNr
     sta ActiveDefenceWeapon,x
+    ; decrease number of defensives
+    lda TanksWeaponsTableL,x
+    sta weaponPointer
+    lda TanksWeaponsTableH,x
+    sta weaponPointer+1
+    lda (weaponPointer),y
+    sec
+    sbc #1
+    sta (weaponPointer),y
+    
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
     rts
