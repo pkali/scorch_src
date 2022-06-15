@@ -772,7 +772,7 @@ inventorySelect
     lda IndexesOfWeaponsL1,y
     ldx tankNr
     sta activeWeapon,x
-    rts
+    jmp WaitForKeyRelease ; rts
     
 invSelectDef
     ldy PositionOnTheList
@@ -792,7 +792,8 @@ invSelectDef
     
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
-    rts
+    jmp WaitForKeyRelease ; rts
+
 .endp
 ; -----------------------------------------------------
 .proc calcPosDefensive
