@@ -1850,9 +1850,9 @@ EndOfFlight2
 	tax
 	dex		; index of tank in X
 	lda ActiveDefenceWeapon,x
-	cmp #60		; Auto Defence
+	cmp #61		; Auto Defence
 	beq AutoDefence
-	cmp #55		; Mag Deflector
+	cmp #56		; Mag Deflector
 	bne NoDefence
 MagDeflector
 	; now run defensive-aggressive weapon - Mag Deflector!
@@ -2296,14 +2296,23 @@ MIRValreadyAll
 CheckCollisionWithTankLoop
 	lda eXistenZ,x
 	beq DeadTank
+	; first we test top and bottom (same with and without shield!)
+    lda ytankstable,x
+    cmp ydraw  ; check range
+    bcc BelowTheTank ;(ytankstable,ytankstable+3)
+    sbc #4 ; we must rewrite EndOfTheBarrelY table or remove Y correction completely to "bold" tank !!!
+    cmp ydraw
+    bcs OverTheTank
+	; with or without shield ?
 	lda ShieldEnergy,x
 	bne CheckCollisionWithShieldedTank	; tank with shield is bigger :)
+
     lda xtankstableH,x
     cmp xdraw+1
-    bne Condition01
+    bne @+
     lda xtankstableL,x
     cmp xdraw
-Condition01
+@
     bcs LeftFromTheTank ;add 8 double byte
     clc
     adc #8
@@ -2311,17 +2320,11 @@ Condition01
     lda xtankstableH,x
     adc #0
     cmp xdraw+1
-    bne Condition02
+    bne @+
     cpy xdraw
-Condition02
+@
     bcc RightFromTheTank
-
-    lda ytankstable,x
-    cmp ydraw  ; check range
-    bcc BelowTheTank ;(ytankstable,ytankstable+3)
-    sbc #4
-    cmp ydraw
-    bcs OverTheTank
+TankHit
 	inx
     stx HitFlag		; index of hit tank+1
 	dex
@@ -2338,38 +2341,30 @@ DeadTank
     bne CheckCollisionWithTankLoop
     rts
 CheckCollisionWithShieldedTank
-    lda xtankstableH,x
-    cmp xdraw+1
-    bne Condition01a
     lda xtankstableL,x
 	sec
 	sbc #4		; 5 pixels more on left side
-    cmp xdraw
-Condition01a
-    bcs LeftFromTheTank ;add 8 double byte
+	tay
+	lda xtankstableH,x
+	sbc #0
+	; bmi ShieldOverLeftEdge	; I do not know whether to check it. Probably not :) !!!
+    cmp xdraw+1
+    bne @+
+    cpy xdraw
+@
+    bcs LeftFromTheTank 
+	tya	;add 16 double byte
     clc
-    adc #16
+    adc #16	
     tay
     lda xtankstableH,x
     adc #0
     cmp xdraw+1
-    bne Condition02a
+    bne @+
     cpy xdraw
-Condition02a
+@
     bcc RightFromTheTank
-
-    lda ytankstable,x
-    cmp ydraw  ; check range
-    bcc BelowTheTank ;(ytankstable,ytankstable+3)
-    sbc #4			; we must rewrite EndOfTheBarrelY table or remove Y correction completely to "bold" tank !!!
-    cmp ydraw
-    bcs OverTheTank
-	inx
-    stx HitFlag		; index of hit tank+1
-	dex
-    mwa xdraw XHit
-    mwa ydraw YHit
-    rts ; in X there is an index of the hit tank
+	bcs TankHit
 .endp
 ;--------------------------------------------------
 CalculateExplosionRange0
