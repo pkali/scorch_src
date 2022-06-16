@@ -733,7 +733,7 @@ NotNegativeShieldEnergy
 .endp
 
 ;--------------------------------------------------
-GetRandomWind .proc
+.proc GetRandomWind
 ;in: MaxWind (byte)
 ;out: Wind (word)
 ;uses: _
@@ -762,7 +762,7 @@ GetRandomWind .proc
 .endp
 
 ;--------------------------------------------------
-PMoutofScreen .proc
+.proc PMoutofScreen
 ;--------------------------------------------------
     lda #$00 ; let all P/M disappear
     :8 sta hposp0+#
@@ -903,7 +903,7 @@ ClearResults
     rts
 .endp
     
-DLIinterruptGraph .proc
+.proc DLIinterruptGraph
     pha
 	phy
 	ldy dliCounter
@@ -920,7 +920,7 @@ DLIinterruptGraph .proc
     rti
 .endp
 
-DLIinterruptText .proc
+.proc DLIinterruptText
 	pha
 	sta WSYNC
     mva #TextBackgroundColor colpf2
@@ -930,7 +930,7 @@ DLIinterruptNone
 	rti
 .endp
 
-VBLinterrupt .proc
+.proc VBLinterrupt
 	pha
 	phx
 	phy
@@ -1017,7 +1017,7 @@ UsageLoop
     rts
 .endp
 ;----------------------------------------------
-RandomizeAngle .proc ;
+.proc RandomizeAngle
 ; routine returns in A
 ; a valid angle for the tank's barrel.
 ; X is not changed
@@ -1040,7 +1040,7 @@ RandomizeAngle .proc ;
     rts
 .endp
 ;----------------------------------------------
-RandomizeForce  .proc
+.proc RandomizeForce
 ; routine returns in ForceTable/L/H
 ; valid force of shooting for TankNr
 ; in X must be TankNr
@@ -1253,7 +1253,7 @@ getkeyend
 
 .endp
 ;--------------------------------------------------
-getkeynowait .proc;
+.proc getkeynowait
 ;--------------------------------------------------
     jsr WaitForKeyRelease 
     lda kbcode
@@ -1261,7 +1261,7 @@ getkeynowait .proc;
     rts
 .endp
 ;--------------------------------------------------
-WaitForKeyRelease .proc
+.proc WaitForKeyRelease
 ;--------------------------------------------------
     lda JSTICK0
     and #$0f

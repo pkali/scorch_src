@@ -363,7 +363,7 @@ endcircleloop
     rts
 .endp
 ;----
-splot8 .proc
+.proc splot8
 ; plot xcircle+XC,ycircle+YC
 ; plot xcircle+XC,ycircle-YC
 ; plot xcircle-XC,ycircle-YC
@@ -462,7 +462,7 @@ splot8 .proc
 .endp
 
 ;--------------------------------------------------
-clearscreen .proc
+.proc clearscreen
 ;--------------------------------------------------
 
     lda #$ff
@@ -476,7 +476,7 @@ clearscreen .proc
     rts
 .endp
 ;-------------------------------*------------------
-placetanks .proc
+.proc placetanks
 ;--------------------------------------------------
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
     lda #0

@@ -2314,6 +2314,8 @@ CheckCollisionWithTankLoop
     cmp xdraw
 @
     bcs LeftFromTheTank ;add 8 double byte
+	; now we use Y as low byte and A as high byte of checked position (right edge of tank)
+	; it is tricky but fast and much shorter
     clc
     adc #8
     tay
@@ -2341,6 +2343,8 @@ DeadTank
     bne CheckCollisionWithTankLoop
     rts
 CheckCollisionWithShieldedTank
+	; now we use Y as low byte and A as high byte of checked position (left right edgs of shield)
+	; it is tricky but fast and much shorter
     lda xtankstableL,x
 	sec
 	sbc #4		; 5 pixels more on left side
