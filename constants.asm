@@ -811,8 +811,8 @@ WeaponSymbols
     .by $58,$59,$5a,$5b,$60,$7b,$7c,$7d
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
-    .by $00,$02,$03,$06,$1d,$0a,$1b,$1c  ; defensives
-    .by $1e,$3b,$3c,$3d,$3e,$3f,$5e,$5f
+    .by $5f,$02,$03,$06,$1d,$0a,$1b,$1c  ; defensives
+    .by $1e,$3b,$3c,$3d,$3e,$3f,$5e,$00
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
