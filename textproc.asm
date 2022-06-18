@@ -411,12 +411,12 @@ notInventory
     dey
     bpl @-
 
-    adw temp #NamesOfWeapons-6 modify
+    adw temp #NamesOfWeapons-6 weaponPointer
 
     ldy #6 ; from 6th char on screen
 
 @
-    lda (modify),y
+    lda (weaponPointer),y
     sta (xbyte),y
     iny
     cpy #(16+6)
@@ -428,7 +428,11 @@ notInventory
     ; If on screen after the purchase there is still
     ; present the weapon purchased recently,
     ; the pointer must point to it.
-
+    bit lastWeapon
+    bpl @+  ; if == $ff => first run, jump to top
+    mva #0 PositionOnTheList
+    beq NotTheSameAsLastTime
+@
     cpx LastWeapon
     bne NotTheSameAsLastTime
     lda WhichList
@@ -443,12 +447,12 @@ NotTheSameAsLastTime
     ; increase appropriate counter
     txa
     cpx #$30
-    bcs SecondList
+    bcs DefenceList
     ldy HowManyOnTheList1
     sta IndexesOfWeaponsL1,y
     inc HowManyOnTheList1
     bne NextLineOfTheList
-SecondList
+DefenceList
     ldy HowManyOnTheList2
     sta IndexesOfWeaponsL2,y
     inc HowManyOnTheList2
@@ -688,15 +692,26 @@ ListChange
     lda WhichList
     eor #$01
     sta WhichList
-    bne SecondSelected
+    bne DeffensiveSelected
 
     mwa #ListOfWeapons WeaponsListDL
+    lda isInventory
+    beq @+
+    ; inventory
     jsr calcPosOffensive
     jmp ChoosingItemForPurchase
+@
+    mva #0 PositionOnTheList
+    jmp ChoosingItemForPurchase
 
-SecondSelected
+DeffensiveSelected
     mwa #ListOfDefensiveWeapons WeaponsListDL
+    lda isInventory
+    beq @+
     jsr calcPosDefensive
+    jmp ChoosingItemForPurchase
+@
+    mva #0 positionOnTheList
     jmp ChoosingItemForPurchase
 
 .endp
@@ -705,8 +720,6 @@ SecondSelected
 ;--------------------------------------------------
 .proc PurchaseWeaponNow
 ;--------------------------------------------------
-weaponPtr = temp  ; could be weaponPointer... we have this 
-isPriceZero = tempXRoller
     bit isInventory
     bmi inventorySelect
 
@@ -733,29 +746,23 @@ PurchaseAll
     sta moneyH,x
     
 positiveMoney    
-    ; save info about price == 0
-    lda WeaponPriceL,y
-    ora WeaponPriceH,y
-    sta isPriceZero    
-
-
     ; now we have to get address of
     ; the table of the weapon of the tank
     ; and add appropriate number of shells
     
     lda TanksWeaponsTableL,x
-    sta weaponPtr
+    sta weaponPointer
     lda TanksWeaponsTableH,x
-    sta weaponPtr+1
+    sta weaponPointer+1
 
     clc
-    lda (weaponPtr),y  ; and we have number of posessed bullets of the weapon
+    lda (weaponPointer),y  ; and we have number of posessed bullets of the weapon
     adc WeaponUnits,y
-    sta (weaponPtr),y ; and we added appropriate number of bullets
+    sta (weaponPointer),y ; and we added appropriate number of bullets
     cmp #100 ; but there should be no more than 99 bullets
     bcc LessThan100
       lda #99
-      sta (weaponPtr),y
+      sta (weaponPointer),y
 LessThan100
     sty LastWeapon ; store last purchased weapon
     ; because we must put screen pointer next to it
@@ -820,7 +827,7 @@ invSelectDef
 ; calculate positionOnTheList from the activeWeapon (defensives)
     ldx tankNr
     lda ActiveWeapon,x
-    ;beq ?noWeaponActive
+    beq ?noWeaponActive
     ldy #0  ; min defensive weapon
 @
       cmp IndexesOfWeaponsL1,y

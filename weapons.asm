@@ -1061,7 +1061,8 @@ notpressed
     mva #$ff isInventory
     jsr Purchase
     mva #0 escFlag
-    jsr SetMainScreen    
+    jsr DisplayStatus
+    jsr SetMainScreen   
     jsr DrawTanks   
 @
     cmp #$8e
