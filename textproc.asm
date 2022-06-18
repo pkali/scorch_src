@@ -724,7 +724,6 @@ PurchaseAll
     ; after getting weapon index the routine is common for all
     ldx tanknr
     tay  ; weapon index is in Y
-    beq @+  ; baby missile skips all
     sec
     lda moneyL,x ; substracting from posessed money
     sbc WeaponPriceL,y ; of price of the given weapon
@@ -761,7 +760,7 @@ LessThan100
     sty LastWeapon ; store last purchased weapon
     ; because we must put screen pointer next to it
 
-@   mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
+    mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
     jmp Purchase.AfterPurchase
 
 inventorySelect
