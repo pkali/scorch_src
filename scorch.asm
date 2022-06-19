@@ -55,26 +55,33 @@
     .zpvar xc               .word
     .zpvar temp             .word ;temporary word for the most embeded loops only
     .zpvar temp2            .word ;same as above
+    .zpvar modify           .word ;origially used to replace self-modyfying code
     .zpvar tempXROLLER      .word ;same as above for XROLLER routine (used also in result display routine)
     .zpvar xtempDRAW        .word ;same as above for XDRAW routine
     .zpvar ytempDRAW        .word ;same as above for XDRAW routine
+    .zpvar tempor2          .byte
     ;--------------temps used in circle routine
     .zpvar xi               .word ;X (word) in draw routine
-    .zpvar fx               .byte ;circle drawing variables
+    .zpvar fx               .byte 
     .zpvar yi               .word ;Y (word) in draw routine
     .zpvar fy               .byte
     .zpvar xk               .word
     .zpvar fs               .byte
     .zpvar yc               .byte ;ycircle - temporary for circle
     .zpvar dx               .word
-    .zpvar tempor2          .byte
     .zpvar dy               .word
     .zpvar dd               .word
     .zpvar di               .word
     .zpvar dp               .word
-    .zpvar modify           .word
+    ;----------------------------
     .zpvar weaponPointer    .word
 	.zpvar dliCounter       .byte
+	.zpvar pressTimer       .byte
+	.zpvar NTSCcounter      .byte
+    ;.zpvar dliA             .byte
+    ;.zpvar dliX             .byte
+    ;.zpvar dliY             .byte
+
     ;* RMT ZeroPage addresses
     .zpvar p_tis            .word
     .zpvar p_trackslbstable .word
@@ -889,7 +896,8 @@ ClearResults
     bne ClearResults
 
     mva #1 CurrentRoundNr ;we start from round 1
-
+    mva #6 NTSCcounter
+    
     ; RMT INIT
     lda #$f0                    ;initial value
     sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
@@ -908,7 +916,9 @@ ClearResults
 .endp
     
 .proc DLIinterruptGraph
-    pha
+    ;sta dliA
+	;sty dliY
+	pha
 	phy
 	ldy dliCounter
 	lda dliColorsBack,y
@@ -919,17 +929,21 @@ ClearResults
     sta COLPF1
 	sty COLPF2
 	inc dliCounter
-	ply
+	;ldy dliY
+    ;lda dliA
+    ply
     pla
     rti
 .endp
 
 .proc DLIinterruptText
-	pha
+	;sta dliA
+    pha
 	sta WSYNC
     mva #TextBackgroundColor colpf2
     mva #TextForegroundColor colpf3
-	pla
+	;lda dliA
+    pla
 DLIinterruptNone
 	rti
 .endp
@@ -940,6 +954,21 @@ DLIinterruptNone
 	phy
 	mva #0 dliCounter
 	
+	lda PAL
+	and #%00001110
+	beq itsPAL
+	;it is NTSC here
+    dec NTSCcounter
+    bne itsPAL
+    mva #6 NTSCcounter
+    bne exitVBL ; skip doing VBL things each 6 frames in Amerika, Amerika
+                ; We're all living in Amerika, Coca Cola, Wonderbra
+
+itsPAL
+    ; pressTimer is trigger tick counter. always 50 ticks / s
+    bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
+
+    ; ------- RMT -------
 	lda sfx_effect
     bmi lab2
     asl @                       ; * 2
@@ -947,13 +976,14 @@ DLIinterruptNone
     ldx #0                      ;X = 0          channel (0..3 or 0..7 for stereo module)
     lda #0                      ;A = 12         note (0..60)
     jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
-;
+
     lda #$ff
     sta sfx_effect              ;reinit value
-;
 lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
+    ; ------- RMT -------
 	   
+exitVBL
     ply
     plx
 	pla

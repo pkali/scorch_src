@@ -1025,8 +1025,6 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
-    lda TRIG0S
-    beq notpressed
     lda SKSTAT
     cmp #$ff
     jeq checkJoy
@@ -1091,10 +1089,17 @@ notpressedJoy
     ;fire
     lda TRIG0S
     jeq pressedSpace
+    mva #$ff pressTimer  ; stop counting frames
    jmp notpressed
 
 ;
 pressedUp
+    lda pressTimer
+    spl:mva #0 pressTimer  ; if >128 then reset to 0
+    cmp #25  ; 1/2s
+    bcs CTRLPressedUp
+    
+    
     ;force increaseeee!
     ldx TankNr
     inc ForceTableL,x
@@ -1131,6 +1136,11 @@ CTRLPressedUp
 
 
 pressedDown
+    lda pressTimer
+    spl:mva #0 pressTimer  ; if >128 then reset to 0
+    cmp #50  ; 1s
+    bcs CTRLPressedDown
+
     mva #sfx_set_power_1 sfx_effect
 
     ldx TankNr

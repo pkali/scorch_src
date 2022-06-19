@@ -456,7 +456,7 @@ quit
 	ini main
 ; ---
 
-	opt l-
+	;opt l-
 
 .MACRO	SPRITES
 missiles
