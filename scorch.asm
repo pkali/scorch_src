@@ -427,6 +427,10 @@ AfterManualShooting
 
 ShootNow
     jsr Shoot
+    ;here we clear offensive text (after a shoot)
+    ldy TankNr
+    mva #0 plot4x4color
+    jsr DisplayOffensiveTextNr
     
     lda HitFlag ;0 if missed
     beq missed
@@ -438,9 +442,9 @@ ShootNow
 
 continueMainRoundLoopAfterSeppuku
     ;here we clear offensive text (after a shoot)
-    ldy TankNr
-    mva #0 plot4x4color
-    jsr DisplayOffensiveTextNr
+    ;ldy TankNr
+    ;mva #0 plot4x4color
+    ;jsr DisplayOffensiveTextNr
 
 
 AfterExplode

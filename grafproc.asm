@@ -1451,7 +1451,7 @@ EndPutChar
 ; ------------------------------------------
 .proc PutChar4x4
 ; puts 4x4 pixels char on the graphics screen
-; in: xdraw, ydraw (LOWER left corner of the char)
+; in: dx, dy (LOWER left corner of the char)
 ; in: CharCode4x4 (.sbyte)
 ; in: plot4x4color (0/1)
 ; all pixels are being drawn
@@ -1505,7 +1505,7 @@ GetUpper4bits
     bpl CopyChar
 
     ; calculating coordinates from xdraw and ydraw
-    mwa xdraw xbyte
+    mwa dx xbyte
 
     lda xbyte
     and #$7
@@ -1516,7 +1516,7 @@ GetUpper4bits
     rorw xbyte
 ;---
     ldy xbyte
-    lda ydraw ; y = y - 3 because left lower.
+    lda dy ; y = y - 3 because left lower.
     sec
     sbc #3
     tax

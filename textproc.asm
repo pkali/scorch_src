@@ -1305,6 +1305,8 @@ space    dta d" "
     ;that's easy because we have number of tank
     ;and xtankstableL and H keep X position of a given tank
 
+    ;save vars (messed when printing...)
+
     lda xtankstableL,y
     sta temp
     lda xtankstableH,y
@@ -1425,12 +1427,12 @@ DOTNcharloop
     asl
     clc
     adc TextPositionX
-    sta Xdraw
+    sta dx
     lda #0
     adc TextPositionX+1
-    sta Xdraw+1
+    sta dx+1
     lda TextPositionY
-    sta ydraw
+    sta dy
     jsr PutChar4x4
 
     inc TextCounter
@@ -1448,6 +1450,7 @@ DOTNcharloop
     ;address in LineAddress4x4
     ;starting from LineXdraw, LineYdraw
 
+
     ldy #0
     sty LineCharNr
 
@@ -1460,8 +1463,8 @@ TypeLine4x4Loop
     beq EndOfTypeLine4x4
 
     sta CharCode4x4
-    mwa LineXdraw Xdraw
-    mva LineYdraw Ydraw
+    mwa LineXdraw dx
+    mva LineYdraw dy
 	mva #1 plot4x4color
     jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
@@ -1477,10 +1480,6 @@ EndOfTypeLine4x4
 .proc AreYouSure
 ;using 4x4 font
     
-    ;save vars (messed in TypeLine4x4)
-    mwa Xdraw xk
-    mva Ydraw yc
-
     mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
     
     ;top frame
@@ -1510,7 +1509,7 @@ EndOfTypeLine4x4
 skip01
     
     ;clean
-    mva #3 dx
+    mva #3 di
     mva #4 ResultY
 @
       mva #1 plot4x4color
@@ -1520,23 +1519,16 @@ skip01
       jsr TypeLine4x4
       adb ResultY  #4 ;next line
   
-      dec dx
+      dec di
       bne @-
 
-
 quit_areyousure
-    ;restore vars
-    mva yc Ydraw
-    mwa xk Xdraw
     rts
 .endp
 ;--------------------------------
 .proc DisplaySeppuku
 ;using 4x4 font
     
-    ;save vars (messed in TypeLine4x4)
-    mwa Xdraw xk
-    mva Ydraw yc
 
     mva #20 fs  ; temp, how many times blink the billboard
 seppuku_loop
@@ -1564,7 +1556,7 @@ seppuku_loop
 
     ;clean seppuku
     
-    mva #3 dx
+    mva #3 di
     mva #4 ResultY
 @
       mwa #lineClear LineAddress4x4
@@ -1573,16 +1565,13 @@ seppuku_loop
       jsr TypeLine4x4
       adb ResultY  #4 ;next line
   
-      dec dx
+      dec di
       bne @-
 
      dec fs
     jne seppuku_loop
 
 quit_seppuku
-    ;restore vars
-    mva yc Ydraw
-    mwa xk Xdraw
     rts
 .endp
 ;--------------------------------

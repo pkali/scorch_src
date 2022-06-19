@@ -102,14 +102,7 @@ VOID
     jsr xmissile
 
     ; soil must fall down now! there is no other way...
-    
-    ;first clean the offensive text...
-    ldy TankNr
-    mva #0 plot4x4color
-    jsr DisplayOffensiveTextNr
-    
     ; hide tanks or they fall down with soil
-
     lda TankNr
     pha
     mva #1 Erase
@@ -186,10 +179,6 @@ EndOfLeapping
     mva #21 ExplosionRadius
     jsr CalculateExplosionRange0
     jsr xmissile
-
-    ldy TankNr
-    mva #0 plot4x4color
-    jsr DisplayOffensiveTextNr 
     
     lda TankNr
     pha
@@ -1832,8 +1821,6 @@ EndOfFlight
     jsr unPlot
     mwa xcircle xdraw
     mwa ycircle ydraw
-;    mwa XHit xdraw
-;    mva YHit ydraw
 
 	ldy SmokeTracerFlag
 	beq EndOfFlight2
