@@ -14,9 +14,9 @@ dliColorsFore
 TextBackgroundColor = $02	; REAL constans - use: LDA #TextBackgroundColor
 TextForegroundColor = $0c
 CashOptionL ;(one zero less than on the screen)
-    .by 0,<200,<500,<800,<1000
+    .by 0,<200,<800,<1200,<2000
 CashOptionH   
-    .by 0,>200,>500,>800,>1000
+    .by 0,>200,>800,>1200,>2000
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,70,99
 RoundsTable    .by 10,20,30,40,50
@@ -514,7 +514,8 @@ EndOfTheBarrelY
     .by 6,6,6,6,6,6,6,6,6
     .by 5,5,5,5,5,5,5,5,5,5
     .by 4,4,4,4,4,4,4,4,4,4,4,4,4
-    .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
+    .by 4,4,4,4,4,4,4,4,4,4,4,4,4,4	; one pixel Up for fix problems with colision check
+;    .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
 
     .by 0,0,0,0,0,0,0,0,0,0		; not used
     .by 0,0,0,0,0,0,0,0,0,0		; not used
@@ -526,7 +527,8 @@ EndOfTheBarrelY
     .by 0,0,0,0					; not used
 
 	; left angles from 90 (horizontally to the left) to 1 (vertically up)
-    .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
+;    .by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
+    .by 4,4,4,4,4,4,4,4,4,4,4,4,4,4	; one pixel Up for fix problems with colision check
     .by 4,4,4,4,4,4,4,4,4,4,4,4,4
     .by 5,5,5,5,5,5,5,5,5,5
     .by 6,6,6,6,6,6,6,6,6
@@ -593,6 +595,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price______________45
   .by >price______________46
   .by >price______________47
+  .by >price_White_Flag_____
   .by >price_Heat_Guidance__
   .by >price_Bal_Guidance___
   .by >price_Horz_Guidance__
@@ -608,7 +611,6 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Auto_Defense___
   .by >price_Fuel_Tank______
   .by >price_Contact_Trigger
-  .by >price_White_Flag_____
 
 WeaponPriceL
   .by <price_Baby_Missile___
@@ -659,6 +661,7 @@ WeaponPriceL
   .by <price______________45
   .by <price______________46
   .by <price______________47
+  .by <price_White_Flag_____
   .by <price_Heat_Guidance__
   .by <price_Bal_Guidance___
   .by <price_Horz_Guidance__
@@ -674,7 +677,6 @@ WeaponPriceL
   .by <price_Auto_Defense___
   .by <price_Fuel_Tank______
   .by <price_Contact_Trigger
-  .by <price_White_Flag_____
 
 ;-------------------------------------------------
 ; how many units (bulletd) of a given weapon we get for a given price
@@ -731,6 +733,7 @@ WeaponUnits
   .by 0  ;_____________45
   .by 0  ;_____________46
   .by 0  ;_____________47
+  .by 1  ;White_Flag___48
   .by 6  ;Heat_Guidance__
   .by 2  ;Bal_Guidance___
   .by 5  ;Horz_Guidance__
@@ -746,7 +749,6 @@ WeaponUnits
   .by 1  ;Auto_Defense___
   .by 10 ;Fuel_Tank______
   .by 25 ;Contact_Trigger
-  .by 1  ;_____________63
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
                 ;the comment is an index in the tables
@@ -809,8 +811,8 @@ WeaponSymbols
     .by $58,$59,$5a,$5b,$60,$7b,$7c,$7d
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
-    .by $02,$03,$06,$1d,$0a,$1b,$1c,$1e
-    .by $3b,$3c,$3d,$3e,$3f,$5e,$5f,$00
+    .by $5f,$02,$03,$06,$1d,$0a,$1b,$1c  ; defensives
+    .by $1e,$3b,$3c,$3d,$3e,$3f,$5e,$00
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
@@ -861,26 +863,43 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"----------------" ; 44
     dta d"----------------" ; 45
     dta d"----------------" ; 46
-    dta d"----------------" ; 47
+    dta d"                " ; 47 ; special (no weapon) name to simplify display
 
-    dta d"Heat Guidance   " ; 48 ($30)
-    dta d"Bal Guidance    " ; 49
-    dta d"Horz Guidance   " ; 50
-    dta d"Vert Guidance   " ; 51
-    dta d"Lazy Boy        " ; 52
-    dta d"Parachute       " ; 53
-    dta d"Battery         " ; 54
-    dta d"Mag Deflector   " ; 55
-    dta d"Shield          " ; 56
-    dta d"Force Shield    " ; 57
-    dta d"Heavy Shield    " ; 58
-    dta d"Super Mag       " ; 59
-    dta d"Auto Defense    " ; 60
-    dta d"Fuel Tank       " ; 61
-    dta d"Contact Trigger " ; 62
-    dta d"White Flag      " ; 63
+    dta d"White Flag      " ; 48 ($30)                                        
+    dta d"Heat Guidance   " ; 49                                              
+    dta d"Bal Guidance    " ; 50                                              
+    dta d"Horz Guidance   " ; 51                                              
+    dta d"Vert Guidance   " ; 52                                              
+    dta d"Lazy Boy        " ; 53                            
+    dta d"Parachute       " ; 54    - no energy                                                 
+    dta d"Battery         " ; 55            
+    dta d"Mag Deflector   " ; 56    - with shield and energy           
+    dta d"Shield          " ; 57    - shield for one shot - no energy       
+    dta d"Force Shield    " ; 58    - shield with energy and parachute                         
+    dta d"Heavy Shield    " ; 59    - shield with energy                                               
+    dta d"Super Mag       " ; 60               
+    dta d"Auto Defense    " ; 61    - with shield and energy                                            
+    dta d"Fuel Tank       " ; 62                                              
+    dta d"Contact Trigger " ; 63
+DefensiveEnergy = * - 48
+	.by 00	; White Flag
+	.by 00	; Heat Guidance
+	.by 00	; Bal Guidance
+	.by 00	; Horz Guidance
+	.by 00	; Vert Guidance
+	.by 00	; Lazy Boy
+	.by 00	; Parachute       
+	.by 00	; Battery
+	.by 90	; Mag Deflector
+	.by 00	; Shield
+	.by 99	; Force Shield
+	.by 99	; Heavy Shield
+	.by 00	; Super Mag
+	.by 99	; Auto Defense
+	.by 00	; Fuel Tank
+	.by 00	; Contact Trigger
 weaponsOfDeath
-	dta 1,2,3,7,15,16,17,18,19,20,21,22,23,24,25,26,27
+	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
 weaponsOfDeathEnd
 joyToKeyTable
   ; .by  00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15

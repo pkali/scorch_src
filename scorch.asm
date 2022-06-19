@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"143" ; number of this build (3 bytes)
+	dta d"144" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -55,26 +55,33 @@
     .zpvar xc               .word
     .zpvar temp             .word ;temporary word for the most embeded loops only
     .zpvar temp2            .word ;same as above
+    .zpvar modify           .word ;origially used to replace self-modyfying code
     .zpvar tempXROLLER      .word ;same as above for XROLLER routine (used also in result display routine)
     .zpvar xtempDRAW        .word ;same as above for XDRAW routine
     .zpvar ytempDRAW        .word ;same as above for XDRAW routine
+    .zpvar tempor2          .byte
     ;--------------temps used in circle routine
     .zpvar xi               .word ;X (word) in draw routine
-    .zpvar fx               .byte ;circle drawing variables
+    .zpvar fx               .byte 
     .zpvar yi               .word ;Y (word) in draw routine
     .zpvar fy               .byte
     .zpvar xk               .word
     .zpvar fs               .byte
     .zpvar yc               .byte ;ycircle - temporary for circle
     .zpvar dx               .word
-    .zpvar tempor2          .byte
     .zpvar dy               .word
     .zpvar dd               .word
     .zpvar di               .word
     .zpvar dp               .word
-    .zpvar modify           .word
+    ;----------------------------
     .zpvar weaponPointer    .word
 	.zpvar dliCounter       .byte
+	.zpvar pressTimer       .byte
+	.zpvar NTSCcounter      .byte
+    ;.zpvar dliA             .byte
+    ;.zpvar dliX             .byte
+    ;.zpvar dliY             .byte
+
     ;* RMT ZeroPage addresses
     .zpvar p_tis            .word
     .zpvar p_trackslbstable .word
@@ -103,7 +110,7 @@
     ;Game loading address
     ORG  $3000
 WeaponFont
-    ins 'artwork/weapons_AW5.fnt'  ; 'artwork/weapons.fnt'
+    ins 'artwork/weapons_AW5_mod.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
@@ -128,19 +135,24 @@ START
 
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
-
+	
+	; activate mag deflector for all players (test)
+;    ldx numberOfPlayers
+;    dex
+;@
+;	mva #56 ActiveDefenceWeapon,x
+;	tay
+;	lda DefensiveEnergy,y
+;	sta ShieldEnergy,x		; set energy of shield
+;	dex
+;	bpl @-
+	; mag deflector activated! (test)
 MainGameLoop
-    VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
-
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
     mva #0 dmactl
-    lda dmactls
-    and #$fc
-    ;ora #$02     ; 2=normal, 3 = wide screen width, 0 = no screen
-    sta dmactls
-	
+
     jsr GetRandomWind
 
     jsr RoundInit
@@ -300,13 +312,7 @@ SettingEnergies
     jsr calculatemountains ;let mountains be easy for the eye
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
 
-    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
-    mwa #dl dlptrs  ; issue #72 (glitches when switches)
-    lda dmactls
-    and #$fc
-    ora #$02     ; 2=normal, 3 = wide screen width
-    sta dmactls
-
+    jsr SetMainScreen
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
@@ -428,6 +434,10 @@ AfterManualShooting
 
 ShootNow
     jsr Shoot
+    ;here we clear offensive text (after a shoot)
+    ldy TankNr
+    mva #0 plot4x4color
+    jsr DisplayOffensiveTextNr
     
     lda HitFlag ;0 if missed
     beq missed
@@ -439,9 +449,9 @@ ShootNow
 
 continueMainRoundLoopAfterSeppuku
     ;here we clear offensive text (after a shoot)
-    ldy TankNr
-    mva #0 plot4x4color
-    jsr DisplayOffensiveTextNr
+    ;ldy TankNr
+    ;mva #0 plot4x4color
+    ;jsr DisplayOffensiveTextNr
 
 
 AfterExplode
@@ -649,7 +659,7 @@ MetodOfDeath
 
 ;--------------------------------------------------
 .proc DecreaseEnergyX
-;Decreases energy of player nr X
+;Decreases energy of player nr X by the value Y
 ;increases his financial loss
 ;increases gain of tank TankNr
 ;--------------------------------------------------
@@ -687,6 +697,33 @@ NotNegativeEnergy
     rts
 .endp
 
+;--------------------------------------------------
+.proc DecreaseShieldEnergyX
+; Decreases energy of shield player nr X by the value Y
+; if shield energy is 0 after decrease then in Y we have
+; rest of the energy - to decrease tank energy
+;--------------------------------------------------
+    sty EnergyDecrease
+	ldy #0	; if Shield survive then no decrease tank anergy
+    ; Energy cannot be less than 0
+    lda ShieldEnergy,x
+    cmp EnergyDecrease
+    bcc UseAllShieldEnergy
+    ;sec
+    sbc EnergyDecrease
+    bpl NotNegativeShieldEnergy	; jump allways
+UseAllShieldEnergy
+	; now calculate rest of energy for future tank energy decrease
+	sec
+	lda EnergyDecrease
+	sbc ShieldEnergy,x
+	tay
+    lda #0
+NotNegativeShieldEnergy
+    sta ShieldEnergy,x
+    rts
+.endp
+
 ;---------------------------------
 .proc Seppuku
     lda #0
@@ -707,7 +744,7 @@ NotNegativeEnergy
 .endp
 
 ;--------------------------------------------------
-GetRandomWind .proc
+.proc GetRandomWind
 ;in: MaxWind (byte)
 ;out: Wind (word)
 ;uses: _
@@ -736,7 +773,7 @@ GetRandomWind .proc
 .endp
 
 ;--------------------------------------------------
-PMoutofScreen .proc
+.proc PMoutofScreen
 ;--------------------------------------------------
     lda #$00 ; let all P/M disappear
     :8 sta hposp0+#
@@ -746,21 +783,26 @@ PMoutofScreen .proc
 ;--------------------------------------------------
 .proc WeaponCleanup;
 ; cleaning of the weapon possesion tables
-; (99 of Baby Missles, all other weapons=0)
+; 99 of Baby Missles(index==0), all other weapons=0)
 ;--------------------------------------------------
-    ldx #$3f
-    lda #$0
-@
-      sta TanksWeapon1,x
+    ldx #$3f  ; TODO: maxweapons
+@    lda #$0
+      cpx #48  ; White Flag
+      bne @+
+       lda #99     
+@     sta TanksWeapon1,x
       sta TanksWeapon2,x
       sta TanksWeapon3,x
       sta TanksWeapon4,x
       sta TanksWeapon5,x
       sta TanksWeapon6,x
       dex
-      sne:lda #99
-    bpl @-
+      beq setBmissile
+    bpl @-1
     rts
+setBmissile
+    lda #99
+    bne @-
 .endp
 
 ;--------------------------------------------------
@@ -854,7 +896,8 @@ ClearResults
     bne ClearResults
 
     mva #1 CurrentRoundNr ;we start from round 1
-
+    mva #6 NTSCcounter
+    
     ; RMT INIT
     lda #$f0                    ;initial value
     sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
@@ -872,8 +915,10 @@ ClearResults
     rts
 .endp
     
-DLIinterruptGraph .proc
-    pha
+.proc DLIinterruptGraph
+    ;sta dliA
+	;sty dliY
+	pha
 	phy
 	ldy dliCounter
 	lda dliColorsBack,y
@@ -884,27 +929,46 @@ DLIinterruptGraph .proc
     sta COLPF1
 	sty COLPF2
 	inc dliCounter
-	ply
+	;ldy dliY
+    ;lda dliA
+    ply
     pla
     rti
 .endp
 
-DLIinterruptText .proc
-	pha
+.proc DLIinterruptText
+	;sta dliA
+    pha
 	sta WSYNC
     mva #TextBackgroundColor colpf2
     mva #TextForegroundColor colpf3
-	pla
+	;lda dliA
+    pla
 DLIinterruptNone
 	rti
 .endp
 
-VBLinterrupt .proc
+.proc VBLinterrupt
 	pha
 	phx
 	phy
 	mva #0 dliCounter
 	
+	lda PAL
+	and #%00001110
+	beq itsPAL
+	;it is NTSC here
+    dec NTSCcounter
+    bne itsPAL
+    mva #6 NTSCcounter
+    bne exitVBL ; skip doing VBL things each 6 frames in Amerika, Amerika
+                ; We're all living in Amerika, Coca Cola, Wonderbra
+
+itsPAL
+    ; pressTimer is trigger tick counter. always 50 ticks / s
+    bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
+
+    ; ------- RMT -------
 	lda sfx_effect
     bmi lab2
     asl @                       ; * 2
@@ -912,13 +976,14 @@ VBLinterrupt .proc
     ldx #0                      ;X = 0          channel (0..3 or 0..7 for stereo module)
     lda #0                      ;A = 12         note (0..60)
     jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
-;
+
     lda #$ff
     sta sfx_effect              ;reinit value
-;
 lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
+    ; ------- RMT -------
 	   
+exitVBL
     ply
     plx
 	pla
@@ -986,7 +1051,7 @@ UsageLoop
     rts
 .endp
 ;----------------------------------------------
-RandomizeAngle .proc ;
+.proc RandomizeAngle
 ; routine returns in A
 ; a valid angle for the tank's barrel.
 ; X is not changed
@@ -1009,7 +1074,7 @@ RandomizeAngle .proc ;
     rts
 .endp
 ;----------------------------------------------
-RandomizeForce  .proc
+.proc RandomizeForce
 ; routine returns in ForceTable/L/H
 ; valid force of shooting for TankNr
 ; in X must be TankNr
@@ -1222,7 +1287,7 @@ getkeyend
 
 .endp
 ;--------------------------------------------------
-getkeynowait .proc;
+.proc getkeynowait
 ;--------------------------------------------------
     jsr WaitForKeyRelease 
     lda kbcode
@@ -1230,7 +1295,7 @@ getkeynowait .proc;
     rts
 .endp
 ;--------------------------------------------------
-WaitForKeyRelease .proc
+.proc WaitForKeyRelease
 ;--------------------------------------------------
     lda JSTICK0
     and #$0f

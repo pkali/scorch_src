@@ -47,6 +47,21 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 144
+2022-06-19
+Juneteenth release is coming with the most anticipated new feature: defensive weapons. Thanks to @Pecusx we have 5 completely new weapons and more reasonably working parachute. The stub of instruction manual describing these weapons is available here: https://github.com/pkali/scorch_src/wiki/Instruction-manual.
+
+The new inventory system has been added. Call it by pressing "I" key or short-pressing fire. Select weapon to use by moving joystick or cursor keys right. Switch between offensive and deffensive weapons by moving joystick left. Fire/escape to quit inventory.
+
+Other significant playability change is https://github.com/pkali/scorch_src/issues/54 - it is not finished yet, but keeping joystick up or down makes force to increase / decrease faster.
+Also - short press of fire calls Inventory, long press fires the shell. The timings are experimental, please let me know it this needs a modification / improvement.
+
+Tickets closed:
+* https://github.com/pkali/scorch_src/issues/92 - less unnecessary cleaning of the offensive texts
+* https://github.com/pkali/scorch_src/issues/89 - improved collisions with tank
+* https://github.com/pkali/scorch_src/issues/71 - ditto
+* https://github.com/pkali/scorch_src/issues/11, https://github.com/pkali/scorch_src/issues/26, https://github.com/pkali/scorch_src/issues/8, https://github.com/pkali/scorch_src/issues/20 - new inventory system
+
 ###### Build 143
 2022-06-05
 Rewrite build. We redone several important parts of the game to allow for bug fixes and requested features. Generally it was a great success, but some new bugs appeared. This build is nice for the eye, but beware, no mercy for testers again :)

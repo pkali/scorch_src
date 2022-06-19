@@ -8,7 +8,7 @@
 ;----------------------------------------
 
 ;--------------------------------------------------
-Options .proc
+.proc Options
 ;--------------------------------------------------
 ; start-up screen - options, etc.
 ; this function returns:
@@ -201,14 +201,9 @@ OptionsYLoop
 ;-------------------------------------------
 ; call of the purchase screens for each tank
 .proc CallPurchaseForEveryTank
-    jsr PMoutofScreen
-    mwa #PurchaseDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$02     ; normal screen width
-    sta dmactls
 
     mva #0 TankNr
+    sta isInventory
 @
       ldx TankNr
       lda SkillTable,x
@@ -231,17 +226,29 @@ AfterManualPurchase
 ;--------------------------------------------------
 .proc Purchase ;
 ;--------------------------------------------------
+; TODO: when round ends with a weapon depleted the pointer points to an empty line
+
 ; In tanknr there is a number of the tank (player)
 ; that is buying weapons now (from 0).
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
+    mva #0 dmactl
+    VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
+    jsr PMoutofScreen
+    mwa #PurchaseDL dlptrs
+    lda dmactls
+    and #$fc
+    ora #$02     ; normal screen width
+    sta dmactls
+    
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
     
     ldx tankNr
     lda TankStatusColoursTable,x
-    sta colpf2s 
-
+    sta colpf2s
+    
+    
 ; we are clearing list of the weapons
     mva #$ff LastWeapon
     mva #$00 WhichList
@@ -265,6 +272,8 @@ NextChar03
 ; here we must jump in after each purchase
 ; to generate again list of available weapons
 AfterPurchase
+
+    ; current cash display
     mva #sfx_purchase sfx_effect
     ldx tanknr
     lda moneyL,x
@@ -277,32 +286,44 @@ AfterPurchase
     ; in xbyte there is the address of the line that
     ; is being processed now
     mwa #ListOfWeapons xbyte
-    ldx #$00  ; number of the checked weapon
+    ldx #$00  ; index of the checked weapon
     stx HowManyOnTheList1 ; amounts of weapons (shells, bullets) in both lists
     stx HowManyOnTheList2
-    stx PositionOnTheList
 
 ; Creating full list of the available weapons for displaying
-; in X there is a number of the weapon to be checked,
+; in X there is an index of the weapon to be checked,
 ; in 'Xbyte' address of the first char in filled screen line
 
 CreateList
-    ; checking if the weapon of the given number is present
+    stx temp ; index of a weapon will be necessary later
+    ; checking if the weapon of the given index is present
     lda WeaponUnits,x
     jeq NoWeapon
+
+    ldy tanknr    
+    
+    bit isInventory
+    jmi itIsInventory
+    
+    ; put "Purchase" on the screen
+     ldx #[purchaseTextEnd-purchaseText-1]
+@     lda purchaseText,x
+      sta purchaseActivate,x
+      dex
+    bpl @-
+
     ; checking if we can afford buying this weapon
-    ldy tanknr
+    ldx temp
     lda moneyH,y
     cmp WeaponPriceH,x
-    bne CheckWeapon01
+    bne @+
     lda moneyL,y
     cmp WeaponPriceL,x
-CheckWeapon01
+@
     jcc TooLittleCash
-
+    
     ; we have enough cash and the weapon can be
     ; added to the list
-    stx temp ; number of weapon will be necessary later
 
     ; first parentheses and other special chars
     ; (it's easier this way)
@@ -322,58 +343,65 @@ CheckWeapon01
     lda #16 ; "0"
     sta (xbyte),y
 
-    ; now symbol of the weapon
-    lda WeaponSymbols,x
-    ldy #$4  ; 4 chars from the beginning of the line
-    sta (xbyte),y
-
-    ;now number of purchased units (shells)
-    clc
-    lda xbyte
-    adc #23  ; 23 chars from the beginning of the line
-    sta displayposition
-    lda xbyte+1
-    adc #$00
-    sta displayposition+1
+    ;now number of units (shells) to be purchased
+    adw xbyte #23 displayposition  ; 23 chars from the beginning of the line
     lda WeaponUnits,x
     sta decimal
     jsr displaybyte
-    ldx temp ;getting back number of the weapon
+    ldx temp ;getting back index of the weapon
 
     ; and now price of the weapon
-    clc
-    lda xbyte
-    adc #27  ; 27 chars from the beginning of the line
-    sta displayposition
-    lda xbyte+1
-    adc #$00
-    sta displayposition+1
+    adw xbyte #27 displayposition  ; 27 chars from the beginning of the line
     lda WeaponPriceL,x
     sta decimal
     lda WeaponPriceH,x
     sta decimal+1
     jsr displaydec
 
-    lda temp ;getting back number of the weapon
-    pha  ;and saving it on the stack
+    jmp notInventory
 
+itIsInventory
+    ; put "Activate" on the screen
+     ldx #[purchaseTextEnd-purchaseText-1]
+@     lda activateText,x
+      sta purchaseActivate,x
+      dex
+    bpl @-
+
+    ldx temp
+    lda TanksWeaponsTableL,y
+    sta weaponPointer
+    lda TanksWeaponsTableH,y
+    sta weaponPointer+1
+    ldy temp
+    lda (weaponPointer),y
+    jeq noWeapon
+
+    ; clear price area
+    ldy #22  ; beginning of the price area
+    lda #0
+@     sta (XBYTE),y
+      iny
+      cpy #32+1  ; end of price
+    bne @-
+
+notInventory
+
+    ; number of posessed shells
+    lda temp ; weapon index again
     jsr HowManyBullets
     sta decimal
 
-    pla
-    sta temp ; let's store weapon number again
-
-    clc
-    lda xbyte
-    adc #1  ; 1 char from the beginning of the screen
-    sta displayposition
-    lda xbyte+1
-    adc #$00
-    sta displayposition+1
+    adw xbyte #1 displayposition 
     jsr displaybyte
 
+    ldx temp ;weapon index
+    ; now symbol of the weapon
+    lda WeaponSymbols,x
+    ldy #$4  ; 4 chars from the beginning of the line
+    sta (xbyte),y
+
     ; and now name of the weapon and finisheeeedd !!!!
-    ldx temp ;weapon number
     mva #0 temp+1  ; this number is only in X
     ; times 16 (it's length of the names of weapons)
     ldy #3 ; Rotate 4 times
@@ -383,55 +411,54 @@ CheckWeapon01
     dey
     bpl @-
 
-    adw temp #NamesOfWeapons-6 modify
+    adw temp #NamesOfWeapons-6 weaponPointer
 
-    ldy #6 ; from 6th char
+    ldy #6 ; from 6th char on screen
 
 @
-    lda (modify),y
+    lda (weaponPointer),y
     sta (xbyte),y
     iny
     cpy #(16+6)
     bne @-
 
 
-    ; in X there is what we need
+    ; in X there is what we need (weapon index)
 
     ; If on screen after the purchase there is still
     ; present the weapon purchased recently,
     ; the pointer must point to it.
-
+    bit lastWeapon
+    bpl @+  ; if == $ff => first run, jump to top
+    mva #0 PositionOnTheList
+    beq NotTheSameAsLastTime
+@
     cpx LastWeapon
     bne NotTheSameAsLastTime
     lda WhichList
-    bne ominx06
+    bne @+
     lda HowManyOnTheList1
     sta PositionOnTheList
     jmp NotTheSameAsLastTime
-ominx06
+@
     lda HowManyOnTheList2
     sta PositionOnTheList
 NotTheSameAsLastTime
     ; increase appropriate counter
     txa
     cpx #$30
-    bcs SecondList
+    bcs DefenceList
     ldy HowManyOnTheList1
-    sta NubersOfWeaponsL1,y
+    sta IndexesOfWeaponsL1,y
     inc HowManyOnTheList1
     bne NextLineOfTheList
-SecondList
+DefenceList
     ldy HowManyOnTheList2
-    sta NubersOfWeaponsL2,y
+    sta IndexesOfWeaponsL2,y
     inc HowManyOnTheList2
     ; If everything is copied then next line
 NextLineOfTheList
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc TooLittleCash
-    inc xbyte+1
+    adw xbyte #40
 TooLittleCash
 NoWeapon
 
@@ -550,17 +577,47 @@ DoNotIncHigher2
 ; screen clearing at each list refresh
 ; (it was very ugly - I checked it :)
 
+    bit isInventory  ; 
+    bpl ChoosingItemForPurchase
+    
+    lda whichList
+    bne PositionDefensive
+     
+; calculate positionOnTheList from the activeWeapon (offensives)
+    ldx tankNr
+    lda activeWeapon,x
+    ldy #0
+@
+      cmp IndexesOfWeaponsL1,y
+      beq ?weaponfound
+      iny
+      cpy #48  ; maxOffensiveWeapons
+    bne @-
+    ; not found apparently?
+    ; TODO: check border case (the last weapon)
+    ldy #0
+    beq ?weaponFound  ; jmp
+PositionDefensive
+    jsr calcPosDefensive
+    
+
+?weaponFound
+    ; weapon index in Y
+    sty positionOnTheList
 
 ; Here we have all we need
 ; So choose the weapon for purchase ......
 ;--------------------------------------------------
 ChoosingItemForPurchase
 ;--------------------------------------------------
+    
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
     ldx escFlag
-    seq:rts
+    seq:jmp WaitForKeyRelease  ; like jsr ... : rts
     cmp #$2c ; Tab
+    jeq ListChange
+    cmp #$06  ; cursor left
     jeq ListChange
     cmp #$0c ; Return
     sne:rts
@@ -600,8 +657,7 @@ EndUpX
 PurchaseKeyDown
     lda WhichList
     beq GoDown1
-    inc PositionOnTheList
-    lda PositionOnTheList
+    inc:lda PositionOnTheList
     cmp HowManyOnTheList2
     bne EndGoDownX
     ldy HowManyOnTheList2
@@ -609,8 +665,7 @@ PurchaseKeyDown
     sty PositionOnTheList
     jmp ChoosingItemForPurchase
 GoDown1
-    inc PositionOnTheList
-    lda PositionOnTheList
+    inc:lda PositionOnTheList
     cmp HowManyOnTheList1
     bne MakeOffsetDown
     ldy HowManyOnTheList1
@@ -632,18 +687,31 @@ EndGoDownX
 
 ; swapping the displayed list and setting pointer to position 0
 ListChange
+    mva #0 OffsetDL1
+
     lda WhichList
     eor #$01
     sta WhichList
-    bne SecondSelected
+    bne DeffensiveSelected
+
     mwa #ListOfWeapons WeaponsListDL
-    jmp @+
-SecondSelected
-    mwa #ListOfDefensiveWeapons WeaponsListDL
+    lda isInventory
+    beq @+
+    ; inventory
+    jsr calcPosOffensive
+    jmp ChoosingItemForPurchase
 @
-    lda #$00
-    sta PositionOnTheList
-    sta OffsetDL1
+    mva #0 PositionOnTheList
+    jmp ChoosingItemForPurchase
+
+DeffensiveSelected
+    mwa #ListOfDefensiveWeapons WeaponsListDL
+    lda isInventory
+    beq @+
+    jsr calcPosDefensive
+    jmp ChoosingItemForPurchase
+@
+    mva #0 positionOnTheList
     jmp ChoosingItemForPurchase
 
 .endp
@@ -652,24 +720,23 @@ SecondSelected
 ;--------------------------------------------------
 .proc PurchaseWeaponNow
 ;--------------------------------------------------
-weaponPtr = temp
-isPriceZero = tempXRoller
+    bit isInventory
+    bmi inventorySelect
 
     lda WhichList
     bne PurchaseDeffensive
 
     ; here we purchase the offensive weapon
     ldy PositionOnTheList
-    lda NubersOfWeaponsL1,y
+    lda IndexesOfWeaponsL1,y
     jmp PurchaseAll
 PurchaseDeffensive
     ldy PositionOnTheList
-    lda NubersOfWeaponsL2,y
+    lda IndexesOfWeaponsL2,y
 PurchaseAll
-    ; after getting weapon number the routine is common for all
+    ; after getting weapon index the routine is common for all
     ldx tanknr
-    tay  ; weapon number is in Y
-    beq @+
+    tay  ; weapon index is in Y
     sec
     lda moneyL,x ; substracting from posessed money
     sbc WeaponPriceL,y ; of price of the given weapon
@@ -678,61 +745,117 @@ PurchaseAll
     sbc WeaponPriceH,y
     sta moneyH,x
     
-    ; save info about price == 0
-    lda WeaponPriceL,y
-    ora WeaponPriceH,y
-    sta isPriceZero    
-
-
+positiveMoney    
     ; now we have to get address of
     ; the table of the weapon of the tank
     ; and add appropriate number of shells
     
     lda TanksWeaponsTableL,x
-    sta weaponPtr
+    sta weaponPointer
     lda TanksWeaponsTableH,x
-    sta weaponPtr+1
+    sta weaponPointer+1
 
     clc
-    lda (weaponPtr),y  ; and we have number of posessed bullets of the weapon
+    lda (weaponPointer),y  ; and we have number of posessed bullets of the weapon
     adc WeaponUnits,y
-    sta (weaponPtr),y ; and we added appropriate number of bullets
+    sta (weaponPointer),y ; and we added appropriate number of bullets
     cmp #100 ; but there should be no more than 99 bullets
     bcc LessThan100
       lda #99
-      sta (weaponPtr),y
+      sta (weaponPointer),y
 LessThan100
     sty LastWeapon ; store last purchased weapon
     ; because we must put screen pointer next to it
 
-    ; additional check for unfinished game
-    ; if weapon was free (price == $0)
-    ; then have nothing...
-    lda isPriceZero
-    bne @+
-      lda #0
-      sta (weaponPtr),y
-@
+    mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
     jmp Purchase.AfterPurchase
+
+inventorySelect
+    lda whichList
+    bne invSelectDef
+
+    ldy PositionOnTheList
+    lda IndexesOfWeaponsL1,y
+    ldx tankNr
+    sta activeWeapon,x
+    jmp WaitForKeyRelease ; rts
+    
+invSelectDef
+    ldy PositionOnTheList
+    lda IndexesOfWeaponsL2,y
+    tay
+    ldx tankNr
+    sta ActiveDefenceWeapon,x
+    ; decrease number of defensives
+    lda TanksWeaponsTableL,x
+    sta weaponPointer
+    lda TanksWeaponsTableH,x
+    sta weaponPointer+1
+    lda (weaponPointer),y
+    sec
+    sbc #1
+    sta (weaponPointer),y
+    
+    lda DefensiveEnergy,y
+    sta ShieldEnergy,x
+    jmp WaitForKeyRelease ; rts
+
+.endp
+; -----------------------------------------------------
+.proc calcPosDefensive
+; calculate positionOnTheList from the activeWeapon (defensives)
+    ldx tankNr
+    lda ActiveDefenceWeapon,x
+    beq ?noWeaponActive
+    ldy #0  ; min defensive weapon
+@
+      cmp IndexesOfWeaponsL2,y
+      beq ?weaponfound
+      iny
+      cpy #8*2  ; maxDefensiveWeapon
+    bne @-
+    ; not found apparently?
+    ; TODO: check border case (the last weapon)
+?noWeaponActive
+    ldy #0
+?weaponFound
+    sty positionOnTheList
+    rts
 .endp
 
+.proc calcPosOffensive
+; calculate positionOnTheList from the activeWeapon (defensives)
+    ldx tankNr
+    lda ActiveWeapon,x
+    beq ?noWeaponActive
+    ldy #0  ; min defensive weapon
+@
+      cmp IndexesOfWeaponsL1,y
+      beq ?weaponfound
+      iny
+      cpy #8*5  ; maxOffensiveWeapon
+    bne @-
+    ; not found apparently?
+    ; TODO: check border case (the last weapon)
+?noWeaponActive
+    ldy #0
+?weaponFound
+    sty positionOnTheList
+    rts
+.endp
+; -----------------------------------------------------
 .proc PutLitteChar
-    ; first let's cleat both lists from little chars
+    ; first let's clear both lists from little chars
     mwa #ListOfWeapons xbyte
     ldx #52 ; there are 52 lines total
     ldy #$00
 EraseLoop
-    lda #$00
+    tya  ; lda #$00
     sta (xbyte),y
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc ominx02
-    inc xbyte+1
-ominx02
+    adw xbyte #40
     dex
     bpl EraseLoop
+
     ; now let's check which list is active now
     lda WhichList
     beq CharToList1
@@ -742,13 +865,7 @@ ominx02
     ldx PositionOnTheList
     beq SelectList2 ; if there is 0 we add nothing
 AddLoop2
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc ominx03
-    inc xbyte+1
-ominx03
+    adw xbyte #40
     dex
     bne AddLoop2
 SelectList2
@@ -770,13 +887,7 @@ CharToList1
     ldx PositionOnTheList
     beq SelectList1 ; if there is 0 we add nothing
 AddLoop1
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc ominx04
-    inc xbyte+1
-ominx04
+    adw xbyte #40
     dex
     bne AddLoop1
 SelectList1
@@ -787,13 +898,7 @@ SelectList1
     ldx OffsetDL1
     beq SetWindowList1 ; if zero then add nothing
 LoopWindow1
-    clc
-    lda xbyte
-    adc #40
-    sta xbyte
-    bcc ominx05
-    inc xbyte+1
-ominx05
+    adw xbyte #40
     dex
     bne LoopWindow1
 SetWindowList1
@@ -805,8 +910,8 @@ SetWindowList1
     ldy #>EmptyLine
     lda OffsetDL1
     beq NoArrowUp
-    ldx #<MoreUp
-    ldy #>MoreUp
+      ldx #<MoreUp
+      ldy #>MoreUp
 NoArrowUp
     stx MoreUpdl
     sty MoreUpdl+1
@@ -819,8 +924,8 @@ NoArrowUp
     bmi NoArrowDown
     cmp OffsetDL1
     bcc NoArrowDown
-    ldx #<MoreDown
-    ldy #>MoreDown
+      ldx #<MoreDown
+      ldy #>MoreDown
 NoArrowDown
     stx MoreDowndl
     sty MoreDowndl+1
@@ -1200,6 +1305,8 @@ space    dta d" "
     ;that's easy because we have number of tank
     ;and xtankstableL and H keep X position of a given tank
 
+    ;save vars (messed when printing...)
+
     lda xtankstableL,y
     sta temp
     lda xtankstableH,y
@@ -1320,12 +1427,12 @@ DOTNcharloop
     asl
     clc
     adc TextPositionX
-    sta Xdraw
+    sta dx
     lda #0
     adc TextPositionX+1
-    sta Xdraw+1
+    sta dx+1
     lda TextPositionY
-    sta ydraw
+    sta dy
     jsr PutChar4x4
 
     inc TextCounter
@@ -1343,6 +1450,7 @@ DOTNcharloop
     ;address in LineAddress4x4
     ;starting from LineXdraw, LineYdraw
 
+
     ldy #0
     sty LineCharNr
 
@@ -1355,8 +1463,8 @@ TypeLine4x4Loop
     beq EndOfTypeLine4x4
 
     sta CharCode4x4
-    mwa LineXdraw Xdraw
-    mva LineYdraw Ydraw
+    mwa LineXdraw dx
+    mva LineYdraw dy
 	mva #1 plot4x4color
     jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
@@ -1372,10 +1480,6 @@ EndOfTypeLine4x4
 .proc AreYouSure
 ;using 4x4 font
     
-    ;save vars (messed in TypeLine4x4)
-    mwa Xdraw xk
-    mva Ydraw yc
-
     mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
     
     ;top frame
@@ -1405,7 +1509,7 @@ EndOfTypeLine4x4
 skip01
     
     ;clean
-    mva #3 dx
+    mva #3 di
     mva #4 ResultY
 @
       mva #1 plot4x4color
@@ -1415,23 +1519,16 @@ skip01
       jsr TypeLine4x4
       adb ResultY  #4 ;next line
   
-      dec dx
+      dec di
       bne @-
 
-
 quit_areyousure
-    ;restore vars
-    mva yc Ydraw
-    mwa xk Xdraw
     rts
 .endp
 ;--------------------------------
 .proc DisplaySeppuku
 ;using 4x4 font
     
-    ;save vars (messed in TypeLine4x4)
-    mwa Xdraw xk
-    mva Ydraw yc
 
     mva #20 fs  ; temp, how many times blink the billboard
 seppuku_loop
@@ -1459,7 +1556,7 @@ seppuku_loop
 
     ;clean seppuku
     
-    mva #3 dx
+    mva #3 di
     mva #4 ResultY
 @
       mwa #lineClear LineAddress4x4
@@ -1468,16 +1565,13 @@ seppuku_loop
       jsr TypeLine4x4
       adb ResultY  #4 ;next line
   
-      dec dx
+      dec di
       bne @-
 
      dec fs
     jne seppuku_loop
 
 quit_seppuku
-    ;restore vars
-    mva yc Ydraw
-    mwa xk Xdraw
     rts
 .endp
 ;--------------------------------
@@ -1690,12 +1784,43 @@ FinishResultDisplay
     bpl @-
  
     adw temp #NamesOfWeapons
-    ldy #6 ; from 6th character
-
     ldy #15
 @
       lda (temp),y
       sta textbuffer+23,y
+      dey
+    bpl @-
+
+    ;---------------------
+    ;displaying name of the defence weapon (if active)
+    ;---------------------
+	lda #$08 ; (
+	sta textbuffer+80+22
+	lda #$09	; )
+	sta textbuffer+80+39
+	lda ActiveDefenceWeapon,x
+	bne ActiveDefence
+	; clear brackets
+	lda #$00 ; space
+	sta textbuffer+80+22
+	sta textbuffer+80+39
+	lda #47	; no weapon name
+ActiveDefence
+    sta temp ;get back number of the weapon
+    mva #0 temp+1
+    ; times 16 (because this is length of weapon name)
+    ldy #3 ; shift left 4 times
+@
+      aslw temp
+      dey
+    bpl @-
+ 
+    adw temp #NamesOfWeapons
+
+    ldy #15
+@
+      lda (temp),y
+      sta textbuffer+40+40+23,y
       dey
     bpl @-
 
@@ -1709,6 +1834,31 @@ FinishResultDisplay
     mwa #textbuffer+48 displayposition
     jsr displaybyte
 
+    ;---------------------
+    ;displaying the energy of a tank shield (if exist)
+    ;---------------------
+	; clear (if no shield)
+	lda #$00	; space
+	sta textbuffer+40+10
+	sta textbuffer+40+11
+	sta textbuffer+40+12
+	sta textbuffer+40+13
+	; check shield energy and display it
+	ldx TankNr
+	lda ActiveDefenceWeapon,x
+	beq NoDefenceWeapon
+	lda ShieldEnergy,x
+	beq NoShieldEnergy
+	sta decimal	; displayed value
+	lda #$08 ; (
+	sta textbuffer+40+10
+	mwa #textbuffer+40+11 displayposition
+    jsr displaybyte
+	lda #$09	; )
+	sta textbuffer+40+13
+NoDefenceWeapon	
+NoShieldEnergy
+
     ;=========================
     ;display Force
     ;=========================
@@ -1717,7 +1867,7 @@ FinishResultDisplay
     sta decimal
     lda ForceTableH,x
     sta decimal+1
-    mwa #textbuffer+40+34 displayposition
+    mwa #textbuffer+40+36 displayposition
     jsr displaydec
 
     ;=========================
@@ -1729,9 +1879,9 @@ FinishResultDisplay
     lda AngleTable,x
     bmi AngleToLeft
     lda #$7f  ; (tab) character
-    sta textbuffer+40+23
+    sta textbuffer+40+25
     lda #0  ;space
-    sta textbuffer+40+20
+    sta textbuffer+40+22
     lda #90
     sec
     sbc AngleTable,x
@@ -1748,12 +1898,12 @@ AngleToLeft
     lda BarrelTableL,y
     sta CharCode
     lda #$7e  ;(del) char
-    sta textbuffer+40+20
+    sta textbuffer+40+22
     lda #0 ;space
-    sta textbuffer+40+23
+    sta textbuffer+40+25
 
 AngleDisplay
-    mwa #textbuffer+40+21 displayposition
+    mwa #textbuffer+40+23 displayposition
     jsr displaybyte
 
     ;=========================
@@ -1763,9 +1913,9 @@ AngleDisplay
     lda Wind+3 ; highest byte of 4 byte wind
     bmi DisplayLeftWind
     lda #$7f  ; (tab) char
-    sta textbuffer+80+28
+    sta textbuffer+80+20
     lda #0  ;space
-    sta textbuffer+80+25
+    sta textbuffer+80+17
     beq DisplayWindValue
 DisplayLeftWind
       sec  ; Wind = -Wind
@@ -1776,14 +1926,14 @@ DisplayLeftWind
       sbc temp+1
       sta temp+1
     lda #$7e  ;(del) char
-    sta textbuffer+80+25
+    sta textbuffer+80+17
     lda #0 ;space
-    sta textbuffer+80+28
+    sta textbuffer+80+20
 DisplayWindValue
     :4 lsrw temp ;divide by 16 to have a nice value on a screen
     lda temp
     sta decimal
-    mwa #textbuffer+80+26 displayposition
+    mwa #textbuffer+80+18 displayposition
     jsr displaybyte
     
     ;=========================
@@ -1791,7 +1941,7 @@ DisplayWindValue
     ;=========================
     lda CurrentRoundNr
     sta decimal
-    mwa #textbuffer+80+14 displayposition
+    mwa #textbuffer+80+7 displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
     
     rts

@@ -102,14 +102,7 @@ VOID
     jsr xmissile
 
     ; soil must fall down now! there is no other way...
-    
-    ;first clean the offensive text...
-    ldy TankNr
-    mva #0 plot4x4color
-    jsr DisplayOffensiveTextNr
-    
     ; hide tanks or they fall down with soil
-
     lda TankNr
     pha
     mva #1 Erase
@@ -130,6 +123,7 @@ VOID
     mva LeapFrogAngle Angle
     
     mva #sfx_funky_hit sfx_effect
+    sbw ytraj+1 #$05	; next missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
     jsr Flight
     lda HitFlag
     beq EndOfLeapping
@@ -159,6 +153,7 @@ VOID
     ror Force
     mva LeapFrogAngle Angle
     mva #sfx_funky_hit sfx_effect
+    sbw ytraj+1 #$05	; next missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
     jsr Flight
     lda HitFlag
     beq EndOfLeapping
@@ -178,16 +173,12 @@ EndOfLeapping
 .proc funkybomb ;
     mva #sfx_baby_missile sfx_effect
     mwa xtraj+1 xtrajfb
-    mwa ytraj+1 ytrajfb
+    sbw ytraj+1 #$05 ytrajfb	; funky missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
     inc FallDown2
     ;central Explosion
     mva #21 ExplosionRadius
     jsr CalculateExplosionRange0
     jsr xmissile
-
-    ldy TankNr
-    mva #0 plot4x4color
-    jsr DisplayOffensiveTextNr 
     
     lda TankNr
     pha
@@ -663,12 +654,39 @@ DistanceCheckLoop
     adc #1
     :3 asl
     tay
+	; check shields
+	lda ActiveDefenceWeapon,x
+	cmp #57		; one hit shield
+	beq UseShield
+	cmp #58		; shield with energy and parachute
+	beq UseShieldWithEnergy
+	cmp #59		; shield with energy
+	beq UseShieldWithEnergy
+	cmp #61		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	beq UseShieldWithEnergy
+	cmp #56		; Mag deflector  (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	beq UseShieldWithEnergy
     jsr DecreaseEnergyX
-
+	jmp EndOfDistanceCheckLoop
+UseShieldWithEnergy
+	jsr DecreaseShieldEnergyX
+	cpy #0	; is necessary to reduce tenk energy ?
+	beq ShieldCoveredTank
+    jsr DecreaseEnergyX
+ShieldCoveredTank	
+	lda ShieldEnergy,x
+	jne EndOfDistanceCheckLoop
+ShieldEnergy0	; deactivate if no energy. it's like use one hit shield :) 
+UseShield
+	mva #1 Erase
+	phx
+	jsr DrawTankShield
+	plx
+	mva #0 ActiveDefenceWeapon,x	; deactivate defense weapons
 TankIsNotWithinTheRange
 EndOfDistanceCheckLoop
     txa
-    bne DistanceCheckLoop
+    jne DistanceCheckLoop
     mva #sfx_silencer sfx_effect
     rts
 .endp
@@ -740,7 +758,7 @@ UpNotYet
     sbc #1
     sta ydraw
     ;check tank collision prior to PLOT
-    sty HitFlag
+    sty HitFlag		; set to 0
 
     jsr CheckCollisionWithTank
 
@@ -1007,13 +1025,11 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
-    lda TRIG0S
-    beq notpressed
     lda SKSTAT
     cmp #$ff
-    beq checkJoy
+    jeq checkJoy
     cmp #$f7  ; SHIFT
-    beq checkJoy
+    jeq checkJoy
 
     lda kbcode
     and #%10111111 ; SHIFT elimination
@@ -1026,6 +1042,18 @@ notpressed
     ;---esc pressed-quit game---
     rts
 
+@
+    cmp #$0d  ; I
+    bne @+
+callInventory
+    mva #$ff isInventory
+    jsr Purchase
+    mva #0 escFlag
+    jsr DisplayStatus
+    jsr SetMainScreen   
+    jsr DrawTanks
+    jsr WaitForKeyRelease
+    jmp BeforeFire   
 @
     cmp #$8e
     jeq CTRLPressedUp
@@ -1064,10 +1092,17 @@ notpressedJoy
     ;fire
     lda TRIG0S
     jeq pressedSpace
+    mva #$ff pressTimer  ; stop counting frames
    jmp notpressed
 
 ;
 pressedUp
+    lda pressTimer
+    spl:mva #0 pressTimer  ; if >128 then reset to 0
+    cmp #25  ; 1/2s
+    bcs CTRLPressedUp
+    
+    
     ;force increaseeee!
     ldx TankNr
     inc ForceTableL,x
@@ -1104,6 +1139,11 @@ CTRLPressedUp
 
 
 pressedDown
+    lda pressTimer
+    spl:mva #0 pressTimer  ; if >128 then reset to 0
+    cmp #25  ; 1/2s
+    bcs CTRLPressedDown
+
     mva #sfx_set_power_1 sfx_effect
 
     ldx TankNr
@@ -1197,6 +1237,13 @@ CTRLpressedTAB
 pressedSpace
     ;=================================
     ;we shoot here!!!
+    mva #0 pressTimer ; reset
+    jsr WaitForKeyRelease
+    lda pressTimer
+    cmp #25  ; 1/2s
+    bcs fire
+    jmp callInventory
+fire
     RTS
 .endp
 
@@ -1269,9 +1316,20 @@ AfterStrongShoot
 	sbc #$00
     sta ytraj+2
 
+	; checking if the shot is underground (no Flight but Hit :) )
+	ldy #0
+	adw xtraj+1 #mountaintable temp
+    lda ytraj+1
+    cmp (temp),y	; check collision witch mountains
+    bcs ShotUnderGround
     jsr Flight
     mva #1 color
     rts
+ShotUnderGround
+	mwa xtraj+1 xdraw	; but why not XHit and YHit !!!???
+	mwa ytraj+1 ydraw
+	mva #$ff HitFlag
+	rts
 .endp
 
 
@@ -1285,9 +1343,13 @@ AfterStrongShoot
     sta Parachute
 
     ; let's check if the given tank has got the parachute
-    lda #$35 ; parachute
-    jsr HowManyBullets
-    beq TankFallsX
+	ldx TankNr
+	lda ActiveDefenceWeapon,x
+    cmp #54 ; parachute
+	beq ParachuteActive
+	cmp #58 ; scheld witch energy and parachute
+    bne TankFallsX
+ParachuteActive
     inc Parachute
 TankFallsX
     ; coordinates of the first pixel under the tank
@@ -1489,6 +1551,11 @@ EndOfFall
     ; first we clear parachute on the screen
     mva #1 Erase
     ldx TankNr
+	lda ActiveDefenceWeapon,x
+	cmp #54		; deactivate weapon only if parachute (53)
+	bne NoParachuteWeapon
+	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
+NoParachuteWeapon
     lda #$34
     sta CharCode
     lda Ytankstable,x
@@ -1501,10 +1568,8 @@ EndOfFall
     sta xdraw+1
     jsr TypeChar
     mva #0 Erase
-    ; now we can deduct one parachute from the list of weapons
-
-    lda #$35 ; parachute
-    jsr DecreaseWeapon
+    ldx TankNr	
+    jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
 ThereWasNoParachute
     mva #sfx_silencer sfx_effect
     rts
@@ -1536,7 +1601,8 @@ ThereWasNoParachute
 noSmokeTracer
 	sty SmokeTracerFlag
 
-RepeatIfSmokeTracer		
+RepeatIfSmokeTracer
+RepeatFlight	
     mwa ytraj+1 Ytrajold+1
     mwa xtraj+1 Xtrajold+1
     mva #%01000000 drawFunction
@@ -1775,8 +1841,6 @@ EndOfFlight
     jsr unPlot
     mwa xcircle xdraw
     mwa ycircle ydraw
-;    mwa XHit xdraw
-;    mva YHit ydraw
 
 	ldy SmokeTracerFlag
 	beq EndOfFlight2
@@ -1785,7 +1849,71 @@ EndOfFlight
 	jmp SecondFlight
 EndOfFlight2
 	mva #0 tracerflag ;  don't know why
-    rts
+	
+	; and now check for defensive-aggressive weapon
+	lda HitFlag
+	jeq NoHitAtEndOfFight		; RTS only !!!
+	jmi NoTankHitAtEndOfFight
+	; tank hit - check defensive weapon of this tank
+	tax
+	dex		; index of tank in X
+	lda ActiveDefenceWeapon,x
+	cmp #61		; Auto Defence
+	beq AutoDefence
+	cmp #56		; Mag Deflector
+	bne NoDefence
+MagDeflector
+	; now run defensive-aggressive weapon - Mag Deflector!
+	; get tank position
+	clc
+	lda xtankstableL,x
+	adc #$04	; almost in tak center :)
+	sta XHit
+	lda xtankstableH,x
+	adc #$00
+	sta XHit+1
+	lda #$ff	; change to ground hit (we hope)
+	sta HitFlag
+	bit random	; left or right deflection ?
+	bpl RightDeflection
+LeftDeflection
+	sbw XHit #18	; 18 pixels to right and explode...
+	bit XHit+1	; if off-screen ...
+	bpl EndOfMagDeflector	; hit of course but we need RTS
+	adw XHit #36	; change to right :)
+	jmp EndOfMagDeflector
+RightDeflection
+	adw XHit #18	; 18 pixels to right and explode...
+	cpw XHit screenwidth	; if off-screen ...
+	bcs EndOfMagDeflector	; hit of course but we need RTS
+	sbw XHit #36	; change to left
+EndOfMagDeflector
+	mwa XHit xdraw	; why? !!!
+NoTankHitAtEndOfFight
+NoHitAtEndOfFight
+NoDefence
+    rts		; END !!!	
+AutoDefence
+	; now run defensive-aggressive weapon - Auto Defence!
+	sbb #255 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
+	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
+	mva #1 Erase		; now erase shield 
+	phx
+	jsr DrawTankShield
+	jsr DrawTankShieldHorns
+	plx
+	lda #$00
+	sta Erase
+	sta ActiveDefenceWeapon,x	; deactivate used Auto Defence
+	sta ShieldEnergy,x
+    sta xtraj		; prepare coordinates
+    sta ytraj
+	sta xtraj+2
+	sta ytraj+2
+	mwa XHit xtraj+1
+	sbw YHit #5 ytraj+1
+	mva #1 color
+	jmp RepeatFlight		; and repeat Fight
 .endp
 
 .proc SecondFlight
@@ -2157,7 +2285,7 @@ MIRValreadyAll
     mva tempor2 TankNr
     mva #0 Erase
     jsr SoilDown2
-    mva #1 HitFlag
+    mva #$ff HitFlag		; but why ??
     ;jsr drawtanks
     rts
 .endp
@@ -2168,7 +2296,7 @@ MIRValreadyAll
 ; Check collision with Tank :)
 ; xdraw , ydraw - coordinates of the checked point
 ; results:
-; HitFlag - 1 - hit, 0 - no hit
+; HitFlag - $ff - hit ground, 0 - no hit, 1-6 - hit tank (index+1)
 ; XHit , YHit - coordinates of hit
 ; X - index of the hit tank
 
@@ -2176,31 +2304,40 @@ MIRValreadyAll
 CheckCollisionWithTankLoop
 	lda eXistenZ,x
 	beq DeadTank
+	; first we test top and bottom (same with and without shield!)
+    lda ytankstable,x
+    cmp ydraw  ; check range
+    bcc BelowTheTank ;(ytankstable,ytankstable+3)
+    sbc #4 ; we must rewrite EndOfTheBarrelY table or remove Y correction completely to "bold" tank !!!
+    cmp ydraw
+    bcs OverTheTank
+	; with or without shield ?
+	lda ShieldEnergy,x
+	bne CheckCollisionWithShieldedTank	; tank with shield is bigger :)
+
     lda xtankstableH,x
     cmp xdraw+1
-    bne Condition01
+    bne @+
     lda xtankstableL,x
     cmp xdraw
-Condition01
+@
     bcs LeftFromTheTank ;add 8 double byte
+	; now we use Y as low byte and A as high byte of checked position (right edge of tank)
+	; it is tricky but fast and much shorter
     clc
     adc #8
     tay
     lda xtankstableH,x
     adc #0
     cmp xdraw+1
-    bne Condition02
+    bne @+
     cpy xdraw
-Condition02
+@
     bcc RightFromTheTank
-
-    lda ytankstable,x
-    cmp ydraw  ; check range
-    bcc BelowTheTank ;(ytankstable,ytankstable+3)
-    sbc #4
-    cmp ydraw
-    bcs OverTheTank
-    mva #1 HitFlag
+TankHit
+	inx
+    stx HitFlag		; index of hit tank+1
+	dex
     mwa xdraw XHit
     mwa ydraw YHit
     rts ; in X there is an index of the hit tank
@@ -2213,6 +2350,33 @@ DeadTank
     cpx NumberOfPlayers
     bne CheckCollisionWithTankLoop
     rts
+CheckCollisionWithShieldedTank
+	; now we use Y as low byte and A as high byte of checked position (left right edgs of shield)
+	; it is tricky but fast and much shorter
+    lda xtankstableL,x
+	sec
+	sbc #4		; 5 pixels more on left side
+	tay
+	lda xtankstableH,x
+	sbc #0
+	; bmi ShieldOverLeftEdge	; I do not know whether to check it. Probably not :) !!!
+    cmp xdraw+1
+    bne @+
+    cpy xdraw
+@
+    bcs LeftFromTheTank 
+	tya	;add 16 double byte
+    clc
+    adc #16	
+    tay
+    lda xtankstableH,x
+    adc #0
+    cmp xdraw+1
+    bne @+
+    cpy xdraw
+@
+    bcc RightFromTheTank
+	bcs TankHit
 .endp
 ;--------------------------------------------------
 CalculateExplosionRange0

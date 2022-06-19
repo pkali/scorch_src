@@ -262,8 +262,7 @@ CheckCollisionDraw
 	sbc #1
 	sta YHit
 	sty YHit+1
-    ;mwa ydraw YHit
-    mva #1 HitFlag
+    mva #$ff HitFlag
 StopHitChecking
     jmp ContinueDraw
 @
@@ -364,7 +363,7 @@ endcircleloop
     rts
 .endp
 ;----
-splot8 .proc
+.proc splot8
 ; plot xcircle+XC,ycircle+YC
 ; plot xcircle+XC,ycircle-YC
 ; plot xcircle-XC,ycircle-YC
@@ -463,7 +462,7 @@ splot8 .proc
 .endp
 
 ;--------------------------------------------------
-clearscreen .proc
+.proc clearscreen
 ;--------------------------------------------------
 
     lda #$ff
@@ -477,7 +476,7 @@ clearscreen .proc
     rts
 .endp
 ;-------------------------------*------------------
-placetanks .proc
+.proc placetanks
 ;--------------------------------------------------
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
     lda #0
@@ -642,6 +641,7 @@ DrawTankNrX
     sta xdraw+1
     lda ytankstable,x
     sta ydraw
+	mva #0 ydraw+1
 
     jsr TypeChar
 
@@ -690,10 +690,30 @@ ZeroesToGo
     sta (xbyte),y
     dey
     bne ClearPM
-
 NoPlayerMissile
+	; draw defensive weapons like shield ( tank number in X )
+	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
+	lda ActiveDefenceWeapon,x
+	cmp #57		; one shot shield activation
+	beq ShieldDraw
+	cmp #58		; shield with energy and parachute activation
+	beq ShieldDraw
+	cmp #59		; shield with energy activation
+	beq ShieldDraw
+	cmp #61		; Auto Defence
+	beq DrawTankShieldWihHorns
+	cmp #56		; Mag Deflector
+	beq DrawTankShieldWihHorns	
+	bne NoShieldDraw
+ShieldDraw
+	jsr DrawTankShield.DrawInPosition
+NoShieldDraw
 DoNotDrawTankNr
     rts
+DrawTankShieldWihHorns
+	jsr DrawTankShield.DrawInPosition
+	jsr DrawTankShieldHorns
+	rts
 .endp
 
 ; -------------------------------------
@@ -715,6 +735,88 @@ tankflash_loop
 	PAUSE 2
     dec fs
     jne tankflash_loop
+	rts
+.endp
+
+;--------------------------------------------------
+.proc DrawTankShield
+; X - tank number
+; if use DrawInPosition entry point then:
+; xdraw, ydraw - coordinates left LOWER corner of Tank char
+; values remain there after a DrawTankNr proc.
+; 
+; this proc change xdraw, ydraw  and temp!
+;--------------------------------------------------
+    lda xtankstableL,x
+    sta xdraw
+    lda xtankstableH,x
+    sta xdraw+1
+    lda ytankstable,x
+    sta ydraw
+	mva #0 ydraw+1
+DrawInPosition
+	mva #1 color
+	lda erase
+	beq ShieldVisible
+	dec color
+ShieldVisible
+	sbw xdraw #$03		; 3 pixels to left
+	; draw left vertical line of shield ( | )
+	mva #6 temp			; strange !!!
+@
+	jsr plot
+.nowarn	dew ydraw
+	dec temp
+	bne @-
+	; draw left oblique line of shield ( / )
+	mva #4 temp
+@
+	jsr plot
+.nowarn	dew ydraw
+	inw xdraw
+	dec temp
+	bne @-
+	; draw top horizontal line of shield ( _ )
+	mva #5 temp
+@
+	jsr plot
+	inw xdraw
+	dec temp
+	bne @-
+	; draw right oblique line of shield ( \ )
+	mva #4 temp
+@
+	jsr plot
+	inw ydraw
+	inw xdraw
+	dec temp
+	bne @-
+	; draw right vertical line of shield ( | )
+	mva #7 temp
+@
+	jsr plot
+	inw ydraw
+	dec temp
+	bne @-
+	rts
+.endp
+;--------------------------------------------------
+.proc DrawTankShieldHorns
+; use only directly after DrawTankShield
+; this proc draws a little "horns" on shield.
+; Symbol of defensive but aggressive :) weapon
+;--------------------------------------------------
+.nowarn	dew xdraw			; 1 pixel left
+	sbw ydraw #$0a		; 10 pixels up
+	jsr plot
+.nowarn	dew ydraw
+	inw xdraw
+	jsr plot
+	sbw xdraw #$0d		; 13 pixels left
+	jsr plot
+	inw xdraw
+	inw ydraw
+	jsr plot
 	rts
 .endp
 
@@ -1349,7 +1451,7 @@ EndPutChar
 ; ------------------------------------------
 .proc PutChar4x4
 ; puts 4x4 pixels char on the graphics screen
-; in: xdraw, ydraw (LOWER left corner of the char)
+; in: dx, dy (LOWER left corner of the char)
 ; in: CharCode4x4 (.sbyte)
 ; in: plot4x4color (0/1)
 ; all pixels are being drawn
@@ -1403,7 +1505,7 @@ GetUpper4bits
     bpl CopyChar
 
     ; calculating coordinates from xdraw and ydraw
-    mwa xdraw xbyte
+    mwa dx xbyte
 
     lda xbyte
     and #$7
@@ -1414,7 +1516,7 @@ GetUpper4bits
     rorw xbyte
 ;---
     ldy xbyte
-    lda ydraw ; y = y - 3 because left lower.
+    lda dy ; y = y - 3 because left lower.
     sec
     sbc #3
     tax
@@ -1462,6 +1564,17 @@ PutInColor0_2
 	cpx #4
     bne CharLoopi4x4
 EndPut4x4
+    rts
+.endp
+
+.proc SetMainScreen
+    mva #0 dmactl 
+    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
+    mwa #dl dlptrs  ; issue #72 (glitches when switches)
+    lda dmactls
+    and #$fc
+    ora #$02     ; 2=normal, 3 = wide screen width
+    sta dmactls
     rts
 .endp
 

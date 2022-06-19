@@ -30,6 +30,8 @@ RoundNrDisplay
 ;=====================================================
 variablesStart  ; zeroing starts here
 ;=====================================================
+isInventory .ds 1  ; 0 - purchase, $ff - inventory
+;-------------- 
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
 ;-------------- 
 sfx_effect .ds 1
@@ -47,7 +49,7 @@ moneyH ;we place zero at the end of prices and money
     ;and have range from 0 to 99990 (not too much)
     ;money players have (maybe one more byte is needed?)
     .DS [MaxPlayers]
-moneyL 
+moneyL
     .DS [MaxPlayers]
 ;----------------------------------------------------
 gainH ;how much money player gets after the round
@@ -65,6 +67,8 @@ looseL
     .DS [MaxPlayers]
 ;----------------------------------------------------
 Energy
+    .DS [MaxPlayers]
+ShieldEnergy
     .DS [MaxPlayers]
 EnergyDecrease  .DS 1
 eXistenZ
@@ -95,6 +99,8 @@ NewAngle .DS 1
 
 ActiveWeapon ;number of the selected weapon
     .DS [MaxPlayers]
+ActiveDefenceWeapon ;number of the activated defence weapon - 0 
+    .DS [MaxPlayers]	
 WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;----------------------------------------------------
 
@@ -114,7 +120,7 @@ MaxWind   .ds 1 ;
 WindOrientation  .DS 1 ;(0-right,1-left)
 ;----------------------------------------------------
 Counter  .DS 1  ;temporary Counter for outside loops
-HitFlag  .DS 1 ;1 when missile hit anything
+HitFlag  .DS 1 ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank 
 ;----------------------------------------------------
 xtankstableL ;X positions of tanks (lower left point)
     .DS [MaxPlayers]
@@ -239,14 +245,12 @@ temptankNr .DS 1
 
 ;----------------------------------------------------
 ;Variables from textproc.s65
-    ; tables with numbers of weapons on the right lists
-    ; to be honest - I do not know at the moment what the above
-    ; comment was supposed to mean...
+    ; tables with indexes of weapons on the right lists
     ; OK (2022) so, L1 is list of offensive weapons, L2 - defensive
-NubersOfWeaponsL1
-    .ds 8*5 ; :(8*5) .by $ff
-NubersOfWeaponsL2
-    .ds 8*2 ; :(8*2) .by $ff
+IndexesOfWeaponsL1
+    .ds 8*5 ;  max 40 offensive weapons. this is wrong, should be 48, still only 32 defined.
+IndexesOfWeaponsL2
+    .ds 8*2 ;  max 16 defensive weapons. 
 ;----------------------------------------------------
 
 ; variables storing amount of weapons on the first and second

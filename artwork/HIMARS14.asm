@@ -73,7 +73,7 @@ pmg	.ds $0300
 	eif
 
 song_data
-        ins     'mmm_16.lzs'
+        ins 'mmm_16.lzs'
 song_end
 
 POKEY = $D200
@@ -456,7 +456,7 @@ quit
 	ini main
 ; ---
 
-	opt l-
+	;opt l-
 
 .MACRO	SPRITES
 missiles
