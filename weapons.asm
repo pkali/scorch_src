@@ -1045,12 +1045,15 @@ notpressed
 @
     cmp #$0d  ; I
     bne @+
+callInventory
     mva #$ff isInventory
     jsr Purchase
     mva #0 escFlag
     jsr DisplayStatus
     jsr SetMainScreen   
-    jsr DrawTanks   
+    jsr DrawTanks
+    jsr WaitForKeyRelease
+    jmp BeforeFire   
 @
     cmp #$8e
     jeq CTRLPressedUp
@@ -1138,7 +1141,7 @@ CTRLPressedUp
 pressedDown
     lda pressTimer
     spl:mva #0 pressTimer  ; if >128 then reset to 0
-    cmp #50  ; 1s
+    cmp #25  ; 1/2s
     bcs CTRLPressedDown
 
     mva #sfx_set_power_1 sfx_effect
@@ -1234,6 +1237,13 @@ CTRLpressedTAB
 pressedSpace
     ;=================================
     ;we shoot here!!!
+    mva #0 pressTimer ; reset
+    jsr WaitForKeyRelease
+    lda pressTimer
+    cmp #25  ; 1/2s
+    bcs fire
+    jmp callInventory
+fire
     RTS
 .endp
 
