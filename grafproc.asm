@@ -694,15 +694,15 @@ NoPlayerMissile
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
 	lda ActiveDefenceWeapon,x
-	cmp #57		; one shot shield activation
+	cmp #ind_Shield_________		; one shot shield 
 	beq ShieldDraw
-	cmp #58		; shield with energy and parachute activation
+	cmp #ind_Force_Shield___		; shield with energy and parachute
 	beq ShieldDraw
-	cmp #59		; shield with energy activation
+	cmp #ind_Heavy_Shield___		; shield with energy
 	beq ShieldDraw
-	cmp #61		; Auto Defence
+	cmp #ind_Auto_Defense___		; Auto Defence
 	beq DrawTankShieldWihHorns
-	cmp #56		; Mag Deflector
+	cmp #ind_Mag_Deflector__		; Mag Deflector
 	beq DrawTankShieldWihHorns	
 	bne NoShieldDraw
 ShieldDraw

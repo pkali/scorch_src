@@ -656,15 +656,15 @@ DistanceCheckLoop
     tay
 	; check shields
 	lda ActiveDefenceWeapon,x
-	cmp #57		; one hit shield
+	cmp #ind_Shield_________		; one hit shield
 	beq UseShield
-	cmp #58		; shield with energy and parachute
+	cmp #ind_Force_Shield___		; shield with energy and parachute
 	beq UseShieldWithEnergy
-	cmp #59		; shield with energy
+	cmp #ind_Heavy_Shield___		; shield with energy
 	beq UseShieldWithEnergy
-	cmp #61		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	cmp #ind_Auto_Defense___		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
 	beq UseShieldWithEnergy
-	cmp #56		; Mag deflector  (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	cmp #ind_Mag_Deflector__		; Mag deflector  (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
 	beq UseShieldWithEnergy
     jsr DecreaseEnergyX
 	jmp EndOfDistanceCheckLoop
@@ -1345,9 +1345,11 @@ ShotUnderGround
     ; let's check if the given tank has got the parachute
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
-    cmp #54 ; parachute
+    cmp #ind_Parachute______ ; parachute
 	beq ParachuteActive
-	cmp #58 ; scheld witch energy and parachute
+	cmp #ind_StrongParachute ; strong parachute
+	beq ParachuteActive
+	cmp #ind_Force_Shield___ ; shield witch energy and parachute
     bne TankFallsX
 ParachuteActive
     inc Parachute
@@ -1417,6 +1419,44 @@ ItStillFalls
 FallDiagonally
 NoFallingDown
 ParachutePresent
+	; check parachute type
+	lda ActiveDefenceWeapon,x
+    cmp #ind_StrongParachute ; strong parachute
+	bne OneTimeParachute
+    ; decreasing energy of parachute - if the vertical fall, substract 2
+    ; and if at an angle then substract 1
+    ldy #1 ; how much energy to substract
+    lda IfFallDown
+    and #1
+    beq NoFallingDown2
+    ldx TankNr
+	jsr DecreaseShieldEnergyX
+	cpy #0	; is necessary to reduce tenk energy ?
+	beq @+
+    jsr DecreaseEnergyX
+@
+	ldy #1
+    lda IfFallDown
+    and #6
+    bne FallDiagonally2
+    ldx TankNr
+	jsr DecreaseShieldEnergyX
+	cpy #0	; is necessary to reduce tenk energy ?
+	beq @+
+    jsr DecreaseEnergyX
+@	
+	; check energy of parachute
+	
+	lda ShieldEnergy,x
+	bne OneTimeParachute
+	mva #0 Parachute
+	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
+	; and now we must clear parachute symbol
+    mva #1 Erase
+	jsr DrawTankParachute
+FallDiagonally2
+NoFallingDown2
+OneTimeParachute
     ; we must set flag meaning that the tank was falling down
     ; because later maybe the number of parachutes will decrease
     ; (if there were parachutes and they were ON)
@@ -1424,7 +1464,7 @@ ParachutePresent
     lda Parachute
     ora #2 ; we set bit nr 1 (nr 0 means that parachute is present)
     sta Parachute
-
+testowanie
     ; storing last direction of falling
     ; (it is not necessarily the direction from the previous
     ; iteraction, so we must check directional bits before storing)
@@ -1472,17 +1512,7 @@ NotRightEdge
     beq DoNotClearParachute
     ; here we clear the parachute
     ldx TankNr
-    lda #$34
-    sta CharCode
-    lda Ytankstable,x
-    sec
-    sbc #8
-    sta ydraw
-    lda XtanksTableL,x
-    sta xdraw
-    lda XtanksTableH,x
-    sta xdraw+1
-    jsr TypeChar
+    jsr DrawTankParachute
 DoNotClearParachute
     mva #0 Erase
     ldx TankNr
@@ -1525,17 +1555,7 @@ DoesNotFallRight
 
     ; here we draw parachute
     ldx TankNr
-    lda #$34
-    sta CharCode
-    lda Ytankstable,x
-    sec
-    sbc #8
-    sta ydraw
-    lda XtanksTableL,x
-    sta xdraw
-    lda XtanksTableH,x
-    sta xdraw+1
-    jsr TypeChar
+    jsr DrawTankParachute
 DoNotDrawParachute
     lda EndOfTheFallFlag
     jeq TankFallsX
@@ -1552,11 +1572,24 @@ EndOfFall
     mva #1 Erase
     ldx TankNr
 	lda ActiveDefenceWeapon,x
-	cmp #54		; deactivate weapon only if parachute (53)
+	cmp #ind_Parachute______		; deactivate weapon only if parachute (54)
 	bne NoParachuteWeapon
 	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
 NoParachuteWeapon
-    lda #$34
+    jsr DrawTankParachute
+    mva #0 Erase
+    ldx TankNr	
+    jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
+ThereWasNoParachute
+    mva #sfx_silencer sfx_effect
+    rts
+.endp
+
+;--------------------------------------------------
+.proc DrawTankParachute
+;Tank number in X
+;--------------------------------------------------
+    lda #$34	; parachute symbol
     sta CharCode
     lda Ytankstable,x
     sec
@@ -1567,14 +1600,8 @@ NoParachuteWeapon
     lda XtanksTableH,x
     sta xdraw+1
     jsr TypeChar
-    mva #0 Erase
-    ldx TankNr	
-    jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
-ThereWasNoParachute
-    mva #sfx_silencer sfx_effect
-    rts
+	rts
 .endp
-
 ;--------------------------------------------------
 .proc Flight  ; Force(byte.byte), Wind(0.word)
 ; Angle(byte) 128=0, 255=maxright, 0=maxleft
@@ -1858,9 +1885,9 @@ EndOfFlight2
 	tax
 	dex		; index of tank in X
 	lda ActiveDefenceWeapon,x
-	cmp #61		; Auto Defence
+	cmp #ind_Auto_Defense___		; Auto Defence
 	beq AutoDefence
-	cmp #56		; Mag Deflector
+	cmp #ind_Mag_Deflector__		; Mag Deflector
 	bne NoDefence
 MagDeflector
 	; now run defensive-aggressive weapon - Mag Deflector!

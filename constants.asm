@@ -602,7 +602,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Vert_Guidance__
   .by >price_Lazy_Boy_______
   .by >price_Parachute______
-  .by >price_Battery________
+  .by >price_StrongParachute
   .by >price_Mag_Deflector__
   .by >price_Shield_________
   .by >price_Force_Shield___
@@ -668,7 +668,7 @@ WeaponPriceL
   .by <price_Vert_Guidance__
   .by <price_Lazy_Boy_______
   .by <price_Parachute______
-  .by <price_Battery________
+  .by <price_StrongParachute
   .by <price_Mag_Deflector__
   .by <price_Shield_________
   .by <price_Force_Shield___
@@ -740,7 +740,7 @@ WeaponUnits
   .by 5  ;Vert_Guidance__
   .by 2  ;Lazy_Boy_______
   .by 8  ;Parachute______
-  .by 10 ;Battery________
+  .by 2  ;StrongParachute
   .by 2  ;Mag_Deflector__
   .by 3  ;Shield_________
   .by 3  ;Force_Shield___
@@ -811,7 +811,7 @@ WeaponSymbols
     .by $58,$59,$5a,$5b,$60,$7b,$7c,$7d
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
-    .by $5f,$02,$03,$06,$1d,$0a,$1b,$1c  ; defensives
+    .by $5f,$02,$03,$06,$1d,$0a,$1b,$1b  ; defensives
     .by $1e,$3b,$3c,$3d,$3e,$3f,$5e,$00
 
 ; Names of weapons (16 chars long)
@@ -872,7 +872,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Vert Guidance   " ; 52                                              
     dta d"Lazy Boy        " ; 53                            
     dta d"Parachute       " ; 54    - no energy                                                 
-    dta d"Battery         " ; 55            
+    dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
     dta d"Mag Deflector   " ; 56    - with shield and energy           
     dta d"Shield          " ; 57    - shield for one shot - no energy       
     dta d"Force Shield    " ; 58    - shield with energy and parachute                         
@@ -889,8 +889,8 @@ DefensiveEnergy = * - 48
 	.by 00	; Vert Guidance
 	.by 00	; Lazy Boy
 	.by 00	; Parachute       
-	.by 00	; Battery
-	.by 90	; Mag Deflector
+	.by 99	; Strong Parachute
+	.by 99	; Mag Deflector
 	.by 00	; Shield
 	.by 99	; Force Shield
 	.by 99	; Heavy Shield
