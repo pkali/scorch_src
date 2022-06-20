@@ -587,20 +587,20 @@ UnequalTanks
 ;-------------------------------------------------
 .proc drawtanks
 ;-------------------------------------------------
-    lda tanknr
+    lda TankNr
     pha
     ldx #$00
-    stx tanknr
+    stx TankNr
 
 DrawNextTank
     jsr drawtanknr
-    inc tanknr
-    ldx tanknr
+    inc TankNr
+    ldx TankNr
     Cpx NumberOfPlayers
     bne DrawNextTank
 
     pla
-    sta tankNr
+    sta TankNr
 
     rts
 .endp

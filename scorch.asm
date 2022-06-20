@@ -413,6 +413,27 @@ ManualShooting
     seq:rts
 
 AfterManualShooting
+	; White Flag handling
+	ldx TankNr
+	lda ActiveDefenceWeapon,x
+    cmp #ind_White_Flag_____ ; White Flag
+	bne StandardShoot
+	; --- white flag ---
+	mva #sfx_death_begin sfx_effect
+	jsr FlashTank	; first we flash tank
+    mva #1 Erase
+    jsr DrawTankNr	; and erase tank
+	mva #0 Erase
+    ldx TankNr
+	sta Energy,x	; clear tan energy
+	sta eXistenZ,x	; erase from existence
+	sta LASTeXistenZ,x	; to prevent explosion
+	sta ActiveDefenceWeapon,x	; deactivate White Flag
+	jsr PMoutofScreen
+    jsr drawtanks	; for restore PM
+	; --- white flag end ---
+	jmp NextPlayerShoots ; and we skip shoot
+StandardShoot
     inc noDeathCounter
 
     jsr DecreaseWeaponBeforeShoot
@@ -453,10 +474,8 @@ AfterExplode
 @
 
     ;temporary tanks removal (would fall down with soil)
-    mva TankNr tempor2
     mva #1 Erase
     jsr drawtanks
-    mva tempor2 TankNr
     mva #0 Erase
     lda FallDown2
     beq NoFallDown2
