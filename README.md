@@ -49,12 +49,11 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ###### Build 144
 2022-06-19
-Juneteenth release is coming with the most anticipated new feature: defensive weapons. Thanks to @Pecusx we have 5 completely new weapons and more reasonably working parachute. The stub of instruction manual describing these weapons is available here: https://github.com/pkali/scorch_src/wiki/Instruction-manual.
+Father's day release comes with the most anticipated new feature: defensive weapons. Thanks to @Pecus we have 5 completely new weapons and a more reasonably working parachute. The stub of the instruction manual describing these weapons is available here: https://github.com/pkali/scorch_src/wiki/Instruction-manual.
 
-The new inventory system has been added. Call it by pressing "I" key or short-pressing fire. Select weapon to use by moving joystick or cursor keys right. Switch between offensive and deffensive weapons by moving joystick left. Fire/escape to quit inventory.
+The new inventory system has been added. Call it by pressing the "I" key or short-pressing fire. Select the weapon to use by moving the joystick or cursor keys right. Switch between offensive and defensive weapons by moving the joystick left. Fire/escape to quit inventory.
 
-Other significant playability change is https://github.com/pkali/scorch_src/issues/54 - it is not finished yet, but keeping joystick up or down makes force to increase / decrease faster.
-Also - short press of fire calls Inventory, long press fires the shell. The timings are experimental, please let me know it this needs a modification / improvement.
+Another significant playability change is #54 - it is not finished yet, but keeping the joystick up or down makes force increase/decrease faster. Also - short press of fire calls Inventory, long press fires the shell. The timings are experimental, please let me know if this needs a modification/improvement.
 
 Tickets closed:
 * https://github.com/pkali/scorch_src/issues/92 - less unnecessary cleaning of the offensive texts
