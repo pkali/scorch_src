@@ -1046,6 +1046,11 @@ notpressed
     cmp #$0d  ; I
     bne @+
 callInventory
+    ; Hide all tanks - after inventory they may have other shapes
+    mva #1 Erase
+    jsr DrawTanks
+    mva #0 Erase
+	;
     mva #$ff isInventory
     jsr Purchase
     mva #0 escFlag

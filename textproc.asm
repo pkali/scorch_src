@@ -785,6 +785,16 @@ invSelectDef
     lda IndexesOfWeaponsL2,y
     tay
     ldx tankNr
+	cmp #ind_White_Flag_____
+	bne NotWhiteFlag
+	cmp ActiveDefenceWeapon,x
+	bne NoDeactivateWhiteFlag
+	lda #$00	; if try to activate activated White Flag then deactivate Defence
+    sta ActiveDefenceWeapon,x
+	sta ShieldEnergy,x
+	beq DefActivationEnd
+NotWhiteFlag
+NoDeactivateWhiteFlag
     sta ActiveDefenceWeapon,x
     ; decrease number of defensives
     lda TanksWeaponsTableL,x
@@ -798,6 +808,7 @@ invSelectDef
     
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
+DefActivationEnd
     jmp WaitForKeyRelease ; rts
 
 .endp
