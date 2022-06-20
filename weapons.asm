@@ -1241,7 +1241,7 @@ pressedSpace
     jsr WaitForKeyRelease
     lda pressTimer
     cmp #25  ; 1/2s
-    bcs fire
+    bcc fire
     jmp callInventory
 fire
     RTS
@@ -1589,7 +1589,7 @@ ThereWasNoParachute
 .proc DrawTankParachute
 ;Tank number in X
 ;--------------------------------------------------
-    lda #$34	; parachute symbol
+    lda #$5A	; parachute symbol
     sta CharCode
     lda Ytankstable,x
     sec

@@ -703,7 +703,9 @@ NoPlayerMissile
 	cmp #ind_Auto_Defense___		; Auto Defence
 	beq DrawTankShieldWihHorns
 	cmp #ind_Mag_Deflector__		; Mag Deflector
-	beq DrawTankShieldWihHorns	
+	beq DrawTankShieldWihHorns
+	cmp #ind_White_Flag_____		; White Flag
+	beq DrawTankFlag
 	bne NoShieldDraw
 ShieldDraw
 	jsr DrawTankShield.DrawInPosition
@@ -713,6 +715,19 @@ DoNotDrawTankNr
 DrawTankShieldWihHorns
 	jsr DrawTankShield.DrawInPosition
 	jsr DrawTankShieldHorns
+	rts
+DrawTankFlag
+    lda #$5E	; flag symbol
+    sta CharCode
+    lda Ytankstable,x
+    sec
+    sbc #8
+    sta ydraw
+    lda XtanksTableL,x
+    sta xdraw
+    lda XtanksTableH,x
+    sta xdraw+1
+    jsr TypeChar
 	rts
 .endp
 
