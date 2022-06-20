@@ -1277,7 +1277,7 @@ RandomizeOffensiveText
 
     ldx TankNr
     lda ActiveWeapon,x
-    cmp #$20 ; laser
+    cmp #ind_Laser__________ ; laser
     bne NotStrongShoot
       mva #0 color
       lda #7
@@ -1594,7 +1594,7 @@ ThereWasNoParachute
 .proc DrawTankParachute
 ;Tank number in X
 ;--------------------------------------------------
-    lda #$5A	; parachute symbol
+    lda #$34	; parachute symbol
     sta CharCode
     lda Ytankstable,x
     sec
