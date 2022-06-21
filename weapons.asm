@@ -2399,11 +2399,13 @@ NextLine2
 	iny
 	cpy #40
 	bne NextColumn
-	
+	; and we have "snow" :)
+	lda #0
 	ldx TankNr
 	sta ActiveDefenceWeapon,x	; deactivate Nuclear Winter
 	
-	mwa #0 RangeLeft			; whole screen in range of soil down
+	sta RangeLeft			; whole screen in range of soil down
+	sta RangeLeft+1
 	mwa #screenwidth RangeRight
     jsr SoilDown2
 	jsr drawtanks	; for restore PM
