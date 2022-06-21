@@ -596,7 +596,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price______________46
   .by >price______________47
   .by >price_White_Flag_____
-  .by >price_Heat_Guidance__
+  .by >price_Battery________
   .by >price_Bal_Guidance___
   .by >price_Horz_Guidance__
   .by >price_Vert_Guidance__
@@ -662,7 +662,7 @@ WeaponPriceL
   .by <price______________46
   .by <price______________47
   .by <price_White_Flag_____
-  .by <price_Heat_Guidance__
+  .by <price_Battery________
   .by <price_Bal_Guidance___
   .by <price_Horz_Guidance__
   .by <price_Vert_Guidance__
@@ -734,7 +734,7 @@ WeaponUnits
   .by 0  ;_____________46
   .by 0  ;_____________47
   .by 1  ;White_Flag___48
-  .by 6  ;Heat_Guidance__
+  .by 3  ;Battery________
   .by 2  ;Bal_Guidance___
   .by 5  ;Horz_Guidance__
   .by 5  ;Vert_Guidance__
@@ -811,8 +811,8 @@ WeaponSymbols
     .by $58,$59,$5a,$5b,$60,$7b,$7c,$7d
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
-    .by $5f,$02,$03,$06,$1d,$0a,$1b,$1b  ; defensives
-    .by $1e,$3b,$3c,$3d,$3e,$3f,$5e,$00
+    .by $5f,$1c,$03,$06,$1d,$0a,$1b,$1b  ; defensives
+    .by $1e,$3b,$3c,$3d,$3e,$3f,$5e,$7d
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
@@ -866,7 +866,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"                " ; 47 ; special (no weapon) name to simplify display
 
     dta d"White Flag      " ; 48 ($30)                                        
-    dta d"Heat Guidance   " ; 49                                              
+    dta d"Battery         " ; 49                                              
     dta d"Bal Guidance    " ; 50                                              
     dta d"Horz Guidance   " ; 51                                              
     dta d"Vert Guidance   " ; 52                                              

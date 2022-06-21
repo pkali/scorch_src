@@ -785,6 +785,12 @@ invSelectDef
     lda IndexesOfWeaponsL2,y
     tay
     ldx tankNr
+	cmp #ind_Battery________
+	bne NotBattery
+	; if activate battery, we do it differently
+	mva #99 Energy,x
+	bne DecreaseDefensive ; bypass activation
+NotBattery
 	cmp #ind_White_Flag_____
 	bne NotWhiteFlag
 	cmp ActiveDefenceWeapon,x
@@ -796,6 +802,7 @@ invSelectDef
 NotWhiteFlag
 NoDeactivateWhiteFlag
     sta ActiveDefenceWeapon,x
+DecreaseDefensive
     ; decrease number of defensives
     lda TanksWeaponsTableL,x
     sta weaponPointer
