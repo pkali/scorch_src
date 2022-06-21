@@ -610,7 +610,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Super_Mag______
   .by >price_Auto_Defense___
   .by >price_Fuel_Tank______
-  .by >price_Contact_Trigger
+  .by >price_Nuclear_Winter_
 
 WeaponPriceL
   .by <price_Baby_Missile___
@@ -676,7 +676,7 @@ WeaponPriceL
   .by <price_Super_Mag______
   .by <price_Auto_Defense___
   .by <price_Fuel_Tank______
-  .by <price_Contact_Trigger
+  .by <price_Nuclear_Winter_
 
 ;-------------------------------------------------
 ; how many units (bulletd) of a given weapon we get for a given price
@@ -748,7 +748,7 @@ WeaponUnits
   .by 2  ;Super_Mag______
   .by 1  ;Auto_Defense___
   .by 10 ;Fuel_Tank______
-  .by 25 ;Contact_Trigger
+  .by 1  ;Nuclear_Winter_
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
                 ;the comment is an index in the tables
@@ -880,7 +880,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Super Mag       " ; 60               
     dta d"Auto Defense    " ; 61    - with shield and energy                                            
     dta d"Fuel Tank       " ; 62                                              
-    dta d"Contact Trigger " ; 63
+    dta d"Nuclear Winter  " ; 63
 DefensiveEnergy = * - 48
 	.by 00	; White Flag
 	.by 00	; Heat Guidance
@@ -897,7 +897,7 @@ DefensiveEnergy = * - 48
 	.by 00	; Super Mag
 	.by 99	; Auto Defense
 	.by 00	; Fuel Tank
-	.by 00	; Contact Trigger
+	.by 00	; Nuclear Winter
 weaponsOfDeath
 	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
 weaponsOfDeathEnd

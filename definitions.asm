@@ -74,7 +74,7 @@ price_Heavy_Shield___ =   375     ;_59
 price_Super_Mag______ = $ffff     ;_60            
 price_Auto_Defense___ =   512     ;_61            
 price_Fuel_Tank______ = $ffff     ;_62            
-price_Contact_Trigger = $ffff     ;_63
+price_Nuclear_Winter_ =  1000     ;_63
 ;Weapon indexes (numbers)
 ind_Baby_Missile___ = 0
 ind_Missile________ = 1
@@ -139,7 +139,7 @@ ind_Heavy_Shield___ = 59
 ind_Super_Mag______ = 60            
 ind_Auto_Defense___ = 61            
 ind_Fuel_Tank______ = 62            
-ind_Contact_Trigger = 63
+ind_Nuclear_Winter_ = 63
 ;--------------------------------
 ; names of RMT instruments (sfx)
 ;--------------------------------

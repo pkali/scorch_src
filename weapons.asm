@@ -2323,6 +2323,99 @@ MIRValreadyAll
 .endp
 
 ; -------------------------------------------------
+.proc WhiteFlag
+; -------------------------------------------------
+; This routine is run from inside of the main loop
+; and replaces Shoot and Flight routines
+; X and TankNr - index of shooting tank
+; -------------------------------------------------
+	mva #sfx_death_begin sfx_effect
+	jsr FlashTank	; first we flash tank
+	mva #1 Erase
+	jsr DrawTankNr	; and erase tank
+	mva #0 Erase
+	ldx TankNr
+	sta Energy,x	; clear tank energy
+	sta eXistenZ,x	; erase from existence
+	sta LASTeXistenZ,x	; to prevent explosion
+	sta ActiveDefenceWeapon,x	; deactivate White Flag
+	jsr PMoutofScreen
+	jsr drawtanks	; for restore PM
+    mva #sfx_silencer sfx_effect
+	rts
+.endp
+
+; -------------------------------------------------
+.proc NuclearWinter
+; -------------------------------------------------
+; This routine is run from inside of the main loop
+; and replaces Shoot and Flight routines
+; X and TankNr - index of shooting tank
+; -------------------------------------------------
+	; now we use xdraw and ydraw as temporary 
+	ldy #0 		 	; byte counter (from 0 to 39)
+NextColumn
+	sty magic
+	ldx #0			; line counter (ftom 0 to ?? )
+	; first inverse column of bytes for a while
+	ldy magic
+NextLine1
+	lda LineTableL,x
+	sta temp
+	lda LineTableH,x
+	sta temp+1
+	lda (temp),y
+	eor #$ff
+	sta (temp),y
+	inx
+	inx
+	cpx #60
+	bne NextLine1
+	;
+	wait	; wait uses A and Y
+	; second - inverse again and randomize column of bytes
+	ldx #0
+	ldy magic
+	mva #$55 magic+1
+NextLine2
+	lda LineTableL,x
+	sta temp
+	lda LineTableH,x
+	sta temp+1
+	lda (temp),y
+	eor #$ff
+	sta (temp),y
+	lda random
+	ora magic+1
+	and (temp),y
+	sta (temp),y
+	lda magic+1
+	eor #$ff
+	sta magic+1
+	inx
+	inx
+	cpx #60
+	bne NextLine2
+	; and go to next column
+	iny
+	cpy #40
+	bne NextColumn
+	
+	ldx TankNr
+	sta ActiveDefenceWeapon,x	; deactivate Nuclear Winter
+	
+    ;temporary tanks removal (would fall down with soil)
+    ;mva #1 Erase
+    ;jsr drawtanks
+    ;mva #0 Erase
+	mwa #0 RangeLeft			; whole screen in range of soil down
+	mwa #screenwidth RangeRight
+    jsr SoilDown2
+	jsr drawtanks	; for restore PM
+	rts
+.endp
+
+; -------------------------------------------------
 .proc CheckCollisionWithTank
 ; -------------------------------------------------
 ; Check collision with Tank :)

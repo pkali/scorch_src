@@ -416,22 +416,17 @@ AfterManualShooting
 	; White Flag handling
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
-    cmp #ind_White_Flag_____ ; White Flag
+	cmp #ind_White_Flag_____ ; White Flag
+	beq ShootWhiteFlag
+	cmp #ind_Nuclear_Winter_
 	bne StandardShoot
+ShootAtomicWinter
+	; --- nuclear winter ---
+	jsr NuclearWinter
+	jmp NextPlayerShoots ; and we skip shoot
+ShootWhiteFlag
 	; --- white flag ---
-	mva #sfx_death_begin sfx_effect
-	jsr FlashTank	; first we flash tank
-    mva #1 Erase
-    jsr DrawTankNr	; and erase tank
-	mva #0 Erase
-    ldx TankNr
-	sta Energy,x	; clear tan energy
-	sta eXistenZ,x	; erase from existence
-	sta LASTeXistenZ,x	; to prevent explosion
-	sta ActiveDefenceWeapon,x	; deactivate White Flag
-	jsr PMoutofScreen
-    jsr drawtanks	; for restore PM
-	; --- white flag end ---
+	jsr WhiteFlag
 	jmp NextPlayerShoots ; and we skip shoot
 StandardShoot
     inc noDeathCounter
@@ -479,7 +474,7 @@ AfterExplode
     mva #0 Erase
     lda FallDown2
     beq NoFallDown2
-    jsr SoilDown2;
+    jsr SoilDown2
 
 NoFallDown2
     ;here tanks are falling down
