@@ -2354,36 +2354,25 @@ MIRValreadyAll
 ; -------------------------------------------------
 	ldy #0 		 	; byte counter (from 0 to 39)
 NextColumn
+	; big loop - we repat internal loops for each column of bytes
 	sty magic
-	ldx #0			; line counter (ftom 0 to ?? )
-	; first inverse column of bytes for a while
+	ldx #0			; line counter (from 0 to ?? )
+	; first loop - inverse column of bytes for a while
 	ldy magic
 NextLine1
-	lda LineTableL,x
-	sta temp
-	lda LineTableH,x
-	sta temp+1
-	lda (temp),y
-	eor #$ff
-	sta (temp),y
+	jsr InverseScreenByte
 	inx
 	inx
 	cpx #60
 	bne NextLine1
 	;
 	wait	; wait uses A and Y
-	; second - inverse again and randomize column of bytes
+	; second loop - inverse again and put random "snow" to column of bytes
 	ldx #0
 	ldy magic
 	mva #$55 magic+1
 NextLine2
-	lda LineTableL,x
-	sta temp
-	lda LineTableH,x
-	sta temp+1
-	lda (temp),y
-	eor #$ff
-	sta (temp),y
+	jsr InverseScreenByte
 	lda random
 	ora magic+1
 	and (temp),y
@@ -2409,6 +2398,18 @@ NextLine2
 	mwa #screenwidth RangeRight
     jsr SoilDown2
 	jsr drawtanks	; for restore PM
+	rts
+
+	; in order to optimize the fragment repeated in both internal loops
+	; we save 15 bytes :)
+InverseScreenByte
+	lda LineTableL,x
+	sta temp
+	lda LineTableH,x
+	sta temp+1
+	lda (temp),y
+	eor #$ff
+	sta (temp),y
 	rts
 .endp
 
