@@ -413,7 +413,7 @@ ManualShooting
     seq:rts
 
 AfterManualShooting
-	; White Flag handling
+	; defensive weapons without flight handling
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
 	cmp #ind_White_Flag_____ ; White Flag

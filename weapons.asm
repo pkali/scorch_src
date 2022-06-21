@@ -2352,7 +2352,6 @@ MIRValreadyAll
 ; and replaces Shoot and Flight routines
 ; X and TankNr - index of shooting tank
 ; -------------------------------------------------
-	; now we use xdraw and ydraw as temporary 
 	ldy #0 		 	; byte counter (from 0 to 39)
 NextColumn
 	sty magic
@@ -2404,10 +2403,6 @@ NextLine2
 	ldx TankNr
 	sta ActiveDefenceWeapon,x	; deactivate Nuclear Winter
 	
-    ;temporary tanks removal (would fall down with soil)
-    ;mva #1 Erase
-    ;jsr drawtanks
-    ;mva #0 Erase
 	mwa #0 RangeLeft			; whole screen in range of soil down
 	mwa #screenwidth RangeRight
     jsr SoilDown2
