@@ -2356,19 +2356,18 @@ MIRValreadyAll
 NextColumn
 	; big loop - we repat internal loops for each column of bytes
 	sty magic
-	ldx #0			; line counter (from 0 to ?? )
+	ldx #60			; line counter (from 0 to 60 )
 	; first loop - inverse column of bytes for a while
 	ldy magic
 NextLine1
 	jsr InverseScreenByte
-	inx
-	inx
-	cpx #60
-	bne NextLine1
+	dex
+	dex
+	bpl NextLine1
 	;
 	wait	; wait uses A and Y
 	; second loop - inverse again and put random "snow" to column of bytes
-	ldx #0
+	ldx #60
 	ldy magic
 	mva #$55 magic+1
 NextLine2
@@ -2380,10 +2379,9 @@ NextLine2
 	lda magic+1
 	eor #$ff
 	sta magic+1
-	inx
-	inx
-	cpx #60
-	bne NextLine2
+	dex
+	dex
+	bpl NextLine2
 	; and go to next column
 	iny
 	cpy #40
