@@ -1078,6 +1078,10 @@ jumpFromStick
     jeq pressedSpace
     cmp #$2c
     jeq pressedTAB
+    cmp #$25  ; M
+    jeq pressedM
+    cmp #$3e  ; S
+    jeq pressedS
     jmp notpressed
 checkJoy
     ;------------JOY-------------
@@ -1232,6 +1236,26 @@ CTRLpressedTAB
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....
     beq CTRLpressedTAB
+    jsr WaitForKeyRelease
+    jmp BeforeFire
+
+pressedM
+    ; have you tried turning the music off and on again?
+    lda #$ff
+    eor:sta noMusic
+    bmi silencioMusico
+    lda #song_ingame
+    bne @+
+silencioMusico
+    lda #song_silencio
+@   jsr RmtSongSelect
+    jsr WaitForKeyRelease
+    jmp BeforeFire
+
+pressedS
+    ; have you tried turning sfx off and on again?
+    lda #$ff
+    eor:sta noSfx
     jsr WaitForKeyRelease
     jmp BeforeFire
 
@@ -2349,11 +2373,12 @@ MIRValreadyAll
 ; and replaces Shoot and Flight routines
 ; X and TankNr - index of shooting tank
 ; -------------------------------------------------
+    mva #sfx_sandhog sfx_effect
 	ldy #0 		 	; byte counter (from 0 to 39)
 NextColumn
 	; big loop - we repat internal loops for each column of bytes
 	sty magic
-	ldx #60			; line counter (from 0 to 60 )
+	ldx #120			; line counter (from 0 to 60 )
 	; first loop - inverse column of bytes for a while
 	ldy magic
 NextLine1
@@ -2364,7 +2389,7 @@ NextLine1
 	;
 	wait	; wait uses A and Y
 	; second loop - inverse again and put random "snow" to column of bytes
-	ldx #60
+	ldx #120
 	ldy magic
 	mva #$55 magic+1
 NextLine2

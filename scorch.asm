@@ -167,7 +167,8 @@ MainGameLoop
     ; Results are number of other deaths
     ; before the player dies itself
 
-
+    lda #song_end_round
+    jsr RmtSongSelect
     jsr DisplayResults
 
     ;check demo mode
@@ -240,6 +241,7 @@ skipzeroing
 
     inc CurrentRoundNr
     mva #0 dmactl  ; issue #72
+    jsr RmtSongSelect
     mva #sfx_silencer sfx_effect
     jmp MainGameLoop
  
@@ -253,6 +255,9 @@ skipzeroing
 ; the default shooting energy to 350
 ; the shooting angle is randomized
 ; of course gains an looses are zeroed
+
+    lda #song_ingame
+    jsr RmtSongSelect
 
 	lda #0
 	tax
@@ -908,10 +913,8 @@ ClearResults
     lda #$ff                    ;initial value
     sta sfx_effect
 ;
-    ldx #<MODUL                 ;low byte of RMT module to X reg
-    ldy #>MODUL                 ;hi byte of RMT module to Y reg
-    lda #0                      ;starting song line 0-255 to A reg
-    jsr RASTERMUSICTRACKER      ;Init
+    lda #0
+    jsr RmtSongSelect
 ;
     VMAIN VBLinterrupt,6  		;jsr SetVBL
 
@@ -971,14 +974,16 @@ itsPAL
     ; pressTimer is trigger tick counter. always 50 ticks / s
     bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
 
+    
     ; ------- RMT -------
 	lda sfx_effect
     bmi lab2
     asl @                       ; * 2
     tay                         ;Y = 2,4,..,16  instrument number * 2 (0,2,4,..,126)
     ldx #0                      ;X = 0          channel (0..3 or 0..7 for stereo module)
-    lda #0                      ;A = 12         note (0..60)
-    jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
+    lda #0                      ;A = 0          note (0..60)
+    bit noSfx
+    smi:jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
 
     lda #$ff
     sta sfx_effect              ;reinit value
@@ -1312,7 +1317,14 @@ getkeyend
     rts
 .endp
 
-
+;--------------------------------------------------
+.proc RmtSongSelect
+;--------------------------------------------------
+;  starting song line 0-255 to A reg
+    ldx #<MODUL                 ;low byte of RMT module to X reg
+    ldy #>MODUL                 ;hi byte of RMT module to Y reg
+    jmp RASTERMUSICTRACKER      ;Init, :RTS
+.endp
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------
@@ -1342,7 +1354,7 @@ TankFont
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0e_stripped.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_trial0f_stripped.rmt"  ;include music RMT module
     opt h+
 ;
 ;

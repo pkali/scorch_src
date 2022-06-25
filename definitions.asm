@@ -171,3 +171,12 @@ sfx_keyclick    = $18 ;y
 sfx_shoot       = $19 ;z
 sfx_seppuku     = $1a ;1
 sfx_liquid_dirt = $1b ;2
+sfx_battery     = $1c ;3
+sfx_white_flag  = $1d ;4
+;--------------------------------
+; RMT songs (lines)
+;--------------------------------
+song_silencio   = $00
+song_end_round  = $02
+song_ingame     = $06
+song_game_over  = $0b

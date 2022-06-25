@@ -788,6 +788,7 @@ invSelectDef
 	cmp #ind_Battery________
 	bne NotBattery
 	; if activate battery, we do it differently
+    mva #sfx_battery sfx_effect
 	mva #99 Energy,x
 	bne DecreaseDefensive ; bypass activation
 NotBattery
@@ -795,6 +796,7 @@ NotBattery
 	bne NotWhiteFlag
 	cmp ActiveDefenceWeapon,x
 	bne NoDeactivateWhiteFlag
+	mva #sfx_white_flag sfx_effect
 	lda #$00	; if try to activate activated White Flag then deactivate Defence
     sta ActiveDefenceWeapon,x
 	sta ShieldEnergy,x
@@ -1601,7 +1603,6 @@ quit_seppuku
 ;displays results of the round
 ;using 4x4 font
     
-    mva #sfx_smoke_cloud sfx_effect
     mva #1 plot4x4color
         
     ;centering the result screen
@@ -1631,6 +1632,8 @@ quit_seppuku
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
+    lda #song_game_over
+    jsr RmtSongSelect
     mwa #LineGameOver LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
