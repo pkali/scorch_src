@@ -256,9 +256,9 @@ IndexesOfWeaponsL2
 ; variables storing amount of weapons on the first and second
 ; list and pointer position
 
-HowManyOnTheList1
+HowManyOnTheListOff
     .DS 1
-HowManyOnTheList2
+HowManyOnTheListDef
     .DS 1
 PositionOnTheList ; pointer position on the list being displayed
     .DS 1

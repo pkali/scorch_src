@@ -33,7 +33,7 @@ ExplosionRoutines
     .word VOID-1 ;napalm
     .word VOID-1 ;hotnapalm
     .word tracer-1
-    .word VOID-1 ;smoketracer
+    .word tracer-1 ;smoketracer
     .word babyroller-1
     .word roller-1
     .word heavyroller-1
@@ -57,6 +57,7 @@ ExplosionRoutines
     .word laser-1
 
 VOID
+tracer
     rts
 .endp
 ; ------------------------
@@ -261,10 +262,6 @@ NoUpperCircle
     jsr xmissile
 NoLowerCircle
     mva #sfx_silencer sfx_effect
-    rts
-.endp
-; ------------------------
-.proc tracer
     rts
 .endp
 ; ------------------------

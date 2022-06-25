@@ -287,8 +287,8 @@ AfterPurchase
     ; is being processed now
     mwa #ListOfWeapons xbyte
     ldx #$00  ; index of the checked weapon
-    stx HowManyOnTheList1 ; amounts of weapons (shells, bullets) in both lists
-    stx HowManyOnTheList2
+    stx HowManyOnTheListOff ; amounts of weapons (shells, bullets) in both lists
+    stx HowManyOnTheListDef
 
 ; Creating full list of the available weapons for displaying
 ; in X there is an index of the weapon to be checked,
@@ -437,25 +437,25 @@ notInventory
     bne NotTheSameAsLastTime
     lda WhichList
     bne @+
-    lda HowManyOnTheList1
+    lda HowManyOnTheListOff
     sta PositionOnTheList
     jmp NotTheSameAsLastTime
 @
-    lda HowManyOnTheList2
+    lda HowManyOnTheListDef
     sta PositionOnTheList
 NotTheSameAsLastTime
     ; increase appropriate counter
     txa
     cpx #$30
     bcs DefenceList
-    ldy HowManyOnTheList1
+    ldy HowManyOnTheListOff
     sta IndexesOfWeaponsL1,y
-    inc HowManyOnTheList1
+    inc HowManyOnTheListOff
     bne NextLineOfTheList
 DefenceList
-    ldy HowManyOnTheList2
+    ldy HowManyOnTheListDef
     sta IndexesOfWeaponsL2,y
-    inc HowManyOnTheList2
+    inc HowManyOnTheListDef
     ; If everything is copied then next line
 NextLineOfTheList
     adw xbyte #40
@@ -491,7 +491,7 @@ WeHaveOffset
     ; of the first erased char.
     ; (multiplying taken from book of Ruszczyc 'Assembler 6502'
 
-    lda HowManyOnTheList1
+    lda HowManyOnTheListOff
     sta xbyte+1 ; multiplier (temporarily here, it will be erased anyway)
     lda #$00 ; higher byte of the Result
     sta xbyte ; lower byte of the Result
@@ -534,7 +534,7 @@ DoNotIncHigher1
 
     ; Multiply number on list 1 by 40 and set address
     ; of the first erased char.
-    lda HowManyOnTheList2
+    lda HowManyOnTheListDef
     sta xbyte+1 ; multiplier
     lda #$00 ; higher byte of the Result
     sta xbyte ; lower byte of the Result
@@ -658,17 +658,17 @@ PurchaseKeyDown
     lda WhichList
     beq GoDown1
     inc:lda PositionOnTheList
-    cmp HowManyOnTheList2
+    cmp HowManyOnTheListDef
     bne EndGoDownX
-    ldy HowManyOnTheList2
+    ldy HowManyOnTheListDef
     dey
     sty PositionOnTheList
     jmp ChoosingItemForPurchase
 GoDown1
     inc:lda PositionOnTheList
-    cmp HowManyOnTheList1
+    cmp HowManyOnTheListOff
     bne MakeOffsetDown
-    ldy HowManyOnTheList1
+    ldy HowManyOnTheListOff
     dey
     sty PositionOnTheList
 MakeOffsetDown
@@ -837,6 +837,8 @@ DefActivationEnd
 ?noWeaponActive
     ldy #0
 ?weaponFound
+    cpy howManyOnTheListDef
+    bcs ?noWeaponActive
     sty positionOnTheList
     rts
 .endp
@@ -858,6 +860,8 @@ DefActivationEnd
 ?noWeaponActive
     ldy #0
 ?weaponFound
+    cpy howManyOnTheListOff
+    bcs ?noWeaponActive
     sty positionOnTheList
     rts
 .endp
@@ -934,7 +938,7 @@ NoArrowUp
     stx MoreUpdl
     sty MoreUpdl+1
     ; the same, bu scrolling down
-    lda HowManyOnTheList1
+    lda HowManyOnTheListOff
     ldx #<EmptyLine
     ldy #>EmptyLine
     sec
