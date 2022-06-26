@@ -1321,6 +1321,8 @@ getkeyend
 .proc RmtSongSelect
 ;--------------------------------------------------
 ;  starting song line 0-255 to A reg
+    bit noMusic
+    spl:lda #song_silencio
     ldx #<MODUL                 ;low byte of RMT module to X reg
     ldy #>MODUL                 ;hi byte of RMT module to Y reg
     jmp RASTERMUSICTRACKER      ;Init, :RTS
@@ -1346,6 +1348,7 @@ TankFont
 ;----------------------------------------------
     icl 'variables.asm'
 ;----------------------------------------------
+
 ; reserved space for RMT player
     .ds $0320
     .align $100

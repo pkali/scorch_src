@@ -1243,12 +1243,8 @@ pressedM
     ; have you tried turning the music off and on again?
     lda #$ff
     eor:sta noMusic
-    bmi silencioMusico
     lda #song_ingame
-    bne @+
-silencioMusico
-    lda #song_silencio
-@   jsr RmtSongSelect
+    jsr RmtSongSelect
     jsr WaitForKeyRelease
     jmp BeforeFire
 
