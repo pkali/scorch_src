@@ -19,7 +19,7 @@ CashOptionH
     .by 0,>200,>800,>1200,>2000
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,70,99
-RoundsTable    .by 10,20,30,40,50
+RoundsTable    .by 2,20,30,40,50
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
 ;------------------------------------------------
@@ -919,5 +919,10 @@ scrcodes
     dta d"qrstuvwx"
     dta d"yz123456"
     dta d"7890." ; "-"
+;-----------------------------------
+gameOverSpritesTop
+    ; end of the Gover sprites by number of players
+    ;    1   2   3   4   5   6
+    .by 130,130,136,142,148,154
 
 .endif

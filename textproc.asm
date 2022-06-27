@@ -1634,6 +1634,7 @@ quit_seppuku
 GameOver4x4
     lda #song_game_over
     jsr RmtSongSelect
+    jsr GameOverSprites
     mwa #LineGameOver LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
@@ -1987,6 +1988,39 @@ NextChar02
     iny
     cpy #$08
     bne NextChar02
+    rts
+.endp
+;-------------------------------------------------
+.proc GameOverSprites
+    ; fill sprites with bytes
+    ldy numberOfPlayers
+    dey
+    lda gameOverSpritesTop,y
+    sta temp
+    
+    ; clean the whole sprite
+    lda #0
+    tax
+@     sta PMGraph+$400,x
+      sta PMGraph+$500,x
+      dex
+    bne @-
+    
+    ; set background
+    lda #$ff
+    ldx #100 ; top of the sprites
+@     sta PMGraph+$400,x
+      sta PMGraph+$500,x
+      inx
+    cpx temp
+    bne @-
+    GOSbeg = 112
+    mva #GOSbeg hposp0
+    mva #GOSbeg+12 hposp0+1
+    
+    mva #15 COLPM0S
+    sta COLPM1S
+    
     rts
 .endp
 ;-------------------------------------------------
