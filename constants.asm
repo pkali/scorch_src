@@ -19,7 +19,7 @@ CashOptionH
     .by 0,>200,>800,>1200,>2000
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,70,99
-RoundsTable    .by 2,20,30,40,50
+RoundsTable    .by 10,20,30,40,50
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
 ;------------------------------------------------

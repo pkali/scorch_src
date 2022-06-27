@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"144" ; number of this build (3 bytes)
+	dta d"145" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -888,7 +888,6 @@ SetunPlots
     lda #$10 ; P/M priorities (bit 4 joins missiles)
     sta gtictls
     jsr PMoutofScreen
-    jsr ColorsOfSprites
 
     ;let the tanks be visible!
     ldx #(maxPlayers-1)
