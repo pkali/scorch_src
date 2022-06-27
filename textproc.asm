@@ -1602,6 +1602,8 @@ quit_seppuku
 .proc DisplayResults ;
 ;displays results of the round
 ;using 4x4 font
+    jsr RoundOverSprites
+
     
     mva #1 plot4x4color
         
@@ -1634,7 +1636,6 @@ quit_seppuku
 GameOver4x4
     lda #song_game_over
     jsr RmtSongSelect
-    jsr GameOverSprites
     mwa #LineGameOver LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
@@ -1991,7 +1992,7 @@ NextChar02
     rts
 .endp
 ;-------------------------------------------------
-.proc GameOverSprites
+.proc RoundOverSprites
     ; fill sprites with bytes
     ldy numberOfPlayers
     dey

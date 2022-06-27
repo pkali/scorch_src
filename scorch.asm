@@ -307,12 +307,13 @@ SettingEnergies
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
 
     jsr SetMainScreen
+    jsr ColorsOfSprites
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
     mva #0 TankSequencePointer
-;--------------------round screen is ready---------
+;---------round screen is ready---------
     rts
 .endp
 
@@ -787,6 +788,20 @@ NotNegativeShieldEnergy
     :8 sta hposp0+#
     rts
 .endp
+;--------------------------------------------------
+.proc ColorsOfSprites     
+    lda TankColoursTable ; colours of sprites under tanks
+    sta COLPM0S
+    lda TankColoursTable+1
+    sta COLPM1S
+    lda TankColoursTable+2
+    sta COLPM2S
+    lda TankColoursTable+3
+    sta COLPM3S
+    LDA TankColoursTable+4
+    STA COLPF3S     ; joined missiles (5th tank)
+    rts
+.endp
 
 ;--------------------------------------------------
 .proc WeaponCleanup;
@@ -873,18 +888,7 @@ SetunPlots
     lda #$10 ; P/M priorities (bit 4 joins missiles)
     sta gtictls
     jsr PMoutofScreen
-    lda TankColoursTable ; temporary colours of sprites under tanks
-    sta COLPM0S
-    lda TankColoursTable+1
-    sta COLPM1S
-    lda TankColoursTable+2
-    sta COLPM2S
-    lda TankColoursTable+3
-    sta COLPM3S
-    LDA TankColoursTable+4
-    STA COLPF3S		; joined missiles (5th tank)
-    mva #0 hscrol
-
+    jsr ColorsOfSprites
 
     ;let the tanks be visible!
     ldx #(maxPlayers-1)
@@ -920,7 +924,7 @@ ClearResults
 
     rts
 .endp
-    
+;--------------------------------------------------
 .proc DLIinterruptGraph
     ;sta dliA
 	;sty dliY
@@ -941,7 +945,7 @@ ClearResults
     pla
     rti
 .endp
-
+;--------------------------------------------------
 .proc DLIinterruptText
 	;sta dliA
     pha
@@ -953,7 +957,7 @@ ClearResults
 DLIinterruptNone
 	rti
 .endp
-
+;--------------------------------------------------
 .proc VBLinterrupt
 	pha
 	phx
@@ -1007,9 +1011,7 @@ exitVBL
     bne @-
     rts
 .endp
-
-
-
+;--------------------------------------------------
 .proc RandomizeSequence
 ; in: NumberOfPlayers
 ; out: TankSequence
@@ -1127,7 +1129,6 @@ LimitForce
     rts
 
 .endp
-
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
 	jsr DrawTankNr
@@ -1161,7 +1162,7 @@ rotateLeft
 BarrelPositionIsFine
 	rts
 	
-	.endp
+.endp
 
 ;----------------------------------------------
 .proc SortSequence ;
@@ -1291,9 +1292,8 @@ notpressedJoyGetKey
 getkeyend
     mvx #sfx_keyclick sfx_effect
     rts
-    
-
 .endp
+
 ;--------------------------------------------------
 .proc getkeynowait
 ;--------------------------------------------------
@@ -1302,6 +1302,7 @@ getkeyend
     and #$3f ;CTRL and SHIFT ellimination
     rts
 .endp
+
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
