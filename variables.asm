@@ -19,6 +19,8 @@ seppukuVal .by 75
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS [MaxPlayers]
 ;----------------------------------------------------
+noMusic .by 0  ; 0 - play music, $ff - do not play music
+noSfx   .by 0  ; 0 - play SFX, $ff - do not play SFX
 ; 4x4 text buffer
 ResultLineBuffer
     dta d"                  ", $ff
@@ -256,9 +258,9 @@ IndexesOfWeaponsL2
 ; variables storing amount of weapons on the first and second
 ; list and pointer position
 
-HowManyOnTheList1
+HowManyOnTheListOff
     .DS 1
-HowManyOnTheList2
+HowManyOnTheListDef
     .DS 1
 PositionOnTheList ; pointer position on the list being displayed
     .DS 1

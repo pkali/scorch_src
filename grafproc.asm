@@ -587,20 +587,20 @@ UnequalTanks
 ;-------------------------------------------------
 .proc drawtanks
 ;-------------------------------------------------
-    lda tanknr
+    lda TankNr
     pha
     ldx #$00
-    stx tanknr
+    stx TankNr
 
 DrawNextTank
     jsr drawtanknr
-    inc tanknr
-    ldx tanknr
+    inc TankNr
+    ldx TankNr
     Cpx NumberOfPlayers
     bne DrawNextTank
 
     pla
-    sta tankNr
+    sta TankNr
 
     rts
 .endp
@@ -654,11 +654,11 @@ DrawTankNrX
     rorw xbyte ; divide by 2 (carry does not matter)
     lda xbyte
     clc
-    adc #$24 ; P/M to graphics offset
+    adc #PMOffset+1 ; P/M to graphics offset
     cpx #$4 ; 5th tank are joined missiles and offset is defferent
     bne NoMissile
     clc
-    adc #$0C
+    adc #$0C  ; missile offset offset
 NoMissile
     sta hposp0,x
     ; vertical position
@@ -694,16 +694,18 @@ NoPlayerMissile
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
 	lda ActiveDefenceWeapon,x
-	cmp #57		; one shot shield activation
+	cmp #ind_Shield_________		; one shot shield 
 	beq ShieldDraw
-	cmp #58		; shield with energy and parachute activation
+	cmp #ind_Force_Shield___		; shield with energy and parachute
 	beq ShieldDraw
-	cmp #59		; shield with energy activation
+	cmp #ind_Heavy_Shield___		; shield with energy
 	beq ShieldDraw
-	cmp #61		; Auto Defence
+	cmp #ind_Auto_Defense___		; Auto Defence
 	beq DrawTankShieldWihHorns
-	cmp #56		; Mag Deflector
-	beq DrawTankShieldWihHorns	
+	cmp #ind_Mag_Deflector__		; Mag Deflector
+	beq DrawTankShieldWihHorns
+	cmp #ind_White_Flag_____		; White Flag
+	beq DrawTankFlag
 	bne NoShieldDraw
 ShieldDraw
 	jsr DrawTankShield.DrawInPosition
@@ -713,6 +715,19 @@ DoNotDrawTankNr
 DrawTankShieldWihHorns
 	jsr DrawTankShield.DrawInPosition
 	jsr DrawTankShieldHorns
+	rts
+DrawTankFlag
+    lda #$5E	; flag symbol
+    sta CharCode
+    lda Ytankstable,x
+    sec
+    sbc #8
+    sta ydraw
+    lda XtanksTableL,x
+    sta xdraw
+    lda XtanksTableH,x
+    sta xdraw+1
+    jsr TypeChar
 	rts
 .endp
 

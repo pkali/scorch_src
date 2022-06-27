@@ -287,8 +287,8 @@ AfterPurchase
     ; is being processed now
     mwa #ListOfWeapons xbyte
     ldx #$00  ; index of the checked weapon
-    stx HowManyOnTheList1 ; amounts of weapons (shells, bullets) in both lists
-    stx HowManyOnTheList2
+    stx HowManyOnTheListOff ; amounts of weapons (shells, bullets) in both lists
+    stx HowManyOnTheListDef
 
 ; Creating full list of the available weapons for displaying
 ; in X there is an index of the weapon to be checked,
@@ -437,25 +437,25 @@ notInventory
     bne NotTheSameAsLastTime
     lda WhichList
     bne @+
-    lda HowManyOnTheList1
+    lda HowManyOnTheListOff
     sta PositionOnTheList
     jmp NotTheSameAsLastTime
 @
-    lda HowManyOnTheList2
+    lda HowManyOnTheListDef
     sta PositionOnTheList
 NotTheSameAsLastTime
     ; increase appropriate counter
     txa
     cpx #$30
     bcs DefenceList
-    ldy HowManyOnTheList1
+    ldy HowManyOnTheListOff
     sta IndexesOfWeaponsL1,y
-    inc HowManyOnTheList1
+    inc HowManyOnTheListOff
     bne NextLineOfTheList
 DefenceList
-    ldy HowManyOnTheList2
+    ldy HowManyOnTheListDef
     sta IndexesOfWeaponsL2,y
-    inc HowManyOnTheList2
+    inc HowManyOnTheListDef
     ; If everything is copied then next line
 NextLineOfTheList
     adw xbyte #40
@@ -491,7 +491,7 @@ WeHaveOffset
     ; of the first erased char.
     ; (multiplying taken from book of Ruszczyc 'Assembler 6502'
 
-    lda HowManyOnTheList1
+    lda HowManyOnTheListOff
     sta xbyte+1 ; multiplier (temporarily here, it will be erased anyway)
     lda #$00 ; higher byte of the Result
     sta xbyte ; lower byte of the Result
@@ -534,7 +534,7 @@ DoNotIncHigher1
 
     ; Multiply number on list 1 by 40 and set address
     ; of the first erased char.
-    lda HowManyOnTheList2
+    lda HowManyOnTheListDef
     sta xbyte+1 ; multiplier
     lda #$00 ; higher byte of the Result
     sta xbyte ; lower byte of the Result
@@ -658,17 +658,17 @@ PurchaseKeyDown
     lda WhichList
     beq GoDown1
     inc:lda PositionOnTheList
-    cmp HowManyOnTheList2
+    cmp HowManyOnTheListDef
     bne EndGoDownX
-    ldy HowManyOnTheList2
+    ldy HowManyOnTheListDef
     dey
     sty PositionOnTheList
     jmp ChoosingItemForPurchase
 GoDown1
     inc:lda PositionOnTheList
-    cmp HowManyOnTheList1
+    cmp HowManyOnTheListOff
     bne MakeOffsetDown
-    ldy HowManyOnTheList1
+    ldy HowManyOnTheListOff
     dey
     sty PositionOnTheList
 MakeOffsetDown
@@ -785,7 +785,26 @@ invSelectDef
     lda IndexesOfWeaponsL2,y
     tay
     ldx tankNr
+	cmp #ind_Battery________
+	bne NotBattery
+	; if activate battery, we do it differently
+    mva #sfx_battery sfx_effect
+	mva #99 Energy,x
+	bne DecreaseDefensive ; bypass activation
+NotBattery
+	cmp #ind_White_Flag_____
+	bne NotWhiteFlag
+	cmp ActiveDefenceWeapon,x
+	bne NoDeactivateWhiteFlag
+	mva #sfx_white_flag sfx_effect
+	lda #$00	; if try to activate activated White Flag then deactivate Defence
     sta ActiveDefenceWeapon,x
+	sta ShieldEnergy,x
+	beq DefActivationEnd
+NotWhiteFlag
+NoDeactivateWhiteFlag
+    sta ActiveDefenceWeapon,x
+DecreaseDefensive
     ; decrease number of defensives
     lda TanksWeaponsTableL,x
     sta weaponPointer
@@ -798,6 +817,7 @@ invSelectDef
     
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
+DefActivationEnd
     jmp WaitForKeyRelease ; rts
 
 .endp
@@ -819,6 +839,8 @@ invSelectDef
 ?noWeaponActive
     ldy #0
 ?weaponFound
+    cpy howManyOnTheListDef
+    bcs ?noWeaponActive
     sty positionOnTheList
     rts
 .endp
@@ -840,6 +862,8 @@ invSelectDef
 ?noWeaponActive
     ldy #0
 ?weaponFound
+    cpy howManyOnTheListOff
+    bcs ?noWeaponActive
     sty positionOnTheList
     rts
 .endp
@@ -916,7 +940,7 @@ NoArrowUp
     stx MoreUpdl
     sty MoreUpdl+1
     ; the same, bu scrolling down
-    lda HowManyOnTheList1
+    lda HowManyOnTheListOff
     ldx #<EmptyLine
     ldy #>EmptyLine
     sec
@@ -1578,8 +1602,9 @@ quit_seppuku
 .proc DisplayResults ;
 ;displays results of the round
 ;using 4x4 font
+    jsr RoundOverSprites
+
     
-    mva #sfx_smoke_cloud sfx_effect
     mva #1 plot4x4color
         
     ;centering the result screen
@@ -1609,6 +1634,8 @@ quit_seppuku
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
+    lda #song_game_over
+    jsr RmtSongSelect
     mwa #LineGameOver LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
@@ -1962,6 +1989,39 @@ NextChar02
     iny
     cpy #$08
     bne NextChar02
+    rts
+.endp
+;-------------------------------------------------
+.proc RoundOverSprites
+    ; fill sprites with bytes
+    ldy numberOfPlayers
+    dey
+    lda gameOverSpritesTop,y
+    sta temp
+    
+    ; clean the whole sprite
+    lda #0
+    tax
+@     sta PMGraph+$400,x
+      sta PMGraph+$500,x
+      dex
+    bne @-
+    
+    ; set background
+    lda #$ff
+    ldx #100 ; top of the sprites
+@     sta PMGraph+$400,x
+      sta PMGraph+$500,x
+      inx
+    cpx temp
+    bne @-
+    GOSbeg = 112
+    mva #GOSbeg hposp0
+    mva #GOSbeg+12 hposp0+1
+    
+    mva #15 COLPM0S
+    sta COLPM1S
+    
     rts
 .endp
 ;-------------------------------------------------

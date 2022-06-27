@@ -47,6 +47,21 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 145
+2022-06-26
+Possibly last round of weapon additions!
+@Pecusx added 
+- working White Flag -- it is a way to give up while not making opponents richer!
+- Battery - a must for every tank with low energy.
+- Strong Parachute - like a normal parachute, but stronger (it has energy and can work more than once)
+- Nuclear Winter - a quick and efficient solution to global worming, err, warning, WARMING!
+@mikerro added new SFX and in-game-tunes.
+- Pressing [S] turns on/off SFX (when aiming). Pressing [M] turns on/off in-game tunes.
+Tickets closed:
+- https://github.com/pkali/scorch_src/issues/54 - holding joystick up or down longer speeds up force change. It makes playing with joystick much nicer.
+- https://github.com/pkali/scorch_src/issues/76 - a beginning of visual tweaks by Adam
+- infinite defensive weapons purchase bug fixed, to chagrin of some...
+
 ###### Build 144
 2022-06-19
 Father's day release comes with the most anticipated new feature: defensive weapons. Thanks to @Pecus we have 5 completely new weapons and a more reasonably working parachute. The stub of the instruction manual describing these weapons is available here: https://github.com/pkali/scorch_src/wiki/Instruction-manual.

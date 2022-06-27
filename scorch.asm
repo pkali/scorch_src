@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"144" ; number of this build (3 bytes)
+	dta d"145" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -136,17 +136,6 @@ START
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
 	
-	; activate mag deflector for all players (test)
-;    ldx numberOfPlayers
-;    dex
-;@
-;	mva #56 ActiveDefenceWeapon,x
-;	tay
-;	lda DefensiveEnergy,y
-;	sta ShieldEnergy,x		; set energy of shield
-;	dex
-;	bpl @-
-	; mag deflector activated! (test)
 MainGameLoop
 	jsr CallPurchaseForEveryTank
 
@@ -178,7 +167,8 @@ MainGameLoop
     ; Results are number of other deaths
     ; before the player dies itself
 
-
+    lda #song_end_round
+    jsr RmtSongSelect
     jsr DisplayResults
 
     ;check demo mode
@@ -251,6 +241,7 @@ skipzeroing
 
     inc CurrentRoundNr
     mva #0 dmactl  ; issue #72
+    jsr RmtSongSelect
     mva #sfx_silencer sfx_effect
     jmp MainGameLoop
  
@@ -264,6 +255,9 @@ skipzeroing
 ; the default shooting energy to 350
 ; the shooting angle is randomized
 ; of course gains an looses are zeroed
+
+    lda #song_ingame
+    jsr RmtSongSelect
 
 	lda #0
 	tax
@@ -313,12 +307,13 @@ SettingEnergies
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
 
     jsr SetMainScreen
+    jsr ColorsOfSprites
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
     mva #0 TankSequencePointer
-;--------------------round screen is ready---------
+;---------round screen is ready---------
     rts
 .endp
 
@@ -424,6 +419,22 @@ ManualShooting
     seq:rts
 
 AfterManualShooting
+	; defensive weapons without flight handling
+	ldx TankNr
+	lda ActiveDefenceWeapon,x
+	cmp #ind_White_Flag_____ ; White Flag
+	beq ShootWhiteFlag
+	cmp #ind_Nuclear_Winter_
+	bne StandardShoot
+ShootAtomicWinter
+	; --- nuclear winter ---
+	jsr NuclearWinter
+	jmp NextPlayerShoots ; and we skip shoot
+ShootWhiteFlag
+	; --- white flag ---
+	jsr WhiteFlag
+	jmp NextPlayerShoots ; and we skip shoot
+StandardShoot
     inc noDeathCounter
 
     jsr DecreaseWeaponBeforeShoot
@@ -464,14 +475,12 @@ AfterExplode
 @
 
     ;temporary tanks removal (would fall down with soil)
-    mva TankNr tempor2
     mva #1 Erase
     jsr drawtanks
-    mva tempor2 TankNr
     mva #0 Erase
     lda FallDown2
     beq NoFallDown2
-    jsr SoilDown2;
+    jsr SoilDown2
 
 NoFallDown2
     ;here tanks are falling down
@@ -779,6 +788,20 @@ NotNegativeShieldEnergy
     :8 sta hposp0+#
     rts
 .endp
+;--------------------------------------------------
+.proc ColorsOfSprites     
+    lda TankColoursTable ; colours of sprites under tanks
+    sta COLPM0S
+    lda TankColoursTable+1
+    sta COLPM1S
+    lda TankColoursTable+2
+    sta COLPM2S
+    lda TankColoursTable+3
+    sta COLPM3S
+    LDA TankColoursTable+4
+    STA COLPF3S     ; joined missiles (5th tank)
+    rts
+.endp
 
 ;--------------------------------------------------
 .proc WeaponCleanup;
@@ -865,18 +888,6 @@ SetunPlots
     lda #$10 ; P/M priorities (bit 4 joins missiles)
     sta gtictls
     jsr PMoutofScreen
-    lda TankColoursTable ; temporary colours of sprites under tanks
-    sta COLPM0S
-    lda TankColoursTable+1
-    sta COLPM1S
-    lda TankColoursTable+2
-    sta COLPM2S
-    lda TankColoursTable+3
-    sta COLPM3S
-    LDA TankColoursTable+4
-    STA COLPF3S		; joined missiles (5th tank)
-    mva #0 hscrol
-
 
     ;let the tanks be visible!
     ldx #(maxPlayers-1)
@@ -905,16 +916,14 @@ ClearResults
     lda #$ff                    ;initial value
     sta sfx_effect
 ;
-    ldx #<MODUL                 ;low byte of RMT module to X reg
-    ldy #>MODUL                 ;hi byte of RMT module to Y reg
-    lda #0                      ;starting song line 0-255 to A reg
-    jsr RASTERMUSICTRACKER      ;Init
+    lda #0
+    jsr RmtSongSelect
 ;
     VMAIN VBLinterrupt,6  		;jsr SetVBL
 
     rts
 .endp
-    
+;--------------------------------------------------
 .proc DLIinterruptGraph
     ;sta dliA
 	;sty dliY
@@ -935,7 +944,7 @@ ClearResults
     pla
     rti
 .endp
-
+;--------------------------------------------------
 .proc DLIinterruptText
 	;sta dliA
     pha
@@ -947,7 +956,7 @@ ClearResults
 DLIinterruptNone
 	rti
 .endp
-
+;--------------------------------------------------
 .proc VBLinterrupt
 	pha
 	phx
@@ -968,14 +977,16 @@ itsPAL
     ; pressTimer is trigger tick counter. always 50 ticks / s
     bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
 
+    
     ; ------- RMT -------
 	lda sfx_effect
     bmi lab2
     asl @                       ; * 2
     tay                         ;Y = 2,4,..,16  instrument number * 2 (0,2,4,..,126)
     ldx #0                      ;X = 0          channel (0..3 or 0..7 for stereo module)
-    lda #0                      ;A = 12         note (0..60)
-    jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
+    lda #0                      ;A = 0          note (0..60)
+    bit noSfx
+    smi:jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
 
     lda #$ff
     sta sfx_effect              ;reinit value
@@ -999,9 +1010,7 @@ exitVBL
     bne @-
     rts
 .endp
-
-
-
+;--------------------------------------------------
 .proc RandomizeSequence
 ; in: NumberOfPlayers
 ; out: TankSequence
@@ -1119,7 +1128,6 @@ LimitForce
     rts
 
 .endp
-
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
 	jsr DrawTankNr
@@ -1153,7 +1161,7 @@ rotateLeft
 BarrelPositionIsFine
 	rts
 	
-	.endp
+.endp
 
 ;----------------------------------------------
 .proc SortSequence ;
@@ -1283,9 +1291,8 @@ notpressedJoyGetKey
 getkeyend
     mvx #sfx_keyclick sfx_effect
     rts
-    
-
 .endp
+
 ;--------------------------------------------------
 .proc getkeynowait
 ;--------------------------------------------------
@@ -1294,6 +1301,7 @@ getkeyend
     and #$3f ;CTRL and SHIFT ellimination
     rts
 .endp
+
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
@@ -1309,7 +1317,16 @@ getkeyend
     rts
 .endp
 
-
+;--------------------------------------------------
+.proc RmtSongSelect
+;--------------------------------------------------
+;  starting song line 0-255 to A reg
+    bit noMusic
+    spl:lda #song_silencio
+    ldx #<MODUL                 ;low byte of RMT module to X reg
+    ldy #>MODUL                 ;hi byte of RMT module to Y reg
+    jmp RASTERMUSICTRACKER      ;Init, :RTS
+.endp
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------
@@ -1331,6 +1348,7 @@ TankFont
 ;----------------------------------------------
     icl 'variables.asm'
 ;----------------------------------------------
+
 ; reserved space for RMT player
     .ds $0320
     .align $100
@@ -1339,7 +1357,7 @@ TankFont
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0e_stripped.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_trial0f_stripped.rmt"  ;include music RMT module
     opt h+
 ;
 ;
