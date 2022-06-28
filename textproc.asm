@@ -803,7 +803,11 @@ NotBattery
 	beq DefActivationEnd
 NotWhiteFlag
 NoDeactivateWhiteFlag
+	; activate new defensive
     sta ActiveDefenceWeapon,x
+	; set defensive energy
+    lda DefensiveEnergy,y
+    sta ShieldEnergy,x
 DecreaseDefensive
     ; decrease number of defensives
     lda TanksWeaponsTableL,x
@@ -815,8 +819,6 @@ DecreaseDefensive
     sbc #1
     sta (weaponPointer),y
     
-    lda DefensiveEnergy,y
-    sta ShieldEnergy,x
 DefActivationEnd
     jmp WaitForKeyRelease ; rts
 
