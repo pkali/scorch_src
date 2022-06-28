@@ -1388,23 +1388,58 @@ TankFallsX
     ; time in our lives! Tada! It opens a new chapter!!!
     sta ydraw
     ;
+;	lda #0
+;	sta UnderTank1	; byte under tank
+;	sta UnderTank2	; byte under tank reversed (for simple check right direction)
     lda #08
-    sta mask2  ; Loop Counter
+    sta temp  ; Loop Counter
 ByteBelowTank
     jsr point
     beq EmptyPoint2
     sec
+	ror UnderTank2
+	sec
     bcs ROLPoint2
 EmptyPoint2
     clc
+	ror UnderTank2
+	clc
 ROLPoint2
-    rol mask1
+    rol UnderTank1
     inw xdraw
-    dec mask2
+    dec temp
     bne ByteBelowTank
-    ldx mask1
-    lda WhereToSlideTable,x
-    sta IfFallDown  ; taking directions of falling down from the table
+	ldx #0
+    lda UnderTank1
+	bne NotDown
+	inx		; set bit 0 - go down
+NotDown
+	stx	IfFallDown
+	; now we must check falling direction
+	ldx #7		; SlideLeftTable length -1 (from 0 to 7)
+@	lda SlideLeftTable,x
+	cmp UnderTank1
+	beq SetLeftBit
+	cmp UnderTank2
+	beq SetRightBit
+	dex
+	bpl @-
+	bmi NoLeftOrRight
+SetLeftBit
+	lda IfFallDown
+	ora #%100		; set bit 2 - go left
+	bne @+
+SetRightBit
+	lda IfFallDown
+	ora #%010		; set bit 1 - go right
+@	sta IfFallDown
+	cpx #0
+	bne InfinityLoopFix
+	ora #%001		; temporary fix!!! for %10000000 and %00000001
+	sta IfFallDown
+InfinityLoopFix
+NoLeftOrRight
+    lda IfFallDown  ; taking directions of falling down from the table
     bne ItStillFalls
     ; Tank falling down already finished, but it is not sure that
     ; the horizontal coordinate is even.
@@ -1433,11 +1468,11 @@ ItStillFalls
     beq NoFallingDown
     ldx TankNr
     jsr DecreaseEnergyX
-    lda IfFallDown
-    and #6
-    bne FallDiagonally
-    ldx TankNr
-    jsr DecreaseEnergyX
+;    lda IfFallDown
+;    and #%110
+;    bne FallDiagonally
+;    ldx TankNr
+;    jsr DecreaseEnergyX
 FallDiagonally
 NoFallingDown
 ParachutePresent

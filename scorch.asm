@@ -74,6 +74,9 @@
     .zpvar di               .word
     .zpvar dp               .word
     ;----------------------------
+	.zpvar UnderTank1		.byte
+	.zpvar UnderTank2		.byte	
+    ;----------------------------
     .zpvar weaponPointer    .word
 	.zpvar dliCounter       .byte
 	.zpvar pressTimer       .byte
