@@ -1354,13 +1354,12 @@ ShotUnderGround
 	rts
 .endp
 
-
 ;--------------------------------------------------
 .proc TankFalls;
 ;--------------------------------------------------
     mva #sfx_shield_off sfx_effect
     lda #0
-    sta PreviousFall
+    sta PreviousFall	; bit 7 - left, bit 6 - right
     sta EndOfTheFallFlag
     sta Parachute
 
@@ -1376,6 +1375,21 @@ ShotUnderGround
 ParachuteActive
     inc Parachute
 TankFallsX
+    ; clear previous position
+    mva #1 Erase
+    jsr DrawTankNr
+    ; and the parachute (if present)
+    lda Parachute
+    and #01
+    beq DoNotClearParachute
+    ; here we clear the parachute
+    ldx TankNr
+    jsr DrawTankParachute
+DoNotClearParachute
+    mva #0 Erase
+    ldx TankNr
+	lda EndOfTheFallFlag	; We only get byte below the tank if still falling
+	bne NoGroundCheck
     ; coordinates of the first pixel under the tank
     ldx TankNr
     lda XtankstableL,x
@@ -1388,9 +1402,8 @@ TankFallsX
     ; time in our lives! Tada! It opens a new chapter!!!
     sta ydraw
     ;
-;	lda #0
-;	sta UnderTank1	; byte under tank
-;	sta UnderTank2	; byte under tank reversed (for simple check right direction)
+;	UnderTank1	; byte under tank
+;	UnderTank2	; byte under tank reversed (for simple check right direction)
     lda #08
     sta temp  ; Loop Counter
 ByteBelowTank
@@ -1408,145 +1421,79 @@ ROLPoint2
     rol UnderTank1
     inw xdraw
     dec temp
-    bne ByteBelowTank
-	ldx #0
-    lda UnderTank1
-	bne NotDown
-	inx		; set bit 0 - go down
-NotDown
-	stx	IfFallDown
-	; now we must check falling direction
-	ldx #7		; SlideLeftTable length -1 (from 0 to 7)
-@	lda SlideLeftTable,x
-	cmp UnderTank1
-	beq SetLeftBit
-	cmp UnderTank2
-	beq SetRightBit
-	dex
-	bpl @-
-	bmi NoLeftOrRight
-SetLeftBit
-	lda IfFallDown
-	ora #%100		; set bit 2 - go left
-	bne @+
-SetRightBit
-	lda IfFallDown
-	ora #%010		; set bit 1 - go right
-@	sta IfFallDown
-	cpx #0
-	bne InfinityLoopFix
-	ora #%001		; temporary fix!!! for %10000000 and %00000001
-	sta IfFallDown
-InfinityLoopFix
-NoLeftOrRight
-    lda IfFallDown  ; taking directions of falling down from the table
-    bne ItStillFalls
-    ; Tank falling down already finished, but it is not sure that
-    ; the horizontal coordinate is even.
-    ; If it is odd then it must be corrected because otherwise
-    ; P/M graphics background would not look OK
+    bne ByteBelowTank	
+NoGroundCheck
     ldx TankNr
-    lda XtanksTableL,x
-    and #$01
-    jeq EndOfFall ; if it is even then it is the end
-    ; and if not, we push it one pixel the way it was falling before
-    lda PreviousFall
-    sta IfFallDown
-    inc EndOfTheFallFlag ; because after this correction is shouldn't fall anymore
-
-; we have 3 bits: 0 - go down, 1 - go right, 2 - go left
-;---
-ItStillFalls
-    lda Parachute
+	lda UnderTank1
+	bne NoFallingDown
+	; Tank falling down ----
+	lda Parachute
     and #1
     bne ParachutePresent
-    ; decreasing energy - if the vertical fall, substract 2
-    ; and if at an angle then substract 1
-    ldy #1 ; how much energy to substract
-    lda IfFallDown
-    and #1
-    beq NoFallingDown
-    ldx TankNr
+    ; decreasing energy 
+    ldy #2 ; how much energy to substract
     jsr DecreaseEnergyX
-;    lda IfFallDown
-;    and #%110
-;    bne FallDiagonally
-;    ldx TankNr
-;    jsr DecreaseEnergyX
-FallDiagonally
-NoFallingDown
 ParachutePresent
 	; check parachute type
 	lda ActiveDefenceWeapon,x
     cmp #ind_StrongParachute ; strong parachute
 	bne OneTimeParachute
-    ; decreasing energy of parachute - if the vertical fall, substract 2
-    ; and if at an angle then substract 1
-    ldy #1 ; how much energy to substract
-    lda IfFallDown
-    and #1
-    beq NoFallingDown2
-    ldx TankNr
+    ; decreasing energy of parachute
+    ldy #2 ; how much energy to substract
 	jsr DecreaseShieldEnergyX
 	cpy #0	; is necessary to reduce tenk energy ?
 	beq @+
     jsr DecreaseEnergyX
 @
-	ldy #1
-    lda IfFallDown
-    and #6
-    bne FallDiagonally2
-    ldx TankNr
-	jsr DecreaseShieldEnergyX
-	cpy #0	; is necessary to reduce tenk energy ?
-	beq @+
-    jsr DecreaseEnergyX
-@	
-	; check energy of parachute
-	
+	; check energy of parachute	
 	lda ShieldEnergy,x
 	bne OneTimeParachute
 	mva #0 Parachute
-	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
-	; and now we must clear parachute symbol
-    mva #1 Erase
-	jsr DrawTankParachute
-FallDiagonally2
-NoFallingDown2
+	mva #0 ActiveDefenceWeapon,x ; deactivate defence
 OneTimeParachute
-    ; we must set flag meaning that the tank was falling down
-    ; because later maybe the number of parachutes will decrease
-    ; (if there were parachutes and they were ON)
-
     lda Parachute
     ora #2 ; we set bit nr 1 (nr 0 means that parachute is present)
     sta Parachute
-testowanie
-    ; storing last direction of falling
-    ; (it is not necessarily the direction from the previous
-    ; iteraction, so we must check directional bits before storing)
-    lda IfFallDown
-    and #$06
-    beq FallStraightDown
-    sta PreviousFall
-FallStraightDown
-    lda Parachute
-    and #01
-    beq RapidFalling
-    wait
-RapidFalling
-    ; we finish falling down if the tank reached the edge of the screen
-    ; but if it falls straight down or the other way than the edge,
-    ; then continue falling!
-    ldx TankNr
+    ; tank is falling down - modify coorinates
+    lda Ytankstable,x
+    clc
+    adc #1
+    sta Ytankstable,x
+	jmp EndOfFCycle
+NoFallingDown
+	; check direction (left or right)
+	ldy #7		; SlideLeftTable length -1 (from 0 to 7)
+@	lda SlideLeftTable,y
+	cmp UnderTank1
+	beq FallingRight
+	cmp UnderTank2
+	beq FallingLeft
+	dey
+	bpl @-
+	bmi NoLeftOrRight
+FallingLeft
+	bit PreviousFall	; bit 6 - right
+	bvs EndLeftFall
+    ; we finish falling left if the tank reached the edge of the screen
     lda XtanksTableL,x
     bne NotLeftEdge
     lda XtanksTableH,x
-    bne NotLeftEdge
-    lda IfFallDown
-    and #$04 ; check if it does not fall left
-    jne EndOfFall  ; if so then maybe we finish
+    beq EndLeftFall
 NotLeftEdge
+    ; tank is falling left - modify coorinates
+    clc
+    lda XtankstableL,x
+    adc #1
+    sta XtankstableL,x
+    lda XtankstableH,x
+    adc #0
+    sta XtankstableH,x
+	mva #%10000000 PreviousFall	; set bit 7 - left
+	bne EndOfFCycle
+FallingRight
+	bit PreviousFall	; bit 7 - left
+	bmi EndRightFall
+    ; we finish falling right if the tank reached the edge of the screen
     clc
     lda XtanksTableL,x
     adc #$08 ; we'll check right side of the char
@@ -1555,46 +1502,8 @@ NotLeftEdge
     adc #0
     sta temp+1
     cpw temp #screenwidth
-    bne NotRightEdge
-    lda IfFallDown
-    and #$02 ; check if it does not fall right
-    jne EndOfFall  ; if so then maybe we finish
-NotRightEdge
-    ; clear previous position
-    mva #1 Erase
-    jsr DrawTankNr
-    ; and the parachute (if present)
-    lda Parachute
-    and #01
-    beq DoNotClearParachute
-    ; here we clear the parachute
-    ldx TankNr
-    jsr DrawTankParachute
-DoNotClearParachute
-    mva #0 Erase
-    ldx TankNr
-    lsr IfFallDown ; bit nr 0 (down)
-    bcc DoesNotFallDown
-    ; tank is falling down
-    lda Ytankstable,x
-    clc
-    adc #1
-    sta Ytankstable,x
-DoesNotFallDown
-    lsr IfFallDown ; bit nr 1 (right)
-    bcc DoesNotFallLeft
-    ; tank is falling left
-    clc
-    lda XtankstableL,x
-    adc #1
-    sta XtankstableL,x
-    lda XtankstableH,x
-    adc #0
-    sta XtankstableH,x
-DoesNotFallLeft
-    lsr IfFallDown ; bit nr 2 (left)
-    bcc DoesNotFallRight
-    ; tank is falling right
+    beq EndRightFall
+    ; tank is falling right - modify coorinates
     sec
     lda XtankstableL,x
     sbc #1
@@ -1602,44 +1511,68 @@ DoesNotFallLeft
     lda XtankstableH,x
     sbc #0
     sta XtankstableH,x
-DoesNotFallRight
-    jsr DrawTankNr
-
+	mva #%01000000 PreviousFall	; set bit 6 - right
+	bne EndOfFCycle
+EndLeftFall
+EndRightFall
+NoLeftOrRight
+    inc EndOfTheFallFlag ; after this is shouldn't fall 
+EndOfFCycle
+	; draw tank on new position
+    jsr DrawTankNr	; ew have TankNr in X (I hope :) )
     ; checking is parachute present and if so, draw it
     lda Parachute
     and #01
     beq DoNotDrawParachute
-
     ; here we draw parachute
     ldx TankNr
     jsr DrawTankParachute
+    wait	; onli if tank with patachute
+RapidFalling
 DoNotDrawParachute
-    lda EndOfTheFallFlag
-    jeq TankFallsX
-
+	lda EndOfTheFallFlag
+	jeq TankFallsX
+    ; Tank falling down already finished, but it is not sure that
+    ; the horizontal coordinate is even.
+    ; If it is odd then it must be corrected because otherwise
+    ; P/M graphics background would not look OK
+    ldx TankNr
+    lda XtanksTableL,x
+    and #$01
+    beq EndOfFall ; if it is even then it is the end
+    ; and if not, we push it one pixel the way it was falling before
+    lda #%10000000	 ; set "virtual ground" for right falling
+	ldy #%00000001
+	bit PreviousFall
+	bmi ForceFallLeft
+	tay		; tricky - replaces ldy #%10000000
+	lda #%00000001	 ; set "virtual ground" for left falling
+ForceFallLeft
+	sta UnderTank1
+	sty UnderTank2
+	jne TankFallsX
 EndOfFall
-    jsr DrawTankNr
-
+    mva #1 Erase
+    ldx TankNr
     ; if tank was falling down having parachute,
     ; we must deduct one parachute
     lda Parachute
     cmp #$03 ; was falling down and the parachute
-    bne ThereWasNoParachute
-    ; first we clear parachute on the screen
-    mva #1 Erase
-    ldx TankNr
+    bne NoParachuteWeapon
+	; first we check type of parachute
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Parachute______		; deactivate weapon only if parachute (54)
 	bne NoParachuteWeapon
 	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
 NoParachuteWeapon
+    ; now we clear parachute on the screen
     jsr DrawTankParachute
     mva #0 Erase
     ldx TankNr	
     jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
-ThereWasNoParachute
     mva #sfx_silencer sfx_effect
     rts
+
 .endp
 
 ;--------------------------------------------------
