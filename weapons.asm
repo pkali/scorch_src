@@ -1574,8 +1574,12 @@ EndOfFall
 	bne NoParachuteWeapon
 	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
 NoParachuteWeapon
-    ; now we clear parachute on the screen
+    ; now we clear parachute on the screen if present
+    lda Parachute
+    and #01
+    beq ThereWasNoParachute
     jsr DrawTankParachute
+ThereWasNoParachute
     mva #0 Erase
     ldx TankNr	
     jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
