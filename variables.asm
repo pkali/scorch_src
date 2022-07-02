@@ -178,7 +178,7 @@ xcircle .DS 2
 ycircle .DS 2
 tempcir .DS 2
 ;TankFalls
-IfFallDown  .DS 1
+FallingSoundBit .DS 1
 PreviousFall  .DS 1
 EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 Parachute .DS 1 ; are you insured with parachute?

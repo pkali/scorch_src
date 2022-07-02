@@ -1357,11 +1357,11 @@ ShotUnderGround
 ;--------------------------------------------------
 .proc TankFalls;
 ;--------------------------------------------------
-    mva #sfx_shield_off sfx_effect
     lda #0
     sta PreviousFall	; bit 7 - left, bit 6 - right
     sta EndOfTheFallFlag
     sta Parachute
+	mva #2 FallingSoundBit	; another trick for only one sfx initialization in loop
 
     ; let's check if the given tank has got the parachute
 	ldx TankNr
@@ -1375,6 +1375,13 @@ ShotUnderGround
 ParachuteActive
     inc Parachute
 TankFallsX
+	; sound only if really falls
+	lda Parachute
+	and FallingSoundBit		; bit 1
+	beq NoFallingSound
+	mva #0 FallingSoundBit
+    mva #sfx_shield_off sfx_effect
+NoFallingSound
     ; clear previous position
     mva #1 Erase
     jsr DrawTankNr
@@ -1472,6 +1479,7 @@ NoFallingDown
 	bpl @-
 	bmi NoLeftOrRight
 FallingLeft
+	; tank is falling left
 	bit PreviousFall	; bit 6 - right
 	bvs EndLeftFall
     ; we finish falling left if the tank reached the edge of the screen
@@ -1491,6 +1499,7 @@ NotLeftEdge
 	mva #%10000000 PreviousFall	; set bit 7 - left
 	bne EndOfFCycle
 FallingRight
+	; tank is falling right
 	bit PreviousFall	; bit 7 - left
 	bmi EndRightFall
     ; we finish falling right if the tank reached the edge of the screen
