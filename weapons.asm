@@ -536,35 +536,31 @@ DiggerCharacter
 	lda #$00
 	sbc #$00
     sta ybyte+1
+
     mva #0 drawFunction
+
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
     mwa ybyte LaserCoordinate+6
-    mva #sfx_lightning sfx_effect
 
-    jsr draw
-    mva #0 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
-    mva #sfx_lightning sfx_effect
-    jsr draw
-    mva #1 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
-    mva #sfx_lightning sfx_effect
-    jsr draw
-    mva #0 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
-    mva #sfx_lightning sfx_effect
-    jsr draw
+
+    mva #51 yc  ; laser blink counter
+@
+      lda yc
+      and #$01
+      sta color
+        mwa LaserCoordinate xdraw
+        mwa LaserCoordinate+2 ydraw
+        mwa LaserCoordinate+4 xbyte
+        mwa LaserCoordinate+6 ybyte
+        mva #sfx_lightning sfx_effect
+      mva #sfx_lightning sfx_effect
+      jsr draw
+
+    dec:lda yc
+    bpl @-
+        
     mva #1 color
     mwa LaserCoordinate xdraw
     mwa LaserCoordinate+2 ydraw
@@ -1795,7 +1791,7 @@ Loopi
     ; we check if it is MIRV and if so, jump to MIRV routine
     ldx TankNr
     lda ActiveWeapon,x
-    cmp #6 ; MIRV
+    cmp #ind_MIRV___________ ; MIRV
     jeq MIRVdownLoop
 StillUp
 
