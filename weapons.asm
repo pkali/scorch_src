@@ -1531,8 +1531,8 @@ EndOfFCycle
     jsr DrawTankNr	; ew have TankNr in X (I hope :) )
     ; checking is parachute present and if so, draw it
     lda Parachute
-    and #01
-    beq DoNotDrawParachute
+	cmp #3	; parachute and falling
+	bne DoNotDrawParachute
     ; here we draw parachute
     ldx TankNr
     jsr DrawTankParachute
