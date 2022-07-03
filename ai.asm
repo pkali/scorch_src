@@ -80,11 +80,21 @@ AIRoutines
     beq firstShoot
     
 	lda PreviousAngle,x
+	cmp #90
+	bcs shootingLeftAtThisMomentOfTime
+	; shooting right at this moment of time
+    sec
+    sbc #5
+    cmp #10
+    bcs @+ ;not smaller than 10
+    bcc firstShoot ; GET THE aim againg
+    
+shootingLeftAtThisMomentOfTime
+	
 	clc
 	adc #5
-	cmp #180
-	bcc @+
-	lda #0
+	cmp #170  ; maximum shooter angle
+    bcs firstShoot
 @
 	sta NewAngle
 
@@ -93,7 +103,7 @@ AIRoutines
 	sbc #5
 	sta ForceTableL,x
 	lda PreviousEnergyH,x
-	sbc #0 
+	sbc #0
 	sta ForceTableH,x
 	jmp endo
 
