@@ -429,18 +429,18 @@ WeaponPriceL
 WeaponUnits
   .by 10 ;Baby_Missile___
   .by 5  ;Missile________
-  .by 3  ;Baby_Nuke______
+  .by 2  ;Baby_Nuke______
   .by 1  ;Nuke___________
   .by 2  ;LeapFrog_______
-  .by 2  ;Funky_Bomb_____
-  .by 3  ;MIRV___________
+  .by 3  ;Funky_Bomb_____
+  .by 2  ;MIRV___________
   .by 1  ;Death_s_Head___
   .by 10 ;Napalm_________
   .by 2  ;Hot_Napalm_____
   .by 20 ;Tracer_________
   .by 10 ;Smoke_Tracer___
-  .by 10 ;Baby_Roller____
-  .by 5  ;Roller_________
+  .by 5  ;Baby_Roller____
+  .by 3  ;Roller_________
   .by 2  ;Heavy_Roller___
   .by 5  ;Riot_Charge____
   .by 2  ;Riot_Blast_____
@@ -452,9 +452,9 @@ WeaponUnits
   .by 10 ;Baby_Sandhog___
   .by 5  ;Sandhog________
   .by 2  ;Heavy_Sandhog__
-  .by 10 ;Dirt_Clod______
-  .by 5  ;Dirt_Ball______
-  .by 2  ;Ton_of_Dirt____
+  .by 5 ;Dirt_Clod______
+  .by 3  ;Dirt_Ball______
+  .by 1  ;Ton_of_Dirt____
   .by 4  ;Liquid_Dirt____
   .by 2  ;Dirt_Charge____
   .by 10 ;Earth_Disrupter
@@ -481,7 +481,7 @@ WeaponUnits
   .by 5  ;Horz_Guidance__
   .by 5  ;Vert_Guidance__
   .by 2  ;Lazy_Boy_______
-  .by 8  ;Parachute______
+  .by 3  ;Parachute______
   .by 2  ;StrongParachute
   .by 2  ;Mag_Deflector__
   .by 3  ;Shield_________
