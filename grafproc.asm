@@ -619,19 +619,8 @@ SkipRemovigPM
 
 
     lda AngleTable,x
-    bmi AngleToLeft01
-    lda #90
-    sec
-    sbc AngleTable,x
     tay
-    lda BarrelTableR,y
-    jmp CharacterAlreadyKnown
-AngleToLeft01
-    sec
-    sbc #(255-90)
-    tay
-    lda BarrelTableL,y
-CharacterAlreadyKnown
+    lda BarrelTable,y
     sta CharCode
 DrawTankNrX
     ldx tanknr

@@ -1079,9 +1079,9 @@ UsageLoop
     bcs RandomizeAngle
 
 
-    sta temp
-    lda #90 ; CARRY=0 here
-    sbc temp
+    ;sta temp
+    ;lda #90 ; CARRY=0 here
+    ;sbc temp
 
     rts
 .endp
@@ -1347,7 +1347,7 @@ font4x4
     ins 'artwork/font4x4s.bmp',+62
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanks.fnt'
+    ins 'artwork/tanksv2.fnt'
 ;----------------------------------------------
     icl 'variables.asm'
 ;----------------------------------------------

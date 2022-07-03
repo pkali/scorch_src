@@ -1205,7 +1205,7 @@ CheckNextLevel
 .proc displaydec ;decimal (word), displayposition  (word)
 ;--------------------------------------------------
 ; displays decimal number as in parameters (in text mode)
-; leading zeores are removed
+; leading zeroes are removed
 ; the range is (0000..9999 - two bytes)
 
     ldy #3  ; there will be 4 digits
@@ -1907,33 +1907,36 @@ NoShieldEnergy
     ldx TankNr
     lda AngleTable,x
     bmi AngleToLeft
-    lda #$7f  ; (tab) character
-    sta textbuffer+40+25
-    lda #0  ;space
-    sta textbuffer+40+22
-    lda #90
-    sec
-    sbc AngleTable,x
+
+    lda AngleTable,x
     sta decimal
+    ;lda #$7f  ; (tab) character
+    ;sta textbuffer+40+25
+    lda #0  ;space
+    ;sta textbuffer+40+22
+    sta decimal+1  ; angle is single byte, but displayed with displaydec (word) routine
+    ;lda #90
+    ;sec
+    ;sbc AngleTable,x
     tay
-    lda BarrelTableR,y
+    lda BarrelTable,y
     sta CharCode
     bne AngleDisplay ;like jmp, because code always <>0
 AngleToLeft
-    sec
-    sbc #(255-90)
+    ;sec
+    ;sbc #(255-90)
     sta decimal
     tay
-    lda BarrelTableL,y
+    lda BarrelTable,y
     sta CharCode
-    lda #$7e  ;(del) char
-    sta textbuffer+40+22
-    lda #0 ;space
-    sta textbuffer+40+25
+    ;lda #$7e  ;(del) char
+    ;sta textbuffer+40+22
+    ;lda #0 ;space
+    ;sta textbuffer+40+25
 
 AngleDisplay
-    mwa #textbuffer+40+23 displayposition
-    jsr displaybyte
+    mwa #textbuffer+40+21 displayposition
+    jsr displaydec
 
     ;=========================
     ;display Wind
