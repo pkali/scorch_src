@@ -9,7 +9,7 @@
 ; greeeting to myself 10 years older in 2013-11-09... still no idea
 
 ;----------------------------------------------
-MakeLowResDistances .proc
+.proc MakeLowResDistances 
 	; create low precision table of positions
 	; by dividing positions by 4
 
@@ -30,7 +30,7 @@ loop
 .endp
 
 ;----------------------------------------------
-ArtificialIntelligence .proc ;
+.proc ArtificialIntelligence ;
 ; A - skill of the TankNr
 ; returns shoot energy and angle in
 ; ForceTable/L/H and AngleTable
@@ -56,7 +56,7 @@ AIRoutines
     .word Poolshark-1 ;Unknown
 
 ;----------------------------------------------
-Moron .proc
+.proc Moron 
     ldx TankNr
     jsr RandomizeAngle
     sta NewAngle
@@ -66,7 +66,7 @@ Moron .proc
     rts
 .endp
 ;----------------------------------------------
-Shooter .proc
+.proc Shooter 
 
     ldx TankNr
     lda PreviousAngle,x
@@ -149,7 +149,7 @@ loop
     rts
     .endp
 ;----------------------------------------------
-Poolshark .proc
+.proc Poolshark
 	; defensives
 	ldx TankNr
 	; address of weapons table (for future use)
@@ -189,6 +189,10 @@ EnoughEnergy
 	sta ActiveDefenceWeapon,x
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
+	; decrease in inventory
+	clc
+	sbc #1
+	sta (temp),y
 NoUseDefensive
 DefensiveInUse
 firstShoot
@@ -280,7 +284,7 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 	.by 16,24,32,40,48,56,64,72
 	.endp
 ;----------------------------------------------
-PurchaseAI .proc ; 
+.proc PurchaseAI ; 
 ; A - skill of the TankNr
 ; makes purchase for AI opponents
 ; results of this routine are not visible on the screen
@@ -307,12 +311,12 @@ PurchaseAIRoutines
     .word PoolsharkPurchase-1 ;UnknownPurchase
 
 ;----------------------------------------------
-MoronPurchase
+.proc MoronPurchase
 ;Moron buys nothing
     rts
-    
+.endp
 ;-------
-TryToPurchaseOnePiece .proc
+.proc TryToPurchaseOnePiece
 	; A - weapon number, better it will be in range(1,32)
 	; TankNr in X
 	tay
@@ -360,7 +364,7 @@ SorryNoPurchase
 	
 
 ;----------------------------------------------
-ShooterPurchase .proc
+.proc ShooterPurchase
 	; first try to buy defensives
 	mva #2 tempXroller; number of offensive purchases to perform
 	ldx TankNr
@@ -380,9 +384,9 @@ ShooterPurchase .proc
 	bne @-
 
 	rts 
-	.endp
+.endp
 ;----------------------------------------------
-PoolsharkPurchase .proc
+.proc PoolsharkPurchase
 	; first try to buy defensives
 	mva #3 tempXroller; number of offensive purchases to perform
 	ldx TankNr
