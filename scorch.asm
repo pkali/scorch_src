@@ -1142,14 +1142,8 @@ LimitForce
 .proc MoveBarrelToNewPosition
 	jsr DrawTankNr
 	ldx TankNr
-	lda AngleTable,x
-	clc
-	adc #90 ;shift angle to the positive values
-	sta temp
 	lda NewAngle
-	clc 
-	adc #90
-	cmp temp
+	cmp AngleTable,x
 	beq BarrelPositionIsFine
 	bcc rotateLeft ; older is bigger
 rotateRight;older is lower

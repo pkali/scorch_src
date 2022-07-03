@@ -49,7 +49,7 @@ AIRoutines
     .word Moron-1
     .word Shooter-1 ;Shooter
     .word Poolshark-1 ;Poolshark
-    .word Poolshark-1 ;Toosser
+    .word Toosser-1 ;Toosser
     .word Poolshark-1 ;Chooser
     .word Poolshark-1 ;Spoiler
     .word Poolshark-1 ;Cyborg
@@ -77,10 +77,9 @@ AIRoutines
 	lda PreviousAngle,x
 	clc
 	adc #5
-	bmi @+
-	cmp #90
+	cmp #180
 	bcc @+
-	lda #(-90)
+	lda #0
 @
 	sta NewAngle
 
@@ -174,6 +173,10 @@ loop
 NoBatteries
 EnoughEnergy
 	; use best defensive :)
+	; but not allways
+	randomize 1 3
+	cmp #1
+	bne NoUseDefensive
 	; first check check if any is in use
 	lda ActiveDefenceWeapon,x
 	bne DefensiveInUse
@@ -280,9 +283,43 @@ loop
     
 ;----------------------------------------------
 AngleTable	; 16 bytes ;ba w $348b L$3350
-	.by 178,186,194,202,210,218,226,234
-	.by 16,24,32,40,48,56,64,72
-	.endp
+	.by 106,114,122,130,138,146,154,162
+	.by 18,26,34,43,50,58,66,74
+.endp
+;----------------------------------------------
+.proc Toosser
+	ldx TankNr
+	; address of weapons table
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+	; use best defensive :)
+	; allways
+	; first check check if any is in use
+	lda ActiveDefenceWeapon,x
+	bne DefensiveInUse
+	ldy #64 ;the last defensive weapon	
+@
+	dey
+	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
+	beq NoUseDefensive
+	lda (temp),y
+	beq @- 
+	tya
+	; activate defensive weapon
+	sta ActiveDefenceWeapon,x
+    lda DefensiveEnergy,y
+    sta ShieldEnergy,x
+	; decrease in inventory
+	clc
+	sbc #1
+	sta (temp),y
+DefensiveInUse
+NoUseDefensive
+	; Toosser is like Poolshark but allways uses defensives
+	jmp Poolshark
+.endp
 ;----------------------------------------------
 .proc PurchaseAI ; 
 ; A - skill of the TankNr
