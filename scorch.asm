@@ -380,6 +380,7 @@ DoNotFinishTheRound
     
     mva #0 noDeathCounter
     mva #sfx_seppuku sfx_effect
+    
     jsr DisplaySeppuku
     jmp Seppuku
 
@@ -751,6 +752,9 @@ NotNegativeShieldEnergy
     sta ydraw+1
     ; get position of the tank
     ldx TankNr
+    lda #0  ; turn off defense weapons when hara-kiring
+    sta ActiveDefenceWeapon,x
+    sta ShieldEnergy,x
     lda xtankstableL,x
     sta xdraw
     lda xtankstableH,x
@@ -1148,20 +1152,10 @@ LimitForce
 	bcc rotateLeft ; older is bigger
 rotateRight;older is lower
 	inc angleTable,x
-	bne MoveBarrelToNewPosition
-
-    mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    jsr DrawTankNr.drawtankNrX
-	
 	jmp MoveBarrelToNewPosition
 rotateLeft
 	dec angleTable,x
-	bpl MoveBarrelToNewPosition
-    	mva #$2e CharCode
-   	jsr DrawTankNr.drawtankNrX	
-
 	jmp MoveBarrelToNewPosition
-	
 BarrelPositionIsFine
 	rts
 	

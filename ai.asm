@@ -42,6 +42,13 @@ loop
     pha
     lda AIRoutines,x
     pha
+
+    ldx TankNr  ; common values used in AI routines
+    ; address of weapons table (for future use)
+    lda TanksWeaponsTableL,x
+    sta temp
+    lda TanksWeaponsTableH,x
+    sta temp+1
 	rts
 .endp
 ;----------------
@@ -57,7 +64,6 @@ AIRoutines
 
 ;----------------------------------------------
 .proc Moron 
-    ldx TankNr
     jsr RandomizeAngle
     sta NewAngle
     mwa #80 RandBoundaryLow
@@ -68,7 +74,6 @@ AIRoutines
 ;----------------------------------------------
 .proc Shooter 
 
-    ldx TankNr
     lda PreviousAngle,x
     ora PreviousEnergyL,x
     ora PreviousEnergyH,x
@@ -94,36 +99,30 @@ AIRoutines
 
 firstShoot
 	; compare the x position with the middle of the screen
+    lda xTanksTableH,x
+    cmp #>(screenwidth/2)
+    bne @+
 	lda xTanksTableL,x
-	sta temp
-	lda xTanksTableH,x
-	sta temp+1
-	cpw temp #(screenwidth/2)
-	bcs tankIsOnTheRight
+	cmp #<(screenwidth/2)
+@	bcc tankIsOnTheRight
 
-	lda RANDOM
-	and #$1F
-	clc
-	adc #5
-
+    ; enemy tank is on the left
+	randomize 95 125
 	sta NewAngle
-	jmp forceNow
+	bne forceNow
+
 tankIsOnTheRight
-	lda RANDOM
-	and #$1F
-	clc
-	adc #(-85)
-	;lda #-45
-	sta NewAngle
+    randomize 55 85
+    sta NewAngle
 	
 forceNow
     mwa #100 RandBoundaryLow
     mwa #800 RandBoundaryHigh 
-    ldx TankNr ;this is possibly not necessary
+    ;ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce
 
 endo
-	ldx TankNr ;this is possibly not necessary
+	;ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce.LimitForce
 	lda NewAngle
 	sta PreviousAngle,x
@@ -134,14 +133,10 @@ endo
 	
 	; choose the best weapon
 	
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
 	ldy #32 ;the last  weapon	
 loop
 	dey
-	lda (temp),y
+	lda (temp),y  ; this is set up before calling the routine, has address of TanksWeaponsTable
 	beq loop 
 	tya
 	sta ActiveWeapon,x
@@ -150,19 +145,13 @@ loop
 ;----------------------------------------------
 .proc Poolshark
 	; defensives
-	ldx TankNr
-	; address of weapons table (for future use)
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
 	; if low energy ten use battery
 	lda Energy,x
 	cmp #30
 	bcs EnoughEnergy
 	; lower than 30 units - check battery
 	ldy #ind_Battery________
-	lda (temp),y
+	lda (temp),y  ; has address of TanksWeaponsTable
 	beq NoBatteries
 	; we have batteries - use one
 	clc
@@ -180,12 +169,12 @@ EnoughEnergy
 	; first check check if any is in use
 	lda ActiveDefenceWeapon,x
 	bne DefensiveInUse
-	ldy #64 ;the last defensive weapon	
+	ldy #ind_Nuclear_Winter_+1 ;the last defensive weapon
 @
 	dey
 	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
 	beq NoUseDefensive
-	lda (temp),y
+	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
 	tya
 	; activate defensive weapon
@@ -195,7 +184,7 @@ EnoughEnergy
 	; decrease in inventory
 	clc
 	sbc #1
-	sta (temp),y
+	sta (temp),y  ; has address of TanksWeaponsTable
 NoUseDefensive
 DefensiveInUse
 firstShoot
@@ -203,7 +192,7 @@ firstShoot
 	jsr MakeLowResDistances
 	mva #$ff temp2 ; min possible distance
 
-	ldx TankNr
+	;ldx TankNr
 	ldy NumberOfPlayers
 	dey
 	
@@ -264,7 +253,7 @@ forceNow
     jsr RandomizeForce
 
 endo
-	ldx TankNr ;this is possibly not necessary
+	;ldx TankNr ;this is possibly not necessary
 	
 	; choose the best weapon
 	
@@ -288,12 +277,6 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 .endp
 ;----------------------------------------------
 .proc Toosser
-	ldx TankNr
-	; address of weapons table
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
 	; use best defensive :)
 	; allways
 	; first check check if any is in use
@@ -304,7 +287,7 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 	dey
 	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
 	beq NoUseDefensive
-	lda (temp),y
+	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
 	tya
 	; activate defensive weapon
