@@ -202,11 +202,8 @@ FunkyBombLoop
     lda random
     sta Force
     mva #1 Force+1
-    ;Angle randomization Range: (-16..+16)
-    lda random
-    lsr
-    and #%00011111
-    scc:eor #$ff
+    ;Angle randomization Range: (70-110 degrees)
+    randomize 70 110
     sta Angle
 
     lda #0
@@ -536,35 +533,30 @@ DiggerCharacter
 	lda #$00
 	sbc #$00
     sta ybyte+1
+
     mva #0 drawFunction
+
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
     mwa ybyte LaserCoordinate+6
-    mva #sfx_lightning sfx_effect
 
-    jsr draw
-    mva #0 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
     mva #sfx_lightning sfx_effect
-    jsr draw
-    mva #1 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
-    mva #sfx_lightning sfx_effect
-    jsr draw
-    mva #0 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
-    mva #sfx_lightning sfx_effect
-    jsr draw
+    mva #51 yc  ; laser blink counter
+@
+      lda yc
+      and #$01
+      sta color
+        mwa LaserCoordinate xdraw
+        mwa LaserCoordinate+2 ydraw
+        mwa LaserCoordinate+4 xbyte
+        mwa LaserCoordinate+6 ybyte
+        mva #sfx_lightning sfx_effect
+      jsr draw
+
+    dec:lda yc
+    bpl @-
+        
     mva #1 color
     mwa LaserCoordinate xdraw
     mwa LaserCoordinate+2 ydraw
@@ -1179,34 +1171,34 @@ CTRLPressedDown
     bmi ForceGoesZero
     jmp BeforeFire
 
-pressedLeft
+pressedRight
     mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     dec AngleTable,x
     lda AngleTable,x
-    cmp #$ff ; if angle goes through 0 we clear the barrel
-    bne NotThrough90DegreesLeft
-    mva #$2e CharCode
-    jsr DrawTankNr.drawtankNrX
-NotThrough90DegreesLeft
-    cmp #(255-91)
+    ;cmp #180 ; if angle goes through 180 we clear the barrel
+    ;bne NotThrough90DegreesLeft
+    ;mva #$2e CharCode ; TODO: change
+    ;jsr DrawTankNr.drawtankNrX
+;NotThrough90DegreesLeft
+    cmp #255 ; -1
     jne BeforeFire
-    lda #90
+    lda #180
     sta AngleTable,x
     jmp BeforeFire
 
-pressedRight
+pressedLeft
     mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     INC AngleTable,x
     lda AngleTable,x
-    bne NotThrough90DegreesRight
-    mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    jsr DrawTankNr.drawtankNrX
-NotThrough90DegreesRight
-    cmp #91
+    ;bne NotThrough90DegreesRight
+    ;mva #$30 CharCode ; if angle goes through 0 we clear the barrel
+    ;jsr DrawTankNr.drawtankNrX
+;NotThrough90DegreesRight
+    cmp #181
     jne BeforeFire
-    lda #(255-90)
+    lda #0
     sta AngleTable,x
     jmp BeforeFire
 
@@ -1610,8 +1602,8 @@ ThereWasNoParachute
 ; Angle(byte) 128=0, 255=maxright, 0=maxleft
 ;--------------------------------------------------
 ;g=-0.1
-;vx=Force*sin(Angle)
-;vy=Force*cos(Angle)
+;vx=Force*cos(Angle)
+;vy=Force*sin(Angle)
 ;
 ;:begin
 ;ytraj=ytray-vy
@@ -1620,6 +1612,9 @@ ThereWasNoParachute
 ;vx=vx+Wind (Wind is a small fraction)
 ;plot xtraj,ytraj - there is clearing in plot
 ;goto begin
+
+
+
 
 ; smoke tracer :)
     ldy #0
@@ -1648,45 +1643,41 @@ RepeatFlight
     sta ydraw+1
 
     ;vx calculation
+    ;vx = sin(90-Angle) for Angle <=90
+    ;vx = -sin(Angle-90) for 90 < Angle <= 180 
     aslw Force ;Force = Force * 2
 
-    ;sin(Angle)
+    ;cos(Angle) (but we use sin table only so some shenanigans happen)
     ldx Angle
     stx LeapFrogAngle ; we will need it later
 
     ;Angle works like this:
-    ;0 'degrees' is straight up
-    ;90 'degrees' is horizontally right
-    ;255 is straight up (same as 0)
-    ;255-90 (165) horizontally left
+    ;0 'degrees' is horizontally right
+    ;90 'degrees' is straight up
+    ;180 horizontally left
 
-    bpl FlightRight
+    ; (we have to set goleft used in rolling weapons)
+   
+    cpx #91
+    bcc angleUnder90
     
-    ;and if the highest bit is set then
-    ;Flight to LEFT
-    ;calculate Angle with this formula:
-    ;Angle=90-(Angle-165)
-
-    sec
-    txa
-    sbc #165 ;(Angle-165)
-    sta temp 
-    lda #90  
-    sbc temp ;90-(Angle-165)
-    ;and we have rady angle here ... and we go LEFT!
-    tax
-    sta Angle
-    
-    ; and now we contine as if nothing happened
-    ; (but we have goleft set to 1!!!)
+    ;over 90
     mva #1 goleft
-    bne @+
+    sec
+    txa  ; lda # Angle
+    sbc #90
+    tax
+    jmp @+
 
-FlightRight
+angleUnder90
     mva #0 goleft
-@
-    lda sintable,x  ;sin(Angle)
-    sta Multiplee   ;sin(Angle)*Force
+    sec             ; X = 90-Angle
+    lda #90
+    sbc Angle
+    tax
+@    
+    lda sintable,x  ; cos(X)
+    sta Multiplee   ; *Force
     mwa Force Multiplier
     lda #$0
     sta Multiplier+2
@@ -1725,18 +1716,27 @@ DoNotAdd
       .endr
 @
 ;======vy
-    lda #0  ;cos(Angle)
+    ;vy = sin(Angle) for Angle <=90
+    ;vy = sin(180-Angle) for 90 < Angle <= 180
+
+    lda #0  
     sta vy
     sta vy+1
     sta vy+2
 ;--
-    lda #90
+    ldx Angle
+    cpx #91
+    bcc YangleUnder90
+    
+    lda #180
     sec
     sbc Angle
     tax
+
+YangleUnder90
     lda sintable,x
 
-    sta Multiplee ;cos(Angle)*Force
+    sta Multiplee ;sin(Angle)*Force
     mwa Force Multiplier
     lda #$0
     sta Multiplier+2
@@ -1795,7 +1795,7 @@ Loopi
     ; we check if it is MIRV and if so, jump to MIRV routine
     ldx TankNr
     lda ActiveWeapon,x
-    cmp #6 ; MIRV
+    cmp #ind_MIRV___________ ; MIRV
     jeq MIRVdownLoop
 StillUp
 
