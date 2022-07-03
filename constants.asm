@@ -542,6 +542,22 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     dta 0 ;"----------------" ; 45
     dta 0 ;"----------------" ; 46
     dta 0 ;"----------------" ; 47
+	dta 0 ;"White Flag      " ; 48
+	dta 1 ;"Battery         " ; 49
+	dta 0 ;"Bal Guidance    " ; 50
+	dta 0 ;"Horz Guidance   " ; 51
+	dta 0 ;"Vert Guidance   " ; 52
+	dta 0 ;"Lazy Boy        " ; 53
+	dta 1 ;"Parachute       " ; 54
+	dta 1 ;"Strong Parachute" ; 55
+	dta 1 ;"Mag Deflector   " ; 56
+	dta 1 ;"Shield          " ; 57
+	dta 1 ;"Force Shield    " ; 58
+	dta 1 ;"Heavy Shield    " ; 59
+	dta 0 ;"Super Mag       " ; 60
+	dta 1 ;"Auto Defense    " ; 61
+	dta 0 ;"Fuel Tank       " ; 62
+	dta 0 ;"Nuclear Winter  " ; 63
  
 
 ;-------------------------------------------------

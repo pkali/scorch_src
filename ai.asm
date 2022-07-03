@@ -150,7 +150,47 @@ loop
     .endp
 ;----------------------------------------------
 Poolshark .proc
-
+	; defensives
+	ldx TankNr
+	; address of weapons table (for future use)
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+	; if low energy ten use battery
+	lda Energy,x
+	cmp #30
+	bcs EnoughEnergy
+	; lower than 30 units - check battery
+	ldy #ind_Battery________
+	lda (temp),y
+	beq NoBatteries
+	; we have batteries - use one
+	clc
+	sbc #1
+	sta (temp),y
+	lda #99
+	sta Energy,x
+NoBatteries
+EnoughEnergy
+	; use best defensive :)
+	; first check check if any is in use
+	lda ActiveDefenceWeapon,x
+	bne DefensiveInUse
+	ldy #64 ;the last defensive weapon	
+@
+	dey
+	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
+	beq NoUseDefensive
+	lda (temp),y
+	beq @- 
+	tya
+	; activate defensive weapon
+	sta ActiveDefenceWeapon,x
+    lda DefensiveEnergy,y
+    sta ShieldEnergy,x
+NoUseDefensive
+DefensiveInUse
 firstShoot
 	;find nearest tank neighbour
 	jsr MakeLowResDistances
@@ -321,27 +361,45 @@ SorryNoPurchase
 
 ;----------------------------------------------
 ShooterPurchase .proc
-	mva #4 tempXroller; number of purchases to perform
-
+	; first try to buy defensives
+	mva #2 tempXroller; number of offensive purchases to perform
 	ldx TankNr
-loop
+@
+	randomize 49 55
+	jsr TryToPurchaseOnePiece
+	dec tempXroller
+	bne @-
+	
+	; and now offensives
+	mva #4 tempXroller; number of offensive purchases to perform
+	ldx TankNr
+@
 	randomize 1 14
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
-	bne loop
+	bne @-
 
 	rts 
 	.endp
 ;----------------------------------------------
 PoolsharkPurchase .proc
-	mva #8 tempXroller; number of purchases to perform
-
+	; first try to buy defensives
+	mva #3 tempXroller; number of offensive purchases to perform
 	ldx TankNr
-loop
+@
+	randomize 49 61
+	jsr TryToPurchaseOnePiece
+	dec tempXroller
+	bne @-
+	
+	; and now offensives
+	mva #8 tempXroller; number of purchases to perform
+	ldx TankNr
+@
 	randomize 1 30
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
-	bne loop
+	bne @-
 
 	rts 
 .endp

@@ -311,12 +311,16 @@ SettingEnergies
 
     jsr SetMainScreen
     jsr ColorsOfSprites
+	lda #0
+	sta colpf2s	; status line "off"
+	sta colpf1s
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
     mva #0 TankSequencePointer
 ;---------round screen is ready---------
+	mva #TextForegroundColor colpf1s	; status line "on"
     rts
 .endp
 
