@@ -409,7 +409,7 @@ SorryNoPurchase
 	mva #4 tempXroller; number of offensive purchases to perform
 	;ldx TankNr
 @
-	randomize ind_Battery________ ind_Heavy_Roller___
+	randomize ind_Missile________ ind_Heavy_Roller___
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
 	bne @-

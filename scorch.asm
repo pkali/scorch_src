@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"145" ; number of this build (3 bytes)
+	dta d"146" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -1362,7 +1362,7 @@ MODUL    equ $b000                                 ;address of RMT module
 TheEnd
     .ECHO 'TheEnd: ',TheEnd
     .if TheEnd > PMGraph + $300
-        .error memory conflict
+        .error "memory conflict"
 
     .endif
 ;----------------------------------------------
