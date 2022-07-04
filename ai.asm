@@ -57,10 +57,10 @@ AIRoutines
     .word Shooter-1 ;Shooter
     .word Poolshark-1 ;Poolshark
     .word Tosser-1 ;Tosser
-    .word Poolshark-1 ;Chooser
-    .word Poolshark-1 ;Spoiler
-    .word Poolshark-1 ;Cyborg
-    .word Poolshark-1 ;Unknown
+    .word Tosser-1 ;Chooser
+    .word Tosser-1 ;Spoiler
+    .word Tosser-1 ;Cyborg
+    .word Tosser-1 ;Unknown
 
 ;----------------------------------------------
 .proc Moron 
@@ -335,10 +335,10 @@ PurchaseAIRoutines
     .word ShooterPurchase-1 ;ShooterPurchase
     .word PoolsharkPurchase-1 ;PoolsharkPurchase
     .word TosserPurchase-1 ;TosserPurchase
-    .word PoolsharkPurchase-1 ;ChooserPurchase
-    .word PoolsharkPurchase-1 ;SpoilerPurchase
-    .word PoolsharkPurchase-1 ;CyborgPurchase
-    .word PoolsharkPurchase-1 ;UnknownPurchase
+    .word TosserPurchase-1 ;ChooserPurchase
+    .word TosserPurchase-1 ;SpoilerPurchase
+    .word TosserPurchase-1 ;CyborgPurchase
+    .word TosserPurchase-1 ;UnknownPurchase
 
 ;----------------------------------------------
 .proc MoronPurchase
