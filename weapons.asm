@@ -232,16 +232,22 @@ NoExplosionInFunkyBomb
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
 
-    mva #sfx_nuke sfx_effect 
+    mva #sfx_nuke sfx_effect
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
     sbw xdraw #35
     jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
     adw xdraw #70
     jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
     sbw xdraw #35
     ;
     sbw ydraw #35
@@ -249,16 +255,30 @@ NoExplosionInFunkyBomb
     cpw ydraw #screenHeight
     bcs NoUpperCircle
     mva #sfx_nuke sfx_effect 
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
 NoUpperCircle
     adw ydraw #70
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
     mva #sfx_nuke sfx_effect 
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
 NoLowerCircle
     mva #sfx_silencer sfx_effect
+    rts
+.endp
+.proc SaveDrawXY
+    mwa xdraw tempXROLLER
+    mwa ydraw modify
+    rts
+.endp
+.proc UnSaveDrawXY
+    mwa tempXROLLER xdraw
+    mwa modify ydraw
     rts
 .endp
 ; ------------------------

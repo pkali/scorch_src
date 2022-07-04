@@ -56,7 +56,7 @@ AIRoutines
     .word Moron-1
     .word Shooter-1 ;Shooter
     .word Poolshark-1 ;Poolshark
-    .word Toosser-1 ;Toosser
+    .word Tosser-1 ;Tosser
     .word Poolshark-1 ;Chooser
     .word Poolshark-1 ;Spoiler
     .word Poolshark-1 ;Cyborg
@@ -271,7 +271,7 @@ endo
 	sta temp
 	lda TanksWeaponsTableH,x
 	sta temp+1
-	ldy #32 ;the last  weapon	
+	ldy #ind_Laser__________ ;the last offensive weapon	
 loop
 	dey
 	lda (temp),y
@@ -286,13 +286,13 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 	.by 18,26,34,43,50,58,66,74
 .endp
 ;----------------------------------------------
-.proc Toosser
+.proc Tosser
 	; use best defensive :)
 	; allways
 	; first check check if any is in use
 	lda ActiveDefenceWeapon,x
 	bne DefensiveInUse
-	ldy #64 ;the last defensive weapon	
+	ldy #ind_Nuclear_Winter_+1 ;the last defensive weapon	
 @
 	dey
 	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
@@ -334,7 +334,7 @@ PurchaseAIRoutines
     .word MoronPurchase-1
     .word ShooterPurchase-1 ;ShooterPurchase
     .word PoolsharkPurchase-1 ;PoolsharkPurchase
-    .word PoolsharkPurchase-1 ;ToosserPurchase
+    .word TosserPurchase-1 ;TosserPurchase
     .word PoolsharkPurchase-1 ;ChooserPurchase
     .word PoolsharkPurchase-1 ;SpoilerPurchase
     .word PoolsharkPurchase-1 ;CyborgPurchase
@@ -349,6 +349,7 @@ PurchaseAIRoutines
 .proc TryToPurchaseOnePiece
 	; A - weapon number, better it will be in range(1,32)
 	; TankNr in X
+    ; DOES NOT CHANGE X
 	tay
 	lda PurchaseMeTable,y
 	beq SorryNoPurchase
@@ -399,16 +400,16 @@ SorryNoPurchase
 	mva #2 tempXroller; number of offensive purchases to perform
 	ldx TankNr
 @
-	randomize 49 55
+	randomize ind_Battery________ ind_StrongParachute
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
 	bne @-
 	
 	; and now offensives
 	mva #4 tempXroller; number of offensive purchases to perform
-	ldx TankNr
+	;ldx TankNr
 @
-	randomize 1 14
+	randomize ind_Battery________ ind_Heavy_Roller___
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
 	bne @-
@@ -421,19 +422,46 @@ SorryNoPurchase
 	mva #3 tempXroller; number of offensive purchases to perform
 	ldx TankNr
 @
-	randomize 49 61
+	randomize ind_Battery________ ind_Auto_Defense___
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
 	bne @-
 	
 	; and now offensives
 	mva #8 tempXroller; number of purchases to perform
-	ldx TankNr
+	;ldx TankNr
 @
-	randomize 1 30
+	randomize ind_Missile________ ind_Dirt_Charge____
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
 	bne @-
 
 	rts 
+.endp
+;----------------------------------------------
+.proc TosserPurchase
+
+    ; what is my money level
+    ldx TankNr
+    lda MoneyH,x ; money / 256
+    sta tempXroller ; perform this many purchase attempts
+    ; first try to buy defensives
+    mva #3 tempXroller; number of defensive purchases to perform
+@
+    randomize ind_Battery________ ind_Auto_Defense___
+    jsr TryToPurchaseOnePiece
+    dec tempXroller
+    bne @-
+    
+    ; and now offensives
+    lda MoneyH,x ; money / 256
+    asl  ;*2
+    sta tempXroller ; perform this many purchase attempts
+@
+    randomize ind_Missile________ ind_Dirt_Charge____
+    jsr TryToPurchaseOnePiece
+    dec tempXroller
+    bne @-
+
+    rts 
 .endp
