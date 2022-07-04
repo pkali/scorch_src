@@ -30,8 +30,8 @@ ExplosionRoutines
     .word funkybomb-1
     .word mirv-1
     .word deathshead-1
-    .word VOID-1 ;napalm
-    .word VOID-1 ;hotnapalm
+    .word napalm-1 ;napalm
+    .word hotnapalm-1 ;hotnapalm
     .word tracer-1
     .word tracer-1 ;smoketracer
     .word babyroller-1
@@ -280,6 +280,40 @@ NoLowerCircle
     mwa tempXROLLER xdraw
     mwa modify ydraw
     rts
+.endp
+; ------------------------
+.proc napalm
+	jmp xnapalm
+.endp
+; ------------------------
+.proc hotnapalm
+	jmp xnapalm
+.endp
+; ------------------------
+.proc xnapalm
+;	adw mountaintable xdraw temp
+;	ldy #0
+;	sty ydraw+1
+;	lda (temp),y	; ground height in hit point
+;	sta ydraw
+	sbw xdraw #4 ; char centering
+	lda #0
+	sta modify
+@
+	lda random
+	and #%00000110
+	clc
+	adc #$46
+	sta CharCode
+	jsr TypeChar
+	wait
+	inc modify
+	bpl @-
+	lda #$4e
+	sta CharCode
+	jsr TypeChar
+
+	rts
 .endp
 ; ------------------------
 .proc babyroller
