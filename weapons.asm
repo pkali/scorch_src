@@ -291,27 +291,42 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc xnapalm
-;	adw mountaintable xdraw temp
-;	ldy #0
-;	sty ydraw+1
-;	lda (temp),y	; ground height in hit point
-;	sta ydraw
-	sbw xdraw #4 ; char centering
-	lda #0
-	sta modify
-@
+	mwa xdraw xcircle	; store hitpoint for future repeats
+	ldy #30		; repeat 30 times
+	sty magic	
+RepeatNapalm	; external loop (for fire animation)
+	mwa xcircle xdraw
+	sbw xdraw #(1*8)  ; 8 characters on left side hit point
+	ldy #0
+	sty magic+1
+RepeatFlame		; internal loop (draw flames)
+	ldy #0
+	adw xdraw #mountaintable temp
+	sty ydraw+1
+	lda (temp),y
+	sta ydraw
+	sbw xdraw #4
+	; draw flame symbol
+	lda magic	; if last repeat - clear flames
+	beq LastNapalmRepeat
 	lda random
 	and #%00000110
 	clc
 	adc #$46
+	bne PutFlameChar
+LastNapalmRepeat
+	lda #$4e	; clear flame symbol
+PutFlameChar
 	sta CharCode
 	jsr TypeChar
-	wait
-	inc modify
-	bpl @-
-	lda #$4e
-	sta CharCode
-	jsr TypeChar
+	adw xdraw #4
+	adw xdraw #1 ; next char 1 pixels to right
+	inc magic+1
+	lda magic+1
+	cmp #17 	; 8 chars on left, 8 chars on right and 1 in center
+	bne RepeatFlame
+	dec magic
+	bpl RepeatNapalm
 
 	rts
 .endp
