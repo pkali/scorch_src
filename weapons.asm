@@ -283,10 +283,18 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc napalm
+    inc FallDown2
+    mva #(10+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
+    jsr CalculateExplosionRange
+	mva #0 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
 	jmp xnapalm
 .endp
 ; ------------------------
 .proc hotnapalm
+    inc FallDown2
+    mva #(10+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
+    jsr CalculateExplosionRange
+	mva #1 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
 	jmp xnapalm
 .endp
 ; ------------------------
@@ -296,7 +304,7 @@ NoLowerCircle
 	sty magic	
 RepeatNapalm	; external loop (for fire animation)
 	mwa xcircle xdraw
-	sbw xdraw #(1*8)  ; 8 characters on left side hit point
+	sbw xdraw #(1*10)  ; 10 characters on left side hit point
 	ldy #0
 	sty magic+1
 RepeatFlame		; internal loop (draw flames)
@@ -304,8 +312,19 @@ RepeatFlame		; internal loop (draw flames)
 	adw xdraw #mountaintable temp
 	sty ydraw+1
 	lda (temp),y
+	sec
+	sbc #1	; over ground
 	sta ydraw
-	sbw xdraw #4
+	lda xdraw
+	and ExplosionRadius	; if hotnapalm and x is odd:
+	:2 asl	; modify y position 4 pixels up
+	ldy ydraw
+	sta ydraw
+	tya
+	sec
+	sbc ydraw
+	sta ydraw	
+	sbw xdraw #4	; half character correction
 	; draw flame symbol
 	lda magic	; if last repeat - clear flames
 	beq LastNapalmRepeat
@@ -318,16 +337,69 @@ LastNapalmRepeat
 	lda #$4e	; clear flame symbol
 PutFlameChar
 	sta CharCode
+	; check coordinates
+	cpw xdraw #(screenwidth-7)
+	bcs CharOffTheScreen
+	lda ydraw
+	cmp #7
+	bcc CharOffTheScreen
+	cmp #(screenHeight-1)
+	bcs CharOffTheScreen
 	jsr TypeChar
-	adw xdraw #4
-	adw xdraw #1 ; next char 1 pixels to right
+CharOffTheScreen
+	adw xdraw #4	; reverse half character correction (we need positon of character center)
+	adw xdraw #1	; next char 1 pixels to right
 	inc magic+1
 	lda magic+1
-	cmp #17 	; 8 chars on left, 8 chars on right and 1 in center
-	bne RepeatFlame
+	cmp #21 	; 10 chars on left, 10 chars on right and 1 in center
+	jne RepeatFlame
 	dec magic
-	bpl RepeatNapalm
+	jpl RepeatNapalm
+	inc FallDown2
+;now we must check tanks in range
+    ldx NumberOfPlayers
+BurnedCheckLoop
+    dex
+    lda eXistenZ,x
+    beq EndNurnedCheckLoop
+    ;here the tank exist
+	mwa xcircle xdraw
+	; calculate right edge of the fire
+	adw xdraw #(1*10-8)  ; 10 characters on left side hit point (right edge of the fire - character width)
+	; now we compare tank position with right edge of the fire (napalm)
+    lda XtankstableH,x
+	cmp xdraw+1
+	bne @+
+    lda XtankstableL,x
+	cmp xdraw
+@
+	bcs TankOutOfFire
+	; let's calculate left edge of the fire
+	sbw xdraw #(21-8)	; 10 chars on left, 10 chars on right and 1 in center (- character width)
+	bpl @+
+	mwa #0 xdraw	; left screen edge
+@
+	; now we compare tank position with left edge of the fire (napalm)
+    lda XtankstableH,x
+	cmp xdraw+1
+	bne @+
+    lda XtankstableL,x
+	cmp xdraw
+@
+	bcc TankOutOfFire
 
+    ldy #40		; energy decrease (napalm) - but if hotnapalm:
+	lda ExplosionRadius
+	beq NotHot
+	ldy #80		; energy decrease (hotnapalm)
+NotHot
+	; check shields ( joke :) )
+    jsr DecreaseEnergyX
+TankOutOfFire
+EndNurnedCheckLoop
+    txa
+    bne BurnedCheckLoop
+    mva #sfx_silencer sfx_effect
 	rts
 .endp
 ; ------------------------
