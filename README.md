@@ -55,9 +55,9 @@ Not much changed visually since the last build, but really large parts of the co
 - silly angle system rewritten to a proper, primary school angling. BTW - I had to dig into 8th grade trig to make it work. About 200 bytes saved, complexity reduced. Next build will have improved angle speed UI. I will also allow for an easier improvement of tank visuals.
 - Weapon price and quantity balance - this is our honest attempt to make game more fun. We'll accept any critique and improvement proposals.
 - New AI opponent - Tosser! Not much better than Poolshark, but still beats sharks most of the time.
-- AI opponents can purchase defensive weapons what makes playing against AI somewhat more challenging.
+- AI opponents can purchase defensive weapons which make playing against AI somewhat more challenging.
 - Improved Laser. It is still not ideal, but better. Still hard to aim :]
-- Few small parachute related bugs fixed
+- Few small parachute-related bugs fixed
 - Death's Head bug fix
 
 Issues closed:
