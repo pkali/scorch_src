@@ -609,29 +609,18 @@ DrawNextTank
     ldx tankNr
     ; let's check the energy
     lda eXistenZ,x
-    bne SkipRemovigPM ; if energy=0 then no tank
+    bne SkipHidingPM ; if energy=0 then no tank
 
       ; hide P/M
       lda #0
       sta hposp0,x
       jmp DoNotDrawTankNr
-SkipRemovigPM
+SkipHidingPM
 
 
     lda AngleTable,x
-    bmi AngleToLeft01
-    lda #90
-    sec
-    sbc AngleTable,x
     tay
-    lda BarrelTableR,y
-    jmp CharacterAlreadyKnown
-AngleToLeft01
-    sec
-    sbc #(255-90)
-    tay
-    lda BarrelTableL,y
-CharacterAlreadyKnown
+    lda BarrelTable,y
     sta CharCode
 DrawTankNrX
     ldx tanknr
@@ -742,11 +731,11 @@ tankflash_loop
     sne:mva #1 fs  ; finish it     
     mva #1 Erase
 	ldx TankNr
-    jsr DrawTankNr.SkipRemovigPM	; it's necessary becouse DrawTankNr skips tanks with no energy !
+    jsr DrawTankNr.SkipHidingPM	; it's necessary becouse DrawTankNr skips tanks with no energy !
 	PAUSE 2
     mva #0 Erase
 	ldx TankNr
-    jsr DrawTankNr.SkipRemovigPM
+    jsr DrawTankNr.SkipHidingPM
 	PAUSE 2
     dec fs
     jne tankflash_loop

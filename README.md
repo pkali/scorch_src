@@ -47,20 +47,40 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 146
+2022-07-03
+Super heavy rewrite build.
+Not much changed visually since the last build, but really large parts of the code were rewritten, optimized and improved. A fresh swath of buggies certainly introduced, too. 
+- completely new tank falling routine by @Pecusx - over 300 bytes saved, complexity reduced, more just energy deduction when falling.
+- silly angle system rewritten to a proper, primary school angling. BTW - I had to dig into 8th grade trig to make it work. About 200 bytes saved, complexity reduced. Next build will have improved angle speed UI. I will also allow for an easier improvement of tank visuals.
+- Weapon price and quantity balance - this is our honest attempt to make game more fun. We'll accept any critique and improvement proposals.
+- New AI opponent - Tosser! Not much better than Poolshark, but still beats sharks most of the time.
+- AI opponents can purchase defensive weapons what makes playing against AI somewhat more challenging.
+- Improved Laser. It is still not ideal, but better. Still hard to aim :]
+- Few small parachute related bugs fixed
+- Death's Head bug fix
+
+Issues closed:
+- https://github.com/pkali/scorch_src/issues/87 Angles are reasonable now. PROFIT!!!
+
+
 ###### Build 145
 2022-06-26
 Possibly last round of weapon additions!
+
 @Pecusx added 
 - working White Flag -- it is a way to give up while not making opponents richer!
 - Battery - a must for every tank with low energy.
 - Strong Parachute - like a normal parachute, but stronger (it has energy and can work more than once)
 - Nuclear Winter - a quick and efficient solution to global worming, err, warning, WARMING!
+
 @mikerro added new SFX and in-game-tunes.
 - Pressing [S] turns on/off SFX (when aiming). Pressing [M] turns on/off in-game tunes.
+
 Tickets closed:
-- https://github.com/pkali/scorch_src/issues/54 - holding joystick up or down longer speeds up force change. It makes playing with joystick much nicer.
-- https://github.com/pkali/scorch_src/issues/76 - a beginning of visual tweaks by Adam
-- infinite defensive weapons purchase bug fixed, to chagrin of some...
+- https://github.com/pkali/scorch_src/issues/54 - holding a joystick up or down speeds up force change. It makes playing with a joystick much nicer.
+- https://github.com/pkali/scorch_src/issues/76 - a beginning of visual tweaks by @6502adam
+- infinite defensive weapons purchase bug fixed, to the chagrin of some...
 
 ###### Build 144
 2022-06-19

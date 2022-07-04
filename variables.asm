@@ -12,7 +12,7 @@ TanksNames  ; DO NOT ZERO - ticket #24
     :6 dta d"        "
 ;----------------------------------------------------
 ;Options DO NOT ZERO - ticket #27
-OptionsTable .by 0,0,2,2,0,1,3
+OptionsTable .by 0,1,2,2,0,1,3
 RoundsInTheGame .by 10 ;how many rounds in the current game
 seppukuVal .by 75
 ;----------------------------------------------------
@@ -178,7 +178,7 @@ xcircle .DS 2
 ycircle .DS 2
 tempcir .DS 2
 ;TankFalls
-IfFallDown  .DS 1
+FallingSoundBit .DS 1
 PreviousFall  .DS 1
 EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 Parachute .DS 1 ; are you insured with parachute?

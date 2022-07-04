@@ -202,11 +202,8 @@ FunkyBombLoop
     lda random
     sta Force
     mva #1 Force+1
-    ;Angle randomization Range: (-16..+16)
-    lda random
-    lsr
-    and #%00011111
-    scc:eor #$ff
+    ;Angle randomization Range: (70-110 degrees)
+    randomize 70 110
     sta Angle
 
     lda #0
@@ -235,16 +232,22 @@ NoExplosionInFunkyBomb
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
 
-    mva #sfx_nuke sfx_effect 
+    mva #sfx_nuke sfx_effect
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
     sbw xdraw #35
     jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
     adw xdraw #70
     jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
     sbw xdraw #35
     ;
     sbw ydraw #35
@@ -252,16 +255,30 @@ NoExplosionInFunkyBomb
     cpw ydraw #screenHeight
     bcs NoUpperCircle
     mva #sfx_nuke sfx_effect 
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
 NoUpperCircle
     adw ydraw #70
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
     mva #sfx_nuke sfx_effect 
+    SaveDrawXY 
     jsr xmissile
+    UnSaveDrawXY
 NoLowerCircle
     mva #sfx_silencer sfx_effect
+    rts
+.endp
+.proc SaveDrawXY
+    mwa xdraw tempXROLLER
+    mwa ydraw modify
+    rts
+.endp
+.proc UnSaveDrawXY
+    mwa tempXROLLER xdraw
+    mwa modify ydraw
     rts
 .endp
 ; ------------------------
@@ -536,35 +553,30 @@ DiggerCharacter
 	lda #$00
 	sbc #$00
     sta ybyte+1
+
     mva #0 drawFunction
+
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
     mwa ybyte LaserCoordinate+6
-    mva #sfx_lightning sfx_effect
 
-    jsr draw
-    mva #0 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
     mva #sfx_lightning sfx_effect
-    jsr draw
-    mva #1 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
-    mva #sfx_lightning sfx_effect
-    jsr draw
-    mva #0 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
-    mwa LaserCoordinate+4 xbyte
-    mwa LaserCoordinate+6 ybyte
-    mva #sfx_lightning sfx_effect
-    jsr draw
+    mva #51 yc  ; laser blink counter
+@
+      lda yc
+      and #$01
+      sta color
+        mwa LaserCoordinate xdraw
+        mwa LaserCoordinate+2 ydraw
+        mwa LaserCoordinate+4 xbyte
+        mwa LaserCoordinate+6 ybyte
+        mva #sfx_lightning sfx_effect
+      jsr draw
+
+    dec:lda yc
+    bpl @-
+        
     mva #1 color
     mwa LaserCoordinate xdraw
     mwa LaserCoordinate+2 ydraw
@@ -1179,34 +1191,34 @@ CTRLPressedDown
     bmi ForceGoesZero
     jmp BeforeFire
 
-pressedLeft
+pressedRight
     mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     dec AngleTable,x
     lda AngleTable,x
-    cmp #$ff ; if angle goes through 0 we clear the barrel
-    bne NotThrough90DegreesLeft
-    mva #$2e CharCode
-    jsr DrawTankNr.drawtankNrX
-NotThrough90DegreesLeft
-    cmp #(255-91)
+    ;cmp #180 ; if angle goes through 180 we clear the barrel
+    ;bne NotThrough90DegreesLeft
+    ;mva #$2e CharCode ; TODO: change
+    ;jsr DrawTankNr.drawtankNrX
+;NotThrough90DegreesLeft
+    cmp #255 ; -1
     jne BeforeFire
-    lda #90
+    lda #180
     sta AngleTable,x
     jmp BeforeFire
 
-pressedRight
+pressedLeft
     mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     INC AngleTable,x
     lda AngleTable,x
-    bne NotThrough90DegreesRight
-    mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    jsr DrawTankNr.drawtankNrX
-NotThrough90DegreesRight
-    cmp #91
+    ;bne NotThrough90DegreesRight
+    ;mva #$30 CharCode ; if angle goes through 0 we clear the barrel
+    ;jsr DrawTankNr.drawtankNrX
+;NotThrough90DegreesRight
+    cmp #181
     jne BeforeFire
-    lda #(255-90)
+    lda #0
     sta AngleTable,x
     jmp BeforeFire
 
@@ -1354,15 +1366,14 @@ ShotUnderGround
 	rts
 .endp
 
-
 ;--------------------------------------------------
 .proc TankFalls;
 ;--------------------------------------------------
-    mva #sfx_shield_off sfx_effect
     lda #0
-    sta PreviousFall
+    sta PreviousFall	; bit 7 - left, bit 6 - right
     sta EndOfTheFallFlag
     sta Parachute
+	mva #2 FallingSoundBit	; another trick for only one sfx initialization in loop
 
     ; let's check if the given tank has got the parachute
 	ldx TankNr
@@ -1376,155 +1387,13 @@ ShotUnderGround
 ParachuteActive
     inc Parachute
 TankFallsX
-    ; coordinates of the first pixel under the tank
-    ldx TankNr
-    lda XtankstableL,x
-    sta xdraw
-    lda XtankstableH,x
-    sta xdraw+1
-    lda Ytankstable,x
-    clc
-    adc #1 ; in this point the comment helped us! For the very first
-    ; time in our lives! Tada! It opens a new chapter!!!
-    sta ydraw
-    ;
-    lda #08
-    sta mask2  ; Loop Counter
-ByteBelowTank
-    jsr point
-    beq EmptyPoint2
-    sec
-    bcs ROLPoint2
-EmptyPoint2
-    clc
-ROLPoint2
-    rol mask1
-    inw xdraw
-    dec mask2
-    bne ByteBelowTank
-    ldx mask1
-    lda WhereToSlideTable,x
-    sta IfFallDown  ; taking directions of falling down from the table
-    bne ItStillFalls
-    ; Tank falling down already finished, but it is not sure that
-    ; the horizontal coordinate is even.
-    ; If it is odd then it must be corrected because otherwise
-    ; P/M graphics background would not look OK
-    ldx TankNr
-    lda XtanksTableL,x
-    and #$01
-    jeq EndOfFall ; if it is even then it is the end
-    ; and if not, we push it one pixel the way it was falling before
-    lda PreviousFall
-    sta IfFallDown
-    inc EndOfTheFallFlag ; because after this correction is shouldn't fall anymore
-
-; we have 3 bits: 0 - go down, 1 - go right, 2 - go left
-;---
-ItStillFalls
-    lda Parachute
-    and #1
-    bne ParachutePresent
-    ; decreasing energy - if the vertical fall, substract 2
-    ; and if at an angle then substract 1
-    ldy #1 ; how much energy to substract
-    lda IfFallDown
-    and #1
-    beq NoFallingDown
-    ldx TankNr
-    jsr DecreaseEnergyX
-    lda IfFallDown
-    and #6
-    bne FallDiagonally
-    ldx TankNr
-    jsr DecreaseEnergyX
-FallDiagonally
-NoFallingDown
-ParachutePresent
-	; check parachute type
-	lda ActiveDefenceWeapon,x
-    cmp #ind_StrongParachute ; strong parachute
-	bne OneTimeParachute
-    ; decreasing energy of parachute - if the vertical fall, substract 2
-    ; and if at an angle then substract 1
-    ldy #1 ; how much energy to substract
-    lda IfFallDown
-    and #1
-    beq NoFallingDown2
-    ldx TankNr
-	jsr DecreaseShieldEnergyX
-	cpy #0	; is necessary to reduce tenk energy ?
-	beq @+
-    jsr DecreaseEnergyX
-@
-	ldy #1
-    lda IfFallDown
-    and #6
-    bne FallDiagonally2
-    ldx TankNr
-	jsr DecreaseShieldEnergyX
-	cpy #0	; is necessary to reduce tenk energy ?
-	beq @+
-    jsr DecreaseEnergyX
-@	
-	; check energy of parachute
-	
-	lda ShieldEnergy,x
-	bne OneTimeParachute
-	mva #0 Parachute
-	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
-	; and now we must clear parachute symbol
-    mva #1 Erase
-	jsr DrawTankParachute
-FallDiagonally2
-NoFallingDown2
-OneTimeParachute
-    ; we must set flag meaning that the tank was falling down
-    ; because later maybe the number of parachutes will decrease
-    ; (if there were parachutes and they were ON)
-
-    lda Parachute
-    ora #2 ; we set bit nr 1 (nr 0 means that parachute is present)
-    sta Parachute
-testowanie
-    ; storing last direction of falling
-    ; (it is not necessarily the direction from the previous
-    ; iteraction, so we must check directional bits before storing)
-    lda IfFallDown
-    and #$06
-    beq FallStraightDown
-    sta PreviousFall
-FallStraightDown
-    lda Parachute
-    and #01
-    beq RapidFalling
-    wait
-RapidFalling
-    ; we finish falling down if the tank reached the edge of the screen
-    ; but if it falls straight down or the other way than the edge,
-    ; then continue falling!
-    ldx TankNr
-    lda XtanksTableL,x
-    bne NotLeftEdge
-    lda XtanksTableH,x
-    bne NotLeftEdge
-    lda IfFallDown
-    and #$04 ; check if it does not fall left
-    jne EndOfFall  ; if so then maybe we finish
-NotLeftEdge
-    clc
-    lda XtanksTableL,x
-    adc #$08 ; we'll check right side of the char
-    sta temp
-    lda XtanksTableH,x
-    adc #0
-    sta temp+1
-    cpw temp #screenwidth
-    bne NotRightEdge
-    lda IfFallDown
-    and #$02 ; check if it does not fall right
-    jne EndOfFall  ; if so then maybe we finish
-NotRightEdge
+	; sound only if really falls
+	lda Parachute
+	and FallingSoundBit		; bit 1
+	beq NoFallingSound
+	mva #0 FallingSoundBit
+    mva #sfx_shield_off sfx_effect
+NoFallingSound
     ; clear previous position
     mva #1 Erase
     jsr DrawTankNr
@@ -1538,17 +1407,100 @@ NotRightEdge
 DoNotClearParachute
     mva #0 Erase
     ldx TankNr
-    lsr IfFallDown ; bit nr 0 (down)
-    bcc DoesNotFallDown
-    ; tank is falling down
+	lda EndOfTheFallFlag	; We only get byte below the tank if still falling
+	bne NoGroundCheck
+    ; coordinates of the first pixel under the tank
+    ldx TankNr
+    lda XtankstableL,x
+    sta xdraw
+    lda XtankstableH,x
+    sta xdraw+1
+    lda Ytankstable,x
+    clc
+    adc #1 ; in this point the comment helped us! For the very first
+    ; time in our lives! Tada! It opens a new chapter!!!
+    sta ydraw
+    ;
+;	UnderTank1	; byte under tank
+;	UnderTank2	; byte under tank reversed (for simple check right direction)
+    lda #08
+    sta temp  ; Loop Counter
+ByteBelowTank
+    jsr point
+    beq EmptyPoint2
+    sec
+	ror UnderTank2
+	sec
+    bcs ROLPoint2
+EmptyPoint2
+    clc
+	ror UnderTank2
+	clc
+ROLPoint2
+    rol UnderTank1
+    inw xdraw
+    dec temp
+    bne ByteBelowTank	
+NoGroundCheck
+    ldx TankNr
+	lda UnderTank1
+	bne NoFallingDown
+	; Tank falling down ----
+	lda Parachute
+    and #1
+    bne ParachutePresent
+    ; decreasing energy 
+    ldy #2 ; how much energy to substract
+    jsr DecreaseEnergyX
+ParachutePresent
+	; check parachute type
+	lda ActiveDefenceWeapon,x
+    cmp #ind_StrongParachute ; strong parachute
+	bne OneTimeParachute
+    ; decreasing energy of parachute
+    ldy #2 ; how much energy to substract
+	jsr DecreaseShieldEnergyX
+	cpy #0	; is necessary to reduce tenk energy ?
+	beq @+
+    jsr DecreaseEnergyX
+@
+	; check energy of parachute	
+	lda ShieldEnergy,x
+	bne OneTimeParachute
+	mva #0 Parachute
+	mva #0 ActiveDefenceWeapon,x ; deactivate defence
+OneTimeParachute
+    lda Parachute
+    ora #2 ; we set bit nr 1 (nr 0 means that parachute is present)
+    sta Parachute
+    ; tank is falling down - modify coorinates
     lda Ytankstable,x
     clc
     adc #1
     sta Ytankstable,x
-DoesNotFallDown
-    lsr IfFallDown ; bit nr 1 (right)
-    bcc DoesNotFallLeft
-    ; tank is falling left
+	jmp EndOfFCycle
+NoFallingDown
+	; check direction (left or right)
+	ldy #7		; SlideLeftTable length -1 (from 0 to 7)
+@	lda SlideLeftTable,y
+	cmp UnderTank1
+	beq FallingRight
+	cmp UnderTank2
+	beq FallingLeft
+	dey
+	bpl @-
+	bmi NoLeftOrRight
+FallingLeft
+	; tank is falling left
+	bit PreviousFall	; bit 6 - right
+	bvs EndLeftFall
+    ; we finish falling left if the tank reached the edge of the screen
+    lda XtanksTableL,x
+    bne NotLeftEdge
+    lda XtanksTableH,x
+    beq EndLeftFall
+NotLeftEdge
+    ; tank is falling left - modify coorinates
     clc
     lda XtankstableL,x
     adc #1
@@ -1556,10 +1508,23 @@ DoesNotFallDown
     lda XtankstableH,x
     adc #0
     sta XtankstableH,x
-DoesNotFallLeft
-    lsr IfFallDown ; bit nr 2 (left)
-    bcc DoesNotFallRight
-    ; tank is falling right
+	mva #%10000000 PreviousFall	; set bit 7 - left
+	bne EndOfFCycle
+FallingRight
+	; tank is falling right
+	bit PreviousFall	; bit 7 - left
+	bmi EndRightFall
+    ; we finish falling right if the tank reached the edge of the screen
+    clc
+    lda XtanksTableL,x
+    adc #$08 ; we'll check right side of the char
+    sta temp
+    lda XtanksTableH,x
+    adc #0
+    sta temp+1
+    cpw temp #screenwidth
+    beq EndRightFall
+    ; tank is falling right - modify coorinates
     sec
     lda XtankstableL,x
     sbc #1
@@ -1567,44 +1532,72 @@ DoesNotFallLeft
     lda XtankstableH,x
     sbc #0
     sta XtankstableH,x
-DoesNotFallRight
-    jsr DrawTankNr
-
+	mva #%01000000 PreviousFall	; set bit 6 - right
+	bne EndOfFCycle
+EndLeftFall
+EndRightFall
+NoLeftOrRight
+    inc EndOfTheFallFlag ; after this is shouldn't fall 
+EndOfFCycle
+	; draw tank on new position
+    jsr DrawTankNr	; ew have TankNr in X (I hope :) )
     ; checking is parachute present and if so, draw it
     lda Parachute
-    and #01
-    beq DoNotDrawParachute
-
+	cmp #3	; parachute and falling
+	bne DoNotDrawParachute
     ; here we draw parachute
     ldx TankNr
     jsr DrawTankParachute
+    wait	; onli if tank with patachute
+RapidFalling
 DoNotDrawParachute
-    lda EndOfTheFallFlag
-    jeq TankFallsX
-
+	lda EndOfTheFallFlag
+	jeq TankFallsX
+    ; Tank falling down already finished, but it is not sure that
+    ; the horizontal coordinate is even.
+    ; If it is odd then it must be corrected because otherwise
+    ; P/M graphics background would not look OK
+    ldx TankNr
+    lda XtanksTableL,x
+    and #$01
+    beq EndOfFall ; if it is even then it is the end
+    ; and if not, we push it one pixel the way it was falling before
+    lda #%10000000	 ; set "virtual ground" for right falling
+	ldy #%00000001
+	bit PreviousFall
+	bmi ForceFallLeft
+	tay		; tricky - replaces ldy #%10000000
+	lda #%00000001	 ; set "virtual ground" for left falling
+ForceFallLeft
+	sta UnderTank1
+	sty UnderTank2
+	jne TankFallsX
 EndOfFall
-    jsr DrawTankNr
-
+    mva #1 Erase
+    ldx TankNr
     ; if tank was falling down having parachute,
     ; we must deduct one parachute
     lda Parachute
     cmp #$03 ; was falling down and the parachute
-    bne ThereWasNoParachute
-    ; first we clear parachute on the screen
-    mva #1 Erase
-    ldx TankNr
+    bne NoParachuteWeapon
+	; first we check type of parachute
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Parachute______		; deactivate weapon only if parachute (54)
 	bne NoParachuteWeapon
 	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
 NoParachuteWeapon
+    ; now we clear parachute on the screen if present
+    lda Parachute
+    and #01
+    beq ThereWasNoParachute
     jsr DrawTankParachute
+ThereWasNoParachute
     mva #0 Erase
     ldx TankNr	
     jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
-ThereWasNoParachute
     mva #sfx_silencer sfx_effect
     rts
+
 .endp
 
 ;--------------------------------------------------
@@ -1629,8 +1622,8 @@ ThereWasNoParachute
 ; Angle(byte) 128=0, 255=maxright, 0=maxleft
 ;--------------------------------------------------
 ;g=-0.1
-;vx=Force*sin(Angle)
-;vy=Force*cos(Angle)
+;vx=Force*cos(Angle)
+;vy=Force*sin(Angle)
 ;
 ;:begin
 ;ytraj=ytray-vy
@@ -1639,6 +1632,9 @@ ThereWasNoParachute
 ;vx=vx+Wind (Wind is a small fraction)
 ;plot xtraj,ytraj - there is clearing in plot
 ;goto begin
+
+
+
 
 ; smoke tracer :)
     ldy #0
@@ -1667,45 +1663,41 @@ RepeatFlight
     sta ydraw+1
 
     ;vx calculation
+    ;vx = sin(90-Angle) for Angle <=90
+    ;vx = -sin(Angle-90) for 90 < Angle <= 180 
     aslw Force ;Force = Force * 2
 
-    ;sin(Angle)
+    ;cos(Angle) (but we use sin table only so some shenanigans happen)
     ldx Angle
     stx LeapFrogAngle ; we will need it later
 
     ;Angle works like this:
-    ;0 'degrees' is straight up
-    ;90 'degrees' is horizontally right
-    ;255 is straight up (same as 0)
-    ;255-90 (165) horizontally left
+    ;0 'degrees' is horizontally right
+    ;90 'degrees' is straight up
+    ;180 horizontally left
 
-    bpl FlightRight
+    ; (we have to set goleft used in rolling weapons)
+   
+    cpx #91
+    bcc angleUnder90
     
-    ;and if the highest bit is set then
-    ;Flight to LEFT
-    ;calculate Angle with this formula:
-    ;Angle=90-(Angle-165)
-
-    sec
-    txa
-    sbc #165 ;(Angle-165)
-    sta temp 
-    lda #90  
-    sbc temp ;90-(Angle-165)
-    ;and we have rady angle here ... and we go LEFT!
-    tax
-    sta Angle
-    
-    ; and now we contine as if nothing happened
-    ; (but we have goleft set to 1!!!)
+    ;over 90
     mva #1 goleft
-    bne @+
+    sec
+    txa  ; lda # Angle
+    sbc #90
+    tax
+    jmp @+
 
-FlightRight
+angleUnder90
     mva #0 goleft
-@
-    lda sintable,x  ;sin(Angle)
-    sta Multiplee   ;sin(Angle)*Force
+    sec             ; X = 90-Angle
+    lda #90
+    sbc Angle
+    tax
+@    
+    lda sintable,x  ; cos(X)
+    sta Multiplee   ; *Force
     mwa Force Multiplier
     lda #$0
     sta Multiplier+2
@@ -1744,18 +1736,27 @@ DoNotAdd
       .endr
 @
 ;======vy
-    lda #0  ;cos(Angle)
+    ;vy = sin(Angle) for Angle <=90
+    ;vy = sin(180-Angle) for 90 < Angle <= 180
+
+    lda #0  
     sta vy
     sta vy+1
     sta vy+2
 ;--
-    lda #90
+    ldx Angle
+    cpx #91
+    bcc YangleUnder90
+    
+    lda #180
     sec
     sbc Angle
     tax
+
+YangleUnder90
     lda sintable,x
 
-    sta Multiplee ;cos(Angle)*Force
+    sta Multiplee ;sin(Angle)*Force
     mwa Force Multiplier
     lda #$0
     sta Multiplier+2
@@ -1814,7 +1815,7 @@ Loopi
     ; we check if it is MIRV and if so, jump to MIRV routine
     ldx TankNr
     lda ActiveWeapon,x
-    cmp #6 ; MIRV
+    cmp #ind_MIRV___________ ; MIRV
     jeq MIRVdownLoop
 StillUp
 

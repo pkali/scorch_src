@@ -9,7 +9,7 @@
 ; greeeting to myself 10 years older in 2013-11-09... still no idea
 
 ;----------------------------------------------
-MakeLowResDistances .proc
+.proc MakeLowResDistances 
 	; create low precision table of positions
 	; by dividing positions by 4
 
@@ -30,7 +30,7 @@ loop
 .endp
 
 ;----------------------------------------------
-ArtificialIntelligence .proc ;
+.proc ArtificialIntelligence ;
 ; A - skill of the TankNr
 ; returns shoot energy and angle in
 ; ForceTable/L/H and AngleTable
@@ -42,6 +42,13 @@ ArtificialIntelligence .proc ;
     pha
     lda AIRoutines,x
     pha
+
+    ldx TankNr  ; common values used in AI routines
+    ; address of weapons table (for future use)
+    lda TanksWeaponsTableL,x
+    sta temp
+    lda TanksWeaponsTableH,x
+    sta temp+1
 	rts
 .endp
 ;----------------
@@ -49,15 +56,14 @@ AIRoutines
     .word Moron-1
     .word Shooter-1 ;Shooter
     .word Poolshark-1 ;Poolshark
-    .word Poolshark-1 ;Toosser
+    .word Tosser-1 ;Tosser
     .word Poolshark-1 ;Chooser
     .word Poolshark-1 ;Spoiler
     .word Poolshark-1 ;Cyborg
     .word Poolshark-1 ;Unknown
 
 ;----------------------------------------------
-Moron .proc
-    ldx TankNr
+.proc Moron 
     jsr RandomizeAngle
     sta NewAngle
     mwa #80 RandBoundaryLow
@@ -66,21 +72,29 @@ Moron .proc
     rts
 .endp
 ;----------------------------------------------
-Shooter .proc
+.proc Shooter 
 
-    ldx TankNr
     lda PreviousAngle,x
     ora PreviousEnergyL,x
     ora PreviousEnergyH,x
     beq firstShoot
     
 	lda PreviousAngle,x
+	cmp #90
+	bcs shootingLeftAtThisMomentOfTime
+	; shooting right at this moment of time
+    sec
+    sbc #5
+    cmp #10
+    bcs @+ ;not smaller than 10
+    bcc firstShoot ; GET THE aim againg
+    
+shootingLeftAtThisMomentOfTime
+	
 	clc
 	adc #5
-	bmi @+
-	cmp #90
-	bcc @+
-	lda #(-90)
+	cmp #170  ; maximum shooter angle
+    bcs firstShoot
 @
 	sta NewAngle
 
@@ -89,42 +103,36 @@ Shooter .proc
 	sbc #5
 	sta ForceTableL,x
 	lda PreviousEnergyH,x
-	sbc #0 
+	sbc #0
 	sta ForceTableH,x
 	jmp endo
 
 firstShoot
 	; compare the x position with the middle of the screen
+    lda xTanksTableH,x
+    cmp #>(screenwidth/2)
+    bne @+
 	lda xTanksTableL,x
-	sta temp
-	lda xTanksTableH,x
-	sta temp+1
-	cpw temp #(screenwidth/2)
-	bcs tankIsOnTheRight
+	cmp #<(screenwidth/2)
+@	bcc tankIsOnTheRight
 
-	lda RANDOM
-	and #$1F
-	clc
-	adc #5
-
+    ; enemy tank is on the left
+	randomize 95 125
 	sta NewAngle
-	jmp forceNow
+	bne forceNow
+
 tankIsOnTheRight
-	lda RANDOM
-	and #$1F
-	clc
-	adc #(-85)
-	;lda #-45
-	sta NewAngle
+    randomize 55 85
+    sta NewAngle
 	
 forceNow
     mwa #100 RandBoundaryLow
     mwa #800 RandBoundaryHigh 
-    ldx TankNr ;this is possibly not necessary
+    ;ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce
 
 endo
-	ldx TankNr ;this is possibly not necessary
+	;ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce.LimitForce
 	lda NewAngle
 	sta PreviousAngle,x
@@ -135,28 +143,66 @@ endo
 	
 	; choose the best weapon
 	
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
 	ldy #32 ;the last  weapon	
 loop
 	dey
-	lda (temp),y
+	lda (temp),y  ; this is set up before calling the routine, has address of TanksWeaponsTable
 	beq loop 
 	tya
 	sta ActiveWeapon,x
     rts
     .endp
 ;----------------------------------------------
-Poolshark .proc
-
+.proc Poolshark
+	; defensives
+	; if low energy ten use battery
+	lda Energy,x
+	cmp #30
+	bcs EnoughEnergy
+	; lower than 30 units - check battery
+	ldy #ind_Battery________
+	lda (temp),y  ; has address of TanksWeaponsTable
+	beq NoBatteries
+	; we have batteries - use one
+	clc
+	sbc #1
+	sta (temp),y
+	lda #99
+	sta Energy,x
+NoBatteries
+EnoughEnergy
+	; use best defensive :)
+	; but not allways
+	randomize 1 3
+	cmp #1
+	bne NoUseDefensive
+	; first check check if any is in use
+	lda ActiveDefenceWeapon,x
+	bne DefensiveInUse
+	ldy #ind_Nuclear_Winter_+1 ;the last defensive weapon
+@
+	dey
+	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
+	beq NoUseDefensive
+	lda (temp),y  ; has address of TanksWeaponsTable
+	beq @- 
+	tya
+	; activate defensive weapon
+	sta ActiveDefenceWeapon,x
+    lda DefensiveEnergy,y
+    sta ShieldEnergy,x
+	; decrease in inventory
+	clc
+	sbc #1
+	sta (temp),y  ; has address of TanksWeaponsTable
+NoUseDefensive
+DefensiveInUse
 firstShoot
 	;find nearest tank neighbour
 	jsr MakeLowResDistances
 	mva #$ff temp2 ; min possible distance
 
-	ldx TankNr
+	;ldx TankNr
 	ldy NumberOfPlayers
 	dey
 	
@@ -217,7 +263,7 @@ forceNow
     jsr RandomizeForce
 
 endo
-	ldx TankNr ;this is possibly not necessary
+	;ldx TankNr ;this is possibly not necessary
 	
 	; choose the best weapon
 	
@@ -225,7 +271,7 @@ endo
 	sta temp
 	lda TanksWeaponsTableH,x
 	sta temp+1
-	ldy #32 ;the last  weapon	
+	ldy #ind_Laser__________ ;the last offensive weapon	
 loop
 	dey
 	lda (temp),y
@@ -236,11 +282,39 @@ loop
     
 ;----------------------------------------------
 AngleTable	; 16 bytes ;ba w $348b L$3350
-	.by 178,186,194,202,210,218,226,234
-	.by 16,24,32,40,48,56,64,72
-	.endp
+	.by 106,114,122,130,138,146,154,162
+	.by 18,26,34,43,50,58,66,74
+.endp
 ;----------------------------------------------
-PurchaseAI .proc ; 
+.proc Tosser
+	; use best defensive :)
+	; allways
+	; first check check if any is in use
+	lda ActiveDefenceWeapon,x
+	bne DefensiveInUse
+	ldy #ind_Nuclear_Winter_+1 ;the last defensive weapon	
+@
+	dey
+	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
+	beq NoUseDefensive
+	lda (temp),y  ; has address of TanksWeaponsTable
+	beq @- 
+	tya
+	; activate defensive weapon
+	sta ActiveDefenceWeapon,x
+    lda DefensiveEnergy,y
+    sta ShieldEnergy,x
+	; decrease in inventory
+	clc
+	sbc #1
+	sta (temp),y
+DefensiveInUse
+NoUseDefensive
+	; Toosser is like Poolshark but allways uses defensives
+	jmp Poolshark
+.endp
+;----------------------------------------------
+.proc PurchaseAI ; 
 ; A - skill of the TankNr
 ; makes purchase for AI opponents
 ; results of this routine are not visible on the screen
@@ -260,21 +334,22 @@ PurchaseAIRoutines
     .word MoronPurchase-1
     .word ShooterPurchase-1 ;ShooterPurchase
     .word PoolsharkPurchase-1 ;PoolsharkPurchase
-    .word PoolsharkPurchase-1 ;ToosserPurchase
+    .word TosserPurchase-1 ;TosserPurchase
     .word PoolsharkPurchase-1 ;ChooserPurchase
     .word PoolsharkPurchase-1 ;SpoilerPurchase
     .word PoolsharkPurchase-1 ;CyborgPurchase
     .word PoolsharkPurchase-1 ;UnknownPurchase
 
 ;----------------------------------------------
-MoronPurchase
+.proc MoronPurchase
 ;Moron buys nothing
     rts
-    
+.endp
 ;-------
-TryToPurchaseOnePiece .proc
+.proc TryToPurchaseOnePiece
 	; A - weapon number, better it will be in range(1,32)
 	; TankNr in X
+    ; DOES NOT CHANGE X
 	tay
 	lda PurchaseMeTable,y
 	beq SorryNoPurchase
@@ -320,28 +395,73 @@ SorryNoPurchase
 	
 
 ;----------------------------------------------
-ShooterPurchase .proc
-	mva #4 tempXroller; number of purchases to perform
-
+.proc ShooterPurchase
+	; first try to buy defensives
+	mva #2 tempXroller; number of offensive purchases to perform
 	ldx TankNr
-loop
-	randomize 1 14
+@
+	randomize ind_Battery________ ind_StrongParachute
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
-	bne loop
+	bne @-
+	
+	; and now offensives
+	mva #4 tempXroller; number of offensive purchases to perform
+	;ldx TankNr
+@
+	randomize ind_Missile________ ind_Heavy_Roller___
+	jsr TryToPurchaseOnePiece
+	dec tempXroller
+	bne @-
 
 	rts 
-	.endp
+.endp
 ;----------------------------------------------
-PoolsharkPurchase .proc
-	mva #8 tempXroller; number of purchases to perform
-
+.proc PoolsharkPurchase
+	; first try to buy defensives
+	mva #3 tempXroller; number of offensive purchases to perform
 	ldx TankNr
-loop
-	randomize 1 30
+@
+	randomize ind_Battery________ ind_Auto_Defense___
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
-	bne loop
+	bne @-
+	
+	; and now offensives
+	mva #8 tempXroller; number of purchases to perform
+	;ldx TankNr
+@
+	randomize ind_Missile________ ind_Dirt_Charge____
+	jsr TryToPurchaseOnePiece
+	dec tempXroller
+	bne @-
 
 	rts 
+.endp
+;----------------------------------------------
+.proc TosserPurchase
+
+    ; what is my money level
+    ldx TankNr
+    lda MoneyH,x ; money / 256
+    sta tempXroller ; perform this many purchase attempts
+    ; first try to buy defensives
+    mva #3 tempXroller; number of defensive purchases to perform
+@
+    randomize ind_Battery________ ind_Auto_Defense___
+    jsr TryToPurchaseOnePiece
+    dec tempXroller
+    bne @-
+    
+    ; and now offensives
+    lda MoneyH,x ; money / 256
+    asl  ;*2
+    sta tempXroller ; perform this many purchase attempts
+@
+    randomize ind_Missile________ ind_Dirt_Charge____
+    jsr TryToPurchaseOnePiece
+    dec tempXroller
+    bne @-
+
+    rts 
 .endp

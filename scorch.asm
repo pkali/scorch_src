@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"145" ; number of this build (3 bytes)
+	dta d"146" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -73,6 +73,9 @@
     .zpvar dd               .word
     .zpvar di               .word
     .zpvar dp               .word
+    ;----------------------------
+	.zpvar UnderTank1		.byte
+	.zpvar UnderTank2		.byte	
     ;----------------------------
     .zpvar weaponPointer    .word
 	.zpvar dliCounter       .byte
@@ -308,12 +311,16 @@ SettingEnergies
 
     jsr SetMainScreen
     jsr ColorsOfSprites
+	lda #0
+	sta colpf2s	; status line "off"
+	sta colpf1s
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
     mva #0 TankSequencePointer
 ;---------round screen is ready---------
+	mva #TextForegroundColor colpf1s	; status line "on"
     rts
 .endp
 
@@ -373,6 +380,7 @@ DoNotFinishTheRound
     
     mva #0 noDeathCounter
     mva #sfx_seppuku sfx_effect
+    
     jsr DisplaySeppuku
     jmp Seppuku
 
@@ -485,12 +493,15 @@ AfterExplode
 NoFallDown2
     ;here tanks are falling down
     mva tankNr tempor2
-    mva #0 TankNr
+    mvx #0 TankNr
 
 TanksFallDown
+	lda eXistenZ,x
+	beq NoExistNoFall
     jsr TankFalls
-    inc:lda TankNr
-    cmp NumberOfPlayers
+NoExistNoFall
+    inc:ldx TankNr
+    cpx NumberOfPlayers
     bne TanksFallDown
     mva tempor2 TankNr
 missed
@@ -741,6 +752,9 @@ NotNegativeShieldEnergy
     sta ydraw+1
     ; get position of the tank
     ldx TankNr
+    lda #0  ; turn off defense weapons when hara-kiring
+    sta ActiveDefenceWeapon,x
+    sta ShieldEnergy,x
     lda xtankstableL,x
     sta xdraw
     lda xtankstableH,x
@@ -1076,9 +1090,9 @@ UsageLoop
     bcs RandomizeAngle
 
 
-    sta temp
-    lda #90 ; CARRY=0 here
-    sbc temp
+    ;sta temp
+    ;lda #90 ; CARRY=0 here
+    ;sbc temp
 
     rts
 .endp
@@ -1132,32 +1146,16 @@ LimitForce
 .proc MoveBarrelToNewPosition
 	jsr DrawTankNr
 	ldx TankNr
-	lda AngleTable,x
-	clc
-	adc #90 ;shift angle to the positive values
-	sta temp
 	lda NewAngle
-	clc 
-	adc #90
-	cmp temp
+	cmp AngleTable,x
 	beq BarrelPositionIsFine
 	bcc rotateLeft ; older is bigger
 rotateRight;older is lower
 	inc angleTable,x
-	bne MoveBarrelToNewPosition
-
-    mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    jsr DrawTankNr.drawtankNrX
-	
 	jmp MoveBarrelToNewPosition
 rotateLeft
 	dec angleTable,x
-	bpl MoveBarrelToNewPosition
-    	mva #$2e CharCode
-   	jsr DrawTankNr.drawtankNrX	
-
 	jmp MoveBarrelToNewPosition
-	
 BarrelPositionIsFine
 	rts
 	
@@ -1344,7 +1342,7 @@ font4x4
     ins 'artwork/font4x4s.bmp',+62
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanks.fnt'
+    ins 'artwork/tanksv2.fnt'
 ;----------------------------------------------
     icl 'variables.asm'
 ;----------------------------------------------
@@ -1364,7 +1362,7 @@ MODUL    equ $b000                                 ;address of RMT module
 TheEnd
     .ECHO 'TheEnd: ',TheEnd
     .if TheEnd > PMGraph + $300
-        .error memory conflict
+        .error "memory conflict"
 
     .endif
 ;----------------------------------------------

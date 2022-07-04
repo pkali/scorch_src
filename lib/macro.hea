@@ -104,6 +104,9 @@
     .macro randomize
     ;usage: randomize floor ceiling
     ;returns (in A) a random .byte between "floor" and "ceiling"
+    .if :2 < :1
+      .error "floor higher than ceiling"
+    .endif
 ?rand
       lda random
       cmp #:1 ;floor
