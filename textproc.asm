@@ -1906,37 +1906,38 @@ NoShieldEnergy
     ; (for future display)
     ldx TankNr
     lda AngleTable,x
-    bmi AngleToLeft
-
-    lda AngleTable,x
+	cmp #90
+	beq VerticallyUp
+	bcs AngleToLeft
+AngleToRight
+	; now we have values from 0 to 89 and right angle
     sta decimal
-    ;lda #$7f  ; (tab) character
-    ;sta textbuffer+40+25
+    lda #$7f  ; (tab) character
+    sta textbuffer+40+25
     lda #0  ;space
-    ;sta textbuffer+40+22
-    sta decimal+1  ; angle is single byte, but displayed with displaydec (word) routine
-    ;lda #90
-    ;sec
-    ;sbc AngleTable,x
-    tay
-    lda BarrelTable,y
-    sta CharCode
-    bne AngleDisplay ;like jmp, because code always <>0
+    sta textbuffer+40+22
+	beq AngleDisplay
 AngleToLeft
-    ;sec
-    ;sbc #(255-90)
+	sec
+	lda #180
+	sbc AngleTable,x
+	; angles 180 - 91 converted to 0 - 89
+	sta decimal
+    lda #$7e  ;(del) char
+    sta textbuffer+40+22
+    lda #0 ;space
+    sta textbuffer+40+25
+	beq AngleDisplay	
+VerticallyUp
+	; now we have value 90
     sta decimal
-    tay
-    lda BarrelTable,y
-    sta CharCode
-    ;lda #$7e  ;(del) char
-    ;sta textbuffer+40+22
-    ;lda #0 ;space
-    ;sta textbuffer+40+25
+    lda #0  ;space
+    sta textbuffer+40+25
+    sta textbuffer+40+22
 
 AngleDisplay
-    mwa #textbuffer+40+21 displayposition
-    jsr displaydec
+    mwa #textbuffer+40+23 displayposition
+    jsr displaybyte
 
     ;=========================
     ;display Wind
