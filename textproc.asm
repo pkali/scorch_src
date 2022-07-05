@@ -1791,7 +1791,6 @@ FinishResultDisplay
     ;---------------------
     ;displaying quantity of the given weapon
     ;---------------------
-    ldx TankNr
     lda ActiveWeapon,x
     jsr HowManyBullets
     sta decimal

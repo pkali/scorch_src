@@ -1146,6 +1146,8 @@ LimitForce
 .proc MoveBarrelToNewPosition
 	jsr DrawTankNr
 	ldx TankNr
+	jsr DisplayStatus
+	ldx TankNr
 	lda NewAngle
 	cmp AngleTable,x
 	beq BarrelPositionIsFine
