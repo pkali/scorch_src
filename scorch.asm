@@ -405,9 +405,9 @@ RoboTanks
 	; robotanks shoot here	
     jsr ArtificialIntelligence
     jsr PutTankNameOnScreen
+	jsr DisplayStatus
 	ldx TankNr
     jsr MoveBarrelToNewPosition
-    ;jsr DisplayStatus ;all digital values like force, angle, wind, etc. (but it is done in MoveBarrelToNewPosition proc)
     lda kbcode
     cmp #28  ; ESC
     bne @+
@@ -1147,7 +1147,7 @@ LimitForce
 .proc MoveBarrelToNewPosition
 	jsr DrawTankNr
 	ldx TankNr
-	jsr DisplayStatus
+	jsr DisplayStatus.displayAngle
 	ldx TankNr
 	lda NewAngle
 	cmp AngleTable,x
