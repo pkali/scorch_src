@@ -402,11 +402,12 @@ DoNotFinishTheRound
     beq ManualShooting
 
 RoboTanks
-	; robotanks shoot here
+	; robotanks shoot here	
     jsr ArtificialIntelligence
-    jsr MoveBarrelToNewPosition
-    jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
+	ldx TankNr
+    jsr MoveBarrelToNewPosition
+    ;jsr DisplayStatus ;all digital values like force, angle, wind, etc. (but it is done in MoveBarrelToNewPosition proc)
     lda kbcode
     cmp #28  ; ESC
     bne @+

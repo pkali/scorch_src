@@ -1980,7 +1980,7 @@ DisplayWindValue
 .endp
 ;-------------------------------------------------
 .proc PutTankNameOnScreen
-; puts name of the tan on the screen
+; puts name of the tank on the screen
     ldy #$00
     lda tanknr
     asl
