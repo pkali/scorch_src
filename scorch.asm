@@ -403,6 +403,7 @@ DoNotFinishTheRound
 
 RoboTanks
 	; robotanks shoot here	
+	; TankNr still in X
     jsr ArtificialIntelligence
     jsr PutTankNameOnScreen
 	jsr DisplayStatus
@@ -1146,7 +1147,6 @@ LimitForce
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
 	jsr DrawTankNr
-	ldx TankNr
 	jsr DisplayStatus.displayAngle
 	ldx TankNr
 	lda NewAngle

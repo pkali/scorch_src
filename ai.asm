@@ -31,19 +31,19 @@ loop
 
 ;----------------------------------------------
 .proc ArtificialIntelligence ;
-; A - skill of the TankNr
+; A - skill of the TankNr (in X)
 ; returns shoot energy and angle in
 ; ForceTable/L/H and AngleTable
 ;----------------------------------------------
     asl
-    tax
-    :2 dex  ;credit KK
-    lda AIRoutines+1,x
+    tay
+    :2 dey  ;credit KK
+    lda AIRoutines+1,y
     pha
-    lda AIRoutines,x
+    lda AIRoutines,y
     pha
 
-    ldx TankNr  ; common values used in AI routines
+    ; common values used in AI routines
     ; address of weapons table (for future use)
     lda TanksWeaponsTableL,x
     sta temp
