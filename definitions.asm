@@ -8,7 +8,7 @@ display = $1010 ;screen takes $2K due to clearing routine
 MaxPlayers = 6
 maxOptions = 7  ;number of all options
 PMOffset = $23 ; P/M to graphics offset
-
+napalmRadius = 10
 
 ;Weapon prices (*10 on screen)
 price_Baby_Missile___ = 0      ;_0
@@ -19,8 +19,8 @@ price_LeapFrog_______ = 192    ;_4
 price_Funky_Bomb_____ = 293    ;_5
 price_MIRV___________ = 456    ;_6
 price_Death_s_Head___ = 337    ;_7
-price_Napalm_________ = 20 ;496    ;_8
-price_Hot_Napalm_____ = 40 ;511    ;_9
+price_Napalm_________ = 125    ;_8
+price_Hot_Napalm_____ = 162    ;_9
 price_Tracer_________ = 102    ;_10
 price_Smoke_Tracer___ = 291    ;_11
 price_Baby_Roller____ = 211    ;_12

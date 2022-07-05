@@ -284,7 +284,7 @@ NoLowerCircle
 ; ------------------------
 .proc napalm
     inc FallDown2
-    mva #(10+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
+    mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #0 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
 	jmp xnapalm
@@ -292,7 +292,7 @@ NoLowerCircle
 ; ------------------------
 .proc hotnapalm
     inc FallDown2
-    mva #(10+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
+    mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #1 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
 	jmp xnapalm
@@ -304,7 +304,7 @@ NoLowerCircle
 	sty magic	
 RepeatNapalm	; external loop (for fire animation)
 	mwa xcircle xdraw
-	sbw xdraw #(1*10)  ; 10 characters on left side hit point
+	sbw xdraw #(napalmRadius)  ; 10 characters on left side hit point
 	ldy #0
 	sty magic+1
 RepeatFlame		; internal loop (draw flames)
@@ -351,21 +351,21 @@ CharOffTheScreen
 	adw xdraw #1	; next char 1 pixels to right
 	inc magic+1
 	lda magic+1
-	cmp #21 	; 10 chars on left, 10 chars on right and 1 in center
+	cmp #(2*napalmRadius+1)	; 10 chars on left, 10 chars on right and 1 in center
 	jne RepeatFlame
 	dec magic
 	jpl RepeatNapalm
+	; after napalm 
 	inc FallDown2
 ;now we must check tanks in range
     ldx NumberOfPlayers
+	dex
 BurnedCheckLoop
-    dex
     lda eXistenZ,x
     beq EndNurnedCheckLoop
     ;here the tank exist
-	mwa xcircle xdraw
 	; calculate right edge of the fire
-	adw xdraw #(1*10-8)  ; 10 characters on left side hit point (right edge of the fire - character width)
+	adw xcircle #(napalmRadius-8) xdraw ; 10 characters on right side hit point (right edge of the fire - character width)
 	; now we compare tank position with right edge of the fire (napalm)
     lda XtankstableH,x
 	cmp xdraw+1
@@ -375,7 +375,7 @@ BurnedCheckLoop
 @
 	bcs TankOutOfFire
 	; let's calculate left edge of the fire
-	sbw xdraw #(21-8)	; 10 chars on left, 10 chars on right and 1 in center (- character width)
+	sbw xcircle #(napalmRadius+1) xdraw	; 10 chars on left and 1 in center
 	bpl @+
 	mwa #0 xdraw	; left screen edge
 @
@@ -397,8 +397,8 @@ NotHot
     jsr DecreaseEnergyX
 TankOutOfFire
 EndNurnedCheckLoop
-    txa
-    bne BurnedCheckLoop
+    dex
+    bpl BurnedCheckLoop
     mva #sfx_silencer sfx_effect
 	rts
 .endp

@@ -435,7 +435,7 @@ WeaponUnits
   .by 3  ;Funky_Bomb_____
   .by 2  ;MIRV___________
   .by 1  ;Death_s_Head___
-  .by 10 ;Napalm_________
+  .by 4  ;Napalm_________
   .by 2  ;Hot_Napalm_____
   .by 20 ;Tracer_________
   .by 10 ;Smoke_Tracer___
