@@ -502,8 +502,8 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     dta 1 ;"Funky Bomb      " ; 5
     dta 1 ;"MIRV            " ; 6
     dta 1 ;"Death's Head    " ; 7
-    dta 1 ;"Napalm          " ; 8
-    dta 1 ;"Hot Napalm      " ; 9
+    dta 0 ;"Napalm          " ; 8
+    dta 0 ;"Hot Napalm      " ; 9
     dta 0 ;"Tracer          " ; 10
     dta 0 ;"Smoke Tracer    " ; 11
     dta 1 ;"Baby Roller     " ; 12
