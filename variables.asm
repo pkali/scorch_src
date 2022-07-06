@@ -211,9 +211,6 @@ Multiplier .ds 3 ; 0,0,0
 Multiplee .ds 2 ; 0,0
 goleft  .DS 1 ;if 1 then flights left
 ;----------------------------------------------------
-;SoilDown2
-IsEndOfTheFallFlag .DS 1
-;----------------------------------------------------
 ;unPlot
 WhichUnPlot .DS 1
     ; max 5 concurrent unPlots

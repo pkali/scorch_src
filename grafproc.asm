@@ -922,7 +922,6 @@ StillNothing
     lda ydraw
     sta (tempor2),y
     sta (temp),y
-    jmp FoundPeek1
 FoundPeek1
     inw tempor2
     inw temp
@@ -990,7 +989,7 @@ ColumnIsReady
 ; level of the mountains
     jeq MainFallout2
 ; now correct heights are in the mountaintable
-    mva #1 color
+    sta color	; Pozor! :)  we know - now A=1
     mva #sfx_silencer sfx_effect
     rts
 .endp

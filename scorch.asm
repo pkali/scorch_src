@@ -81,6 +81,7 @@
 	.zpvar dliCounter       .byte
 	.zpvar pressTimer       .byte
 	.zpvar NTSCcounter      .byte
+	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
     ;.zpvar dliA             .byte
     ;.zpvar dliX             .byte
     ;.zpvar dliY             .byte
