@@ -347,8 +347,8 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_StrongParachute
   .by >price_Mag_Deflector__
   .by >price_Shield_________
-  .by >price_Force_Shield___
   .by >price_Heavy_Shield___
+  .by >price_Force_Shield___
   .by >price_Super_Mag______
   .by >price_Auto_Defense___
   .by >price_Fuel_Tank______
@@ -413,8 +413,8 @@ WeaponPriceL
   .by <price_StrongParachute
   .by <price_Mag_Deflector__
   .by <price_Shield_________
-  .by <price_Force_Shield___
   .by <price_Heavy_Shield___
+  .by <price_Force_Shield___
   .by <price_Super_Mag______
   .by <price_Auto_Defense___
   .by <price_Fuel_Tank______
@@ -485,8 +485,8 @@ WeaponUnits
   .by 2  ;StrongParachute
   .by 2  ;Mag_Deflector__
   .by 3  ;Shield_________
-  .by 3  ;Force_Shield___
   .by 2  ;Heavy_Shield___
+  .by 3  ;Force_Shield___
   .by 2  ;Super_Mag______
   .by 1  ;Auto_Defense___
   .by 10 ;Fuel_Tank______
@@ -552,8 +552,8 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	dta 1 ;"Strong Parachute" ; 55
 	dta 1 ;"Mag Deflector   " ; 56
 	dta 1 ;"Shield          " ; 57
-	dta 1 ;"Force Shield    " ; 58
-	dta 1 ;"Heavy Shield    " ; 59
+	dta 1 ;"Heavy Shield    " ; 58
+	dta 1 ;"Force Shield    " ; 59
 	dta 0 ;"Super Mag       " ; 60
 	dta 1 ;"Auto Defense    " ; 61
 	dta 0 ;"Fuel Tank       " ; 62
@@ -570,7 +570,7 @@ WeaponSymbols
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
     .by $5f,$1c,$03,$06,$1d,$0a,$1b,$1b  ; defensives
-    .by $1e,$3b,$3c,$3d,$3e,$3f,$5e,$7d
+    .by $1e,$3b,$3d,$3c,$3e,$3f,$5e,$7d
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
@@ -633,8 +633,8 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
     dta d"Mag Deflector   " ; 56    - with shield and energy           
     dta d"Shield          " ; 57    - shield for one shot - no energy       
-    dta d"Force Shield    " ; 58    - shield with energy and parachute                         
-    dta d"Heavy Shield    " ; 59    - shield with energy                                               
+    dta d"Heavy Shield    " ; 58    - shield with energy                                               
+    dta d"Force Shield    " ; 59    - shield with energy and parachute                         
     dta d"Super Mag       " ; 60               
     dta d"Auto Defense    " ; 61    - with shield and energy                                            
     dta d"Fuel Tank       " ; 62                                              
@@ -650,8 +650,8 @@ DefensiveEnergy = * - 48
 	.by 99	; Strong Parachute
 	.by 99	; Mag Deflector
 	.by 00	; Shield
-	.by 99	; Force Shield
 	.by 99	; Heavy Shield
+	.by 99	; Force Shield
 	.by 00	; Super Mag
 	.by 99	; Auto Defense
 	.by 00	; Fuel Tank
