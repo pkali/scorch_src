@@ -304,7 +304,7 @@ NoLowerCircle
 	sty magic	
 RepeatNapalm	; external loop (for fire animation)
 	mwa xcircle xdraw
-	sbw xdraw #(napalmRadius)  ; 10 characters on left side hit point
+	sbw xdraw #(napalmRadius)  ; 10 pixels on left side hit point
 	ldy #0
 	sty magic+1
 RepeatFlame		; internal loop (draw flames)
@@ -351,7 +351,7 @@ CharOffTheScreen
 	adw xdraw #1	; next char 1 pixels to right
 	inc magic+1
 	lda magic+1
-	cmp #(2*napalmRadius+1)	; 10 chars on left, 10 chars on right and 1 in center
+	cmp #(2*napalmRadius+1)	; 10 pixels on left, 10 pixels on right and 1 in center
 	jne RepeatFlame
 	dec magic
 	jpl RepeatNapalm
@@ -365,7 +365,7 @@ BurnedCheckLoop
     beq EndNurnedCheckLoop
     ;here the tank exist
 	; calculate right edge of the fire
-	adw xcircle #(napalmRadius-8) xdraw ; 10 characters on right side hit point (right edge of the fire - character width)
+	adw xcircle #(napalmRadius+4+4) xdraw ; 10 pixels on right side hit point + half character width + correction
 	; now we compare tank position with right edge of the fire (napalm)
     lda XtankstableH,x
 	cmp xdraw+1
@@ -375,7 +375,7 @@ BurnedCheckLoop
 @
 	bcs TankOutOfFire
 	; let's calculate left edge of the fire
-	sbw xcircle #(napalmRadius+1) xdraw	; 10 chars on left and 1 in center
+	sbw xcircle #(napalmRadius+8+4-4) xdraw	; 10 pixels on left + character width (tank) + half character - correction
 	bpl @+
 	mwa #0 xdraw	; left screen edge
 @
