@@ -2651,7 +2651,6 @@ CalculateExplosionRange0
     lda #0
     sta RangeRight
     sta RangeRight+1
-    mva #11 ExplosionRadius  ; what is this magic value?
 ;--------------------------------------------------
 .proc CalculateExplosionRange
 ;--------------------------------------------------
