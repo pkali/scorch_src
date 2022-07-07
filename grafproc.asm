@@ -686,7 +686,7 @@ NoPlayerMissile
 	cmp #ind_Shield_________		; one shot shield 
 	beq DrawTankShield
 	cmp #ind_Force_Shield___		; shield with energy and parachute
-	beq DrawTankShield
+	beq DrawTankShieldBold
 	cmp #ind_Heavy_Shield___		; shield with energy
 	beq DrawTankShieldBold
 	cmp #ind_Auto_Defense___		; Auto Defence
