@@ -684,11 +684,11 @@ NoPlayerMissile
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Shield_________		; one shot shield 
-	beq ShieldDraw
+	beq DrawTankShield
 	cmp #ind_Force_Shield___		; shield with energy and parachute
-	beq ShieldDraw
+	beq DrawTankShield
 	cmp #ind_Heavy_Shield___		; shield with energy
-	beq ShieldDraw
+	beq DrawTankShieldBold
 	cmp #ind_Auto_Defense___		; Auto Defence
 	beq DrawTankShieldWihHorns
 	cmp #ind_Mag_Deflector__		; Mag Deflector
@@ -696,15 +696,14 @@ NoPlayerMissile
 	cmp #ind_White_Flag_____		; White Flag
 	beq DrawTankFlag
 	bne NoShieldDraw
-ShieldDraw
-	jsr DrawTankShield.DrawInPosition
-NoShieldDraw
-DoNotDrawTankNr
-    rts
+DrawTankShield
+	jmp DrawTankShield.DrawInPosition
 DrawTankShieldWihHorns
 	jsr DrawTankShield.DrawInPosition
-	jsr DrawTankShieldHorns
-	rts
+	jmp DrawTankShieldHorns
+DrawTankShieldBold
+	jsr DrawTankShield.DrawInPosition
+	jmp DrawTankShieldBoldLine
 DrawTankFlag
     lda #$5E	; flag symbol
     sta CharCode
@@ -717,6 +716,8 @@ DrawTankFlag
     lda XtanksTableH,x
     sta xdraw+1
     jsr TypeChar
+NoShieldDraw
+DoNotDrawTankNr
 	rts
 .endp
 
@@ -821,6 +822,23 @@ ShieldVisible
 	inw xdraw
 	inw ydraw
 	jsr plot
+	rts
+.endp
+;--------------------------------------------------
+.proc DrawTankShieldBoldLine
+; use only directly after DrawTankShield
+; this proc draws bold top on shield.
+; Symbol of ablative shield ? :)
+;--------------------------------------------------
+	sbw xdraw #$04			; 5 pixels left
+	sbw ydraw #$0a		; 10 pixels up
+	; draw additional top horizontal line of shield ( _ )
+	mva #6 temp
+@
+	jsr plot
+.nowarn	dew xdraw
+	dec temp
+	bne @-
 	rts
 .endp
 
