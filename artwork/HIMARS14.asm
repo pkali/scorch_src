@@ -23,17 +23,8 @@ bptr        .ds     2
 cur_pos     .ds     1
 chn_bits    .ds     1
 
-bit_data    .byte   1
+bit_data    .ds     1
 
-.proc get_byte
-    lda song_data+1
-    inc song_ptr
-    bne skip
-    inc song_ptr+1
-skip
-    rts
-.endp
-song_ptr = get_byte + 1
     
 
 fcnt    .ds 2
@@ -85,6 +76,8 @@ buffers
 ; Song Initialization - this runs in the first tick:
 ;
 .proc init_song
+
+    mva #1 bit_data
 
     ; Example: here initializes song pointer:
     
@@ -182,17 +175,27 @@ skip_chn:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Check for ending of song and jump to the next frame
 ;
-.proc check_end_song
-    lda song_ptr + 1
-    cmp #>song_end
+
+; not checking really so the tune gets funky :)))
+    ;lda song_ptr + 1
+    ;cmp #>song_end
     ;bne wait_frame
-    lda song_ptr
-    cmp #<song_end
+    ;lda song_ptr
+    ;cmp #<song_end
     ;bne wait_frame
-.endp
 
 end_loop
     rts
+
+song_ptr = get_byte + 1
+.proc get_byte
+    lda song_data+1
+    inc song_ptr
+    bne skip
+    inc song_ptr+1
+skip
+    rts
+.endp
 
 
 main
