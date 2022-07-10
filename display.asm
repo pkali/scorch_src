@@ -110,6 +110,7 @@ OptionsHere
  dta d"Rounds   :   10   20   30   40   50     "
  dta d"Missiles :  slug slow norm fast hare    "
  dta d"Seppuku  :  nevr rare norm oftn alws    "
+ dta d"Mountains:   NL   BE   CZ   CH   NP     "
 OptionsScreenEnd
 ;-----------------------------------------------
 MoreUp

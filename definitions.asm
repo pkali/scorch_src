@@ -6,7 +6,7 @@ screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 margin = 48 ;mountain drawing Y variable margin
 display = $1010 ;screen takes $2K due to clearing routine
 MaxPlayers = 6
-maxOptions = 7  ;number of all options
+maxOptions = 8  ;number of all options
 PMOffset = $23 ; P/M to graphics offset
 napalmRadius = 10
 

@@ -124,6 +124,11 @@ OptionsFinished
     lda seppukuTable,y
     sta seppukuVal
     
+    ;8th option (how aggressive are mountains)
+    ldy OptionsTable+7
+    lda mountainsDeltaTableH,y
+    sta mountainDelta
+    
     rts
 ;--------
 ; inversing selected option (cursor)
@@ -1513,8 +1518,6 @@ end_found
     jsr Display4x4AboveTank
     rts
 .endp
-
-
 
 ;-------------------------------
 .proc TypeLine4x4 ;

@@ -12,9 +12,10 @@ TanksNames  ; DO NOT ZERO - ticket #24
     :6 dta d"        "
 ;----------------------------------------------------
 ;Options DO NOT ZERO - ticket #27
-OptionsTable .by 0,1,2,2,0,1,3
+OptionsTable .by 0,1,2,2,0,1,3,2
 RoundsInTheGame .by 10 ;how many rounds in the current game
 seppukuVal .by 75
+mountainDelta .by 3
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS [MaxPlayers]

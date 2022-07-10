@@ -1038,7 +1038,7 @@ NextPart
     lda random
     sta delta ; it is after the dot (xxx.delta)
     lda random
-    and #$03 ;(max delta)
+    and mountainDelta ;(max delta)
     sta delta+1 ; before the dot (delta+1.delta)
 
     lda random
