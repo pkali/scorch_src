@@ -394,8 +394,13 @@ DoNotFinishTheRound
     jeq NextPlayerShoots
 
 
+    
+    mva #1 plot4x4color
+    jsr DisplayTankNameAbove
+    
     mva #1 color ;to display flying point
 
+    ldx tankNr
     lda TankStatusColoursTable,x
     sta colpf2s  ; set color of status line
 
@@ -407,7 +412,8 @@ RoboTanks
 	; TankNr still in X
     jsr ArtificialIntelligence
     jsr PutTankNameOnScreen
-	jsr DisplayStatus
+    jsr DisplayStatus
+    pause 30
 	ldx TankNr
     jsr MoveBarrelToNewPosition
     lda kbcode
@@ -430,6 +436,8 @@ ManualShooting
     seq:rts
 
 AfterManualShooting
+    mva #0 plot4x4color
+    jsr DisplayTankNameAbove
 	; defensive weapons without flight handling
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
