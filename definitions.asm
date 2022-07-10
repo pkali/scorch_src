@@ -3,7 +3,7 @@
 screenheight = 200
 screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
-margin = 48 ;mountain drawing Y variable margin
+margin = 40 ;mountain drawing Y variable margin
 display = $1010 ;screen takes $2K due to clearing routine
 MaxPlayers = 6
 maxOptions = 8  ;number of all options

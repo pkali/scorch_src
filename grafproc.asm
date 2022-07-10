@@ -1028,6 +1028,8 @@ getrandomY   ;getting random Y coordinate
     sta ydraw
     sta yfloat+1
     mva #0 yfloat ;yfloat equals to e.g. 140.0
+    mva #screenheight-margin-5 yfloat+1
+    sta ydraw
 
 ; how to make nice looking mountains?
 ; randomize points and join them with lines
@@ -1036,9 +1038,10 @@ getrandomY   ;getting random Y coordinate
 
 NextPart
     lda random
+    and mountainDeltaL
     sta delta ; it is after the dot (xxx.delta)
     lda random
-    and mountainDelta ;(max delta)
+    and mountainDeltaH ;(max delta)
     sta delta+1 ; before the dot (delta+1.delta)
 
     lda random

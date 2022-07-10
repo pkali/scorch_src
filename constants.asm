@@ -23,6 +23,7 @@ RoundsTable    .by 10,20,30,40,50
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
 mountainsDeltaTableH .by 0,1,3,5,7
+mountainsDeltaTableL .by $1f, $7f, $ff, $7f, $ff
 ;------------------------------------------------
 LevelNameBeginL ; begins of level names
     .by <NamesOfLevels,<(NamesOfLevels+10),<(NamesOfLevels+20)

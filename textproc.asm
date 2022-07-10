@@ -127,7 +127,10 @@ OptionsFinished
     ;8th option (how aggressive are mountains)
     ldy OptionsTable+7
     lda mountainsDeltaTableH,y
-    sta mountainDelta
+    sta mountainDeltaH
+    lda mountainsDeltaTableL,y
+    sta mountainDeltaL
+    
     
     rts
 ;--------
