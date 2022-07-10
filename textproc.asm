@@ -1320,26 +1320,27 @@ nineplus dta d"9"+1
 space    dta d" "
 
 ;--------------------------------------------------------
-.proc DisplayOffensiveTextNr ;
-    ;This routine displays texts using PutChar4x4
-    ;pretty cool, eh
+.proc Display4x4AboveTank ;
+    ; Displays texts using PutChar4x4 above tank and mountains.
+    ; Pretty cool, eh!
     ;parameters are:
     ;Y - number of tank above which text is displayed
-    ;TextNumber - number of offensive text to display
+    ;fx - length of text
+    ;textAddress - address of the text
 
     ;lets calculate position of the text first!
     ;that's easy because we have number of tank
     ;and xtankstableL and H keep X position of a given tank
 
-    ;save vars (messed when printing...)
-
     lda xtankstableL,y
     sta temp
     lda xtankstableH,y
     sta temp+1
-    ;now we should substract length of the text
-    ldx TextNumberOff
-    lda talk.OffensiveTextLengths,x
+    ;now we should substract length of the text-1
+    
+    ldy fx
+    dey
+    tya
     asl
     sta temp2
     mva #0 temp2+1
@@ -1350,7 +1351,7 @@ space    dta d" "
     ;stored in temp2
     sbw temp temp2 ; here begin of the text is in TEMP !!!!
     ;now we should check overflows
-    lda temp+1
+    ;lda temp+1  ; opty
     bpl DOTNnotLessThanZero
       ;less than zero, so should be zero
       mwa #0 temp
@@ -1360,7 +1361,7 @@ DOTNnotLessThanZero
     ;so check if end larger than screenwidth
 
 
-    lda talk.OffensiveTextLengths,x
+    lda fx
     asl
     asl
     ;length in pixels -
@@ -1381,7 +1382,7 @@ DOTNnotLessThanZero
     ;then screenwidth - length is fine
 
 
-    lda talk.OffensiveTextLengths,x
+    lda fx
     asl
     asl
     sta temp
@@ -1401,7 +1402,7 @@ DOTNnoOverflow
     ;now let's get y position
     ;we will try to put text as low as possible
     ;just above mountains (so mountaintable will be checked)
-    lda talk.OffensiveTextLengths,x
+    lda fx
     asl
     asl
     tay
@@ -1433,19 +1434,13 @@ DOTOldLowestValue
     sbc #(4+9) ;9 pixels above ground (and tanks...)
     sta TextPositionY
 
-
-    lda talk.OffensiveTextTableL,x
-    sta TextAddress
-    lda talk.OffensiveTextTableH,x
-    sta TextAddress+1
     mva #0 TextCounter
-DOTNcharloop
     mwa TextAddress temp
+DOTNcharloop
     ldy TextCounter
 
     lda (temp),y
-    SEC
-    sbc #32 ;conversion from ASCII to .sbyte
+    and #$3f ;always CAPITAL letters
 
     sta CharCode4x4
     lda TextCounter
@@ -1462,13 +1457,65 @@ DOTNcharloop
     jsr PutChar4x4
 
     inc TextCounter
-    ldx TextNumberOff
-    lda talk.OffensiveTextLengths,x
+    lda fx
     cmp TextCounter
     bne DOTNcharloop
 
     rts
 .endp
+
+;--------------------------------------------------------
+.proc DisplayOffensiveTextNr ;
+    ldx TextNumberOff
+    lda talk.OffensiveTextTableL,x
+    sta TextAddress
+    lda talk.OffensiveTextTableH,x
+    sta TextAddress+1
+    inx ; the next text
+    lda talk.OffensiveTextTableH,x
+    sta temp+1
+    lda talk.OffensiveTextTableL,x
+    sta temp  ; opty possible
+    ; substract address of the next text from previous to get text length
+    sbw temp TextAddress temp2
+    mva temp2 fx 
+
+    jsr Display4x4AboveTank
+    rts
+.endp
+
+;--------------------------------------------------------
+.proc DisplayTankNameAbove ;
+    lda tankNr
+    :3 asl  ; *8
+    clc
+    adc #<TanksNames
+    sta temp  ; TextAddress
+    lda #0
+    adc #>Tanksnames
+    sta temp+1  ; TextAddress+1
+    mwa temp TextAddress
+
+    ;find length of the tank's name
+    ldy #0
+@
+      lda (temp),y
+      beq end_found
+      iny
+      cpy #8
+    bne @-
+    dey    
+   
+end_found
+    iny
+    sty fx
+    ldy tankNr
+    jsr Display4x4AboveTank
+    rts
+.endp
+
+
+
 ;-------------------------------
 .proc TypeLine4x4 ;
 ;-------------------------------
@@ -1479,6 +1526,7 @@ DOTNcharloop
 
     ldy #0
     sty LineCharNr
+    mva #1 plot4x4color
 
 TypeLine4x4Loop
     ldy LineCharNr
@@ -1491,7 +1539,6 @@ TypeLine4x4Loop
     sta CharCode4x4
     mwa LineXdraw dx
     mva LineYdraw dy
-	mva #1 plot4x4color
     jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
     inc LineCharNr

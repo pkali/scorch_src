@@ -1111,7 +1111,6 @@ ToHighFill
 	jne RepeatFill
     rts
 .endp
-
 ;--------------------------------------------------
 .proc BeforeFire ;TankNr (byte)
 ;--------------------------------------------------
@@ -1146,6 +1145,9 @@ ContinueToCheckMaxForce2
 
     wait ; best after drawing a tank
 
+    mva #1 plot4x4color
+    jsr DisplayTankNameAbove
+    
 
 ;keyboard reading
 ; KBCODE keeps code of last keybi
@@ -1392,6 +1394,9 @@ pressedS
 pressedSpace
     ;=================================
     ;we shoot here!!!
+    mva #0 plot4x4color
+    jsr DisplayTankNameAbove
+
     mva #0 pressTimer ; reset
     jsr WaitForKeyRelease
     lda pressTimer

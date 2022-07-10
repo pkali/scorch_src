@@ -89,7 +89,7 @@ dl ; MAIN game display list
  		.by $0f+$80 ; DLI (black to end);1
        :38 .byte $0f 					;35 ..... = 200
         .by $4f
-        .wo LastLine	; additional line of ground
+        .wo EmptyLine	; additional line of ground
         .byte $41
         .word dl
 ;-----------------------------------------------
@@ -143,8 +143,6 @@ purchaseActivate
  dta d" - Finish    "
 EmptyLine
  dta d"                                        "
-LastLine
- :40 dta $00
 ; -------------------------------------------------
     .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 NameScreen
