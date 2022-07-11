@@ -1313,32 +1313,60 @@ CTRLPressedDown
     jmp BeforeFire
 
 pressedRight
+    lda pressTimer
+    spl:mva #0 pressTimer  ; if >128 then reset to 0
+    cmp #25  ; 1/2s
+    bcs CTRLPressedRight
+
     mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     dec AngleTable,x
     lda AngleTable,x
-    ;cmp #180 ; if angle goes through 180 we clear the barrel
-    ;bne NotThrough90DegreesLeft
-    ;mva #$2e CharCode ; TODO: change
-    ;jsr DrawTankNr.drawtankNrX
-;NotThrough90DegreesLeft
     cmp #255 ; -1
     jne BeforeFire
     lda #180
     sta AngleTable,x
     jmp BeforeFire
 
+CTRLPressedRight
+    mva #sfx_set_power_2 sfx_effect
+    ldx TankNr
+    lda AngleTable,x
+    sec
+    sbc #4
+    sta AngleTable,x
+    cmp #4  ; smalles angle for speed rotating
+    jcs BeforeFire
+    lda #180
+    sta AngleTable,x
+    jmp BeforeFire
+        
+
 pressedLeft
+    lda pressTimer
+    spl:mva #0 pressTimer  ; if >128 then reset to 0
+    cmp #25  ; 1/2s
+    bcs CTRLPressedLeft
+
     mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     INC AngleTable,x
     lda AngleTable,x
-    ;bne NotThrough90DegreesRight
-    ;mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    ;jsr DrawTankNr.drawtankNrX
-;NotThrough90DegreesRight
     cmp #181
     jne BeforeFire
+    lda #0
+    sta AngleTable,x
+    jmp BeforeFire
+
+CTRLPressedLeft
+    mva #sfx_set_power_2 sfx_effect
+    ldx TankNr
+    lda AngleTable,x
+    clc
+    adc #4
+    sta AngleTable,x
+    cmp #181-4
+    jcc BeforeFire
     lda #0
     sta AngleTable,x
     jmp BeforeFire
