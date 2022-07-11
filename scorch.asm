@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"146" ; number of this build (3 bytes)
+	dta d"147" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -81,6 +81,7 @@
 	.zpvar dliCounter       .byte
 	.zpvar pressTimer       .byte
 	.zpvar NTSCcounter      .byte
+	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
     ;.zpvar dliA             .byte
     ;.zpvar dliX             .byte
     ;.zpvar dliY             .byte
@@ -393,8 +394,13 @@ DoNotFinishTheRound
     jeq NextPlayerShoots
 
 
+    
+    mva #1 plot4x4color
+    jsr DisplayTankNameAbove
+    
     mva #1 color ;to display flying point
 
+    ldx tankNr
     lda TankStatusColoursTable,x
     sta colpf2s  ; set color of status line
 
@@ -402,11 +408,14 @@ DoNotFinishTheRound
     beq ManualShooting
 
 RoboTanks
-	; robotanks shoot here
+	; robotanks shoot here	
+	; TankNr still in X
     jsr ArtificialIntelligence
-    jsr MoveBarrelToNewPosition
-    jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
+    jsr DisplayStatus
+    pause 30
+	ldx TankNr
+    jsr MoveBarrelToNewPosition
     lda kbcode
     cmp #28  ; ESC
     bne @+
@@ -427,6 +436,8 @@ ManualShooting
     seq:rts
 
 AfterManualShooting
+    mva #0 plot4x4color
+    jsr DisplayTankNameAbove
 	; defensive weapons without flight handling
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
@@ -1145,6 +1156,7 @@ LimitForce
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
 	jsr DrawTankNr
+	jsr DisplayStatus.displayAngle
 	ldx TankNr
 	lda NewAngle
 	cmp AngleTable,x

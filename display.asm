@@ -89,7 +89,7 @@ dl ; MAIN game display list
  		.by $0f+$80 ; DLI (black to end);1
        :38 .byte $0f 					;35 ..... = 200
         .by $4f
-        .wo LastLine	; additional line of ground
+        .wo EmptyLine	; additional line of ground
         .byte $41
         .word dl
 ;-----------------------------------------------
@@ -110,6 +110,7 @@ OptionsHere
  dta d"Rounds   :   10   20   30   40   50     "
  dta d"Missiles :  slug slow norm fast hare    "
  dta d"Seppuku  :  nevr rare norm oftn alws    "
+ dta d"Mountains:   NL   BE   CZ   CH   NP     "
 OptionsScreenEnd
 ;-----------------------------------------------
 MoreUp
@@ -143,8 +144,6 @@ purchaseActivate
  dta d" - Finish    "
 EmptyLine
  dta d"                                        "
-LastLine
- :40 dta $00
 ; -------------------------------------------------
     .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 NameScreen

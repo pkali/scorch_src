@@ -124,6 +124,14 @@ OptionsFinished
     lda seppukuTable,y
     sta seppukuVal
     
+    ;8th option (how aggressive are mountains)
+    ldy OptionsTable+7
+    lda mountainsDeltaTableH,y
+    sta mountainDeltaH
+    lda mountainsDeltaTableL,y
+    sta mountainDeltaL
+    
+    
     rts
 ;--------
 ; inversing selected option (cursor)
@@ -1320,26 +1328,27 @@ nineplus dta d"9"+1
 space    dta d" "
 
 ;--------------------------------------------------------
-.proc DisplayOffensiveTextNr ;
-    ;This routine displays texts using PutChar4x4
-    ;pretty cool, eh
+.proc Display4x4AboveTank ;
+    ; Displays texts using PutChar4x4 above tank and mountains.
+    ; Pretty cool, eh!
     ;parameters are:
     ;Y - number of tank above which text is displayed
-    ;TextNumber - number of offensive text to display
+    ;fx - length of text
+    ;textAddress - address of the text
 
     ;lets calculate position of the text first!
     ;that's easy because we have number of tank
     ;and xtankstableL and H keep X position of a given tank
 
-    ;save vars (messed when printing...)
-
     lda xtankstableL,y
     sta temp
     lda xtankstableH,y
     sta temp+1
-    ;now we should substract length of the text
-    ldx TextNumberOff
-    lda talk.OffensiveTextLengths,x
+    ;now we should substract length of the text-1
+    
+    ldy fx
+    dey
+    tya
     asl
     sta temp2
     mva #0 temp2+1
@@ -1350,7 +1359,7 @@ space    dta d" "
     ;stored in temp2
     sbw temp temp2 ; here begin of the text is in TEMP !!!!
     ;now we should check overflows
-    lda temp+1
+    ;lda temp+1  ; opty
     bpl DOTNnotLessThanZero
       ;less than zero, so should be zero
       mwa #0 temp
@@ -1360,7 +1369,7 @@ DOTNnotLessThanZero
     ;so check if end larger than screenwidth
 
 
-    lda talk.OffensiveTextLengths,x
+    lda fx
     asl
     asl
     ;length in pixels -
@@ -1381,7 +1390,7 @@ DOTNnotLessThanZero
     ;then screenwidth - length is fine
 
 
-    lda talk.OffensiveTextLengths,x
+    lda fx
     asl
     asl
     sta temp
@@ -1401,7 +1410,7 @@ DOTNnoOverflow
     ;now let's get y position
     ;we will try to put text as low as possible
     ;just above mountains (so mountaintable will be checked)
-    lda talk.OffensiveTextLengths,x
+    lda fx
     asl
     asl
     tay
@@ -1433,19 +1442,13 @@ DOTOldLowestValue
     sbc #(4+9) ;9 pixels above ground (and tanks...)
     sta TextPositionY
 
-
-    lda talk.OffensiveTextTableL,x
-    sta TextAddress
-    lda talk.OffensiveTextTableH,x
-    sta TextAddress+1
     mva #0 TextCounter
-DOTNcharloop
     mwa TextAddress temp
+DOTNcharloop
     ldy TextCounter
 
     lda (temp),y
-    SEC
-    sbc #32 ;conversion from ASCII to .sbyte
+    and #$3f ;always CAPITAL letters
 
     sta CharCode4x4
     lda TextCounter
@@ -1462,13 +1465,63 @@ DOTNcharloop
     jsr PutChar4x4
 
     inc TextCounter
-    ldx TextNumberOff
-    lda talk.OffensiveTextLengths,x
+    lda fx
     cmp TextCounter
     bne DOTNcharloop
 
     rts
 .endp
+
+;--------------------------------------------------------
+.proc DisplayOffensiveTextNr ;
+    ldx TextNumberOff
+    lda talk.OffensiveTextTableL,x
+    sta TextAddress
+    lda talk.OffensiveTextTableH,x
+    sta TextAddress+1
+    inx ; the next text
+    lda talk.OffensiveTextTableH,x
+    sta temp+1
+    lda talk.OffensiveTextTableL,x
+    sta temp  ; opty possible
+    ; substract address of the next text from previous to get text length
+    sbw temp TextAddress temp2
+    mva temp2 fx 
+
+    jsr Display4x4AboveTank
+    rts
+.endp
+
+;--------------------------------------------------------
+.proc DisplayTankNameAbove ;
+    lda tankNr
+    :3 asl  ; *8
+    clc
+    adc #<TanksNames
+    sta temp  ; TextAddress
+    lda #0
+    adc #>Tanksnames
+    sta temp+1  ; TextAddress+1
+    mwa temp TextAddress
+
+    ;find length of the tank's name
+    ldy #0
+@
+      lda (temp),y
+      beq end_found
+      iny
+      cpy #8
+    bne @-
+    dey    
+   
+end_found
+    iny
+    sty fx
+    ldy tankNr
+    jsr Display4x4AboveTank
+    rts
+.endp
+
 ;-------------------------------
 .proc TypeLine4x4 ;
 ;-------------------------------
@@ -1479,6 +1532,7 @@ DOTNcharloop
 
     ldy #0
     sty LineCharNr
+    mva #1 plot4x4color
 
 TypeLine4x4Loop
     ldy LineCharNr
@@ -1491,7 +1545,6 @@ TypeLine4x4Loop
     sta CharCode4x4
     mwa LineXdraw dx
     mva LineYdraw dy
-	mva #1 plot4x4color
     jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
     inc LineCharNr
@@ -1791,7 +1844,6 @@ FinishResultDisplay
     ;---------------------
     ;displaying quantity of the given weapon
     ;---------------------
-    ldx TankNr
     lda ActiveWeapon,x
     jsr HowManyBullets
     sta decimal
@@ -1889,56 +1941,6 @@ NoDefenceWeapon
 NoShieldEnergy
 
     ;=========================
-    ;display Force
-    ;=========================
-    ldx TankNr
-    lda ForceTableL,x
-    sta decimal
-    lda ForceTableH,x
-    sta decimal+1
-    mwa #textbuffer+40+36 displayposition
-    jsr displaydec
-
-    ;=========================
-    ;display Angle
-    ;=========================
-    ; additionally we are getting charcode of the tank
-    ; (for future display)
-    ldx TankNr
-    lda AngleTable,x
-    bmi AngleToLeft
-
-    lda AngleTable,x
-    sta decimal
-    ;lda #$7f  ; (tab) character
-    ;sta textbuffer+40+25
-    lda #0  ;space
-    ;sta textbuffer+40+22
-    sta decimal+1  ; angle is single byte, but displayed with displaydec (word) routine
-    ;lda #90
-    ;sec
-    ;sbc AngleTable,x
-    tay
-    lda BarrelTable,y
-    sta CharCode
-    bne AngleDisplay ;like jmp, because code always <>0
-AngleToLeft
-    ;sec
-    ;sbc #(255-90)
-    sta decimal
-    tay
-    lda BarrelTable,y
-    sta CharCode
-    ;lda #$7e  ;(del) char
-    ;sta textbuffer+40+22
-    ;lda #0 ;space
-    ;sta textbuffer+40+25
-
-AngleDisplay
-    mwa #textbuffer+40+21 displayposition
-    jsr displaydec
-
-    ;=========================
     ;display Wind
     ;=========================
     mwa Wind temp
@@ -1975,12 +1977,62 @@ DisplayWindValue
     sta decimal
     mwa #textbuffer+80+7 displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
+
+    ;=========================
+    ;display Force
+    ;=========================
+    ldx TankNr
+    lda ForceTableL,x
+    sta decimal
+    lda ForceTableH,x
+    sta decimal+1
+    mwa #textbuffer+40+36 displayposition
+    jsr displaydec
+
+    ;=========================
+    ;display Angle
+    ;=========================
+displayAngle
+    ldx TankNr
+    lda AngleTable,x
+	cmp #90
+	beq VerticallyUp
+	bcs AngleToLeft
+AngleToRight
+	; now we have values from 0 to 89 and right angle
+    sta decimal
+    lda #$7f  ; (tab) character
+    sta textbuffer+40+25
+    lda #0  ;space
+    sta textbuffer+40+22
+	beq AngleDisplay
+AngleToLeft
+	sec
+	lda #180
+	sbc AngleTable,x
+	; angles 180 - 91 converted to 0 - 89
+	sta decimal
+    lda #$7e  ;(del) char
+    sta textbuffer+40+22
+    lda #0 ;space
+    sta textbuffer+40+25
+	beq AngleDisplay	
+VerticallyUp
+	; now we have value 90
+    sta decimal
+    lda #0  ;space
+    sta textbuffer+40+25
+    sta textbuffer+40+22
+
+AngleDisplay
+    mwa #textbuffer+40+23 displayposition
+    jsr displaybyte
     
     rts
 .endp
 ;-------------------------------------------------
 .proc PutTankNameOnScreen
-; puts name of the tan on the screen
+; puts name of the tank on the screen
     ldy #$00
     lda tanknr
     asl

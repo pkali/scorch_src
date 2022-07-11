@@ -30,8 +30,8 @@ ExplosionRoutines
     .word funkybomb-1
     .word mirv-1
     .word deathshead-1
-    .word VOID-1 ;napalm
-    .word VOID-1 ;hotnapalm
+    .word napalm-1 ;napalm
+    .word hotnapalm-1 ;hotnapalm
     .word tracer-1
     .word tracer-1 ;smoketracer
     .word babyroller-1
@@ -280,6 +280,127 @@ NoLowerCircle
     mwa tempXROLLER xdraw
     mwa modify ydraw
     rts
+.endp
+; ------------------------
+.proc napalm
+    inc FallDown2
+    mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
+    jsr CalculateExplosionRange
+	mva #0 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
+	jmp xnapalm
+.endp
+; ------------------------
+.proc hotnapalm
+    inc FallDown2
+    mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
+    jsr CalculateExplosionRange
+	mva #1 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
+	jmp xnapalm
+.endp
+; ------------------------
+.proc xnapalm
+	mwa xdraw xcircle	; store hitpoint for future repeats
+	ldy #30		; repeat 30 times
+	sty magic	
+RepeatNapalm	; external loop (for fire animation)
+	mwa xcircle xdraw
+	sbw xdraw #(napalmRadius)  ; 10 pixels on left side hit point
+	ldy #0
+	sty magic+1
+RepeatFlame		; internal loop (draw flames)
+	ldy #0
+	adw xdraw #mountaintable temp
+	sty ydraw+1
+	lda (temp),y
+	sec
+	sbc #1	; over ground
+	sta ydraw
+	lda xdraw
+	and ExplosionRadius	; if hotnapalm and x is odd:
+	:2 asl	; modify y position 4 pixels up
+	ldy ydraw
+	sta ydraw
+	tya
+	sec
+	sbc ydraw
+	sta ydraw	
+	sbw xdraw #4	; half character correction
+	; draw flame symbol
+	lda magic	; if last repeat - clear flames
+	beq LastNapalmRepeat
+	lda random
+	and #%00000110
+	clc
+	adc #$46
+	bne PutFlameChar
+LastNapalmRepeat
+	lda #$4e	; clear flame symbol
+PutFlameChar
+	sta CharCode
+	; check coordinates
+	cpw xdraw #(screenwidth-7)
+	bcs CharOffTheScreen
+	lda ydraw
+	cmp #7
+	bcc CharOffTheScreen
+	cmp #(screenHeight-1)
+	bcs CharOffTheScreen
+	jsr TypeChar
+CharOffTheScreen
+	adw xdraw #4	; reverse half character correction (we need positon of character center)
+	adw xdraw #1	; next char 1 pixels to right
+	inc magic+1
+	lda magic+1
+	cmp #(2*napalmRadius+1)	; 10 pixels on left, 10 pixels on right and 1 in center
+	jne RepeatFlame
+	dec magic
+	jpl RepeatNapalm
+	; after napalm 
+	inc FallDown2
+;now we must check tanks in range
+    ldx NumberOfPlayers
+	dex
+BurnedCheckLoop
+    lda eXistenZ,x
+    beq EndNurnedCheckLoop
+    ;here the tank exist
+	; calculate right edge of the fire
+	adw xcircle #(napalmRadius+4+4) xdraw ; 10 pixels on right side hit point + half character width + correction
+	; now we compare tank position with right edge of the fire (napalm)
+    lda XtankstableH,x
+	cmp xdraw+1
+	bne @+
+    lda XtankstableL,x
+	cmp xdraw
+@
+	bcs TankOutOfFire
+	; let's calculate left edge of the fire
+	sbw xcircle #(napalmRadius+8+4-4) xdraw	; 10 pixels on left + character width (tank) + half character - correction
+	bpl @+
+	mwa #0 xdraw	; left screen edge
+@
+	; now we compare tank position with left edge of the fire (napalm)
+    lda XtankstableH,x
+	cmp xdraw+1
+	bne @+
+    lda XtankstableL,x
+	cmp xdraw
+@
+	bcc TankOutOfFire
+
+    ldy #40		; energy decrease (napalm) - but if hotnapalm:
+	lda ExplosionRadius
+	beq NotHot
+	ldy #80		; energy decrease (hotnapalm)
+NotHot
+	; check shields ( joke :) )
+    jsr DecreaseEnergyX
+TankOutOfFire
+EndNurnedCheckLoop
+    dex
+    bpl BurnedCheckLoop
+    mva #sfx_silencer sfx_effect
+	rts
 .endp
 ; ------------------------
 .proc babyroller
@@ -990,7 +1111,6 @@ ToHighFill
 	jne RepeatFill
     rts
 .endp
-
 ;--------------------------------------------------
 .proc BeforeFire ;TankNr (byte)
 ;--------------------------------------------------
@@ -1025,6 +1145,7 @@ ContinueToCheckMaxForce2
 
     wait ; best after drawing a tank
 
+    
 
 ;keyboard reading
 ; KBCODE keeps code of last keybi
@@ -1192,32 +1313,60 @@ CTRLPressedDown
     jmp BeforeFire
 
 pressedRight
+    lda pressTimer
+    spl:mva #0 pressTimer  ; if >128 then reset to 0
+    cmp #25  ; 1/2s
+    bcs CTRLPressedRight
+
     mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     dec AngleTable,x
     lda AngleTable,x
-    ;cmp #180 ; if angle goes through 180 we clear the barrel
-    ;bne NotThrough90DegreesLeft
-    ;mva #$2e CharCode ; TODO: change
-    ;jsr DrawTankNr.drawtankNrX
-;NotThrough90DegreesLeft
     cmp #255 ; -1
     jne BeforeFire
     lda #180
     sta AngleTable,x
     jmp BeforeFire
 
+CTRLPressedRight
+    mva #sfx_set_power_2 sfx_effect
+    ldx TankNr
+    lda AngleTable,x
+    sec
+    sbc #4
+    sta AngleTable,x
+    cmp #4  ; smalles angle for speed rotating
+    jcs BeforeFire
+    lda #180
+    sta AngleTable,x
+    jmp BeforeFire
+        
+
 pressedLeft
+    lda pressTimer
+    spl:mva #0 pressTimer  ; if >128 then reset to 0
+    cmp #25  ; 1/2s
+    bcs CTRLPressedLeft
+
     mva #sfx_set_power_2 sfx_effect
     ldx TankNr
     INC AngleTable,x
     lda AngleTable,x
-    ;bne NotThrough90DegreesRight
-    ;mva #$30 CharCode ; if angle goes through 0 we clear the barrel
-    ;jsr DrawTankNr.drawtankNrX
-;NotThrough90DegreesRight
     cmp #181
     jne BeforeFire
+    lda #0
+    sta AngleTable,x
+    jmp BeforeFire
+
+CTRLPressedLeft
+    mva #sfx_set_power_2 sfx_effect
+    ldx TankNr
+    lda AngleTable,x
+    clc
+    adc #4
+    sta AngleTable,x
+    cmp #181-4
+    jcc BeforeFire
     lda #0
     sta AngleTable,x
     jmp BeforeFire
@@ -1271,6 +1420,7 @@ pressedS
 pressedSpace
     ;=================================
     ;we shoot here!!!
+
     mva #0 pressTimer ; reset
     jsr WaitForKeyRelease
     lda pressTimer
@@ -2530,7 +2680,6 @@ CalculateExplosionRange0
     lda #0
     sta RangeRight
     sta RangeRight+1
-    mva #11 ExplosionRadius  ; what is this magic value?
 ;--------------------------------------------------
 .proc CalculateExplosionRange
 ;--------------------------------------------------

@@ -22,6 +22,8 @@ MaxWindTable   .by 5,20,40,70,99
 RoundsTable    .by 10,20,30,40,50
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
+mountainsDeltaTableH .by 0,1,3,5,7
+mountainsDeltaTableL .by $1f, $7f, $ff, $7f, $ff
 ;------------------------------------------------
 LevelNameBeginL ; begins of level names
     .by <NamesOfLevels,<(NamesOfLevels+10),<(NamesOfLevels+20)
@@ -347,8 +349,8 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_StrongParachute
   .by >price_Mag_Deflector__
   .by >price_Shield_________
-  .by >price_Force_Shield___
   .by >price_Heavy_Shield___
+  .by >price_Force_Shield___
   .by >price_Super_Mag______
   .by >price_Auto_Defense___
   .by >price_Fuel_Tank______
@@ -413,8 +415,8 @@ WeaponPriceL
   .by <price_StrongParachute
   .by <price_Mag_Deflector__
   .by <price_Shield_________
-  .by <price_Force_Shield___
   .by <price_Heavy_Shield___
+  .by <price_Force_Shield___
   .by <price_Super_Mag______
   .by <price_Auto_Defense___
   .by <price_Fuel_Tank______
@@ -435,7 +437,7 @@ WeaponUnits
   .by 3  ;Funky_Bomb_____
   .by 2  ;MIRV___________
   .by 1  ;Death_s_Head___
-  .by 10 ;Napalm_________
+  .by 4  ;Napalm_________
   .by 2  ;Hot_Napalm_____
   .by 20 ;Tracer_________
   .by 10 ;Smoke_Tracer___
@@ -485,8 +487,8 @@ WeaponUnits
   .by 2  ;StrongParachute
   .by 2  ;Mag_Deflector__
   .by 3  ;Shield_________
-  .by 3  ;Force_Shield___
   .by 2  ;Heavy_Shield___
+  .by 3  ;Force_Shield___
   .by 2  ;Super_Mag______
   .by 1  ;Auto_Defense___
   .by 10 ;Fuel_Tank______
@@ -502,8 +504,8 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     dta 1 ;"Funky Bomb      " ; 5
     dta 1 ;"MIRV            " ; 6
     dta 1 ;"Death's Head    " ; 7
-    dta 0 ;"Napalm          " ; 8
-    dta 0 ;"Hot Napalm      " ; 9
+    dta 1 ;"Napalm          " ; 8
+    dta 1 ;"Hot Napalm      " ; 9
     dta 0 ;"Tracer          " ; 10
     dta 0 ;"Smoke Tracer    " ; 11
     dta 1 ;"Baby Roller     " ; 12
@@ -552,8 +554,8 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	dta 1 ;"Strong Parachute" ; 55
 	dta 1 ;"Mag Deflector   " ; 56
 	dta 1 ;"Shield          " ; 57
-	dta 1 ;"Force Shield    " ; 58
-	dta 1 ;"Heavy Shield    " ; 59
+	dta 1 ;"Heavy Shield    " ; 58
+	dta 1 ;"Force Shield    " ; 59
 	dta 0 ;"Super Mag       " ; 60
 	dta 1 ;"Auto Defense    " ; 61
 	dta 0 ;"Fuel Tank       " ; 62
@@ -570,7 +572,7 @@ WeaponSymbols
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
     .by $5f,$1c,$03,$06,$1d,$0a,$1b,$1b  ; defensives
-    .by $1e,$3b,$3c,$3d,$3e,$3f,$5e,$7d
+    .by $1e,$3b,$3d,$3c,$3e,$3f,$5e,$7d
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
@@ -633,8 +635,8 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
     dta d"Mag Deflector   " ; 56    - with shield and energy           
     dta d"Shield          " ; 57    - shield for one shot - no energy       
-    dta d"Force Shield    " ; 58    - shield with energy and parachute                         
-    dta d"Heavy Shield    " ; 59    - shield with energy                                               
+    dta d"Heavy Shield    " ; 58    - shield with energy                                               
+    dta d"Force Shield    " ; 59    - shield with energy and parachute                         
     dta d"Super Mag       " ; 60               
     dta d"Auto Defense    " ; 61    - with shield and energy                                            
     dta d"Fuel Tank       " ; 62                                              
@@ -650,8 +652,8 @@ DefensiveEnergy = * - 48
 	.by 99	; Strong Parachute
 	.by 99	; Mag Deflector
 	.by 00	; Shield
-	.by 99	; Force Shield
 	.by 99	; Heavy Shield
+	.by 99	; Force Shield
 	.by 00	; Super Mag
 	.by 99	; Auto Defense
 	.by 00	; Fuel Tank

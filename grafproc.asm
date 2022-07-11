@@ -684,11 +684,11 @@ NoPlayerMissile
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Shield_________		; one shot shield 
-	beq ShieldDraw
+	beq DrawTankShield
 	cmp #ind_Force_Shield___		; shield with energy and parachute
-	beq ShieldDraw
+	beq DrawTankShieldBold
 	cmp #ind_Heavy_Shield___		; shield with energy
-	beq ShieldDraw
+	beq DrawTankShieldBold
 	cmp #ind_Auto_Defense___		; Auto Defence
 	beq DrawTankShieldWihHorns
 	cmp #ind_Mag_Deflector__		; Mag Deflector
@@ -696,15 +696,14 @@ NoPlayerMissile
 	cmp #ind_White_Flag_____		; White Flag
 	beq DrawTankFlag
 	bne NoShieldDraw
-ShieldDraw
-	jsr DrawTankShield.DrawInPosition
-NoShieldDraw
-DoNotDrawTankNr
-    rts
+DrawTankShield
+	jmp DrawTankShield.DrawInPosition
 DrawTankShieldWihHorns
 	jsr DrawTankShield.DrawInPosition
-	jsr DrawTankShieldHorns
-	rts
+	jmp DrawTankShieldHorns
+DrawTankShieldBold
+	jsr DrawTankShield.DrawInPosition
+	jmp DrawTankShieldBoldLine
 DrawTankFlag
     lda #$5E	; flag symbol
     sta CharCode
@@ -717,6 +716,8 @@ DrawTankFlag
     lda XtanksTableH,x
     sta xdraw+1
     jsr TypeChar
+NoShieldDraw
+DoNotDrawTankNr
 	rts
 .endp
 
@@ -823,6 +824,23 @@ ShieldVisible
 	jsr plot
 	rts
 .endp
+;--------------------------------------------------
+.proc DrawTankShieldBoldLine
+; use only directly after DrawTankShield
+; this proc draws bold top on shield.
+; Symbol of ablative shield ? :)
+;--------------------------------------------------
+	sbw xdraw #$04			; 5 pixels left
+	sbw ydraw #$0a		; 10 pixels up
+	; draw additional top horizontal line of shield ( _ )
+	mva #6 temp
+@
+	jsr plot
+.nowarn	dew xdraw
+	dec temp
+	bne @-
+	rts
+.endp
 
 ;--------------------------------------------------
 .proc drawmountains 
@@ -922,7 +940,6 @@ StillNothing
     lda ydraw
     sta (tempor2),y
     sta (temp),y
-    jmp FoundPeek1
 FoundPeek1
     inw tempor2
     inw temp
@@ -990,7 +1007,7 @@ ColumnIsReady
 ; level of the mountains
     jeq MainFallout2
 ; now correct heights are in the mountaintable
-    mva #1 color
+    sta color	; Pozor! :)  we know - now A=1
     mva #sfx_silencer sfx_effect
     rts
 .endp
@@ -1011,6 +1028,8 @@ getrandomY   ;getting random Y coordinate
     sta ydraw
     sta yfloat+1
     mva #0 yfloat ;yfloat equals to e.g. 140.0
+    mva #screenheight-margin-5 yfloat+1
+    sta ydraw
 
 ; how to make nice looking mountains?
 ; randomize points and join them with lines
@@ -1019,9 +1038,10 @@ getrandomY   ;getting random Y coordinate
 
 NextPart
     lda random
+    and mountainDeltaL
     sta delta ; it is after the dot (xxx.delta)
     lda random
-    and #$03 ;(max delta)
+    and mountainDeltaH ;(max delta)
     sta delta+1 ; before the dot (delta+1.delta)
 
     lda random

@@ -14,9 +14,9 @@ Contributors:
 - Bocianu (@bocianu) - important ideas, FujiNet implementation, QA
 - Emkay - splash screen music
 
-QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert
+QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert, archon800, Shaggy the Atarian
 
-You can contact us at pecus@poczta.fm or pirx@5oft.pl
+You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https://atarionline.pl) forums.
 
 This source code was originally compiled under [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
 
@@ -47,6 +47,21 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 147
+2022-07-10
+LOST build. We were watching [LOST party](https://www.lostparty.pl/2022/) streams so maybe a little less done, but still some nice improvements.
+- new weapons by @Pecusx - Napalm and Hot Napalm. Fire penetrates all shields, so beware!
+- status bar showing outdated info on the beginning of the round fix
+- various small optimizations incl. memory usage, soildown, weapon ranges
+- improved shapes of Heavy and Force Shields
+
+Issues closed:
+- revert to the old but slightly improved version of showing angles (#105)
+- zero page loading eliminated (#106)
+- active player name appear over his tank when aiming (#107)
+- configurable mountain heights (The Netherlands, Belgium, Czechia, Switzerland, Nepal) (#86)
+- angle speeds up when joystick / keyboard are pressed (#75)
+
 ###### Build 146
 2022-07-03
 Super heavy rewrite build.
@@ -55,9 +70,9 @@ Not much changed visually since the last build, but really large parts of the co
 - silly angle system rewritten to a proper, primary school angling. BTW - I had to dig into 8th grade trig to make it work. About 200 bytes saved, complexity reduced. Next build will have improved angle speed UI. I will also allow for an easier improvement of tank visuals.
 - Weapon price and quantity balance - this is our honest attempt to make game more fun. We'll accept any critique and improvement proposals.
 - New AI opponent - Tosser! Not much better than Poolshark, but still beats sharks most of the time.
-- AI opponents can purchase defensive weapons what makes playing against AI somewhat more challenging.
+- AI opponents can purchase defensive weapons which make playing against AI somewhat more challenging.
 - Improved Laser. It is still not ideal, but better. Still hard to aim :]
-- Few small parachute related bugs fixed
+- Few small parachute-related bugs fixed
 - Death's Head bug fix
 
 Issues closed:

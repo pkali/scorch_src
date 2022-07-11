@@ -3,12 +3,12 @@
 screenheight = 200
 screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
-margin = 48 ;mountain drawing Y variable margin
+margin = 40 ;mountain drawing Y variable margin
 display = $1010 ;screen takes $2K due to clearing routine
 MaxPlayers = 6
-maxOptions = 7  ;number of all options
+maxOptions = 8  ;number of all options
 PMOffset = $23 ; P/M to graphics offset
-
+napalmRadius = 10
 
 ;Weapon prices (*10 on screen)
 price_Baby_Missile___ = 0      ;_0
@@ -19,8 +19,8 @@ price_LeapFrog_______ = 192    ;_4
 price_Funky_Bomb_____ = 293    ;_5
 price_MIRV___________ = 456    ;_6
 price_Death_s_Head___ = 337    ;_7
-price_Napalm_________ = $ffff ;496    ;_8
-price_Hot_Napalm_____ = $ffff ;511    ;_9
+price_Napalm_________ = 125    ;_8
+price_Hot_Napalm_____ = 162    ;_9
 price_Tracer_________ = 102    ;_10
 price_Smoke_Tracer___ = 291    ;_11
 price_Baby_Roller____ = 211    ;_12
@@ -69,8 +69,8 @@ price_Parachute______ =   234     ;_54
 price_StrongParachute =  1000     ;_55            
 price_Mag_Deflector__ =   745     ;_56            
 price_Shield_________ =   224     ;_57            
-price_Force_Shield___ =  1100     ;_58            
-price_Heavy_Shield___ =   628     ;_59            
+price_Heavy_Shield___ =   628     ;_58            
+price_Force_Shield___ =  1100     ;_59            
 price_Super_Mag______ = $ffff     ;_60            
 price_Auto_Defense___ =   512     ;_61            
 price_Fuel_Tank______ = $ffff     ;_62            
@@ -134,8 +134,8 @@ ind_Parachute______ = 54
 ind_StrongParachute = 55            
 ind_Mag_Deflector__ = 56            
 ind_Shield_________ = 57            
-ind_Force_Shield___ = 58            
-ind_Heavy_Shield___ = 59            
+ind_Heavy_Shield___ = 58            
+ind_Force_Shield___ = 59            
 ind_Super_Mag______ = 60            
 ind_Auto_Defense___ = 61            
 ind_Fuel_Tank______ = 62            

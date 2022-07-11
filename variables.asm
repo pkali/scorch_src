@@ -12,9 +12,11 @@ TanksNames  ; DO NOT ZERO - ticket #24
     :6 dta d"        "
 ;----------------------------------------------------
 ;Options DO NOT ZERO - ticket #27
-OptionsTable .by 0,1,2,2,0,1,3
+OptionsTable .by 0,1,2,2,0,1,3,2
 RoundsInTheGame .by 10 ;how many rounds in the current game
 seppukuVal .by 75
+mountainDeltaH .by 3
+mountainDeltaL .by $ff
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS [MaxPlayers]
@@ -210,9 +212,6 @@ Force  .ds 3 ; 0,0,0
 Multiplier .ds 3 ; 0,0,0
 Multiplee .ds 2 ; 0,0
 goleft  .DS 1 ;if 1 then flights left
-;----------------------------------------------------
-;SoilDown2
-IsEndOfTheFallFlag .DS 1
 ;----------------------------------------------------
 ;unPlot
 WhichUnPlot .DS 1
