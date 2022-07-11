@@ -14,9 +14,9 @@ Contributors:
 - Bocianu (@bocianu) - important ideas, FujiNet implementation, QA
 - Emkay - splash screen music
 
-QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert
+QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert, archon800, Shaggy the Atarian
 
-You can contact us at pecus@poczta.fm or pirx@5oft.pl
+You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https://atarionline.pl) forums.
 
 This source code was originally compiled under [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
 
@@ -46,6 +46,21 @@ It never happened, but we got some encouraging comments and we are still trying 
 With the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changes:
+
+###### Build 147
+2022-07-10
+LOST build. We were watching [LOST party](https://www.lostparty.pl/2022/) streams so maybe a little less done, but still some nice improvements.
+- new weapons by @Pecusx - Napalm and Hot Napalm. Fire penetrates all shields, so beware!
+- status bar showing outdated info on the beginning of the round fix
+- various small optimizations incl. memory usage, soildown, weapon ranges
+- improved shapes of Heavy and Force Shields
+
+Issues closed:
+- revert to the old but slightly improved version of showing angles (#105)
+- zero page loading eliminated (#106)
+- active player name appear over his tank when aiming (#107)
+- configurable mountain heights (The Netherlands, Belgium, Czechia, Switzerland, Nepal) (#86)
+- angle speeds up when joystick / keyboard are pressed (#75)
 
 ###### Build 146
 2022-07-03
