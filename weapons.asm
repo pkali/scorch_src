@@ -2095,7 +2095,7 @@ NoDefence
     rts		; END !!!	
 AutoDefence
 	; now run defensive-aggressive weapon - Auto Defence!
-	sbb #255 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
+	sbb #180 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
 	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
 	mva #1 Erase		; now erase shield 
 	phx
