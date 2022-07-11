@@ -446,8 +446,8 @@ AfterManualShooting
 	cmp #ind_Nuclear_Winter_
 	bne StandardShoot
 ShootAtomicWinter
-	; --- nuclear winter ---
-	jsr NuclearWinter
+	; --- atomic winter ---
+	jsr AtomicWinter
 	jmp NextPlayerShoots ; and we skip shoot
 ShootWhiteFlag
 	; --- white flag ---
@@ -680,6 +680,20 @@ MetodOfDeath
 	lda weaponsOfDeath,y
     jsr ExplosionDirect
     mva #sfx_silencer sfx_effect
+
+	; Clear current Shooter settings. After that, Shooter will "search" for the target again
+	ldx NumberOfPlayers
+	dex
+@	lda skillTable,x
+	cmp #2		; clear variables only if Shooter
+	bne NotShooter
+	lda #0
+	sta PreviousAngle,x
+	sta PreviousEnergyL,x
+	sta PreviousEnergyH,x
+NotShooter
+	dex
+	bpl @-
 
     ; jump to after explosion routines (soil fallout, etc.)
     ; After going through these routines we are back

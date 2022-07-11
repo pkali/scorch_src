@@ -2514,7 +2514,7 @@ MIRValreadyAll
 .endp
 
 ; -------------------------------------------------
-.proc NuclearWinter
+.proc AtomicWinter
 ; -------------------------------------------------
 ; This routine is run from inside of the main loop
 ; and replaces Shoot and Flight routines

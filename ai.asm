@@ -193,6 +193,7 @@ EnoughEnergy
     sta ShieldEnergy,x
 	; decrease in inventory
 	clc
+	lda (temp),y
 	sbc #1
 	sta (temp),y  ; has address of TanksWeaponsTable
 NoUseDefensive
@@ -306,6 +307,7 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
     sta ShieldEnergy,x
 	; decrease in inventory
 	clc
+	lda (temp),y
 	sbc #1
 	sta (temp),y
 DefensiveInUse
