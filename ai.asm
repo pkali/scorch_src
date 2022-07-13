@@ -186,16 +186,15 @@ EnoughEnergy
 	beq NoUseDefensive
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
-	tya
+	; decrease in inventory
+	clc
+	sbc #1
+	sta (temp),y  ; has address of TanksWeaponsTable
 	; activate defensive weapon
+	tya		; number of selectet defensive weapon
 	sta ActiveDefenceWeapon,x
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
-	; decrease in inventory
-	clc
-	lda (temp),y
-	sbc #1
-	sta (temp),y  ; has address of TanksWeaponsTable
 NoUseDefensive
 DefensiveInUse
 firstShoot
@@ -300,16 +299,15 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 	beq NoUseDefensive
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
-	tya
+	; decrease in inventory
+	clc
+	sbc #1
+	sta (temp),y  ; has address of TanksWeaponsTable
 	; activate defensive weapon
+	tya		; number of selectet defensive weapon
 	sta ActiveDefenceWeapon,x
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
-	; decrease in inventory
-	clc
-	lda (temp),y
-	sbc #1
-	sta (temp),y
 DefensiveInUse
 NoUseDefensive
 	; Toosser is like Poolshark but allways uses defensives

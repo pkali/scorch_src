@@ -774,7 +774,7 @@ ShieldVisible
 	dec temp
 	bne @-
 	; draw left oblique line of shield ( / )
-	mva #4 temp
+	mva #3 temp
 @
 	jsr plot
 .nowarn	dew ydraw
@@ -782,14 +782,14 @@ ShieldVisible
 	dec temp
 	bne @-
 	; draw top horizontal line of shield ( _ )
-	mva #5 temp
+	mva #7 temp
 @
 	jsr plot
 	inw xdraw
 	dec temp
 	bne @-
 	; draw right oblique line of shield ( \ )
-	mva #4 temp
+	mva #3 temp
 @
 	jsr plot
 	inw ydraw
@@ -831,7 +831,7 @@ ShieldVisible
 ; Symbol of ablative shield ? :)
 ;--------------------------------------------------
 	sbw xdraw #$04			; 5 pixels left
-	sbw ydraw #$0a		; 10 pixels up
+	sbw ydraw #$0b		; 11 pixels up
 	; draw additional top horizontal line of shield ( _ )
 	mva #6 temp
 @
