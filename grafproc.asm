@@ -611,10 +611,23 @@ DrawNextTank
     lda eXistenZ,x
     bne SkipHidingPM ; if energy=0 then no tank
 
-      ; hide P/M
-      lda #0
-      sta hposp0,x
-      jmp DoNotDrawTankNr
+    ; hide P/M
+    lda #0
+    cpx #$4 ; 5th tank is defferent
+    bne No5thTankHide
+	sta hposp0+4
+	sta hposp0+5
+	beq @+
+No5thTankHide
+	cpx #$5 ; 6th tank is defferent
+	bne No6thTankHide
+	sta hposp0+6
+	sta hposp0+7
+	beq @+
+No6thTankHide
+    sta hposp0,x
+@
+    jmp DoNotDrawTankNr
 SkipHidingPM
 
 
@@ -636,20 +649,31 @@ DrawTankNrX
 
     ; now P/M graphics on the screen (only for 5 tanks)
     ; horizontal position
+    ldx TankNr
     mwa xdraw xbyte
-    ldx tanknr
-    cpx #$5
-    bcs NoPlayerMissile
     rorw xbyte ; divide by 2 (carry does not matter)
     lda xbyte
     clc
-    adc #PMOffset+1 ; P/M to graphics offset
+    adc #PMOffsetX ; P/M to graphics offset
     cpx #$4 ; 5th tank are joined missiles and offset is defferent
-    bne NoMissile
+    bne No5thTank
     clc
-    adc #$0C  ; missile offset offset
-NoMissile
+    adc #$04  ; missile offset offset
+	sta hposp0+4
+	sta hposp0+5
+	bne NoMissile
+No5thTank
+	cpx #$5 ; 6th tank are joined missiles and offset is defferent
+	bne Tanks1to4
+    clc
+    adc #$04  ; missile offset offset
+	sta hposp0+6
+	sta hposp0+7
+	bne NoMissile
+Tanks1to4
     sta hposp0,x
+
+NoMissile
     ; vertical position
     lda pmtableL,x
     sta xbyte
@@ -659,26 +683,64 @@ NoMissile
     ; calculate start position of the tank
     lda ydraw
     clc
-    adc #PMOffset
+    adc #PMOffsetY
     sta temp
-    ; clear sprite and put 3 lines on the tank at the same time
     ldy #$00
-    tya
+    cpx #$5
+    bcs PMForTank6
+    ; clear sprite and put 3 lines on the tank at the same time
 ClearPM     
     cpy temp
     bne ZeroesToGo
-    lda #$03 ; (2 bits set) we set on two pixels in three lines
+	lda (xbyte),y
+	and #%11110000 ; only for equal speeds
+    ora #%00001111 ; (2 bits set) we set on two pixels in three lines
     sta (xbyte),y
     dey
+	lda (xbyte),y
+	and #%11110000 ; only for equal speeds
+    ora #%00001111 ; (2 bits set) we set on two pixels in three lines
     sta (xbyte),y
     dey
+	lda (xbyte),y
+	and #%11110000 ; only for equal speeds
+    ora #%00001111 ; (2 bits set) we set on two pixels in three lines
     sta (xbyte),y
     dey
-    lda #$00
 ZeroesToGo
+    lda (xbyte),y
+	and #%11110000 ; only for equal speeds
     sta (xbyte),y
     dey
     bne ClearPM
+	beq NoPlayerMissile
+PMForTank6
+    ; clear sprite and put 3 lines on the tank at the same time
+ClearPM6     
+    cpy temp
+    bne ZeroesToGo6
+	lda (xbyte),y
+	and #%00001111
+    ora #%11110000 ; (2 bits set) we set on two pixels in three lines
+    sta (xbyte),y
+    dey
+	lda (xbyte),y
+	and #%00001111
+    ora #%11110000 ; (2 bits set) we set on two pixels in three lines
+    sta (xbyte),y
+    dey
+	lda (xbyte),y
+	and #%00001111
+    ora #%11110000 ; (2 bits set) we set on two pixels in three lines
+    sta (xbyte),y
+    dey
+ZeroesToGo6
+    lda (xbyte),y
+	and #%00001111
+    sta (xbyte),y
+    dey
+    bne ClearPM6
+
 NoPlayerMissile
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
@@ -840,6 +902,22 @@ ShieldVisible
 	dec temp
 	bne @-
 	rts
+.endp
+
+;--------------------------------------------------
+.proc ClearPMmemory
+;--------------------------------------------------
+
+	lda #$00
+	tay
+@	sta pmgraph+$300,y
+	sta pmgraph+$400,y
+	sta pmgraph+$500,y
+	sta pmgraph+$600,y
+	sta pmgraph+$700,y
+	iny
+	bne @-
+	rts	
 .endp
 
 ;--------------------------------------------------

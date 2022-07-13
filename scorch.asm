@@ -306,6 +306,7 @@ SettingEnergies
 ;generating the new landscape
     jsr PMoutofScreen ;let P/M disappear
     jsr clearscreen   ;let the screen be clean
+	jsr ClearPMmemory
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
@@ -918,13 +919,14 @@ SetunPlots
     sta dmactls
     lda #$03    ; P/M on
     sta pmcntl
-    lda #$01
-    sta sizem ; there will be only M0, double width
+    lda #$00
     sta sizep0 ; P0-P3 widths
     sta sizep0+1
     sta sizep0+2
     sta sizep0+3
-    lda #$10 ; P/M priorities (bit 4 joins missiles)
+	lda #%01010101
+    sta sizem ; all missiles, double width
+    lda #%00100000 ; P/M priorities (multicolor players on)
     sta gtictls
     jsr PMoutofScreen
 

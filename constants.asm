@@ -59,17 +59,19 @@ lineClear
     dta d"              ", $ff
 
 ;-----------
-pmtableL ; addressess of the P/M memory for 5 tanks (6th is without P/M background)
+pmtableL ; addressess of the P/M memory for 6 tanks
     .by <(pmgraph+$400)
     .by <(pmgraph+$500)
     .by <(pmgraph+$600)
     .by <(pmgraph+$700)
+    .by <(pmgraph+$300)  ; this is a missile background
     .by <(pmgraph+$300)  ; this is a missile background
 pmtableH
     .by >(pmgraph+$400)
     .by >(pmgraph+$500)
     .by >(pmgraph+$600)
     .by >(pmgraph+$700)
+    .by >(pmgraph+$300)
     .by >(pmgraph+$300)
 ;-----------
 sintable
