@@ -689,51 +689,37 @@ NoMissile
     cpx #$5
     bcs PMForTank6
     ; clear sprite and put 3 lines on the tank at the same time
+	ldx #3	; three lines of PM
 ClearPM     
     cpy temp
     bne ZeroesToGo
-	lda (xbyte),y
-	and #%11110000 ; only for equal speeds
+@	lda (xbyte),y
+	and #%11110000
     ora #%00001111 ; (2 bits set) we set on two pixels in three lines
     sta (xbyte),y
     dey
-	lda (xbyte),y
-	and #%11110000 ; only for equal speeds
-    ora #%00001111 ; (2 bits set) we set on two pixels in three lines
-    sta (xbyte),y
-    dey
-	lda (xbyte),y
-	and #%11110000 ; only for equal speeds
-    ora #%00001111 ; (2 bits set) we set on two pixels in three lines
-    sta (xbyte),y
-    dey
+	dex
+	bne @-
 ZeroesToGo
     lda (xbyte),y
-	and #%11110000 ; only for equal speeds
+	and #%11110000
     sta (xbyte),y
     dey
     bne ClearPM
 	beq NoPlayerMissile
 PMForTank6
     ; clear sprite and put 3 lines on the tank at the same time
+	ldx #3	; three lines of PM
 ClearPM6     
     cpy temp
     bne ZeroesToGo6
-	lda (xbyte),y
+@	lda (xbyte),y
 	and #%00001111
     ora #%11110000 ; (2 bits set) we set on two pixels in three lines
     sta (xbyte),y
     dey
-	lda (xbyte),y
-	and #%00001111
-    ora #%11110000 ; (2 bits set) we set on two pixels in three lines
-    sta (xbyte),y
-    dey
-	lda (xbyte),y
-	and #%00001111
-    ora #%11110000 ; (2 bits set) we set on two pixels in three lines
-    sta (xbyte),y
-    dey
+	dex
+	bne @-
 ZeroesToGo6
     lda (xbyte),y
 	and #%00001111
@@ -744,6 +730,7 @@ ZeroesToGo6
 NoPlayerMissile
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
+    ldx TankNr
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Shield_________		; one shot shield 
 	beq DrawTankShield
