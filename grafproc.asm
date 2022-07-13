@@ -1268,28 +1268,24 @@ CheckX02
     bcs EndOfPlot ;nearest RTS
 MakePlot
     ; let's calculate coordinates from xdraw and ydraw
-    mwa xdraw xbyte
-
-
-    lda xbyte
-    and #$7
-    sta ybit
 
     ;xbyte = xbyte/8
-    lda xbyte
-    lsr xbyte+1
-    ror ;just one bit over 256. Max screenwidth = 512!!!
-    lsr  
+    lda xdraw+1
     lsr
-    tay ;save
+    lda xdraw
+    ror ;just one bit over 256. Max screenwidth = 512!!!
+    lsr
+    lsr
+    sta xbyte
     ;---
     ldx ydraw
-    lda linetableL,x
-    sta xbyte
+    ldy linetableL,x
     lda linetableH,x
     sta xbyte+1
 
-    ldx ybit
+    lda xdraw
+    and #$7
+    tax
     lda color
     bne ClearPlot
 
@@ -1312,31 +1308,28 @@ ClearPlot
     ; result is in A (zero or appropriate bit is set)
 
     ; let's calculate coordinates from xdraw and ydraw
-    mwa xdraw xbyte
-
-    lda xbyte
-    and #$7
-    sta ybit
 
     ;xbyte = xbyte/8
-    lda xbyte
-    lsr xbyte+1
-    ror ;just one bit over 256. Max screenwidht = 512!!!
-    lsr  
+    lda xdraw+1
     lsr
-    tay ;save
+    lda xdraw
+    ror ;just one bit over 256. Max screenwidht = 512!!!
+    lsr
+    lsr
+    sta xbyte
     ;---
     ldx ydraw
-    lda linetableL,x
-    sta xbyte
+    ldy linetableL,x
     lda linetableH,x
     sta xbyte+1
 
-    ldx ybit
+    lda xdraw
+    and #$7
+    tax
 
     lda (xbyte),y
+    eor #$ff
     and bittable,x
-	eor bittable,x
     rts
 .endp
 
