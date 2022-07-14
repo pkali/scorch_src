@@ -213,22 +213,22 @@ CalculateGains
     lda moneyH,x
     adc gainH,x
     sta moneyH,x
-    ; substract loose
-    ; if loose is greater than money then zero money
+    ; substract lose
+    ; if lose is greater than money then zero money
     lda moneyH,x
-    cmp looseH,x
+    cmp loseH,x
     bcc zeromoney
-    bne substractloose
+    bne substractlose
     lda moneyL,x
-    cmp looseL,x
+    cmp loseL,x
     bcc zeromoney
-substractloose
+substractlose
     sec
     lda moneyL,x
-    sbc looseL,x
+    sbc loseL,x
     sta moneyL,x
     lda moneyH,x
-    sbc looseH,x
+    sbc loseH,x
     sta moneyH,x
     jmp skipzeroing
 zeromoney
@@ -244,7 +244,8 @@ skipzeroing
     jne START
 
     inc CurrentRoundNr
-    mva #0 dmactl  ; issue #72
+    lda #$0
+    sta dmactl  ; issue #72
     jsr RmtSongSelect
     mva #sfx_silencer sfx_effect
     jmp MainGameLoop
@@ -258,12 +259,15 @@ skipzeroing
 ; the maximum shooting energy to 990 (it is 10*energy)
 ; the default shooting energy to 350
 ; the shooting angle is randomized
-; of course gains an looses are zeroed
+; of course gains an loses are zeroed
 
     lda #song_ingame
     jsr RmtSongSelect
 
 	lda #0
+    sta sizep0 ; P0-P1 widths
+    sta sizep0+1
+	
 	tax
 @	  sta singleRoundVars,x
 	  inx
@@ -275,8 +279,8 @@ SettingEnergies
       lda #$00
       sta gainL,x
       sta gainH,x
-      sta looseL,x
-      sta looseH,x
+      sta loseL,x
+      sta loseH,x
       lda #99
       sta Energy,x
       sta eXistenZ,x
@@ -710,14 +714,14 @@ NotShooter
 ;increases gain of tank TankNr
 ;--------------------------------------------------
     sty EnergyDecrease
-    ; Loose increase
-    lda looseL,x
+    ; Lose increase
+    lda loseL,x
     clc
     adc EnergyDecrease
-    sta looseL,x
-    lda looseH,x
+    sta loseL,x
+    lda loseH,x
     adc #$00
-    sta looseH,x
+    sta loseH,x
     ; Energy now, not less than 0
     lda Energy,x
     cmp EnergyDecrease

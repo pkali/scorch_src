@@ -11,8 +11,6 @@ dliColorsBack
     :10 .by $02,$00
 dliColorsFore
     .by $0a
-TextBackgroundColor = $02	; REAL constans - use: LDA #TextBackgroundColor
-TextForegroundColor = $0c
 CashOptionL ;(one zero less than on the screen)
     .by 0,<200,<800,<1200,<2000
 CashOptionH   

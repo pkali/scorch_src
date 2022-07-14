@@ -2064,6 +2064,10 @@ NextChar02
       dex
     bne @-
     
+    lda #$01
+    sta sizep0 ; P0-P1 widths
+    sta sizep0+1
+    
     ; set background
     lda #$ff
     ldx #100 ; top of the sprites

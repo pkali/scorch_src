@@ -11,6 +11,9 @@ PMOffsetX = $2C ; P/M to graphics offset
 PMOffsetY = $23 ; P/M to graphics offset
 napalmRadius = 10
 
+TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
+TextForegroundColor = $0c
+
 ;Weapon prices (*10 on screen)
 price_Baby_Missile___ = 0      ;_0
 price_Missile________ = 96     ;_1

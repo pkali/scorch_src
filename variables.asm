@@ -58,16 +58,16 @@ moneyL
 ;----------------------------------------------------
 gainH ;how much money player gets after the round
     ;it is gathered during the round basing on energy
-    ;opponents loose after player's shoots
+    ;opponents lose after player's shoots
     .DS [MaxPlayers]
 gainL
     .DS [MaxPlayers]
 ;----------------------------------------------------
-looseH ;how much player looses after the round
+loseH ;how much player looses after the round
     ;calculated from REAL energy loss
     ;(not only to zero energy)
     .DS [MaxPlayers]
-looseL
+loseL
     .DS [MaxPlayers]
 ;----------------------------------------------------
 Energy
