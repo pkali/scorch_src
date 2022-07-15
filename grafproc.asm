@@ -1648,12 +1648,12 @@ EndPut4x4
 .endp
 
 .proc SetMainScreen
-    mva #0 dmactl 
+;    mva #0 dmactls 
     VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
     mwa #dl dlptrs  ; issue #72 (glitches when switches)
-    lda dmactls
-    and #$fc
-    ora #$02     ; 2=normal, 3 = wide screen width
+    lda #%00111110
+;    and #$fc
+;    ora #$02     ; 2=normal, 3 = wide screen width
     sta dmactls
     rts
 .endp

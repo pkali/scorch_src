@@ -144,7 +144,7 @@ MainGameLoop
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
-    mva #0 dmactl
+    mva #0 dmactls
 
     jsr GetRandomWind
 
@@ -245,9 +245,11 @@ skipzeroing
 
     inc CurrentRoundNr
     lda #$0
-    sta dmactl  ; issue #72
+    sta dmactls  ; issue #72
     jsr RmtSongSelect
     mva #sfx_silencer sfx_effect
+    jsr PMoutofscreen
+
     jmp MainGameLoop
  
 
@@ -918,9 +920,9 @@ SetunPlots
     ;setting up P/M graphics
     lda #>pmgraph
     sta pmbase
-    lda dmactls
-    ora #$38     ; Players and Missiles single lined
-    sta dmactls
+;    lda dmactls
+;    ora #$38     ; Players and Missiles single lined
+;    sta dmactls
     lda #$03    ; P/M on
     sta pmcntl
     lda #$00
