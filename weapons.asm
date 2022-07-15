@@ -901,13 +901,12 @@ UpNotYet
     beq HowMuchToFallRight2
 .nowarn    dew xdraw
     lda xdraw
+	ora xdraw+1
     jne RollinContinues		; like cpw xdraw #0
-    lda xdraw+1
-    jne RollinContinues
     beq ExplodeNow
 HowMuchToFallRight2
     inw xdraw
-    cpw xdraw #screenwidth
+    cpw xdraw #screenwidth-1	; if without -1 it miscalculates range of explosion (why? !!!)
     jne RollinContinues
 ExplodeNow
     mwa xdraw xcircle  ; we must store somewhere (BAD)
@@ -1077,7 +1076,9 @@ UpNotYet2
     cmp #1
     beq HowMuchToFallRight3
 .NOWARN    dew xdraw
-	cpw xdraw #$ffff
+	lda xdraw
+	and xdraw+1
+	cmp #$ff ; like cpw xdraw #$ffff
     jne RollinContinuesLiquid
     beq FillNow
 HowMuchToFallRight3
