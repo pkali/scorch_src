@@ -675,28 +675,39 @@ DiggerCharacter
 	sbc #$00
     sta ybyte+1
 
-    mva #0 drawFunction
-
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
     mwa ybyte LaserCoordinate+6
 
     mva #sfx_lightning sfx_effect
-    mva #51 yc  ; laser blink counter
+	
+    mva #%10000000 drawFunction
+    ;the above switches Draw to measuring length
+    jsr draw
+    mva #0 drawFunction
+	lsr LineLength+1	; LineLength / 8
+	ror LineLength
+	lsr LineLength 	; max line lenght is about 380 (9 bits)
+	lsr LineLength
+	sec
+	lda #60
+	sbc LineLength
+	sta yc  ; laser blink counter 60-(LineLength/8)
 @
       lda yc
-      and #$01
+	  and #$01
+	  eor #$01
       sta color
         mwa LaserCoordinate xdraw
         mwa LaserCoordinate+2 ydraw
         mwa LaserCoordinate+4 xbyte
         mwa LaserCoordinate+6 ybyte
-        mva #sfx_lightning sfx_effect
+		mva #sfx_lightning sfx_effect
       jsr draw
 
-    dec:lda yc
-    bpl @-
+    dec yc
+    bne @-
         
     mva #1 color
     mwa LaserCoordinate xdraw
