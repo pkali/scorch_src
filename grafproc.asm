@@ -28,15 +28,15 @@
     ; begin: xdraw,ydraw - end: xbyte,ybyte
     ; let's store starting coordinates
     ; will be needed, because everything is calculated relatively
-    mwa #0 LineLength
+    mwa #$ffff LineLength
     mwa xdraw xtempDRAW
     mwa ydraw ytempDRAW
 
     ; if line goes our of the screen we are not drawing it, but...
 
-    cpw xdraw #screenwidth
+    cpw xdraw #screenwidth+1
     bcs DrawOutOfTheScreen
-    cpw xbyte #screenwidth
+    cpw xbyte #screenwidth+1
     bcs DrawOutOfTheScreen
     ;cpw ydraw #screenheight
     ;bcs DrawOutOfTheScreen

@@ -906,7 +906,7 @@ UpNotYet
     beq ExplodeNow
 HowMuchToFallRight2
     inw xdraw
-    cpw xdraw #screenwidth-1	; if without -1 it miscalculates range of explosion (why? !!!)
+    cpw xdraw #screenwidth
     jne RollinContinues
 ExplodeNow
     mwa xdraw xcircle  ; we must store somewhere (BAD)
@@ -1469,6 +1469,7 @@ NotStrongShoot
     sta Force
     lda ForceTableH,x
     sta Force+1
+    mva #sfx_shoot sfx_effect
 AfterStrongShoot
     lda #$0
     sta Force+2
@@ -1479,7 +1480,6 @@ AfterStrongShoot
     sta xtraj
     sta ytraj
 
-    mva #sfx_shoot sfx_effect
     ; Shoots tank nr X !!! :)
     ; set the starting coordinates of bullet with correction
     ; to start where the tank's barrel ends
