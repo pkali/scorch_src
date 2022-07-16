@@ -701,7 +701,6 @@ DiggerCharacter
     mva #1 color
     mwa LaserCoordinate xdraw
     mwa LaserCoordinate+2 ydraw
-    jsr plot
     mva #0 HitFlag
     jsr CheckCollisionWithTank
     lda HitFlag
@@ -1455,15 +1454,16 @@ RandomizeOffensiveText
     jsr DisplayOffensiveTextNr
 
 
-    ldx TankNr
-    lda ActiveWeapon,x
-    cmp #ind_Laser__________ ; laser
-    bne NotStrongShoot
-      mva #0 color
-      lda #7
-      sta Force
-      sta Force+1
-      bne AfterStrongShoot
+	ldx TankNr
+	lda ActiveWeapon,x
+	cmp #ind_Laser__________ ; laser
+	bne NotStrongShoot
+	; Laser: very strong - invisible - shot for laser beam end coordinates
+	mva #0 color
+	lda #7
+	sta Force
+	sta Force+1
+	bne AfterStrongShoot
 NotStrongShoot
     lda ForceTableL,x
     sta Force
@@ -2007,6 +2007,24 @@ StillUp
 nowait
     lda HitFlag
     bne Hit
+	; --- only for Laser
+    ldx TankNr
+    lda ActiveWeapon,x
+    cmp #ind_Laser__________  ; Laser
+    bne NoCheckEdgesForLaser
+	; If laser fires, edges of the screen finish "flying" and laser hits.
+	lda ytraj+2
+	bmi LaserHitEdge
+	cpw xtraj+1 #screenwidth+1
+	bcc LaserNoHitEdge
+LaserHitEdge
+    mwa xdraw XHit
+    mwa ydraw YHit
+	mva #$ff HitFlag	; screen edgs like ground (only for Laser)
+	jmp EndOfFlight
+LaserNoHitEdge
+	; ------------------
+NoCheckEdgesForLaser
 
     cpw ytraj+1 #screenheight+1
     bcc YTrayLowerThanScreenHeight
