@@ -34,9 +34,9 @@
 
     ; if line goes our of the screen we are not drawing it, but...
 
-    cpw xdraw #screenwidth+1
+    cpw xdraw #screenwidth
     bcs DrawOutOfTheScreen
-    cpw xbyte #screenwidth+1
+    cpw xbyte #screenwidth
     bcs DrawOutOfTheScreen
     ;cpw ydraw #screenheight
     ;bcs DrawOutOfTheScreen
