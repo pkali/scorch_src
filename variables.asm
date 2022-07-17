@@ -197,6 +197,7 @@ vx03   .DS [5]
 MirvDown .DS [5] ; is given missile down?
 MirvMissileCounter .DS 1 ; missile Counter (mainly for X)
 SmokeTracerFlag .DS 1 ; if Smoketracer
+LaserFlag .DS 1 ; $ff if Laser
 XposFlag .DS 1	; bullet positon X (0 - on screen , %1000000 - off-screen)
 YposFlag .DS 1  ; bullet positon Y (0 - on screen , %1000000 - over the screen , %0100000 - under the screen)
 ;----------------------------------------------------
