@@ -13,6 +13,7 @@ Contributors:
 - Adam (@6502adam) - font, ideas, QA
 - Bocianu (@bocianu) - important ideas, FujiNet implementation, QA
 - Emkay - splash screen music
+- Fox (@pfusik) - plot and point optimization
 
 QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert, archon800, Shaggy the Atarian
 
@@ -47,6 +48,18 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Build 148
+2022-07-17
+WHAT DOES THE FOX SAY?
+
+Fox (x0f, @pfusik) says plots and points can be optimized by 18 clock cycles each and thanks to his 6502 wizardry the game is noticeably nicer. Thank you!
+Other changes:
+- https://github.com/pkali/scorch_src/issues/99, https://github.com/pkali/scorch_src/issues/98 - tank number 6 has got a color now! No one is monochrome now! 
+- https://github.com/pkali/scorch_src/issues/110 much improved laser - previously it was almost useless, now it looks and works much better
+- fixed an interesting roller bug
+- Auto Defense angle fix
+- multiple improvements in AI routines, preparation for the final opponents.
+ 
 ###### Build 147
 2022-07-10
 LOST build. We were watching [LOST party](https://www.lostparty.pl/2022/) streams so maybe a little less done, but still some nice improvements.
