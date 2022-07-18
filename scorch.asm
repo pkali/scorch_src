@@ -1397,14 +1397,10 @@ MODUL    equ $b000                                 ;address of RMT module
 ;
 TheEnd
     .ECHO 'TheEnd: ',TheEnd
-    .if TheEnd > PMGraph + $300
-        .error "memory conflict"
+    ;.if TheEnd > PMGraph + $300
+    ;    .error "memory conflict"
+    ;.endif
 
-    .endif
-;----------------------------------------------
-; Player/missile memory
-    org $b800
-PMGraph
 
 
 
