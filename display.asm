@@ -94,10 +94,18 @@ dl ; MAIN game display list
         .word dl
 ;-----------------------------------------------
 GameOverDL
-		.byte $70,$70,$70,$70,$70,$70,$70,$20
+		.byte $70,$70,$70,$40
+		.byte $4f	; 1 line
+		.word display+(40*72)
+		:28 .byte $0f	; 28 lines
+		.byte $0f+$80
 		.byte $4f	; 1 line
 		.word display+(40*32)
-		:31 .byte $0f	; 31 lines
+		:30 .byte $0f	; 30 lines
+		.byte $0f+$80	; 1 line
+		.byte $4f	; 1 line
+		.word display+(40*72)
+		:7 .byte $0f	; 7 lines
 		.byte $70
 		.byte $41
 		.word GameOverDL

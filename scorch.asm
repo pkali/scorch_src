@@ -994,6 +994,27 @@ ClearResults
     rti
 .endp
 ;--------------------------------------------------
+.proc DLIinterruptGameOver
+    ;sta dliA
+	;sty dliY
+	pha
+	lda dliCounter
+	bne @+
+    lda #%00100000	; playfield after P/M
+	STA WSYNC
+    sta gtictl
+	inc dliCounter
+	pla
+	rti
+@
+    lda #%00100100	; playfield before P/M
+	STA WSYNC
+    sta gtictl
+	inc dliCounter
+	pla
+	rti
+.endp
+;--------------------------------------------------
 .proc DLIinterruptText
 	;sta dliA
     pha
