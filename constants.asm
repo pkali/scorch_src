@@ -5,14 +5,12 @@
 ;===================================================================================
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
-TankColoursTable        .BYTE $88,$cc,$38,$1c,$6a,$02
-TankStatusColoursTable  .BYTE $80,$c0,$30,$10,$60,$00
+TankColoursTable        .BYTE $86,$46,$c6,$28,$c6,$ee
+TankStatusColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
 dliColorsBack
     :10 .by $02,$00
 dliColorsFore
     .by $0a
-TextBackgroundColor = $02	; REAL constans - use: LDA #TextBackgroundColor
-TextForegroundColor = $0c
 CashOptionL ;(one zero less than on the screen)
     .by 0,<200,<800,<1200,<2000
 CashOptionH   
@@ -59,17 +57,19 @@ lineClear
     dta d"              ", $ff
 
 ;-----------
-pmtableL ; addressess of the P/M memory for 5 tanks (6th is without P/M background)
+pmtableL ; addressess of the P/M memory for 6 tanks
     .by <(pmgraph+$400)
     .by <(pmgraph+$500)
     .by <(pmgraph+$600)
     .by <(pmgraph+$700)
+    .by <(pmgraph+$300)  ; this is a missile background
     .by <(pmgraph+$300)  ; this is a missile background
 pmtableH
     .by >(pmgraph+$400)
     .by >(pmgraph+$500)
     .by >(pmgraph+$600)
     .by >(pmgraph+$700)
+    .by >(pmgraph+$300)
     .by >(pmgraph+$300)
 ;-----------
 sintable

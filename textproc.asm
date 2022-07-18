@@ -17,9 +17,10 @@
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
     mwa #OptionsDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$02     ; normal screen width
+;    lda dmactls
+;    and #$fc
+;    ora #$02     ; normal screen width
+    lda #%00110010 ; normal screen width, DL on, P/M off
     sta dmactls
     
     VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
@@ -241,13 +242,14 @@ AfterManualPurchase
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
-    mva #0 dmactl
+;    mva #0 dmactl
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
     jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$02     ; normal screen width
+;    lda dmactls
+;    and #$fc
+;    ora #$02     ; normal screen width
+    lda #%00110010 ; normal screen width, DL on, P/M off
     sta dmactls
     
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
@@ -969,9 +971,10 @@ NoArrowDown
 .proc EnterPlayerNames
     ;entering names of players
     mwa #NameDL dlptrs
-    lda dmactls
-    and #$fc
-    ora #$01     ; narrow screen (32 chars)
+;    lda dmactls
+;    and #$fc
+;    ora #$01     ; narrow screen (32 chars)
+    lda #%00110001 ; narrow screen width, DL on, P/M off
     sta dmactls
     VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
 
@@ -2063,6 +2066,10 @@ NextChar02
       sta PMGraph+$500,x
       dex
     bne @-
+    
+    lda #$01
+    sta sizep0 ; P0-P1 widths
+    sta sizep0+1
     
     ; set background
     lda #$ff

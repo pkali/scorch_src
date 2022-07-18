@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"147" ; number of this build (3 bytes)
+	dta d"148" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -144,7 +144,7 @@ MainGameLoop
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
-    mva #0 dmactl
+    mva #0 dmactls
 
     jsr GetRandomWind
 
@@ -213,22 +213,22 @@ CalculateGains
     lda moneyH,x
     adc gainH,x
     sta moneyH,x
-    ; substract loose
-    ; if loose is greater than money then zero money
+    ; substract lose
+    ; if lose is greater than money then zero money
     lda moneyH,x
-    cmp looseH,x
+    cmp loseH,x
     bcc zeromoney
-    bne substractloose
+    bne substractlose
     lda moneyL,x
-    cmp looseL,x
+    cmp loseL,x
     bcc zeromoney
-substractloose
+substractlose
     sec
     lda moneyL,x
-    sbc looseL,x
+    sbc loseL,x
     sta moneyL,x
     lda moneyH,x
-    sbc looseH,x
+    sbc loseH,x
     sta moneyH,x
     jmp skipzeroing
 zeromoney
@@ -244,9 +244,12 @@ skipzeroing
     jne START
 
     inc CurrentRoundNr
-    mva #0 dmactl  ; issue #72
+    lda #$0
+    sta dmactls  ; issue #72
     jsr RmtSongSelect
     mva #sfx_silencer sfx_effect
+    jsr PMoutofscreen
+
     jmp MainGameLoop
  
 
@@ -258,12 +261,15 @@ skipzeroing
 ; the maximum shooting energy to 990 (it is 10*energy)
 ; the default shooting energy to 350
 ; the shooting angle is randomized
-; of course gains an looses are zeroed
+; of course gains an loses are zeroed
 
     lda #song_ingame
     jsr RmtSongSelect
 
 	lda #0
+    sta sizep0 ; P0-P1 widths
+    sta sizep0+1
+	
 	tax
 @	  sta singleRoundVars,x
 	  inx
@@ -275,8 +281,8 @@ SettingEnergies
       lda #$00
       sta gainL,x
       sta gainH,x
-      sta looseL,x
-      sta looseH,x
+      sta loseL,x
+      sta loseH,x
       lda #99
       sta Energy,x
       sta eXistenZ,x
@@ -306,6 +312,7 @@ SettingEnergies
 ;generating the new landscape
     jsr PMoutofScreen ;let P/M disappear
     jsr clearscreen   ;let the screen be clean
+	jsr ClearPMmemory
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
@@ -446,8 +453,8 @@ AfterManualShooting
 	cmp #ind_Nuclear_Winter_
 	bne StandardShoot
 ShootAtomicWinter
-	; --- nuclear winter ---
-	jsr NuclearWinter
+	; --- atomic winter ---
+	jsr AtomicWinter
 	jmp NextPlayerShoots ; and we skip shoot
 ShootWhiteFlag
 	; --- white flag ---
@@ -681,6 +688,20 @@ MetodOfDeath
     jsr ExplosionDirect
     mva #sfx_silencer sfx_effect
 
+	; Clear current Shooter settings. After that, Shooter will "search" for the target again
+	ldx NumberOfPlayers
+	dex
+@	lda skillTable,x
+	cmp #2		; clear variables only if Shooter
+	bne NotShooter
+	lda #0
+	sta PreviousAngle,x
+	sta PreviousEnergyL,x
+	sta PreviousEnergyH,x
+NotShooter
+	dex
+	bpl @-
+
     ; jump to after explosion routines (soil fallout, etc.)
     ; After going through these routines we are back
     ; to checking if a tank exploded and maybe we have
@@ -695,14 +716,14 @@ MetodOfDeath
 ;increases gain of tank TankNr
 ;--------------------------------------------------
     sty EnergyDecrease
-    ; Loose increase
-    lda looseL,x
+    ; Lose increase
+    lda loseL,x
     clc
     adc EnergyDecrease
-    sta looseL,x
-    lda looseH,x
+    sta loseL,x
+    lda loseH,x
     adc #$00
-    sta looseH,x
+    sta loseH,x
     ; Energy now, not less than 0
     lda Energy,x
     cmp EnergyDecrease
@@ -899,18 +920,19 @@ SetunPlots
     ;setting up P/M graphics
     lda #>pmgraph
     sta pmbase
-    lda dmactls
-    ora #$38     ; Players and Missiles single lined
-    sta dmactls
+;    lda dmactls
+;    ora #$38     ; Players and Missiles single lined
+;    sta dmactls
     lda #$03    ; P/M on
     sta pmcntl
-    lda #$01
-    sta sizem ; there will be only M0, double width
+    lda #$00
     sta sizep0 ; P0-P3 widths
     sta sizep0+1
     sta sizep0+2
     sta sizep0+3
-    lda #$10 ; P/M priorities (bit 4 joins missiles)
+	lda #%01010101
+    sta sizem ; all missiles, double width
+    lda #%00100000 ; P/M priorities (multicolor players on)
     sta gtictls
     jsr PMoutofScreen
 

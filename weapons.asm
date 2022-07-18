@@ -655,7 +655,8 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc laser
-; but where are xdraw and ydraw ???? !!!!
+; in xdraw and ydraw we have hit point coordinates
+; from Shoot/Flight procedures (invisible flight)
 ; ------------------------
     ldx TankNr
     lda AngleTable,x
@@ -675,33 +676,43 @@ DiggerCharacter
 	sbc #$00
     sta ybyte+1
 
-    mva #0 drawFunction
-
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
     mwa ybyte LaserCoordinate+6
 
     mva #sfx_lightning sfx_effect
-    mva #51 yc  ; laser blink counter
+	
+    mva #%10000000 drawFunction
+    ;the above switches Draw to measuring length
+    jsr draw
+    mva #0 drawFunction
+	lsr LineLength+1	; LineLength / 8
+	ror LineLength
+	lsr LineLength 	; max line lenght is about 380 (9 bits)
+	lsr LineLength
+	sec
+	lda #60
+	sbc LineLength
+	sta yc  ; laser blink counter 60-(LineLength/8)
 @
       lda yc
-      and #$01
+	  and #$01
+	  eor #$01
       sta color
         mwa LaserCoordinate xdraw
         mwa LaserCoordinate+2 ydraw
         mwa LaserCoordinate+4 xbyte
         mwa LaserCoordinate+6 ybyte
-        mva #sfx_lightning sfx_effect
+		mva #sfx_lightning sfx_effect
       jsr draw
 
-    dec:lda yc
-    bpl @-
+    dec yc
+    bne @-
         
     mva #1 color
     mwa LaserCoordinate xdraw
     mwa LaserCoordinate+2 ydraw
-    jsr plot
     mva #0 HitFlag
     jsr CheckCollisionWithTank
     lda HitFlag
@@ -901,9 +912,8 @@ UpNotYet
     beq HowMuchToFallRight2
 .nowarn    dew xdraw
     lda xdraw
+	ora xdraw+1
     jne RollinContinues		; like cpw xdraw #0
-    lda xdraw+1
-    jne RollinContinues
     beq ExplodeNow
 HowMuchToFallRight2
     inw xdraw
@@ -1077,7 +1087,9 @@ UpNotYet2
     cmp #1
     beq HowMuchToFallRight3
 .NOWARN    dew xdraw
-	cpw xdraw #$ffff
+	lda xdraw
+	and xdraw+1
+	cmp #$ff ; like cpw xdraw #$ffff
     jne RollinContinuesLiquid
     beq FillNow
 HowMuchToFallRight3
@@ -1453,21 +1465,24 @@ RandomizeOffensiveText
     mva #1 plot4x4color
     jsr DisplayOffensiveTextNr
 
-
-    ldx TankNr
-    lda ActiveWeapon,x
-    cmp #ind_Laser__________ ; laser
-    bne NotStrongShoot
-      mva #0 color
-      lda #7
-      sta Force
-      sta Force+1
-      bne AfterStrongShoot
+	mva #0 LaserFlag	; $ff - Laser
+	ldx TankNr
+	lda ActiveWeapon,x
+	cmp #ind_Laser__________ ; laser
+	bne NotStrongShoot
+	; Laser: (not)very strong - invisible - shot for laser beam end coordinates
+	mva #0 color
+	lda #1
+	sta Force
+	sta Force+1
+	mva #$ff LaserFlag	; $ff - Laser
+	bne AfterStrongShoot
 NotStrongShoot
     lda ForceTableL,x
     sta Force
     lda ForceTableH,x
     sta Force+1
+    mva #sfx_shoot sfx_effect
 AfterStrongShoot
     lda #$0
     sta Force+2
@@ -1478,7 +1493,6 @@ AfterStrongShoot
     sta xtraj
     sta ytraj
 
-    mva #sfx_shoot sfx_effect
     ; Shoots tank nr X !!! :)
     ; set the starting coordinates of bullet with correction
     ; to start where the tank's barrel ends
@@ -1517,257 +1531,6 @@ ShotUnderGround
 .endp
 
 ;--------------------------------------------------
-.proc TankFalls;
-;--------------------------------------------------
-    lda #0
-    sta PreviousFall	; bit 7 - left, bit 6 - right
-    sta EndOfTheFallFlag
-    sta Parachute
-	mva #2 FallingSoundBit	; another trick for only one sfx initialization in loop
-
-    ; let's check if the given tank has got the parachute
-	ldx TankNr
-	lda ActiveDefenceWeapon,x
-    cmp #ind_Parachute______ ; parachute
-	beq ParachuteActive
-	cmp #ind_StrongParachute ; strong parachute
-	beq ParachuteActive
-	cmp #ind_Force_Shield___ ; shield witch energy and parachute
-    bne TankFallsX
-ParachuteActive
-    inc Parachute
-TankFallsX
-	; sound only if really falls
-	lda Parachute
-	and FallingSoundBit		; bit 1
-	beq NoFallingSound
-	mva #0 FallingSoundBit
-    mva #sfx_shield_off sfx_effect
-NoFallingSound
-    ; clear previous position
-    mva #1 Erase
-    jsr DrawTankNr
-    ; and the parachute (if present)
-    lda Parachute
-    and #01
-    beq DoNotClearParachute
-    ; here we clear the parachute
-    ldx TankNr
-    jsr DrawTankParachute
-DoNotClearParachute
-    mva #0 Erase
-    ldx TankNr
-	lda EndOfTheFallFlag	; We only get byte below the tank if still falling
-	bne NoGroundCheck
-    ; coordinates of the first pixel under the tank
-    ldx TankNr
-    lda XtankstableL,x
-    sta xdraw
-    lda XtankstableH,x
-    sta xdraw+1
-    lda Ytankstable,x
-    clc
-    adc #1 ; in this point the comment helped us! For the very first
-    ; time in our lives! Tada! It opens a new chapter!!!
-    sta ydraw
-    ;
-;	UnderTank1	; byte under tank
-;	UnderTank2	; byte under tank reversed (for simple check right direction)
-    lda #08
-    sta temp  ; Loop Counter
-ByteBelowTank
-    jsr point
-    beq EmptyPoint2
-    sec
-	ror UnderTank2
-	sec
-    bcs ROLPoint2
-EmptyPoint2
-    clc
-	ror UnderTank2
-	clc
-ROLPoint2
-    rol UnderTank1
-    inw xdraw
-    dec temp
-    bne ByteBelowTank	
-NoGroundCheck
-    ldx TankNr
-	lda UnderTank1
-	bne NoFallingDown
-	; Tank falling down ----
-	lda Parachute
-    and #1
-    bne ParachutePresent
-    ; decreasing energy 
-    ldy #2 ; how much energy to substract
-    jsr DecreaseEnergyX
-ParachutePresent
-	; check parachute type
-	lda ActiveDefenceWeapon,x
-    cmp #ind_StrongParachute ; strong parachute
-	bne OneTimeParachute
-    ; decreasing energy of parachute
-    ldy #2 ; how much energy to substract
-	jsr DecreaseShieldEnergyX
-	cpy #0	; is necessary to reduce tenk energy ?
-	beq @+
-    jsr DecreaseEnergyX
-@
-	; check energy of parachute	
-	lda ShieldEnergy,x
-	bne OneTimeParachute
-	mva #0 Parachute
-	mva #0 ActiveDefenceWeapon,x ; deactivate defence
-OneTimeParachute
-    lda Parachute
-    ora #2 ; we set bit nr 1 (nr 0 means that parachute is present)
-    sta Parachute
-    ; tank is falling down - modify coorinates
-    lda Ytankstable,x
-    clc
-    adc #1
-    sta Ytankstable,x
-	jmp EndOfFCycle
-NoFallingDown
-	; check direction (left or right)
-	ldy #7		; SlideLeftTable length -1 (from 0 to 7)
-@	lda SlideLeftTable,y
-	cmp UnderTank1
-	beq FallingRight
-	cmp UnderTank2
-	beq FallingLeft
-	dey
-	bpl @-
-	bmi NoLeftOrRight
-FallingLeft
-	; tank is falling left
-	bit PreviousFall	; bit 6 - right
-	bvs EndLeftFall
-    ; we finish falling left if the tank reached the edge of the screen
-    lda XtanksTableL,x
-    bne NotLeftEdge
-    lda XtanksTableH,x
-    beq EndLeftFall
-NotLeftEdge
-    ; tank is falling left - modify coorinates
-    clc
-    lda XtankstableL,x
-    adc #1
-    sta XtankstableL,x
-    lda XtankstableH,x
-    adc #0
-    sta XtankstableH,x
-	mva #%10000000 PreviousFall	; set bit 7 - left
-	bne EndOfFCycle
-FallingRight
-	; tank is falling right
-	bit PreviousFall	; bit 7 - left
-	bmi EndRightFall
-    ; we finish falling right if the tank reached the edge of the screen
-    clc
-    lda XtanksTableL,x
-    adc #$08 ; we'll check right side of the char
-    sta temp
-    lda XtanksTableH,x
-    adc #0
-    sta temp+1
-    cpw temp #screenwidth
-    beq EndRightFall
-    ; tank is falling right - modify coorinates
-    sec
-    lda XtankstableL,x
-    sbc #1
-    sta XtankstableL,x
-    lda XtankstableH,x
-    sbc #0
-    sta XtankstableH,x
-	mva #%01000000 PreviousFall	; set bit 6 - right
-	bne EndOfFCycle
-EndLeftFall
-EndRightFall
-NoLeftOrRight
-    inc EndOfTheFallFlag ; after this is shouldn't fall 
-EndOfFCycle
-	; draw tank on new position
-    jsr DrawTankNr	; ew have TankNr in X (I hope :) )
-    ; checking is parachute present and if so, draw it
-    lda Parachute
-	cmp #3	; parachute and falling
-	bne DoNotDrawParachute
-    ; here we draw parachute
-    ldx TankNr
-    jsr DrawTankParachute
-    wait	; onli if tank with patachute
-RapidFalling
-DoNotDrawParachute
-	lda EndOfTheFallFlag
-	jeq TankFallsX
-    ; Tank falling down already finished, but it is not sure that
-    ; the horizontal coordinate is even.
-    ; If it is odd then it must be corrected because otherwise
-    ; P/M graphics background would not look OK
-    ldx TankNr
-    lda XtanksTableL,x
-    and #$01
-    beq EndOfFall ; if it is even then it is the end
-    ; and if not, we push it one pixel the way it was falling before
-    lda #%10000000	 ; set "virtual ground" for right falling
-	ldy #%00000001
-	bit PreviousFall
-	bmi ForceFallLeft
-	tay		; tricky - replaces ldy #%10000000
-	lda #%00000001	 ; set "virtual ground" for left falling
-ForceFallLeft
-	sta UnderTank1
-	sty UnderTank2
-	jne TankFallsX
-EndOfFall
-    mva #1 Erase
-    ldx TankNr
-    ; if tank was falling down having parachute,
-    ; we must deduct one parachute
-    lda Parachute
-    cmp #$03 ; was falling down and the parachute
-    bne NoParachuteWeapon
-	; first we check type of parachute
-	lda ActiveDefenceWeapon,x
-	cmp #ind_Parachute______		; deactivate weapon only if parachute (54)
-	bne NoParachuteWeapon
-	mva #0 ActiveDefenceWeapon,x ; deactivate defence weapon (parachute)
-NoParachuteWeapon
-    ; now we clear parachute on the screen if present
-    lda Parachute
-    and #01
-    beq ThereWasNoParachute
-    jsr DrawTankParachute
-ThereWasNoParachute
-    mva #0 Erase
-    ldx TankNr	
-    jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
-    mva #sfx_silencer sfx_effect
-    rts
-
-.endp
-
-;--------------------------------------------------
-.proc DrawTankParachute
-;Tank number in X
-;--------------------------------------------------
-    lda #$34	; parachute symbol
-    sta CharCode
-    lda Ytankstable,x
-    sec
-    sbc #8
-    sta ydraw
-    lda XtanksTableL,x
-    sta xdraw
-    lda XtanksTableH,x
-    sta xdraw+1
-    jsr TypeChar
-	rts
-.endp
-;--------------------------------------------------
 .proc Flight  ; Force(byte.byte), Wind(0.word)
 ; Angle(byte) 128=0, 255=maxright, 0=maxleft
 ;--------------------------------------------------
@@ -1790,7 +1553,7 @@ ThereWasNoParachute
     ldy #0
     ldx TankNr
     lda ActiveWeapon,x
-    cmp #11 ; Smoke tracer
+    cmp #ind_Smoke_Tracer___ ; Smoke tracer
 	bne noSmokeTracer
 	iny
 noSmokeTracer
@@ -1949,6 +1712,8 @@ Loopi
     sbc vy+3
     sta ytraj+2
 
+	bit LaserFlag	; no gravity if Laser
+	bmi NoGravity
     ;vy=vy-g (again without least significant byte of vy)
     sec
     lda vy+1
@@ -1967,8 +1732,8 @@ Loopi
     lda ActiveWeapon,x
     cmp #ind_MIRV___________ ; MIRV
     jeq MIRVdownLoop
+NoGravity
 StillUp
-
 
     clc ;xtraj=xtraj+vx (skipping least significant byte of vx)
     lda xtraj ;here of course Fight to right
@@ -1981,12 +1746,15 @@ StillUp
     adc vx+3
     sta xtraj+2
 
+	bit LaserFlag	; no wind if Laser
+	bmi NoWind
     clc
     .rept 4
       lda vx+#
       adc Wind+#
       sta vx+#
     .endr
+NoWind
     mwa xtrajold+1 xdraw
     mwa ytrajold+1 ydraw
     mwa xtraj+1 xbyte
@@ -2006,6 +1774,22 @@ StillUp
 nowait
     lda HitFlag
     bne Hit
+	; --- only for Laser
+	bit LaserFlag
+    bpl NoCheckEdgesForLaser
+	; If laser fires, edges of the screen finish "flying" and laser hits.
+	lda ytraj+2
+	bmi LaserHitEdge
+	cpw xtraj+1 #screenwidth+1
+	bcc LaserNoHitEdge
+LaserHitEdge
+    mwa xdraw XHit
+    mwa ydraw YHit
+	mva #$ff HitFlag	; screen edgs like ground (only for Laser)
+	jmp EndOfFlight
+LaserNoHitEdge
+	; ------------------
+NoCheckEdgesForLaser
 
     cpw ytraj+1 #screenheight+1
     bcc YTrayLowerThanScreenHeight
@@ -2095,7 +1879,7 @@ NoDefence
     rts		; END !!!	
 AutoDefence
 	; now run defensive-aggressive weapon - Auto Defence!
-	sbb #255 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
+	sbb #180 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
 	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
 	mva #1 Erase		; now erase shield 
 	phx
@@ -2514,7 +2298,7 @@ MIRValreadyAll
 .endp
 
 ; -------------------------------------------------
-.proc NuclearWinter
+.proc AtomicWinter
 ; -------------------------------------------------
 ; This routine is run from inside of the main loop
 ; and replaces Shoot and Flight routines

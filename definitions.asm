@@ -7,8 +7,12 @@ margin = 40 ;mountain drawing Y variable margin
 display = $1010 ;screen takes $2K due to clearing routine
 MaxPlayers = 6
 maxOptions = 8  ;number of all options
-PMOffset = $23 ; P/M to graphics offset
+PMOffsetX = $2C ; P/M to graphics offset
+PMOffsetY = $23 ; P/M to graphics offset
 napalmRadius = 10
+
+TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
+TextForegroundColor = $0c
 
 ;Weapon prices (*10 on screen)
 price_Baby_Missile___ = 0      ;_0
