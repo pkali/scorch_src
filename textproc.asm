@@ -1837,6 +1837,8 @@ FinishResultDisplay
 	lda #%00111110 ; normal screen width, DL on, P/M on
     sta dmactls
 	jsr ColorsOfSprites
+    mva #0 colpf1s
+    mva #TextForegroundColor colpf2s
     VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
 	; initial tank positions randomization
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
@@ -1857,6 +1859,22 @@ AllTanksFloatingDown
 	jsr RandomizeTankPos
 TankOnScreen
 	jsr DrawTankNr
+	; now we must clear sprites over and under our banner
+    lda pmtableL,x
+    sta xbyte	    ; sprite position in RAM
+    lda pmtableH,x
+    sta xbyte+1
+	lda #0
+	ldy #PMOffsetY	; start on top position
+@	sta (xbyte),y
+	iny
+	cpy #PMOffsetY+32	; banner begin - end zeroing sprites
+	bne @-
+	ldy #PMOffsetY+64	; banner end - start zeroing again
+@	sta (xbyte),y
+	iny
+	cpy #PMOffsetY+80	; end of zeroing sprites
+	bne @-	
 	jsr DrawTankParachute
 	ldx TankNr
 	dex
