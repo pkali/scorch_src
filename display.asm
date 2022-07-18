@@ -93,6 +93,16 @@ dl ; MAIN game display list
         .byte $41
         .word dl
 ;-----------------------------------------------
+GameOverDL
+		.byte $70,$70,$70,$70,$70,$70,$70,$20
+		.byte $4f	; 1 line
+		.word display+(40*32)
+		:31 .byte $0f	; 31 lines
+		.byte $70
+		.byte $41
+		.word GameOverDL
+
+;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen

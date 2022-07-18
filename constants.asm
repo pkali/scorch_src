@@ -36,7 +36,11 @@ TanksWeaponsTableL
     .by <TanksWeapon1,<TanksWeapon2,<TanksWeapon3,<TanksWeapon4,<TanksWeapon5,<TanksWeapon6
 TanksWeaponsTableH
     .by >TanksWeapon1,>TanksWeapon2,>TanksWeapon3,>TanksWeapon4,>TanksWeapon5,>TanksWeapon6
-
+;--------------
+XtankOffsetGO_L
+	.by 6,56,106,156,206,0
+XtankOffsetGO_H
+	.by 0,0,0,0,0,1
 ;-----4x4 texts-----
 LineTop
     dta d"(%%%%%%%%%%%%)", $ff

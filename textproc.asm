@@ -1828,6 +1828,56 @@ FinishResultDisplay
     jmp TypeLine4x4  ; jsr:rts
 .endp
 
+;--------------------------------------------------
+.proc GameOverScreen
+;--------------------------------------------------
+	jsr ClearScreen
+	jsr ClearPMmemory
+    mwa #GameOverDL dlptrs
+	lda #%00111110 ; normal screen width, DL on, P/M on
+    sta dmactls
+	jsr ColorsOfSprites
+    VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
+	; initial tank positions randomization
+    ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
+@
+	jsr RandomizeTankPos
+    dex
+    bpl @-
+MainTanksFloatingLoop	
+	; main tanks floating loop
+    ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
+AllTanksFloatingDown	
+	stx TankNr
+	inc Ytankstable,x
+	lda Ytankstable,x
+;	cmp #32		; tank over screen - not visible
+	cmp #80		; tank under screen - new tank randomize
+	bne TankOnScreen
+	jsr RandomizeTankPos
+TankOnScreen
+	jsr DrawTankNr
+	jsr DrawTankParachute
+	ldx TankNr
+	dex
+	bpl AllTanksFloatingDown
+	jmp MainTanksFloatingLoop	; neverending loop
+	rts
+RandomizeTankPos
+	randomize 8 32
+	sta Ytankstable,x
+	randomize 0 180
+	sta AngleTable,x
+	randomize 0 (49-8)
+	and #%11111110	; correction for PMG
+	clc
+	adc XtankOffsetGO_L,x
+    sta XtankstableL,x
+	lda XtankOffsetGO_H,x
+	adc #0
+    sta XtankstableH,x
+	rts
+.endp
 ;-------------------------------------------------
 .proc DisplayStatus
 ;-------------------------------------------------

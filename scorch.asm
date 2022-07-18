@@ -128,6 +128,8 @@ START
 
     ; Startup sequence
     jsr Initialize
+	
+	jsr GameOverScreen	; only for test !!!
 
     jsr Options  ;startup screen
     lda escFlag
