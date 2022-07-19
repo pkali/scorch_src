@@ -93,24 +93,6 @@ dl ; MAIN game display list
         .byte $41
         .word dl
 ;-----------------------------------------------
-GameOverDL
-		.byte $70,$70,$70,$40
-		.byte $4f	; 1 line
-		.word display+(40*72)
-		:28 .byte $0f	; 28 lines
-		.byte $0f+$80
-		.byte $4f	; 1 line
-		.word display+(40*32)
-		:30 .byte $0f	; 30 lines
-		.byte $0f+$80	; 1 line
-		.byte $4f	; 1 line
-		.word display+(40*72)
-		:7 .byte $0f	; 7 lines
-		.byte $70
-		.byte $41
-		.word GameOverDL
-
-;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
@@ -164,6 +146,24 @@ EmptyLine
  dta d"                                        "
 ; -------------------------------------------------
     .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
+;-----------------------------------------------
+GameOverDL
+       .byte $70,$70,$70,$40
+       .byte $4f   ; 1 line
+       .word display+(40*72)
+       :28 .byte $0f   ; 28 lines
+       .byte $0f+$80
+       .byte $4f   ; 1 line
+       .word display+(40*32)
+       :30 .byte $0f   ; 30 lines
+       .byte $0f+$80   ; 1 line
+       .byte $4f   ; 1 line
+       .word display+(40*72)
+       :7 .byte $0f    ; 7 lines
+       .byte $70
+       .byte $41
+       .word GameOverDL
+
 NameScreen
  dta d"    Enter names of players      "
  dta d"   Tank  01    Name:"
