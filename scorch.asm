@@ -998,19 +998,30 @@ ClearResults
     ;sta dliA
 	;sty dliY
 	pha
+	phy
 	lda dliCounter
-	bne @+
+	bne EndofPMG
     lda #%00100000	; playfield after P/M
 	STA WSYNC
     sta gtictl
-	inc dliCounter
-	pla
-	rti
-@
+	bne EndOfDLI_GO
+EndofPMG
+	cmp #1
+	bne ColoredLines
     lda #%00100100	; playfield before P/M
 	STA WSYNC
     sta gtictl
+	bne EndOfDLI_GO
+ColoredLines
+	tay
+	lda GameOverColoursTable-3,y	; -2 becouse this is DLI nr 2 and -1 (labels line)
+	ldy #$0a	; text colour (brightnes)
+	STA WSYNC
+	sta COLPF2
+	sty COLPF1
+EndOfDLI_GO
 	inc dliCounter
+	ply
 	pla
 	rti
 .endp
@@ -1019,8 +1030,8 @@ ClearResults
 	;sta dliA
     pha
 	sta WSYNC
-    mva #TextBackgroundColor colpf2
-    mva #TextForegroundColor colpf3
+    mva #TextBackgroundColor COLPF2
+    mva #TextForegroundColor COLPF3
 	;lda dliA
     pla
 DLIinterruptNone

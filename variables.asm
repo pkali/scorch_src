@@ -18,6 +18,10 @@ seppukuVal .by 75
 mountainDeltaH .by 3
 mountainDeltaL .by $ff
 ;----------------------------------------------------
+; Color table for Game Over Screen
+	.by $00		; labels line color
+GameOverColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
+;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS [MaxPlayers]
 ;----------------------------------------------------

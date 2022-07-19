@@ -128,6 +128,7 @@ MoreDown
 ListOfWeapons
  :36 dta d"                                        "
 ListOfWeapons1End
+GameOverResults	; reuse after game (remember to clear on start new)
 ListOfDefensiveWeapons
  :16 dta d"                                        "
 ListOfDefensiveWeaponsEnd ;constant useful when clearing
@@ -148,7 +149,9 @@ EmptyLine
     .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 ;-----------------------------------------------
 GameOverDL
-       .byte $70,$70,$70,$40
+       .byte $70,$40
+	   .byte $47	; 16 gr8 lines
+	   .word GameOverTitle
        .byte $4f   ; 1 line
        .word display+(40*72)
        :28 .byte $0f   ; 28 lines
@@ -160,6 +163,13 @@ GameOverDL
        .byte $4f   ; 1 line
        .word display+(40*72)
        :7 .byte $0f    ; 7 lines
+	   .byte $00+$80	; 1 line
+	   .byte $42	; 7 tekst lines
+	   .word GameOverTitle2
+	   .byte $00+$80
+	   .byte $42
+	   .word GameOverResults
+	   :5 .byte $00+$80,$02
        .byte $70
        .byte $41
        .word GameOverDL
@@ -197,5 +207,8 @@ activateTextEnd
 purchaseText
  dta d"Purchase"
 purchaseTextEnd
-
+GameOverTitle
+ dta d"     game  over     "*
+GameOverTitle2
+ dta d" Player    Points    Hits    Money      "
 .endif
