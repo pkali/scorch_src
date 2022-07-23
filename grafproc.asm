@@ -1908,14 +1908,32 @@ EndPut4x4
     sta dmactls
     rts
 .endp
-
-.proc TankBarrel
+; -------------------------------------
+.proc _XtanksTableLHX
+    lda ytankstable,x
+    sta ydraw
+    mva #0 ydraw+1
+X    lda XtanksTableL,x
+    sta xdraw
+    lda XtanksTableH,x
+    sta xdraw+1
+    rts
+.endp
+;--------------------------------------------------
+.proc DrawBarrel
+; X - tank number
+; 
+; changes xdraw, ydraw, xbyte, ybyte
+;--------------------------------------------------
+    jsr _XtanksTableLHX
     ;vx calculation
     ;vx = sin(90-Angle) for Angle <=90
     ;vx = -sin(Angle-90) for 90 < Angle <= 180 
 
     ;cos(Angle) (but we use sin table only so some shenanigans happen)
-    ldx Angle
+    lda AngleTable,x
+    sta Angle
+    tax
 
     ;Angle works like this:
     ;0 'degrees' is horizontally right
@@ -1968,7 +1986,8 @@ YangleUnder90
     sta vy+1
     
     # draw by vx vy
-    
+    # add barrel start offset
+    adw #4 
 
 
     rts
