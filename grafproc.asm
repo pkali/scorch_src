@@ -1578,10 +1578,10 @@ EndOfUnPlot
 ; -----------------------------------------
     ; is it not over the screen ???
     cpw ydraw #(screenheight+1); changed for one additional line. cpw ydraw #(screenheight-1)
-    bcs unPlot.EndOfUnPlot
+    bcs unPlot.EndOfUnPlot ;nearest RTS
 CheckX02
     cpw xdraw #screenwidth
-    bcs EndOfPlot ;nearest RTS
+    bcs EndOfPlot 
 MakePlot
     ; let's calculate coordinates from xdraw and ydraw
 
@@ -1923,7 +1923,7 @@ X    lda XtanksTableL,x
 .proc DrawBarrel
 ; X - tank number
 ; 
-; changes xdraw, ydraw, xbyte, ybyte
+; changes xdraw, ydraw, fx, fy
 ;--------------------------------------------------
     jsr _XtanksTableLHX
     ;vx calculation
@@ -1981,13 +1981,52 @@ YangleUnder90
 
     sta vy
 
-    lda #0
+    lda #0  ; all arithmetic to zero
     sta vx+1
     sta vy+1
+    sta fx
+    sta fy
     
-    # draw by vx vy
-    # add barrel start offset
-    adw #4 
+    ; barrel start offset
+    adw xdraw #4 xdraw
+    sbw ydraw #4 ydraw
+    
+ 
+    ; draw by vx vy
+    ; in each step 
+    ; 1. plot(xdraw, ydraw)
+    ; 2. add vx and vy to 3 byte variables xdraw.fx, ydraw.fy
+    ; 3 check length, if shorter, go to 1.
+    
+    mva #5 yc  ; barrel length
+    mva #1 color
+@
+    jsr plot.MakePlot
+    clc
+    lda fx
+    adc vx
+    sta fx
+    lda xdraw
+    adc #0
+    sta xdraw
+    lda xdraw+1
+    adc #0
+    sta xdraw+1
+    
+    clc
+    lda fy
+    adc vy
+    sta fy
+    lda ydraw
+    adc #0
+    sta ydraw
+    lda ydraw+1
+    adc #0
+    sta ydraw+1
+    
+    dec yc
+    bne @-
+    
 
 
     rts
