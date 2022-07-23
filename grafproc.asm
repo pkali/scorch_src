@@ -1909,4 +1909,69 @@ EndPut4x4
     rts
 .endp
 
+.proc TankBarrel
+    ;vx calculation
+    ;vx = sin(90-Angle) for Angle <=90
+    ;vx = -sin(Angle-90) for 90 < Angle <= 180 
+
+    ;cos(Angle) (but we use sin table only so some shenanigans happen)
+    ldx Angle
+
+    ;Angle works like this:
+    ;0 'degrees' is horizontally right
+    ;90 'degrees' is straight up
+    ;180 horizontally left
+
+    ; (we have to set goleft used in rolling weapons)
+   
+    cpx #91
+    bcc angleUnder90
+    
+    ;over 90
+    sec
+    txa  ; lda # Angle
+    sbc #90
+    tax
+    jmp @+
+
+angleUnder90
+    mva #0 goleft
+    sec             ; X = 90-Angle
+    lda #90
+    sbc Angle
+    tax
+@    
+    lda sintable,x  ; cos(X)
+    sta vx
+
+;======vy
+    ;vy = sin(Angle) for Angle <=90
+    ;vy = sin(180-Angle) for 90 < Angle <= 180
+
+;--
+    ldx Angle
+    cpx #91
+    bcc YangleUnder90
+    
+    lda #180
+    sec
+    sbc Angle
+    tax
+
+YangleUnder90
+    lda sintable,x
+
+    sta vy
+
+    lda #0
+    sta vx+1
+    sta vy+1
+    
+    # draw by vx vy
+    
+
+
+    rts
+.endp
+
 .endif
