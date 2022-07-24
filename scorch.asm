@@ -325,6 +325,13 @@ SettingEnergies
 	sta colpf2s	; status line "off"
 	sta colpf1s
 
+    lda #90 ; barrel fully erect
+    ldx #MaxPlayers-1
+@     sta previousBarrelAngle,x
+      dex
+    bpl @-
+
+
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
@@ -789,12 +796,7 @@ NotNegativeShieldEnergy
     lda #0  ; turn off defense weapons when hara-kiring
     sta ActiveDefenceWeapon,x
     sta ShieldEnergy,x
-    lda xtankstableL,x
-    sta xdraw
-    lda xtankstableH,x
-    sta xdraw+1
-    lda yTanksTable,x
-    sta ydraw
+    jsr SetupXYdraw
     lda #1  ; Missile
     jsr ExplosionDirect
     jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku

@@ -661,20 +661,25 @@ DiggerCharacter
     ldx TankNr
     lda AngleTable,x
     tay
-    clc
-    lda xtankstableL,x
-    adc EndOfTheBarrelX,y ; correction of the end of the barrel point (X)
-    sta xbyte
-    lda xtankstableH,x
-    adc #0
-    sta xbyte+1
-    sec
-    lda ytankstable,x
-    sbc EndOfTheBarrelY,y ; correction of the end of the barrel point (Y)
-    sta ybyte
-	lda #$00
-	sbc #$00
-    sta ybyte+1
+    
+    mwa EndOfTheBarrelX xbyte
+    mva EndOfTheBarrelY ybyte
+    mva #0 ybyte+1
+    
+    ;clc
+    ;lda xtankstableL,x
+    ;adc EndOfTheBarrelX,y ; correction of the end of the barrel point (X)
+    ;sta xbyte
+    ;lda xtankstableH,x
+    ;adc #0
+    ;sta xbyte+1
+    ;sec
+    ;lda ytankstable,x
+    ;sbc EndOfTheBarrelY,y ; correction of the end of the barrel point (Y)
+    ;sta ybyte
+	;lda #$00
+	;sbc #$00
+    ;sta ybyte+1
 
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
@@ -1325,61 +1330,70 @@ CTRLPressedDown
     jmp BeforeFire
 
 pressedRight
+    ldx TankNr
+    lda AngleTable,x
+    sta previousBarrelAngle,x
     lda pressTimer
     spl:mva #0 pressTimer  ; if >128 then reset to 0
     cmp #25  ; 1/2s
     bcs CTRLPressedRight
 
     mva #sfx_set_power_2 sfx_effect
-    ldx TankNr
+
     dec AngleTable,x
     lda AngleTable,x
     cmp #255 ; -1
     jne BeforeFire
-    lda #180
+    lda #179
     sta AngleTable,x
     jmp BeforeFire
 
 CTRLPressedRight
-    mva #sfx_set_power_2 sfx_effect
     ldx TankNr
+    lda AngleTable,x
+    sta previousBarrelAngle,x
+    mva #sfx_set_power_2 sfx_effect
     lda AngleTable,x
     sec
     sbc #4
     sta AngleTable,x
-    cmp #4  ; smalles angle for speed rotating
+    cmp #4  ; smallest angle for speed rotating
     jcs BeforeFire
-    lda #180
+    lda #179
     sta AngleTable,x
     jmp BeforeFire
         
 
 pressedLeft
+    ldx TankNr
+    lda AngleTable,x
+    sta previousBarrelAngle,x
     lda pressTimer
     spl:mva #0 pressTimer  ; if >128 then reset to 0
     cmp #25  ; 1/2s
     bcs CTRLPressedLeft
 
     mva #sfx_set_power_2 sfx_effect
-    ldx TankNr
     INC AngleTable,x
     lda AngleTable,x
-    cmp #181
+    cmp #180
     jne BeforeFire
-    lda #0
+    lda #1
     sta AngleTable,x
     jmp BeforeFire
 
 CTRLPressedLeft
-    mva #sfx_set_power_2 sfx_effect
     ldx TankNr
+    lda AngleTable,x
+    sta previousBarrelAngle,x
+    mva #sfx_set_power_2 sfx_effect
     lda AngleTable,x
     clc
     adc #4
     sta AngleTable,x
-    cmp #181-4
+    cmp #180-4
     jcc BeforeFire
-    lda #0
+    lda #1
     sta AngleTable,x
     jmp BeforeFire
 
@@ -1498,21 +1512,26 @@ AfterStrongShoot
     ; to start where the tank's barrel ends
     ; (without it bullet would go from the left lower corner of the tank)
     ;ldx TankNr
-	ldy Angle
-	clc
-    lda xtankstableL,x
-	adc EndOfTheBarrelX,y   ; correction of X
-    sta xtraj+1
-    lda xtankstableH,x
-	adc #$00
-    sta xtraj+2
-	sec
-    lda ytankstable,x
-	sbc EndOfTheBarrelY,y   ; correction of Y
-    sta ytraj+1
-    lda #$00
-	sbc #$00
-    sta ytraj+2
+	
+	mwa EndOfTheBarrelX xtraj+1
+	mva EndOfTheBarrely ytraj+1
+	mva #0 ytraj+2
+	
+	;ldy Angle
+	;clc
+    ;lda xtankstableL,x
+	;adc EndOfTheBarrelX,y   ; correction of X
+    ;sta xtraj+1
+    ;lda xtankstableH,x
+	;adc #$00
+    ;sta xtraj+2
+	;sec
+    ;lda ytankstable,x
+	;sbc EndOfTheBarrelY,y   ; correction of Y
+    ;sta ytraj+1
+    ;lda #$00
+	;sbc #$00
+    ;sta ytraj+2
 
 	; checking if the shot is underground (no Flight but Hit :) )
 	ldy #0
@@ -1918,30 +1937,25 @@ AutoDefence
     sta xtraj
     sta ytraj
 
-    lda xtankstableL,x
-    sta xtraj+1
-    lda xtankstableH,x
-    sta xtraj+2
-    lda ytankstable,x
-    sta ytraj+1
-    lda #$00
-    sta ytraj+2
+    mwa EndOfTheBarrelX xbyte
+    mva EndOfTheBarrelY ybyte
+    mva #0 ybyte+1
 
-    ldy Angle
-    clc
-    lda xtraj+1
-    adc EndOfTheBarrelX,y   ; correction of X
-    sta xtraj+1
-    lda xtraj+2
-    adc #0
-    sta xtraj+2
-    sec
-    lda ytraj+1
-    sbc EndOfTheBarrelY,y   ; correction of Y
-    sta ytraj+1
-    lda ytraj+2
-    sbc #0
-    sta ytraj+2
+;    ldy Angle
+;    clc
+;    lda xtraj+1
+;    adc EndOfTheBarrelX,y   ; correction of X
+;    sta xtraj+1
+;    lda xtraj+2
+;    adc #0
+;    sta xtraj+2
+;    sec
+;    lda ytraj+1
+;    sbc EndOfTheBarrelY,y   ; correction of Y
+;    sta ytraj+1
+;    lda ytraj+2
+;    sbc #0
+;    sta ytraj+2
 	
     ldy #100           ; ???
 	mva #1 tracerflag  ; I do not know (I mean I think I know ;) )

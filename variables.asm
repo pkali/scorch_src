@@ -100,10 +100,6 @@ MaxForceTableH
     .DS [MaxPlayers]
 ;----------------------------------------------------
 
-AngleTable ;Angle of the barrel of each tank during the round
-    .DS [MaxPlayers]
-NewAngle .DS 1
-;----------------------------------------------------
 
 ActiveWeapon ;number of the selected weapon
     .DS [MaxPlayers]
@@ -347,7 +343,18 @@ escFlag .ds 1
 ;-------------- 
 CurrentResult
     .DS 1
-;-------------- 
+;--------------
+AngleTable ;Angle of the barrel of each tank during the round
+    .DS [MaxPlayers]
+NewAngle  ; used in AI
+    .DS 1
+previousBarrelAngle
+    .DS [MaxPlayers]
+EndOfTheBarrelX
+    .ds 2
+EndOfTheBarrelY
+    .ds 1
+;----------------------------------------------------
 previousAngle
     .DS [MaxPlayers]
 previousEnergyL
@@ -355,8 +362,6 @@ previousEnergyL
 previousLeftRange
     .DS [MaxPlayers]
 previousEnergyH
-    .DS [MaxPlayers]
-previousRightAngle
     .DS [MaxPlayers]
 RandBoundaryLow
     .ds 2

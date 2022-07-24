@@ -637,13 +637,7 @@ SkipHidingPM
     sta CharCode
 DrawTankNrX
     ldx tanknr
-    lda xtankstableL,x
-    sta xdraw
-    lda xtankstableH,x
-    sta xdraw+1
-    lda ytankstable,x
-    sta ydraw
-	mva #0 ydraw+1
+    jsr SetupXYdraw
 
     jsr TypeChar
 
@@ -760,12 +754,10 @@ DrawTankFlag
     sec
     sbc #8
     sta ydraw
-    lda XtanksTableL,x
-    sta xdraw
-    lda XtanksTableH,x
-    sta xdraw+1
+    jsr SetupXYdraw.X
     jsr TypeChar
 NoShieldDraw
+    DrawBarrel
 DoNotDrawTankNr
 	rts
 .endp
@@ -801,13 +793,7 @@ tankflash_loop
 ; 
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
-    lda xtankstableL,x
-    sta xdraw
-    lda xtankstableH,x
-    sta xdraw+1
-    lda ytankstable,x
-    sta ydraw
-	mva #0 ydraw+1
+    jsr SetupXYdraw
 DrawInPosition
 	mva #1 color
 	lda erase
@@ -900,10 +886,7 @@ ShieldVisible
     sec
     sbc #8
     sta ydraw
-    lda XtanksTableL,x
-    sta xdraw
-    lda XtanksTableH,x
-    sta xdraw+1
+    jsr SetupXYdraw.X
     jsr TypeChar
 	rts
 .endp
@@ -953,10 +936,7 @@ DoNotClearParachute
 	bne NoGroundCheck
     ; coordinates of the first pixel under the tank
     ldx TankNr
-    lda XtankstableL,x
-    sta xdraw
-    lda XtankstableH,x
-    sta xdraw+1
+    jsr SetupXYdraw.X
     lda Ytankstable,x
     clc
     adc #1 ; in this point the comment helped us! For the very first
@@ -1909,7 +1889,7 @@ EndPut4x4
     rts
 .endp
 ; -------------------------------------
-.proc _XtanksTableLHX
+.proc SetupXYdraw
     lda ytankstable,x
     sta ydraw
     mva #0 ydraw+1
@@ -1921,43 +1901,58 @@ X    lda XtanksTableL,x
 .endp
 ;--------------------------------------------------
 .proc DrawBarrel
-; X - tank number
-; 
+; X - tankNr
 ; changes xdraw, ydraw, fx, fy
 ;--------------------------------------------------
-    jsr _XtanksTableLHX
+    jsr SetupXYdraw
     ;vx calculation
     ;vx = sin(90-Angle) for Angle <=90
     ;vx = -sin(Angle-90) for 90 < Angle <= 180 
 
+    ; erase previous barrel
+
     ;cos(Angle) (but we use sin table only so some shenanigans happen)
-    lda AngleTable,x
+    mva #0 color
+    lda previousBarrelAngle,x
     sta Angle
-    tax
+    jsr DrawBarrelTech
+    
+    mva #1 color
+    ldx TankNr
+    jsr SetupXYdraw
+    lda angleTable,x
+    sta Angle
+    jsr DrawBarrelTech
+    rts
+.endp
 
-    ;Angle works like this:
-    ;0 'degrees' is horizontally right
-    ;90 'degrees' is straight up
-    ;180 horizontally left
-
-    ; (we have to set goleft used in rolling weapons)
-   
-    cpx #91
+.proc DrawBarrelTech
+    ; angle in Angle and A
+ 
+    mvx #0 goleft
+    cmp #91
     bcc angleUnder90
     
     ;over 90
     sec
-    txa  ; lda # Angle
     sbc #90
     tax
-    jmp @+
+    ; barrel start offset over 90deg
+    adw xdraw #6 xdraw
+    sbw ydraw #2 ydraw
+    mva #1 goleft
+    bpl @+  ; jmp @+
 
 angleUnder90
-    mva #0 goleft
     sec             ; X = 90-Angle
     lda #90
     sbc Angle
     tax
+    ; barrel start offset under 90deg
+    adw xdraw #1 xdraw
+    sbw ydraw #2 ydraw
+    
+
 @    
     lda sintable,x  ; cos(X)
     sta vx
@@ -1967,18 +1962,16 @@ angleUnder90
     ;vy = sin(180-Angle) for 90 < Angle <= 180
 
 ;--
-    ldx Angle
-    cpx #91
+    lda Angle
+    cmp #91
     bcc YangleUnder90
     
     lda #180
     sec
     sbc Angle
-    tax
-
 YangleUnder90
+    tax
     lda sintable,x
-
     sta vy
 
     lda #0  ; all arithmetic to zero
@@ -1987,21 +1980,17 @@ YangleUnder90
     sta fx
     sta fy
     
-    ; barrel start offset
-    adw xdraw #4 xdraw
-    sbw ydraw #4 ydraw
-    
- 
     ; draw by vx vy
     ; in each step 
     ; 1. plot(xdraw, ydraw)
     ; 2. add vx and vy to 3 byte variables xdraw.fx, ydraw.fy
     ; 3 check length, if shorter, go to 1.
     
-    mva #5 yc  ; barrel length
-    mva #1 color
-@
-    jsr plot.MakePlot
+    mva #20 yc  ; barrel length
+barrelLoop
+    
+    lda goleft
+    bne @+
     clc
     lda fx
     adc vx
@@ -2012,23 +2001,39 @@ YangleUnder90
     lda xdraw+1
     adc #0
     sta xdraw+1
-    
-    clc
+    jmp ybarrel
+@
+    sec
+    lda fx
+    sbc vx
+    sta fx
+    lda xdraw
+    sbc #0
+    sta xdraw
+    lda xdraw+1
+    sbc #0
+    sta xdraw+1
+
+ybarrel
+    sec
     lda fy
-    adc vy
+    sbc vy
     sta fy
     lda ydraw
-    adc #0
+    sbc #0
     sta ydraw
     lda ydraw+1
-    adc #0
+    sbc #0
     sta ydraw+1
     
+    jsr plot.MakePlot
+
     dec yc
-    bne @-
+    bne barrelLoop
     
-
-
+    mwa xdraw EndOfTheBarrelX
+    mva ydraw EndOfTheBarrelY
+    
     rts
 .endp
 
