@@ -479,7 +479,7 @@ NoWeapon
 
 ; if we got to the defense weapons,
 ; we switch address to the second table.
-    mwa #ListOfDefensiveWeapons xbyte
+    mwa #ListOfWeapons xbyte
 NoDefense
     cpx #$40
     jne CreateList
@@ -534,10 +534,10 @@ ClearList1
     bne DoNotIncHigher1
     inc xbyte+1
 DoNotIncHigher1
-    cpy #<ListOfWeapons1End
+    cpy #<ListOfWeaponsEnd
     bne ClearList1
     ldx xbyte+1
-    cpx #>ListOfWeapons1End
+    cpx #>ListOfWeaponsEnd
     bne ClearList1
 
     ; And the same we do with the second list
@@ -564,10 +564,10 @@ DoNotAddX02
     ; add to the address of the list
     clc
     lda xbyte
-    adc #<ListOfDefensiveWeapons
+    adc #<ListOfWeapons
     tay
     lda xbyte+1
-    adc #>ListOfDefensiveWeapons
+    adc #>ListOfWeapons
     sta xbyte+1
     stx xbyte
     txa ; now there is zero here
@@ -577,10 +577,10 @@ ClearList2
     bne DoNotIncHigher2
     inc xbyte+1
 DoNotIncHigher2
-    cpy #<ListOfDefensiveWeaponsEnd
+    cpy #<ListOfWeaponsEnd
     bne ClearList2
     ldx xbyte+1
-    cpx #>ListOfDefensiveWeaponsEnd
+    cpx #>ListOfWeaponsEnd
     bne ClearList2
 
 ; here we have pretty cool lists and there is no brute force
@@ -715,7 +715,7 @@ ListChange
     jmp ChoosingItemForPurchase
 
 DeffensiveSelected
-    mwa #ListOfDefensiveWeapons WeaponsListDL
+    mwa #ListOfWeapons WeaponsListDL
     lda isInventory
     beq @+
     jsr calcPosDefensive
@@ -897,7 +897,7 @@ EraseLoop
     beq CharToList1
     ; we are on the second list (deffensive)
     ; so there is no problem with scrolling
-    mwa #ListOfDefensiveWeapons xbyte
+    mwa #ListOfWeapons xbyte
     ldx PositionOnTheList
     beq SelectList2 ; if there is 0 we add nothing
 AddLoop2

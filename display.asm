@@ -125,13 +125,14 @@ MoreDown
  dta d"  more  "
  dta 93,93,93
  dta d"             "
+GameOverResults ; reuse after game (remember to clear on start new)
 ListOfWeapons
- :36 dta d"                                        "
-ListOfWeapons1End
-GameOverResults	; reuse after game (remember to clear on start new)
-ListOfDefensiveWeapons
- :16 dta d"                                        "
-ListOfDefensiveWeaponsEnd ;constant useful when clearing
+ :32 dta d"                                        "  ; WARNING! 32 offensive weapons at the moment!
+ListOfWeaponsEnd
+
+;ListOfDefensiveWeapons
+; :16 dta d"                                        "
+;ListOfDefensiveWeaponsEnd ;constant useful when clearing
 WeaponsDescription
  dta d"  "
  dta d"Tab"*
