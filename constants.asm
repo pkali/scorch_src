@@ -688,5 +688,10 @@ gameOverSpritesTop
     ; end of the Gover sprites by number of players
     ;    1   2   3   4   5   6
     .by 130,130,136,142,148,154
+;-------decimal constans
+zero
+digits   dta d"0123456789"
+nineplus dta d"9"+1
+space    dta d" "
 
 .endif

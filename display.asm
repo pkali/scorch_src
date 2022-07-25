@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 .IF *>0 ;this is a trick that prevents compiling this file alone
 
@@ -54,42 +54,42 @@ dl ; MAIN game display list
         .byte $10  ; 2 blank lines 
 
         .byte $4f
-        .word display					; 1 line
-        :76 .by $0f						;76
-		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:13 .by $0f						;13
-		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:8 .by $0f						;8
-        .by $4f							;1
+        .word display                   ; 1 line
+        :76 .by $0f                     ;76
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :13 .by $0f                     ;13
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :8 .by $0f                      ;8
+        .by $4f                         ;1
         .wo display+$0ff0
-		:2 .by $0f						;2
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:9 .by $0f						;9
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:8 .by $0f						;8
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:7 .by $0f						;7
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:6 .by $0f						;6
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:5 .by $0f						;5
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:4 .by $0f						;4
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:3 .by $0f						;3
- 		.by $0f+$80 ; DLI (black to end);1
-       :38 .byte $0f 					;35 ..... = 200
+        :2 .by $0f                      ;2
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :9 .by $0f                      ;9
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :8 .by $0f                      ;8
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :7 .by $0f                      ;7
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :6 .by $0f                      ;6
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :5 .by $0f                      ;5
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :4 .by $0f                      ;4
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :3 .by $0f                      ;3
+        .by $0f+$80 ; DLI (black to end);1
+       :38 .byte $0f                    ;35 ..... = 200
         .by $4f
-        .wo EmptyLine	; additional line of ground
+        .wo EmptyLine   ; additional line of ground
         .byte $41
         .word dl
 ;-----------------------------------------------
@@ -125,14 +125,13 @@ MoreDown
  dta d"  more  "
  dta 93,93,93
  dta d"             "
-GameOverResults ; reuse after game (remember to clear on start new)
 ListOfWeapons
- :32 dta d"                                        "  ; WARNING! 32 offensive weapons at the moment!
-ListOfWeaponsEnd
-
-;ListOfDefensiveWeapons
-; :16 dta d"                                        "
-;ListOfDefensiveWeaponsEnd ;constant useful when clearing
+ :36 dta d"                                        "
+ListOfWeapons1End
+GameOverResults ; reuse after game (remember to clear on start new)
+ListOfDefensiveWeapons
+ :16 dta d"                                        "
+ListOfDefensiveWeaponsEnd ;constant useful when clearing
 WeaponsDescription
  dta d"  "
  dta d"Tab"*
@@ -151,8 +150,8 @@ EmptyLine
 ;-----------------------------------------------
 GameOverDL
        .byte $70,$40
-	   .byte $47	; 16 gr8 lines
-	   .word GameOverTitle
+       .byte $47    ; 16 gr8 lines
+       .word GameOverTitle
        .byte $4f   ; 1 line
        .word display+(40*72)
        :28 .byte $0f   ; 28 lines
@@ -164,13 +163,13 @@ GameOverDL
        .byte $4f   ; 1 line
        .word display+(40*72)
        :7 .byte $0f    ; 7 lines
-	   .byte $00+$80	; 1 line
-	   .byte $42	; 7 tekst lines
-	   .word GameOverTitle2
-	   .byte $00+$80
-	   .byte $42
-	   .word GameOverResults
-	   :5 .byte $00+$80,$02
+       .byte $00+$80    ; 1 line
+       .byte $42    ; 7 tekst lines
+       .word GameOverTitle2
+       .byte $00+$80
+       .byte $42
+       .word GameOverResults
+       :5 .byte $00+$80,$02
        .byte $70
        .byte $41
        .word GameOverDL

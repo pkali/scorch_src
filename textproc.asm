@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 
     .IF *>0
@@ -479,7 +479,7 @@ NoWeapon
 
 ; if we got to the defense weapons,
 ; we switch address to the second table.
-    mwa #ListOfWeapons xbyte
+    mwa #ListOfDefensiveWeapons xbyte
 NoDefense
     cpx #$40
     jne CreateList
@@ -534,10 +534,10 @@ ClearList1
     bne DoNotIncHigher1
     inc xbyte+1
 DoNotIncHigher1
-    cpy #<ListOfWeaponsEnd
+    cpy #<ListOfWeapons1End
     bne ClearList1
     ldx xbyte+1
-    cpx #>ListOfWeaponsEnd
+    cpx #>ListOfWeapons1End
     bne ClearList1
 
     ; And the same we do with the second list
@@ -564,10 +564,10 @@ DoNotAddX02
     ; add to the address of the list
     clc
     lda xbyte
-    adc #<ListOfWeapons
+    adc #<ListOfDefensiveWeapons
     tay
     lda xbyte+1
-    adc #>ListOfWeapons
+    adc #>ListOfDefensiveWeapons
     sta xbyte+1
     stx xbyte
     txa ; now there is zero here
@@ -577,10 +577,10 @@ ClearList2
     bne DoNotIncHigher2
     inc xbyte+1
 DoNotIncHigher2
-    cpy #<ListOfWeaponsEnd
+    cpy #<ListOfDefensiveWeaponsEnd
     bne ClearList2
     ldx xbyte+1
-    cpx #>ListOfWeaponsEnd
+    cpx #>ListOfDefensiveWeaponsEnd
     bne ClearList2
 
 ; here we have pretty cool lists and there is no brute force
@@ -715,7 +715,7 @@ ListChange
     jmp ChoosingItemForPurchase
 
 DeffensiveSelected
-    mwa #ListOfWeapons WeaponsListDL
+    mwa #ListOfDefensiveWeapons WeaponsListDL
     lda isInventory
     beq @+
     jsr calcPosDefensive
@@ -795,27 +795,27 @@ invSelectDef
     lda IndexesOfWeaponsL2,y
     tay
     ldx tankNr
-	cmp #ind_Battery________
-	bne NotBattery
-	; if activate battery, we do it differently
+    cmp #ind_Battery________
+    bne NotBattery
+    ; if activate battery, we do it differently
     mva #sfx_battery sfx_effect
-	mva #99 Energy,x
-	bne DecreaseDefensive ; bypass activation
+    mva #99 Energy,x
+    bne DecreaseDefensive ; bypass activation
 NotBattery
-	cmp #ind_White_Flag_____
-	bne NotWhiteFlag
-	cmp ActiveDefenceWeapon,x
-	bne NoDeactivateWhiteFlag
-	mva #sfx_white_flag sfx_effect
-	lda #$00	; if try to activate activated White Flag then deactivate Defence
+    cmp #ind_White_Flag_____
+    bne NotWhiteFlag
+    cmp ActiveDefenceWeapon,x
+    bne NoDeactivateWhiteFlag
+    mva #sfx_white_flag sfx_effect
+    lda #$00    ; if try to activate activated White Flag then deactivate Defence
     sta ActiveDefenceWeapon,x
-	sta ShieldEnergy,x
-	beq DefActivationEnd
+    sta ShieldEnergy,x
+    beq DefActivationEnd
 NotWhiteFlag
 NoDeactivateWhiteFlag
-	; activate new defensive
+    ; activate new defensive
     sta ActiveDefenceWeapon,x
-	; set defensive energy
+    ; set defensive energy
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
 DecreaseDefensive
@@ -897,7 +897,7 @@ EraseLoop
     beq CharToList1
     ; we are on the second list (deffensive)
     ; so there is no problem with scrolling
-    mwa #ListOfWeapons xbyte
+    mwa #ListOfDefensiveWeapons xbyte
     ldx PositionOnTheList
     beq SelectList2 ; if there is 0 we add nothing
 AddLoop2
@@ -1324,11 +1324,6 @@ displayloop1
 
     rts
 .endp
-;-------decimal constans
-zero
-digits   dta d"0123456789"
-nineplus dta d"9"+1
-space    dta d" "
 
 ;--------------------------------------------------------
 .proc Display4x4AboveTank ;
@@ -1831,61 +1826,61 @@ FinishResultDisplay
 ;--------------------------------------------------
 .proc GameOverScreen
 ;--------------------------------------------------
-	jsr ClearScreen
-	jsr ClearPMmemory
+    jsr ClearScreen
+    jsr ClearPMmemory
     mwa #GameOverDL dlptrs
-	lda #%00111110	; normal screen width, DL on, P/M on
+    lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
-    lda #%00100100	; playfield before P/M
-    sta gtictls	
-	jsr ColorsOfSprites
+    lda #%00100100  ; playfield before P/M
+    sta gtictls 
+    jsr ColorsOfSprites
     mva #0 colpf1s
     mva #TextForegroundColor colpf2s
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
-	; initial tank positions randomization
+    ; initial tank positions randomization
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
 @
-	jsr RandomizeTankPos
+    jsr RandomizeTankPos
     dex
     bpl @-
-MainTanksFloatingLoop	
-	; main tanks floating loop
+MainTanksFloatingLoop   
+    ; main tanks floating loop
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
-AllTanksFloatingDown	
-	stx TankNr
-	inc Ytankstable,x
-	lda Ytankstable,x
-;	cmp #32		; tank over screen - not visible
-	cmp #80		; tank under screen - new tank randomize
-	beq TankUnderScreen
-	cmp #72		; tank under screen but.... parachute
-	bcs DrawOnlyParachute
-	bcc TankOnScreen
+AllTanksFloatingDown    
+    stx TankNr
+    inc Ytankstable,x
+    lda Ytankstable,x
+;   cmp #32     ; tank over screen - not visible
+    cmp #80     ; tank under screen - new tank randomize
+    beq TankUnderScreen
+    cmp #72     ; tank under screen but.... parachute
+    bcs DrawOnlyParachute
+    bcc TankOnScreen
 TankUnderScreen
-	jsr RandomizeTankPos
+    jsr RandomizeTankPos
 TankOnScreen
-	jsr DrawTankNr
+    jsr DrawTankNr
 DrawOnlyParachute
-	jsr DrawTankParachute
-	ldx TankNr
-	dex
-	bpl AllTanksFloatingDown
-	jmp MainTanksFloatingLoop	; neverending loop
-	rts
+    jsr DrawTankParachute
+    ldx TankNr
+    dex
+    bpl AllTanksFloatingDown
+    jmp MainTanksFloatingLoop   ; neverending loop
+    rts
 RandomizeTankPos
-	randomize 8 32
-	sta Ytankstable,x
-	randomize 0 180
-	sta AngleTable,x
-	randomize 0 (49-8)
-	and #%11111110	; correction for PMG
-	clc
-	adc XtankOffsetGO_L,x
+    randomize 8 32
+    sta Ytankstable,x
+    randomize 0 180
+    sta AngleTable,x
+    randomize 0 (49-8)
+    and #%11111110  ; correction for PMG
+    clc
+    adc XtankOffsetGO_L,x
     sta XtankstableL,x
-	lda XtankOffsetGO_H,x
-	adc #0
+    lda XtankOffsetGO_H,x
+    adc #0
     sta XtankstableH,x
-	rts
+    rts
 .endp
 ;-------------------------------------------------
 .proc DisplayStatus
@@ -1937,17 +1932,17 @@ RandomizeTankPos
     ;---------------------
     ;displaying name of the defence weapon (if active)
     ;---------------------
-	lda #$08 ; (
-	sta textbuffer+80+22
-	lda #$09	; )
-	sta textbuffer+80+39
-	lda ActiveDefenceWeapon,x
-	bne ActiveDefence
-	; clear brackets
-	lda #$00 ; space
-	sta textbuffer+80+22
-	sta textbuffer+80+39
-	lda #47	; no weapon name
+    lda #$08 ; (
+    sta textbuffer+80+22
+    lda #$09    ; )
+    sta textbuffer+80+39
+    lda ActiveDefenceWeapon,x
+    bne ActiveDefence
+    ; clear brackets
+    lda #$00 ; space
+    sta textbuffer+80+22
+    sta textbuffer+80+39
+    lda #47 ; no weapon name
 ActiveDefence
     sta temp ;get back number of the weapon
     mva #0 temp+1
@@ -1980,26 +1975,26 @@ ActiveDefence
     ;---------------------
     ;displaying the energy of a tank shield (if exist)
     ;---------------------
-	; clear (if no shield)
-	lda #$00	; space
-	sta textbuffer+40+10
-	sta textbuffer+40+11
-	sta textbuffer+40+12
-	sta textbuffer+40+13
-	; check shield energy and display it
-	ldx TankNr
-	lda ActiveDefenceWeapon,x
-	beq NoDefenceWeapon
-	lda ShieldEnergy,x
-	beq NoShieldEnergy
-	sta decimal	; displayed value
-	lda #$08 ; (
-	sta textbuffer+40+10
-	mwa #textbuffer+40+11 displayposition
+    ; clear (if no shield)
+    lda #$00    ; space
+    sta textbuffer+40+10
+    sta textbuffer+40+11
+    sta textbuffer+40+12
+    sta textbuffer+40+13
+    ; check shield energy and display it
+    ldx TankNr
+    lda ActiveDefenceWeapon,x
+    beq NoDefenceWeapon
+    lda ShieldEnergy,x
+    beq NoShieldEnergy
+    sta decimal ; displayed value
+    lda #$08 ; (
+    sta textbuffer+40+10
+    mwa #textbuffer+40+11 displayposition
     jsr displaybyte
-	lda #$09	; )
-	sta textbuffer+40+13
-NoDefenceWeapon	
+    lda #$09    ; )
+    sta textbuffer+40+13
+NoDefenceWeapon 
 NoShieldEnergy
 
     ;=========================
@@ -2057,30 +2052,30 @@ DisplayWindValue
 displayAngle
     ldx TankNr
     lda AngleTable,x
-	cmp #90
-	beq VerticallyUp
-	bcs AngleToLeft
+    cmp #90
+    beq VerticallyUp
+    bcs AngleToLeft
 AngleToRight
-	; now we have values from 0 to 89 and right angle
+    ; now we have values from 0 to 89 and right angle
     sta decimal
     lda #$7f  ; (tab) character
     sta textbuffer+40+25
     lda #0  ;space
     sta textbuffer+40+22
-	beq AngleDisplay
+    beq AngleDisplay
 AngleToLeft
-	sec
-	lda #180
-	sbc AngleTable,x
-	; angles 180 - 91 converted to 0 - 89
-	sta decimal
+    sec
+    lda #180
+    sbc AngleTable,x
+    ; angles 180 - 91 converted to 0 - 89
+    sta decimal
     lda #$7e  ;(del) char
     sta textbuffer+40+22
     lda #0 ;space
     sta textbuffer+40+25
-	beq AngleDisplay	
+    beq AngleDisplay    
 VerticallyUp
-	; now we have value 90
+    ; now we have value 90
     sta decimal
     lda #0  ;space
     sta textbuffer+40+25
