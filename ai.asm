@@ -170,6 +170,13 @@ loop
 	lda #99
 	sta Energy,x
 NoBatteries
+	; if very low energy and no battery then use White Flag
+	lda Energy,x
+	cmp #5
+	bcs EnoughEnergy
+	; lower than 5 units - white flag
+	lda #ind_White_Flag_____
+	sta ActiveDefenceWeapon,x
 EnoughEnergy
 	; use best defensive :)
 	; but not allways
