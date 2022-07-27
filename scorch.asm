@@ -1213,15 +1213,16 @@ LimitForce
 .endp
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
-    mva #sfx_set_power_2 sfx_effect
 	mva #1 Erase
 	jsr DrawTankNr.BarrelChange
 	mva #0 Erase
 MoveBarrel
+    mva #sfx_set_power_2 sfx_effect
 	jsr DrawTankNr
 	jsr DisplayStatus.displayAngle
 	ldx TankNr
 	mva #1 Erase
+	PAUSE 1
 	jsr DrawTankNr.BarrelChange
 	mva #0 Erase
 	lda NewAngle
