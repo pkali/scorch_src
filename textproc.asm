@@ -1837,6 +1837,8 @@ FinishResultDisplay
     mva #0 colpf1s
     mva #TextForegroundColor colpf2s
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
+    lda #song_game_over
+    jsr RmtSongSelect
     ; initial tank positions randomization
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
 @
@@ -1848,6 +1850,10 @@ MainTanksFloatingLoop
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
 AllTanksFloatingDown    
     stx TankNr
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	ldx TankNr
     inc Ytankstable,x
     lda Ytankstable,x
 ;   cmp #32     ; tank over screen - not visible

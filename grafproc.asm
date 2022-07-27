@@ -722,6 +722,14 @@ ZeroesToGo6
     bne ClearPM6
 
 NoPlayerMissile
+BarrelChange
+	ldy #$01
+	lda Erase
+	beq @+
+	dey
+@	sty color
+	jsr DrawBarrel
+
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
     ldx TankNr
@@ -757,7 +765,6 @@ DrawTankFlag
     jsr SetupXYdraw.X
     jsr TypeChar
 NoShieldDraw
-    DrawBarrel
 DoNotDrawTankNr
 	rts
 .endp
@@ -1912,12 +1919,12 @@ X    lda XtanksTableL,x
     ; erase previous barrel
 
     ;cos(Angle) (but we use sin table only so some shenanigans happen)
-    mva #0 color
-    lda previousBarrelAngle,x
-    sta Angle
-    jsr DrawBarrelTech
-    
-    mva #1 color
+  ;  mva #0 color
+  ;  lda previousBarrelAngle,x
+  ;  sta Angle
+  ;  jsr DrawBarrelTech
+  ;  
+  ;  mva #1 color
     ldx TankNr
     jsr SetupXYdraw
     lda angleTable,x

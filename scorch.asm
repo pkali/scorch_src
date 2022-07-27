@@ -325,11 +325,11 @@ SettingEnergies
 	sta colpf2s	; status line "off"
 	sta colpf1s
 
-    lda #90 ; barrel fully erect
-    ldx #MaxPlayers-1
-@     sta previousBarrelAngle,x
-      dex
-    bpl @-
+;    lda #90 ; barrel fully erect
+;    ldx #MaxPlayers-1
+;@     sta previousBarrelAngle,x
+;      dex
+;    bpl @-
 
 
     jsr drawmountains ;draw them
@@ -1213,20 +1213,29 @@ LimitForce
 .endp
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
+    mva #sfx_set_power_2 sfx_effect
+	mva #1 Erase
+	jsr DrawTankNr.BarrelChange
+	mva #0 Erase
+MoveBarrel
 	jsr DrawTankNr
 	jsr DisplayStatus.displayAngle
 	ldx TankNr
+	mva #1 Erase
+	jsr DrawTankNr.BarrelChange
+	mva #0 Erase
 	lda NewAngle
 	cmp AngleTable,x
 	beq BarrelPositionIsFine
 	bcc rotateLeft ; older is bigger
 rotateRight;older is lower
 	inc angleTable,x
-	jmp MoveBarrelToNewPosition
+	jmp MoveBarrel
 rotateLeft
 	dec angleTable,x
-	jmp MoveBarrelToNewPosition
+	jmp MoveBarrel
 BarrelPositionIsFine
+	jsr DrawTankNr
 	rts
 	
 .endp

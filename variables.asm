@@ -348,8 +348,8 @@ AngleTable ;Angle of the barrel of each tank during the round
     .DS [MaxPlayers]
 NewAngle  ; used in AI
     .DS 1
-previousBarrelAngle
-    .DS [MaxPlayers]
+;previousBarrelAngle
+;    .DS [MaxPlayers]
 EndOfTheBarrelX
     .ds 2
 EndOfTheBarrelY

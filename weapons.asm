@@ -1139,6 +1139,7 @@ ToHighFill
 ;first, get current parameters (angle+force)
 ;for an active tank and display them
 ;(these values are taken from the previous round)
+	mva #0 Erase
 
     ldx TankNr
 
@@ -1331,15 +1332,14 @@ CTRLPressedDown
 
 pressedRight
     ldx TankNr
-    lda AngleTable,x
-    sta previousBarrelAngle,x
     lda pressTimer
     spl:mva #0 pressTimer  ; if >128 then reset to 0
     cmp #25  ; 1/2s
     bcs CTRLPressedRight
 
     mva #sfx_set_power_2 sfx_effect
-
+	mva #1 Erase
+	jsr DrawTankNr.BarrelChange
     dec AngleTable,x
     lda AngleTable,x
     cmp #255 ; -1
@@ -1350,9 +1350,9 @@ pressedRight
 
 CTRLPressedRight
     ldx TankNr
-    lda AngleTable,x
-    sta previousBarrelAngle,x
     mva #sfx_set_power_2 sfx_effect
+	mva #1 Erase
+	jsr DrawTankNr.BarrelChange
     lda AngleTable,x
     sec
     sbc #4
@@ -1366,14 +1366,14 @@ CTRLPressedRight
 
 pressedLeft
     ldx TankNr
-    lda AngleTable,x
-    sta previousBarrelAngle,x
     lda pressTimer
     spl:mva #0 pressTimer  ; if >128 then reset to 0
     cmp #25  ; 1/2s
     bcs CTRLPressedLeft
 
     mva #sfx_set_power_2 sfx_effect
+	mva #1 Erase
+	jsr DrawTankNr.BarrelChange
     INC AngleTable,x
     lda AngleTable,x
     cmp #180
@@ -1384,9 +1384,9 @@ pressedLeft
 
 CTRLPressedLeft
     ldx TankNr
-    lda AngleTable,x
-    sta previousBarrelAngle,x
     mva #sfx_set_power_2 sfx_effect
+	mva #1 Erase
+	jsr DrawTankNr.BarrelChange
     lda AngleTable,x
     clc
     adc #4
