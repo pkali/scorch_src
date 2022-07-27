@@ -1850,9 +1850,13 @@ MainTanksFloatingLoop
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
 AllTanksFloatingDown    
     stx TankNr
+    lda Ytankstable,x
+	cmp #72		; tank under screen - no erase
+	bcs NoEraseTank
 	mva #1 Erase
     jsr DrawTankNr
 	mva #0 Erase
+NoEraseTank
 	ldx TankNr
     inc Ytankstable,x
     lda Ytankstable,x
