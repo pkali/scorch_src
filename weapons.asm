@@ -767,7 +767,7 @@ ExplosionLoop2
 DistanceCheckLoop
     dex
     lda eXistenZ,x
-    beq EndOfDistanceCheckLoop
+    jeq EndOfDistanceCheckLoop
     ;here the tank exist
     lda XtankstableL,x
     clc
@@ -825,10 +825,17 @@ ShieldCoveredTank
 ShieldEnergy0	; deactivate if no energy. it's like use one hit shield :) 
 UseShield
 	mva #1 Erase
-	phx
-	jsr DrawTankShield
-	plx
-	mva #0 ActiveDefenceWeapon,x	; deactivate defense weapons
+	lda TankNr
+	pha			; store TankNr
+	stx TankNr	; store X in TankNr :)
+	jsr DrawTankNr	; now erase tank with shield (to erase shield)
+	lda #0
+	sta ActiveDefenceWeapon,x	; deactivate defense weapons
+	sta Erase
+	jsr DrawTankNr	; draw tank without shield
+	ldx TankNr	; restore X value :)
+	pla
+	sta TankNr	; restore TankNr value :)
 TankIsNotWithinTheRange
 EndOfDistanceCheckLoop
     txa
@@ -1900,19 +1907,23 @@ AutoDefence
 	; now run defensive-aggressive weapon - Auto Defence!
 	sbb #180 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
 	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
-	mva #1 Erase		; now erase shield 
-	phx
-	jsr DrawTankShield
-	jsr DrawTankShieldHorns
-	plx
-	lda #$00
-	sta Erase
-	sta ActiveDefenceWeapon,x	; deactivate used Auto Defence
+	mva #1 Erase
+	lda TankNr
+	pha			; store TankNr
+	stx TankNr	; store X in TankNr :)
+	jsr DrawTankNr	; now erase tank with shield (to erase shield)
+	lda #0
+	sta ActiveDefenceWeapon,x	; deactivate used auto defense weapon
 	sta ShieldEnergy,x
     sta xtraj		; prepare coordinates
     sta ytraj
 	sta xtraj+2
 	sta ytraj+2
+	sta Erase
+	jsr DrawTankNr	; draw tank without shield
+	ldx TankNr	; restore X value :)
+	pla
+	sta TankNr	; restore TankNr value :)
 	mwa XHit xtraj+1
 	sbw YHit #5 ytraj+1
 	mva #1 color

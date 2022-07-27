@@ -723,6 +723,11 @@ ZeroesToGo6
 
 NoPlayerMissile
 
+	ldy #$01
+	lda Erase
+	beq @+
+	dey
+@	sty color
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
     ldx TankNr
@@ -803,11 +808,6 @@ tankflash_loop
 ; 
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
-	mva #1 color
-	lda erase
-	beq ShieldVisible
-	dec color
-ShieldVisible
 	sbw xdraw #$03		; 3 pixels to left
 	; draw left vertical line of shield ( | )
 	mva #6 temp			; strange !!!
