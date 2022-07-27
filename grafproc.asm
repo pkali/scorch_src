@@ -632,9 +632,12 @@ SkipHidingPM
 
 
     lda AngleTable,x
-    tay
-    lda BarrelTable,y
-    sta CharCode
+	ldy #$50	; left tank
+	cmp #91		; left or right tank shape
+	bcs LeftTank
+	ldy #$52	; right tank
+LeftTank
+    sty CharCode
 DrawTankNrX
     ldx tanknr
     jsr SetupXYdraw
@@ -1912,7 +1915,6 @@ X    lda XtanksTableL,x
 ; X - tankNr
 ; changes xdraw, ydraw, fx, fy
 ;--------------------------------------------------
-    jsr SetupXYdraw
     ;vx calculation
     ;vx = sin(90-Angle) for Angle <=90
     ;vx = -sin(Angle-90) for 90 < Angle <= 180 
@@ -1946,8 +1948,7 @@ X    lda XtanksTableL,x
     sbc #90
     tax
     ; barrel start offset over 90deg
-    adw xdraw #6 xdraw
-    sbw ydraw #2 ydraw
+    adw xdraw #5 xdraw
     mva #1 goleft
     bpl @+  ; jmp @+
 
@@ -1957,11 +1958,10 @@ angleUnder90
     sbc Angle
     tax
     ; barrel start offset under 90deg
-    adw xdraw #1 xdraw
-    sbw ydraw #2 ydraw
+    adw xdraw #3 xdraw
     
-
 @    
+    sbw ydraw #3 ydraw
     lda sintable,x  ; cos(X)
     sta vx
 
@@ -1994,7 +1994,7 @@ YangleUnder90
     ; 2. add vx and vy to 3 byte variables xdraw.fx, ydraw.fy
     ; 3 check length, if shorter, go to 1.
     
-    mva #20 yc  ; barrel length
+    mva #5 yc  ; barrel length
 barrelLoop
     
     lda goleft
