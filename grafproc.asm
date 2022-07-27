@@ -722,20 +722,13 @@ ZeroesToGo6
     bne ClearPM6
 
 NoPlayerMissile
-BarrelChange
-	ldy #$01
-	lda Erase
-	beq @+
-	dey
-@	sty color
-	jsr DrawBarrel
 
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
     ldx TankNr
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Shield_________		; one shot shield 
-	beq DrawTankShield
+	beq DrawTankSh
 	cmp #ind_Force_Shield___		; shield with energy and parachute
 	beq DrawTankShieldBold
 	cmp #ind_Heavy_Shield___		; shield with energy
@@ -747,14 +740,17 @@ BarrelChange
 	cmp #ind_White_Flag_____		; White Flag
 	beq DrawTankFlag
 	bne NoShieldDraw
-DrawTankShield
-	jmp DrawTankShield.DrawInPosition
+DrawTankSh
+	jsr DrawTankShield
+	jmp NoShieldDraw
 DrawTankShieldWihHorns
-	jsr DrawTankShield.DrawInPosition
-	jmp DrawTankShieldHorns
+	jsr DrawTankShield
+	jsr DrawTankShieldHorns
+	jmp NoShieldDraw
 DrawTankShieldBold
-	jsr DrawTankShield.DrawInPosition
-	jmp DrawTankShieldBoldLine
+	jsr DrawTankShield
+	jsr DrawTankShieldBoldLine
+	jmp NoShieldDraw
 DrawTankFlag
     lda #$5E	; flag symbol
     sta CharCode
@@ -762,9 +758,16 @@ DrawTankFlag
     sec
     sbc #8
     sta ydraw
-    jsr SetupXYdraw.X
     jsr TypeChar
 NoShieldDraw
+BarrelChange
+	ldy #$01
+	lda Erase
+	beq @+
+	dey
+@	sty color
+	jsr DrawBarrel
+	ldx TankNr
 DoNotDrawTankNr
 	rts
 .endp
@@ -800,8 +803,6 @@ tankflash_loop
 ; 
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
-    jsr SetupXYdraw
-DrawInPosition
 	mva #1 color
 	lda erase
 	beq ShieldVisible
