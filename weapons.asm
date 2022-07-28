@@ -1505,14 +1505,8 @@ NotStrongShoot
     sta Force+1
     mva #sfx_shoot sfx_effect
 AfterStrongShoot
-    lda #$0
-    sta Force+2
     lda AngleTable,x
     sta Angle
-
-    lda #0
-    sta xtraj
-    sta ytraj
 
     ; Shoots tank nr X !!! :)
     ; set the starting coordinates of bullet with correction
@@ -1522,26 +1516,15 @@ AfterStrongShoot
 	
 	mwa EndOfTheBarrelX xtraj+1
 	mva EndOfTheBarrely ytraj+1
-	mva #0 ytraj+2
-	
-	;ldy Angle
-	;clc
-    ;lda xtankstableL,x
-	;adc EndOfTheBarrelX,y   ; correction of X
-    ;sta xtraj+1
-    ;lda xtankstableH,x
-	;adc #$00
-    ;sta xtraj+2
-	;sec
-    ;lda ytankstable,x
-	;sbc EndOfTheBarrelY,y   ; correction of Y
-    ;sta ytraj+1
-    ;lda #$00
-	;sbc #$00
-    ;sta ytraj+2
+    lda #0
+    sta Force+2
+	sta ytraj+2
+    sta xtraj
+    sta ytraj
+	sta TestFlightFlag
 
 	; checking if the shot is underground (no Flight but Hit :) )
-	ldy #0
+	tay	; A=0 !
 	adw xtraj+1 #mountaintable temp
     lda ytraj+1
     cmp (temp),y	; check collision witch mountains

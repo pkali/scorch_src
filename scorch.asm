@@ -272,6 +272,8 @@ skipzeroing
 	lda #0
     sta sizep0 ; P0-P1 widths
     sta sizep0+1
+	sta colpf2s	; status line "off"
+	sta colpf1s
 	
 	tax
 @	  sta singleRoundVars,x
@@ -322,9 +324,6 @@ SettingEnergies
 
     jsr SetMainScreen
     jsr ColorsOfSprites
-	lda #0
-	sta colpf2s	; status line "off"
-	sta colpf1s
 
 ;    lda #90 ; barrel fully erect
 ;    ldx #MaxPlayers-1
@@ -336,9 +335,8 @@ SettingEnergies
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
-	lda #$00
-    sta TankSequencePointer
-	sta TestFlightFlag
+	mva #$00 TankSequencePointer
+
 ;---------round screen is ready---------
 	mva #TextForegroundColor colpf1s	; status line "on"
     rts
