@@ -631,11 +631,11 @@ No6thTankHide
 SkipHidingPM
 
 
-	ldy #char_tank1___________	; left tank
+	ldy #char_tank2___________	; left tank
 	txa
 	and #$01
 	beq FirstTankShape
-	ldy #char_tank2___________	; left tank (second shape)
+	ldy #char_tank3___________	; left tank (second shape)
 FirstTankShape	
     lda AngleTable,x
 	cmp #91		; left or right tank shape
