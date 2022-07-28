@@ -631,12 +631,7 @@ No6thTankHide
 SkipHidingPM
 
 
-	ldy #char_tank2___________	; left tank
-	txa
-	and #$01
-	beq FirstTankShape
-	ldy #char_tank3___________	; left tank (second shape)
-FirstTankShape	
+	ldy TankShapesTable,x
     lda AngleTable,x
 	cmp #91		; left or right tank shape
 	bcs LeftTank
@@ -1999,7 +1994,7 @@ YangleUnder90
     ; 2. add vx and vy to 3 byte variables xdraw.fx, ydraw.fy
     ; 3 check length, if shorter, go to 1.
     
-    mva #5 yc  ; barrel length
+    mva #6 yc  ; barrel length
 barrelLoop
     
     lda goleft

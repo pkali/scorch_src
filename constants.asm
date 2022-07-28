@@ -7,6 +7,8 @@
 ;===================================================================================
 TankColoursTable        .BYTE $86,$46,$c6,$28,$c6,$ee
 TankStatusColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
+TankShapesTable			.BYTE char_tank1___________,char_tank2___________,char_tank3___________
+						.BYTE char_tank1___________,char_tank2___________,char_tank3___________
 dliColorsBack
     :10 .by $02,$00
 dliColorsFore
