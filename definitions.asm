@@ -19,6 +19,18 @@ napalmRadius = 10
 TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
 TextForegroundColor = $0c
 
+;character codes for symbols (tank, parachute, etc. )
+char_parachute_______ = $02
+char_flag____________ = $1e
+char_flame___________ = $14
+char_clear_flame_____ = $1c
+char_digger__________ = $04
+char_sandhog_________ = $0c
+char_sandhog_offset = char_sandhog_________-char_digger__________
+
+char_tank1___________ = $20
+char_tank2___________ = $24
+
 ;Weapon prices (*10 on screen)
 price_Baby_Missile___ = 0      ;_0
 price_Missile________ = 96     ;_1

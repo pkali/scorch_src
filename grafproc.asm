@@ -631,11 +631,16 @@ No6thTankHide
 SkipHidingPM
 
 
+	ldy #char_tank1___________	; left tank
+	txa
+	and #$01
+	beq FirstTankShape
+	ldy #char_tank2___________	; left tank (second shape)
+FirstTankShape	
     lda AngleTable,x
-	ldy #$50	; left tank
 	cmp #91		; left or right tank shape
 	bcs LeftTank
-	ldy #$52	; right tank
+	:2 iny	; right tank
 LeftTank
     sty CharCode
 DrawTankNrX
@@ -760,7 +765,7 @@ DrawTankShieldBold
 	jsr DrawTankShieldBoldLine
 	jmp NoShieldDraw
 DrawTankFlag
-    lda #$5E	; flag symbol
+    lda #char_flag____________	; flag symbol
     sta CharCode
     lda Ytankstable,x
     sec
@@ -891,7 +896,7 @@ tankflash_loop
 .proc DrawTankParachute
 ;Tank number in X
 ;--------------------------------------------------
-    lda #$34	; parachute symbol
+    lda #char_parachute_______	; parachute symbol
     sta CharCode
     lda Ytankstable,x
     sec

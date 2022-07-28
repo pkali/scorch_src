@@ -331,10 +331,10 @@ RepeatFlame		; internal loop (draw flames)
 	lda random
 	and #%00000110
 	clc
-	adc #$46
+	adc #char_flame___________
 	bne PutFlameChar
 LastNapalmRepeat
-	lda #$4e	; clear flame symbol
+	lda #char_clear_flame_____	; clear flame symbol
 PutFlameChar
 	sta CharCode
 	; check coordinates
@@ -569,7 +569,7 @@ DiggerCharacter
     lda random
     and #$06
     clc
-    adc #$36
+    adc #char_digger__________
     adc sandhogflag
     sta CharCode
     cpw xdraw #(screenwidth-6)
@@ -579,7 +579,7 @@ DiggerCharacter
 ; ------------------------
 .proc babysandhog
     mva #sfx_sandhog sfx_effect
-    mva #8 sandhogflag
+    mva #char_sandhog_offset sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
@@ -588,7 +588,7 @@ DiggerCharacter
 ; ------------------------
 .proc sandhog
     mva #sfx_sandhog sfx_effect
-    mva #8 sandhogflag
+    mva #char_sandhog_offset sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
@@ -597,7 +597,7 @@ DiggerCharacter
 ; ------------------------
 .proc heavysandhog
     mva #sfx_sandhog sfx_effect
-    mva #8 sandhogflag
+    mva #char_sandhog_offset sandhogflag
     inc FallDown2
     mva #13 DigLong
     mva #5 diggery  ; how many branches (-1)

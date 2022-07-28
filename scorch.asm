@@ -1422,7 +1422,7 @@ font4x4
     ins 'artwork/font4x4s.bmp',+62
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv2.fnt'
+    ins 'artwork/tanksv3.fnt',+0,320	; 40 characters only
 ;----------------------------------------------
     icl 'variables.asm'
 ;----------------------------------------------
