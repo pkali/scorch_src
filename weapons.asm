@@ -1559,6 +1559,7 @@ ShotUnderGround
 ;--------------------------------------------------
 .proc Flight  ; Force(byte.byte), Wind(0.word)
 ; Angle(byte) 128=0, 255=maxright, 0=maxleft
+; if TestFlightFlag is set ($ff) ne real flight - hit test only (for AI)
 ;--------------------------------------------------
 ;g=-0.1
 ;vx=Force*cos(Angle)
@@ -1790,6 +1791,8 @@ NoWind
     mwa xtraj+1 XtrajOld+1
     mwa ytraj+1 YtrajOld+1
 
+	bit TestFlightFlag
+	bmi nowait
     lda tracerflag
     bne nowait
     lda color
@@ -1828,7 +1831,9 @@ SkipCollisionCheck
 
     mwa xtraj+1 xdraw
     mwa ytraj+1 ydraw
-
+	
+	bit TestFlightFlag
+	bmi NoUnPlot
     lda tracerflag
     bne NoUnPlot
 
@@ -1841,7 +1846,8 @@ NoUnPlot
 Hit
     mwa XHit xdraw
     mwa YHit ydraw
-
+	bit TestFlightFlag
+	bmi EndOfFlight
     jsr unPlot
 EndOfFlight
     mwa xdraw xcircle  ; we must store for a little while
@@ -1860,6 +1866,8 @@ EndOfFlight
 EndOfFlight2
 	mva #0 tracerflag ;  don't know why
 	
+	bit TestFlightFlag
+	jmi NoHitAtEndOfFight		; RTS only !!! - no defendsives check
 	; and now check for defensive-aggressive weapon
 	lda HitFlag
 	jeq NoHitAtEndOfFight		; RTS only !!!

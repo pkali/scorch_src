@@ -77,6 +77,7 @@
 	.zpvar UnderTank1		.byte
 	.zpvar UnderTank2		.byte	
     ;----------------------------
+	.zpvar TestFlightFlag	.byte ; For AI test flights ($ff - test, $00 - standard shoot flight)
     .zpvar weaponPointer    .word
 	.zpvar dliCounter       .byte
 	.zpvar pressTimer       .byte
@@ -335,7 +336,9 @@ SettingEnergies
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
-    mva #0 TankSequencePointer
+	lda #$00
+    sta TankSequencePointer
+	sta TestFlightFlag
 ;---------round screen is ready---------
 	mva #TextForegroundColor colpf1s	; status line "on"
     rts
