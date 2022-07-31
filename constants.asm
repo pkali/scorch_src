@@ -20,7 +20,7 @@ CashOptionH
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,70,99
 RoundsTable    .by 10,20,30,40,50
-AIForceTable	.wo 400,500,650,750,850	; starting shoot forces for different gravity
+AIForceTable	.wo 375,470,630,720,820	; starting shoot forces for different gravity
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
 mountainsDeltaTableH .by 0,1,3,5,7

@@ -764,8 +764,8 @@ ExplosionLoop2
     ;calculation
 
     ldx NumberOfPlayers
+	dex
 DistanceCheckLoop
-    dex
     lda eXistenZ,x
     jeq EndOfDistanceCheckLoop
     ;here the tank exist
@@ -838,8 +838,8 @@ UseShield
 	sta TankNr	; restore TankNr value :)
 TankIsNotWithinTheRange
 EndOfDistanceCheckLoop
-    txa
-    jne DistanceCheckLoop
+    dex
+    jpl DistanceCheckLoop
     mva #sfx_silencer sfx_effect
     rts
 .endp

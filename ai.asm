@@ -609,11 +609,16 @@ skipThisPlayer
 	lda OptionsTable+2	; selected gravity
 	asl 
 	tay
+	clc
 	lda AIForceTable,y
-	sta ForceTableL,x
+	sta RandBoundaryLow
+	adc #60
+	sta RandBoundaryHigh
 	lda AIForceTable+1,y
-	sta ForceTableH,x
-    jsr RandomizeForce.LimitForce
+	sta RandBoundaryLow+1
+	adc #0
+	sta RandBoundaryHigh+1
+    jsr RandomizeForce
 	lda ForceTableL,x
 	sta Force
 	lda ForceTableH,x

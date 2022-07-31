@@ -744,16 +744,16 @@ ldahashzero
 NotNegativeEnergy
     sta Energy,x
     ;now increase the gain of the shooting tank
-    phx
-    ldx TankNr
+ ;   phx
+    ldy TankNr
     clc
-    lda gainL,x
+    lda gainL,y
     adc EnergyDecrease
-    sta gainL,x
-    lda gainH,x
+    sta gainL,y
+    lda gainH,y
     adc #$00
-    sta gainH,x
-    plx
+    sta gainH,y
+ ;   plx
     rts
 .endp
 
