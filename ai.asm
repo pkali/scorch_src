@@ -158,56 +158,24 @@ loop
 	jsr PoolsharkDefensives
 firstShoot
 	;find nearest tank neighbour
-	jsr MakeLowResDistances
-	mva #$ff temp2 ; min possible distance
-
-	;ldx TankNr
-	ldy NumberOfPlayers
-	dey
-	
-loop01
-	cpy TankNr
-	beq skipThisPlayer
-	lda eXistenZ,y
-	beq skipThisPlayer
-	
-	lda LowResDistances,x
-	cmp LowResDistances,y
-	bcs EnemyOnTheLeft
-	;enemy on the right
-	sec
-	lda LowResDistances,y
-	sbc LowResDistances,x
-	cmp temp2 ; lowest
-	bcs lowestIsLower
-	sta temp2
-	sty temp2+1 ; number of the closest tank
+	jsr FindBestTarget2
+	beq EnemyOnLeft
 	; calculate index to shotangle table
+	; in temp2 we have x distance divided by 8 
+	lda temp2
 	:3 lsr @
 	and #%00000111
 	clc
 	adc #8
-	sta AngleTablePointer	
-	jmp lowestIsLower
-
-EnemyOnTheLeft
-	sec
-	lda LowResDistances,x
-	sbc LowResDistances,y
-	cmp temp2 ; lowest
-	bcs lowestIsLower
-	sta temp2
-	sty temp2+1 ; number of the closest tank
-	; calculate index to shotangle table
+	sta AngleTablePointer
+	bne AngleIsSet	
+EnemyOnLeft
+	lda temp2
 	:3 lsr @
 	and #%00000111
 	eor #%00000111
-	sta AngleTablePointer	
-	
-lowestIsLower
-skipThisPlayer
-	dey
-	bpl loop01
+	sta AngleTablePointer		
+AngleIsSet
 	
 	randomize 0 8
 	ldy AngleTablePointer
@@ -349,6 +317,63 @@ NoUseDefensive
 	sta ForceTableH,x
 	rts
 .endp
+
+;----------------------------------------------
+.proc FindBestTarget2
+; find farthest tank neighbour
+; X - shooting tank number
+; returns target tank number in Y and
+; direcion of shoot in A (0 - left, >0 - right)
+;----------------------------------------------
+	jsr MakeLowResDistances
+	mva #$ff temp2 ; min possible distance
+	mva #0 tempor2	; direction of shoot
+
+	;ldx TankNr
+	ldy NumberOfPlayers
+	dey
+	
+loop01
+	cpy TankNr
+	beq skipThisPlayer
+	lda eXistenZ,y
+	beq skipThisPlayer
+	
+	lda LowResDistances,x
+	cmp LowResDistances,y
+	bcs EnemyOnTheLeft
+	;enemy on the right
+	sec
+	lda LowResDistances,y
+	sbc LowResDistances,x
+	cmp temp2 ; lowest
+	bcs lowestIsLower
+	sta temp2
+	sty temp2+1 ; number of the closest tank
+	inc tempor2	; set direction to right
+	bne lowestIsLower
+
+EnemyOnTheLeft
+	sec
+	lda LowResDistances,x
+	sbc LowResDistances,y
+	cmp temp2 ; lowest
+	bcs lowestIsLower
+	sta temp2
+	sty temp2+1 ; number of the closest tank
+	
+lowestIsLower
+skipThisPlayer
+	dey
+	bpl loop01
+	; now we have number of the closest tank in temp2+1
+	; and direction (0 - left, >0 - right) in tempor2
+	; let's move them to registers
+	; in temp2 we have x distance divided by 8 
+	ldy temp2+1
+	lda tempor2
+	rts
+.endp
 ;----------------------------------------------
 .proc FindBestTarget1
 ; find farthest tank neighbour
@@ -400,6 +425,7 @@ skipThisPlayer
 	; now we have number of the farthest tank in temp2+1
 	; and direction (0 - left, >0 - right) in tempor2
 	; let's move them to registers
+	; in temp2 we have x distance divided by 8 
 	ldy temp2+1
 	lda tempor2
 	rts
