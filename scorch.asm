@@ -420,6 +420,8 @@ DoNotFinishTheRound
     ldx tankNr
     lda TankStatusColoursTable,x
     sta colpf2s  ; set color of status line
+    jsr PutTankNameOnScreen
+    jsr DisplayStatus
 
     lda SkillTable,x
     beq ManualShooting
@@ -428,9 +430,7 @@ RoboTanks
 	; robotanks shoot here	
 	; TankNr still in X
     jsr ArtificialIntelligence
-    jsr PutTankNameOnScreen
-    jsr DisplayStatus
-    pause 30
+    ;pause 30
 	ldx TankNr
     jsr MoveBarrelToNewPosition
     lda kbcode
@@ -476,7 +476,7 @@ StandardShoot
     jsr DecreaseWeaponBeforeShoot
     jsr DisplayStatus
 
-	ldx TankNr
+;	ldx TankNr
 	dec Energy,x   ; lower energy to eventually let tanks commit suicide
 
 ShootNow
@@ -1221,7 +1221,7 @@ MoveBarrel
     mva #sfx_set_power_2 sfx_effect
 	jsr DrawTankNr
 	jsr DisplayStatus.displayAngle
-	ldx TankNr
+;	ldx TankNr
 	mva #1 Erase
 	PAUSE 1
 	jsr DrawTankNr.BarrelChange

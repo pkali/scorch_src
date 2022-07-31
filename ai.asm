@@ -57,11 +57,23 @@ AIRoutines
     .word Shooter-1 ;Shooter
     .word Poolshark-1 ;Poolshark
     .word Tosser-1 ;Tosser
-    .word Tosser-1 ;Chooser
-    .word Tosser-1 ;Spoiler
+    .word Chooser-1 ;Chooser
+    .word Spoiler-1 ;Spoiler
     .word Cyborg-1 ;Cyborg
-    .word Tosser-1 ;Unknown
+    .word Unknown-1 ;Unknown
 
+;----------------------------------------------
+.proc Unknown
+	; random robotank (from Poolshark to Cyborg)
+	randomize 4 13
+	and #%11111110
+	tay
+    lda AIRoutines+1,y
+    pha
+    lda AIRoutines,y
+    pha
+	rts
+.endp
 ;----------------------------------------------
 .proc Moron 
     jsr RandomizeAngle
@@ -154,6 +166,7 @@ loop
     .endp
 ;----------------------------------------------
 .proc Poolshark
+	jsr UseBatteryOrFlag
 	; defensives
 	jsr PoolsharkDefensives
 firstShoot
@@ -213,8 +226,7 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 	.by 18,26,34,43,50,58,66,74
 .endp
 ;----------------------------------------------
-.proc PoolsharkDefensives
-	; defensives
+.proc UseBatteryOrFlag
 	; if low energy ten use battery
 	lda Energy,x
 	cmp #30
@@ -238,6 +250,10 @@ NoBatteries
 	lda #ind_White_Flag_____
 	sta ActiveDefenceWeapon,x
 EnoughEnergy
+	rts
+.endp
+;----------------------------------------------
+.proc PoolsharkDefensives
 	; use best defensive :)
 	; but not allways
 	randomize 1 3
@@ -268,6 +284,7 @@ DefensiveInUse
 .endp
 ;----------------------------------------------
 .proc Tosser
+	jsr UseBatteryOrFlag
 	; use best defensive :)
 	jsr TosserDefensives
 	; Toosser is like Poolshark but allways uses defensives
@@ -301,23 +318,173 @@ NoUseDefensive
 	rts
 .endp
 ;----------------------------------------------
-.proc Cyborg
+.proc Chooser
+	; like cyborg but more randomizing force
+	jsr UseBatteryOrFlag
 	; use defensives like Tosser
 	jsr TosserDefensives
 	; now select best target
-	jsr FindBestTarget1
+	jsr FindBestTarget3
 	sty TargetTankNr
 	; aiming
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
-	lda #0
+	
+	; choose the best weapon
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
+loop
+	dey
+	lda (temp),y
+	beq loop 
+	tya
 	sta ActiveWeapon,x
+
+	; randomizing force +-100
+	sbw Force #100 RandBoundaryLow
+	bpl NotNegativeEnergy
+	mwa #1 RandBoundaryLow
+NotNegativeEnergy
+	adw Force #100 RandBoundaryHigh
+    jsr RandomizeForce
+	lda ForceTableH,x
+	bne HighForce
+	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	lda #ind_Baby_Missile___
+	sta ActiveWeapon,x
+HighForce
+	rts
+.endp
+;----------------------------------------------
+.proc Spoiler
+	; like cyborg but little randomizing force
+	jsr UseBatteryOrFlag
+	; use defensives like Tosser
+	jsr TosserDefensives
+	; now select best target
+	jsr FindBestTarget3
+	sty TargetTankNr
+	; aiming
+	jsr TakeAim		; direction still in A (0 - left, >0 - right)
+	
+	; choose the best weapon
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
+loop
+	dey
+	lda (temp),y
+	beq loop 
+	tya
+	sta ActiveWeapon,x
+
+	; randomizing force +-50
+	sbw Force #50 RandBoundaryLow
+	bpl NotNegativeEnergy
+	mwa #1 RandBoundaryLow
+NotNegativeEnergy
+	adw Force #50 RandBoundaryHigh
+    jsr RandomizeForce
+	lda ForceTableH,x
+	bne HighForce
+	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	lda #ind_Baby_Missile___
+	sta ActiveWeapon,x
+HighForce
+	rts
+.endp
+;----------------------------------------------
+.proc Cyborg
+	jsr UseBatteryOrFlag
+	; use defensives like Tosser
+	jsr TosserDefensives
+	; now select best target
+	jsr FindBestTarget3
+	sty TargetTankNr
+	; aiming
+	jsr TakeAim		; direction still in A (0 - left, >0 - right)
+	
+	; choose the best weapon
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
+loop
+	dey
+	lda (temp),y
+	beq loop 
+	tya
+	sta ActiveWeapon,x
+
 	lda Force
 	sta ForceTableL,x
 	lda Force+1
 	sta ForceTableH,x
+	bne HighForce
+	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	lda #ind_Baby_Missile___
+	sta ActiveWeapon,x
+HighForce
 	rts
 .endp
 
+;----------------------------------------------
+.proc FindBestTarget3
+; find target with lowest energy
+; X - shooting tank number
+; returns target tank number in Y and
+; direcion of shoot in A (0 - left, >0 - right)
+;----------------------------------------------
+	jsr MakeLowResDistances
+	lda #$ff
+	sta temp2 ; max possible energy
+	sta tempor2	; direction of shoot
+	;ldx TankNr
+	ldy NumberOfPlayers
+	dey
+	
+loop01
+	cpy TankNr
+	beq skipThisPlayer
+	lda eXistenZ,y
+	beq skipThisPlayer
+	
+	lda LowResDistances,x
+	cmp LowResDistances,y
+	bcs EnemyOnTheLeft
+	;enemy on the right
+	lda Energy,y
+	cmp temp2 ; lowest
+	bcs lowestIsLower
+	sta temp2
+	sty temp2+1 ; number of the closest tank
+	inc tempor2	; set direction to right
+	bne lowestIsLower
+
+EnemyOnTheLeft
+	lda Energy,y
+	cmp temp2 ; lowest
+	bcs lowestIsLower
+	sta temp2
+	sty temp2+1 ; number of the closest tank
+	
+lowestIsLower
+skipThisPlayer
+	dey
+	bpl loop01
+	; now we have number of the farthest tank in temp2+1
+	; and direction (0 - left, >0 - right) in tempor2
+	; let's move them to registers
+	; in temp2 we have energy of target 
+	ldy temp2+1
+	lda tempor2
+	rts
+.endp
 ;----------------------------------------------
 .proc FindBestTarget2
 ; find farthest tank neighbour

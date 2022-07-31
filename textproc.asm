@@ -2094,7 +2094,7 @@ VerticallyUp
 AngleDisplay
     mwa #textbuffer+40+23 displayposition
     jsr displaybyte
-    
+    ldx TankNr   
     rts
 .endp
 ;-------------------------------------------------
