@@ -519,16 +519,16 @@ AfterExplode
 NoFallDown2
     ;here tanks are falling down
     mva tankNr tempor2
-    mvx #0 TankNr
-
+	ldx NumberOfPlayers
+	dex
 TanksFallDown
+    stx TankNr
 	lda eXistenZ,x
 	beq NoExistNoFall
     jsr TankFalls
 NoExistNoFall
-    inc:ldx TankNr
-    cpx NumberOfPlayers
-    bne TanksFallDown
+    dex
+    bpl TanksFallDown
     mva tempor2 TankNr
 missed
 
