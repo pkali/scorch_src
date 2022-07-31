@@ -1862,7 +1862,8 @@ EndOfFlight2
 	cmp #ind_Auto_Defense___		; Auto Defence
 	jeq AutoDefence
 	cmp #ind_Mag_Deflector__		; Mag Deflector
-	bne NoDefence
+	beq MagDeflector
+	jmp NoDefence
 MagDeflector
 	; now run defensive-aggressive weapon - Mag Deflector!
 	; get tank position
@@ -1889,9 +1890,19 @@ RightDeflection
 	bcs EndOfMagDeflector	; hit of course but we need RTS
 	sbw XHit #36	; change to left
 EndOfMagDeflector
+	mva #1 Erase
+	lda TankNr
+	pha			; store TankNr
+	stx TankNr	; store X in TankNr :)
+	jsr DrawTankNr	; now erase tank with shield (to erase shield)
 	lda #0
 	sta ActiveDefenceWeapon,x	; deactivate used mag deflector weapon
 	sta ShieldEnergy,x
+	sta Erase
+	jsr DrawTankNr	; draw tank without shield
+	ldx TankNr	; restore X value :)
+	pla
+	sta TankNr	; restore TankNr value :)
 	mwa XHit xdraw	; why? !!!
 NoTankHitAtEndOfFight
 NoHitAtEndOfFight
@@ -2305,7 +2316,8 @@ MIRValreadyAll
 	jsr FlashTank	; first we flash tank
 	mva #1 Erase
 	jsr DrawTankNr	; and erase tank
-	mva #0 Erase
+	lda #0
+	sta Erase
 	ldx TankNr
 	sta Energy,x	; clear tank energy
 	sta eXistenZ,x	; erase from existence
@@ -2394,7 +2406,8 @@ InverseScreenByte
 ; XHit , YHit - coordinates of hit
 ; X - index of the hit tank
 
-    ldx #0
+    ldx NumberOfPlayers
+	dex
 CheckCollisionWithTankLoop
 	lda eXistenZ,x
 	beq DeadTank
@@ -2440,9 +2453,8 @@ LeftFromTheTank
 OverTheTank
 BelowTheTank
 DeadTank
-    inx
-    cpx NumberOfPlayers
-    bne CheckCollisionWithTankLoop
+    dex
+    bpl CheckCollisionWithTankLoop
     rts
 CheckCollisionWithShieldedTank
 	; now we use Y as low byte and A as high byte of checked position (left right edgs of shield)

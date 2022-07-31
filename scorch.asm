@@ -736,7 +736,6 @@ NotShooter
     lda Energy,x
     cmp EnergyDecrease
     bcc ldahashzero
-	beq ldahashzero
     ;sec
     sbc EnergyDecrease
     bpl NotNegativeEnergy
@@ -942,7 +941,7 @@ SetunPlots
 
     ;let the tanks be visible!
     ldx #(maxPlayers-1)
-    lda #1 ; tank is visible
+    lda #99 ; tank is visible
 MakeTanksVisible
     sta eXistenZ,x
     dex
