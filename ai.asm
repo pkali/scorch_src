@@ -618,6 +618,8 @@ skipThisPlayer
 	sta Force
 	lda ForceTableH,x
 	sta Force+1
+	lda #ind_Baby_Missile___
+	sta ActiveWeapon,x
 	; now we have initial valuses
 	mva #$ff TestFlightFlag
 	; check targeting direction

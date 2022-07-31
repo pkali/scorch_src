@@ -1889,6 +1889,9 @@ RightDeflection
 	bcs EndOfMagDeflector	; hit of course but we need RTS
 	sbw XHit #36	; change to left
 EndOfMagDeflector
+	lda #0
+	sta ActiveDefenceWeapon,x	; deactivate used mag deflector weapon
+	sta ShieldEnergy,x
 	mwa XHit xdraw	; why? !!!
 NoTankHitAtEndOfFight
 NoHitAtEndOfFight

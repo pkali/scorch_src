@@ -441,8 +441,6 @@ RoboTanks
       seq:rts
 @
 
-    ; let's move the tank's barrel so it points the right
-    ; direction
     jmp AfterManualShooting
 
 ManualShooting
@@ -738,6 +736,7 @@ NotShooter
     lda Energy,x
     cmp EnergyDecrease
     bcc ldahashzero
+	beq ldahashzero
     ;sec
     sbc EnergyDecrease
     bpl NotNegativeEnergy
