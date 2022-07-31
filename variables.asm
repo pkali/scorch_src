@@ -135,6 +135,9 @@ ytankstable ;Y positions of tanks (lower left point)
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS [MaxPlayers]
 ;----------------------------------------------------
+TargetTankNr	; Target tank index (for AI routines)
+	.DS 1	
+;----------------------------------------------------
 Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally
 

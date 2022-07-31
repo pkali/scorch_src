@@ -59,7 +59,7 @@ AIRoutines
     .word Tosser-1 ;Tosser
     .word Tosser-1 ;Chooser
     .word Tosser-1 ;Spoiler
-    .word Tosser-1 ;Cyborg
+    .word Cyborg-1 ;Cyborg
     .word Tosser-1 ;Unknown
 
 ;----------------------------------------------
@@ -155,55 +155,7 @@ loop
 ;----------------------------------------------
 .proc Poolshark
 	; defensives
-	; if low energy ten use battery
-	lda Energy,x
-	cmp #30
-	bcs EnoughEnergy
-	; lower than 30 units - check battery
-	ldy #ind_Battery________
-	lda (temp),y  ; has address of TanksWeaponsTable
-	beq NoBatteries
-	; we have batteries - use one
-	clc
-	sbc #1
-	sta (temp),y
-	lda #99
-	sta Energy,x
-NoBatteries
-	; if very low energy and no battery then use White Flag
-	lda Energy,x
-	cmp #5
-	bcs EnoughEnergy
-	; lower than 5 units - white flag
-	lda #ind_White_Flag_____
-	sta ActiveDefenceWeapon,x
-EnoughEnergy
-	; use best defensive :)
-	; but not allways
-	randomize 1 3
-	cmp #1
-	bne NoUseDefensive
-	; first check check if any is in use
-	lda ActiveDefenceWeapon,x
-	bne DefensiveInUse
-	ldy #ind_Nuclear_Winter_+1 ;the last defensive weapon
-@
-	dey
-	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
-	beq NoUseDefensive
-	lda (temp),y  ; has address of TanksWeaponsTable
-	beq @- 
-	; decrease in inventory
-	clc
-	sbc #1
-	sta (temp),y  ; has address of TanksWeaponsTable
-	; activate defensive weapon
-	tya		; number of selectet defensive weapon
-	sta ActiveDefenceWeapon,x
-    lda DefensiveEnergy,y
-    sta ShieldEnergy,x
-NoUseDefensive
-DefensiveInUse
+	jsr PoolsharkDefensives
 firstShoot
 	;find nearest tank neighbour
 	jsr MakeLowResDistances
@@ -293,7 +245,68 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 	.by 18,26,34,43,50,58,66,74
 .endp
 ;----------------------------------------------
+.proc PoolsharkDefensives
+	; defensives
+	; if low energy ten use battery
+	lda Energy,x
+	cmp #30
+	bcs EnoughEnergy
+	; lower than 30 units - check battery
+	ldy #ind_Battery________
+	lda (temp),y  ; has address of TanksWeaponsTable
+	beq NoBatteries
+	; we have batteries - use one
+	clc
+	sbc #1
+	sta (temp),y
+	lda #99
+	sta Energy,x
+NoBatteries
+	; if very low energy and no battery then use White Flag
+	lda Energy,x
+	cmp #5
+	bcs EnoughEnergy
+	; lower than 5 units - white flag
+	lda #ind_White_Flag_____
+	sta ActiveDefenceWeapon,x
+EnoughEnergy
+	; use best defensive :)
+	; but not allways
+	randomize 1 3
+	cmp #1
+	bne NoUseDefensive
+	; first check check if any is in use
+	lda ActiveDefenceWeapon,x
+	bne DefensiveInUse
+	ldy #ind_Nuclear_Winter_+1 ;the last defensive weapon
+@
+	dey
+	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
+	beq NoUseDefensive
+	lda (temp),y  ; has address of TanksWeaponsTable
+	beq @- 
+	; decrease in inventory
+	clc
+	sbc #1
+	sta (temp),y  ; has address of TanksWeaponsTable
+	; activate defensive weapon
+	tya		; number of selectet defensive weapon
+	sta ActiveDefenceWeapon,x
+    lda DefensiveEnergy,y
+    sta ShieldEnergy,x
+NoUseDefensive
+DefensiveInUse
+	rts
+.endp
+;----------------------------------------------
 .proc Tosser
+	; use best defensive :)
+	jsr TosserDefensives
+	; Toosser is like Poolshark but allways uses defensives
+	jmp Poolshark.firstShoot
+.endp
+;----------------------------------------------
+.proc TosserDefensives
 	; use best defensive :)
 	; allways
 	; first check check if any is in use
@@ -317,10 +330,25 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
     sta ShieldEnergy,x
 DefensiveInUse
 NoUseDefensive
-	; Toosser is like Poolshark but allways uses defensives
-	jmp Poolshark
+	rts
 .endp
-
+;----------------------------------------------
+.proc Cyborg
+	; use defensives like Tosser
+	jsr TosserDefensives
+	; now select best target
+	jsr FindBestTarget1
+	sty TargetTankNr
+	; aiming
+	jsr TakeAim		; direction still in A (0 - left, >0 - right)
+	lda #0
+	sta ActiveWeapon,x
+	lda Force
+	sta ForceTableL,x
+	lda Force+1
+	sta ForceTableH,x
+	rts
+.endp
 ;----------------------------------------------
 .proc FindBestTarget1
 ; find farthest tank neighbour
@@ -374,6 +402,210 @@ skipThisPlayer
 	; let's move them to registers
 	ldy temp2+1
 	lda tempor2
+	rts
+.endp
+;----------------------------------------------
+.proc TakeAim
+; targeting the tank number TargetTankNr (and Y)
+; A (and tempor2) - direction from shooting tank (0 - left, >0 - right)
+; returns angle and power of shoot tank X (TankNr)
+; in the appropriate variables (Angle and Force)
+;----------------------------------------------
+	; set initial Angle and Force values
+	mva #90 NewAngle
+	lda OptionsTable+2	; selected gravity
+	asl 
+	tay
+	lda AIForceTable,y
+	sta ForceTableL,x
+	lda AIForceTable+1,y
+	sta ForceTableH,x
+    jsr RandomizeForce.LimitForce
+	lda ForceTableL,x
+	sta Force
+	lda ForceTableH,x
+	sta Force+1
+	; now we have initial valuses
+	mva #$ff TestFlightFlag
+	; check targeting direction
+	lda tempor2
+	jeq AimingLeft
+AimingRight
+	; make test Shoot (Flight)
+	jsr SetStartAndFlight
+	lda HitFlag
+	beq NoHitInFirstLoopR	; impossible :)
+	bmi GroundHitInFirstLoopR
+TankHitInFirstLoopR
+	; tank hit, but which tank?
+	; it's our target or not?
+	ldy HitFlag
+	dey
+	cpy TargetTankNr
+	beq EndOfFirstLoopR	; it's our target!
+	; if it's another tank then check position like ground hit
+GroundHitInFirstLoopR
+	; checking only x position of hit
+	ldy TargetTankNr
+	lda xTanksTableH,y
+	cmp XHit+1
+	bne @+
+	lda xTanksTableL,y
+	cmp XHit
+@
+	bcc HitOnRightSideOfTargetR
+	; continue targeting
+	sec
+	lda NewAngle
+	sbc #5	; 5 deg to right
+	cmp #15
+	beq EndOfFirstLoopR
+	sta NewAngle
+	jmp AimingRight
+NoHitInFirstLoopR
+	; Angle 5 deg to left and end loop 
+	clc
+	lda NewAngle
+	adc #5
+	sta NewAngle	
+HitOnRightSideOfTargetR
+EndOfFirstLoopR
+	mva #5 temp2	; set counter (5 turns)
+SecondLoopR
+	; make test Shoot (Flight)
+	jsr SetStartAndFlight
+	lda HitFlag
+	beq NoHitInSecondLoopR	; impossible :)
+	bmi GroundHitInSecondLoopR
+TankHitInSecondLoopR
+	; tank hit, but which tank?
+	; it's our target or not?
+	ldy HitFlag
+	dey
+	cpy TargetTankNr
+	beq EndOfSecondLoopR	; it's our target!
+	; if it's another tank then check position like ground hit
+GroundHitInSecondLoopR
+	; checking only x position of hit
+	ldy TargetTankNr
+	lda xTanksTableH,y
+	cmp XHit+1
+	bne @+
+	lda xTanksTableL,y
+	cmp XHit
+@
+	bcs HitOnLeftSideOfTargetR
+	; continue targeting
+	inc NewAngle	; 1 deg to left
+	dec temp2	; max 5 turns
+	beq EndOfSecondLoopR
+	jmp SecondLoopR
+HitOnLeftSideOfTargetR
+	; decrease energy (a little)
+	sbw Energy #5
+NoHitInSecondLoopR
+	; Angle 1 deg to right and end loop 
+	dec NewAngle
+EndOfSecondLoopR
+	rts
+
+AimingLeft
+	; make test Shoot (Flight)
+	jsr SetStartAndFlight
+	lda HitFlag
+	beq NoHitInFirstLoopL	; impossible :)
+	bmi GroundHitInFirstLoopL
+TankHitInFirstLoopL
+	; tank hit, but which tank?
+	; it's our target or not?
+	ldy HitFlag
+	dey
+	cpy TargetTankNr
+	beq EndOfFirstLoopL	; it's our target!
+	; if it's another tank then check position like ground hit
+GroundHitInFirstLoopL
+	; checking only x position of hit
+	ldy TargetTankNr
+	lda xTanksTableH,y
+	cmp XHit+1
+	bne @+
+	lda xTanksTableL,y
+	cmp XHit
+@
+	bcs HitOnLeftSideOfTargetL
+	; continue targeting
+	clc
+	lda NewAngle
+	adc #5	; 5 deg to left
+	cmp #(180-15)
+	beq EndOfFirstLoopL
+	sta NewAngle
+	jmp AimingLeft
+NoHitInFirstLoopL
+	; Angle 5 deg to right and end loop 
+	sec
+	lda NewAngle
+	sbc #5
+	sta NewAngle	
+HitOnLeftSideOfTargetL
+EndOfFirstLoopL
+	mva #5 temp2	; set counter (5 turns)
+SecondLoopL
+	; make test Shoot (Flight)
+	jsr SetStartAndFlight
+	lda HitFlag
+	beq NoHitInSecondLoopL	; impossible :)
+	bmi GroundHitInSecondLoopL
+TankHitInSecondLoopL
+	; tank hit, but which tank?
+	; it's our target or not?
+	ldy HitFlag
+	dey
+	cpy TargetTankNr
+	beq EndOfSecondLoopL	; it's our target!
+	; if it's another tank then check position like ground hit
+GroundHitInSecondLoopL
+	; checking only x position of hit
+	ldy TargetTankNr
+	lda xTanksTableH,y
+	cmp XHit+1
+	bne @+
+	lda xTanksTableL,y
+	cmp XHit
+@
+	bcc HitOnRightSideOfTargetL
+	; continue targeting
+	dec NewAngle	; 1 deg to right
+	dec temp2	; max 5 turns
+	beq EndOfSecondLoopL
+	jmp SecondLoopL
+HitOnRightSideOfTargetL
+	; decrease energy (a little)
+	sbw Energy #5
+NoHitInSecondLoopL
+	; Angle 1 deg to left and end loop 
+	inc NewAngle
+EndOfSecondLoopL
+
+	rts
+	
+SetStartAndFlight	; set start point (virtual barrel end :) ) and make test flight
+	; xtraj+1 and ytraj+1 set
+	clc
+	lda xTanksTableL,x
+	adc #4
+	sta xtraj+1
+	lda xTanksTableH,x
+	adc #0
+	sta xtraj+2
+	sec
+	lda yTanksTable,x
+	sbc #4
+	sta ytraj+1
+	mva #0 ytraj+2
+	mva NewAngle Angle
+	jsr Flight
+	ldx TankNr
 	rts
 .endp
 ;----------------------------------------------

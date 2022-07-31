@@ -1860,7 +1860,7 @@ EndOfFlight2
 	dex		; index of tank in X
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Auto_Defense___		; Auto Defence
-	beq AutoDefence
+	jeq AutoDefence
 	cmp #ind_Mag_Deflector__		; Mag Deflector
 	bne NoDefence
 MagDeflector
@@ -1893,6 +1893,7 @@ EndOfMagDeflector
 NoTankHitAtEndOfFight
 NoHitAtEndOfFight
 NoDefence
+	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
     rts		; END !!!	
 AutoDefence
 	; now run defensive-aggressive weapon - Auto Defence!
