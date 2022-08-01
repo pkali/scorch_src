@@ -702,7 +702,7 @@ GroundHitInSecondLoopR
 	jmp SecondLoopR
 HitOnLeftSideOfTargetR
 	; decrease energy (a little)
-	sbw Energy #5
+	sbw Force #5
 NoHitInSecondLoopR
 	; Angle 1 deg to right and end loop 
 	dec NewAngle
@@ -781,7 +781,7 @@ GroundHitInSecondLoopL
 	jmp SecondLoopL
 HitOnRightSideOfTargetL
 	; decrease energy (a little)
-	sbw Energy #5
+	sbw Force #5
 NoHitInSecondLoopL
 	; Angle 1 deg to left and end loop 
 	inc NewAngle
