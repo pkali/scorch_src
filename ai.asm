@@ -441,8 +441,9 @@ HighForce
 ; direcion of shoot in A (0 - left, >0 - right)
 ;----------------------------------------------
 	jsr MakeLowResDistances
-	lda #$ff
+	lda #101
 	sta temp2 ; max possible energy
+	lda #0
 	sta tempor2	; direction of shoot
 	;ldx TankNr
 	ldy NumberOfPlayers
@@ -635,7 +636,7 @@ skipThisPlayer
 	mva #$ff TestFlightFlag
 	; check targeting direction
 	lda tempor2
-	jeq AimingLeft
+	jne AimingLeft
 AimingRight
 	; make test Shoot (Flight)
 	jsr SetStartAndFlight
