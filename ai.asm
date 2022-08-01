@@ -605,7 +605,13 @@ skipThisPlayer
 ; in the appropriate variables (Angle and Force)
 ;----------------------------------------------
 	; set initial Angle and Force values
-	mva #90 NewAngle
+	; wind correction 90+(wind/8)
+	mwa Wind temp2
+	:7 lsrw temp2
+	clc
+	lda #90
+	adc temp2
+	sta NewAngle
 	lda OptionsTable+2	; selected gravity
 	asl 
 	tay
@@ -653,24 +659,24 @@ GroundHitInFirstLoopR
 	lda xTanksTableL,y
 	cmp XHit
 @
-	bcc HitOnRightSideOfTargetR
+	bcs HitOnRightSideOfTargetR
 	; continue targeting
-	sec
+	clc
 	lda NewAngle
-	sbc #5	; 5 deg to right
-	cmp #15
-	beq EndOfFirstLoopR
+	adc #5	; 5 deg to right
+	cmp #(180-20)
+	bcs EndOfFirstLoopR	; if angle 180-20 or higher
 	sta NewAngle
 	jmp AimingRight
 NoHitInFirstLoopR
 	; Angle 5 deg to left and end loop 
-	clc
+	sec
 	lda NewAngle
-	adc #5
+	sbc #5
 	sta NewAngle	
 HitOnRightSideOfTargetR
 EndOfFirstLoopR
-	mva #5 temp2	; set counter (5 turns)
+	mva #5 modify	; set counter (5 turns)
 SecondLoopR
 	; make test Shoot (Flight)
 	jsr SetStartAndFlight
@@ -694,10 +700,10 @@ GroundHitInSecondLoopR
 	lda xTanksTableL,y
 	cmp XHit
 @
-	bcs HitOnLeftSideOfTargetR
+	bcc HitOnLeftSideOfTargetR
 	; continue targeting
-	inc NewAngle	; 1 deg to left
-	dec temp2	; max 5 turns
+	dec NewAngle	; 1 deg to left
+	dec modify	; max 5 turns
 	beq EndOfSecondLoopR
 	jmp SecondLoopR
 HitOnLeftSideOfTargetR
@@ -705,7 +711,7 @@ HitOnLeftSideOfTargetR
 	sbw Force #5
 NoHitInSecondLoopR
 	; Angle 1 deg to right and end loop 
-	dec NewAngle
+	inc NewAngle
 EndOfSecondLoopR
 	rts
 
@@ -732,24 +738,24 @@ GroundHitInFirstLoopL
 	lda xTanksTableL,y
 	cmp XHit
 @
-	bcs HitOnLeftSideOfTargetL
+	bcc HitOnLeftSideOfTargetL
 	; continue targeting
-	clc
+	sec
 	lda NewAngle
-	adc #5	; 5 deg to left
-	cmp #(180-15)
-	beq EndOfFirstLoopL
+	sbc #5	; 5 deg to left
+	cmp #21
+	bcc EndOfFirstLoopL	; if angle 180-20 or higher
 	sta NewAngle
 	jmp AimingLeft
 NoHitInFirstLoopL
 	; Angle 5 deg to right and end loop 
-	sec
+	clc
 	lda NewAngle
-	sbc #5
+	adc #5
 	sta NewAngle	
 HitOnLeftSideOfTargetL
 EndOfFirstLoopL
-	mva #5 temp2	; set counter (5 turns)
+	mva #5 modify	; set counter (5 turns)
 SecondLoopL
 	; make test Shoot (Flight)
 	jsr SetStartAndFlight
@@ -773,10 +779,10 @@ GroundHitInSecondLoopL
 	lda xTanksTableL,y
 	cmp XHit
 @
-	bcc HitOnRightSideOfTargetL
+	bcs HitOnRightSideOfTargetL
 	; continue targeting
-	dec NewAngle	; 1 deg to right
-	dec temp2	; max 5 turns
+	inc NewAngle	; 1 deg to right
+	dec modify	; max 5 turns
 	beq EndOfSecondLoopL
 	jmp SecondLoopL
 HitOnRightSideOfTargetL
@@ -784,7 +790,7 @@ HitOnRightSideOfTargetL
 	sbw Force #5
 NoHitInSecondLoopL
 	; Angle 1 deg to left and end loop 
-	inc NewAngle
+	dec NewAngle
 EndOfSecondLoopL
 
 	rts

@@ -1028,9 +1028,10 @@ FallingLeft
 	bit PreviousFall	; bit 6 - right
 	bvs EndLeftFall
     ; we finish falling left if the tank reached the edge of the screen
-    lda XtanksTableL,x
-    bne NotLeftEdge
     lda XtanksTableH,x
+    bne NotLeftEdge
+    lda XtanksTableL,x
+	cmp #2	; 2 pixels correction due to a barrel wider than tank
     beq EndLeftFall
 NotLeftEdge
     ; tank is falling left - modify coorinates
@@ -1055,7 +1056,7 @@ FallingRight
     lda XtanksTableH,x
     adc #0
     sta temp+1
-    cpw temp #screenwidth
+    cpw temp #screenwidth-2	; 2 pixels correction due to a barrel wider than tank
     beq EndRightFall
     ; tank is falling right - modify coorinates
     sec
