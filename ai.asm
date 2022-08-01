@@ -616,10 +616,15 @@ skipThisPlayer
 	lda OptionsTable+2	; selected gravity
 	asl 
 	tay
+	; force correction - lower tank Y position - higher possible force
+	clc
+	lda #screenheight
+	sbc Ytankstable,x
+	sta temp2
 	clc
 	lda AIForceTable,y
 	sta RandBoundaryLow
-	adc #60
+	adc temp2
 	sta RandBoundaryHigh
 	lda AIForceTable+1,y
 	sta RandBoundaryLow+1
