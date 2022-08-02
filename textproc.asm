@@ -1832,11 +1832,46 @@ FinishResultDisplay
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
     lda #%00100100  ; playfield before P/M
-    sta gtictls 
+    sta gtictls
+	jsr SetPMWidth	
     jsr ColorsOfSprites
     mva #0 colpf1s
     mva #TextForegroundColor colpf2s
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
+	; make text and color lines for each tank
+;    ldx NumberOfPlayers  ;we start from the highest (best) tank
+;    dex   ;and it is the last one
+;    stx ResultOfTankNr  ;in TankSequence table
+;	ldy #0 ;witch line we are coloring
+;FinalResultOfTheNextPlayer
+;    ldx ResultOfTankNr ;we are after a round, so we can use TankNr
+;    lda TankSequence,x ;and we keep here real number if the tank
+;	tax
+;    stx TankNr   ;for which we are displaying results
+;	lda TankStatusColoursTable,x
+;	sta GameOverColoursTable,y
+;	;
+;	iny
+;    dec ResultOfTankNr
+;    beq FinalResultOfTheNextPlayer
+;MakeBlackLines
+;	cpy #$06
+;	beq AllLinesReady
+;	lda #0	; black line color for rest of tanks
+;	sta GameOverColoursTable,y
+;	iny
+;	bne MakeBlackLines
+;AllLinesReady
+    ldx #(MaxPlayers-1)
+MakeAllTanksVisible
+    lda #99
+    sta eXistenZ,x
+	lda #0
+	sta ActiveDefenceWeapon,x
+    dex
+    bpl MakeAllTanksVisible
+
+	; start music and animations
     lda #song_game_over
     jsr RmtSongSelect
     ; initial tank positions randomization

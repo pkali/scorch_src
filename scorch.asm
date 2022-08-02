@@ -178,21 +178,8 @@ MainGameLoop
     jsr RmtSongSelect
     jsr DisplayResults
 
-    ;check demo mode
-    ldx numberOfPlayers
-    dex
-checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
-    lda skillTable,x
-    beq peopleAreHere
-    dex
-    bpl checkForHuman
-    ; no people, just wait a bit
-    pause 150
-    jmp noKey
+	jsr DemoModeOrKey
 
-peopleAreHere
-    jsr getkey
-noKey
     ldx NumberOfPlayers
     dex
 CalculateGains
@@ -244,8 +231,10 @@ skipzeroing
     bpl CalculateGains
 
     lda GameIsOver
-    jne START
-
+	beq NoGameOverYet
+	;jsr GameOverScreen
+    jmp START
+NoGameOverYet
     inc CurrentRoundNr
     lda #$0
     sta dmactls  ; issue #72
@@ -269,9 +258,8 @@ skipzeroing
     lda #song_ingame
     jsr RmtSongSelect
 
+	jsr SetPMWidth
 	lda #0
-    sta sizep0 ; P0-P1 widths
-    sta sizep0+1
 	sta colpf2s	; status line "off"
 	sta colpf1s
 	
@@ -928,13 +916,7 @@ SetunPlots
 ;    sta dmactls
     lda #$03    ; P/M on
     sta pmcntl
-    lda #$00
-    sta sizep0 ; P0-P3 widths
-    sta sizep0+1
-    sta sizep0+2
-    sta sizep0+3
-	lda #%01010101
-    sta sizem ; all missiles, double width
+	jsr SetPMWidth
     lda #%00100000 ; P/M priorities (multicolor players on)
     sta gtictls
     jsr PMoutofScreen
@@ -972,6 +954,17 @@ ClearResults
     VMAIN VBLinterrupt,6  		;jsr SetVBL
 
     rts
+.endp
+;--------------------------------------------------
+.proc SetPMWidth
+    lda #$00
+    sta sizep0 ; P0-P3 widths
+    sta sizep0+1
+    sta sizep0+2
+    sta sizep0+3
+	lda #%01010101
+    sta sizem ; all missiles, double width
+	rts
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGraph
@@ -1392,6 +1385,26 @@ getkeyend
     cmp #$ff
     bne WaitForKeyRelease
     rts
+.endp
+;--------------------------------------------------
+.proc DemoModeOrKey
+;--------------------------------------------------
+    ;check demo mode
+    ldx numberOfPlayers
+    dex
+checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
+    lda skillTable,x
+    beq peopleAreHere
+    dex
+    bpl checkForHuman
+    ; no people, just wait a bit
+    pause 150
+    jmp noKey
+
+peopleAreHere
+    jsr getkey
+noKey
+	rts
 .endp
 
 ;--------------------------------------------------
