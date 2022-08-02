@@ -1839,29 +1839,33 @@ FinishResultDisplay
     mva #TextForegroundColor colpf2s
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
 	; make text and color lines for each tank
-;    ldx NumberOfPlayers  ;we start from the highest (best) tank
-;    dex   ;and it is the last one
-;    stx ResultOfTankNr  ;in TankSequence table
-;	ldy #0 ;witch line we are coloring
-;FinalResultOfTheNextPlayer
-;    ldx ResultOfTankNr ;we are after a round, so we can use TankNr
-;    lda TankSequence,x ;and we keep here real number if the tank
-;	tax
-;    stx TankNr   ;for which we are displaying results
-;	lda TankStatusColoursTable,x
-;	sta GameOverColoursTable,y
-;	;
-;	iny
-;    dec ResultOfTankNr
-;    beq FinalResultOfTheNextPlayer
-;MakeBlackLines
-;	cpy #$06
-;	beq AllLinesReady
-;	lda #0	; black line color for rest of tanks
-;	sta GameOverColoursTable,y
-;	iny
-;	bne MakeBlackLines
-;AllLinesReady
+    ldx NumberOfPlayers  ;we start from the highest (best) tank
+    dex   ;and it is the last one
+    stx ResultOfTankNr  ;in TankSequence table
+	ldy #0 ;witch line we are coloring
+FinalResultOfTheNextPlayer
+    ldx ResultOfTankNr ;we are after a round, so we can use TankNr
+    lda TankSequence,x ;and we keep here real number if the tank
+	tax
+    stx TankNr   ;for which we are displaying results
+	lda TankStatusColoursTable,x
+	sta GameOverColoursTable,y
+	; Y - line number (from 0 to 5)
+	; X - TanNr
+	; let's make texts
+	
+	;
+	iny
+    dec ResultOfTankNr
+    bpl FinalResultOfTheNextPlayer
+MakeBlackLines
+	cpy #$06
+	beq AllLinesReady
+	lda #0	; black line color for rest of tanks
+	sta GameOverColoursTable,y
+	iny
+	bne MakeBlackLines
+AllLinesReady
     ldx #(MaxPlayers-1)
 MakeAllTanksVisible
     lda #99
