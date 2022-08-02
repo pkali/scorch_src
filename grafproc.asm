@@ -894,11 +894,14 @@ tankflash_loop
     lda #char_parachute_______	; parachute symbol
     sta CharCode
     lda Ytankstable,x
-    sec
+	cmp #16
+	bcc ToHighToParachute
+    ;sec
     sbc #8
     sta ydraw
     jsr SetupXYdraw.X
     jsr TypeChar
+ToHighToParachute
 	rts
 .endp
 
