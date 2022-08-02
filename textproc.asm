@@ -1945,7 +1945,9 @@ DrawOnlyParachute
     ldx TankNr
     dex
     bpl AllTanksFloatingDown
-    jmp MainTanksFloatingLoop   ; neverending loop
+	lda kbcode
+	and #%00000100
+    bne MainTanksFloatingLoop   ; neverending loop
 	jsr GameOverResultsClear
     rts
 RandomizeTankPos
