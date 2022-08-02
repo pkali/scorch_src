@@ -1828,6 +1828,7 @@ FinishResultDisplay
 ;--------------------------------------------------
     jsr ClearScreen
     jsr ClearPMmemory
+	jsr GameOverResultsClear
     mwa #GameOverDL dlptrs
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
@@ -1853,8 +1854,38 @@ FinalResultOfTheNextPlayer
 	; Y - line number (from 0 to 5)
 	; X - TanNr
 	; let's make texts
+	phy
+	; first calculate adres first byte of line
+	mwa #GameOverResults temp
+@	dey
+	bmi LineAdresReady
+	adw temp #40
+	jmp @-
+LineAdresReady
+; puts name of the tank on the screen
+    ldy #$01
+    lda TankNr
+    :3 asl ; 8 chars per name
+    tax
+NextChar
+    lda tanksnames,x
+    sta (temp),y
+    inx
+    iny
+    cpy #$08+1
+    bne NextChar
+	; put big points on the screen
+    ldx TankNr
+    lda ResultsTable,x
+    sta decimal
+    mva #0 decimal+1
+    adw temp #11 displayposition
+    jsr displaydec
+	mva #0 displayposition	; overwrite first digit
+
 	
 	;
+	ply
 	iny
     dec ResultOfTankNr
     bpl FinalResultOfTheNextPlayer
@@ -1915,6 +1946,7 @@ DrawOnlyParachute
     dex
     bpl AllTanksFloatingDown
     jmp MainTanksFloatingLoop   ; neverending loop
+	jsr GameOverResultsClear
     rts
 RandomizeTankPos
     randomize 8 32
@@ -1930,6 +1962,14 @@ RandomizeTankPos
     adc #0
     sta XtankstableH,x
     rts
+GameOverResultsClear
+	lda #$00
+	tax
+@	sta GameOverResults,x
+	inx
+	cpx #(6*40)+1
+	bne @-
+	rts
 .endp
 ;-------------------------------------------------
 .proc DisplayStatus
