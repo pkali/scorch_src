@@ -290,8 +290,8 @@ AfterPurchase
     sta decimal
     lda moneyH,x
     sta decimal+1
-    mwa #textbuffer2+29 displayposition
-    jsr displaydec
+    mwa #textbuffer2+28 displayposition
+    jsr displaydec5
 
     ; in xbyte there is the address of the line that
     ; is being processed now
@@ -346,9 +346,6 @@ CreateList
     ldy #25
     lda #15 ; "/"
     sta (xbyte),y
-    iny
-    lda #04 ; "$"
-    sta (xbyte),y
     ldy #31
     lda #16 ; "0"
     sta (xbyte),y
@@ -361,12 +358,15 @@ CreateList
     ldx temp ;getting back index of the weapon
 
     ; and now price of the weapon
-    adw xbyte #27 displayposition  ; 27 chars from the beginning of the line
+    adw xbyte #26 displayposition  ; 26 chars from the beginning of the line
     lda WeaponPriceL,x
     sta decimal
     lda WeaponPriceH,x
     sta decimal+1
-    jsr displaydec
+    jsr displaydec5
+    ldy #26		; overwrite first digit (allways space - no digit :) )
+    lda #04 ; "$"
+    sta (xbyte),y
 
     jmp notInventory
 
@@ -1243,108 +1243,31 @@ TooLittle000 dex
     dey
     bpl NextDigit ; Result again /10 and we have next digit
 
-
-rightnumber
-; now cut leading zeroes (002 goes   2)
-    lda decimalresult
-    cmp zero
-    bne decimalend
-    lda space
-    sta decimalresult
-
-    lda decimalresult+1
-    cmp zero
-    bne decimalend
-    lda space
-    sta decimalresult+1
-
-    lda decimalresult+2
-    cmp zero
-    bne DecimalEnd
-    lda space
-    sta decimalresult+2
-
-    lda decimalresult+3
-    cmp zero
-    bne DecimalEnd
-    lda space
-    sta decimalresult+3
-
-DecimalEnd
-    ; displaying
-    ldy #4
+;rightnumber
+    ; displaying without leading zeroes (if zeroes exist then display space at this position)
+    ldy #0
+	ldx #0	; digit flag (cut leading zeroes)
 displayloop
     lda decimalresult,y
+	cpx #0
+	bne noleading0
+	cpy #4
+	beq noleading0	; if 00000 - last 0 must be
+	cmp zero
+	bne noleading0
+	lda space
+	beq displaychar	; space = 0 !
+noleading0
+	inx		; set flag (no leading zeroes to cut)
+displaychar
     sta (displayposition),y
-    dey
-    bpl displayloop
+nexdigit
+    iny
+	cpy #5
+    bne displayloop
 
     rts
 .endp
-;--------------------------------------------------
-.proc displaydec ;decimal (word), displayposition  (word)
-;--------------------------------------------------
-; displays decimal number as in parameters (in text mode)
-; leading zeroes are removed
-; the range is (0000..9999 - two bytes)
-
-    ldy #3  ; there will be 4 digits
-NextDigit
-    ldx #16 ; 16-bit dividee so Rotate 16 times
-    lda #$00
-Rotate000
-    aslw decimal
-    rol  ; scroll dividee
-    ; (as highest byte - additional - byte is A)
-    cmp #10  ; divider
-    bcc TooLittle000 ; if A is smaller than divider
-    ; there is nothing to substract
-    sbc #10  ; divider
-    inc decimal     ; lowest bit set to 1
-    ; because it is 0 and this is the fastest way
-TooLittle000 dex
-    bne Rotate000 ; and Rotate 16 times, Result will be in decimal
-    tax  ; and the rest in A
-    ; (and it goes to X because
-    ; it is our decimal digit)
-    lda digits,x
-    sta decimalresult,y
-    dey
-    bpl NextDigit ; Result again /10 and we have next digit
-
-
-rightnumber
-; now cut leading zeroes (002 goes   2)
-    lda decimalresult
-    cmp zero
-    bne decimalend
-    lda space
-    sta decimalresult
-
-    lda decimalresult+1
-    cmp zero
-    bne decimalend
-    lda space
-    sta decimalresult+1
-
-    lda decimalresult+2
-    cmp zero
-    bne DecimalEnd
-    lda space
-    sta decimalresult+2
-
-DecimalEnd
-    ; displaying
-    ldy #3
-displayloop
-    lda decimalresult,y
-    sta (displayposition),y
-    dey
-    bpl displayloop
-
-    rts
-.endp
-
 ;--------------------------------------------------
 .proc displaybyte ;decimal (byte), displayposition  (word)
 ;--------------------------------------------------
@@ -1807,11 +1730,21 @@ ResultOfTheNextPlayer
     ;there are at least 2 players, so we can safely
     ;start displaying the result
 
-    ldx #0
     lda #3 ;it means |
-    sta ResultLineBuffer,x
+    sta ResultLineBuffer
 
+    ldy TankNr
+    lda ResultsTable,y
+    sta decimal
+    mva #0 decimal+1
+    mwa #(ResultLineBuffer+8) displayposition
+    jsr displaydec5 ;decimal (byte), displayposition  (word)
 
+    ; overwrite the second digit of the points (max 255)
+    ;it means ":"
+    mva #26 ResultLineBuffer+9
+	
+    ldx #0
     lda TankNr
     asl
     asl ; times 8, because it is lengtgh
@@ -1826,18 +1759,8 @@ TankNameCopyLoop
     iny
     cpx #8 ; end of name
     bne TankNameCopyLoop
+	; last letter of tank name overwrites first digit of the points (max 255)
 
-    ldy TankNr
-    lda ResultsTable,y
-    sta decimal
-    mva #0 decimal+1
-    mwa #(ResultLineBuffer+9) displayposition
-    jsr displaydec ;decimal (byte), displayposition  (word)
-
-
-    ; overwrite the first digit of the points (max 255)
-    ;it means ":"
-    mva #26 ResultLineBuffer+9
 
     ;just after the digits
     ;it means |
@@ -1948,8 +1871,8 @@ NextChar
     lda ResultsTable,x
     sta decimal
     mva #0 decimal+1
-    adw temp #11 displayposition
-    jsr displaydec
+    adw temp #10 displayposition
+    jsr displaydec5
 	mva #0 displayposition	; overwrite first digit
 	; put hits points on the screen
     ldx TankNr
@@ -1957,8 +1880,8 @@ NextChar
     sta decimal
 	lda DirectHitsH,x
     sta decimal+1
-    adw temp #20 displayposition
-    jsr displaydec
+    adw temp #19 displayposition
+    jsr displaydec5
 	mva #0 displayposition	; overwrite first digit
 	; put earned money on the screen
     ldx TankNr
@@ -1968,6 +1891,9 @@ NextChar
     sta decimal+1
     adw temp #28 displayposition
     jsr displaydec5
+	ldy #33
+	lda zero
+	sta (temp),y ; and last zero
 	ply
 	iny
     dec ResultOfTankNr
@@ -2217,8 +2143,8 @@ DisplayWindValue
     sta decimal
     lda ForceTableH,x
     sta decimal+1
-    mwa #textbuffer+40+36 displayposition
-    jsr displaydec
+    mwa #textbuffer+40+35 displayposition
+    jsr displaydec5
 
     ;=========================
     ;display Angle
