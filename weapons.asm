@@ -1855,6 +1855,16 @@ EndOfFlight2
 	lda HitFlag
 	jeq NoHitAtEndOfFight		; RTS only !!!
 	jmi NoTankHitAtEndOfFight
+	; tank hit - increase direct hits points
+	ldx TankNr
+	inx
+	cpx HitFlag	; we don't count suicides :)
+	beq @+
+	dex
+	inc DirectHitsL,x
+	bne @+
+	inc DirectHitsH,x
+@
 	; tank hit - check defensive weapon of this tank
 	tax
 	dex		; index of tank in X

@@ -1882,13 +1882,27 @@ NextChar
     adw temp #11 displayposition
     jsr displaydec
 	mva #0 displayposition	; overwrite first digit
-
-	
-	;
+	; put hits points on the screen
+    ldx TankNr
+    lda DirectHitsL,x
+    sta decimal
+	lda DirectHitsH,x
+    sta decimal+1
+    adw temp #20 displayposition
+    jsr displaydec
+	mva #0 displayposition	; overwrite first digit
+	; put earned money on the screen
+    ldx TankNr
+    lda EarnedMoneyL,x
+    sta decimal
+	lda EarnedMoneyH,x
+    sta decimal+1
+    adw temp #28 displayposition
+    jsr displaydec
 	ply
 	iny
     dec ResultOfTankNr
-    bpl FinalResultOfTheNextPlayer
+    jpl FinalResultOfTheNextPlayer
 MakeBlackLines
 	cpy #$06
 	beq AllLinesReady

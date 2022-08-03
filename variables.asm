@@ -88,6 +88,14 @@ ResultsTable ;the results in the gameeeeee
     .DS [MaxPlayers]
 TempResults
     .DS [MaxPlayers]
+DirectHitsH
+    .DS [MaxPlayers]
+DirectHitsL
+    .DS [MaxPlayers]
+EarnedMoneyH
+    .DS [MaxPlayers]
+EarnedMoneyL
+    .DS [MaxPlayers]
 ;----------------------------------------------------
 ForceTableL ;shooting Force of the tank during the round
     .DS [MaxPlayers]

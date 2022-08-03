@@ -225,10 +225,41 @@ zeromoney
     lda #0
     sta moneyL,x
     sta moneyH,x
-
 skipzeroing
+; and earned money for summary
+    clc
+    lda EarnedMoneyL,x
+    adc gainL,x
+    sta EarnedMoneyL,x
+    lda EarnedMoneyH,x
+    adc gainH,x
+    sta EarnedMoneyH,x
+    ; substract lose
+    ; if lose is greater than money then zero money
+    lda EarnedMoneyH,x
+    cmp loseH,x
+    bcc ezeromoney
+    bne esubstractlose
+    lda EarnedMoneyL,x
+    cmp loseL,x
+    bcc ezeromoney
+esubstractlose
+    sec
+    lda EarnedMoneyL,x
+    sbc loseL,x
+    sta EarnedMoneyL,x
+    lda EarnedMoneyH,x
+    sbc loseH,x
+    sta EarnedMoneyH,x
+    jmp eskipzeroing
+ezeromoney
+    lda #0
+    sta EarnedMoneyL,x
+    sta EarnedMoneyH,x
+eskipzeroing
+
     dex
-    bpl CalculateGains
+    jpl CalculateGains
 
     lda GameIsOver
 	beq NoGameOverYet
@@ -934,6 +965,10 @@ MakeTanksVisible
     txa
 ClearResults
     sta ResultsTable,x
+	sta DirectHitsL,x
+	sta DirectHitsH,x
+	sta EarnedMoneyL,x
+	sta EarnedMoneyH,x
     inx
     cpx #MaxPlayers
     bne ClearResults

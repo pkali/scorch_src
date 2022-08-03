@@ -210,5 +210,5 @@ purchaseTextEnd
 GameOverTitle
  dta d"     game  over     "*
 GameOverTitle2
- dta d" Player    Points    Hits    Money      "
+ dta d" Player    Points   Hits   Earned Money "
 .endif
