@@ -297,7 +297,7 @@ DifficultyLevel ; Difficulty Level (human/cpu)
 ;----------------------------------------------------
 ;displaydecimal
 decimal  .DS 2
-decimalresult  .DS 4
+decimalresult  .DS 5
 
 ;xmissile
 ExplosionRadius .DS 2  ;because when adding in xdraw it is double byte

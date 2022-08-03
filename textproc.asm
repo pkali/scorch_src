@@ -1213,6 +1213,75 @@ CheckNextLevel
 .endp
 
 ;--------------------------------------------------
+.proc displaydec5 ;decimal (word), displayposition  (word)
+;--------------------------------------------------
+; displays decimal number as in parameters (in text mode)
+; leading zeroes are removed
+; the range is (00000..65565 - two bytes)
+
+    ldy #4  ; there will be 5 digits
+NextDigit
+    ldx #16 ; 16-bit dividee so Rotate 16 times
+    lda #$00
+Rotate000
+    aslw decimal
+    rol  ; scroll dividee
+    ; (as highest byte - additional - byte is A)
+    cmp #10  ; divider
+    bcc TooLittle000 ; if A is smaller than divider
+    ; there is nothing to substract
+    sbc #10  ; divider
+    inc decimal     ; lowest bit set to 1
+    ; because it is 0 and this is the fastest way
+TooLittle000 dex
+    bne Rotate000 ; and Rotate 16 times, Result will be in decimal
+    tax  ; and the rest in A
+    ; (and it goes to X because
+    ; it is our decimal digit)
+    lda digits,x
+    sta decimalresult,y
+    dey
+    bpl NextDigit ; Result again /10 and we have next digit
+
+
+rightnumber
+; now cut leading zeroes (002 goes   2)
+    lda decimalresult
+    cmp zero
+    bne decimalend
+    lda space
+    sta decimalresult
+
+    lda decimalresult+1
+    cmp zero
+    bne decimalend
+    lda space
+    sta decimalresult+1
+
+    lda decimalresult+2
+    cmp zero
+    bne DecimalEnd
+    lda space
+    sta decimalresult+2
+
+    lda decimalresult+3
+    cmp zero
+    bne DecimalEnd
+    lda space
+    sta decimalresult+3
+
+DecimalEnd
+    ; displaying
+    ldy #4
+displayloop
+    lda decimalresult,y
+    sta (displayposition),y
+    dey
+    bpl displayloop
+
+    rts
+.endp
+;--------------------------------------------------
 .proc displaydec ;decimal (word), displayposition  (word)
 ;--------------------------------------------------
 ; displays decimal number as in parameters (in text mode)
@@ -1898,7 +1967,7 @@ NextChar
 	lda EarnedMoneyH,x
     sta decimal+1
     adw temp #28 displayposition
-    jsr displaydec
+    jsr displaydec5
 	ply
 	iny
     dec ResultOfTankNr
