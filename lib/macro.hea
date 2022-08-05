@@ -79,13 +79,14 @@
         lda CONSOL
         cmp #6  ; START KEY
         beq ?nowait
-         LDA VCOUNT
-         ldy vcount
-?WA      cpy VCOUNT
-         BEQ ?WA
-?wframe
-         cmp vcount
-         bne ?wframe
+?zero	 LDA VCOUNT
+		 beq ?zero
+?WA		 cmp VCOUNT
+		 beq ?WA
+		 bcc ?WA
+?WFRAME	 cmp VCOUNT
+		 beq ?nowait
+		 bcs ?WFRAME
 ?nowait
          .ENDM
 ;-------------------------------------

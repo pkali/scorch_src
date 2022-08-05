@@ -535,7 +535,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     dta 0 ;"Dirt Charge     " ; 29
     dta 0 ;"Earth Disrupter " ; 30
     dta 0 ;"Plasma Blast    " ; 31
-    dta 1 ;"Laser           " ; 32
+    dta 0 ;"Laser           " ; 32
     dta 0 ;"----------------" ; 33
     dta 0 ;"----------------" ; 34
     dta 0 ;"----------------" ; 35
@@ -571,13 +571,13 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
                 ;the comment is an index in the tables
     dta 1 ;"Baby Missile    " ; 0
-    dta 1 ;"Missile         " ; 1
+    dta 0 ;"Missile         " ; 1
     dta 1 ;"Baby Nuke       " ; 2
     dta 1 ;"Nuke            " ; 3
     dta 0 ;"LeapFrog        " ; 4
     dta 0 ;"Funky Bomb      " ; 5
     dta 0 ;"MIRV            " ; 6
-    dta 0 ;"Death's Head    " ; 7
+    dta 1 ;"Death's Head    " ; 7
     dta 0 ;"Napalm          " ; 8
     dta 1 ;"Hot Napalm      " ; 9
     dta 0 ;"Tracer          " ; 10
@@ -601,8 +601,8 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
     dta 0 ;"Liquid Dirt     " ; 28
     dta 0 ;"Dirt Charge     " ; 29
     dta 0 ;"Earth Disrupter " ; 30
-    dta 1 ;"Plasma Blast    " ; 31
-    dta 1 ;"Laser           " ; 32
+    dta 0 ;"Plasma Blast    " ; 31
+    dta 0 ;"Laser           " ; 32
     dta 0 ;"----------------" ; 33
     dta 0 ;"----------------" ; 34
     dta 0 ;"----------------" ; 35
@@ -624,10 +624,10 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
 	dta 0 ;"Horz Guidance   " ; 51
 	dta 0 ;"Vert Guidance   " ; 52
 	dta 0 ;"Lazy Boy        " ; 53
-	dta 1 ;"Parachute       " ; 54
+	dta 0 ;"Parachute       " ; 54
 	dta 1 ;"Strong Parachute" ; 55
 	dta 1 ;"Mag Deflector   " ; 56
-	dta 1 ;"Shield          " ; 57
+	dta 0 ;"Shield          " ; 57
 	dta 1 ;"Heavy Shield    " ; 58
 	dta 1 ;"Force Shield    " ; 59
 	dta 0 ;"Super Mag       " ; 60

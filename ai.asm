@@ -961,10 +961,10 @@ SorryNoPurchase
 
     ; what is my money level
     ldx TankNr
-    lda MoneyH,x ; money / 256
-    sta tempXroller ; perform this many purchase attempts
+;    lda MoneyH,x ; money / 256
+;    sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-    mva #2 tempXroller; number of defensive purchases to perform
+    mva #1 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery________ ind_Auto_Defense___
     jsr TryToPurchaseOnePiece
@@ -991,7 +991,7 @@ SorryNoPurchase
     ;lda MoneyH,x ; money / 256
     ;sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-    mva #2 tempXroller; number of defensive purchases to perform
+    mva #1 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery________ ind_Auto_Defense___
     jsr TryToPurchaseOnePiece2
@@ -1000,8 +1000,7 @@ SorryNoPurchase
     
     ; and now offensives
     lda MoneyH,x ; money / 256
-    asl  ;*4
-	asl
+    :4 asl  ;*16
     sta tempXroller ; perform this many purchase attempts
 @
     randomize ind_Missile________ ind_Plasma_Blast___
