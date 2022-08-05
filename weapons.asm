@@ -893,8 +893,8 @@ Rollin
     sta HeightRol ; relative point
 
 RollinContinues
-    wait
-    wait
+    jsr WaitOneFrame
+    jsr WaitOneFrame
     ; new point is set
     adw xdraw #mountaintable tempXROLLER
     ldy #0
@@ -1031,7 +1031,7 @@ NoColor ; jump here with color=0 to clean dirt
 ; current dirt width
     sta magic
 NextRow
-    wait
+    jsr WaitOneFrame
     ldy magic
 NextLine
     lda random
@@ -1168,7 +1168,7 @@ ContinueToCheckMaxForce2
 
     jsr DrawTankNr
 
-    wait ; best after drawing a tank
+    jsr WaitOneFrame ; best after drawing a tank
 
     
 
@@ -2360,7 +2360,7 @@ NextLine1
 	dex
 	bpl NextLine1
 	;
-	wait	; wait uses A and Y
+	jsr WaitOneFrame	; wait uses A only
 	; second loop - inverse again and put random "snow" to column of bytes
 	ldx #120
 	ldy magic

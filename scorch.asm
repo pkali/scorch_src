@@ -1441,7 +1441,10 @@ peopleAreHere
 noKey
 	rts
 .endp
-
+.proc WaitOneFrame
+	wait
+	rts
+.endp
 ;--------------------------------------------------
 .proc RmtSongSelect
 ;--------------------------------------------------
