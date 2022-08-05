@@ -1854,8 +1854,15 @@ FinalResultOfTheNextPlayer
 	adw temp #40
 	jmp @-
 LineAdresReady
+	; put position of tank on the screen
+	pla
+	pha	; now we have line number in A register
+	ldy #1
+	tax
+	lda zero+1,x
+	sta (temp),y
 ; puts name of the tank on the screen
-    ldy #$01
+    ldy #$03
     lda TankNr
     :3 asl ; 8 chars per name
     tax
@@ -1864,14 +1871,14 @@ NextChar
     sta (temp),y
     inx
     iny
-    cpy #$08+1
+    cpy #$08+3
     bne NextChar
 	; put big points on the screen
     ldx TankNr
     lda ResultsTable,x
     sta decimal
     mva #0 decimal+1
-    adw temp #10 displayposition
+    adw temp #12 displayposition
     jsr displaydec5
 	mva #0 displayposition	; overwrite first digit
 	; put hits points on the screen
@@ -1889,9 +1896,9 @@ NextChar
     sta decimal
 	lda EarnedMoneyH,x
     sta decimal+1
-    adw temp #28 displayposition
+    adw temp #30 displayposition
     jsr displaydec5
-	ldy #33
+	ldy #35
 	lda zero
 	sta (temp),y ; and last zero
 	ply

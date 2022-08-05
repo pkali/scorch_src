@@ -843,14 +843,24 @@ PurchaseAIRoutines
     .word PoolsharkPurchase-1 ;PoolsharkPurchase
     .word TosserPurchase-1 ;TosserPurchase
     .word TosserPurchase-1 ;ChooserPurchase
-    .word TosserPurchase-1 ;SpoilerPurchase
-    .word TosserPurchase-1 ;CyborgPurchase
+    .word CyborgPurchase-1 ;SpoilerPurchase
+    .word CyborgPurchase-1 ;CyborgPurchase
     .word TosserPurchase-1 ;UnknownPurchase
 
 ;----------------------------------------------
 .proc MoronPurchase
 ;Moron buys nothing
     rts
+.endp
+;-------
+.proc TryToPurchaseOnePiece2	; for Cyborg
+	; A - weapon number, better it will be in range(1,32)
+	; TankNr in X
+    ; DOES NOT CHANGE X
+	tay
+	lda PurchaseMeTable2,y
+	beq TryToPurchaseOnePiece.SorryNoPurchase
+	jmp TryToPurchaseOnePiece.PurchaseIt
 .endp
 ;-------
 .proc TryToPurchaseOnePiece
@@ -860,6 +870,7 @@ PurchaseAIRoutines
 	tay
 	lda PurchaseMeTable,y
 	beq SorryNoPurchase
+PurchaseIt
 	lda WeaponPriceL,y
 	sta temp
 	lda WeaponPriceH,y
@@ -953,7 +964,7 @@ SorryNoPurchase
     lda MoneyH,x ; money / 256
     sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-    mva #3 tempXroller; number of defensive purchases to perform
+    mva #2 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery________ ind_Auto_Defense___
     jsr TryToPurchaseOnePiece
@@ -967,6 +978,34 @@ SorryNoPurchase
 @
     randomize ind_Missile________ ind_Dirt_Charge____
     jsr TryToPurchaseOnePiece
+    dec tempXroller
+    bne @-
+
+    rts 
+.endp
+;----------------------------------------------
+.proc CyborgPurchase
+
+    ; what is my money level
+    ldx TankNr
+    ;lda MoneyH,x ; money / 256
+    ;sta tempXroller ; perform this many purchase attempts
+    ; first try to buy defensives
+    mva #2 tempXroller; number of defensive purchases to perform
+@
+    randomize ind_Battery________ ind_Auto_Defense___
+    jsr TryToPurchaseOnePiece2
+    dec tempXroller
+    bne @-
+    
+    ; and now offensives
+    lda MoneyH,x ; money / 256
+    asl  ;*4
+	asl
+    sta tempXroller ; perform this many purchase attempts
+@
+    randomize ind_Missile________ ind_Plasma_Blast___
+    jsr TryToPurchaseOnePiece2
     dec tempXroller
     bne @-
 
