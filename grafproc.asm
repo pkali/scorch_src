@@ -1084,7 +1084,7 @@ EndOfFCycle
     ; here we draw parachute
     ldx TankNr
     jsr DrawTankParachute
-    jsr WaitOneFrame	; onli if tank with patachute
+    jsr WaitOneFrame	; only if tank with parachute
 RapidFalling
 DoNotDrawParachute
 	lda EndOfTheFallFlag

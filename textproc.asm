@@ -1923,7 +1923,7 @@ MakeAllTanksVisible
     bpl MakeAllTanksVisible
 
 	; start music and animations
-    lda #song_game_over
+    lda #song_ending_looped
     jsr RmtSongSelect
     ; initial tank positions randomization
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1

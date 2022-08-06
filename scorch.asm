@@ -131,6 +131,10 @@ START
     jsr Initialize
 	
 	;jsr GameOverScreen	; only for test !!!
+    
+    lda #song_main_menu
+    jsr RmtSongSelect
+    
 
     jsr Options  ;startup screen
     lda escFlag
@@ -174,7 +178,7 @@ MainGameLoop
     ; Results are number of other deaths
     ; before the player dies itself
 
-    lda #song_end_round
+    lda #song_round_over
     jsr RmtSongSelect
     jsr DisplayResults
 
@@ -1433,7 +1437,8 @@ checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
     dex
     bpl checkForHuman
     ; no people, just wait a bit
-    pause 150
+    pause 250
+    pause 50
     jmp noKey
 
 peopleAreHere
@@ -1485,7 +1490,7 @@ TankFont
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0g_stripped.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_trial0h_stripped.rmt"  ;include music RMT module
     opt h+
 ;
 ;

@@ -199,7 +199,8 @@ sfx_white_flag  = $1d ;4
 ; RMT songs (lines)
 ;--------------------------------
 song_silencio   = $00
-song_end_round  = $02
+song_main_menu  = $02
 song_ingame     = $06
-song_old_game_over  = $0b
+song_round_over = $0b
 song_game_over  = $0e
+song_ending_looped = $11
