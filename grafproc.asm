@@ -464,17 +464,16 @@ endcircleloop
 ;--------------------------------------------------
 .proc ClearScreen
 ;--------------------------------------------------
-
-    lda #$ff
-    ldx #0
-@
-    :31 sta display+($100*#),x
-    sta display+$1e50,x  ; this is so no space outside of the screen is cleared
-                         ; of course we are clearing $100 instead of $50, but who cares :]
-    inx
+    mwa #display temp
+    ldy #0
+@     lda #$ff
+      sta (temp),y
+      inw temp
+      cpw temp #display+screenheight*screenBytes+1
     bne @-
-    rts
+   rts 
 .endp
+
 ;-------------------------------*------------------
 .proc placetanks
 ;--------------------------------------------------
