@@ -1679,7 +1679,7 @@ quit_seppuku
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
-    lda #song_game_over
+    lda #song_round_over
     jsr RmtSongSelect
     mwa #LineGameOver LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw

@@ -202,5 +202,4 @@ song_silencio   = $00
 song_main_menu  = $02
 song_ingame     = $06
 song_round_over = $0b
-song_game_over  = $0e
-song_ending_looped = $11
+song_ending_looped = $0e
