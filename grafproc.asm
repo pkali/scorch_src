@@ -791,11 +791,15 @@ tankflash_loop
     mva #1 Erase
 	ldx TankNr
     jsr DrawTankNr.SkipHidingPM	; it's necessary becouse DrawTankNr skips tanks with no energy !
-	PAUSE 2
+	;PAUSE 2
+    ldy #1
+    jsr PauseYFrames
     mva #0 Erase
 	ldx TankNr
     jsr DrawTankNr.SkipHidingPM
-	PAUSE 2
+    ;PAUSE 2
+    ldy #1
+    jsr PauseYFrames
     dec fs
     jne tankflash_loop
 	rts

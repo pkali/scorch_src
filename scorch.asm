@@ -1253,7 +1253,7 @@ MoveBarrel
 	jsr DisplayStatus.displayAngle
 ;	ldx TankNr
 	mva #1 Erase
-	PAUSE 1
+	jsr WaitOneFrame
 	jsr DrawTankNr.BarrelChange
 	mva #0 Erase
 	lda NewAngle
@@ -1437,8 +1437,9 @@ checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
     dex
     bpl checkForHuman
     ; no people, just wait a bit
-    pause 250
-    pause 50
+    ;pause 150
+    ldy #75
+    jsr PauseYFrames
     jmp noKey
 
 peopleAreHere
@@ -1450,6 +1451,16 @@ noKey
 	wait
 	rts
 .endp
+.proc PauseYFrames
+; Y - number of frames to wait (divided by 2)
+; pauses for maximally 510 frames (255 * 2)
+@     jsr WaitOneFrame
+      jsr WaitOneFrame
+      dey
+    bne @-
+    rts
+.endp
+
 ;--------------------------------------------------
 .proc RmtSongSelect
 ;--------------------------------------------------
