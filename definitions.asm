@@ -201,4 +201,5 @@ sfx_white_flag  = $1d ;4
 song_silencio   = $00
 song_end_round  = $02
 song_ingame     = $06
-song_game_over  = $0b
+song_old_game_over  = $0b
+song_game_over  = $0e

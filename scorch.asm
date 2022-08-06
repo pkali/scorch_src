@@ -878,7 +878,7 @@ NotNegativeShieldEnergy
 ;--------------------------------------------------
     ldx #$3f  ; TODO: maxweapons
 @    lda #$0
-      cpx #48  ; White Flag
+      cpx #ind_White_Flag_____  ; White Flag
       bne @+
        lda #99     
 @     sta TanksWeapon1,x
@@ -986,7 +986,7 @@ ClearResults
     lda #0
     jsr RmtSongSelect
 ;
-    VMAIN VBLinterrupt,6  		;jsr SetVBL
+    VMAIN VBLinterrupt,7  		;jsr SetVBL
 
     rts
 .endp
@@ -1108,7 +1108,7 @@ exitVBL
     ply
     plx
 	pla
-	jmp SYSVBV
+	jmp XITVBV
 .endp
 ;----------------------------------------------
 .proc RandomizeSequence0
@@ -1485,7 +1485,7 @@ TankFont
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0f_stripped.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_trial0g_stripped.rmt"  ;include music RMT module
     opt h+
 ;
 ;
