@@ -1490,11 +1490,11 @@ TankFont
 TankFontEnd
 ;----------------------------------------------
 
-;    .align $100
+    ORG $B200
 MODUL                                  ;address of RMT module
-;    opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0h1_stripped.rmt"  ;include music RMT module
-;    opt h+
+    ;opt h-                                         ;RMT module is standard Atari binary file already
+    ins "artwork/sfx/scorch_trial0h1_stripped.rmt",+6  ;include music RMT module
+    ;opt h+
 ;
 ;
 TheEnd
