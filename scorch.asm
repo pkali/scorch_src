@@ -109,6 +109,9 @@
 
     icl 'lib/atari.hea'
     icl 'lib/macro.hea'
+    
+    ; ---   BASIC switch OFF
+    org $2000\ mva #$ff portb\ rts\ ini $2000
 
 ;----------------------------------------------
     org $3000
@@ -121,10 +124,9 @@
 
     ;Game loading address
     ORG  $4000
-    .ECHO 'PLAYER: ',*
     icl 'artwork/sfx/rmtplayr_game.asm'
+    .ALIGN $400
 WeaponFont
-    .ALIGN $400 
     ins 'artwork/weapons_AW5_mod.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
@@ -1484,13 +1486,15 @@ font4x4
     ins 'artwork/font4x4s.bmp',+62
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
+    ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only'
+TankFontEnd
 ;----------------------------------------------
 
-MODUL    ;equ $b200                                 ;address of RMT module
-    opt h-                                         ;RMT module is standard Atari binary file already
+;    .align $100
+MODUL                                  ;address of RMT module
+;    opt h-                                         ;RMT module is standard Atari binary file already
     ins "artwork/sfx/scorch_trial0h1_stripped.rmt"  ;include music RMT module
-    opt h+
+;    opt h+
 ;
 ;
 TheEnd
