@@ -172,10 +172,6 @@ sintable
     .by 255
     .by 255 ;anti self destruction byte
 
-linetableL
-    :screenheight+1 .by <(display+screenBytes*#)
-linetableH
-    :screenheight+1 .by >(display+screenBytes*#)
 ;----------------------------
 bittable
     .by $80,$40,$20,$10,$08,$04,$02,$01

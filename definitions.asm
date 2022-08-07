@@ -4,7 +4,7 @@
 ; Player/missile memory
     
 PMGraph =  $0800
-display = $1010 ;screen takes $2K due to clearing routine
+display = $1010 ;screen takes $2K - $10
 
 screenheight = 200
 screenBytes = 40

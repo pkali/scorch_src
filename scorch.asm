@@ -110,11 +110,21 @@
     icl 'lib/atari.hea'
     icl 'lib/macro.hea'
 
-    ;splash screen and musix
-	icl 'artwork/HIMARS14.asm'
+;----------------------------------------------
+    org $3000
+    icl 'variables.asm'
+;----------------------------------------------
+
+
+; reserved space for RMT player
+;   ORG $4000-$0320 = $3ce0
+
     ;Game loading address
-    ORG  $3000
+    ORG  $4000
+    .ECHO 'PLAYER: ',*
+    icl 'artwork/sfx/rmtplayr_game.asm'
 WeaponFont
+    .ALIGN $400 
     ins 'artwork/weapons_AW5_mod.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
@@ -1490,16 +1500,8 @@ font4x4
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
-    icl 'variables.asm'
-;----------------------------------------------
 
-; reserved space for RMT player
-    .ds $0320
-    .align $100
-    .ECHO 'PLAYER: ',*
-    icl 'artwork/sfx/rmtplayr_game.asm'
-
-MODUL    equ $b000                                 ;address of RMT module
+MODUL    ;equ $b200                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
     ins "artwork/sfx/scorch_trial0h1_stripped.rmt"  ;include music RMT module
     opt h+

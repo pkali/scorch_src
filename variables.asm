@@ -1,6 +1,7 @@
 ;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
+variablesBegin
 ;=====================================================
 ; most important non-zero page variables
 ; used by the given subroutines
@@ -8,6 +9,11 @@
 ; compilation to e.g. cartridge
 ; zero page variables are declared in program.s65 module
 ;=====================================================
+linetableL
+    :screenheight+1 .by <(display+screenBytes*#)
+linetableH
+    :screenheight+1 .by >(display+screenBytes*#)
+
 TanksNames  ; DO NOT ZERO - ticket #24
     :6 dta d"        "
 ;----------------------------------------------------
