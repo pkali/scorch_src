@@ -858,7 +858,15 @@ PurchaseAIRoutines
 	; TankNr in X
     ; DOES NOT CHANGE X
 	tay
-	lda PurchaseMeTable2,y
+	sta temp+1
+	:3 lsr	; A=A/8
+	sta temp
+	tya
+	and #%00000111
+	tay
+	lda bittable,y
+	ldy temp
+	and PurchaseMeTable2,y	
 	beq TryToPurchaseOnePiece.SorryNoPurchase
 	jmp TryToPurchaseOnePiece.PurchaseIt
 .endp
@@ -868,9 +876,18 @@ PurchaseAIRoutines
 	; TankNr in X
     ; DOES NOT CHANGE X
 	tay
-	lda PurchaseMeTable,y
+	sta temp+1
+	:3 lsr	; A=A/8
+	sta temp
+	tya
+	and #%00000111
+	tay
+	lda bittable,y
+	ldy temp
+	and PurchaseMeTable,y
 	beq SorryNoPurchase
 PurchaseIt
+	ldy temp+1
 	lda WeaponPriceL,y
 	sta temp
 	lda WeaponPriceH,y
