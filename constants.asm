@@ -499,137 +499,51 @@ WeaponUnits
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
                 ;the comment is an index in the tables
-    dta 1 ;"Baby Missile    " ; 0
-    dta 1 ;"Missile         " ; 1
-    dta 1 ;"Baby Nuke       " ; 2
-    dta 1 ;"Nuke            " ; 3
-    dta 1 ;"LeapFrog        " ; 4
-    dta 1 ;"Funky Bomb      " ; 5
-    dta 1 ;"MIRV            " ; 6
-    dta 1 ;"Death's Head    " ; 7
-    dta 1 ;"Napalm          " ; 8
-    dta 1 ;"Hot Napalm      " ; 9
-    dta 0 ;"Tracer          " ; 10
-    dta 0 ;"Smoke Tracer    " ; 11
-    dta 1 ;"Baby Roller     " ; 12
-    dta 1 ;"Roller          " ; 13
-    dta 1 ;"Heavy Roller    " ; 14
-    dta 0 ;"Riot Charge     " ; 15
-    dta 0 ;"Riot Blast      " ; 16
-    dta 0 ;"Riot Bomb       " ; 17
-    dta 0 ;"Heavy Riot Bomb " ; 18
-    dta 0 ;"Baby Digger     " ; 19
-    dta 0 ;"Digger          " ; 20
-    dta 0 ;"Heavy Digger    " ; 21
-    dta 0 ;"Baby Sandhog    " ; 22
-    dta 0 ;"Sandhog         " ; 23
-    dta 0 ;"Heavy Sandhog   " ; 24
-    dta 0 ;"Dirt Clod       " ; 25
-    dta 0 ;"Dirt Ball       " ; 26
-    dta 0 ;"Ton of Dirt     " ; 27
-    dta 0 ;"Liquid Dirt     " ; 28
-    dta 0 ;"Dirt Charge     " ; 29
-    dta 0 ;"Earth Disrupter " ; 30
-    dta 0 ;"Plasma Blast    " ; 31
-    dta 0 ;"Laser           " ; 32
-    dta 0 ;"----------------" ; 33
-    dta 0 ;"----------------" ; 34
-    dta 0 ;"----------------" ; 35
-    dta 0 ;"----------------" ; 36
-    dta 0 ;"----------------" ; 37
-    dta 0 ;"----------------" ; 38
-    dta 0 ;"----------------" ; 39
-    dta 0 ;"----------------" ; 40
-    dta 0 ;"----------------" ; 41
-    dta 0 ;"----------------" ; 42
-    dta 0 ;"----------------" ; 43
-    dta 0 ;"----------------" ; 44
-    dta 0 ;"----------------" ; 45
-    dta 0 ;"----------------" ; 46
-    dta 0 ;"----------------" ; 47
-	dta 0 ;"White Flag      " ; 48
-	dta 1 ;"Battery         " ; 49
-	dta 0 ;"Bal Guidance    " ; 50
-	dta 0 ;"Horz Guidance   " ; 51
-	dta 0 ;"Vert Guidance   " ; 52
-	dta 0 ;"Lazy Boy        " ; 53
-	dta 1 ;"Parachute       " ; 54
-	dta 1 ;"Strong Parachute" ; 55
-	dta 1 ;"Mag Deflector   " ; 56
-	dta 1 ;"Shield          " ; 57
-	dta 1 ;"Heavy Shield    " ; 58
-	dta 1 ;"Force Shield    " ; 59
-	dta 0 ;"Super Mag       " ; 60
-	dta 1 ;"Auto Defense    " ; 61
-	dta 0 ;"Fuel Tank       " ; 62
-	dta 0 ;"Nuclear Winter  " ; 63
+	; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
+	; "LeapFrog        ","Funky Bomb      ","MIRV            ","Death's Head    "
+	.by %01111111
+	; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
+	; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
+	.by %11001110
+	; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
+	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+	.by %00000000
+	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
+	; "Liquid Dirt     ","Dirt Charge     ","Earth Disrupter ","Plasma Blast    "
+	.by %00000000
+	; "Laser           "
+	.by %00000000
+	.by 0 ; offset to defensives
+	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
+	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	.by %01000011
+	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
+	; "Super Mag       ","Auto Defense    ","Fuel Tank       ","Nuclear Winter  "
+	.by %11110100
  
 PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
                 ;the comment is an index in the tables
-    dta 1 ;"Baby Missile    " ; 0
-    dta 0 ;"Missile         " ; 1
-    dta 1 ;"Baby Nuke       " ; 2
-    dta 1 ;"Nuke            " ; 3
-    dta 0 ;"LeapFrog        " ; 4
-    dta 0 ;"Funky Bomb      " ; 5
-    dta 0 ;"MIRV            " ; 6
-    dta 1 ;"Death's Head    " ; 7
-    dta 0 ;"Napalm          " ; 8
-    dta 1 ;"Hot Napalm      " ; 9
-    dta 0 ;"Tracer          " ; 10
-    dta 0 ;"Smoke Tracer    " ; 11
-    dta 0 ;"Baby Roller     " ; 12
-    dta 0 ;"Roller          " ; 13
-    dta 0 ;"Heavy Roller    " ; 14
-    dta 0 ;"Riot Charge     " ; 15
-    dta 0 ;"Riot Blast      " ; 16
-    dta 0 ;"Riot Bomb       " ; 17
-    dta 0 ;"Heavy Riot Bomb " ; 18
-    dta 0 ;"Baby Digger     " ; 19
-    dta 0 ;"Digger          " ; 20
-    dta 0 ;"Heavy Digger    " ; 21
-    dta 0 ;"Baby Sandhog    " ; 22
-    dta 0 ;"Sandhog         " ; 23
-    dta 0 ;"Heavy Sandhog   " ; 24
-    dta 0 ;"Dirt Clod       " ; 25
-    dta 0 ;"Dirt Ball       " ; 26
-    dta 0 ;"Ton of Dirt     " ; 27
-    dta 0 ;"Liquid Dirt     " ; 28
-    dta 0 ;"Dirt Charge     " ; 29
-    dta 0 ;"Earth Disrupter " ; 30
-    dta 0 ;"Plasma Blast    " ; 31
-    dta 0 ;"Laser           " ; 32
-    dta 0 ;"----------------" ; 33
-    dta 0 ;"----------------" ; 34
-    dta 0 ;"----------------" ; 35
-    dta 0 ;"----------------" ; 36
-    dta 0 ;"----------------" ; 37
-    dta 0 ;"----------------" ; 38
-    dta 0 ;"----------------" ; 39
-    dta 0 ;"----------------" ; 40
-    dta 0 ;"----------------" ; 41
-    dta 0 ;"----------------" ; 42
-    dta 0 ;"----------------" ; 43
-    dta 0 ;"----------------" ; 44
-    dta 0 ;"----------------" ; 45
-    dta 0 ;"----------------" ; 46
-    dta 0 ;"----------------" ; 47
-	dta 0 ;"White Flag      " ; 48
-	dta 1 ;"Battery         " ; 49
-	dta 0 ;"Bal Guidance    " ; 50
-	dta 0 ;"Horz Guidance   " ; 51
-	dta 0 ;"Vert Guidance   " ; 52
-	dta 0 ;"Lazy Boy        " ; 53
-	dta 0 ;"Parachute       " ; 54
-	dta 1 ;"Strong Parachute" ; 55
-	dta 1 ;"Mag Deflector   " ; 56
-	dta 0 ;"Shield          " ; 57
-	dta 1 ;"Heavy Shield    " ; 58
-	dta 1 ;"Force Shield    " ; 59
-	dta 0 ;"Super Mag       " ; 60
-	dta 1 ;"Auto Defense    " ; 61
-	dta 0 ;"Fuel Tank       " ; 62
-	dta 0 ;"Nuclear Winter  " ; 63
+	; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
+	; "LeapFrog        ","Funky Bomb      ","MIRV            ","Death's Head    "
+	.by %00110001
+	; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
+	; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
+	.by %01000000
+	; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
+	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+	.by %00000000
+	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
+	; "Liquid Dirt     ","Dirt Charge     ","Earth Disrupter ","Plasma Blast    "
+	.by %00000000
+	; "Laser           "
+	.by %00000000
+	.by 0 ; offset to defensives
+	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
+	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	.by %01000001
+	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
+	; "Super Mag       ","Auto Defense    ","Fuel Tank       ","Nuclear Winter  "
+	.by %10110100
 
 ;-------------------------------------------------
 ; Screen codes of icons (chars) representing a given weapon

@@ -935,8 +935,6 @@ deletePtr = temp
     jsr WeaponCleanup    
     
     
-    mva #TextBackgroundColor colpf2s
-    mva #TextForegroundColor colpf3s
     mva #>WeaponFont chbas
 
     ;parameter for old plot (unPlot) max 5 points
@@ -974,18 +972,6 @@ MakeTanksVisible
     dex
     bpl MakeTanksVisible
 
-
-    ldx #0
-    txa
-ClearResults
-    sta ResultsTable,x
-	sta DirectHitsL,x
-	sta DirectHitsH,x
-	sta EarnedMoneyL,x
-	sta EarnedMoneyH,x
-    inx
-    cpx #MaxPlayers
-    bne ClearResults
 
     mva #1 CurrentRoundNr ;we start from round 1
     mva #6 NTSCcounter

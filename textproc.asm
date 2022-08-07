@@ -22,7 +22,11 @@
 ;    ora #$02     ; normal screen width
     lda #%00110010 ; normal screen width, DL on, P/M off
     sta dmactls
-    
+    jsr PMoutofScreen
+    mva #TextBackgroundColor colpf2s
+    mva #TextForegroundColor colpf3s
+	mva #$ca colpf1s
+   
     VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
 
     mva #0 OptionsY

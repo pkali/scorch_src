@@ -146,7 +146,7 @@ purchaseActivate
 EmptyLine
  dta d"                                        "
 ; -------------------------------------------------
-    .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
+;    .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 ;-----------------------------------------------
 GameOverDL
        .byte $70,$40
