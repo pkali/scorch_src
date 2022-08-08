@@ -111,7 +111,7 @@
     icl 'lib/macro.hea'
     
     ; ---   BASIC switch OFF
-    org $2000\ mva #$ff portb\ rts\ ini $2000
+    org $2000\ mva #$ff portb\ mva #0 dmactls\ rts\ ini $2000
 
 ;----------------------------------------------
     org $3000
