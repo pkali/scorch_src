@@ -128,7 +128,7 @@ MoreDown
 ListOfWeapons
  :36 dta d"                                        "
 ListOfWeapons1End
-GameOverResults ; reuse after game (remember to clear on start new)
+;GameOverResults ; reuse after game (remember to clear on start new)
 ListOfDefensiveWeapons
  :16 dta d"                                        "
 ListOfDefensiveWeaponsEnd ;constant useful when clearing
@@ -148,6 +148,9 @@ EmptyLine
 ; -------------------------------------------------
     .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 ;-----------------------------------------------
+GameOverResults = display+$0ff0 ; reuse after game
+Credits = GameOverResults +(6*40)
+CreditsLastLine = Credits + (41*40)
 GameOverDL
        .byte $70,$40
        .byte $47    ; 16 gr8 lines
@@ -170,7 +173,12 @@ GameOverDL
        .byte $42
        .word GameOverResults
        :5 .byte $00+$80,$02
-       .byte $70
+       .byte $70+$80
+	   .byte $42+$20	; VSCRL
+DLCreditsAddr
+	   .word Credits
+	   :6 .byte $02+$20
+	   .byte $02
        .byte $41
        .word GameOverDL
 

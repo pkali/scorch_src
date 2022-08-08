@@ -60,6 +60,7 @@
     .zpvar xtempDRAW        .word ;same as above for XDRAW routine
     .zpvar ytempDRAW        .word ;same as above for XDRAW routine
     .zpvar tempor2          .byte
+	.zpvar CreditsVScrol	.byte
     ;--------------temps used in circle routine
     .zpvar xi               .word ;X (word) in draw routine
     .zpvar fx               .byte 
@@ -111,7 +112,7 @@
     icl 'lib/macro.hea'
 
     ;splash screen and musix
-	icl 'artwork/HIMARS14.asm'
+	;icl 'artwork/HIMARS14.asm'
     ;Game loading address
     ORG  $3000
 WeaponFont
@@ -267,7 +268,7 @@ eskipzeroing
 
     lda GameIsOver
 	beq NoGameOverYet
-	;jsr GameOverScreen
+	jsr GameOverScreen
     jmp START
 NoGameOverYet
     inc CurrentRoundNr
@@ -1031,12 +1032,33 @@ EndofPMG
     sta gtictl
 	bne EndOfDLI_GO
 ColoredLines
+	cmp #9
+	beq CreditsScroll
 	tay
 	lda GameOverColoursTable-3,y	; -2 becouse this is DLI nr 2 and -1 (labels line)
 	ldy #$0a	; text colour (brightnes)
 	STA WSYNC
 	sta COLPF2
 	sty COLPF1
+	bne EndOfDLI_GO
+CreditsScroll
+	lda #$00
+	sta COLPF2
+	inc CreditsVScrol
+	lda CreditsVScrol
+	cmp #16		;not to fast
+	beq nextlinedisplay
+	lsr		;not to fast
+	sta VSCROL
+	jmp EndOfDLI_GO
+nextlinedisplay
+	lda #0
+	sta CreditsVScrol
+	sta VSCROL
+	adw DLCreditsAddr #40
+	cpw DLCreditsAddr #CreditsLastLine
+	bne EndOfDLI_GO
+	mwa #Credits DLCreditsAddr
 EndOfDLI_GO
 	inc dliCounter
 	ply

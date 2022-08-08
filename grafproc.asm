@@ -905,6 +905,7 @@ tankflash_loop
     jsr SetupXYdraw.X
     jsr TypeChar
 ToHighToParachute
+	ldx TankNr
 	rts
 .endp
 
@@ -948,7 +949,7 @@ NoFallingSound
     jsr DrawTankParachute
 DoNotClearParachute
     mva #0 Erase
-    ldx TankNr
+;    ldx TankNr
 	lda EndOfTheFallFlag	; We only get byte below the tank if still falling
 	bne NoGroundCheck
     ; coordinates of the first pixel under the tank
@@ -1097,7 +1098,7 @@ DoNotDrawParachute
     ; the horizontal coordinate is even.
     ; If it is odd then it must be corrected because otherwise
     ; P/M graphics background would not look OK
-    ldx TankNr
+;    ldx TankNr
     lda XtanksTableL,x
     and #$01
     beq EndOfFall ; if it is even then it is the end
@@ -1133,7 +1134,7 @@ NoParachuteWeapon
     jsr DrawTankParachute
 ThereWasNoParachute
     mva #0 Erase
-    ldx TankNr	
+;    ldx TankNr	
     jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
     mva #sfx_silencer sfx_effect
     rts

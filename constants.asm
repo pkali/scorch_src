@@ -676,5 +676,40 @@ zero
 digits   dta d"0123456789"
 nineplus dta d"9"+1
 space    dta d" "
-
+;------credits
+CreditsStart
+	dta d"          "*
+	dta d"You were playin",d"g"*
+	dta d"Scorc",d"h"*
+	dta d"Warsaw, Miam",d"i"*
+	dta d"2000-202",d"2"*
+	dta d" "*
+	dta d"B",d"y"*
+	dta d" "*
+	dta d"Programmin",d"g"*
+	dta d"Tomasz 'Pecus' Peck",d"o"*
+	dta d"Pawel 'pirx' Kalinowsk",d"i"*
+	dta d" "*
+	dta d"SFX and Music",d"c"*
+	dta d"Michal 'Miker' Szpilowsk",d"i"*
+	dta d" "*
+	dta d"Additional musi",d"c"*
+	dta d"Mario 'Emkay' Kri",d"x"*
+	dta d" "*
+	dta d"Code Optimizatio",d"n"*
+	dta d"Piotr '0xF' Fusi",d"k"*
+	dta d" "*
+	dta d"Ar",d"t"*
+	dta d"Adam Wachowsk",d"i"*
+	dta d"Krzysztof 'Kaz' Ziembi",d"k"*
+	dta d" "*
+	dta d"Ideas and Q",d"A"*
+	dta d"Bocianu, Probabilitydragon, KrzysRog",d","*
+	dta d"Beeblebrox, EnderDude, lopezpb, Dracon",d","*
+	dta d"brad-colbert, archon800",d","*
+	dta d"Shaggy the Ataria",d"n"*
+	dta d" "*
+	dta d"Stay tuned for the FujiNet version",d"!"*
+	dta d"          "*
+CreditsEnd
 .endif

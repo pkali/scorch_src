@@ -1822,8 +1822,10 @@ FinishResultDisplay
 ;--------------------------------------------------
 .proc GameOverScreen
 ;--------------------------------------------------
+    jsr WaitForKeyRelease
     jsr ClearScreen
     jsr ClearPMmemory
+	jsr PrepareCredits
 	jsr GameOverResultsClear
     mwa #GameOverDL dlptrs
     lda #%00111110  ; normal screen width, DL on, P/M on
@@ -1833,6 +1835,7 @@ FinishResultDisplay
 	jsr SetPMWidth	
     jsr ColorsOfSprites
     mva #0 colpf1s
+	sta CreditsVScrol
     mva #TextForegroundColor colpf2s
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
 	; make text and color lines for each tank
@@ -1949,10 +1952,14 @@ AllTanksFloatingDown
 NoEraseTank
 	ldx TankNr
     inc Ytankstable,x
+	lda ActiveDefenceWeapon,x
+	beq NotFastTank
+    :3 inc Ytankstable,x
+NotFastTank
     lda Ytankstable,x
 ;   cmp #32     ; tank over screen - not visible
     cmp #80     ; tank under screen - new tank randomize
-    beq TankUnderScreen
+    bcs TankUnderScreen
     cmp #72     ; tank under screen but.... parachute
     bcs DrawOnlyParachute
     bcc TankOnScreen
@@ -1961,8 +1968,11 @@ TankUnderScreen
 TankOnScreen
     jsr DrawTankNr
 DrawOnlyParachute
+	lda ActiveDefenceWeapon,x
+	bne FastTank
     jsr DrawTankParachute
-    ldx TankNr
+FastTank
+;    ldx TankNr
     dex
     bpl AllTanksFloatingDown
 	lda kbcode
@@ -1983,6 +1993,15 @@ RandomizeTankPos
     lda XtankOffsetGO_H,x
     adc #0
     sta XtankstableH,x
+	lda random
+	cmp #8	; like 1:32
+	bcc NowFastTank
+	lda #0
+	sta ActiveDefenceWeapon,x
+    rts
+NowFastTank
+	lda #1
+	sta ActiveDefenceWeapon,x
     rts
 GameOverResultsClear
 	lda #$00
@@ -1991,6 +2010,59 @@ GameOverResultsClear
 	inx
 	cpx #(6*40)+1
 	bne @-
+	rts
+PrepareCredits
+	; Rewrites credits and places it in the middle of each line.
+	mwa #CreditsStart temp	; from
+	mwa #Credits temp2	; to
+MainRewriteLoop
+	ldy #0
+	cpw temp #CreditsEnd
+	beq EndOfCredits
+	; count characters in this line
+@	lda (temp),y
+	bmi LastCharFound
+	iny
+	bne @-
+LastCharFound
+	; in Y number of characters reduced by 1
+	; let's count how many spaces add before the text
+	sec
+	sty magic
+	lda #40
+	sbc magic
+	lsr		; now in A we have number of spaces in front
+	sta magic
+	ldy #0
+	tya
+	tax
+FirstSpaces
+	sta (temp2),y	; fill the area in front of the text with spaces
+	iny
+	cpy magic
+	bne FirstSpaces
+MainText
+	lda (temp,x)
+	sta (temp2),y	; rewrite the text to a new place
+	bmi LastCharWritten
+	inw temp
+	iny
+	bne MainText
+LastCharWritten
+	inw temp
+	and #%01111111	; remove inverse
+	sta (temp2),y
+	iny
+	txa	; space to A (0)
+LastSpaces
+	sta (temp2),y	; fill the area behind the text with spaces
+	iny
+	cpy #40
+	bne LastSpaces
+NextLine
+	adw temp2 #40
+	jmp MainRewriteLoop
+EndOfCredits
 	rts
 .endp
 ;-------------------------------------------------
