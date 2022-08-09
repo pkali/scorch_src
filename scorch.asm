@@ -1013,6 +1013,19 @@ MakeTanksVisible
     rti
 .endp
 ;--------------------------------------------------
+.proc DLIinterruptOptions
+    ;sta dliA
+	;sty dliY
+	pha
+;	lda dliColorsBack
+	lda #0
+    sta COLPF1
+	lda dliColorsFore
+	sta COLPF2
+    pla
+    rti
+.endp
+;--------------------------------------------------
 .proc DLIinterruptGameOver
     ;sta dliA
 	;sty dliY

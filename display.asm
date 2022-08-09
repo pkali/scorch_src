@@ -31,6 +31,11 @@ OptionsDL
         .word OptionsScreen
         .byte $30,$02,$02,$70
         :maxOptions .by $02,$10
+		:(9-maxOptions) .by $70,$10
+		.byte $80
+        .byte $4f
+        .word (display+140*40)
+        :21 .by $0f                     ;76
         .byte $41
         .word OptionsDL
 ;------------------------

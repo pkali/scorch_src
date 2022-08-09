@@ -20,19 +20,45 @@
 ;    lda dmactls
 ;    and #$fc
 ;    ora #$02     ; normal screen width
-    lda #%00110010 ; normal screen width, DL on, P/M off
+;    lda #%00110010 ; normal screen width, DL on, P/M off
+    lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
-    jsr PMoutofScreen
+	jsr SetPMWidth
     mva #TextBackgroundColor colpf2s
     mva #TextForegroundColor colpf3s
 	mva #$ca colpf1s
    
-    VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
+    VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
+
+; -------- setup bottom (tanks) line	
+	lda NumberOfPlayers
+	pha
+    lda mountainsDeltaTableH
+    sta mountainDeltaH
+    lda mountainsDeltaTableL
+    sta mountainDeltaL
+	mva #6 NumberOfPlayers
+    jsr PMoutofScreen ;let P/M disappear
+    jsr clearscreen   ;let the screen be clean
+	jsr ClearPMmemory
+    jsr placetanks    ;let the tanks be evenly placed
+    jsr calculatemountains ;let mountains be easy for the eye
+    jsr ColorsOfSprites
+    jsr drawmountains ;draw them
+	ldx NumberOfPlayers
+	dex
+@	jsr RandomizeAngle
+	sta AngleTable,x
+	dex
+	bpl @-
+    jsr drawtanks     ;finally draw tanks
+	pla
+	sta NumberOfPlayers
+; --------
 
     mva #0 OptionsY
 
 OptionsMainLoop
-
     jsr OptionsInversion
     jsr getkey
     ldx escFlag
