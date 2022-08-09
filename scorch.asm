@@ -88,7 +88,6 @@
     ;.zpvar dliX             .byte
     ;.zpvar dliY             .byte
 	.zpvar sfx_effect .byte
-	.zpvar RMT_VBL_Runin	.byte
 ;-------------- 
 
 	displayposition = modify
@@ -158,7 +157,6 @@ FirstSTART
     sta sfx_effect
 
     lda #0
-	sta RMT_VBL_Runin
     jsr RmtSongSelect
 
     VMAIN VBLinterrupt,7  		;jsr SetVBL
@@ -1154,15 +1152,12 @@ itsPAL
     ; pressTimer is trigger tick counter. always 50 ticks / s
     bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
 
-	lda RMT_VBL_Runin
-	bne SkipRMTVBL
     ; ------- RMT -------
-	inc RMT_VBL_Runin
 	lda sfx_effect
     bmi lab2
     asl @                       ; * 2
     tay                         ;Y = 2,4,..,16  instrument number * 2 (0,2,4,..,126)
-    ldx #3                      ;X = 0          channel (0..3 or 0..7 for stereo module)
+    ldx #0                      ;X = 0          channel (0..3 or 0..7 for stereo module)
     lda #0                      ;A = 0          note (0..60)
     bit noSfx
     smi:jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
@@ -1171,8 +1166,6 @@ itsPAL
     sta sfx_effect              ;reinit value
 lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
-	lda #0
-	sta RMT_VBL_Runin
     ; ------- RMT -------
 SkipRMTVBL	   
 exitVBL
