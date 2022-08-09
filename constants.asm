@@ -2,6 +2,22 @@
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 
+; initial values for some variables
+initialvaluesStart
+I_OptionsTable .by 0,1,2,2,0,1,3,2
+I_RoundsInTheGame .by 10 ;how many rounds in the current game
+I_seppukuVal .by 75
+I_mountainDeltaH .by 3
+I_mountainDeltaL .by $ff
+;----------------------------------------------------
+; 4x4 text buffer
+I_ResultLineBuffer
+    dta d"                  ", $ff
+I_LineHeader1
+    dta d"# ROUND: "
+I_RoundNrDisplay
+    dta d"    #", $ff
+initialvaluesCount = *-initialvaluesstart  ; MAX 128 bytes !
 ;===================================================================================
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
@@ -678,7 +694,7 @@ nineplus dta d"9"+1
 space    dta d" "
 ;------credits
 CreditsStart
-	dta d"          "*
+	dta d"         "*
 	dta d"You were playin",d"g"*
 	dta d"Scorc",d"h"*
 	dta d"Warsaw, Miam",d"i"*
@@ -690,7 +706,7 @@ CreditsStart
 	dta d"Tomasz 'Pecus' Peck",d"o"*
 	dta d"Pawel 'pirx' Kalinowsk",d"i"*
 	dta d" "*
-	dta d"SFX and Music",d"c"*
+	dta d"SFX and Musi",d"c"*
 	dta d"Michal 'Miker' Szpilowsk",d"i"*
 	dta d" "*
 	dta d"Additional musi",d"c"*
@@ -704,12 +720,12 @@ CreditsStart
 	dta d"Krzysztof 'Kaz' Ziembi",d"k"*
 	dta d" "*
 	dta d"Ideas and Q",d"A"*
-	dta d"Bocianu, Probabilitydragon, KrzysRog",d","*
-	dta d"Beeblebrox, EnderDude, lopezpb, Dracon",d","*
+	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
+	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
 	dta d"brad-colbert, archon800",d","*
 	dta d"Shaggy the Ataria",d"n"*
-	dta d" "*
+	dta d"  "*
 	dta d"Stay tuned for the FujiNet version",d"!"*
-	dta d"          "*
+	dta d"         "*
 CreditsEnd
 .endif

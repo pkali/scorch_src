@@ -945,7 +945,7 @@ NoFallingSound
     and #01
     beq DoNotClearParachute
     ; here we clear the parachute
-    ldx TankNr
+;    ldx TankNr
     jsr DrawTankParachute
 DoNotClearParachute
     mva #0 Erase
@@ -1087,7 +1087,7 @@ EndOfFCycle
 	cmp #3	; parachute and falling
 	bne DoNotDrawParachute
     ; here we draw parachute
-    ldx TankNr
+;    ldx TankNr
     jsr DrawTankParachute
     jsr WaitOneFrame	; only if tank with parachute
 RapidFalling
@@ -1115,7 +1115,7 @@ ForceFallLeft
 	jne TankFallsX
 EndOfFall
     mva #1 Erase
-    ldx TankNr
+;    ldx TankNr
     ; if tank was falling down having parachute,
     ; we must deduct one parachute
     lda Parachute

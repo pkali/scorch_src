@@ -16,6 +16,8 @@
 ; - money each player has on the beginning of the game (moneyL i moneyH)
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
+    jsr clearscreen   ;let the screen be clean
+
     mwa #OptionsDL dlptrs
 ;    lda dmactls
 ;    and #$fc
@@ -2001,9 +2003,10 @@ FastTank
 ;    ldx TankNr
     dex
     bpl AllTanksFloatingDown
-	lda kbcode
-	and #%00000100
+	jsr IsKeyPressed
     bne MainTanksFloatingLoop   ; neverending loop
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
 	jsr GameOverResultsClear
     rts
 RandomizeTankPos

@@ -112,7 +112,7 @@
     icl 'lib/macro.hea'
 
     ;splash screen and musix
-	;icl 'artwork/HIMARS14.asm'
+	icl 'artwork/HIMARS14.asm'
     ;Game loading address
     ORG  $3000
 WeaponFont
@@ -126,8 +126,25 @@ WeaponFont
 ;--------------------------------------------------
 ; Game Code
 ;--------------------------------------------------
-START
+FirstSTART
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
 
+	; one time zero variables in RAM (non zero page)
+	lda #0
+	ldy #OneTimeZeroVariablesCount-1
+@	sta OneTimeZeroVariables
+	dey
+	bpl @-
+	
+	; initialize variables in RAM (non zero page)
+	ldy #initialvaluesCount-1
+@	lda initialvaluesStart,y
+	sta variablesToInitialize,y
+	dey
+	bpl @-
+	
+START
     ; Startup sequence
     jsr Initialize
 	
@@ -138,10 +155,14 @@ START
     
 
     jsr Options  ;startup screen
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
     lda escFlag
     bne START
 
     jsr EnterPlayerNames
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
     lda escFlag
     bne START
 
@@ -152,7 +173,8 @@ MainGameLoop
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
-    mva #0 dmactls
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
 
     jsr GetRandomWind
 
@@ -268,6 +290,8 @@ eskipzeroing
 
     lda GameIsOver
 	beq NoGameOverYet
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
 	jsr GameOverScreen
     jmp START
 NoGameOverYet
@@ -1059,9 +1083,9 @@ CreditsScroll
 	sta COLPF2
 	inc CreditsVScrol
 	lda CreditsVScrol
-	cmp #16		;not to fast
+	cmp #32		;not to fast
 	beq nextlinedisplay
-	lsr		;not to fast
+	:2 lsr		;not to fast
 	sta VSCROL
 	jmp EndOfDLI_GO
 nextlinedisplay
@@ -1446,6 +1470,16 @@ getkeyend
     rts
 .endp
 ;--------------------------------------------------
+.proc IsKeyPressed	; A=0 - yes , A>0 - no
+;--------------------------------------------------
+	lda SKSTAT
+	and #%00000100
+	beq @+
+	lda #1
+@	and TRIG0S
+	rts
+.endp
+;--------------------------------------------------
 .proc DemoModeOrKey
 ;--------------------------------------------------
     ;check demo mode
@@ -1534,4 +1568,4 @@ TheEnd
 
 
 
-    run START
+    run FirstSTART
