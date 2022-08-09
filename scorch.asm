@@ -1518,8 +1518,11 @@ noKey
 	rts
 .endp
 .proc WaitOneFrame
+	lda CONSOL
+	cmp #6  ; START KEY
+	beq @+
 	wait
-	rts
+@	rts
 .endp
 .proc PauseYFrames
 ; Y - number of frames to wait (divided by 2)
