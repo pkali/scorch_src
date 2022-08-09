@@ -46,8 +46,6 @@ isInventory .ds 1  ; 0 - purchase, $ff - inventory
 ;-------------- 
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
 ;-------------- 
-sfx_effect .ds 1
-;-------------- 
 noDeathCounter .ds 1
 ;--------------
 OptionsY  .ds 1 ;vertical position of cursor on Options screen

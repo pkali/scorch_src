@@ -40,7 +40,7 @@
 .endm
 
     icl 'definitions.asm'
-    icl 'artwork/sfx/rmt_feat.asm'
+;    icl 'artwork/sfx/rmt_feat.asm'
     
     
     .zpvar xdraw            .word = $80 ;variable X for plot
@@ -87,25 +87,30 @@
     ;.zpvar dliA             .byte
     ;.zpvar dliX             .byte
     ;.zpvar dliY             .byte
+	.zpvar sfx_effect .byte
+;-------------- 
+
+	displayposition = modify
+	
 
     ;* RMT ZeroPage addresses
-    .zpvar p_tis            .word
-    .zpvar p_trackslbstable .word
-    .zpvar p_trackshbstable .word
-    .zpvar p_song           .word
-    .zpvar ns               .word
-    .zpvar nr               .word
-    .zpvar nt               .word
-    .zpvar reg1             .byte
-    .zpvar reg2             .byte
-    .zpvar reg3             .byte
-    .zpvar tmp              .byte
-    IFT FEAT_COMMAND2
-      .zpvar frqaddcmd2     .byte
-    EIF
-    p_instrstable = p_tis
+	.zpvar RMT_Zero_Page_V .byte
+;    .zpvar p_tis            .word
+;    .zpvar p_trackslbstable .word
+;    .zpvar p_trackshbstable .word
+;    .zpvar p_song           .word
+;    .zpvar ns               .word
+;    .zpvar nr               .word
+;    .zpvar nt               .word
+;    .zpvar reg1             .byte
+;    .zpvar reg2             .byte
+;    .zpvar reg3             .byte
+;    .zpvar tmp              .byte
+;    IFT FEAT_COMMAND2
+;      .zpvar frqaddcmd2     .byte
+;    EIF
+;    p_instrstable = p_tis
 
-    displayposition = modify
 ;-------------------------------
 
     icl 'lib/atari.hea'
@@ -143,6 +148,18 @@ FirstSTART
 	sta variablesToInitialize,y
 	dey
 	bpl @-
+
+    ; RMT INIT
+    lda #$f0                    ;initial value
+    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
+
+    lda #$ff                    ;initial value
+    sta sfx_effect
+
+    lda #0
+    jsr RmtSongSelect
+
+    VMAIN VBLinterrupt,7  		;jsr SetVBL
 	
 START
     ; Startup sequence
@@ -990,17 +1007,17 @@ MakeTanksVisible
     mva #1 CurrentRoundNr ;we start from round 1
     mva #6 NTSCcounter
     
-    ; RMT INIT
-    lda #$f0                    ;initial value
-    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
+;    ; RMT INIT
+;    lda #$f0                    ;initial value
+;    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
 ;
-    lda #$ff                    ;initial value
-    sta sfx_effect
+;    lda #$ff                    ;initial value
+;    sta sfx_effect
 ;
-    lda #0
-    jsr RmtSongSelect
+;    lda #0
+;    jsr RmtSongSelect
 ;
-    VMAIN VBLinterrupt,7  		;jsr SetVBL
+;    VMAIN VBLinterrupt,7  		;jsr SetVBL
 
     rts
 .endp
@@ -1141,7 +1158,7 @@ itsPAL
     bmi lab2
     asl @                       ; * 2
     tay                         ;Y = 2,4,..,16  instrument number * 2 (0,2,4,..,126)
-    ldx #0                      ;X = 0          channel (0..3 or 0..7 for stereo module)
+    ldx #3                      ;X = 0          channel (0..3 or 0..7 for stereo module)
     lda #0                      ;A = 0          note (0..60)
     bit noSfx
     smi:jsr RASTERMUSICTRACKER+15   ;RMT_SFX start tone (It works only if FEAT_SFX is enabled !!!)
@@ -1550,8 +1567,9 @@ TankFont
 ; reserved space for RMT player
     .ds $0320
     .align $100
+PLAYER
     .ECHO 'PLAYER: ',*
-    icl 'artwork/sfx/rmtplayr_game.asm'
+    icl 'artwork/sfx/rmtplayr.a65'
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already

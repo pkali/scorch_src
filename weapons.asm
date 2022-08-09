@@ -283,6 +283,7 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc napalm
+    mva #sfx_napalm sfx_effect
     inc FallDown2
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
@@ -291,6 +292,7 @@ NoLowerCircle
 .endp
 ; ------------------------
 .proc hotnapalm
+    mva #sfx_napalm sfx_effect
     inc FallDown2
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange

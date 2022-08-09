@@ -2010,7 +2010,7 @@ FastTank
 	jsr GameOverResultsClear
     rts
 RandomizeTankPos
-    randomize 8 32
+    randomize 10 32	; 10 not 8 - barrel !! :)
     sta Ytankstable,x
     randomize 0 180
     sta AngleTable,x
