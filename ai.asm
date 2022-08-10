@@ -488,7 +488,7 @@ skipThisPlayer
 .endp
 ;----------------------------------------------
 .proc FindBestTarget2
-; find farthest tank neighbour
+; find nearest tank neighbour
 ; X - shooting tank number
 ; returns target tank number in Y and
 ; direcion of shoot in A (0 - left, >0 - right)
@@ -542,6 +542,7 @@ skipThisPlayer
 	lda tempor2
 	rts
 .endp
+/*
 ;----------------------------------------------
 .proc FindBestTarget1
 ; find farthest tank neighbour
@@ -598,6 +599,7 @@ skipThisPlayer
 	lda tempor2
 	rts
 .endp
+*/
 ;----------------------------------------------
 .proc TakeAim
 ; targeting the tank number TargetTankNr (and Y)

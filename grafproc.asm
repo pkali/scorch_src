@@ -1431,7 +1431,7 @@ EndDrawing
 
     rts
 .endp
-; ****************************************************
+/*
 ;--------------------------------------------------
 .proc calculatemountains0
 ; Only for testing - makes ground flat (0 pixels)
@@ -1456,7 +1456,7 @@ SetYofNextTank
     bpl SetYofNextTank
    rts
 .endp
-; ****************************************************
+*/
 
 ; -----------------------------------------
 .proc unPlot
