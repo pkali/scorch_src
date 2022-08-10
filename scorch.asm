@@ -88,6 +88,7 @@
     ;.zpvar dliX             .byte
     ;.zpvar dliY             .byte
 	.zpvar sfx_effect .byte
+	.zpvar RMT_blocked	.byte
 ;-------------- 
 
 	displayposition = modify
@@ -1152,6 +1153,8 @@ itsPAL
     ; pressTimer is trigger tick counter. always 50 ticks / s
     bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
 
+	bit RMT_blocked
+	bmi SkipRMTVBL
     ; ------- RMT -------
 	lda sfx_effect
     bmi lab2
@@ -1540,9 +1543,12 @@ noKey
 ;  starting song line 0-255 to A reg
     bit noMusic
     spl:lda #song_silencio
+	mvx #$ff RMT_blocked
     ldx #<MODUL                 ;low byte of RMT module to X reg
     ldy #>MODUL                 ;hi byte of RMT module to Y reg
-    jmp RASTERMUSICTRACKER      ;Init, :RTS
+    jsr RASTERMUSICTRACKER      ;Init
+	mva #0 RMT_blocked
+	rts
 .endp
 ;----------------------------------------------
     icl 'weapons.asm'
@@ -1575,7 +1581,7 @@ PLAYER
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0h1_stripped.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_trial0j_stripped.rmt"  ;include music RMT module
     opt h+
 ;
 ;

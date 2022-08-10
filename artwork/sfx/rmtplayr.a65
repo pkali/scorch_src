@@ -31,7 +31,7 @@ TRACKS		equ 4
 ;*
 ;* RMT FEATures definitions file
 ;* For optimizations of RMT player routine to concrete RMT modul only!
-	icl "rmt_feat.a65"
+	icl "feat.txt"
 ;*
 ;* RMT ZeroPage addresses
 	org RMT_Zero_Page_V
