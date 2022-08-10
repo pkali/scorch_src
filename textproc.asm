@@ -283,6 +283,9 @@ AfterManualPurchase
 ;    ora #$02     ; normal screen width
     lda #%00110010 ; normal screen width, DL on, P/M off
     sta dmactls
+
+    lda #song_supermarket
+    jsr RmtSongSelect
     
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
     
@@ -2092,6 +2095,7 @@ NextLine
 	adw temp2 #40
 	jmp MainRewriteLoop
 EndOfCredits
+	mwa #Credits DLCreditsAddr	; set address in DL to first line
 	rts
 .endp
 ;-------------------------------------------------

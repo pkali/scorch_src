@@ -203,3 +203,4 @@ song_main_menu  = $02
 song_ingame     = $06
 song_round_over = $0b
 song_ending_looped = $0e
+song_supermarket = $1b
