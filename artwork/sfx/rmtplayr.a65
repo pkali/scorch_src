@@ -766,8 +766,9 @@ ei4
 	IFT 1==[FEAT_COMMAND1+FEAT_COMMAND2+FEAT_COMMAND3+FEAT_COMMAND4+FEAT_COMMAND5+FEAT_COMMAND6+[FEAT_COMMAND7SETNOTE||FEAT_COMMAND7VOLUMEONLY]]
 	beq cmd0
 	ELS
-	lsr @
-	lsr @
+;	lsr @
+;	lsr @
+	lda #0	; my fix :)
 	sta jmx+1
 jmx	bcc *
 	jmp cmd0

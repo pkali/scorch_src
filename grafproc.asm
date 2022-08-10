@@ -1799,7 +1799,7 @@ EndPutChar
 FontColor0
     ; char to the table
     lda CharCode4x4
-    and #1
+    and #%00000001
 	beq Upper4bits
 	lda #$ff 		; better option to check (nibbler4x4 = $00 or $ff)
 Upper4bits
@@ -1841,11 +1841,11 @@ GetUpper4bits
     and #$7
     sta ybit
 
-    lsrw xbyte ; div 8
-    rorw xbyte
-    rorw xbyte
+    :3 lsrw xbyte ; div 8
+;    rorw xbyte
+;    rorw xbyte
 ;---
-    ldy xbyte
+    ldy xbyte	; horizontal byte offet stored in Y
     lda dy ; y = y - 3 because left lower.
     sec
     sbc #3
