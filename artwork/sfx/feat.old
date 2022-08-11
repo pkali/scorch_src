@@ -1,6 +1,6 @@
 STEREOMODE	equ 0
 ;* --------BEGIN--------
-;* C:\Atari\rmt\rmt128\schorch_str2.rmt
+;* C:\Atari\rmt\rmt128\schorch_str.rmt
 FEAT_SFX		equ 1
 FEAT_GLOBALVOLUMEFADE	equ 0		;RMTGLOBALVOLUMEFADE variable
 FEAT_NOSTARTINGSONGLINE	equ 0
@@ -33,7 +33,7 @@ FEAT_VOLUMEONLYG2R		equ 0		;(0 times)
 FEAT_VOLUMEONLYG3R		equ 0		;(0 times)
 FEAT_TABLETYPE		equ 0		;(0 times)
 FEAT_TABLEMODE		equ 0		;(0 times)
-FEAT_TABLEGO		equ 1		;(2 times)
+FEAT_TABLEGO		equ 1		;(1 times)
 FEAT_AUDCTLMANUALSET		equ 1		;(6 times)
 FEAT_VOLUMEMIN		equ 0		;(0 times)
 FEAT_EFFECTVIBRATO		equ 1		;(3 times)

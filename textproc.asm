@@ -840,6 +840,7 @@ NotBattery
 	cmp #ind_Long_Barrel____
 	bne NotBarrel
 	; if activate long barrel, we do it differently too
+	mva #sfx_long_barrel sfx_effect
     mva #LongBarrel BarrelLength,x
     bne DecreaseDefensive ; bypass activation	
 NotBarrel

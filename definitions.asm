@@ -97,7 +97,7 @@ price_Heavy_Shield___ =   628     ;_58
 price_Force_Shield___ =  1100     ;_59            
 price_Super_Mag______ = $ffff     ;_60            
 price_Bouncy_Castle__ =   512     ;_61            
-price_Long_Barrel____ =   920     ;_62            
+price_Long_Barrel____ =  2100     ;_62            
 price_Nuclear_Winter_ =  1000     ;_63
 ;Weapon indexes (numbers)
 ind_Baby_Missile___ = 0
@@ -197,6 +197,7 @@ sfx_seppuku     = $1a ;1
 sfx_liquid_dirt = $1b ;2
 sfx_battery     = $1c ;3
 sfx_white_flag  = $1d ;4
+sfx_long_barrel = $1e
 ;--------------------------------
 ; RMT songs (lines)
 ;--------------------------------

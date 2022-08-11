@@ -1210,11 +1210,14 @@ callInventory
 	;
     mva #$ff isInventory
     jsr Purchase
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame	
     lda #song_ingame
     jsr RmtSongSelect
     mva #0 escFlag
     jsr DisplayStatus
     jsr SetMainScreen   
+    jsr WaitOneFrame
     jsr DrawTanks
     jsr WaitForKeyRelease
     jmp BeforeFire   

@@ -430,7 +430,7 @@ WeaponUnits
   .by 3  ;Force_Shield___
   .by 2  ;Super_Mag______
   .by 1  ;Auto_Defense___
-  .by 1  ;Long_Barrel____
+  .by 2  ;Long_Barrel____
   .by 1  ;Nuclear_Winter_
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
@@ -550,15 +550,15 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Horz Guidance   " ; 51                                              
     dta d"Vert Guidance   " ; 52                                              
     dta d"Lazy Boy        " ; 53                            
-    dta d"Parachute       " ; 54    - no energy                                                 
+    dta d"Parachute       " ; 54    - no energy         
     dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
     dta d"Mag Deflector   " ; 56    - with shield and energy           
     dta d"Shield          " ; 57    - shield for one shot - no energy       
-    dta d"Heavy Shield    " ; 58    - shield with energy                                               
-    dta d"Force Shield    " ; 59    - shield with energy and parachute                         
+    dta d"Heavy Shield    " ; 58    - shield with energy          
+    dta d"Force Shield    " ; 59    - shield with energy and parachute
     dta d"Super Mag       " ; 60               
-    dta d"Bouncy Castle   " ; 61    - with shield and energy                                            
-    dta d"Long Barrel     " ; 62                                              
+    dta d"Bouncy Castle   " ; 61    - with shield and energy 
+    dta d"Long Schlong    " ; 62                                              
     dta d"Nuclear Winter  " ; 63
 DefensiveEnergy = * - 48
 	.by 00	; White Flag

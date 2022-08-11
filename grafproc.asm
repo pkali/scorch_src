@@ -1905,6 +1905,7 @@ EndPut4x4
 ;    and #$fc
 ;    ora #$02     ; 2=normal, 3 = wide screen width
     sta dmactls
+    jsr WaitOneFrame
     rts
 .endp
 ; -------------------------------------
