@@ -17,7 +17,7 @@ PMOffsetY = $23 ; P/M to graphics offset
 napalmRadius = 10
 
 TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
-TextForegroundColor = $0c
+TextForegroundColor = $0A
 
 ;character codes for symbols (tank, parachute, etc. )
 char_parachute_______ = $02
@@ -26,7 +26,7 @@ char_flame___________ = $14
 char_clear_flame_____ = $1c
 char_digger__________ = $04
 char_sandhog_________ = $0c
-char_sandhog_offset = char_sandhog_________-char_digger__________
+char_sandhog_offset = char_sandhog_________ - char_digger__________
 
 char_tank1___________ = $20
 char_tank2___________ = $24

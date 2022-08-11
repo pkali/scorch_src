@@ -21,8 +21,8 @@ initialvaluesCount = *-initialvaluesstart  ; MAX 128 bytes !
 ;===================================================================================
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
-TankColoursTable        .BYTE $86,$46,$c6,$28,$c6,$ee
-TankStatusColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
+TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$de
+TankStatusColoursTable  .BYTE $54,$24,$94,$c4,$74,$d4
 TankShapesTable			.BYTE char_tank1___________,char_tank2___________,char_tank3___________
 						.BYTE char_tank1___________,char_tank2___________,char_tank3___________
 dliColorsBack
