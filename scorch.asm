@@ -139,7 +139,7 @@ FirstSTART
 	; one time zero variables in RAM (non zero page)
 	lda #0
 	ldy #OneTimeZeroVariablesCount-1
-@	sta OneTimeZeroVariables
+@	sta OneTimeZeroVariables,y
 	dey
 	bpl @-
 	

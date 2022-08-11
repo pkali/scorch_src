@@ -1922,6 +1922,7 @@ NoDefence
 	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
     rts		; END !!!	
 BouncyCastle
+    mva #sfx_shield_on sfx_effect
 	; now run defensive-aggressive weapon - Bouncy Castle (previously known as Auto Defence)!
 	sbb #180 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
 	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2

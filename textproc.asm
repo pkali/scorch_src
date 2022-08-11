@@ -2026,7 +2026,7 @@ RandomizeTankPos
     adc #0
     sta XtankstableH,x
 	lda random
-	cmp #8	; like 1:32
+	cmp #32	; like 1:8
 	bcc NowFastTank
 	lda #0
 	sta ActiveDefenceWeapon,x
