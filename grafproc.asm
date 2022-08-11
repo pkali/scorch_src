@@ -1938,6 +1938,8 @@ X    lda XtanksTableL,x
   ;  mva #1 color
     ldx TankNr
     jsr SetupXYdraw
+	lda BarrelLength,x
+	sta yc	; current tank barrel length
     lda angleTable,x
     sta Angle
     jsr DrawBarrelTech
@@ -2002,7 +2004,7 @@ YangleUnder90
     ; 2. add vx and vy to 3 byte variables xdraw.fx, ydraw.fy
     ; 3 check length, if shorter, go to 1.
     
-    mva #6 yc  ; barrel length
+ ;   mva #6 yc  ; barrel length
 barrelLoop
     
     lda goleft
@@ -2042,7 +2044,7 @@ ybarrel
     sbc #0
     sta ydraw+1
     
-    jsr plot.MakePlot
+    jsr plot ;.MakePlot
 
     dec yc
     bne barrelLoop

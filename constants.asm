@@ -292,7 +292,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Force_Shield___
   .by >price_Super_Mag______
   .by >price_Bouncy_Castle__
-  .by >price_Fuel_Tank______
+  .by >price_Long_Barrel____
   .by >price_Nuclear_Winter_
 
 WeaponPriceL
@@ -358,7 +358,7 @@ WeaponPriceL
   .by <price_Force_Shield___
   .by <price_Super_Mag______
   .by <price_Bouncy_Castle__
-  .by <price_Fuel_Tank______
+  .by <price_Long_Barrel____
   .by <price_Nuclear_Winter_
 
 ;-------------------------------------------------
@@ -430,7 +430,7 @@ WeaponUnits
   .by 3  ;Force_Shield___
   .by 2  ;Super_Mag______
   .by 1  ;Auto_Defense___
-  .by 10 ;Fuel_Tank______
+  .by 1  ;Long_Barrel____
   .by 1  ;Nuclear_Winter_
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
@@ -454,7 +454,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000011
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
-	; "Super Mag       ","Bouncy Castle   ","Fuel Tank       ","Nuclear Winter  "
+	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
 	.by %11110100
  
 PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
@@ -478,7 +478,7 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
 	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000001
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
-	; "Super Mag       ","Bouncy Castle   ","Fuel Tank       ","Nuclear Winter  "
+	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
 	.by %10110100
 
 ;-------------------------------------------------
@@ -491,7 +491,7 @@ WeaponSymbols
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
     .by $5f,$1c,$03,$06,$1d,$0a,$1b,$1b  ; defensives
-    .by $1e,$3b,$3d,$3c,$3e,$3f,$5e,$7d
+    .by $1e,$3b,$3d,$3c,$3e,$3f,$1d,$7d
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
@@ -558,7 +558,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Force Shield    " ; 59    - shield with energy and parachute                         
     dta d"Super Mag       " ; 60               
     dta d"Bouncy Castle   " ; 61    - with shield and energy                                            
-    dta d"Fuel Tank       " ; 62                                              
+    dta d"Long Barrel     " ; 62                                              
     dta d"Nuclear Winter  " ; 63
 DefensiveEnergy = * - 48
 	.by 00	; White Flag
@@ -575,7 +575,7 @@ DefensiveEnergy = * - 48
 	.by 99	; Force Shield
 	.by 00	; Super Mag
 	.by 99	; Bouncy Castle
-	.by 00	; Fuel Tank
+	.by 00	; Long Barrel
 	.by 00	; Nuclear Winter
 weaponsOfDeath
 	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27

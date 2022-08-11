@@ -837,6 +837,12 @@ invSelectDef
     mva #99 Energy,x
     bne DecreaseDefensive ; bypass activation
 NotBattery
+	cmp #ind_Long_Barrel____
+	bne NotBarrel
+	; if activate long barrel, we do it differently too
+    mva #LongBarrel BarrelLength,x
+    bne DecreaseDefensive ; bypass activation	
+NotBarrel
     cmp #ind_White_Flag_____
     bne NotWhiteFlag
     cmp ActiveDefenceWeapon,x
@@ -1959,6 +1965,7 @@ MakeAllTanksVisible
 	sta ActiveDefenceWeapon,x
     dex
     bpl MakeAllTanksVisible
+	jsr SetStandardBarrels
 
 	; start music and animations
     lda #song_ending_looped

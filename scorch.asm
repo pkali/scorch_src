@@ -358,6 +358,8 @@ SettingEnergies
       sta Energy,x
       sta eXistenZ,x
       sta LASTeXistenZ,x
+	  lda #StandardBarrel	; standard barrel length
+	  sta BarrelLength,x
       ; anything in eXistenZ table means that this tank exist
       ; in the given round
       lda #<1000
@@ -959,14 +961,14 @@ deletePtr = temp
       inw deletePtr
       cpw deletePtr #variablesEnd
     bne @-
-    
+
     mwa #1024 RandBoundaryHigh
     mva #$ff LastWeapon
     sta HowMuchToFall
     mva #1 color
     
-    jsr WeaponCleanup    
-    
+	jsr SetStandardBarrels
+    jsr WeaponCleanup        
     
     mva #>WeaponFont chbas
 
@@ -1021,6 +1023,15 @@ MakeTanksVisible
 ;    VMAIN VBLinterrupt,7  		;jsr SetVBL
 
     rts
+.endp
+;--------------------------------------------------
+.proc SetStandardBarrels
+    ldx #maxPlayers-1
+	lda #StandardBarrel	; standard barrel length
+@	sta BarrelLength,x
+	dex
+	bpl @-
+	rts
 .endp
 ;--------------------------------------------------
 .proc SetPMWidth

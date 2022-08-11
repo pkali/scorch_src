@@ -15,6 +15,8 @@ maxOptions = 8  ;number of all options
 PMOffsetX = $2C ; P/M to graphics offset
 PMOffsetY = $23 ; P/M to graphics offset
 napalmRadius = 10
+StandardBarrel = 6 ; standard tank barrel length
+LongBarrel = 20	; long barrel length
 
 TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
 TextForegroundColor = $0A
@@ -95,7 +97,7 @@ price_Heavy_Shield___ =   628     ;_58
 price_Force_Shield___ =  1100     ;_59            
 price_Super_Mag______ = $ffff     ;_60            
 price_Bouncy_Castle__ =   512     ;_61            
-price_Fuel_Tank______ = $ffff     ;_62            
+price_Long_Barrel____ =   920     ;_62            
 price_Nuclear_Winter_ =  1000     ;_63
 ;Weapon indexes (numbers)
 ind_Baby_Missile___ = 0
@@ -160,7 +162,7 @@ ind_Heavy_Shield___ = 58
 ind_Force_Shield___ = 59            
 ind_Super_Mag______ = 60            
 ind_Bouncy_Castle__ = 61            
-ind_Fuel_Tank______ = 62            
+ind_Long_Barrel____ = 62            
 ind_Nuclear_Winter_ = 63
 ;--------------------------------
 ; names of RMT instruments (sfx)

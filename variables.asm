@@ -109,8 +109,8 @@ MaxForceTableL ;Energy of the tank during the round
 MaxForceTableH
     .DS [MaxPlayers]
 ;----------------------------------------------------
-
-
+BarrelLength ;length of the tank barrel - dont forget to set it to 6 at round start!
+    .DS [MaxPlayers]
 ActiveWeapon ;number of the selected weapon
     .DS [MaxPlayers]
 ActiveDefenceWeapon ;number of the activated defence weapon - 0 
