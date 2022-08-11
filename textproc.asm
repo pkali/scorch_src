@@ -1195,6 +1195,8 @@ EndOfNick
     asl ; 8 chars per name
     tax  ; in X where to put new name
 
+    mva #sfx_next_player sfx_effect
+
     lda NameAdr ; check if first char is " "
     and #$7F  ; remove inverse (Cursor)
     beq MakeDefaultName
@@ -1216,7 +1218,6 @@ nextchar05
     iny
     cpy #$08
     bne nextchar05
-    mva #sfx_next_player sfx_effect
     rts
 .endp
 
@@ -1987,6 +1988,7 @@ AllTanksFloatingDown
 	mva #1 Erase
     jsr DrawTankNr
 	mva #0 Erase
+	sta ATRACT	; reset atract mode
 NoEraseTank
 	ldx TankNr
     inc Ytankstable,x
