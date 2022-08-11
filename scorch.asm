@@ -122,7 +122,7 @@
     ;Game loading address
     ORG  $3000
 WeaponFont
-    ins 'artwork/weapons_AW5_mod.fnt'  ; 'artwork/weapons.fnt'
+    ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------

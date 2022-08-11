@@ -220,90 +220,6 @@ SlideLeftTable
     .BY %00000111
     .BY %00001100
 
-;-----------------------------------------------------------
-; this table changes Angle to the appropriate tank character
-;BarrelTable
-;
-;  .by $2C,$2C,$2C,$2C,$2C,$2C,$2C,$2C,$2A,$2A,
-;  .by $2A,$2A,$2A,$2A,$2A,$2A,$28,$28,$28,$28,
-;  .by $28,$28,$28,$28,$28,$26,$26,$26,$26,$26,
-;  .by $26,$26,$26,$24,$24,$24,$24,$24,$24,$24,
-;  .by $24,$22,$22,$22,$22,$22,$22,$22,$22,$22,
-;  .by $20,$20,$20,$20,$20,$20,$20,$20,$1E,$1E,
-;  .by $1E,$1E,$1E,$1E,$1E,$1E,$1C,$1C,$1C,$1C,
-;  .by $1C,$1C,$1C,$1C,$1C,$1A,$1A,$1A,$1A,$1A,
-;  .by $1A,$1A,$1A,$18,$18,$18,$18,$18,$18,$18,
-  ;.by $18,
-
-;  .by $16,$16,$16,$16,$16,$16,$16,$16,$14,$14,
-;  .by $14,$14,$14,$14,$14,$14,$12,$12,$12,$12,
-;  .by $12,$12,$12,$12,$12,$10,$10,$10,$10,$10,
-;  .by $10,$10,$10,$0E,$0E,$0E,$0E,$0E,$0E,$0E,
-;  .by $0E,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,
-;  .by $0A,$0A,$0A,$0A,$0A,$0A,$0A,$0A,$08,$08,
-;  .by $08,$08,$08,$08,$08,$08,$06,$06,$06,$06,
-;  .by $06,$06,$06,$06,$06,$04,$04,$04,$04,$04,
-;  .by $04,$04,$04,$02,$02,$02,$02,$02,$02,$02,
-;  .by $02,
-
-;EndOfTheBarrelX
-;	; right angles from 0 (horizontally right) to 90  (up)
-;
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,6,6,6,6,6,6,6,6,6,
-;  .by 5,5,5,5,5,5,5,5,5,5,
-;  .by 4,4,4,4,4,4,4,4,4,4,
-;  ;.by 4,
-;
-;	; left angles from 90 (vertical) to 180 (horizontally left)
-;  .by 3,3,3,3,3,3,3,3,3,3,
-;  .by 3,2,2,2,2,2,2,2,2,2,
-;  .by 2,1,1,1,1,1,1,1,1,1,
-;  .by 0,0,0,0,0,0,0,0,0,0,
-;  .by 0,0,0,0,0,0,0,0,0,0,
-;  .by 0,0,0,0,0,0,0,0,0,0,
-;  .by 0,0,0,0,0,0,0,0,0,0,
-;  .by 0,0,0,0,0,0,0,0,0,0,
-;  .by 0,0,0,0,0,0,0,0,0,0,
-;  .by 0
-;
-;EndOfTheBarrelY
-;; right angles from 0 (horizontally right) to 90  (up)
-;
-; ; one pixel Up for fix problems with colision check
-; ;.by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
-;  .by 4,4,4,4,4,4,4,4,4,4,
-;  .by 4,4,4,4,4,4,4,4,4,4,
-;  .by 4,4,4,4,4,4,4,5,5,5,
-;  .by 5,5,5,5,5,5,5,6,6,6,
-;  .by 6,6,6,6,6,6,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  ;.by 7,    	
-;
-;; left angles from 90 (vertical) to 180 (horizontally left)
-;
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,7,7,7,7,7,
-;  .by 7,7,7,7,7,6,6,6,6,6,
-;  .by 6,6,6,6,5,5,5,5,5,5,
-;  .by 5,5,5,5,4,4,4,4,4,4,
-;  .by 4,4,4,4,4,4,4,4,4,4,
-;  .by 4,4,4,4,4,4,4,4,4,4,
-;  .by 4,
-; ; one pixel Up for fix problems with colision check
-; ;.by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
-
-
 ;-------------------------------------------------
 TanksNamesDefault
     dta d"1st.Tank"
@@ -375,7 +291,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Heavy_Shield___
   .by >price_Force_Shield___
   .by >price_Super_Mag______
-  .by >price_Auto_Defense___
+  .by >price_Bouncy_Castle__
   .by >price_Fuel_Tank______
   .by >price_Nuclear_Winter_
 
@@ -441,7 +357,7 @@ WeaponPriceL
   .by <price_Heavy_Shield___
   .by <price_Force_Shield___
   .by <price_Super_Mag______
-  .by <price_Auto_Defense___
+  .by <price_Bouncy_Castle__
   .by <price_Fuel_Tank______
   .by <price_Nuclear_Winter_
 
@@ -538,7 +454,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000011
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
-	; "Super Mag       ","Auto Defense    ","Fuel Tank       ","Nuclear Winter  "
+	; "Super Mag       ","Bouncy Castle   ","Fuel Tank       ","Nuclear Winter  "
 	.by %11110100
  
 PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
@@ -562,7 +478,7 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
 	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000001
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
-	; "Super Mag       ","Auto Defense    ","Fuel Tank       ","Nuclear Winter  "
+	; "Super Mag       ","Bouncy Castle   ","Fuel Tank       ","Nuclear Winter  "
 	.by %10110100
 
 ;-------------------------------------------------
@@ -641,7 +557,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Heavy Shield    " ; 58    - shield with energy                                               
     dta d"Force Shield    " ; 59    - shield with energy and parachute                         
     dta d"Super Mag       " ; 60               
-    dta d"Auto Defense    " ; 61    - with shield and energy                                            
+    dta d"Bouncy Castle   " ; 61    - with shield and energy                                            
     dta d"Fuel Tank       " ; 62                                              
     dta d"Nuclear Winter  " ; 63
 DefensiveEnergy = * - 48
@@ -658,7 +574,7 @@ DefensiveEnergy = * - 48
 	.by 99	; Heavy Shield
 	.by 99	; Force Shield
 	.by 00	; Super Mag
-	.by 99	; Auto Defense
+	.by 99	; Bouncy Castle
 	.by 00	; Fuel Tank
 	.by 00	; Nuclear Winter
 weaponsOfDeath

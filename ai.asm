@@ -959,7 +959,7 @@ SorryNoPurchase
 	mva #3 tempXroller; number of offensive purchases to perform
 	ldx TankNr
 @
-	randomize ind_Battery________ ind_Auto_Defense___
+	randomize ind_Battery________ ind_Bouncy_Castle__
 	jsr TryToPurchaseOnePiece
 	dec tempXroller
 	bne @-
@@ -985,7 +985,7 @@ SorryNoPurchase
     ; first try to buy defensives
     mva #1 tempXroller; number of defensive purchases to perform
 @
-    randomize ind_Battery________ ind_Auto_Defense___
+    randomize ind_Battery________ ind_Bouncy_Castle__
     jsr TryToPurchaseOnePiece
     dec tempXroller
     bne @-
@@ -1012,7 +1012,7 @@ SorryNoPurchase
     ; first try to buy defensives
     mva #1 tempXroller; number of defensive purchases to perform
 @
-    randomize ind_Battery________ ind_Auto_Defense___
+    randomize ind_Battery________ ind_Bouncy_Castle__
     jsr TryToPurchaseOnePiece2
     dec tempXroller
     bne @-

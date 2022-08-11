@@ -740,7 +740,7 @@ NoPlayerMissile
 	beq DrawTankShieldBold
 	cmp #ind_Heavy_Shield___		; shield with energy
 	beq DrawTankShieldBold
-	cmp #ind_Auto_Defense___		; Auto Defence
+	cmp #ind_Bouncy_Castle__		; Auto Defence
 	beq DrawTankShieldWihHorns
 	cmp #ind_Mag_Deflector__		; Mag Deflector
 	beq DrawTankShieldWihHorns
@@ -816,7 +816,7 @@ tankflash_loop
 ;--------------------------------------------------
 	sbw xdraw #$03		; 3 pixels to left
 	; draw left vertical line of shield ( | )
-	mva #6 temp			; strange !!!
+	mva #7 temp			; strange !!!
 @
 	jsr plot
 .nowarn	dew ydraw

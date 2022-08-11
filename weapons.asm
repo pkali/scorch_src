@@ -810,7 +810,7 @@ DistanceCheckLoop
 	beq UseShieldWithEnergy
 	cmp #ind_Heavy_Shield___		; shield with energy
 	beq UseShieldWithEnergy
-	cmp #ind_Auto_Defense___		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
+	cmp #ind_Bouncy_Castle__		; Auto Defence (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
 	beq UseShieldWithEnergy
 	cmp #ind_Mag_Deflector__		; Mag deflector  (it works only if hit ground next to tank. Tank hit is handled in Flight proc)
 	beq UseShieldWithEnergy
@@ -1871,8 +1871,8 @@ EndOfFlight2
 	tax
 	dex		; index of tank in X
 	lda ActiveDefenceWeapon,x
-	cmp #ind_Auto_Defense___		; Auto Defence
-	jeq AutoDefence
+	cmp #ind_Bouncy_Castle__		; Auto Defence
+	jeq BouncyCastle
 	cmp #ind_Mag_Deflector__		; Mag Deflector
 	beq MagDeflector
 	jmp NoDefence
@@ -1919,12 +1919,12 @@ EndOfMagDeflector
 NoTankHitAtEndOfFight
 NoHitAtEndOfFight
 NoDefence
-	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
+	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
     rts		; END !!!	
-AutoDefence
-	; now run defensive-aggressive weapon - Auto Defence!
+BouncyCastle
+	; now run defensive-aggressive weapon - Bouncy Castle (previously known as Auto Defence)!
 	sbb #180 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
-	lsrw Force	; Force = Force / 2 - becouse earlier we multiplied by 2
+	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
 	mva #1 Erase
 	lda TankNr
 	pha			; store TankNr

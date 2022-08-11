@@ -94,7 +94,7 @@ price_Shield_________ =   224     ;_57
 price_Heavy_Shield___ =   628     ;_58            
 price_Force_Shield___ =  1100     ;_59            
 price_Super_Mag______ = $ffff     ;_60            
-price_Auto_Defense___ =   512     ;_61            
+price_Bouncy_Castle__ =   512     ;_61            
 price_Fuel_Tank______ = $ffff     ;_62            
 price_Nuclear_Winter_ =  1000     ;_63
 ;Weapon indexes (numbers)
@@ -159,7 +159,7 @@ ind_Shield_________ = 57
 ind_Heavy_Shield___ = 58            
 ind_Force_Shield___ = 59            
 ind_Super_Mag______ = 60            
-ind_Auto_Defense___ = 61            
+ind_Bouncy_Castle__ = 61            
 ind_Fuel_Tank______ = 62            
 ind_Nuclear_Winter_ = 63
 ;--------------------------------
