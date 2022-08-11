@@ -1210,6 +1210,8 @@ callInventory
 	;
     mva #$ff isInventory
     jsr Purchase
+    lda #song_ingame
+    jsr RmtSongSelect
     mva #0 escFlag
     jsr DisplayStatus
     jsr SetMainScreen   

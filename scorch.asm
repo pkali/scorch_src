@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"148" ; number of this build (3 bytes)
+	dta d"1.00" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'

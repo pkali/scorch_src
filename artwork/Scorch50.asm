@@ -653,22 +653,22 @@ dli10
 	lda >fnt+$400*$00
 	sta wsync		;line=232
 	sta chbase
-    DLINEW dli11 1 0 0
+    ;DLINEW dli11 1 0 0
 
 	lda regA
 	rti
 
-dli11
-    sta regA
-
-    lda #>$a000  ; system font
-    sta wsync       ;line=232
-    sta chbase
-    lda #$01
-    sta gtictl
-
-    lda regA
-    rti
+;dli11
+;    sta regA
+;
+;    lda #>$a000  ; system font
+;    sta wsync       ;line=232
+;    sta chbase
+;    lda #$01
+;    sta gtictl
+;
+;    lda regA
+;    rti
 
 
 .endl

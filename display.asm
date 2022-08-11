@@ -101,9 +101,9 @@ dl ; MAIN game display list
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. "
- build  ; 3 bytes from scorch.asm (fancy method) :) 
- dta d" (un)2000-2022"
+ dta d"Welcome to Scorch v. "
+ build  ; 4 bytes from scorch.asm (fancy method) :) 
+ dta d"  (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   
