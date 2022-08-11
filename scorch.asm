@@ -237,7 +237,15 @@ CalculateGains
     ; Important! If player has 10 energy and gets a central hit
     ; from nuke that would take 90 energy points, his loss
     ; is 90, not 10
-
+	
+	; adding the remaining energy of the tank to gain
+	; winner gets more ! :)
+	lda Energy,x
+	adc gainL,x
+	sta gainL,x
+	bcc @+
+	inc gainH,x
+@	
     ; add gain * 2
     asl gainL,x
     rol gainH,x
