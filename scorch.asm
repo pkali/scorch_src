@@ -118,7 +118,7 @@
     icl 'lib/macro.hea'
 
     ;splash screen and musix
-	icl 'artwork/HIMARS14.asm'
+	icl 'artwork/Scorch50.asm'
     ;Game loading address
     ORG  $3000
 WeaponFont
