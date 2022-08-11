@@ -500,6 +500,7 @@ RoboTanks
     jsr ArtificialIntelligence
     ;pause 30
 	ldx TankNr
+	jsr DisplayStatus	; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
     lda kbcode
     cmp #28  ; ESC
