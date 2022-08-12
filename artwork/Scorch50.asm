@@ -28,7 +28,7 @@ WIDTH	= 40
 HEIGHT	= 30
 
 ; ---	BASIC switch OFF
-	;org $2000\ mva #$ff portb\ rts\ ini $2000
+	org $2000\ mva #$ff portb\ rts\ ini $2000
 
 ; ---	MAIN PROGRAM
 	org $2000
