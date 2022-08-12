@@ -228,6 +228,17 @@ main
 
 	;mwa #NMI $fffa		;new NMI handler
 
+    sta colbaks
+    lda #$0E
+    sta colpf1s
+    lda #$84
+    sta colpf2s
+    lda #$0E
+    sta colpf3s
+    lda #$02
+
+
+
     VMAIN NMI.vbl,6        ;jsr SetVBL
     VDLI DLI.dli_start
     
