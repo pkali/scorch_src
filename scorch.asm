@@ -625,30 +625,8 @@ NextPlayerShoots
 SeteXistenZ
     lda Energy,x
     sta eXistenZ,x
-    sta L1
-
-    ;DATA L1,L2
-    ;Multiplication 8bit*8bit,
-    ;result 16bit
-    ;this algiorithm is a little longer than one in Ruszczyc 6502 book
-    ;but it is faster
-
-    LDy #8
-    LDA #0
-    CLC
-LP0
-    ror
-    ROR L1
-    BCC B0
-    CLC
-    ADC #10 ; (L2) multiplication by 10
-B0  DEY
-    BNE LP0
-    ror
-    ROR L1
-    STA MaxForceTableH,x
-    lda L1
-    sta MaxForceTableL,x
+	
+	jsr MaxForceCalculate
 
     dex
     bpl SeteXistenZ
@@ -908,7 +886,37 @@ NotNegativeShieldEnergy
       .endr
 @   rts
 .endp
+;--------------------------------------------------
+.proc MaxForceCalculate
+; calculates max force for tank (tanknr in X)
+; Energy of tank X in A
+;--------------------------------------------------
+	sta L1
+	
+    ;DATA L1,L2
+    ;Multiplication 8bit*8bit,
+    ;result 16bit
+    ;this algiorithm is a little longer than one in Ruszczyc 6502 book
+    ;but it is faster
 
+    LDy #8
+    LDA #0
+    CLC
+LP0
+    ror
+    ROR L1
+    BCC B0
+    CLC
+    ADC #10 ; (L2) multiplication by 10
+B0  DEY
+    BNE LP0
+    ror
+    ROR L1
+    STA MaxForceTableH,x
+    lda L1
+    sta MaxForceTableL,x
+	rts
+.endp
 ;--------------------------------------------------
 .proc PMoutofScreen
 ;--------------------------------------------------

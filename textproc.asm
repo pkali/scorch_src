@@ -835,7 +835,8 @@ invSelectDef
     ; if activate battery, we do it differently
     mva #sfx_battery sfx_effect
     mva #99 Energy,x
-    bne DecreaseDefensive ; bypass activation
+	jsr MaxForceCalculate
+    jmp DecreaseDefensive ; bypass activation
 NotBattery
 	cmp #ind_Long_Barrel____
 	bne NotBarrel
