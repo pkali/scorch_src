@@ -254,7 +254,7 @@ OptionsYLoop
 
 ManualPurchase
       jsr Purchase
-      ldx escFlag
+      bit escFlag
       spl:rts
 AfterManualPurchase
 

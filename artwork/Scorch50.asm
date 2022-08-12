@@ -28,7 +28,7 @@ WIDTH	= 40
 HEIGHT	= 30
 
 ; ---	BASIC switch OFF
-	org $2000\ mva #$ff portb\ rts\ ini $2000
+	;org $2000\ mva #$ff portb\ rts\ ini $2000
 
 ; ---	MAIN PROGRAM
 	org $2000
@@ -211,6 +211,7 @@ main
 ;    ;sta $a300,x
 ;    inx
 ;    bne @-
+
 ; ---	init PMG
 
 	ift USESPRITES
@@ -223,15 +224,17 @@ main
 	sei			;stop IRQ interrupts
 	mva #$00 nmien		;stop NMI interrupts
 	sta dmactl
-	mva #$fe portb		;switch off ROM to get 16k more ram
+	;mva #$fe portb		;switch off ROM to get 16k more ram
 
-	mwa #NMI $fffa		;new NMI handler
+	;mwa #NMI $fffa		;new NMI handler
+
+    VMAIN NMI.vbl,6        ;jsr SetVBL
+    VDLI DLI.dli_start
+    
 
 	mva #1 vscrol
 
 	mva #$c0 nmien		;switch on NMI+DLI again
-
-	ift CHANGES		;if label CHANGES defined
 
 _lp	lda trig0		; FIRE #0
 	beq stop
@@ -247,27 +250,26 @@ _lp	lda trig0		; FIRE #0
 	and #$04
 	bne _lp			;wait to press any key; here you can put any own routine
 
-	els
-
-null	jmp DLI.dli1		;CPU is busy here, so no more routines allowed
-
-	eif
-
 
 stop
+	
+	cli
+	vmain sysvbv,6
+	
 	mva #$00 pmcntl		;PMG disabled
 	tax
 	sta:rne hposp0,x+
 
-	mva #$ff portb		;ROM switch on
+	;mva #$ff portb		;ROM switch on
 	mva #$40 nmien		;only NMI interrupts, DLI disabled
-	cli			;IRQ enabled
+	;cli			;IRQ enabled
 
-	    lda #0
+	lda #0
     ldx #8
 @   sta POKEY,x
     dex
     bpl @-
+    
         
     ;no glitching please (issue #67)
     lda #0
@@ -280,32 +282,6 @@ stop
 .local	DLI
 
 	?old_dli = *
-
-	ift !CHANGES
-
-dli1	lda trig0		; FIRE #0
-	beq stop
-
-	lda trig1		; FIRE #1
-	beq stop
-
-	lda consol		; START
-	and #1
-	beq stop
-
-	lda skctl
-	and #$04
-	beq stop
-
-	lda vcount
-	cmp #$02
-	bne dli1
-
-	:3 sta wsync
-
-	DLINEW dli13
-
-	eif
 
 dli_start
 
@@ -680,6 +656,8 @@ FADECHR	= 0
 
 SCHR	= 127
 
+dliv = $0200
+
 ; ---
 
 .proc	NMI
@@ -688,14 +666,14 @@ SCHR	= 127
 	bpl VBL
 
 	jmp DLI.dli_start
-dliv	equ *-2
+
 
 VBL
 	sta regA
 	stx regX
 	sty regY
 
-	sta nmist		;reset NMI flag
+	;sta nmist		;reset NMI flag
 
 	mwa #ant dlptr		;ANTIC address program
 
@@ -763,7 +741,7 @@ quit
 	lda regA
 	ldx regX
 	ldy regY
-	rti
+	jmp sysvbv
 
 .endp
 
@@ -864,9 +842,9 @@ player3
 USESPRITES = 1
 
 .MACRO	DLINEW
-	mva <:1 NMI.dliv
+	mva <:1 dliv
 	ift [>?old_dli]<>[>:1]
-	mva >:1 NMI.dliv+1
+	mva >:1 dliv+1
 	eif
 
 	ift :2
