@@ -622,10 +622,10 @@ CreditsStart
 	dta d"Tomasz 'Pecus' Peck",d"o"*
 	dta d"Pawel 'pirx' Kalinowsk",d"i"*
 	dta d" "*
-	dta d"SFX and Musi",d"c"*
+	dta d"SFX, Music and Suppor",d"t"*
 	dta d"Michal 'Miker' Szpilowsk",d"i"*
 	dta d" "*
-	dta d"Additional musi",d"c"*
+	dta d"Additional Musi",d"c"*
 	dta d"Mario 'Emkay' Kri",d"x"*
 	dta d" "*
 	dta d"Code Optimizatio",d"n"*
@@ -638,8 +638,8 @@ CreditsStart
 	dta d"Ideas and Q",d"A"*
 	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
 	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
-	dta d"brad-colbert, archon800",d","*
-	dta d"Shaggy the Ataria",d"n"*
+	dta d"brad-colbert, archon800, nowy80",d","*
+	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
 	dta d"  "*
 	dta d"Stay tuned for the FujiNet version",d"!"*
 	dta d"         "*
