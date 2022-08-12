@@ -1191,11 +1191,20 @@ notpressed
     lda kbcode
     and #%10111111 ; SHIFT elimination
 
+    cmp #$08  ; O
+    bne @+
+    jsr AreYouSure
+    bit escFlag
+    bpl notpressed
+    ;---O pressed-quit game to game over screen---
+	mva #$40 escFlag
+    rts
+@
     cmp #28  ; ESC
     bne @+
     jsr AreYouSure
-    lda escFlag
-    beq notpressed
+    bit escFlag
+    bpl notpressed
     ;---esc pressed-quit game---
     rts
 

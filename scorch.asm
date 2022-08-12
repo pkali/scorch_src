@@ -175,14 +175,14 @@ START
     jsr Options  ;startup screen
 	mva #0 dmactls		; dark screen
 	jsr WaitOneFrame
-    lda escFlag
-    bne START
+    bit escFlag
+    bmi START
 
     jsr EnterPlayerNames
 	mva #0 dmactls		; dark screen
 	jsr WaitOneFrame
-    lda escFlag
-    bne START
+    bit escFlag
+    bmi START
 
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
@@ -199,8 +199,9 @@ MainGameLoop
     jsr RoundInit
     
     jsr MainRoundLoop
-    lda escFlag
-    bne START
+    bit escFlag
+    bmi START
+	jvs GoGameOver
     
     mva #0 TankNr  ; 
     
@@ -316,6 +317,7 @@ eskipzeroing
 
     lda GameIsOver
 	beq NoGameOverYet
+GoGameOver
 	mva #0 dmactls		; dark screen
 	jsr WaitOneFrame
 	jsr GameOverScreen
@@ -514,8 +516,8 @@ RoboTanks
     cmp #28  ; ESC
     bne @+
       jsr AreYouSure
-      lda escFlag
-      seq:rts
+      bit escFlag
+	  spl:rts
 @
 
     jmp AfterManualShooting
@@ -525,7 +527,7 @@ ManualShooting
     jsr WaitForKeyRelease
     jsr BeforeFire
     lda escFlag
-    seq:rts
+    seq:rts		; keys Esc or O
 
 AfterManualShooting
     mva #0 plot4x4color
@@ -1459,7 +1461,7 @@ nextishigher
       and #$3f ;CTRL and SHIFT ellimination
       cmp #28  ; ESC
       bne getkeyend
-        mvx #1 escFlag
+        mvx #$80 escFlag
       bne getkeyend
 
 checkJoyGetKey

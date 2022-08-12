@@ -352,7 +352,7 @@ TankTempY
 ;----------------------------------------------------
 singleRoundVars
 ;-------------- 
-escFlag .ds 1
+escFlag .ds 1	; 0 - Esc or O not pressed, $80 - Esc pressed, $40 - O pressed
 ;-------------- 
 CurrentResult
     .DS 1

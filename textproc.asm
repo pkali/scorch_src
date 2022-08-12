@@ -63,8 +63,8 @@
 OptionsMainLoop
     jsr OptionsInversion
     jsr getkey
-    ldx escFlag
-    seq:rts
+    bit escFlag
+    spl:rts
        
     cmp #$f  ;cursor down
     bne OptionsNoDown
@@ -255,7 +255,7 @@ OptionsYLoop
 ManualPurchase
       jsr Purchase
       ldx escFlag
-      seq:rts
+      spl:rts
 AfterManualPurchase
 
       inc:lda TankNr
@@ -658,8 +658,8 @@ ChoosingItemForPurchase
     
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
-    ldx escFlag
-    seq:jmp WaitForKeyRelease  ; like jsr ... : rts
+    bit escFlag
+    spl:jmp WaitForKeyRelease  ; like jsr ... : rts
     cmp #$2c ; Tab
     jeq ListChange
     cmp #$06  ; cursor left
@@ -1025,8 +1025,8 @@ NoArrowDown
       lda TankStatusColoursTable,x
       sta colpf2s  ; set color of player name line
       jsr EnterPlayerName
-      lda escFlag
-      seq:rts
+      bit escFlag
+      spl:rts
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -1085,8 +1085,8 @@ endOfTankName
 
 CheckKeys
     jsr getkey
-    ldx escFlag
-    seq:rts
+    bit escFlag
+    spl:rts
     
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
@@ -1614,11 +1614,11 @@ EndOfTypeLine4x4
     jsr GetKey
     cmp #$2b  ; "Y"
     bne @+
-    mva #1 escFlag
+    mva #$80 escFlag
     bne skip01
 @    mva #0 escFlag
-     jsr WaitForKeyRelease
 skip01
+    jsr WaitForKeyRelease
     
     ;clean
     mva #3 di
