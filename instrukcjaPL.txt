@@ -42,6 +42,7 @@ klawisz I lub dłuższe przytrzymanie przycisku joysticka - przejście do Invent
 Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne z tym że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną.
 Klawisz M - wyłączenie/włączenie muzyki w tle
 Klawisz S - wyłączenie/włączenie dźwięków efektów.
+Klawisz O - wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłąćznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza Esc ztą róznicą, że wyświetlane jest podsumowanie oraz creditsy.
 
 W czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz Esc, który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem).
 
