@@ -8,21 +8,29 @@
 ; compilation to e.g. cartridge
 ; zero page variables are declared in program.s65 module
 ;=====================================================
-TanksNames  ; DO NOT ZERO - ticket #24
+OneTimeZeroVariables
+OneTimeZeroVariablesCount = variablesToInitialize-OneTimeZeroVariables  ; MAX 128 bytes !
+noMusic .by 0  ; 0 - play music, $ff - do not play music
+noSfx   .by 0  ; 0 - play SFX, $ff - do not play SFX
+;----------------------------------------------------
+; Color table for Game Over Screen (created in a gameover routine)
+	.by $00		; labels line color
+GameOverColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
+;----------------------------------------------------
+TanksNames  ; DO NOT ZERO ON RESTART GAME - ticket #24
     :6 dta d"        "
 ;----------------------------------------------------
-;Options DO NOT ZERO - ticket #27
+skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
+    .DS [MaxPlayers]
+;----------------------------------------------------
+variablesToInitialize
+;Options DO NOT ZERO ON RESTART GAME - ticket #27
 OptionsTable .by 0,1,2,2,0,1,3,2
 RoundsInTheGame .by 10 ;how many rounds in the current game
 seppukuVal .by 75
 mountainDeltaH .by 3
 mountainDeltaL .by $ff
 ;----------------------------------------------------
-skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
-    .DS [MaxPlayers]
-;----------------------------------------------------
-noMusic .by 0  ; 0 - play music, $ff - do not play music
-noSfx   .by 0  ; 0 - play SFX, $ff - do not play SFX
 ; 4x4 text buffer
 ResultLineBuffer
     dta d"                  ", $ff
@@ -37,8 +45,6 @@ variablesStart  ; zeroing starts here
 isInventory .ds 1  ; 0 - purchase, $ff - inventory
 ;-------------- 
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
-;-------------- 
-sfx_effect .ds 1
 ;-------------- 
 noDeathCounter .ds 1
 ;--------------
@@ -84,6 +90,14 @@ ResultsTable ;the results in the gameeeeee
     .DS [MaxPlayers]
 TempResults
     .DS [MaxPlayers]
+DirectHitsH
+    .DS [MaxPlayers]
+DirectHitsL
+    .DS [MaxPlayers]
+EarnedMoneyH
+    .DS [MaxPlayers]
+EarnedMoneyL
+    .DS [MaxPlayers]
 ;----------------------------------------------------
 ForceTableL ;shooting Force of the tank during the round
     .DS [MaxPlayers]
@@ -95,12 +109,8 @@ MaxForceTableL ;Energy of the tank during the round
 MaxForceTableH
     .DS [MaxPlayers]
 ;----------------------------------------------------
-
-AngleTable ;Angle of the barrel of each tank during the round
+BarrelLength ;length of the tank barrel - dont forget to set it to 6 at round start!
     .DS [MaxPlayers]
-NewAngle .DS 1
-;----------------------------------------------------
-
 ActiveWeapon ;number of the selected weapon
     .DS [MaxPlayers]
 ActiveDefenceWeapon ;number of the activated defence weapon - 0 
@@ -134,6 +144,9 @@ ytankstable ;Y positions of tanks (lower left point)
     .DS [MaxPlayers]
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS [MaxPlayers]
+;----------------------------------------------------
+TargetTankNr	; Target tank index (for AI routines)
+	.DS 1	
 ;----------------------------------------------------
 Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally
@@ -286,7 +299,7 @@ DifficultyLevel ; Difficulty Level (human/cpu)
 ;----------------------------------------------------
 ;displaydecimal
 decimal  .DS 2
-decimalresult  .DS 4
+decimalresult  .DS 5
 
 ;xmissile
 ExplosionRadius .DS 2  ;because when adding in xdraw it is double byte
@@ -339,11 +352,22 @@ TankTempY
 ;----------------------------------------------------
 singleRoundVars
 ;-------------- 
-escFlag .ds 1
+escFlag .ds 1	; 0 - Esc or O not pressed, $80 - Esc pressed, $40 - O pressed
 ;-------------- 
 CurrentResult
     .DS 1
-;-------------- 
+;--------------
+AngleTable ;Angle of the barrel of each tank during the round
+    .DS [MaxPlayers]
+NewAngle  ; used in AI
+    .DS 1
+;previousBarrelAngle
+;    .DS [MaxPlayers]
+EndOfTheBarrelX
+    .ds 2
+EndOfTheBarrelY
+    .ds 1
+;----------------------------------------------------
 previousAngle
     .DS [MaxPlayers]
 previousEnergyL
@@ -351,8 +375,6 @@ previousEnergyL
 previousLeftRange
     .DS [MaxPlayers]
 previousEnergyH
-    .DS [MaxPlayers]
-previousRightAngle
     .DS [MaxPlayers]
 RandBoundaryLow
     .ds 2

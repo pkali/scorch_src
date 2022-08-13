@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 .IF *>0 ;this is a trick that prevents compiling this file alone
 
@@ -31,6 +31,11 @@ OptionsDL
         .word OptionsScreen
         .byte $30,$02,$02,$70
         :maxOptions .by $02,$10
+		:(9-maxOptions) .by $70,$10
+		.byte $80
+        .byte $4f
+        .word (display+140*40)
+        :21 .by $0f                     ;76
         .byte $41
         .word OptionsDL
 ;------------------------
@@ -54,51 +59,51 @@ dl ; MAIN game display list
         .byte $10  ; 2 blank lines 
 
         .byte $4f
-        .word display					; 1 line
-        :76 .by $0f						;76
-		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:13 .by $0f						;13
-		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:8 .by $0f						;8
-        .by $4f							;1
+        .word display                   ; 1 line
+        :76 .by $0f                     ;76
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :13 .by $0f                     ;13
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :8 .by $0f                      ;8
+        .by $4f                         ;1
         .wo display+$0ff0
-		:2 .by $0f						;2
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:9 .by $0f						;9
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:8 .by $0f						;8
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:7 .by $0f						;7
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:6 .by $0f						;6
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:5 .by $0f						;5
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:4 .by $0f						;4
- 		.by $0f+$80 ; DLI (black bar)	;2
-		.by $0f+$80 ; DLI
-		:3 .by $0f						;3
- 		.by $0f+$80 ; DLI (black to end);1
-       :38 .byte $0f 					;35 ..... = 200
+        :2 .by $0f                      ;2
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :9 .by $0f                      ;9
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :8 .by $0f                      ;8
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :7 .by $0f                      ;7
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :6 .by $0f                      ;6
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :5 .by $0f                      ;5
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :4 .by $0f                      ;4
+        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80 ; DLI
+        :3 .by $0f                      ;3
+        .by $0f+$80 ; DLI (black to end);1
+       :38 .byte $0f                    ;35 ..... = 200
         .by $4f
-        .wo EmptyLine	; additional line of ground
+        .wo EmptyLine   ; additional line of ground
         .byte $41
         .word dl
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
 ;-----------------------------------------------
 OptionsScreen
- dta d"Welcome to Scorch ver. "
- build  ; 3 bytes from scorch.asm (fancy method) :) 
- dta d" (un)2000-2022"
+ dta d"Welcome to Scorch v. "
+ build  ; 4 bytes from scorch.asm (fancy method) :) 
+ dta d"  (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 OptionsHere   
@@ -128,6 +133,7 @@ MoreDown
 ListOfWeapons
  :36 dta d"                                        "
 ListOfWeapons1End
+;GameOverResults ; reuse after game (remember to clear on start new)
 ListOfDefensiveWeapons
  :16 dta d"                                        "
 ListOfDefensiveWeaponsEnd ;constant useful when clearing
@@ -146,6 +152,41 @@ EmptyLine
  dta d"                                        "
 ; -------------------------------------------------
     .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
+;-----------------------------------------------
+GameOverResults = display+$0ff0 ; reuse after game
+Credits = GameOverResults +(6*40)
+CreditsLastLine = Credits + (41*40)
+GameOverDL
+       .byte $70,$40
+       .byte $47    ; 16 gr8 lines
+       .word GameOverTitle
+       .byte $4f   ; 1 line
+       .word display+(40*72)
+       :28 .byte $0f   ; 28 lines
+       .byte $0f+$80
+       .byte $4f   ; 1 line
+       .word display+(40*32)
+       :30 .byte $0f   ; 30 lines
+       .byte $0f+$80   ; 1 line
+       .byte $4f   ; 1 line
+       .word display+(40*72)
+       :7 .byte $0f    ; 7 lines
+       .byte $00+$80    ; 1 line
+       .byte $42    ; 7 tekst lines
+       .word GameOverTitle2
+       .byte $00+$80
+       .byte $42
+       .word GameOverResults
+       :5 .byte $00+$80,$02
+       .byte $70+$80
+	   .byte $42+$20	; VSCRL
+DLCreditsAddr
+	   .word Credits
+	   :6 .byte $02+$20
+	   .byte $02
+       .byte $41
+       .word GameOverDL
+
 NameScreen
  dta d"    Enter names of players      "
  dta d"   Tank  01    Name:"
@@ -179,5 +220,8 @@ activateTextEnd
 purchaseText
  dta d"Purchase"
 purchaseTextEnd
-
+GameOverTitle
+ dta d"     game  over     "*
+GameOverTitle2
+ dta d"   Player   Points  Hits   Earned Money "
 .endif

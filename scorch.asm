@@ -36,11 +36,11 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"148" ; number of this build (3 bytes)
+	dta d"1.00" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
-    icl 'artwork/sfx/rmt_feat.asm'
+;    icl 'artwork/sfx/rmt_feat.asm'
     
     
     .zpvar xdraw            .word = $80 ;variable X for plot
@@ -60,6 +60,7 @@
     .zpvar xtempDRAW        .word ;same as above for XDRAW routine
     .zpvar ytempDRAW        .word ;same as above for XDRAW routine
     .zpvar tempor2          .byte
+	.zpvar CreditsVScrol	.byte
     ;--------------temps used in circle routine
     .zpvar xi               .word ;X (word) in draw routine
     .zpvar fx               .byte 
@@ -77,6 +78,7 @@
 	.zpvar UnderTank1		.byte
 	.zpvar UnderTank2		.byte	
     ;----------------------------
+	.zpvar TestFlightFlag	.byte ; For AI test flights ($ff - test, $00 - standard shoot flight)
     .zpvar weaponPointer    .word
 	.zpvar dliCounter       .byte
 	.zpvar pressTimer       .byte
@@ -85,36 +87,42 @@
     ;.zpvar dliA             .byte
     ;.zpvar dliX             .byte
     ;.zpvar dliY             .byte
+	.zpvar sfx_effect .byte
+	.zpvar RMT_blocked	.byte
+;-------------- 
+
+	displayposition = modify
+	
 
     ;* RMT ZeroPage addresses
-    .zpvar p_tis            .word
-    .zpvar p_trackslbstable .word
-    .zpvar p_trackshbstable .word
-    .zpvar p_song           .word
-    .zpvar ns               .word
-    .zpvar nr               .word
-    .zpvar nt               .word
-    .zpvar reg1             .byte
-    .zpvar reg2             .byte
-    .zpvar reg3             .byte
-    .zpvar tmp              .byte
-    IFT FEAT_COMMAND2
-      .zpvar frqaddcmd2     .byte
-    EIF
-    p_instrstable = p_tis
+	.zpvar RMT_Zero_Page_V .byte
+;    .zpvar p_tis            .word
+;    .zpvar p_trackslbstable .word
+;    .zpvar p_trackshbstable .word
+;    .zpvar p_song           .word
+;    .zpvar ns               .word
+;    .zpvar nr               .word
+;    .zpvar nt               .word
+;    .zpvar reg1             .byte
+;    .zpvar reg2             .byte
+;    .zpvar reg3             .byte
+;    .zpvar tmp              .byte
+;    IFT FEAT_COMMAND2
+;      .zpvar frqaddcmd2     .byte
+;    EIF
+;    p_instrstable = p_tis
 
-    displayposition = modify
 ;-------------------------------
 
     icl 'lib/atari.hea'
     icl 'lib/macro.hea'
 
     ;splash screen and musix
-	icl 'artwork/HIMARS14.asm'
+	icl 'artwork/Scorch50.asm'
     ;Game loading address
     ORG  $3000
 WeaponFont
-    ins 'artwork/weapons_AW5_mod.fnt'  ; 'artwork/weapons.fnt'
+    ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
@@ -124,18 +132,57 @@ WeaponFont
 ;--------------------------------------------------
 ; Game Code
 ;--------------------------------------------------
-START
+FirstSTART
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
 
+	; one time zero variables in RAM (non zero page)
+	lda #0
+	ldy #OneTimeZeroVariablesCount-1
+@	sta OneTimeZeroVariables,y
+	dey
+	bpl @-
+	
+	; initialize variables in RAM (non zero page)
+	ldy #initialvaluesCount-1
+@	lda initialvaluesStart,y
+	sta variablesToInitialize,y
+	dey
+	bpl @-
+
+    ; RMT INIT
+    lda #$f0                    ;initial value
+    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
+
+    lda #$ff                    ;initial value
+    sta sfx_effect
+
+    lda #0
+    jsr RmtSongSelect
+
+    VMAIN VBLinterrupt,7  		;jsr SetVBL
+	
+START
     ; Startup sequence
     jsr Initialize
+	
+	;jsr GameOverScreen	; only for test !!!
+    
+    lda #song_main_menu
+    jsr RmtSongSelect
+    
 
     jsr Options  ;startup screen
-    lda escFlag
-    bne START
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
+    bit escFlag
+    bmi START
 
     jsr EnterPlayerNames
-    lda escFlag
-    bne START
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
+    bit escFlag
+    bmi START
 
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
@@ -144,15 +191,17 @@ MainGameLoop
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
-    mva #0 dmactls
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
 
     jsr GetRandomWind
 
     jsr RoundInit
     
     jsr MainRoundLoop
-    lda escFlag
-    bne START
+    bit escFlag
+    bmi START
+	jvs GoGameOver
     
     mva #0 TankNr  ; 
     
@@ -171,25 +220,12 @@ MainGameLoop
     ; Results are number of other deaths
     ; before the player dies itself
 
-    lda #song_end_round
+    lda #song_round_over
     jsr RmtSongSelect
     jsr DisplayResults
 
-    ;check demo mode
-    ldx numberOfPlayers
-    dex
-checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
-    lda skillTable,x
-    beq peopleAreHere
-    dex
-    bpl checkForHuman
-    ; no people, just wait a bit
-    pause 150
-    jmp noKey
+	jsr DemoModeOrKey
 
-peopleAreHere
-    jsr getkey
-noKey
     ldx NumberOfPlayers
     dex
 CalculateGains
@@ -202,7 +238,15 @@ CalculateGains
     ; Important! If player has 10 energy and gets a central hit
     ; from nuke that would take 90 energy points, his loss
     ; is 90, not 10
-
+	
+	; adding the remaining energy of the tank to gain
+	; winner gets more ! :)
+	lda Energy,x
+	adc gainL,x
+	sta gainL,x
+	bcc @+
+	inc gainH,x
+@	
     ; add gain * 2
     asl gainL,x
     rol gainH,x
@@ -235,14 +279,50 @@ zeromoney
     lda #0
     sta moneyL,x
     sta moneyH,x
-
 skipzeroing
+; and earned money for summary
+    clc
+    lda EarnedMoneyL,x
+    adc gainL,x
+    sta EarnedMoneyL,x
+    lda EarnedMoneyH,x
+    adc gainH,x
+    sta EarnedMoneyH,x
+    ; substract lose
+    ; if lose is greater than money then zero money
+    lda EarnedMoneyH,x
+    cmp loseH,x
+    bcc ezeromoney
+    bne esubstractlose
+    lda EarnedMoneyL,x
+    cmp loseL,x
+    bcc ezeromoney
+esubstractlose
+    sec
+    lda EarnedMoneyL,x
+    sbc loseL,x
+    sta EarnedMoneyL,x
+    lda EarnedMoneyH,x
+    sbc loseH,x
+    sta EarnedMoneyH,x
+    jmp eskipzeroing
+ezeromoney
+    lda #0
+    sta EarnedMoneyL,x
+    sta EarnedMoneyH,x
+eskipzeroing
+
     dex
-    bpl CalculateGains
+    jpl CalculateGains
 
     lda GameIsOver
-    jne START
-
+	beq NoGameOverYet
+GoGameOver
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
+	jsr GameOverScreen
+    jmp START
+NoGameOverYet
     inc CurrentRoundNr
     lda #$0
     sta dmactls  ; issue #72
@@ -266,9 +346,10 @@ skipzeroing
     lda #song_ingame
     jsr RmtSongSelect
 
+	jsr SetPMWidth
 	lda #0
-    sta sizep0 ; P0-P1 widths
-    sta sizep0+1
+	sta colpf2s	; status line "off"
+	sta colpf1s
 	
 	tax
 @	  sta singleRoundVars,x
@@ -287,6 +368,8 @@ SettingEnergies
       sta Energy,x
       sta eXistenZ,x
       sta LASTeXistenZ,x
+	  lda #StandardBarrel	; standard barrel length
+	  sta BarrelLength,x
       ; anything in eXistenZ table means that this tank exist
       ; in the given round
       lda #<1000
@@ -319,14 +402,19 @@ SettingEnergies
 
     jsr SetMainScreen
     jsr ColorsOfSprites
-	lda #0
-	sta colpf2s	; status line "off"
-	sta colpf1s
+
+;    lda #90 ; barrel fully erect
+;    ldx #MaxPlayers-1
+;@     sta previousBarrelAngle,x
+;      dex
+;    bpl @-
+
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
-    mva #0 TankSequencePointer
+	mva #$00 TankSequencePointer
+
 ;---------round screen is ready---------
 	mva #TextForegroundColor colpf1s	; status line "on"
     rts
@@ -410,6 +498,8 @@ DoNotFinishTheRound
     ldx tankNr
     lda TankStatusColoursTable,x
     sta colpf2s  ; set color of status line
+    jsr PutTankNameOnScreen
+    jsr DisplayStatus
 
     lda SkillTable,x
     beq ManualShooting
@@ -418,21 +508,18 @@ RoboTanks
 	; robotanks shoot here	
 	; TankNr still in X
     jsr ArtificialIntelligence
-    jsr PutTankNameOnScreen
-    jsr DisplayStatus
-    pause 30
+    ;pause 30
 	ldx TankNr
+	jsr DisplayStatus	; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
     lda kbcode
     cmp #28  ; ESC
     bne @+
       jsr AreYouSure
-      lda escFlag
-      seq:rts
+      bit escFlag
+	  spl:rts
 @
 
-    ; let's move the tank's barrel so it points the right
-    ; direction
     jmp AfterManualShooting
 
 ManualShooting
@@ -440,7 +527,7 @@ ManualShooting
     jsr WaitForKeyRelease
     jsr BeforeFire
     lda escFlag
-    seq:rts
+    seq:rts		; keys Esc or O
 
 AfterManualShooting
     mva #0 plot4x4color
@@ -466,7 +553,7 @@ StandardShoot
     jsr DecreaseWeaponBeforeShoot
     jsr DisplayStatus
 
-	ldx TankNr
+;	ldx TankNr
 	dec Energy,x   ; lower energy to eventually let tanks commit suicide
 
 ShootNow
@@ -511,16 +598,16 @@ AfterExplode
 NoFallDown2
     ;here tanks are falling down
     mva tankNr tempor2
-    mvx #0 TankNr
-
+	ldx NumberOfPlayers
+	dex
 TanksFallDown
+    stx TankNr
 	lda eXistenZ,x
 	beq NoExistNoFall
     jsr TankFalls
 NoExistNoFall
-    inc:ldx TankNr
-    cpx NumberOfPlayers
-    bne TanksFallDown
+    dex
+    bpl TanksFallDown
     mva tempor2 TankNr
 missed
 
@@ -538,30 +625,8 @@ NextPlayerShoots
 SeteXistenZ
     lda Energy,x
     sta eXistenZ,x
-    sta L1
-
-    ;DATA L1,L2
-    ;Multiplication 8bit*8bit,
-    ;result 16bit
-    ;this algiorithm is a little longer than one in Ruszczyc 6502 book
-    ;but it is faster
-
-    LDy #8
-    LDA #0
-    CLC
-LP0
-    ror
-    ROR L1
-    BCC B0
-    CLC
-    ADC #10 ; (L2) multiplication by 10
-B0  DEY
-    BNE LP0
-    ror
-    ROR L1
-    STA MaxForceTableH,x
-    lda L1
-    sta MaxForceTableL,x
+	
+	jsr MaxForceCalculate
 
     dex
     bpl SeteXistenZ
@@ -736,16 +801,16 @@ ldahashzero
 NotNegativeEnergy
     sta Energy,x
     ;now increase the gain of the shooting tank
-    phx
-    ldx TankNr
+ ;   phx
+    ldy TankNr
     clc
-    lda gainL,x
+    lda gainL,y
     adc EnergyDecrease
-    sta gainL,x
-    lda gainH,x
+    sta gainL,y
+    lda gainH,y
     adc #$00
-    sta gainH,x
-    plx
+    sta gainH,y
+ ;   plx
     rts
 .endp
 
@@ -787,12 +852,7 @@ NotNegativeShieldEnergy
     lda #0  ; turn off defense weapons when hara-kiring
     sta ActiveDefenceWeapon,x
     sta ShieldEnergy,x
-    lda xtankstableL,x
-    sta xdraw
-    lda xtankstableH,x
-    sta xdraw+1
-    lda yTanksTable,x
-    sta ydraw
+    jsr SetupXYdraw
     lda #1  ; Missile
     jsr ExplosionDirect
     jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
@@ -826,7 +886,37 @@ NotNegativeShieldEnergy
       .endr
 @   rts
 .endp
+;--------------------------------------------------
+.proc MaxForceCalculate
+; calculates max force for tank (tanknr in X)
+; Energy of tank X in A
+;--------------------------------------------------
+	sta L1
+	
+    ;DATA L1,L2
+    ;Multiplication 8bit*8bit,
+    ;result 16bit
+    ;this algiorithm is a little longer than one in Ruszczyc 6502 book
+    ;but it is faster
 
+    LDy #8
+    LDA #0
+    CLC
+LP0
+    ror
+    ROR L1
+    BCC B0
+    CLC
+    ADC #10 ; (L2) multiplication by 10
+B0  DEY
+    BNE LP0
+    ror
+    ROR L1
+    STA MaxForceTableH,x
+    lda L1
+    sta MaxForceTableL,x
+	rts
+.endp
 ;--------------------------------------------------
 .proc PMoutofScreen
 ;--------------------------------------------------
@@ -856,7 +946,7 @@ NotNegativeShieldEnergy
 ;--------------------------------------------------
     ldx #$3f  ; TODO: maxweapons
 @    lda #$0
-      cpx #48  ; White Flag
+      cpx #ind_White_Flag_____  ; White Flag
       bne @+
        lda #99     
 @     sta TanksWeapon1,x
@@ -890,17 +980,15 @@ deletePtr = temp
       inw deletePtr
       cpw deletePtr #variablesEnd
     bne @-
-    
+
     mwa #1024 RandBoundaryHigh
     mva #$ff LastWeapon
     sta HowMuchToFall
     mva #1 color
     
-    jsr WeaponCleanup    
+	jsr SetStandardBarrels
+    jsr WeaponCleanup        
     
-    
-    mva #TextBackgroundColor colpf2s
-    mva #TextForegroundColor colpf3s
     mva #>WeaponFont chbas
 
     ;parameter for old plot (unPlot) max 5 points
@@ -925,6 +1013,47 @@ SetunPlots
 ;    sta dmactls
     lda #$03    ; P/M on
     sta pmcntl
+	jsr SetPMWidth
+    lda #%00100000 ; P/M priorities (multicolor players on)
+    sta gtictls
+    jsr PMoutofScreen
+
+    ;let the tanks be visible!
+    ldx #(maxPlayers-1)
+    lda #99 ; tank is visible
+MakeTanksVisible
+    sta eXistenZ,x
+    dex
+    bpl MakeTanksVisible
+
+    mva #1 CurrentRoundNr ;we start from round 1
+    mva #6 NTSCcounter
+    
+;    ; RMT INIT
+;    lda #$f0                    ;initial value
+;    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
+;
+;    lda #$ff                    ;initial value
+;    sta sfx_effect
+;
+;    lda #0
+;    jsr RmtSongSelect
+;
+;    VMAIN VBLinterrupt,7  		;jsr SetVBL
+
+    rts
+.endp
+;--------------------------------------------------
+.proc SetStandardBarrels
+    ldx #maxPlayers-1
+	lda #StandardBarrel	; standard barrel length
+@	sta BarrelLength,x
+	dex
+	bpl @-
+	rts
+.endp
+;--------------------------------------------------
+.proc SetPMWidth
     lda #$00
     sta sizep0 ; P0-P3 widths
     sta sizep0+1
@@ -932,43 +1061,7 @@ SetunPlots
     sta sizep0+3
 	lda #%01010101
     sta sizem ; all missiles, double width
-    lda #%00100000 ; P/M priorities (multicolor players on)
-    sta gtictls
-    jsr PMoutofScreen
-
-    ;let the tanks be visible!
-    ldx #(maxPlayers-1)
-    lda #1 ; tank is visible
-MakeTanksVisible
-    sta eXistenZ,x
-    dex
-    bpl MakeTanksVisible
-
-
-    ldx #0
-    txa
-ClearResults
-    sta ResultsTable,x
-    inx
-    cpx #MaxPlayers
-    bne ClearResults
-
-    mva #1 CurrentRoundNr ;we start from round 1
-    mva #6 NTSCcounter
-    
-    ; RMT INIT
-    lda #$f0                    ;initial value
-    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
-;
-    lda #$ff                    ;initial value
-    sta sfx_effect
-;
-    lda #0
-    jsr RmtSongSelect
-;
-    VMAIN VBLinterrupt,6  		;jsr SetVBL
-
-    rts
+	rts
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGraph
@@ -992,12 +1085,78 @@ ClearResults
     rti
 .endp
 ;--------------------------------------------------
+.proc DLIinterruptOptions
+    ;sta dliA
+	;sty dliY
+	pha
+;	lda dliColorsBack
+	lda #0
+    sta COLPF1
+	lda dliColorsFore
+	sta COLPF2
+    pla
+    rti
+.endp
+;--------------------------------------------------
+.proc DLIinterruptGameOver
+    ;sta dliA
+	;sty dliY
+	pha
+	phy
+	lda dliCounter
+	bne EndofPMG
+    lda #%00100000	; playfield after P/M
+	STA WSYNC
+    sta gtictl
+	bne EndOfDLI_GO
+EndofPMG
+	cmp #1
+	bne ColoredLines
+    lda #%00100100	; playfield before P/M
+	STA WSYNC
+    sta gtictl
+	bne EndOfDLI_GO
+ColoredLines
+	cmp #9
+	beq CreditsScroll
+	tay
+	lda GameOverColoursTable-3,y	; -2 becouse this is DLI nr 2 and -1 (labels line)
+	ldy #$0a	; text colour (brightnes)
+	STA WSYNC
+	sta COLPF2
+	sty COLPF1
+	bne EndOfDLI_GO
+CreditsScroll
+	lda #$00
+	sta COLPF2
+	inc CreditsVScrol
+	lda CreditsVScrol
+	cmp #32		;not to fast
+	beq nextlinedisplay
+	:2 lsr		;not to fast
+	sta VSCROL
+	jmp EndOfDLI_GO
+nextlinedisplay
+	lda #0
+	sta CreditsVScrol
+	sta VSCROL
+	adw DLCreditsAddr #40
+	cpw DLCreditsAddr #CreditsLastLine
+	bne EndOfDLI_GO
+	mwa #Credits DLCreditsAddr
+EndOfDLI_GO
+	inc dliCounter
+	ply
+	pla
+	rti
+.endp
+;--------------------------------------------------
 .proc DLIinterruptText
 	;sta dliA
     pha
 	sta WSYNC
-    mva #TextBackgroundColor colpf2
-    mva #TextForegroundColor colpf3
+    mva #TextBackgroundColor COLPF2
+    mva #TextForegroundColor COLPF3
 	;lda dliA
     pla
 DLIinterruptNone
@@ -1024,7 +1183,8 @@ itsPAL
     ; pressTimer is trigger tick counter. always 50 ticks / s
     bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
 
-    
+	bit RMT_blocked
+	bmi SkipRMTVBL
     ; ------- RMT -------
 	lda sfx_effect
     bmi lab2
@@ -1040,12 +1200,12 @@ itsPAL
 lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
     ; ------- RMT -------
-	   
+SkipRMTVBL	   
 exitVBL
     ply
     plx
 	pla
-	jmp SYSVBV
+	jmp XITVBV
 .endp
 ;----------------------------------------------
 .proc RandomizeSequence0
@@ -1177,20 +1337,30 @@ LimitForce
 .endp
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
+	mva #1 Erase
+	jsr DrawTankNr.BarrelChange
+	mva #0 Erase
+MoveBarrel
+    mva #sfx_set_power_2 sfx_effect
 	jsr DrawTankNr
 	jsr DisplayStatus.displayAngle
-	ldx TankNr
+;	ldx TankNr
+	mva #1 Erase
+	jsr WaitOneFrame
+	jsr DrawTankNr.BarrelChange
+	mva #0 Erase
 	lda NewAngle
 	cmp AngleTable,x
 	beq BarrelPositionIsFine
 	bcc rotateLeft ; older is bigger
 rotateRight;older is lower
 	inc angleTable,x
-	jmp MoveBarrelToNewPosition
+	jmp MoveBarrel
 rotateLeft
 	dec angleTable,x
-	jmp MoveBarrelToNewPosition
+	jmp MoveBarrel
 BarrelPositionIsFine
+	jsr DrawTankNr
 	rts
 	
 .endp
@@ -1299,7 +1469,7 @@ nextishigher
       and #$3f ;CTRL and SHIFT ellimination
       cmp #28  ; ESC
       bne getkeyend
-        mvx #1 escFlag
+        mvx #$80 escFlag
       bne getkeyend
 
 checkJoyGetKey
@@ -1348,6 +1518,54 @@ getkeyend
     bne WaitForKeyRelease
     rts
 .endp
+;--------------------------------------------------
+.proc IsKeyPressed	; A=0 - yes , A>0 - no
+;--------------------------------------------------
+	lda SKSTAT
+	and #%00000100
+	beq @+
+	lda #1
+@	and TRIG0S
+	rts
+.endp
+;--------------------------------------------------
+.proc DemoModeOrKey
+;--------------------------------------------------
+    ;check demo mode
+    ldx numberOfPlayers
+    dex
+checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
+    lda skillTable,x
+    beq peopleAreHere
+    dex
+    bpl checkForHuman
+    ; no people, just wait a bit
+    ;pause 150
+    ldy #75
+    jsr PauseYFrames
+    jmp noKey
+
+peopleAreHere
+    jsr getkey
+noKey
+	rts
+.endp
+.proc WaitOneFrame
+	lda CONSOL
+	cmp #6  ; START KEY
+	beq @+
+	wait
+@	rts
+.endp
+.proc PauseYFrames
+; Y - number of frames to wait (divided by 2)
+; pauses for maximally 510 frames (255 * 2)
+@     jsr WaitOneFrame
+      jsr WaitOneFrame
+      dey
+    bne @-
+    rts
+.endp
 
 ;--------------------------------------------------
 .proc RmtSongSelect
@@ -1355,9 +1573,12 @@ getkeyend
 ;  starting song line 0-255 to A reg
     bit noMusic
     spl:lda #song_silencio
+	mvx #$ff RMT_blocked
     ldx #<MODUL                 ;low byte of RMT module to X reg
     ldy #>MODUL                 ;hi byte of RMT module to Y reg
-    jmp RASTERMUSICTRACKER      ;Init, :RTS
+    jsr RASTERMUSICTRACKER      ;Init
+	mva #0 RMT_blocked
+	rts
 .endp
 ;----------------------------------------------
     icl 'weapons.asm'
@@ -1376,7 +1597,7 @@ font4x4
     ins 'artwork/font4x4s.bmp',+62
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv2.fnt'
+    ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
     icl 'variables.asm'
 ;----------------------------------------------
@@ -1384,26 +1605,23 @@ TankFont
 ; reserved space for RMT player
     .ds $0320
     .align $100
+PLAYER
     .ECHO 'PLAYER: ',*
-    icl 'artwork/sfx/rmtplayr_game.asm'
+    icl 'artwork/sfx/rmtplayr.a65'
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_trial0f_stripped.rmt"  ;include music RMT module
+    ins "artwork/sfx/schorch_str2.rmt"  ;include music RMT module
     opt h+
 ;
 ;
 TheEnd
     .ECHO 'TheEnd: ',TheEnd
-    .if TheEnd > PMGraph + $300
-        .error "memory conflict"
-
-    .endif
-;----------------------------------------------
-; Player/missile memory
-    org $b800
-PMGraph
+    ;.if TheEnd > PMGraph + $300
+    ;    .error "memory conflict"
+    ;.endif
 
 
 
-    run START
+
+    run FirstSTART

@@ -1,18 +1,38 @@
 ;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
+;----------------------------------------------
+; Player/missile memory
+    
+PMGraph =  $0800
+display = $1010 ;screen takes $2K due to clearing routine
+
 screenheight = 200
 screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 margin = 40 ;mountain drawing Y variable margin
-display = $1010 ;screen takes $2K due to clearing routine
 MaxPlayers = 6
 maxOptions = 8  ;number of all options
 PMOffsetX = $2C ; P/M to graphics offset
 PMOffsetY = $23 ; P/M to graphics offset
 napalmRadius = 10
+StandardBarrel = 6 ; standard tank barrel length
+LongBarrel = 20	; long barrel length
 
 TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
-TextForegroundColor = $0c
+TextForegroundColor = $0A
+
+;character codes for symbols (tank, parachute, etc. )
+char_parachute_______ = $02
+char_flag____________ = $1e
+char_flame___________ = $14
+char_clear_flame_____ = $1c
+char_digger__________ = $04
+char_sandhog_________ = $0c
+char_sandhog_offset = char_sandhog_________ - char_digger__________
+
+char_tank1___________ = $20
+char_tank2___________ = $24
+char_tank3___________ = $28
 
 ;Weapon prices (*10 on screen)
 price_Baby_Missile___ = 0      ;_0
@@ -76,8 +96,8 @@ price_Shield_________ =   224     ;_57
 price_Heavy_Shield___ =   628     ;_58            
 price_Force_Shield___ =  1100     ;_59            
 price_Super_Mag______ = $ffff     ;_60            
-price_Auto_Defense___ =   512     ;_61            
-price_Fuel_Tank______ = $ffff     ;_62            
+price_Bouncy_Castle__ =   512     ;_61            
+price_Long_Barrel____ =  2100     ;_62            
 price_Nuclear_Winter_ =  1000     ;_63
 ;Weapon indexes (numbers)
 ind_Baby_Missile___ = 0
@@ -141,8 +161,8 @@ ind_Shield_________ = 57
 ind_Heavy_Shield___ = 58            
 ind_Force_Shield___ = 59            
 ind_Super_Mag______ = 60            
-ind_Auto_Defense___ = 61            
-ind_Fuel_Tank______ = 62            
+ind_Bouncy_Castle__ = 61            
+ind_Long_Barrel____ = 62            
 ind_Nuclear_Winter_ = 63
 ;--------------------------------
 ; names of RMT instruments (sfx)
@@ -177,10 +197,13 @@ sfx_seppuku     = $1a ;1
 sfx_liquid_dirt = $1b ;2
 sfx_battery     = $1c ;3
 sfx_white_flag  = $1d ;4
+sfx_long_barrel = $1e
 ;--------------------------------
 ; RMT songs (lines)
 ;--------------------------------
 song_silencio   = $00
-song_end_round  = $02
+song_main_menu  = $02
 song_ingame     = $06
-song_game_over  = $0b
+song_round_over = $0b
+song_ending_looped = $0e
+song_supermarket = $1b

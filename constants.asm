@@ -2,11 +2,29 @@
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 
+; initial values for some variables
+initialvaluesStart
+I_OptionsTable .by 0,1,2,2,0,1,3,2
+I_RoundsInTheGame .by 10 ;how many rounds in the current game
+I_seppukuVal .by 75
+I_mountainDeltaH .by 3
+I_mountainDeltaL .by $ff
+;----------------------------------------------------
+; 4x4 text buffer
+I_ResultLineBuffer
+    dta d"                  ", $ff
+I_LineHeader1
+    dta d"# ROUND: "
+I_RoundNrDisplay
+    dta d"    #", $ff
+initialvaluesCount = *-initialvaluesstart  ; MAX 128 bytes !
 ;===================================================================================
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
-TankColoursTable        .BYTE $86,$46,$c6,$28,$c6,$ee
-TankStatusColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
+TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$de
+TankStatusColoursTable  .BYTE $54,$24,$94,$c4,$74,$d4
+TankShapesTable			.BYTE char_tank1___________,char_tank2___________,char_tank3___________
+						.BYTE char_tank1___________,char_tank2___________,char_tank3___________
 dliColorsBack
     :10 .by $02,$00
 dliColorsFore
@@ -18,6 +36,7 @@ CashOptionH
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,70,99
 RoundsTable    .by 10,20,30,40,50
+AIForceTable	.wo 375,470,630,720,820	; starting shoot forces for different gravity
 flyDelayTable  .by 255,150,75,35,1
 seppukuTable   .by 255, 45,25,15,9
 mountainsDeltaTableH .by 0,1,3,5,7
@@ -36,7 +55,11 @@ TanksWeaponsTableL
     .by <TanksWeapon1,<TanksWeapon2,<TanksWeapon3,<TanksWeapon4,<TanksWeapon5,<TanksWeapon6
 TanksWeaponsTableH
     .by >TanksWeapon1,>TanksWeapon2,>TanksWeapon3,>TanksWeapon4,>TanksWeapon5,>TanksWeapon6
-
+;--------------
+XtankOffsetGO_L
+	.by 6,56,106,156,206,0
+XtankOffsetGO_H
+	.by 0,0,0,0,0,1
 ;-----4x4 texts-----
 LineTop
     dta d"(%%%%%%%%%%%%)", $ff
@@ -197,90 +220,6 @@ SlideLeftTable
     .BY %00000111
     .BY %00001100
 
-;-----------------------------------------------------------
-; this table changes Angle to the appropriate tank character
-BarrelTable
-
-  .by $2C,$2C,$2C,$2C,$2C,$2C,$2C,$2C,$2A,$2A,
-  .by $2A,$2A,$2A,$2A,$2A,$2A,$28,$28,$28,$28,
-  .by $28,$28,$28,$28,$28,$26,$26,$26,$26,$26,
-  .by $26,$26,$26,$24,$24,$24,$24,$24,$24,$24,
-  .by $24,$22,$22,$22,$22,$22,$22,$22,$22,$22,
-  .by $20,$20,$20,$20,$20,$20,$20,$20,$1E,$1E,
-  .by $1E,$1E,$1E,$1E,$1E,$1E,$1C,$1C,$1C,$1C,
-  .by $1C,$1C,$1C,$1C,$1C,$1A,$1A,$1A,$1A,$1A,
-  .by $1A,$1A,$1A,$18,$18,$18,$18,$18,$18,$18,
-  ;.by $18,
-
-  .by $16,$16,$16,$16,$16,$16,$16,$16,$14,$14,
-  .by $14,$14,$14,$14,$14,$14,$12,$12,$12,$12,
-  .by $12,$12,$12,$12,$12,$10,$10,$10,$10,$10,
-  .by $10,$10,$10,$0E,$0E,$0E,$0E,$0E,$0E,$0E,
-  .by $0E,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,
-  .by $0A,$0A,$0A,$0A,$0A,$0A,$0A,$0A,$08,$08,
-  .by $08,$08,$08,$08,$08,$08,$06,$06,$06,$06,
-  .by $06,$06,$06,$06,$06,$04,$04,$04,$04,$04,
-  .by $04,$04,$04,$02,$02,$02,$02,$02,$02,$02,
-  .by $02,
-
-EndOfTheBarrelX
-	; right angles from 0 (horizontally right) to 90  (up)
-
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,6,6,6,6,6,6,6,6,6,
-  .by 5,5,5,5,5,5,5,5,5,5,
-  .by 4,4,4,4,4,4,4,4,4,4,
-  ;.by 4,
-
-	; left angles from 90 (vertical) to 180 (horizontally left)
-  .by 3,3,3,3,3,3,3,3,3,3,
-  .by 3,2,2,2,2,2,2,2,2,2,
-  .by 2,1,1,1,1,1,1,1,1,1,
-  .by 0,0,0,0,0,0,0,0,0,0,
-  .by 0,0,0,0,0,0,0,0,0,0,
-  .by 0,0,0,0,0,0,0,0,0,0,
-  .by 0,0,0,0,0,0,0,0,0,0,
-  .by 0,0,0,0,0,0,0,0,0,0,
-  .by 0,0,0,0,0,0,0,0,0,0,
-  .by 0
-
-EndOfTheBarrelY
-; right angles from 0 (horizontally right) to 90  (up)
-
- ; one pixel Up for fix problems with colision check
- ;.by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
-  .by 4,4,4,4,4,4,4,4,4,4,
-  .by 4,4,4,4,4,4,4,4,4,4,
-  .by 4,4,4,4,4,4,4,5,5,5,
-  .by 5,5,5,5,5,5,5,6,6,6,
-  .by 6,6,6,6,6,6,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  ;.by 7,    	
-
-; left angles from 90 (vertical) to 180 (horizontally left)
-
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,7,7,7,7,7,
-  .by 7,7,7,7,7,6,6,6,6,6,
-  .by 6,6,6,6,5,5,5,5,5,5,
-  .by 5,5,5,5,4,4,4,4,4,4,
-  .by 4,4,4,4,4,4,4,4,4,4,
-  .by 4,4,4,4,4,4,4,4,4,4,
-  .by 4,
- ; one pixel Up for fix problems with colision check
- ;.by 3,3,3,3,3,3,3,3,3,3,3,3,3,3
-
-
 ;-------------------------------------------------
 TanksNamesDefault
     dta d"1st.Tank"
@@ -352,8 +291,8 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Heavy_Shield___
   .by >price_Force_Shield___
   .by >price_Super_Mag______
-  .by >price_Auto_Defense___
-  .by >price_Fuel_Tank______
+  .by >price_Bouncy_Castle__
+  .by >price_Long_Barrel____
   .by >price_Nuclear_Winter_
 
 WeaponPriceL
@@ -418,8 +357,8 @@ WeaponPriceL
   .by <price_Heavy_Shield___
   .by <price_Force_Shield___
   .by <price_Super_Mag______
-  .by <price_Auto_Defense___
-  .by <price_Fuel_Tank______
+  .by <price_Bouncy_Castle__
+  .by <price_Long_Barrel____
   .by <price_Nuclear_Winter_
 
 ;-------------------------------------------------
@@ -491,76 +430,56 @@ WeaponUnits
   .by 3  ;Force_Shield___
   .by 2  ;Super_Mag______
   .by 1  ;Auto_Defense___
-  .by 10 ;Fuel_Tank______
+  .by 2  ;Long_Barrel____
   .by 1  ;Nuclear_Winter_
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
                 ;the comment is an index in the tables
-    dta 1 ;"Baby Missile    " ; 0
-    dta 1 ;"Missile         " ; 1
-    dta 1 ;"Baby Nuke       " ; 2
-    dta 1 ;"Nuke            " ; 3
-    dta 1 ;"LeapFrog        " ; 4
-    dta 1 ;"Funky Bomb      " ; 5
-    dta 1 ;"MIRV            " ; 6
-    dta 1 ;"Death's Head    " ; 7
-    dta 1 ;"Napalm          " ; 8
-    dta 1 ;"Hot Napalm      " ; 9
-    dta 0 ;"Tracer          " ; 10
-    dta 0 ;"Smoke Tracer    " ; 11
-    dta 1 ;"Baby Roller     " ; 12
-    dta 1 ;"Roller          " ; 13
-    dta 1 ;"Heavy Roller    " ; 14
-    dta 0 ;"Riot Charge     " ; 15
-    dta 0 ;"Riot Blast      " ; 16
-    dta 0 ;"Riot Bomb       " ; 17
-    dta 0 ;"Heavy Riot Bomb " ; 18
-    dta 0 ;"Baby Digger     " ; 19
-    dta 0 ;"Digger          " ; 20
-    dta 0 ;"Heavy Digger    " ; 21
-    dta 0 ;"Baby Sandhog    " ; 22
-    dta 0 ;"Sandhog         " ; 23
-    dta 0 ;"Heavy Sandhog   " ; 24
-    dta 0 ;"Dirt Clod       " ; 25
-    dta 0 ;"Dirt Ball       " ; 26
-    dta 0 ;"Ton of Dirt     " ; 27
-    dta 0 ;"Liquid Dirt     " ; 28
-    dta 0 ;"Dirt Charge     " ; 29
-    dta 0 ;"Earth Disrupter " ; 30
-    dta 0 ;"Plasma Blast    " ; 31
-    dta 1 ;"Laser           " ; 32
-    dta 0 ;"----------------" ; 33
-    dta 0 ;"----------------" ; 34
-    dta 0 ;"----------------" ; 35
-    dta 0 ;"----------------" ; 36
-    dta 0 ;"----------------" ; 37
-    dta 0 ;"----------------" ; 38
-    dta 0 ;"----------------" ; 39
-    dta 0 ;"----------------" ; 40
-    dta 0 ;"----------------" ; 41
-    dta 0 ;"----------------" ; 42
-    dta 0 ;"----------------" ; 43
-    dta 0 ;"----------------" ; 44
-    dta 0 ;"----------------" ; 45
-    dta 0 ;"----------------" ; 46
-    dta 0 ;"----------------" ; 47
-	dta 0 ;"White Flag      " ; 48
-	dta 1 ;"Battery         " ; 49
-	dta 0 ;"Bal Guidance    " ; 50
-	dta 0 ;"Horz Guidance   " ; 51
-	dta 0 ;"Vert Guidance   " ; 52
-	dta 0 ;"Lazy Boy        " ; 53
-	dta 1 ;"Parachute       " ; 54
-	dta 1 ;"Strong Parachute" ; 55
-	dta 1 ;"Mag Deflector   " ; 56
-	dta 1 ;"Shield          " ; 57
-	dta 1 ;"Heavy Shield    " ; 58
-	dta 1 ;"Force Shield    " ; 59
-	dta 0 ;"Super Mag       " ; 60
-	dta 1 ;"Auto Defense    " ; 61
-	dta 0 ;"Fuel Tank       " ; 62
-	dta 0 ;"Nuclear Winter  " ; 63
+	; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
+	; "LeapFrog        ","Funky Bomb      ","MIRV            ","Death's Head    "
+	.by %01111111
+	; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
+	; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
+	.by %11001110
+	; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
+	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+	.by %00000000
+	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
+	; "Liquid Dirt     ","Dirt Charge     ","Earth Disrupter ","Plasma Blast    "
+	.by %00000000
+	; "Laser           "
+	.by %00000000
+	.by 0 ; offset to defensives
+	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
+	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	.by %01000011
+	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
+	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
+	.by %11110100
  
+PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
+                ;the comment is an index in the tables
+	; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
+	; "LeapFrog        ","Funky Bomb      ","MIRV            ","Death's Head    "
+	.by %00110001
+	; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
+	; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
+	.by %01000000
+	; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
+	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+	.by %00000000
+	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
+	; "Liquid Dirt     ","Dirt Charge     ","Earth Disrupter ","Plasma Blast    "
+	.by %00000000
+	; "Laser           "
+	.by %00000000
+	.by 0 ; offset to defensives
+	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
+	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	.by %01000001
+	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
+	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
+	.by %10110100
 
 ;-------------------------------------------------
 ; Screen codes of icons (chars) representing a given weapon
@@ -572,7 +491,7 @@ WeaponSymbols
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
     .by $5f,$1c,$03,$06,$1d,$0a,$1b,$1b  ; defensives
-    .by $1e,$3b,$3d,$3c,$3e,$3f,$5e,$7d
+    .by $1e,$3b,$3d,$3c,$3e,$3f,$1d,$7d
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
@@ -631,15 +550,15 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Horz Guidance   " ; 51                                              
     dta d"Vert Guidance   " ; 52                                              
     dta d"Lazy Boy        " ; 53                            
-    dta d"Parachute       " ; 54    - no energy                                                 
+    dta d"Parachute       " ; 54    - no energy         
     dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
     dta d"Mag Deflector   " ; 56    - with shield and energy           
     dta d"Shield          " ; 57    - shield for one shot - no energy       
-    dta d"Heavy Shield    " ; 58    - shield with energy                                               
-    dta d"Force Shield    " ; 59    - shield with energy and parachute                         
+    dta d"Heavy Shield    " ; 58    - shield with energy          
+    dta d"Force Shield    " ; 59    - shield with energy and parachute
     dta d"Super Mag       " ; 60               
-    dta d"Auto Defense    " ; 61    - with shield and energy                                            
-    dta d"Fuel Tank       " ; 62                                              
+    dta d"Bouncy Castle   " ; 61    - with shield and energy 
+    dta d"Long Schlong    " ; 62                                              
     dta d"Nuclear Winter  " ; 63
 DefensiveEnergy = * - 48
 	.by 00	; White Flag
@@ -655,8 +574,8 @@ DefensiveEnergy = * - 48
 	.by 99	; Heavy Shield
 	.by 99	; Force Shield
 	.by 00	; Super Mag
-	.by 99	; Auto Defense
-	.by 00	; Fuel Tank
+	.by 99	; Bouncy Castle
+	.by 00	; Long Barrel
 	.by 00	; Nuclear Winter
 weaponsOfDeath
 	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
@@ -684,5 +603,45 @@ gameOverSpritesTop
     ; end of the Gover sprites by number of players
     ;    1   2   3   4   5   6
     .by 130,130,136,142,148,154
-
+;-------decimal constans
+zero
+digits   dta d"0123456789"
+nineplus dta d"9"+1
+space    dta d" "
+;------credits
+CreditsStart
+	dta d"         "*
+	dta d"You were playin",d"g"*
+	dta d"Scorc",d"h"*
+	dta d"Warsaw, Miam",d"i"*
+	dta d"2000-202",d"2"*
+	dta d" "*
+	dta d"B",d"y"*
+	dta d" "*
+	dta d"Programmin",d"g"*
+	dta d"Tomasz 'Pecus' Peck",d"o"*
+	dta d"Pawel 'pirx' Kalinowsk",d"i"*
+	dta d" "*
+	dta d"SFX, Music and Suppor",d"t"*
+	dta d"Michal 'Miker' Szpilowsk",d"i"*
+	dta d" "*
+	dta d"Additional Musi",d"c"*
+	dta d"Mario 'Emkay' Kri",d"x"*
+	dta d" "*
+	dta d"Code Optimizatio",d"n"*
+	dta d"Piotr '0xF' Fusi",d"k"*
+	dta d" "*
+	dta d"Ar",d"t"*
+	dta d"Adam Wachowsk",d"i"*
+	dta d"Krzysztof 'Kaz' Ziembi",d"k"*
+	dta d" "*
+	dta d"Ideas and Q",d"A"*
+	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
+	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
+	dta d"brad-colbert, archon800, nowy80",d","*
+	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
+	dta d"  "*
+	dta d"Stay tuned for the FujiNet version",d"!"*
+	dta d"         "*
+CreditsEnd
 .endif

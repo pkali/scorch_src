@@ -1,4 +1,3 @@
-.echo *
 ;*
 ;* Raster Music Tracker, RMT Atari routine version 1.20090108
 ;* (c) Radek Sterba, Raster/C.P.U., 2002 - 2009
@@ -17,18 +16,40 @@
 ;*
 ;* 3. Because of RMTplayer provides a lot of effects, it spent a lot of CPU time.
 ;*
-         STEREOMODE	equ 0			;0 => compile RMTplayer for 4 tracks mono
+;* STEREOMODE	equ 0..3			;0 => compile RMTplayer for 4 tracks mono
 ;*									;1 => compile RMTplayer for 8 tracks stereo
 ;*									;2 => compile RMTplayer for 4 tracks stereo L1 R2 R3 L4
 ;*									;3 => compile RMTplayer for 4 tracks stereo L1 L2 R3 R4
 ;*
-;	IFT STEREOMODE==1
-;TRACKS		equ 8
-;	ELS
+	IFT STEREOMODE==1
+TRACKS		equ 8
+	ELS
 TRACKS		equ 4
-;	EIF
+	EIF
 ;*
-PLAYER = *
+;*PLAYER		equ $3400
+;*
+;* RMT FEATures definitions file
+;* For optimizations of RMT player routine to concrete RMT modul only!
+	icl "feat.txt"
+;*
+;* RMT ZeroPage addresses
+	org RMT_Zero_Page_V
+p_tis
+p_instrstable	org *+2
+p_trackslbstable	org *+2
+p_trackshbstable	org *+2
+p_song			org *+2
+ns				org *+2
+nr				org *+2
+nt				org *+2
+reg1			org *+1
+reg2			org *+1
+reg3			org *+1
+tmp				org *+1
+	IFT FEAT_COMMAND2
+frqaddcmd2		org *+1
+	EIF
 	IFT TRACKS>4
 	org PLAYER-$400+$40
 	ELS
@@ -745,8 +766,9 @@ ei4
 	IFT 1==[FEAT_COMMAND1+FEAT_COMMAND2+FEAT_COMMAND3+FEAT_COMMAND4+FEAT_COMMAND5+FEAT_COMMAND6+[FEAT_COMMAND7SETNOTE||FEAT_COMMAND7VOLUMEONLY]]
 	beq cmd0
 	ELS
-	lsr @
-	lsr @
+;	lsr @
+;	lsr @
+	lda #0	; my fix :)
 	sta jmx+1
 jmx	bcc *
 	jmp cmd0

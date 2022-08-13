@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 
     .IF *>0
@@ -16,23 +16,55 @@
 ; - money each player has on the beginning of the game (moneyL i moneyH)
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
+    jsr clearscreen   ;let the screen be clean
+
     mwa #OptionsDL dlptrs
 ;    lda dmactls
 ;    and #$fc
 ;    ora #$02     ; normal screen width
-    lda #%00110010 ; normal screen width, DL on, P/M off
+;    lda #%00110010 ; normal screen width, DL on, P/M off
+    lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
-    
-    VDLI DLIinterruptText.DLIinterruptNone  ; jsr SetDLI for text screen without DLIs
+	jsr SetPMWidth
+    mva #TextBackgroundColor colpf2s
+    mva #TextForegroundColor colpf3s
+	mva #$ca colpf1s
+   
+    VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
+
+; -------- setup bottom (tanks) line	
+	lda NumberOfPlayers
+	pha
+    lda mountainsDeltaTableH
+    sta mountainDeltaH
+    lda mountainsDeltaTableL
+    sta mountainDeltaL
+	mva #6 NumberOfPlayers
+    jsr PMoutofScreen ;let P/M disappear
+    jsr clearscreen   ;let the screen be clean
+	jsr ClearPMmemory
+    jsr placetanks    ;let the tanks be evenly placed
+    jsr calculatemountains ;let mountains be easy for the eye
+    jsr ColorsOfSprites
+    jsr drawmountains ;draw them
+	ldx NumberOfPlayers
+	dex
+@	jsr RandomizeAngle
+	sta AngleTable,x
+	dex
+	bpl @-
+    jsr drawtanks     ;finally draw tanks
+	pla
+	sta NumberOfPlayers
+; --------
 
     mva #0 OptionsY
 
 OptionsMainLoop
-
     jsr OptionsInversion
     jsr getkey
-    ldx escFlag
-    seq:rts
+    bit escFlag
+    spl:rts
        
     cmp #$f  ;cursor down
     bne OptionsNoDown
@@ -222,8 +254,8 @@ OptionsYLoop
 
 ManualPurchase
       jsr Purchase
-      ldx escFlag
-      seq:rts
+      bit escFlag
+      spl:rts
 AfterManualPurchase
 
       inc:lda TankNr
@@ -251,6 +283,9 @@ AfterManualPurchase
 ;    ora #$02     ; normal screen width
     lda #%00110010 ; normal screen width, DL on, P/M off
     sta dmactls
+
+    lda #song_supermarket
+    jsr RmtSongSelect
     
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
     
@@ -290,8 +325,8 @@ AfterPurchase
     sta decimal
     lda moneyH,x
     sta decimal+1
-    mwa #textbuffer2+29 displayposition
-    jsr displaydec
+    mwa #textbuffer2+28 displayposition
+    jsr displaydec5
 
     ; in xbyte there is the address of the line that
     ; is being processed now
@@ -346,9 +381,6 @@ CreateList
     ldy #25
     lda #15 ; "/"
     sta (xbyte),y
-    iny
-    lda #04 ; "$"
-    sta (xbyte),y
     ldy #31
     lda #16 ; "0"
     sta (xbyte),y
@@ -361,12 +393,15 @@ CreateList
     ldx temp ;getting back index of the weapon
 
     ; and now price of the weapon
-    adw xbyte #27 displayposition  ; 27 chars from the beginning of the line
+    adw xbyte #26 displayposition  ; 26 chars from the beginning of the line
     lda WeaponPriceL,x
     sta decimal
     lda WeaponPriceH,x
     sta decimal+1
-    jsr displaydec
+    jsr displaydec5
+    ldy #26		; overwrite first digit (allways space - no digit :) )
+    lda #04 ; "$"
+    sta (xbyte),y
 
     jmp notInventory
 
@@ -623,8 +658,8 @@ ChoosingItemForPurchase
     
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
-    ldx escFlag
-    seq:jmp WaitForKeyRelease  ; like jsr ... : rts
+    bit escFlag
+    spl:jmp WaitForKeyRelease  ; like jsr ... : rts
     cmp #$2c ; Tab
     jeq ListChange
     cmp #$06  ; cursor left
@@ -795,27 +830,35 @@ invSelectDef
     lda IndexesOfWeaponsL2,y
     tay
     ldx tankNr
-	cmp #ind_Battery________
-	bne NotBattery
-	; if activate battery, we do it differently
+    cmp #ind_Battery________
+    bne NotBattery
+    ; if activate battery, we do it differently
     mva #sfx_battery sfx_effect
-	mva #99 Energy,x
-	bne DecreaseDefensive ; bypass activation
+    mva #99 Energy,x
+	jsr MaxForceCalculate
+    jmp DecreaseDefensive ; bypass activation
 NotBattery
-	cmp #ind_White_Flag_____
-	bne NotWhiteFlag
-	cmp ActiveDefenceWeapon,x
-	bne NoDeactivateWhiteFlag
-	mva #sfx_white_flag sfx_effect
-	lda #$00	; if try to activate activated White Flag then deactivate Defence
+	cmp #ind_Long_Barrel____
+	bne NotBarrel
+	; if activate long barrel, we do it differently too
+	mva #sfx_long_barrel sfx_effect
+    mva #LongBarrel BarrelLength,x
+    bne DecreaseDefensive ; bypass activation	
+NotBarrel
+    cmp #ind_White_Flag_____
+    bne NotWhiteFlag
+    cmp ActiveDefenceWeapon,x
+    bne NoDeactivateWhiteFlag
+    mva #sfx_white_flag sfx_effect
+    lda #$00    ; if try to activate activated White Flag then deactivate Defence
     sta ActiveDefenceWeapon,x
-	sta ShieldEnergy,x
-	beq DefActivationEnd
+    sta ShieldEnergy,x
+    beq DefActivationEnd
 NotWhiteFlag
 NoDeactivateWhiteFlag
-	; activate new defensive
+    ; activate new defensive
     sta ActiveDefenceWeapon,x
-	; set defensive energy
+    ; set defensive energy
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
 DecreaseDefensive
@@ -983,8 +1026,8 @@ NoArrowDown
       lda TankStatusColoursTable,x
       sta colpf2s  ; set color of player name line
       jsr EnterPlayerName
-      lda escFlag
-      seq:rts
+      bit escFlag
+      spl:rts
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -1043,8 +1086,8 @@ endOfTankName
 
 CheckKeys
     jsr getkey
-    ldx escFlag
-    seq:rts
+    bit escFlag
+    spl:rts
     
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
@@ -1154,6 +1197,8 @@ EndOfNick
     asl ; 8 chars per name
     tax  ; in X where to put new name
 
+    mva #sfx_next_player sfx_effect
+
     lda NameAdr ; check if first char is " "
     and #$7F  ; remove inverse (Cursor)
     beq MakeDefaultName
@@ -1175,7 +1220,6 @@ nextchar05
     iny
     cpy #$08
     bne nextchar05
-    mva #sfx_next_player sfx_effect
     rts
 .endp
 
@@ -1213,13 +1257,13 @@ CheckNextLevel
 .endp
 
 ;--------------------------------------------------
-.proc displaydec ;decimal (word), displayposition  (word)
+.proc displaydec5 ;decimal (word), displayposition  (word)
 ;--------------------------------------------------
 ; displays decimal number as in parameters (in text mode)
 ; leading zeroes are removed
-; the range is (0000..9999 - two bytes)
+; the range is (00000..65565 - two bytes)
 
-    ldy #3  ; there will be 4 digits
+    ldy #4  ; there will be 5 digits
 NextDigit
     ldx #16 ; 16-bit dividee so Rotate 16 times
     lda #$00
@@ -1243,39 +1287,31 @@ TooLittle000 dex
     dey
     bpl NextDigit ; Result again /10 and we have next digit
 
-
-rightnumber
-; now cut leading zeroes (002 goes   2)
-    lda decimalresult
-    cmp zero
-    bne decimalend
-    lda space
-    sta decimalresult
-
-    lda decimalresult+1
-    cmp zero
-    bne decimalend
-    lda space
-    sta decimalresult+1
-
-    lda decimalresult+2
-    cmp zero
-    bne DecimalEnd
-    lda space
-    sta decimalresult+2
-
-DecimalEnd
-    ; displaying
-    ldy #3
+;rightnumber
+    ; displaying without leading zeroes (if zeroes exist then display space at this position)
+    ldy #0
+	ldx #0	; digit flag (cut leading zeroes)
 displayloop
     lda decimalresult,y
+	cpx #0
+	bne noleading0
+	cpy #4
+	beq noleading0	; if 00000 - last 0 must be
+	cmp zero
+	bne noleading0
+	lda space
+	beq displaychar	; space = 0 !
+noleading0
+	inx		; set flag (no leading zeroes to cut)
+displaychar
     sta (displayposition),y
-    dey
-    bpl displayloop
+nexdigit
+    iny
+	cpy #5
+    bne displayloop
 
     rts
 .endp
-
 ;--------------------------------------------------
 .proc displaybyte ;decimal (byte), displayposition  (word)
 ;--------------------------------------------------
@@ -1324,11 +1360,6 @@ displayloop1
 
     rts
 .endp
-;-------decimal constans
-zero
-digits   dta d"0123456789"
-nineplus dta d"9"+1
-space    dta d" "
 
 ;--------------------------------------------------------
 .proc Display4x4AboveTank ;
@@ -1584,11 +1615,11 @@ EndOfTypeLine4x4
     jsr GetKey
     cmp #$2b  ; "Y"
     bne @+
-    mva #1 escFlag
+    mva #$80 escFlag
     bne skip01
 @    mva #0 escFlag
-     jsr WaitForKeyRelease
 skip01
+    jsr WaitForKeyRelease
     
     ;clean
     mva #3 di
@@ -1692,7 +1723,7 @@ quit_seppuku
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
-    lda #song_game_over
+    lda #song_round_over
     jsr RmtSongSelect
     mwa #LineGameOver LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
@@ -1743,11 +1774,21 @@ ResultOfTheNextPlayer
     ;there are at least 2 players, so we can safely
     ;start displaying the result
 
-    ldx #0
     lda #3 ;it means |
-    sta ResultLineBuffer,x
+    sta ResultLineBuffer
 
+    ldy TankNr
+    lda ResultsTable,y
+    sta decimal
+    mva #0 decimal+1
+    mwa #(ResultLineBuffer+8) displayposition
+    jsr displaydec5 ;decimal (byte), displayposition  (word)
 
+    ; overwrite the second digit of the points (max 255)
+    ;it means ":"
+    mva #26 ResultLineBuffer+9
+	
+    ldx #0
     lda TankNr
     asl
     asl ; times 8, because it is lengtgh
@@ -1762,18 +1803,8 @@ TankNameCopyLoop
     iny
     cpx #8 ; end of name
     bne TankNameCopyLoop
+	; last letter of tank name overwrites first digit of the points (max 255)
 
-    ldy TankNr
-    lda ResultsTable,y
-    sta decimal
-    mva #0 decimal+1
-    mwa #(ResultLineBuffer+9) displayposition
-    jsr displaydec ;decimal (byte), displayposition  (word)
-
-
-    ; overwrite the first digit of the points (max 255)
-    ;it means ":"
-    mva #26 ResultLineBuffer+9
 
     ;just after the digits
     ;it means |
@@ -1828,6 +1859,256 @@ FinishResultDisplay
     jmp TypeLine4x4  ; jsr:rts
 .endp
 
+;--------------------------------------------------
+.proc GameOverScreen
+;--------------------------------------------------
+    jsr WaitForKeyRelease
+    jsr ClearScreen
+    jsr ClearPMmemory
+	jsr PrepareCredits
+	jsr GameOverResultsClear
+    mwa #GameOverDL dlptrs
+    lda #%00111110  ; normal screen width, DL on, P/M on
+    sta dmactls
+    lda #%00100100  ; playfield before P/M
+    sta gtictls
+	jsr SetPMWidth	
+    jsr ColorsOfSprites
+    mva #0 colpf1s
+	sta CreditsVScrol
+    mva #TextForegroundColor colpf2s
+    VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
+	; make text and color lines for each tank
+    ldx NumberOfPlayers  ;we start from the highest (best) tank
+    dex   ;and it is the last one
+    stx ResultOfTankNr  ;in TankSequence table
+	ldy #0 ;witch line we are coloring
+FinalResultOfTheNextPlayer
+    ldx ResultOfTankNr ;we are after a round, so we can use TankNr
+    lda TankSequence,x ;and we keep here real number if the tank
+	tax
+    stx TankNr   ;for which we are displaying results
+	lda TankStatusColoursTable,x
+	sta GameOverColoursTable,y
+	; Y - line number (from 0 to 5)
+	; X - TanNr
+	; let's make texts
+	phy
+	; first calculate adres first byte of line
+	mwa #GameOverResults temp
+@	dey
+	bmi LineAdresReady
+	adw temp #40
+	jmp @-
+LineAdresReady
+	; put position of tank on the screen
+	pla
+	pha	; now we have line number in A register
+	ldy #1
+	tax
+	lda zero+1,x
+	sta (temp),y
+; puts name of the tank on the screen
+    ldy #$03
+    lda TankNr
+    :3 asl ; 8 chars per name
+    tax
+NextChar
+    lda tanksnames,x
+    sta (temp),y
+    inx
+    iny
+    cpy #$08+3
+    bne NextChar
+	; put big points on the screen
+    ldx TankNr
+    lda ResultsTable,x
+    sta decimal
+    mva #0 decimal+1
+    adw temp #12 displayposition
+    jsr displaydec5
+	mva #0 displayposition	; overwrite first digit
+	; put hits points on the screen
+    ldx TankNr
+    lda DirectHitsL,x
+    sta decimal
+	lda DirectHitsH,x
+    sta decimal+1
+    adw temp #19 displayposition
+    jsr displaydec5
+	mva #0 displayposition	; overwrite first digit
+	; put earned money on the screen
+    ldx TankNr
+    lda EarnedMoneyL,x
+    sta decimal
+	lda EarnedMoneyH,x
+    sta decimal+1
+    adw temp #30 displayposition
+    jsr displaydec5
+	ldy #35
+	lda zero
+	sta (temp),y ; and last zero
+	ply
+	iny
+    dec ResultOfTankNr
+    jpl FinalResultOfTheNextPlayer
+MakeBlackLines
+	cpy #$06
+	beq AllLinesReady
+	lda #0	; black line color for rest of tanks
+	sta GameOverColoursTable,y
+	iny
+	bne MakeBlackLines
+AllLinesReady
+    ldx #(MaxPlayers-1)
+MakeAllTanksVisible
+    lda #99
+    sta eXistenZ,x
+	lda #0
+	sta ActiveDefenceWeapon,x
+    dex
+    bpl MakeAllTanksVisible
+	jsr SetStandardBarrels
+
+	; start music and animations
+    lda #song_ending_looped
+    jsr RmtSongSelect
+    ; initial tank positions randomization
+    ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
+@
+    jsr RandomizeTankPos
+    dex
+    bpl @-
+MainTanksFloatingLoop   
+    ; main tanks floating loop
+    ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
+AllTanksFloatingDown    
+    stx TankNr
+    lda Ytankstable,x
+	cmp #72		; tank under screen - no erase
+	bcs NoEraseTank
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	sta ATRACT	; reset atract mode
+NoEraseTank
+	ldx TankNr
+    inc Ytankstable,x
+	lda ActiveDefenceWeapon,x
+	beq NotFastTank
+    :3 inc Ytankstable,x
+NotFastTank
+    lda Ytankstable,x
+;   cmp #32     ; tank over screen - not visible
+    cmp #80     ; tank under screen - new tank randomize
+    bcs TankUnderScreen
+    cmp #72     ; tank under screen but.... parachute
+    bcs DrawOnlyParachute
+    bcc TankOnScreen
+TankUnderScreen
+    jsr RandomizeTankPos
+TankOnScreen
+    jsr DrawTankNr
+DrawOnlyParachute
+	lda ActiveDefenceWeapon,x
+	bne FastTank
+    jsr DrawTankParachute
+FastTank
+;    ldx TankNr
+    dex
+    bpl AllTanksFloatingDown
+	jsr IsKeyPressed
+    bne MainTanksFloatingLoop   ; neverending loop
+	mva #0 dmactls		; dark screen
+	jsr WaitOneFrame
+	jsr GameOverResultsClear
+    rts
+RandomizeTankPos
+    randomize 10 32	; 10 not 8 - barrel !! :)
+    sta Ytankstable,x
+    randomize 0 180
+    sta AngleTable,x
+    randomize 0 (49-8)
+    and #%11111110  ; correction for PMG
+    clc
+    adc XtankOffsetGO_L,x
+    sta XtankstableL,x
+    lda XtankOffsetGO_H,x
+    adc #0
+    sta XtankstableH,x
+	lda random
+	cmp #32	; like 1:8
+	bcc NowFastTank
+	lda #0
+	sta ActiveDefenceWeapon,x
+    rts
+NowFastTank
+	lda #1
+	sta ActiveDefenceWeapon,x
+    rts
+GameOverResultsClear
+	lda #$00
+	tax
+@	sta GameOverResults,x
+	inx
+	cpx #(6*40)+1
+	bne @-
+	rts
+PrepareCredits
+	; Rewrites credits and places it in the middle of each line.
+	mwa #CreditsStart temp	; from
+	mwa #Credits temp2	; to
+MainRewriteLoop
+	ldy #0
+	cpw temp #CreditsEnd
+	beq EndOfCredits
+	; count characters in this line
+@	lda (temp),y
+	bmi LastCharFound
+	iny
+	bne @-
+LastCharFound
+	; in Y number of characters reduced by 1
+	; let's count how many spaces add before the text
+	sec
+	sty magic
+	lda #40
+	sbc magic
+	lsr		; now in A we have number of spaces in front
+	sta magic
+	ldy #0
+	tya
+	tax
+FirstSpaces
+	sta (temp2),y	; fill the area in front of the text with spaces
+	iny
+	cpy magic
+	bne FirstSpaces
+MainText
+	lda (temp,x)
+	sta (temp2),y	; rewrite the text to a new place
+	bmi LastCharWritten
+	inw temp
+	iny
+	bne MainText
+LastCharWritten
+	inw temp
+	and #%01111111	; remove inverse
+	sta (temp2),y
+	iny
+	txa	; space to A (0)
+LastSpaces
+	sta (temp2),y	; fill the area behind the text with spaces
+	iny
+	cpy #40
+	bne LastSpaces
+NextLine
+	adw temp2 #40
+	jmp MainRewriteLoop
+EndOfCredits
+	mwa #Credits DLCreditsAddr	; set address in DL to first line
+	rts
+.endp
 ;-------------------------------------------------
 .proc DisplayStatus
 ;-------------------------------------------------
@@ -1878,17 +2159,17 @@ FinishResultDisplay
     ;---------------------
     ;displaying name of the defence weapon (if active)
     ;---------------------
-	lda #$08 ; (
-	sta textbuffer+80+22
-	lda #$09	; )
-	sta textbuffer+80+39
-	lda ActiveDefenceWeapon,x
-	bne ActiveDefence
-	; clear brackets
-	lda #$00 ; space
-	sta textbuffer+80+22
-	sta textbuffer+80+39
-	lda #47	; no weapon name
+    lda #$08 ; (
+    sta textbuffer+80+22
+    lda #$09    ; )
+    sta textbuffer+80+39
+    lda ActiveDefenceWeapon,x
+    bne ActiveDefence
+    ; clear brackets
+    lda #$00 ; space
+    sta textbuffer+80+22
+    sta textbuffer+80+39
+    lda #47 ; no weapon name
 ActiveDefence
     sta temp ;get back number of the weapon
     mva #0 temp+1
@@ -1921,26 +2202,26 @@ ActiveDefence
     ;---------------------
     ;displaying the energy of a tank shield (if exist)
     ;---------------------
-	; clear (if no shield)
-	lda #$00	; space
-	sta textbuffer+40+10
-	sta textbuffer+40+11
-	sta textbuffer+40+12
-	sta textbuffer+40+13
-	; check shield energy and display it
-	ldx TankNr
-	lda ActiveDefenceWeapon,x
-	beq NoDefenceWeapon
-	lda ShieldEnergy,x
-	beq NoShieldEnergy
-	sta decimal	; displayed value
-	lda #$08 ; (
-	sta textbuffer+40+10
-	mwa #textbuffer+40+11 displayposition
+    ; clear (if no shield)
+    lda #$00    ; space
+    sta textbuffer+40+10
+    sta textbuffer+40+11
+    sta textbuffer+40+12
+    sta textbuffer+40+13
+    ; check shield energy and display it
+    ldx TankNr
+    lda ActiveDefenceWeapon,x
+    beq NoDefenceWeapon
+    lda ShieldEnergy,x
+    beq NoShieldEnergy
+    sta decimal ; displayed value
+    lda #$08 ; (
+    sta textbuffer+40+10
+    mwa #textbuffer+40+11 displayposition
     jsr displaybyte
-	lda #$09	; )
-	sta textbuffer+40+13
-NoDefenceWeapon	
+    lda #$09    ; )
+    sta textbuffer+40+13
+NoDefenceWeapon 
 NoShieldEnergy
 
     ;=========================
@@ -1989,8 +2270,8 @@ DisplayWindValue
     sta decimal
     lda ForceTableH,x
     sta decimal+1
-    mwa #textbuffer+40+36 displayposition
-    jsr displaydec
+    mwa #textbuffer+40+35 displayposition
+    jsr displaydec5
 
     ;=========================
     ;display Angle
@@ -1998,30 +2279,30 @@ DisplayWindValue
 displayAngle
     ldx TankNr
     lda AngleTable,x
-	cmp #90
-	beq VerticallyUp
-	bcs AngleToLeft
+    cmp #90
+    beq VerticallyUp
+    bcs AngleToLeft
 AngleToRight
-	; now we have values from 0 to 89 and right angle
+    ; now we have values from 0 to 89 and right angle
     sta decimal
     lda #$7f  ; (tab) character
     sta textbuffer+40+25
     lda #0  ;space
     sta textbuffer+40+22
-	beq AngleDisplay
+    beq AngleDisplay
 AngleToLeft
-	sec
-	lda #180
-	sbc AngleTable,x
-	; angles 180 - 91 converted to 0 - 89
-	sta decimal
+    sec
+    lda #180
+    sbc AngleTable,x
+    ; angles 180 - 91 converted to 0 - 89
+    sta decimal
     lda #$7e  ;(del) char
     sta textbuffer+40+22
     lda #0 ;space
     sta textbuffer+40+25
-	beq AngleDisplay	
+    beq AngleDisplay    
 VerticallyUp
-	; now we have value 90
+    ; now we have value 90
     sta decimal
     lda #0  ;space
     sta textbuffer+40+25
@@ -2030,7 +2311,7 @@ VerticallyUp
 AngleDisplay
     mwa #textbuffer+40+23 displayposition
     jsr displaybyte
-    
+    ldx TankNr   
     rts
 .endp
 ;-------------------------------------------------

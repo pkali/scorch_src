@@ -462,19 +462,18 @@ endcircleloop
 .endp
 
 ;--------------------------------------------------
-.proc clearscreen
+.proc ClearScreen
 ;--------------------------------------------------
-
-    lda #$ff
-    ldx #0
-@
-    :31 sta display+($100*#),x
-    sta display+$1e50,x  ; this is so no space outside of the screen is cleared
-                         ; of course we are clearing $100 instead of $50, but who cares :]
-    inx
+    mwa #display temp
+    ldy #0
+@     lda #$ff
+      sta (temp),y
+      inw temp
+      cpw temp #display+screenheight*screenBytes+1
     bne @-
-    rts
+   rts 
 .endp
+
 ;-------------------------------*------------------
 .proc placetanks
 ;--------------------------------------------------
@@ -631,19 +630,16 @@ No6thTankHide
 SkipHidingPM
 
 
+	ldy TankShapesTable,x
     lda AngleTable,x
-    tay
-    lda BarrelTable,y
-    sta CharCode
+	cmp #91		; left or right tank shape
+	bcs LeftTank
+	:2 iny	; right tank
+LeftTank
+    sty CharCode
 DrawTankNrX
     ldx tanknr
-    lda xtankstableL,x
-    sta xdraw
-    lda xtankstableH,x
-    sta xdraw+1
-    lda ytankstable,x
-    sta ydraw
-	mva #0 ydraw+1
+    jsr SetupXYdraw
 
     jsr TypeChar
 
@@ -728,44 +724,57 @@ ZeroesToGo6
     bne ClearPM6
 
 NoPlayerMissile
+
+	ldy #$01
+	lda Erase
+	beq @+
+	dey
+@	sty color
 	; draw defensive weapons like shield ( tank number in X )
 	; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
     ldx TankNr
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Shield_________		; one shot shield 
-	beq DrawTankShield
+	beq DrawTankSh
 	cmp #ind_Force_Shield___		; shield with energy and parachute
 	beq DrawTankShieldBold
 	cmp #ind_Heavy_Shield___		; shield with energy
 	beq DrawTankShieldBold
-	cmp #ind_Auto_Defense___		; Auto Defence
+	cmp #ind_Bouncy_Castle__		; Auto Defence
 	beq DrawTankShieldWihHorns
 	cmp #ind_Mag_Deflector__		; Mag Deflector
 	beq DrawTankShieldWihHorns
 	cmp #ind_White_Flag_____		; White Flag
 	beq DrawTankFlag
 	bne NoShieldDraw
-DrawTankShield
-	jmp DrawTankShield.DrawInPosition
+DrawTankSh
+	jsr DrawTankShield
+	jmp NoShieldDraw
 DrawTankShieldWihHorns
-	jsr DrawTankShield.DrawInPosition
-	jmp DrawTankShieldHorns
+	jsr DrawTankShield
+	jsr DrawTankShieldHorns
+	jmp NoShieldDraw
 DrawTankShieldBold
-	jsr DrawTankShield.DrawInPosition
-	jmp DrawTankShieldBoldLine
+	jsr DrawTankShield
+	jsr DrawTankShieldBoldLine
+	jmp NoShieldDraw
 DrawTankFlag
-    lda #$5E	; flag symbol
+    lda #char_flag____________	; flag symbol
     sta CharCode
     lda Ytankstable,x
     sec
     sbc #8
     sta ydraw
-    lda XtanksTableL,x
-    sta xdraw
-    lda XtanksTableH,x
-    sta xdraw+1
     jsr TypeChar
 NoShieldDraw
+BarrelChange
+	ldy #$01
+	lda Erase
+	beq @+
+	dey
+@	sty color
+	jsr DrawBarrel
+	ldx TankNr
 DoNotDrawTankNr
 	rts
 .endp
@@ -782,11 +791,15 @@ tankflash_loop
     mva #1 Erase
 	ldx TankNr
     jsr DrawTankNr.SkipHidingPM	; it's necessary becouse DrawTankNr skips tanks with no energy !
-	PAUSE 2
+	;PAUSE 2
+    ldy #1
+    jsr PauseYFrames
     mva #0 Erase
 	ldx TankNr
     jsr DrawTankNr.SkipHidingPM
-	PAUSE 2
+    ;PAUSE 2
+    ldy #1
+    jsr PauseYFrames
     dec fs
     jne tankflash_loop
 	rts
@@ -801,22 +814,9 @@ tankflash_loop
 ; 
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
-    lda xtankstableL,x
-    sta xdraw
-    lda xtankstableH,x
-    sta xdraw+1
-    lda ytankstable,x
-    sta ydraw
-	mva #0 ydraw+1
-DrawInPosition
-	mva #1 color
-	lda erase
-	beq ShieldVisible
-	dec color
-ShieldVisible
 	sbw xdraw #$03		; 3 pixels to left
 	; draw left vertical line of shield ( | )
-	mva #6 temp			; strange !!!
+	mva #7 temp			; strange !!!
 @
 	jsr plot
 .nowarn	dew ydraw
@@ -894,17 +894,18 @@ ShieldVisible
 .proc DrawTankParachute
 ;Tank number in X
 ;--------------------------------------------------
-    lda #$34	; parachute symbol
+    lda #char_parachute_______	; parachute symbol
     sta CharCode
     lda Ytankstable,x
-    sec
+	cmp #16
+	bcc ToHighToParachute
+    ;sec
     sbc #8
     sta ydraw
-    lda XtanksTableL,x
-    sta xdraw
-    lda XtanksTableH,x
-    sta xdraw+1
+    jsr SetupXYdraw.X
     jsr TypeChar
+ToHighToParachute
+	ldx TankNr
 	rts
 .endp
 
@@ -944,19 +945,16 @@ NoFallingSound
     and #01
     beq DoNotClearParachute
     ; here we clear the parachute
-    ldx TankNr
+;    ldx TankNr
     jsr DrawTankParachute
 DoNotClearParachute
     mva #0 Erase
-    ldx TankNr
+;    ldx TankNr
 	lda EndOfTheFallFlag	; We only get byte below the tank if still falling
 	bne NoGroundCheck
     ; coordinates of the first pixel under the tank
     ldx TankNr
-    lda XtankstableL,x
-    sta xdraw
-    lda XtankstableH,x
-    sta xdraw+1
+    jsr SetupXYdraw.X
     lda Ytankstable,x
     clc
     adc #1 ; in this point the comment helped us! For the very first
@@ -1037,9 +1035,10 @@ FallingLeft
 	bit PreviousFall	; bit 6 - right
 	bvs EndLeftFall
     ; we finish falling left if the tank reached the edge of the screen
-    lda XtanksTableL,x
-    bne NotLeftEdge
     lda XtanksTableH,x
+    bne NotLeftEdge
+    lda XtanksTableL,x
+	cmp #2	; 2 pixels correction due to a barrel wider than tank
     beq EndLeftFall
 NotLeftEdge
     ; tank is falling left - modify coorinates
@@ -1064,7 +1063,7 @@ FallingRight
     lda XtanksTableH,x
     adc #0
     sta temp+1
-    cpw temp #screenwidth
+    cpw temp #screenwidth-2	; 2 pixels correction due to a barrel wider than tank
     beq EndRightFall
     ; tank is falling right - modify coorinates
     sec
@@ -1088,9 +1087,9 @@ EndOfFCycle
 	cmp #3	; parachute and falling
 	bne DoNotDrawParachute
     ; here we draw parachute
-    ldx TankNr
+;    ldx TankNr
     jsr DrawTankParachute
-    wait	; onli if tank with patachute
+    jsr WaitOneFrame	; only if tank with parachute
 RapidFalling
 DoNotDrawParachute
 	lda EndOfTheFallFlag
@@ -1099,7 +1098,7 @@ DoNotDrawParachute
     ; the horizontal coordinate is even.
     ; If it is odd then it must be corrected because otherwise
     ; P/M graphics background would not look OK
-    ldx TankNr
+;    ldx TankNr
     lda XtanksTableL,x
     and #$01
     beq EndOfFall ; if it is even then it is the end
@@ -1116,7 +1115,7 @@ ForceFallLeft
 	jne TankFallsX
 EndOfFall
     mva #1 Erase
-    ldx TankNr
+;    ldx TankNr
     ; if tank was falling down having parachute,
     ; we must deduct one parachute
     lda Parachute
@@ -1135,7 +1134,7 @@ NoParachuteWeapon
     jsr DrawTankParachute
 ThereWasNoParachute
     mva #0 Erase
-    ldx TankNr	
+;    ldx TankNr	
     jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
     mva #sfx_silencer sfx_effect
     rts
@@ -1432,7 +1431,7 @@ EndDrawing
 
     rts
 .endp
-; ****************************************************
+/*
 ;--------------------------------------------------
 .proc calculatemountains0
 ; Only for testing - makes ground flat (0 pixels)
@@ -1457,7 +1456,7 @@ SetYofNextTank
     bpl SetYofNextTank
    rts
 .endp
-; ****************************************************
+*/
 
 ; -----------------------------------------
 .proc unPlot
@@ -1578,10 +1577,10 @@ EndOfUnPlot
 ; -----------------------------------------
     ; is it not over the screen ???
     cpw ydraw #(screenheight+1); changed for one additional line. cpw ydraw #(screenheight-1)
-    bcs unPlot.EndOfUnPlot
+    bcs unPlot.EndOfUnPlot ;nearest RTS
 CheckX02
     cpw xdraw #screenwidth
-    bcs EndOfPlot ;nearest RTS
+    bcs EndOfPlot 
 MakePlot
     ; let's calculate coordinates from xdraw and ydraw
 
@@ -1800,7 +1799,7 @@ EndPutChar
 FontColor0
     ; char to the table
     lda CharCode4x4
-    and #1
+    and #%00000001
 	beq Upper4bits
 	lda #$ff 		; better option to check (nibbler4x4 = $00 or $ff)
 Upper4bits
@@ -1842,11 +1841,11 @@ GetUpper4bits
     and #$7
     sta ybit
 
-    lsrw xbyte ; div 8
-    rorw xbyte
-    rorw xbyte
+    :3 lsrw xbyte ; div 8
+;    rorw xbyte
+;    rorw xbyte
 ;---
-    ldy xbyte
+    ldy xbyte	; horizontal byte offet stored in Y
     lda dy ; y = y - 3 because left lower.
     sec
     sbc #3
@@ -1906,6 +1905,154 @@ EndPut4x4
 ;    and #$fc
 ;    ora #$02     ; 2=normal, 3 = wide screen width
     sta dmactls
+    jsr WaitOneFrame
+    rts
+.endp
+; -------------------------------------
+.proc SetupXYdraw
+    lda ytankstable,x
+    sta ydraw
+    mva #0 ydraw+1
+X    lda XtanksTableL,x
+    sta xdraw
+    lda XtanksTableH,x
+    sta xdraw+1
+    rts
+.endp
+;--------------------------------------------------
+.proc DrawBarrel
+; X - tankNr
+; changes xdraw, ydraw, fx, fy
+;--------------------------------------------------
+    ;vx calculation
+    ;vx = sin(90-Angle) for Angle <=90
+    ;vx = -sin(Angle-90) for 90 < Angle <= 180 
+
+    ; erase previous barrel
+
+    ;cos(Angle) (but we use sin table only so some shenanigans happen)
+  ;  mva #0 color
+  ;  lda previousBarrelAngle,x
+  ;  sta Angle
+  ;  jsr DrawBarrelTech
+  ;  
+  ;  mva #1 color
+    ldx TankNr
+    jsr SetupXYdraw
+	lda BarrelLength,x
+	sta yc	; current tank barrel length
+    lda angleTable,x
+    sta Angle
+    jsr DrawBarrelTech
+    rts
+.endp
+
+.proc DrawBarrelTech
+    ; angle in Angle and A
+ 
+    mvx #0 goleft
+    cmp #91
+    bcc angleUnder90
+    
+    ;over 90
+    sec
+    sbc #90
+    tax
+    ; barrel start offset over 90deg
+    adw xdraw #5 xdraw
+    mva #1 goleft
+    bpl @+  ; jmp @+
+
+angleUnder90
+    sec             ; X = 90-Angle
+    lda #90
+    sbc Angle
+    tax
+    ; barrel start offset under 90deg
+    adw xdraw #3 xdraw
+    
+@    
+    sbw ydraw #3 ydraw
+    lda sintable,x  ; cos(X)
+    sta vx
+
+;======vy
+    ;vy = sin(Angle) for Angle <=90
+    ;vy = sin(180-Angle) for 90 < Angle <= 180
+
+;--
+    lda Angle
+    cmp #91
+    bcc YangleUnder90
+    
+    lda #180
+    sec
+    sbc Angle
+YangleUnder90
+    tax
+    lda sintable,x
+    sta vy
+
+    lda #0  ; all arithmetic to zero
+    sta vx+1
+    sta vy+1
+    sta fx
+    sta fy
+    
+    ; draw by vx vy
+    ; in each step 
+    ; 1. plot(xdraw, ydraw)
+    ; 2. add vx and vy to 3 byte variables xdraw.fx, ydraw.fy
+    ; 3 check length, if shorter, go to 1.
+    
+ ;   mva #6 yc  ; barrel length
+barrelLoop
+    
+    lda goleft
+    bne @+
+    clc
+    lda fx
+    adc vx
+    sta fx
+    lda xdraw
+    adc #0
+    sta xdraw
+    lda xdraw+1
+    adc #0
+    sta xdraw+1
+    jmp ybarrel
+@
+    sec
+    lda fx
+    sbc vx
+    sta fx
+    lda xdraw
+    sbc #0
+    sta xdraw
+    lda xdraw+1
+    sbc #0
+    sta xdraw+1
+
+ybarrel
+    sec
+    lda fy
+    sbc vy
+    sta fy
+    lda ydraw
+    sbc #0
+    sta ydraw
+    lda ydraw+1
+    sbc #0
+    sta ydraw+1
+    
+    jsr plot ;.MakePlot
+
+    dec yc
+    bne barrelLoop
+    
+    mwa xdraw EndOfTheBarrelX
+    mva ydraw EndOfTheBarrelY
+    
     rts
 .endp
 
