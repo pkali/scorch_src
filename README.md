@@ -48,6 +48,34 @@ With the advent of fujinet (https://fujinet.online/) we are thinking about makin
 
 ## Changes:
 
+###### Version 1.00
+2022-08-13
+
+Silly Version 1.00
+This is an official Silly Venture Summer Edition Atari 50 release. The game reached version 1.00.
+
+The game manual is available at https://github.com/pkali/scorch_src/wiki
+All 48KB+ 8-bit Atari computers are supported.
+
+Thank you @Pecusx and @Miker for your hard work over the last few weeks - I was almost entirely absent because of the real-world attack.
+
+Most important changes:
+* New Game Over screen with a summary of wins, direct hits and earned cash. https://github.com/pkali/scorch_src/issues/9
+* Tank barrels are drawn procedurally to make aiming easier..
+* Various SFX and music updates with new tunes for all parts of the game. https://github.com/pkali/scorch_src/issues/112
+* AI can use White Flag.
+* 3 different tank shapes https://github.com/pkali/scorch_src/issues/64.
+* All AI levels are programmed. Cyborg is tough! https://github.com/pkali/scorch_src/issues/40
+* New weapon - Long Schlong!
+* New splash screen.
+* Game mechanics improved.
+* [O] key skips to the Game Over screen.
+* The game works on Atari 800.
+* Huge amount of optimizations to squeeze the game into 48K.
+
+And now the new adventure begins!
+
+
 ###### Build 148
 2022-07-17
 WHAT DOES THE FOX SAY?
