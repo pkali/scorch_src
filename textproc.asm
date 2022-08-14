@@ -362,6 +362,8 @@ CreateList
       sta purchaseActivate,x
       dex
     bpl @-
+	; and Title
+	mwa #PurchaseTitle DLPurTitleAddr
 
     ; checking if we can afford buying this weapon
     ldx temp
@@ -418,6 +420,8 @@ itIsInventory
       sta purchaseActivate,x
       dex
     bpl @-
+	; and Title
+	mwa #InventoryTitle DLPurTitleAddr
 
     ldx temp
     lda TanksWeaponsTableL,y

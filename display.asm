@@ -6,7 +6,11 @@
 ;-------------display-lists---------------------------
 ;-----------------------------------------------------
 PurchaseDL
-        .byte $70,$70,$20
+        .byte $70
+		.byte $47
+DLPurTitleAddr
+		.word PurchaseTitle
+		.byte $70
         .byte $42+$80
         .word textbuffer2
         .byte $02,$10,$42
@@ -151,7 +155,7 @@ purchaseActivate
 EmptyLine
  dta d"                                        "
 ; -------------------------------------------------
-    .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
+ ;   .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 ;-----------------------------------------------
 GameOverResults = display+$0ff0 ; reuse after game
 Credits = GameOverResults +(6*40)
@@ -222,6 +226,10 @@ purchaseText
 purchaseTextEnd
 GameOverTitle
  dta d"     game  over     "*
+PurchaseTitle
+ dta d"  weapons purchase  "
+InventoryTitle
+ dta d"  weapons activate  "*
 GameOverTitle2
  dta d"   Player   Points  Hits   Earned Money "
 .endif
