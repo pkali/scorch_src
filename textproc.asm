@@ -240,28 +240,31 @@ OptionsYLoop
 .endp
 
 ;-------------------------------------------
-; call of the purchase screens for each tank
+; call of the purchase (and activate) screens for each tank
 .proc CallPurchaseForEveryTank
 
-    mva #0 TankNr
-    sta isInventory
+	mva #0 TankNr
+	sta isInventory
 @
-      ldx TankNr
-      lda SkillTable,x
-      beq ManualPurchase
-      jsr PurchaseAI
-      jmp AfterManualPurchase
-
+	ldx TankNr
+	lda SkillTable,x
+	beq ManualPurchase
+	jsr PurchaseAI	; remember to make ActivateAI :) !!!
+	jmp AfterManualPurchase
 ManualPurchase
-      jsr Purchase
-      bit escFlag
-      spl:rts
+	mva #0 isInventory
+	jsr Purchase	; purchase weapons
+	bit escFlag
+	spl:rts
+	mva #$ff isInventory
+	jsr Purchase	; activate weapons
+	bit escFlag
+	spl:rts	
 AfterManualPurchase
-
-      inc:lda TankNr
-      cmp NumberOfPlayers
-    bne @-
-    rts
+	inc:lda TankNr
+	cmp NumberOfPlayers
+	bne @-
+	rts
 .endp
 
 ;--------------------------------------------------
