@@ -89,7 +89,33 @@
     ;.zpvar dliY             .byte
 	.zpvar sfx_effect .byte
 	.zpvar RMT_blocked	.byte
-;-------------- 
+
+    ; --------------OPTIMIZATION VARIABLES--------------
+    .zpvar Force .word
+    .zpvar Force_ .byte ; Force is 3 bytes long
+    .zpvar Angle .byte
+    .zpvar Parachute .byte ; are you insured with parachute?
+    .zpvar color .byte
+    .zpvar Erase .byte
+    .zpvar radius .byte
+    .zpvar decimal .word
+    .zpvar NumberOfPlayers .byte
+    .zpvar Counter .byte ;temporary Counter for outside loops
+    .zpvar ExplosionRadius .word
+    .zpvar ResultY .byte
+    .zpvar FallDown2 .byte
+    .zpvar xcircle .word
+    .zpvar ycircle .word
+    .zpvar vy .word
+    .zpvar vy_ .word ; 4 bytes
+    .zpvar vx .word
+    .zpvar vx_ .word ; 4 bytes
+    .zpvar HitFlag .byte
+    .zpvar PositionOnTheList .byte
+    .zpvar XHit .word
+    .zpvar delta .word
+    .zpvar HowMuchToFall .byte
+    .zpvar magic .word
 
 	displayposition = modify
 	
