@@ -288,7 +288,10 @@ AfterManualPurchase
     sta dmactls
 
     lda #song_supermarket
-    jsr RmtSongSelect
+	bit IsInventory
+	bpl @+
+	lda #song_inventory
+@	jsr RmtSongSelect
     
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
     
