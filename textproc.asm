@@ -27,7 +27,7 @@
     sta dmactls
 	jsr SetPMWidth
     mva #TextBackgroundColor colpf2s
-    mva #TextForegroundColor colpf3s
+    jsr ColorsOfSprites
 	mva #$ca colpf1s
    
     VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
@@ -45,7 +45,6 @@
 	jsr ClearPMmemory
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
-    jsr ColorsOfSprites
     jsr drawmountains ;draw them
 	ldx NumberOfPlayers
 	dex

@@ -30,8 +30,11 @@ MoreDownDL
         .word PurchaseDL
 ;------------------------
 OptionsDL
-        :5 .byte $70
-        .byte $42
+        .byte $70
+		.byte $47
+		.word OptionsTitle
+        .byte $70,$70
+       .byte $42
         .word OptionsScreen
         .byte $30,$02,$02,$70
         :maxOptions .by $02,$10
@@ -45,7 +48,10 @@ OptionsDL
 ;------------------------
 ;Enter names of tanks DL
 NameDL
-        :5 .byte $70
+        .byte $70
+		.byte $47
+		.word DifficultyTitle
+		.byte $70,$70
         .byte $42
         .word NameScreen
         .byte $30
@@ -224,12 +230,16 @@ activateTextEnd
 purchaseText
  dta d"Purchase"
 purchaseTextEnd
-GameOverTitle
- dta d"     game  over     "*
+OptionsTitle
+ dta d"       scorch       "*
+DifficultyTitle
+ dta d"   difficulty   "*
 PurchaseTitle
  dta d"  weapons purchase  "
 InventoryTitle
  dta d"  weapons activate  "*
+GameOverTitle
+ dta d"     game  over     "*
 GameOverTitle2
  dta d"   Player   Points  Hits   Earned Money "
 .endif
