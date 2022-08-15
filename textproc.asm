@@ -269,8 +269,6 @@ AfterManualPurchase
 ;--------------------------------------------------
 .proc Purchase ;
 ;--------------------------------------------------
-; TODO: when round ends with a weapon depleted the pointer points to an empty line
-
 ; In tanknr there is a number of the tank (player)
 ; that is buying weapons now (from 0).
 ; Rest of the data is taken from appropriate tables
@@ -687,17 +685,19 @@ ChoosingItemForPurchase
 
 PurchaseKeyUp
     lda WhichList
-    beq GoUp1
+    beq GoUpOffensive
     dec PositionOnTheList
     bpl EndUpX
-    lda #$00
-    sta PositionOnTheList
+    ldy #0 ;HowManyOnTheListDef
+    ;dey
+    sty PositionOnTheList
     jmp ChoosingItemForPurchase
-GoUp1
+GoUpOffensive
     dec PositionOnTheList
     bpl MakeOffsetUp
-    lda #$00
-    sta PositionOnTheList
+    ldy #0 ;HowManyOnTheListOff
+    ;dey
+    sty PositionOnTheList
 
 MakeOffsetUp
     ; If offset is larger than pointer position,
@@ -710,7 +710,7 @@ EndUpX
     jmp ChoosingItemForPurchase
 PurchaseKeyDown
     lda WhichList
-    beq GoDown1
+    beq GoDownOffensive
     inc:lda PositionOnTheList
     cmp HowManyOnTheListDef
     bne EndGoDownX
@@ -718,7 +718,7 @@ PurchaseKeyDown
     dey
     sty PositionOnTheList
     jmp ChoosingItemForPurchase
-GoDown1
+GoDownOffensive
     inc:lda PositionOnTheList
     cmp HowManyOnTheListOff
     bne MakeOffsetDown
