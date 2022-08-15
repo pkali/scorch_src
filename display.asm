@@ -10,10 +10,10 @@ PurchaseDL
 		.byte $47
 DLPurTitleAddr
 		.word PurchaseTitle
-		.byte $70
+		.byte $50
         .byte $42+$80
         .word textbuffer2
-        .byte $02,$10,$42
+        .byte $60,$42
 MoreUpdl
         .word EmptyLine
         .byte 0,$42
@@ -23,9 +23,11 @@ WeaponsListDL
  .byte 0, $42
 MoreDownDL
  .word EmptyLine
- .byte $10,$42
+ .byte $40,$42
  .word WeaponsDescription
- .byte 2
+ .byte $0,$42
+PurActDescAddr
+ .word PurchaseDescription
         .byte $41
         .word PurchaseDL
 ;------------------------
@@ -148,16 +150,21 @@ ListOfDefensiveWeapons
  :16 dta d"                                        "
 ListOfDefensiveWeaponsEnd ;constant useful when clearing
 WeaponsDescription
- dta d"  "
- dta d"Tab"*
- dta d" - Defensive/Offensive weapon    "
  dta d"   "
+ dta d"Tab"*
+ dta d" - Defensive/Offensive weapon     "
+PurchaseDescription
+ dta d"  "
  dta d"Space"*
- dta d" - "
-purchaseActivate 
- dta d"Purchase  "
+ dta d" - Purchase  "
  dta d"Return"*
- dta d" - Finish    "
+ dta d" - Finish   "
+ActivateDescription
+ dta d"  "
+ dta d"Space"*
+ dta d" - Activate  "
+ dta d"Return"*
+ dta d" - Finish   "
 EmptyLine
  dta d"                                        "
 ; -------------------------------------------------
@@ -222,14 +229,8 @@ textbuffer
  dta d"Round:     Wind:                        "
 textbuffer2
  dta d"Player:                Cash:     0      "  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
- dta d"----------------------------------------"
+; dta d"----------------------------------------"
 ;---------------------------------------------------
-activateText
- dta d"Activate"
-activateTextEnd
-purchaseText
- dta d"Purchase"
-purchaseTextEnd
 OptionsTitle
  dta d"       scorch       "*
 DifficultyTitle

@@ -356,11 +356,7 @@ CreateList
     jmi itIsInventory
     
     ; put "Purchase" on the screen
-     ldx #[purchaseTextEnd-purchaseText-1]
-@     lda purchaseText,x
-      sta purchaseActivate,x
-      dex
-    bpl @-
+	mwa #PurchaseDescription PurActDescAddr
 	; and Title
 	mwa #PurchaseTitle DLPurTitleAddr
 
@@ -414,11 +410,7 @@ CreateList
 
 itIsInventory
     ; put "Activate" on the screen
-     ldx #[purchaseTextEnd-purchaseText-1]
-@     lda activateText,x
-      sta purchaseActivate,x
-      dex
-    bpl @-
+	mwa #ActivateDescription PurActDescAddr
 	; and Title
 	mwa #InventoryTitle DLPurTitleAddr
 
