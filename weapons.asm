@@ -194,7 +194,7 @@ EndOfLeapping
     mva #0 Erase
     pla
     sta TankNr
-
+	mva #1 color
     mva #5 FunkyBombCounter
 FunkyBombLoop
     mva #1 tracerflag
@@ -1792,11 +1792,11 @@ NoWind
 
 	bit TestFlightFlag
 	bmi nowait
-;    lda tracerflag
-;    bne nowait
-;    lda color
-;    beq nowait
- 
+    lda color
+    beq nonowait
+    lda tracerflag
+    bne nowait
+nonowait 
     jsr shellDelay
     
 nowait
