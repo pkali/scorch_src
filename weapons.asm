@@ -1792,10 +1792,10 @@ NoWind
 
 	bit TestFlightFlag
 	bmi nowait
-    lda tracerflag
-    bne nowait
-    lda color
-    beq nowait
+;    lda tracerflag
+;    bne nowait
+;    lda color
+;    beq nowait
  
     jsr shellDelay
     
@@ -1966,40 +1966,31 @@ BouncyCastle
 .proc SecondFlight
 ; ---------------- copied code fragment from before firing. not too elegant.
 ; ---------------- get fire parameters again
-    ldx TankNr
+
+	ldx TankNr
+	lda ActiveWeapon,x
     lda ForceTableL,x
     sta Force
     lda ForceTableH,x
     sta Force+1
-    lda #$0
-    sta Force+2
     lda AngleTable,x
     sta Angle
 
+    ; Shoots tank nr X !!! :)
+    ; set the starting coordinates of bullet with correction
+    ; to start where the tank's barrel ends
+    ; (without it bullet would go from the left lower corner of the tank)
+    ;ldx TankNr
+	
+	mwa EndOfTheBarrelX xtraj+1
+	mva EndOfTheBarrely ytraj+1
     lda #0
-    sta color
+    sta Force+2
+	sta ytraj+2
     sta xtraj
     sta ytraj
+	sta color
 
-    mwa EndOfTheBarrelX xbyte
-    mva EndOfTheBarrelY ybyte
-    mva #0 ybyte+1
-
-;    ldy Angle
-;    clc
-;    lda xtraj+1
-;    adc EndOfTheBarrelX,y   ; correction of X
-;    sta xtraj+1
-;    lda xtraj+2
-;    adc #0
-;    sta xtraj+2
-;    sec
-;    lda ytraj+1
-;    sbc EndOfTheBarrelY,y   ; correction of Y
-;    sta ytraj+1
-;    lda ytraj+2
-;    sbc #0
-;    sta ytraj+2
 	
     ldy #100           ; ???
 	mva #1 tracerflag  ; I do not know (I mean I think I know ;) )
