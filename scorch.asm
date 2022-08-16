@@ -214,6 +214,15 @@ START
     ; for the round #1 shooting sequence is random
 	
 MainGameLoop
+	; first set default barrel lengths (fix for Long Schlong activation :) )
+	; we must do it before purchase/activate
+    ldx #(MaxPlayers-1)
+SettingBarrel
+	lda #StandardBarrel	; standard barrel length
+	sta BarrelLength,x
+    dex
+    bpl SettingBarrel
+
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
@@ -394,8 +403,6 @@ SettingEnergies
       sta Energy,x
       sta eXistenZ,x
       sta LASTeXistenZ,x
-	  lda #StandardBarrel	; standard barrel length
-	  sta BarrelLength,x
       ; anything in eXistenZ table means that this tank exist
       ; in the given round
       lda #<1000
