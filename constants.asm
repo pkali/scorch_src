@@ -640,6 +640,9 @@ CreditsStart
 	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
 	dta d"brad-colbert, archon800, nowy80",d","*
 	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
+	dta d" "*
+	dta d"Additional testin",d"g"*
+	dta d"Arek Peck",d"o"*
 	dta d"  "*
 	dta d"Stay tuned for the FujiNet version",d"!"*
 	dta d"         "*
