@@ -613,14 +613,6 @@ continueMainRoundLoopAfterSeppuku
 
 
 AfterExplode
-    ; TODO: IS IT OK??? possibly a fix here needed for #56
-    ldy WeaponDepleted
-    bne @+
-      ldx TankNr
-      tya
-      sta ActiveWeapon,x 
-@
-
     ;temporary tanks removal (would fall down with soil)
     mva #1 Erase
     jsr drawtanks
@@ -642,8 +634,16 @@ TanksFallDown
 NoExistNoFall
     dex
     bpl TanksFallDown
-    mva tempor2 TankNr
+    mvx tempor2 TankNr
 missed
+
+    ; TODO: IS IT OK??? possibly a fix here needed for #56
+    ldy WeaponDepleted
+    bne @+
+      ldx TankNr
+      tya
+      sta ActiveWeapon,x 
+@
 
     ;here we clear offensive text (after a shoot)
     ;shit -- it's second time, but it must be like this
@@ -1605,8 +1605,11 @@ noKey
 .proc RmtSongSelect
 ;--------------------------------------------------
 ;  starting song line 0-255 to A reg
+	cmp #song_ingame
+	bne noingame	; noMusic blck onlu ingame song
     bit noMusic
     spl:lda #song_silencio
+noingame
 	mvx #$ff RMT_blocked
     ldx #<MODUL                 ;low byte of RMT module to X reg
     ldy #>MODUL                 ;hi byte of RMT module to Y reg
