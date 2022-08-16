@@ -1793,9 +1793,9 @@ NoWind
 	bit TestFlightFlag
 	bmi nowait
     lda color
-    beq nonowait
-    lda tracerflag
-    bne nowait
+    beq nonowait	; smoke tracer erases slowly
+    lda tracerflag	
+    bne nowait		; funky bomb explotes fast ( tracerflag in real is funkyflag :) )
 nonowait 
     jsr shellDelay
     

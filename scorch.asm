@@ -96,12 +96,13 @@
     .zpvar Angle .byte
     .zpvar Parachute .byte ; are you insured with parachute?
     .zpvar color .byte
-    .zpvar Erase .byte
+    .zpvar Erase .byte  ; if 1 only mask of the character is printed
+                        ; on the graphics screen. if 0 character is printed normally
     .zpvar radius .byte
     .zpvar decimal .word
-    .zpvar NumberOfPlayers .byte
+    .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
     .zpvar Counter .byte ;temporary Counter for outside loops
-    .zpvar ExplosionRadius .word
+    .zpvar ExplosionRadius .word ;because when adding in xdraw it is double byte
     .zpvar ResultY .byte
     .zpvar FallDown2 .byte
     .zpvar xcircle .word
@@ -110,8 +111,8 @@
     .zpvar vy_ .word ; 4 bytes
     .zpvar vx .word
     .zpvar vx_ .word ; 4 bytes
-    .zpvar HitFlag .byte
-    .zpvar PositionOnTheList .byte
+    .zpvar HitFlag .byte ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank
+    .zpvar PositionOnTheList .byte ; pointer position on the list being displayed
     .zpvar XHit .word
     .zpvar delta .word
     .zpvar HowMuchToFall .byte
