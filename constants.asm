@@ -647,4 +647,5 @@ CreditsStart
 	dta d"Stay tuned for the FujiNet version",d"!"*
 	dta d"         "*
 CreditsEnd
+CreditsLines=44
 .endif

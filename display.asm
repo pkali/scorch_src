@@ -232,7 +232,7 @@ dl ; MAIN game display list
 ;-----------------------------------------------
 GameOverResults = display+$0ff0 ; reuse after game
 Credits = GameOverResults +(6*40)
-CreditsLastLine = Credits + (41*40)
+CreditsLastLine = Credits + (CreditsLines*40)
 GameOverDL
        .byte $70,$40
        .byte $47    ; 16 gr8 lines
