@@ -1048,7 +1048,7 @@ SetunPlots
     lda #$03    ; P/M on
     sta pmcntl
 	jsr SetPMWidth
-    lda #%00100000 ; P/M priorities (multicolor players on)
+    lda #%00100001 ; P/M priorities (multicolor players on) - prior=1
     sta gtictls
     jsr PMoutofScreen
 
@@ -1139,7 +1139,7 @@ MakeTanksVisible
 	phy
 	lda dliCounter
 	bne EndofPMG
-    lda #%00100000	; playfield after P/M
+    lda #%00100001	; playfield after P/M - prior=1
 	STA WSYNC
     sta gtictl
 	bne EndOfDLI_GO
