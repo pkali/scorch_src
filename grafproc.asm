@@ -611,6 +611,8 @@ DrawNextTank
     bne SkipHidingPM ; if energy=0 then no tank
 
     ; hide P/M
+	lda TanksPMOrder,x
+	tax
     lda #0
     cpx #$4 ; 5th tank is defferent
     bne No5thTankHide
@@ -626,6 +628,7 @@ No5thTankHide
 No6thTankHide
     sta hposp0,x
 @
+	ldx TankNr
     jmp DoNotDrawTankNr
 SkipHidingPM
 
@@ -646,6 +649,8 @@ DrawTankNrX
     ; now P/M graphics on the screen (only for 5 tanks)
     ; horizontal position
     ldx TankNr
+	lda TanksPMOrder,x
+	tax
     mwa xdraw xbyte
     rorw xbyte ; divide by 2 (carry does not matter)
     lda xbyte

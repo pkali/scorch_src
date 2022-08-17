@@ -22,7 +22,10 @@ initialvaluesCount = *-initialvaluesstart  ; MAX 128 bytes !
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
 TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
-TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4
+;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4	; standard order
+;TanksPMOrder	.BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
+TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94	; Adam's order
+TanksPMOrder	.BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
 TankShapesTable			.BYTE char_tank1___________,char_tank2___________,char_tank3___________
 						.BYTE char_tank1___________,char_tank2___________,char_tank3___________
 dliColorsBack
