@@ -1571,14 +1571,12 @@ DOTNcharloop
     mwa temp TextAddress
 
     ;find length of the tank's name
-    ldy #0
+    ldy #7
 @
       lda (temp),y
-      beq end_found
-      iny
-      cpy #8
+      bne end_found
+      dey
     bne @-
-    dey    
    
 end_found
     iny
