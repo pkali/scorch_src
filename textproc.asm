@@ -795,7 +795,34 @@ positiveMoney
     ; now we have to get address of
     ; the table of the weapon of the tank
     ; and add appropriate number of shells
+
+    sty LastWeapon ; store last purchased weapon
+    ; because we must put screen pointer next to it
     
+	; but if we purchasing "Buy me!" then we must draw the winning weapon.
+	
+	cpy #ind_Buy_me_________
+	bne NoSuprise
+	
+Suprise	; get a random weapon
+	lda random
+	cmp #51		; defensive weapons are less likely because they are more expensive - probability 255:51 (5:1)
+	bcc GetRandomDefensive
+GetRandomOffensive
+	randomize ind_Missile________ ind_Laser__________
+	cmp #ind_Buy_me_________
+	beq GetRandomOffensive
+	tay
+    lda WeaponUnits,y	; check if weapon exist
+	beq GetRandomOffensive	
+	bne NoSuprise	; Y always <> 0
+GetRandomDefensive
+	randomize ind_Battery________ ind_Nuclear_Winter_
+	tay
+    lda WeaponUnits,y	; check if weapon exist
+	beq GetRandomDefensive
+	
+NoSuprise
     lda TanksWeaponsTableL,x
     sta weaponPointer
     lda TanksWeaponsTableH,x
@@ -810,8 +837,6 @@ positiveMoney
       lda #99
       sta (weaponPointer),y
 LessThan100
-    sty LastWeapon ; store last purchased weapon
-    ; because we must put screen pointer next to it
 
     mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
     jmp Purchase.AfterPurchase

@@ -263,7 +263,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Ton_of_Dirt____
   .by >price_Liquid_Dirt____
   .by >price_Dirt_Charge____
-  .by >price_Earth_Disrupter
+  .by >price_Buy_me_________  
   .by >price_Plasma_Blast___
   .by >price_Laser__________
   .by >price______________33
@@ -329,7 +329,7 @@ WeaponPriceL
   .by <price_Ton_of_Dirt____
   .by <price_Liquid_Dirt____
   .by <price_Dirt_Charge____
-  .by <price_Earth_Disrupter
+  .by <price_Buy_me_________
   .by <price_Plasma_Blast___
   .by <price_Laser__________
   .by <price______________33
@@ -401,8 +401,8 @@ WeaponUnits
   .by 1  ;Ton_of_Dirt____
   .by 4  ;Liquid_Dirt____
   .by 2  ;Dirt_Charge____
-  .by 10 ;Earth_Disrupter
-  .by 5  ;Plasma_Blast___
+  .by 1  ;Buy_me_________
+  .by 0  ;Plasma_Blast___
   .by 5  ;Laser__________
   .by 0  ;_____________33
   .by 0  ;_____________34
@@ -421,17 +421,17 @@ WeaponUnits
   .by 0  ;_____________47
   .by 1  ;White_Flag___48
   .by 3  ;Battery________
-  .by 2  ;Bal_Guidance___
-  .by 5  ;Horz_Guidance__
-  .by 5  ;Vert_Guidance__
-  .by 2  ;Lazy_Boy_______
+  .by 0  ;Bal_Guidance___
+  .by 0  ;Horz_Guidance__
+  .by 0  ;Vert_Guidance__
+  .by 0  ;Lazy_Boy_______
   .by 3  ;Parachute______
   .by 2  ;StrongParachute
   .by 2  ;Mag_Deflector__
   .by 3  ;Shield_________
   .by 2  ;Heavy_Shield___
   .by 3  ;Force_Shield___
-  .by 2  ;Super_Mag______
+  .by 0  ;Super_Mag______
   .by 1  ;Auto_Defense___
   .by 2  ;Long_Barrel____
   .by 1  ;Nuclear_Winter_
@@ -448,7 +448,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
 	.by %00000000
 	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-	; "Liquid Dirt     ","Dirt Charge     ","Earth Disrupter ","Plasma Blast    "
+	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Plasma Blast    "
 	.by %00000000
 	; "Laser           "
 	.by %00000000
@@ -472,7 +472,7 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
 	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
 	.by %00000000
 	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-	; "Liquid Dirt     ","Dirt Charge     ","Earth Disrupter ","Plasma Blast    "
+	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Plasma Blast    "
 	.by %00000000
 	; "Laser           "
 	.by %00000000
@@ -528,7 +528,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Ton of Dirt     " ; 27
     dta d"Liquid Dirt     " ; 28
     dta d"Dirt Charge     " ; 29
-    dta d"Earth Disrupter " ; 30
+    dta d"Buy me!         " ; 30
     dta d"Plasma Blast    " ; 31
     dta d"Laser           " ; 32
     dta d"----------------" ; 33
