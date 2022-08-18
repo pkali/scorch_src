@@ -593,14 +593,14 @@ keycodes ;tables for converting KeyCode to Screen Code (38 -1  characters)
     .by $0d,$01,$05,$00,$25,$23,$08,$0a
     .by $2f,$28,$3e,$2d,$0b,$10,$2e,$16
     .by $2b,$17,$1f,$1e,$1a,$18,$1d,$1b
-    .by $33,$35,$30,$32,$22 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
+    .by $33,$35,$30,$32,$22,$21 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
 keycodesEnd
 scrcodes
     dta d"abcdefgh"
     dta d"ijklmnop"
     dta d"qrstuvwx"
     dta d"yz123456"
-    dta d"7890." ; "-"
+    dta d"7890. " ; "-"
 ;-----------------------------------
 gameOverSpritesTop
     ; end of the Gover sprites by number of players

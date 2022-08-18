@@ -1096,14 +1096,20 @@ NoArrowDown
     
     ldy #0
 @     lda TanksNames,x
-      beq endOfTankName
+;      beq endOfTankName
       sta NameAdr,y
       inx
       iny
       cpy #8
     bne @-
 endOfTankName
-    
+
+@	lda NameAdr,y
+	bne LastNameChar
+	dey
+	bpl @-
+LastNameChar
+	iny
 
     lda #$80 ; place cursor on the end
     sta NameAdr,y
