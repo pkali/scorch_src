@@ -1231,10 +1231,18 @@ EndOfNick
 
     mva #sfx_next_player sfx_effect
 
-    lda NameAdr ; check if first char is " "
-    and #$7F  ; remove inverse (Cursor)
+
+    ; check if all chars are empty (" ")
+    ldy #7
+    lda #0
+@     ora NameAdr,y 
+      and #$7F  ; remove inverse (Cursor)
+      dey
+    bpl @-
+    tay
     beq MakeDefaultName
 
+    ldy #0
 nextchar04
     lda NameAdr,y
     and #$7f ; remove inverse (Cursor)
