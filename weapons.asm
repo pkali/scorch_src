@@ -2415,6 +2415,168 @@ InverseScreenByte
 .endp
 
 ; -------------------------------------------------
+.proc TankFlying
+; -------------------------------------------------
+; This routine is run from inside of the main loop
+; and replaces Shoot and Flight routines
+; X and TankNr - index of flying tank
+; -------------------------------------------------
+	; Let's designate the flight altitude.
+	mva #17 FloatingAlt	; for testing
+	mwa #mountaintable temp
+	
+	; now animate Up
+TankGoUp
+	lda ytankstable,x
+	cmp FloatingAlt
+	beq ReachSky
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	dec ytankstable,x
+	; then draw tank on new position
+    jsr DrawTankNr
+	jsr WaitOneFrame
+	jmp TankGoUp
+ReachSky
+	; check keyboard/joy and move tank left/right - code copied from BeforeFire
+;keyboard reading
+; KBCODE keeps code of last keybi
+; SKSTAT  $ff - nothing pressed
+;  $FB - any key
+;  $f7 - shift
+;  $f3 - shift+key
+
+notpressed
+    lda SKSTAT
+    cmp #$ff
+    jeq checkJoy
+    cmp #$f7  ; SHIFT
+    jeq checkJoy
+
+    lda kbcode
+    and #%00111111 ; CTRL and SHIFT elimination
+
+    cmp #28  ; ESC
+    bne @+
+    jsr AreYouSure
+    bit escFlag
+    bpl notpressed
+    ;---esc pressed-quit game---
+    rts
+@
+jumpFromStick
+    cmp #$6
+    jeq pressedLeft
+    cmp #$7
+    jeq pressedRight
+    cmp #$21
+    jeq pressedSpace
+    jmp notpressed
+checkJoy
+    ;------------JOY-------------
+    ;happy happy joy joy
+    ;check for joystick now
+    lda JSTICK0
+    and #$0f
+    cmp #$0f
+    beq notpressedJoy
+    tay 
+    lda joyToKeyTable,y
+    jmp jumpFromStick
+notpressedJoy
+    ;fire
+    lda TRIG0S
+    jeq pressedSpace
+    mva #$ff pressTimer  ; stop counting frames
+   jmp notpressed
+
+
+pressedRight
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	lda XtankstableH,x
+	cmp #>(screenwidth-10)	; tank width correction +2 
+	bne @+
+	lda XtankstableL,x
+	cmp #<(screenwidth-10)	; tank width correction +2 
+@	bcs RightScreenEdge	
+	inc XtankstableL,x
+	sne:inc XtankstableH,x
+RightScreenEdge
+	mva #25 AngleTable,x
+	; then draw tank on new position
+    jsr DrawTankNr
+	jsr WaitOneFrame
+    jmp ReachSky
+
+pressedLeft
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	lda XtankstableH,x
+	cmp #0
+	bne @+
+	lda XtankstableL,x
+	cmp #2	; 2 pixles from left edge
+@	bcc LeftScreenEdge
+	dec XtankstableL,x
+	lda XtankstableL,x
+	cmp #$ff
+	sne:dec XtankstableH,x
+LeftScreenEdge
+	mva #155 AngleTable,x
+	; then draw tank on new position
+    jsr DrawTankNr
+	jsr WaitOneFrame
+    jmp ReachSky
+
+pressedSpace
+    ;=================================
+    ;we shoot here!!!
+    jsr WaitForKeyRelease
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	lda XtankstableL,x
+	and #%11111110		; correction for PM
+	sta XtankstableL,x
+GoDown
+	mwa #mountaintable temp
+	clc
+	lda temp
+	adc XtankstableL,x
+	sta temp
+	lda temp+1
+	adc XtankstableH,x
+	sta temp+1
+	adw temp #4 	;	center of the tank
+	ldy #0
+	lda (temp),y
+	sta FloatingAlt
+FloatDown
+	lda ytankstable,x
+	cmp FloatingAlt
+	beq OnGround
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	inc ytankstable,x
+	; then draw tank on new position
+    jsr DrawTankNr
+	jsr WaitOneFrame
+	jmp FloatDown
+OnGround
+	
+	rts
+.endp
+
+; -------------------------------------------------
 .proc CheckCollisionWithTank
 ; -------------------------------------------------
 ; Check collision with Tank :)

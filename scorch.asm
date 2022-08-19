@@ -569,6 +569,8 @@ AfterManualShooting
 	; defensive weapons without flight handling
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
+	cmp #ind_Floating_Tank__ ; Floating Tank
+	beq GoFloat
 	cmp #ind_White_Flag_____ ; White Flag
 	beq ShootWhiteFlag
 	cmp #ind_Nuclear_Winter_
@@ -581,6 +583,13 @@ ShootWhiteFlag
 	; --- white flag ---
 	jsr WhiteFlag
 	jmp NextPlayerShoots ; and we skip shoot
+GoFloat
+	jsr TankFlying
+	lda #0
+	sta ActiveDefenceWeapon,x ; deactivate after use
+	bit escFlag
+	bpl ManualShooting ; after floating tank can shoot
+	rts
 StandardShoot
     inc noDeathCounter
 

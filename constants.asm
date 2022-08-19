@@ -285,7 +285,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Battery________
   .by >price_Bal_Guidance___
   .by >price_Horz_Guidance__
-  .by >price_Vert_Guidance__
+  .by >price_Floating_Tank__
   .by >price_Lazy_Boy_______
   .by >price_Parachute______
   .by >price_StrongParachute
@@ -351,7 +351,7 @@ WeaponPriceL
   .by <price_Battery________
   .by <price_Bal_Guidance___
   .by <price_Horz_Guidance__
-  .by <price_Vert_Guidance__
+  .by <price_Floating_Tank__
   .by <price_Lazy_Boy_______
   .by <price_Parachute______
   .by <price_StrongParachute
@@ -423,7 +423,7 @@ WeaponUnits
   .by 3  ;Battery________
   .by 0  ;Bal_Guidance___
   .by 0  ;Horz_Guidance__
-  .by 0  ;Vert_Guidance__
+  .by 5  ;Floating_Tank__
   .by 0  ;Lazy_Boy_______
   .by 3  ;Parachute______
   .by 2  ;StrongParachute
@@ -454,7 +454,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	.by %00000000
 	.by 0 ; offset to defensives
 	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	; "Let's go!       ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000011
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
 	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
@@ -478,7 +478,7 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
 	.by %00000000
 	.by 0 ; offset to defensives
 	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	; "Let's go!       ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000001
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
 	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
@@ -551,7 +551,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Battery         " ; 49                                              
     dta d"Bal Guidance    " ; 50                                              
     dta d"Horz Guidance   " ; 51                                              
-    dta d"Vert Guidance   " ; 52                                              
+    dta d"Let's go!       " ; 52                                              
     dta d"Lazy Boy        " ; 53                            
     dta d"Parachute       " ; 54    - no energy         
     dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
@@ -568,7 +568,7 @@ DefensiveEnergy = * - 48
 	.by 00	; Heat Guidance
 	.by 00	; Bal Guidance
 	.by 00	; Horz Guidance
-	.by 00	; Vert Guidance
+	.by 00	; Let's go!
 	.by 00	; Lazy Boy
 	.by 00	; Parachute       
 	.by 99	; Strong Parachute
