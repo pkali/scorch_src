@@ -2437,7 +2437,7 @@ TankGoUp
 	dec ytankstable,x
 	; then draw tank on new position
     jsr DrawTankNr
-	jsr WaitOneFrame
+;	jsr WaitOneFrame
 	jmp TankGoUp
 ReachSky
 	; check keyboard/joy and move tank left/right - code copied from BeforeFire
@@ -2547,7 +2547,89 @@ LeftScreenEdge
 
 pressedSpace
     ;=================================
-    ;we shoot here!!!
+	; left or right from center of screen ?
+	ldy #0
+    lda XtankstableH,x
+	cmp #>((screenwidth/2)-8)
+	bne @+
+    lda XtankstableL,x
+	cmp #<((screenwidth/2)-8)
+@	bcc TankOnLeftSide
+TankOnRightSide
+	dey
+TankOnLeftSide
+	sty FloatingAlt ; I know, not elegant byt this variable it's free now (0 go right, $ff go left)
+	; now we have direction of bypassing tanks on screen
+	; first check if we over any tank
+	; Warning! in xdraw wird we have position of floating tank (after DrawTankNr)
+CheckForTanksBelow
+	lda XtankstableL,x
+	sta xdraw
+	lda XtankstableH,x
+	sta xdraw+1
+	ldx NumberOfPlayers
+	dex
+CheckCollisionWithTankLoop
+	cpx TankNr
+	beq ItIsMe
+	lda eXistenZ,x
+	beq DeadTank
+	; now we use Y as low byte and A as high byte of checked position (left right edgs of shield)
+	; it is tricky but fast and much shorter
+    lda xtankstableL,x
+	sec
+	sbc #9		; 2 pixels more on left side + tan width
+	tay
+	lda xtankstableH,x
+	sbc #0
+	; bmi ShieldOverLeftEdge	; I do not know whether to check it. Probably not :) !!!
+    cmp xdraw+1
+    bne @+
+    cpy xdraw
+@
+    bcs LeftFromTheTank 
+	tya	;add 20 (tank size*2 +2 and +2)
+    clc
+    adc #20	
+    tay
+    lda xtankstableH,x
+    adc #0
+    cmp xdraw+1
+    bne @+
+    cpy xdraw
+@
+    bcc RightFromTheTank
+TankBelow
+	; tank below - we must move our tank
+	ldx TankNr
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	bit FloatingAlt
+	bmi PassLeft
+PassRight
+	inc XtankstableL,x
+	sne:inc XtankstableH,x
+	mva #25 AngleTable,x
+	bne Bypassing
+PassLeft
+	dec XtankstableL,x
+	lda XtankstableL,x
+	cmp #$ff
+	sne:dec XtankstableH,x
+	mva #155 AngleTable,x
+Bypassing
+	; then draw tank on new position
+    jsr DrawTankNr
+	jmp CheckForTanksBelow
+RightFromTheTank
+LeftFromTheTank
+DeadTank
+ItIsMe
+    dex
+    bpl CheckCollisionWithTankLoop
+	ldx TankNr
     jsr WaitForKeyRelease
 	mva #1 Erase
     jsr DrawTankNr
