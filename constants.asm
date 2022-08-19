@@ -454,7 +454,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	.by %00000000
 	.by 0 ; offset to defensives
 	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Let's go!       ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	; "Hovercraft      ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000011
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
 	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
@@ -478,7 +478,7 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
 	.by %00000000
 	.by 0 ; offset to defensives
 	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Let's go!       ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	; "Hovercraft      ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000001
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
 	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
@@ -551,7 +551,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Battery         " ; 49                                              
     dta d"Bal Guidance    " ; 50                                              
     dta d"Horz Guidance   " ; 51                                              
-    dta d"Let's go!       " ; 52                                              
+    dta d"Hovercraft      " ; 52                                              
     dta d"Lazy Boy        " ; 53                            
     dta d"Parachute       " ; 54    - no energy         
     dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        

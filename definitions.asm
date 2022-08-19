@@ -198,6 +198,7 @@ sfx_liquid_dirt = $1b ;2
 sfx_battery     = $1c ;3
 sfx_white_flag  = $1d ;4
 sfx_long_barrel = $1e
+sfx_tank_move	= $1f
 ;--------------------------------
 ; RMT songs (lines)
 ;--------------------------------

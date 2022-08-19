@@ -2423,8 +2423,12 @@ InverseScreenByte
 ; -------------------------------------------------
 	; Let's designate the flight altitude.
 	mva #17 FloatingAlt	; for testing
-	mwa #mountaintable temp
+;	mwa #mountaintable temp
+    mva #sfx_plasma_1_2 sfx_effect
+
+	; display text 4x4 - fuel full
 	
+	; TankNr in X reg.
 	; now animate Up
 TankGoUp
 	lda ytankstable,x
@@ -2440,6 +2444,9 @@ TankGoUp
 ;	jsr WaitOneFrame
 	jmp TankGoUp
 ReachSky
+
+	; display text 4x4 - fuel full (clear text)
+
 	; check keyboard/joy and move tank left/right - code copied from BeforeFire
 ;keyboard reading
 ; KBCODE keeps code of last keybi
@@ -2447,7 +2454,15 @@ ReachSky
 ;  $FB - any key
 ;  $f7 - shift
 ;  $f3 - shift+key
-
+KeyboardAndJoyCheck
+    mva #sfx_tank_move sfx_effect
+	lda ShieldEnergy,x
+	cmp #20
+	bne notpressed
+	nop
+	
+	; display text 4x4 - low fuel
+	
 notpressed
     lda SKSTAT
     cmp #$ff
@@ -2495,7 +2510,7 @@ notpressedJoy
 
 pressedRight
 	lda ShieldEnergy,x
-	beq ReachSky
+	jeq pressedSpace
 	ldy #1
 	jsr DecreaseShieldEnergyX
 	; first erase old tank position
@@ -2510,17 +2525,20 @@ pressedRight
 @	bcs RightScreenEdge	
 	inc XtankstableL,x
 	sne:inc XtankstableH,x
+	jmp NoREdge
 RightScreenEdge
+    mva #sfx_dunno sfx_effect
+NoREdge
 	mva #25 AngleTable,x
 	; then draw tank on new position
     jsr DrawTankNr
 	jsr DisplayStatus
 	jsr WaitOneFrame
-    jmp ReachSky
+    jmp KeyboardAndJoyCheck
 
 pressedLeft
 	lda ShieldEnergy,x
-	jeq ReachSky
+	beq pressedSpace
 	ldy #1
 	jsr DecreaseShieldEnergyX
 	; first erase old tank position
@@ -2537,13 +2555,16 @@ pressedLeft
 	lda XtankstableL,x
 	cmp #$ff
 	sne:dec XtankstableH,x
+	jmp NoLEdge
 LeftScreenEdge
+    mva #sfx_dunno sfx_effect
+NoLEdge
 	mva #155 AngleTable,x
 	; then draw tank on new position
     jsr DrawTankNr
 	jsr DisplayStatus
 	jsr WaitOneFrame
-    jmp ReachSky
+    jmp KeyboardAndJoyCheck
 
 pressedSpace
     ;=================================
@@ -2630,7 +2651,7 @@ ItIsMe
     dex
     bpl CheckCollisionWithTankLoop
 	ldx TankNr
-    jsr WaitForKeyRelease
+    mva #sfx_shield_off sfx_effect
 	mva #1 Erase
     jsr DrawTankNr
 	mva #0 Erase
@@ -2638,6 +2659,9 @@ ItIsMe
 	and #%11111110		; correction for PM
 	sta XtankstableL,x
 GoDown
+
+	; display text 4x4 - low fuel (clear text)
+
 	mwa #mountaintable temp
 	clc
 	lda temp
@@ -2664,6 +2688,7 @@ FloatDown
 	jsr WaitOneFrame
 	jmp FloatDown
 OnGround
+    jsr WaitForKeyRelease
 	; and Soildown at the end (for correct mountaintable)
 	; calculate range
 	sec
