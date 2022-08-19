@@ -568,7 +568,7 @@ DefensiveEnergy = * - 48
 	.by 00	; Heat Guidance
 	.by 00	; Bal Guidance
 	.by 00	; Horz Guidance
-	.by 99	; Let's go!
+	.by 98	; Let's go!
 	.by 00	; Lazy Boy
 	.by 00	; Parachute       
 	.by 99	; Strong Parachute
