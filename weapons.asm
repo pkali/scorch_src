@@ -2494,6 +2494,10 @@ notpressedJoy
 
 
 pressedRight
+	lda ShieldEnergy,x
+	beq ReachSky
+	ldy #1
+	jsr DecreaseShieldEnergyX
 	; first erase old tank position
 	mva #1 Erase
     jsr DrawTankNr
@@ -2502,7 +2506,7 @@ pressedRight
 	cmp #>(screenwidth-10)	; tank width correction +2 
 	bne @+
 	lda XtankstableL,x
-	cmp #<(screenwidth-10)	; tank width correction +2 
+	cmp #<(screenwidth-10)	; tank width correction +2 pixels 
 @	bcs RightScreenEdge	
 	inc XtankstableL,x
 	sne:inc XtankstableH,x
@@ -2510,10 +2514,15 @@ RightScreenEdge
 	mva #25 AngleTable,x
 	; then draw tank on new position
     jsr DrawTankNr
+	jsr DisplayStatus
 	jsr WaitOneFrame
     jmp ReachSky
 
 pressedLeft
+	lda ShieldEnergy,x
+	jeq ReachSky
+	ldy #1
+	jsr DecreaseShieldEnergyX
 	; first erase old tank position
 	mva #1 Erase
     jsr DrawTankNr
@@ -2522,7 +2531,7 @@ pressedLeft
 	cmp #0
 	bne @+
 	lda XtankstableL,x
-	cmp #2	; 2 pixles from left edge
+	cmp #5	; 2 pixles from left edge
 @	bcc LeftScreenEdge
 	dec XtankstableL,x
 	lda XtankstableL,x
@@ -2532,6 +2541,7 @@ LeftScreenEdge
 	mva #155 AngleTable,x
 	; then draw tank on new position
     jsr DrawTankNr
+	jsr DisplayStatus
 	jsr WaitOneFrame
     jmp ReachSky
 
@@ -2572,7 +2582,29 @@ FloatDown
 	jsr WaitOneFrame
 	jmp FloatDown
 OnGround
-	
+	; and Soildown at the end (for correct mountaintable)
+	; calculate range
+	sec
+	lda XtankstableL,x
+	sbc #2
+	sta RangeLeft
+	lda XtankstableH,x
+	sbc #0
+	sta RangeLeft+1
+	clc
+	lda XtankstableL,x
+	adc #10
+	sta RangeRight
+	lda XtankstableH,x
+	adc #0
+	sta RangeRight+1
+	; hide tanks and ...
+	mva #1 Erase
+    jsr DrawTanks
+	jsr SoilDown2
+	mva #0 Erase
+    jsr DrawTanks
+	ldx TankNr
 	rts
 .endp
 

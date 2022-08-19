@@ -493,7 +493,7 @@ WeaponSymbols
     .by $58,$59,$5a,$5b,$60,$7b,$1f,$7d
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
-    .by $5f,$1c,$03,$06,$1d,$0a,$1b,$1b  ; defensives
+    .by $5f,$1c,$03,$06,$06,$0a,$1b,$1b  ; defensives
     .by $1e,$3b,$3d,$3c,$3e,$3f,$1d,$7d
 
 ; Names of weapons (16 chars long)
@@ -568,7 +568,7 @@ DefensiveEnergy = * - 48
 	.by 00	; Heat Guidance
 	.by 00	; Bal Guidance
 	.by 00	; Horz Guidance
-	.by 00	; Let's go!
+	.by 99	; Let's go!
 	.by 00	; Lazy Boy
 	.by 00	; Parachute       
 	.by 99	; Strong Parachute
