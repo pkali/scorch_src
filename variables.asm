@@ -42,7 +42,7 @@ RoundNrDisplay
 ;=====================================================
 variablesStart  ; zeroing starts here
 ;=====================================================
-isInventory .ds 1  ; 0 - purchase, $ff - inventory
+;isInventory .ds 1  ; 0 - purchase, $ff - inventory
 ;-------------- 
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
 ;-------------- 
@@ -123,7 +123,7 @@ WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;----------------------------------------------------
 
 L1       .DS 1 ; variable used in multiplications (by 10:)
-gravity  .DS 1 ;only the decimal part (1/10 = 25)
+;gravity  .DS 1 ;only the decimal part (1/10 = 25)
 ;----------------------------------------------------
 
 ;Wind  .ds 4 ;format: 0000.hhll
@@ -178,7 +178,7 @@ sandhogflag .DS 1 ; (0 digger, 8 sandhog)
 ;ofdirt
 ;magic  .DS 2 ; was tempor2, but it was not compiling!!! (bug in OMC65)
 ;draw
-HowToDraw .DS 1
+;HowToDraw .DS 1
     ; bits here mean
     ; 0 - negative X (go up)
     ; 1 - negative Y (left)
@@ -186,7 +186,7 @@ HowToDraw .DS 1
     ; if all 0 then standart routine
 ;XHit  .DS 2
 YHit  .DS 2
-LineLength .DS 2
+;LineLength .DS 2
 ;circle
 ;radius .DS 1
 ;xcircle .DS 2
@@ -224,9 +224,9 @@ xtrajold .ds 3 ; 0,0,0
 ytrajold .ds 3 ; 0,0,0
 ;Angle  .DS 1
 ;Force  .ds 3 ; 0,0,0
-Multiplier .ds 3 ; 0,0,0
+;Multiplier .ds 3 ; 0,0,0
 Multiplee .ds 2 ; 0,0
-goleft  .DS 1 ;if 1 then flights left
+;goleft  .DS 1 ;if 1 then flights left
 ;----------------------------------------------------
 ;unPlot
 WhichUnPlot .DS 1
@@ -240,7 +240,7 @@ FunkyBombCounter .DS 1
 xtrajfb  .DS 2
 ytrajfb  .DS 2
 ;
-tracerflag .DS 1
+;tracerflag .DS 1
 ;----------------------------------------------------
 ;TypeChar
 mask1  .DS [8]
@@ -287,16 +287,16 @@ LastWeapon
 WhichList ; list currently on the screen
     ; (0-offensive, 1-defensive)
     .DS 1
-OffsetDL1 ; offset of the list screen (how many lines)....
-    .DS 1
+;OffsetDL1   .DS 1 ; offset of the list screen (how many lines)....
+
 
 ;----------------------------------------------------
 
 ;mark the level
 PositionInName ; cursor position in name of the player when name input
     .DS 1
-DifficultyLevel ; Difficulty Level (human/cpu)
-    .DS 1
+;DifficultyLevel .DS 1  ; Difficulty Level (human/cpu)
+
 ;----------------------------------------------------
 ;displaydecimal
 ;decimal  .DS 2
@@ -353,14 +353,14 @@ TankTempY
 ;----------------------------------------------------
 singleRoundVars
 ;-------------- 
-escFlag .ds 1   ; 0 - Esc or O not pressed, $80 - Esc pressed, $40 - O pressed
+;escFlag .ds 1   ; 0 - Esc or O not pressed, $80 - Esc pressed, $40 - O pressed
 ;-------------- 
 CurrentResult
     .DS 1
 ;--------------
 AngleTable ;Angle of the barrel of each tank during the round
     .DS [MaxPlayers]
-NewAngle  ; used in AI
+;NewAngle  ; used in AI
     .DS 1
 ;previousBarrelAngle
 ;    .DS [MaxPlayers]
@@ -387,14 +387,10 @@ singleRoundVarsEnd
 ;----------------------------------------------------
 ; 4x4 texts
 ;----------------------------------------------------
-LineAddress4x4
-    .DS 2
-LineCharNr
-    .DS 1
-LineXdraw
-    .DS 2
-LineYdraw
-    .DS 1
+;LineAddress4x4  .DS 2
+LineCharNr  .DS 1
+;LineXdraw   .DS 2
+;LineYdraw   .DS 1
 
 ;-----------
 ResultX
@@ -412,7 +408,7 @@ StoreA4x4 .DS 1
 Xcounter4x4 .DS 1
 nibbler4x4  .DS 1
 CharCode4x4 .DS 1
-plot4x4color .DS 1 ;1-white, 0-background
+;plot4x4color .DS 1 ;1-white, 0-background
 
 
 

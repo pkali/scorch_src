@@ -125,6 +125,24 @@
     .zpvar Wind_ .word  ; 4 bytes
     .zpvar RangeLeft .word
     .zpvar RangeRight .word
+    .zpvar NewAngle .byte
+    .zpvar escFlag .byte
+    .zpvar LineYdraw .byte
+    .zpvar LineXdraw .word
+    .zpvar plot4x4color .byte
+    .zpvar Multiplier .word
+    .zpvar Multiplier_ .byte  ; 3 bytes
+    .zpvar HowToDraw .byte
+    .zpvar gravity .byte
+    .zpvar LineLength .word
+    .zpvar LineAddress4x4 .word
+    .zpvar tracerflag .byte
+    .zpvar isInventory .byte
+    .zpvar DifficultyLevel .byte
+    .zpvar goleft .byte
+    .zpvar OffsetDL1 .byte
+    
+
     
 	displayposition = modify
 	
