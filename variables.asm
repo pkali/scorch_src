@@ -126,7 +126,7 @@ L1       .DS 1 ; variable used in multiplications (by 10:)
 gravity  .DS 1 ;only the decimal part (1/10 = 25)
 ;----------------------------------------------------
 
-Wind  .ds 4 ;format: 0000.hhll
+;Wind  .ds 4 ;format: 0000.hhll
             ;walue displayed on the screen is
             ;decimal portion divided by 16 (>>4)
 ;----------------------------------------------------
@@ -152,8 +152,8 @@ TargetTankNr	; Target tank index (for AI routines)
                ; on the graphics screen. if 0 character is printed normally
 
 ;----------------------------------------------------
-RangeLeft  .DS 2 ;range of the soil to be fallen down
-RangeRight .DS 2 ;it is being set by all Explosions
+;RangeLeft  .DS 2 ;range of the soil to be fallen down
+;RangeRight .DS 2 ;it is being set by all Explosions
 ;----------------------------------------------------
 WeaponRangeLeft  .DS 2 ;Range of the Explosion of the given weapon
 WeaponRangeRight .DS 2
@@ -218,8 +218,8 @@ YposFlag .DS 1  ; bullet positon Y (0 - on screen , %1000000 - over the screen ,
 ;CheckCollisionWithTank
 ;vx  .ds 4 ; 0,0,0,0 ;two decimal bytes, two whole bytes (DC.BA)
 ;vy  .ds 4 ;0,0,0,0
-xtraj  .ds 3 ; 0,0,0
-ytraj  .ds 3 ; 0,0,0
+;xtraj  .ds 3 ; 0,0,0
+;ytraj  .ds 3 ; 0,0,0
 xtrajold .ds 3 ; 0,0,0
 ytrajold .ds 3 ; 0,0,0
 ;Angle  .DS 1

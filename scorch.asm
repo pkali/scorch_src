@@ -117,7 +117,15 @@
     .zpvar delta .word
     .zpvar HowMuchToFall .byte
     .zpvar magic .word
-
+    .zpvar xtraj .word
+    .zpvar xtraj_ .byte  ; 3 bytes
+    .zpvar ytraj .word
+    .zpvar ytraj_ .byte  ; 3 bytes
+    .zpvar Wind .word
+    .zpvar Wind_ .word  ; 4 bytes
+    .zpvar RangeLeft .word
+    .zpvar RangeRight .word
+    
 	displayposition = modify
 	
 
