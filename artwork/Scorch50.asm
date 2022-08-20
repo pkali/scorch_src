@@ -4,6 +4,8 @@
 /***************************************/
 
 	;icl "Scorch50.h"
+    ;icl "../lib/ATARISYS.ASM"
+    ;icl "../lib/macro.hea"
 
 ; --- dmsc LZSS player routine on zero page
     org $80
@@ -63,8 +65,6 @@ pmg	.ds $0300
 song_data
         ins 'mmm_16.lzs'
 song_end
-
-POKEY = $D200
 
 buffers
     .ds 256 * 9
@@ -216,7 +216,7 @@ main
 
 	ift USESPRITES
 	mva >pmg pmbase		;missiles and players data address
-	mva #$03 pmcntl		;enable players and missiles
+	mva #$03 GRACTL		;enable players and missiles
 	eif
 
 	lda:cmp:req $14		;wait 1 frame
@@ -228,13 +228,13 @@ main
 
 	;mwa #NMI $fffa		;new NMI handler
 
-    sta colbaks
+    sta COLOR4
     lda #$0E
-    sta colpf1s
+    sta COLOR1
     lda #$84
-    sta colpf2s
+    sta COLOR2
     lda #$0E
-    sta colpf3s
+    sta COLOR3
     lda #$02
 
 
@@ -267,7 +267,7 @@ stop
 	cli
 	vmain sysvbv,6
 	
-	mva #$00 pmcntl		;PMG disabled
+	mva #$00 GRACTL		;PMG disabled
 	tax
 	sta:rne hposp0,x+
 
@@ -408,7 +408,7 @@ x16	lda #$4A
 	sta hposp1
 c10	lda #$D4
 	sta wsync		;line=133
-	sta color2
+	sta colpf2
 s8	lda #$C3
 x17	ldx #$5A
 	sta wsync		;line=134
@@ -464,7 +464,7 @@ c13	ldy #$02
 	sta wsync		;line=157
 c14	lda #$04
 	sta wsync		;line=158
-	sta color0
+	sta colpf0
 	DLINEW dli7 1 1 1
 
 dli7
@@ -497,7 +497,7 @@ c16	ldx #$0E
 c17	lda #$0A
 c18	ldx #$34
 	sta wsync		;line=188
-	sta color1
+	sta colpf1
 	stx colpm3
 s13	lda #$43
 x23	ldx #$49
@@ -507,47 +507,47 @@ x23	ldx #$49
 c19	lda #$08
 c20	ldx #$34
 	sta wsync		;line=190
-	sta color1
+	sta colpf1
 	stx colpm2
 	sta wsync		;line=191
 c21	lda #$0A
 	sta wsync		;line=192
-	sta color1
+	sta colpf1
 c22	lda #$08
 	sta wsync		;line=193
-	sta color1
+	sta colpf1
 c23	lda #$0A
 	sta wsync		;line=194
-	sta color1
+	sta colpf1
 c24	lda #$34
 	sta wsync		;line=195
-	sta color2
+	sta colpf2
 c25	lda #$0C
 	sta wsync		;line=196
-	sta color1
+	sta colpf1
 c26	lda #$0A
 	sta wsync		;line=197
-	sta color1
+	sta colpf1
 c27	lda #$0C
 	sta wsync		;line=198
-	sta color1
+	sta colpf1
 	sta wsync		;line=199
 	sta wsync		;line=200
 c28	lda #$0E
 	sta wsync		;line=201
-	sta color1
+	sta colpf1
 c29	lda #$0C
 	sta wsync		;line=202
-	sta color1
+	sta colpf1
 c30	lda #$0E
 	sta wsync		;line=203
-	sta color1
+	sta colpf1
 c31	lda #$0C
 	sta wsync		;line=204
-	sta color1
+	sta colpf1
 c32	lda #$0E
 	sta wsync		;line=205
-	sta color1
+	sta colpf1
 	DLINEW dli16 1 1 1
 
 dli16
@@ -557,13 +557,13 @@ dli16
 	sta wsync		;line=209
 c33	lda #$0C
 	sta wsync		;line=210
-	sta color1
+	sta colpf1
 c34	lda #$0E
 	sta wsync		;line=211
-	sta color1
+	sta colpf1
 c35	lda #$0C
 	sta wsync		;line=212
-	sta color1
+	sta colpf1
 	DLINEW dli9 1 0 0
 
 dli9
@@ -574,15 +574,15 @@ dli9
 c36	ldx #$0A
 	sta wsync		;line=216
 	sta chbase
-	stx color1
+	stx colpf1
 c37	lda #$0C
 	sta wsync		;line=217
-	sta color1
+	sta colpf1
 c38	lda #$0A
 x24	ldx #$9D
 c39	ldy #$34
 	sta wsync		;line=218
-	sta color1
+	sta colpf1
 	stx hposm1
 	sty colpm1
 s14	lda #$03
@@ -594,7 +594,7 @@ c40	lda #$08
 s15	ldx #$13
 x26	ldy #$45
 	sta wsync		;line=220
-	sta color1
+	sta colpf1
 	stx sizem
 	sty hposm2
 s16	lda #$03
@@ -612,8 +612,8 @@ x29	ldy #$79
 c41	lda #$06
 c42	ldx #$00
 	sta wsync		;line=223
-	sta color1
-	stx color2
+	sta colpf1
+	stx colpf2
 	lda >fnt+$400*$01
 s18	ldx #$50
 x30	ldy #$44
@@ -624,15 +624,15 @@ x30	ldy #$44
 	sta wsync		;line=225
 c43	lda #$08
 	sta wsync		;line=226
-	sta color1
+	sta colpf1
 c44	lda #$0C
 	sta wsync		;line=227
-	sta color1
+	sta colpf1
 	sta wsync		;line=228
 	sta wsync		;line=229
 c45	lda #$0E
 	sta wsync		;line=230
-	sta color1
+	sta colpf1
 	DLINEW dli10 1 1 1
 
 dli10
@@ -699,15 +699,15 @@ VBL
 c0	lda #$00
 	sta colbak
 c1	lda #$0E
-	sta color1
+	sta colpf1
 c2	lda #$84
-	sta color2
+	sta colpf2
 c3	lda #$0E
-	sta color3
+	sta colpf3
 	lda #$02
-	sta chrctl
+	sta CHACTL
 	lda #$01
-	sta gtictl
+	sta PRIOR
 	sta sizep0
 s0	lda #$03
 	sta sizem
@@ -741,7 +741,7 @@ x6	lda #$A4
 x7	lda #$A6
 	sta hposm1
 c8	lda #$00
-	sta color0
+	sta colpf0
 
 	mwa #DLI.dli_start dliv	;set the first address of DLI interrupt
 

@@ -26,9 +26,9 @@
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
 	jsr SetPMWidth
-    mva #TextBackgroundColor colpf2s
+    mva #TextBackgroundColor COLOR2
     jsr ColorsOfSprites
-	mva #$ca colpf1s
+	mva #$ca COLOR1
    
     VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
 
@@ -294,7 +294,7 @@ AfterManualPurchase
     
     ldx tankNr
     lda TankStatusColoursTable,x
-    sta colpf2s
+    sta COLOR2
     
     
 ; we are clearing list of the weapons
@@ -1050,7 +1050,7 @@ NoArrowDown
     mva #0 TankNr
 @     tax
       lda TankStatusColoursTable,x
-      sta colpf2s  ; set color of player name line
+      sta COLOR2  ; set color of player name line
       jsr EnterPlayerName
       bit escFlag
       spl:rts
@@ -1909,12 +1909,12 @@ FinishResultDisplay
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
     lda #%00100100  ; playfield before P/M
-    sta gtictls
+    sta GPRIOR
 	jsr SetPMWidth	
     jsr ColorsOfSprites
-    mva #0 colpf1s
+    mva #0 COLOR1
 	sta CreditsVScrol
-    mva #TextForegroundColor colpf2s
+    mva #TextForegroundColor COLOR2
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
 	; make text and color lines for each tank
     ldx NumberOfPlayers  ;we start from the highest (best) tank
@@ -2402,8 +2402,8 @@ NextChar02
     mva #GOSbeg hposp0
     mva #GOSbeg+12 hposp0+1
     
-    mva #15 COLPM0S
-    sta COLPM1S
+    mva #15 PCOLR0
+    sta PCOLR1
     
     rts
 .endp

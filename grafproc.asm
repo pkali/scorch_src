@@ -971,7 +971,7 @@ DoNotClearParachute
     lda #08
     sta temp  ; Loop Counter
 ByteBelowTank
-    jsr point
+    jsr point_plot
     beq EmptyPoint2
     sec
 	ror UnderTank2
@@ -1243,7 +1243,7 @@ drawmountainspixelloop
 NextColumn1
     mwa #0 ydraw
 NextPoint1
-    jsr point
+    jsr point_plot
     beq StillNothing
     ldy #0
     lda ydraw
@@ -1294,7 +1294,7 @@ FalloutOfLine
     sta (tempor2),y
     ; and checking if there is a pixel there
     sta ydraw
-    jsr point
+    jsr point_plot
     bne ThereIsPixelHere
     ; if no pixel we plot it
     mva #1 color
@@ -1622,7 +1622,7 @@ ClearPlot
 .endp
 
 ; -----------------------------------------
-.proc point
+.proc point_plot
 ; -----------------------------------------
     ; checks state of the pixel (coordinates in xdraw and ydraw)
     ; result is in A (zero or appropriate bit is set)

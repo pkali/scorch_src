@@ -126,3 +126,7 @@ OffensiveTextTableH
 NumberOfOffensiveTexts=54
 NumberOfDeffensiveTexts=60
 .endp
+;hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"
+hoverFullEnd
+;hoverEmpty dta d"RUNNING OUT OF EELS"
+hoverEmptyEnd

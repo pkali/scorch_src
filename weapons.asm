@@ -1261,7 +1261,7 @@ checkJoy
     ;------------JOY-------------
     ;happy happy joy joy
     ;check for joystick now
-    lda JSTICK0
+    lda STICK0
     and #$0f
     cmp #$0f
     beq notpressedJoy
@@ -1270,7 +1270,7 @@ checkJoy
     jmp jumpFromStick
 notpressedJoy
     ;fire
-    lda TRIG0S
+    lda STRIG0
     jeq pressedSpace
     mva #$ff pressTimer  ; stop counting frames
    jmp notpressed
@@ -2493,7 +2493,7 @@ checkJoy
     ;------------JOY-------------
     ;happy happy joy joy
     ;check for joystick now
-    lda JSTICK0
+    lda STICK0
     and #$0f
     cmp #$0f
     beq notpressedJoy
@@ -2502,7 +2502,7 @@ checkJoy
     jmp jumpFromStick
 notpressedJoy
     ;fire
-    lda TRIG0S
+    lda STRIG0
     jeq pressedSpace
     mva #$ff pressTimer  ; stop counting frames
    jmp notpressed

@@ -43,7 +43,7 @@
 ;    icl 'artwork/sfx/rmt_feat.asm'
     
     
-    .zpvar xdraw            .word = $80 ;variable X for plot
+    .zpvar xdraw            .word = $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
     .zpvar ybyte            .word
@@ -141,7 +141,7 @@
 
 ;-------------------------------
 
-    icl 'lib/atari.hea'
+    icl 'lib/ATARISYS.ASM'
     icl 'lib/macro.hea'
 
     ;splash screen and musix
@@ -384,8 +384,8 @@ NoGameOverYet
 
 	jsr SetPMWidth
 	lda #0
-	sta colpf2s	; status line "off"
-	sta colpf1s
+	sta COLOR2	; status line "off"
+	sta COLOR1
 	
 	tax
 @	  sta singleRoundVars,x
@@ -450,7 +450,7 @@ SettingEnergies
 	mva #$00 TankSequencePointer
 
 ;---------round screen is ready---------
-	mva #TextForegroundColor colpf1s	; status line "on"
+	mva #TextForegroundColor COLOR1	; status line "on"
     rts
 .endp
 
@@ -531,7 +531,7 @@ DoNotFinishTheRound
 
     ldx tankNr
     lda TankStatusColoursTable,x
-    sta colpf2s  ; set color of status line
+    sta COLOR2  ; set color of status line
     jsr PutTankNameOnScreen
     jsr DisplayStatus
 
@@ -970,15 +970,15 @@ B0  DEY
 ;--------------------------------------------------
 .proc ColorsOfSprites     
     lda TankColoursTable ; colours of sprites under tanks
-    sta COLPM0S
+    sta PCOLR0
     lda TankColoursTable+1
-    sta COLPM1S
+    sta PCOLR1
     lda TankColoursTable+2
-    sta COLPM2S
+    sta PCOLR2
     lda TankColoursTable+3
-    sta COLPM3S
+    sta PCOLR3
     LDA TankColoursTable+4
-    STA COLPF3S     ; joined missiles (5th tank)
+    STA COLOR3     ; joined missiles (5th tank)
     rts
 .endp
 
@@ -1055,10 +1055,10 @@ SetunPlots
 ;    ora #$38     ; Players and Missiles single lined
 ;    sta dmactls
     lda #$03    ; P/M on
-    sta pmcntl
+    sta GRACTL
 	jsr SetPMWidth
     lda #%00100001 ; P/M priorities (multicolor players on) - prior=1
-    sta gtictls
+    sta GPRIOR
     jsr PMoutofScreen
 
     ;let the tanks be visible!
@@ -1150,14 +1150,14 @@ MakeTanksVisible
 	bne EndofPMG
     lda #%00100001	; playfield after P/M - prior=1
 	STA WSYNC
-    sta gtictl
+    sta PRIOR
 	bne EndOfDLI_GO
 EndofPMG
 	cmp #1
 	bne ColoredLines
     lda #%00100100	; playfield before P/M
 	STA WSYNC
-    sta gtictl
+    sta PRIOR
 	bne EndOfDLI_GO
 ColoredLines
 	cmp #9
@@ -1519,7 +1519,7 @@ checkJoyGetKey
       ;------------JOY-------------
       ;happy happy joy joy
       ;check for joystick now
-      lda JSTICK0
+      lda STICK0
       and #$0f
       cmp #$0f
       beq notpressedJoyGetKey
@@ -1529,7 +1529,7 @@ checkJoyGetKey
 
 notpressedJoyGetKey
       ;fire
-      lda TRIG0S
+      lda STRIG0
     bne @-
     lda #$0c ;Return key
     
@@ -1550,11 +1550,11 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    lda JSTICK0
+    lda STICK0
     and #$0f
     cmp #$0f
     bne WaitForKeyRelease
-    lda TRIG0S
+    lda STRIG0
     beq WaitForKeyRelease
     lda SKSTAT
     cmp #$ff
@@ -1568,7 +1568,7 @@ getkeyend
 	and #%00000100
 	beq @+
 	lda #1
-@	and TRIG0S
+@	and STRIG0
 	rts
 .endp
 ;--------------------------------------------------
