@@ -2424,26 +2424,45 @@ InverseScreenByte
 	; Let's designate the flight altitude.
 	mva #17 FloatingAlt	; for testing
 ;	mwa #mountaintable temp
-    mva #sfx_plasma_1_2 sfx_effect
+    mva #sfx_plasma_2_2 sfx_effect
 
 	; display text 4x4 - fuel full
 	
 	; TankNr in X reg.
 	; now animate Up
+	mva #0 FloatingAlt	; now it's a counter 
 TankGoUp
 	lda ytankstable,x
-	cmp FloatingAlt
+	cmp #17		; Floating altitude
 	beq ReachSky
 	; first erase old tank position
 	mva #1 Erase
     jsr DrawTankNr
+	lda FloatingAlt
+	cmp #5
+	bcc NoEngineClear
+	mva #0 color
+	jsr DrawTankRocketEngine
+NoEngineClear
 	mva #0 Erase
 	dec ytankstable,x
+	inc FloatingAlt
 	; then draw tank on new position
     jsr DrawTankNr
+	lda FloatingAlt
+	cmp #5
+	bcc NoEngine
+	lda random
+	and #%00000001
+	sta color
+	jsr DrawTankRocketEngine
+NoEngine
 ;	jsr WaitOneFrame
 	jmp TankGoUp
 ReachSky
+	; engine symbol erase
+	mva #0 color
+	jsr DrawTankRocketEngine
 
 	; display text 4x4 - fuel full (clear text)
 
@@ -2464,6 +2483,36 @@ KeyboardAndJoyCheck
 	; display text 4x4 - low fuel
 	
 notpressed
+	; let's animate "engine"
+	; one pixel under tank
+	clc
+	lda Ytankstable,x
+	adc #1
+	sta ydraw
+	mva #0 ydraw+1
+	lda XtankstableL,x
+	sta xdraw
+	lda XtankstableH,x
+	sta xdraw+1
+	; clear first pixel under tank
+	mva #0 color
+	jsr plot
+	inw xdraw
+	; plot 6 random color pixels
+	mva #6 FloatingAlt	; sorry reuse!
+@	lda random
+	and #%00000001
+	sta color
+	jsr plot
+	inw xdraw
+	dec FloatingAlt
+	bne @-
+	; clear last pixel under tank
+	mva #0 color
+	jsr plot
+	ldx TankNr
+	; enimation ends
+	
     lda SKSTAT
     cmp #$ff
     jeq checkJoy
@@ -2504,8 +2553,7 @@ notpressedJoy
     ;fire
     lda STRIG0
     jeq pressedSpace
-    mva #$ff pressTimer  ; stop counting frames
-   jmp notpressed
+    jmp notpressed
 
 
 pressedRight
@@ -2518,10 +2566,10 @@ pressedRight
     jsr DrawTankNr
 	mva #0 Erase
 	lda XtankstableH,x
-	cmp #>(screenwidth-10)	; tank width correction +2 
+	cmp #>(screenwidth-12)	; tank width correction +4 
 	bne @+
 	lda XtankstableL,x
-	cmp #<(screenwidth-10)	; tank width correction +2 pixels 
+	cmp #<(screenwidth-12)	; tank width correction +4 pixels 
 @	bcs RightScreenEdge	
 	inc XtankstableL,x
 	sne:inc XtankstableH,x
@@ -2529,7 +2577,7 @@ pressedRight
 RightScreenEdge
     mva #sfx_dunno sfx_effect
 NoREdge
-	mva #25 AngleTable,x
+	mva #18 AngleTable,x
 	; then draw tank on new position
     jsr DrawTankNr
 	jsr DisplayStatus
@@ -2549,7 +2597,7 @@ pressedLeft
 	cmp #0
 	bne @+
 	lda XtankstableL,x
-	cmp #5	; 2 pixles from left edge
+	cmp #5	; 4 pixles from left edge
 @	bcc LeftScreenEdge
 	dec XtankstableL,x
 	lda XtankstableL,x
@@ -2559,7 +2607,7 @@ pressedLeft
 LeftScreenEdge
     mva #sfx_dunno sfx_effect
 NoLEdge
-	mva #155 AngleTable,x
+	mva #162 AngleTable,x
 	; then draw tank on new position
     jsr DrawTankNr
 	jsr DisplayStatus
@@ -2632,14 +2680,14 @@ TankBelow
 PassRight
 	inc XtankstableL,x
 	sne:inc XtankstableH,x
-	mva #25 AngleTable,x
+	mva #18 AngleTable,x
 	bne Bypassing
 PassLeft
 	dec XtankstableL,x
 	lda XtankstableL,x
 	cmp #$ff
 	sne:dec XtankstableH,x
-	mva #155 AngleTable,x
+	mva #162 AngleTable,x
 Bypassing
 	; then draw tank on new position
     jsr DrawTankNr
@@ -2681,13 +2729,19 @@ FloatDown
 	; first erase old tank position
 	mva #1 Erase
     jsr DrawTankNr
+    jsr DrawTankParachute
 	mva #0 Erase
 	inc ytankstable,x
 	; then draw tank on new position
     jsr DrawTankNr
+    jsr DrawTankParachute
 	jsr WaitOneFrame
 	jmp FloatDown
 OnGround
+	; clear parachute
+	mva #1 Erase
+    jsr DrawTankParachute
+	mva #0 Erase
     jsr WaitForKeyRelease
 	; and Soildown at the end (for correct mountaintable)
 	; calculate range

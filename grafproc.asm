@@ -915,6 +915,54 @@ ToHighToParachute
 .endp
 
 ;--------------------------------------------------
+.proc DrawTankRocketEngine
+; X - tank number
+; 
+; this proc change xdraw, ydraw  and temp!
+;--------------------------------------------------
+	clc
+	lda Ytankstable,x
+	adc #2	; 1 pixel down
+	sta ydraw
+	mva #0 ydraw+1
+	
+	clc
+	lda XtanksTableL,x
+	adc #2	; 2 pixels to right
+	sta xdraw
+	lda XtanksTableH,x
+	adc #0
+	sta xdraw+1
+
+	; draw first horizontal line 
+	mva #5 temp
+@
+	jsr plot
+	inw xdraw
+	dec temp
+	bne @-
+	
+	sbw xdraw #2	; 2 pixels left	
+	inw ydraw	; 1 pixel down
+	
+	; draw second horizontal line 
+	mva #3 temp
+@
+	jsr plot
+.nowarn	dew xdraw
+	dec temp
+	bne @-
+
+	adw xdraw #2	; 2 pixels right	
+	inw ydraw	; 1 pixel down
+
+	; and last pixel
+	jsr plot
+
+	ldx TankNr
+	rts
+.endp
+;--------------------------------------------------
 .proc TankFalls;
 ;--------------------------------------------------
     lda #0
@@ -995,7 +1043,7 @@ NoGroundCheck
     and #1
     bne ParachutePresent
     ; decreasing energy 
-    ldy #2 ; how much energy to substract
+    ldy #2 ; how much energy to substract if no parachute
     jsr DecreaseEnergyX
 ParachutePresent
 	; check parachute type
@@ -1003,7 +1051,7 @@ ParachutePresent
     cmp #ind_StrongParachute ; strong parachute
 	bne OneTimeParachute
     ; decreasing energy of parachute
-    ldy #2 ; how much energy to substract
+    ldy #1 ; how much parachute energy to substract
 	jsr DecreaseShieldEnergyX
 	cpy #0	; is necessary to reduce tenk energy ?
 	beq @+
@@ -1029,37 +1077,16 @@ NoFallingDown
 	ldy #7		; SlideLeftTable length -1 (from 0 to 7)
 @	lda SlideLeftTable,y
 	cmp UnderTank1
-	beq FallingRight
-	cmp UnderTank2
 	beq FallingLeft
+	cmp UnderTank2
+	beq FallingRight
 	dey
 	bpl @-
 	bmi NoLeftOrRight
-FallingLeft
-	; tank is falling left
-	bit PreviousFall	; bit 6 - right
-	bvs EndLeftFall
-    ; we finish falling left if the tank reached the edge of the screen
-    lda XtanksTableH,x
-    bne NotLeftEdge
-    lda XtanksTableL,x
-	cmp #2	; 2 pixels correction due to a barrel wider than tank
-    beq EndLeftFall
-NotLeftEdge
-    ; tank is falling left - modify coorinates
-    clc
-    lda XtankstableL,x
-    adc #1
-    sta XtankstableL,x
-    lda XtankstableH,x
-    adc #0
-    sta XtankstableH,x
-	mva #%10000000 PreviousFall	; set bit 7 - left
-	bne EndOfFCycle
 FallingRight
 	; tank is falling right
-	bit PreviousFall	; bit 7 - left
-	bmi EndRightFall
+	bit PreviousFall	; bit 6 - left
+	bvs EndRightFall
     ; we finish falling right if the tank reached the edge of the screen
     clc
     lda XtanksTableL,x
@@ -1069,8 +1096,29 @@ FallingRight
     adc #0
     sta temp+1
     cpw temp #screenwidth-2	; 2 pixels correction due to a barrel wider than tank
-    beq EndRightFall
+    bcs EndRightFall
+NotLeftEdge
     ; tank is falling right - modify coorinates
+    clc
+    lda XtankstableL,x
+    adc #1
+    sta XtankstableL,x
+    lda XtankstableH,x
+    adc #0
+    sta XtankstableH,x
+	mva #%10000000 PreviousFall	; set bit 7 - right
+	bne EndOfFCycle
+FallingLeft
+	; tank is falling left
+	bit PreviousFall	; bit 7 - right
+	bmi EndLeftFall
+    ; we finish falling left if the tank reached the edge of the screen
+    lda XtanksTableH,x
+    bne NotLeftEdge
+    lda XtanksTableL,x
+	cmp #3	; 2 pixels correction due to a barrel wider than tank
+    bcc EndLeftFall
+    ; tank is falling left - modify coorinates
     sec
     lda XtankstableL,x
     sbc #1
@@ -1078,7 +1126,7 @@ FallingRight
     lda XtankstableH,x
     sbc #0
     sta XtankstableH,x
-	mva #%01000000 PreviousFall	; set bit 6 - right
+	mva #%01000000 PreviousFall	; set bit 6 - left
 	bne EndOfFCycle
 EndLeftFall
 EndRightFall
