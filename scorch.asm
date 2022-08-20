@@ -177,6 +177,22 @@ FirstSTART
 	dey
 	bpl @-
 
+
+    ; generate linetables
+    mwa #display temp
+    mwa #linetableL temp2
+    mwa #linetableH modify
+    ldy #0
+@     lda temp
+      sta (temp2),y
+      lda temp+1
+      sta (modify),y
+      adw temp #40
+      iny
+      cpy #screenheight
+    bne @-
+
+
     ; RMT INIT
     lda #$f0                    ;initial value
     sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
@@ -1626,6 +1642,19 @@ noingame
 	mva #0 RMT_blocked
 	rts
 .endp
+;;--------------------------------------------------
+;.proc Randomizer
+;;--------------------------------------------------
+;    ;usage: randomize floor ceiling
+;    ;returns (in A) a random .byte between "floor" and "ceiling"
+;?rand
+;      lda random
+;      cmp #:1 ;floor
+;      bcc ?rand
+;      cmp #:2+1 ;ceiling
+;      bcs ?rand
+;      rts
+;.endp
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------

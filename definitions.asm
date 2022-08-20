@@ -1,14 +1,20 @@
 ;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
-;----------------------------------------------
-; Player/missile memory
-    
-PMGraph =  $0800
-display = $1010 ;screen takes $2K due to clearing routine
-
 screenheight = 200
 screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
+
+;----------------------------------------------
+; Player/missile memory
+PMGraph =  $0800  ; real PM start = $0b00
+
+
+; Generated tables
+linetableL = $0b00 - screenHeight*2
+linetableH = $0b00 - screenHeight
+
+display = $1010 ;screen takes $2K due to clearing routine
+
 margin = 40 ;mountain drawing Y variable margin
 MaxPlayers = 6
 maxOptions = 8  ;number of all options
