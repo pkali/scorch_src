@@ -2629,6 +2629,25 @@ TankOnRightSide
 TankOnLeftSide
 	sty FloatingAlt ; I know, not elegant byt this variable it's free now (0 go right, $ff go left)
 	; now we have direction of bypassing tanks on screen
+	; clear "engine pixels" under tank
+	lda XtankstableL,x
+	sta xdraw
+	lda XtankstableH,x
+	sta xdraw+1
+	clc
+	lda Ytankstable,x
+	adc #1
+	sta ydraw
+	mva #0 ydraw+1
+	sta color
+	; draw  horizontal line 
+	mva #8 temp
+@
+	jsr plot
+	inw xdraw
+	dec temp
+	bne @-
+	ldx TankNr
 	; first check if we over any tank
 	; Warning! in xdraw wird we have position of floating tank (after DrawTankNr)
 CheckForTanksBelow
