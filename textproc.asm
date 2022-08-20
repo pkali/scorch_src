@@ -1419,18 +1419,19 @@ displayloop1
     lda xtankstableH,y
     sta temp+1
     ;now we should substract length of the text-1
-    
+    ;temp2 = (fx-1)*2
     ldy fx
     dey
     tya
     asl
     sta temp2
     mva #0 temp2+1
-    ;here we assume max length of text
-    ;to display is 127 chars!
-
     ;now we have HALF length in pixels
     ;stored in temp2
+
+    ;here we assume max length of text
+    ;to display is 127 chars, but later it turns out it must be max 63!
+
     sbw temp temp2 ; here begin of the text is in TEMP !!!!
     ;now we should check overflows
     ;lda temp+1  ; opty
@@ -1460,14 +1461,14 @@ DOTNnotLessThanZero
     ;so check if not greater than screenwitdth
     cpw temp2 #screenwidth
     bcc DOTNnoOverflow
+
     ;if end is greater than screenwidth
     ;then screenwidth - length is fine
-
-
     lda fx
     asl
     asl
     sta temp
+    mva #0 temp+1
 
     sec
     lda #<(screenwidth-1)
