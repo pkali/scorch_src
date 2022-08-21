@@ -2491,6 +2491,29 @@ ReachSky
     sta LineYdraw
     lda #0
     jsr TypeLine4x4.staplot4x4color
+	; and Soildown at the start (for correct mountaintable if tank was buried)
+	; calculate range
+	ldx TankNr
+	sec
+	lda XtankstableL,x
+	sbc #2
+	sta RangeLeft
+	lda XtankstableH,x
+	sbc #0
+	sta RangeLeft+1
+	clc
+	lda XtankstableL,x
+	adc #10
+	sta RangeRight
+	lda XtankstableH,x
+	adc #0
+	sta RangeRight+1
+	; hide tanks and ...
+	mva #1 Erase
+    jsr DrawTanks
+	jsr SoilDown2
+	mva #0 Erase
+    jsr DrawTanks
 	ldx TankNr
 
 	; check keyboard/joy and move tank left/right - code copied from BeforeFire
