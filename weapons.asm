@@ -2439,8 +2439,8 @@ InverseScreenByte
 	mva #0 FloatingAlt	; now it's a counter 
 TankGoUp
 	lda ytankstable,x
-	cmp #17		; Floating altitude
-	beq ReachSky
+	cmp #18		; Floating altitude
+	bcc ReachSky
 	; first erase old tank position
 	mva #1 Erase
     jsr DrawTankNr
