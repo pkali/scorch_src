@@ -99,16 +99,16 @@ A oto wartości promienia rażenia (ExplosionRadius) dla poszczególnych broni:
 "Baby Missile" - 11
 "Missile" - 17
 "Baby Nuke" - 25
-"Nuke" - 31
+"Nuke" - 30
 "LeapFrog" - 17 15 13
 "Funky Bomb" - 21 11 (* 5)
 "MIRV" - 17 (* 5)
-"Death's Head" - 31 (* 5)
+"Death's Head" - 30 (* 5)
 "Napalm" - x 40  (ta broń jest inna i nie jest wyznaczana odległość od centrum, po prostu każdy czołg znajdujący się w zasięgu płomieni traci 40 jednostek energii - zmienna ExplosionRadius nie jest używana)
 "Hot Napalm" - x 80 (zasada taka jak w Napalm)
 "Baby Roller" - 11
 "Roller" - 21
-"Heavy Roller" - 31
+"Heavy Roller" - 30
 "Riot Charge" - 31
 "Riot Blast" - 0 (tak na prawdę - 61 ale przy tych broniach nie jest brana pod uwagę przy liczeniu ubytku energii tylko szerokości gruntu do opadnięcia)
 "Riot Bomb" - 17

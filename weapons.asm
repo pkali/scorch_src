@@ -90,7 +90,7 @@ tracer
 .proc nuke
     mva #sfx_nuke sfx_effect 
     inc FallDown2
-    mva #31 ExplosionRadius
+    mva #30 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
 .endp
@@ -229,28 +229,28 @@ NoExplosionInFunkyBomb
 ; ------------------------
 .proc deathshead
     inc FallDown2
-    mva #31 ExplosionRadius
+    mva #30 ExplosionRadius
     jsr CalculateExplosionRange
 
     mva #sfx_nuke sfx_effect
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
-    sbw xdraw #35
+    sbw xdraw #34
     jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
-    adw xdraw #70
+    adw xdraw #68
     jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
-    sbw xdraw #35
+    sbw xdraw #34
     ;
-    sbw ydraw #35
+    sbw ydraw #34
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoUpperCircle
@@ -259,7 +259,7 @@ NoExplosionInFunkyBomb
     jsr xmissile
     UnSaveDrawXY
 NoUpperCircle
-    adw ydraw #70
+    adw ydraw #68
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
@@ -419,7 +419,7 @@ EndNurnedCheckLoop
 ; ------------------------
 .proc heavyroller
     inc FallDown2
-    mva #31 ExplosionRadius
+    mva #30 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------

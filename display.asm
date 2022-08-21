@@ -123,14 +123,14 @@ PurchaseDescription
      ; 0123456789012345678901234567890123456789
  dta d"Space"*
  dta      d": Purchase  "
- dta                   d"Return"*
- dta                         d": Finish"
+ dta                  d"Return"*
+ dta                        d": Finish "
 ActivateDescription
      ; 0123456789012345678901234567890123456789
  dta d"Space"*
  dta      d": Activate  "
- dta                   d"Return"*
- dta                         d": Finish"
+ dta                  d"Return"*
+ dta                        d": Finish "
 EmptyLine
  dta d"                                        "
 ;---------------------------------------------------
