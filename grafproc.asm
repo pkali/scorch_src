@@ -963,6 +963,43 @@ ToHighToParachute
 	rts
 .endp
 ;--------------------------------------------------
+.proc DrawTankEngine
+; X - tank number
+; 
+; this proc change xdraw, ydraw  and temp!
+;--------------------------------------------------
+	; one pixel under tank
+	clc
+	lda Ytankstable,x
+	adc #1
+	sta ydraw
+	mva #0 ydraw+1
+	lda XtankstableL,x
+	sta xdraw
+	lda XtankstableH,x
+	sta xdraw+1
+	; clear first pixel under tank
+	mva #0 color
+	jsr plot
+	inw xdraw
+	; plot 6 random color pixels
+	mva #6 FloatingAlt	; sorry reuse!
+@	lda Erase
+	eor #%00000001
+	and random
+	and #%00000001
+	sta color
+	jsr plot
+	inw xdraw
+	dec FloatingAlt
+	bne @-
+	; clear last pixel under tank
+	mva #0 color
+	jsr plot
+	ldx TankNr
+	rts
+.endp
+;--------------------------------------------------
 .proc TankFalls;
 ;--------------------------------------------------
     lda #0

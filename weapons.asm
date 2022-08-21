@@ -2432,6 +2432,7 @@ InverseScreenByte
     mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
     mva #4 LineYdraw
     jsr TypeLine4x4
+	ldx TankNr
 	
 	; TankNr in X reg.
 	; now animate Up
@@ -2475,7 +2476,7 @@ ReachSky
     mva #4 LineYdraw
     lda #0
     jsr TypeLine4x4.staplot4x4color
-
+	ldx TankNr
 
 	; check keyboard/joy and move tank left/right - code copied from BeforeFire
 ;keyboard reading
@@ -2497,37 +2498,12 @@ KeyboardAndJoyCheck
     mva #4 LineYdraw
     ;lda #0
     jsr TypeLine4x4 ;.staplot4x4color
+	ldx TankNr
 
 	
 notpressed
 	; let's animate "engine"
-	; one pixel under tank
-	clc
-	lda Ytankstable,x
-	adc #1
-	sta ydraw
-	mva #0 ydraw+1
-	lda XtankstableL,x
-	sta xdraw
-	lda XtankstableH,x
-	sta xdraw+1
-	; clear first pixel under tank
-	mva #0 color
-	jsr plot
-	inw xdraw
-	; plot 6 random color pixels
-	mva #6 FloatingAlt	; sorry reuse!
-@	lda random
-	and #%00000001
-	sta color
-	jsr plot
-	inw xdraw
-	dec FloatingAlt
-	bne @-
-	; clear last pixel under tank
-	mva #0 color
-	jsr plot
-	ldx TankNr
+	jsr DrawTankEngine
 	; enimation ends
 	
     lda SKSTAT
@@ -2649,32 +2625,8 @@ TankOnLeftSide
 
 	; clear "engine pixels" under tank
     mva #1 erase
-    jsr drawTankNr
-    inc ytanksTable,x
-    mva #0 erase
-    jsr drawTankNr
-    
+	jsr DrawTankEngine
 
-;	lda XtankstableL,x
-;	sta xdraw
-;	lda XtankstableH,x
-;	sta xdraw+1
-;	clc
-;	lda Ytankstable,x
-;	adc #1
-;	sta ydraw
-;	mva #0 ydraw+1
-;	sta color
-;	; draw  horizontal line 
-;	mva #8 temp
-;@
-;	jsr plot
-;	inw xdraw
-;	dec temp
-;	bne @-
-;	ldx TankNr
-	; first check if we over any tank
-	; Warning! in xdraw wird we have position of floating tank (after DrawTankNr)
 CheckForTanksBelow
 	lda XtankstableL,x
 	sta xdraw
@@ -2758,7 +2710,7 @@ GoDown
     mva #4 LineYdraw
     lda #0
     jsr TypeLine4x4.staplot4x4color
-
+	ldx TankNr
 
 	mwa #mountaintable temp
 	clc
