@@ -465,8 +465,8 @@ EndNurnedCheckLoop
 .endp
 ; ------------------------
 .proc xdigger
-    mwa xdraw digstartx
-    mwa ydraw digstarty
+    ;mwa xdraw digstartx
+    ;mwa ydraw digstarty
     ldx diggery
 WriteToBranches
     lda xdraw
@@ -2012,8 +2012,8 @@ MIRVcopyParameters
     sta xtraj01,x
     lda xtraj+2
     sta xtraj02,x
-    lda vx
-    sta vx00,x
+    ;lda vx
+    ;sta vx00,x
     lda vx+1
     sta vx01,x
     lda vx+2

@@ -40,7 +40,6 @@
 .endm
 
     icl 'definitions.asm'
-;    icl 'artwork/sfx/rmt_feat.asm'
     
     
     .zpvar xdraw            .word = $64 ;variable X for plot
@@ -141,29 +140,13 @@
     .zpvar DifficultyLevel .byte
     .zpvar goleft .byte
     .zpvar OffsetDL1 .byte
-    
-
-    
-	displayposition = modify
+    .zpvar L1 .byte
 	
-
-    ;* RMT ZeroPage addresses
+    ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
 	.zpvar RMT_Zero_Page_V .byte
-;    .zpvar p_tis            .word
-;    .zpvar p_trackslbstable .word
-;    .zpvar p_trackshbstable .word
-;    .zpvar p_song           .word
-;    .zpvar ns               .word
-;    .zpvar nr               .word
-;    .zpvar nt               .word
-;    .zpvar reg1             .byte
-;    .zpvar reg2             .byte
-;    .zpvar reg3             .byte
-;    .zpvar tmp              .byte
-;    IFT FEAT_COMMAND2
-;      .zpvar frqaddcmd2     .byte
-;    EIF
-;    p_instrstable = p_tis
+
+    displayposition = modify
+
 
 ;-------------------------------
 
@@ -172,6 +155,8 @@
 
     ;splash screen and musix
 	icl 'artwork/Scorch50.asm'
+
+
     ;Game loading address
     ORG  $3000
 WeaponFont
@@ -1057,7 +1042,8 @@ setBmissile
 deletePtr = temp
 
     ; clean variables
-    lda #0 
+    lda #0
+    sta escFlag
     tay
     mwa #variablesStart deletePtr
 @     tya
@@ -1093,9 +1079,6 @@ SetunPlots
     ;setting up P/M graphics
     lda #>pmgraph
     sta pmbase
-;    lda dmactls
-;    ora #$38     ; Players and Missiles single lined
-;    sta dmactls
     lda #$03    ; P/M on
     sta GRACTL
 	jsr SetPMWidth
@@ -1114,18 +1097,6 @@ MakeTanksVisible
     mva #1 CurrentRoundNr ;we start from round 1
     mva #6 NTSCcounter
     
-;    ; RMT INIT
-;    lda #$f0                    ;initial value
-;    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
-;
-;    lda #$ff                    ;initial value
-;    sta sfx_effect
-;
-;    lda #0
-;    jsr RmtSongSelect
-;
-;    VMAIN VBLinterrupt,7  		;jsr SetVBL
-
     rts
 .endp
 ;--------------------------------------------------

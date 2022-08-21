@@ -20,10 +20,11 @@ OptionsHere
 OptionsScreenEnd
 ;-----------------------------------------------
 ListOfWeapons
- :36 dta d"                                        "
+     ;     0123456789012345678901234567890123456789
+ :36 dta d"                                "
 ListOfWeapons1End
 ListOfDefensiveWeapons
- :16 dta d"                                        "
+ :16 dta d"                                "
 ListOfDefensiveWeaponsEnd ;constant useful when clearing
 NameScreen
  dta d"    Enter names of players      "
@@ -49,7 +50,7 @@ textbuffer
  dta d"Energy:        Angle:        Force:     "
  dta d"Round:     Wind:                        "
 textbuffer2
- dta d"Player:                Cash:     0      "  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
+ dta d"Player:             Cash:      0"  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
 
 ; DLs fragments (modified by game code)
 ; all Purchase DL :)
@@ -115,21 +116,21 @@ MoreDown
  dta 93,93,93
  dta d"             "
 WeaponsDescription
- dta d"   "
+     ; 0123456789012345678901234567890123456789
  dta d"Tab"*
- dta d" - Defensive/Offensive weapon     "
+ dta d   ": Defensive/Offensive weapon "
 PurchaseDescription
- dta d"  "
+     ; 0123456789012345678901234567890123456789
  dta d"Space"*
- dta d" - Purchase  "
- dta d"Return"*
- dta d" - Finish   "
+ dta      d": Purchase  "
+ dta                   d"Return"*
+ dta                         d": Finish"
 ActivateDescription
- dta d"  "
+     ; 0123456789012345678901234567890123456789
  dta d"Space"*
- dta d" - Activate  "
- dta d"Return"*
- dta d" - Finish   "
+ dta      d": Activate  "
+ dta                   d"Return"*
+ dta                         d": Finish"
 EmptyLine
  dta d"                                        "
 ;---------------------------------------------------
@@ -138,9 +139,9 @@ OptionsTitle
 DifficultyTitle
  dta d"   difficulty   "*
 PurchaseTitle
- dta d"  weapons purchase  "
+ dta d"purchase weapons"
 InventoryTitle
- dta d"  weapons activate  "*
+ dta d"activate weapons"*
 GameOverTitle
  dta d"     game  over     "*
 GameOverTitle2

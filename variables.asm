@@ -10,6 +10,10 @@
 ;=====================================================
 OneTimeZeroVariables
 OneTimeZeroVariablesCount = variablesToInitialize-OneTimeZeroVariables  ; MAX 128 bytes !
+    .if OneTimeZeroVariablesCount > 127
+        .error "OneTimeZeroVariablesCount too large, ",OneTimeZeroVariablesCount
+    .endif
+
 noMusic .by 0  ; 0 - play music, $ff - do not play music
 noSfx   .by 0  ; 0 - play SFX, $ff - do not play SFX
 ;----------------------------------------------------
@@ -17,7 +21,7 @@ noSfx   .by 0  ; 0 - play SFX, $ff - do not play SFX
 	.by $00		; labels line color
 GameOverColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
 ;----------------------------------------------------
-TanksNames  ; DO NOT ZERO ON RESTART GAME - ticket #24
+TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
     :6 dta d"        "
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
@@ -122,7 +126,7 @@ WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;  20203.5 => 128 : <20203 : >20203
 ;----------------------------------------------------
 
-L1       .DS 1 ; variable used in multiplications (by 10:)
+;L1       .DS 1 ; variable used in multiplications (by 10:)
 ;gravity  .DS 1 ;only the decimal part (1/10 = 25)
 ;----------------------------------------------------
 
@@ -162,8 +166,8 @@ WeaponRangeRight .DS 2
 ;HowMuchToFall   .ds 1
 HeightRol .DS 1
 ;digger
-digstartx .DS 2
-digstarty .DS 2
+;digstartx .DS 2
+;digstarty .DS 2
 diggery  .DS 1
 DigLong  .DS 1
 digtabxL .DS [8]
@@ -204,7 +208,7 @@ FloatingAlt	.DS 1	; floating tank altitude
 xtraj00   .DS [5]  ; 3 bytes of xtraj times 5. Lowest byte
 xtraj01   .DS [5]  ; middle byte
 xtraj02   .DS [5]  ; high byte
-vx00   .DS [5]
+;vx00   .DS [5]  ; looks like it is not really used anywhere
 vx01   .DS [5]
 vx02   .DS [5]
 vx03   .DS [5]

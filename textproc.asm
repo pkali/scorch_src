@@ -278,10 +278,7 @@ AfterManualPurchase
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
     jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
-;    lda dmactls
-;    and #$fc
-;    ora #$02     ; normal screen width
-    lda #%00110010 ; normal screen width, DL on, P/M off
+    lda #@dmactl(narrow|dma) ; narro screen width, DL on, P/M off
     sta dmactls
 
     lda #song_supermarket
@@ -328,7 +325,7 @@ AfterPurchase
     sta decimal
     lda moneyH,x
     sta decimal+1
-    mwa #textbuffer2+28 displayposition
+    mwa #textbuffer2+26 displayposition
     jsr displaydec5
 
     ; in xbyte there is the address of the line that
@@ -373,34 +370,34 @@ CreateList
 
     ; first parentheses and other special chars
     ; (it's easier this way)
-    ldy #22
-    lda #08 ; "("
-    STA (XBYTE),y
-    ldy #32
-    lda #09 ; ")"
-    sta (xbyte),y
-    ldy #25
+    ;ldy #22
+    ;lda #08 ; "("
+    ;STA (XBYTE),y
+    ;ldy #32
+    ;lda #09 ; ")"
+    ;sta (xbyte),y
+    ldy #24
     lda #15 ; "/"
     sta (xbyte),y
-    ldy #31
+    ldy #30
     lda #16 ; "0"
     sta (xbyte),y
 
     ;now number of units (shells) to be purchased
-    adw xbyte #23 displayposition  ; 23 chars from the beginning of the line
+    adw xbyte #22 displayposition  ; 23 chars from the beginning of the line
     lda WeaponUnits,x
     sta decimal
     jsr displaybyte
     ldx temp ;getting back index of the weapon
 
     ; and now price of the weapon
-    adw xbyte #26 displayposition  ; 26 chars from the beginning of the line
+    adw xbyte #25 displayposition  ; 26 chars from the beginning of the line
     lda WeaponPriceL,x
     sta decimal
     lda WeaponPriceH,x
     sta decimal+1
     jsr displaydec5
-    ldy #26		; overwrite first digit (allways space - no digit :) )
+    ldy #25		; overwrite first digit (allways space - no digit :) )
     lda #04 ; "$"
     sta (xbyte),y
 
@@ -422,11 +419,11 @@ itIsInventory
     jeq noWeapon
 
     ; clear price area
-    ldy #22  ; beginning of the price area
+    ldy #21  ; beginning of the price area
     lda #0
 @     sta (XBYTE),y
       iny
-      cpy #32+1  ; end of price
+      cpy #32  ; end of price
     bne @-
 
 notInventory
@@ -502,7 +499,7 @@ DefenceList
     inc HowManyOnTheListDef
     ; If everything is copied then next line
 NextLineOfTheList
-    adw xbyte #40
+    adw xbyte #32
 TooLittleCash
 NoWeapon
 
@@ -531,27 +528,20 @@ WeHaveOffset
 
     ; now we have to erase empty position of both lists.
 
-    ; Multiply number on list 1 by 40 and set address
+    ; Multiply number on list 1 by 32 and set address
     ; of the first erased char.
     ; (multiplying taken from book of Ruszczyc 'Assembler 6502'
 
     lda HowManyOnTheListOff
-    sta xbyte+1 ; multiplier (temporarily here, it will be erased anyway)
-    lda #$00 ; higher byte of the Result
-    sta xbyte ; lower byte of the Result
-    ldx #$08
-Rotate04
-    lsr xbyte+1
-    bcc DoNotAddX01
-      clc
-      adc #40
-DoNotAddX01
-    ror
-    ror xbyte
-    dex
-    bne Rotate04
-    sta xbyte+1
-
+    sta xbyte ; multiplier (temporarily here, it will be erased anyway)
+    lda #$00 ; 
+    sta xbyte+1 ; higher byte of the Result
+    ldx #$05 ; 2^5
+@     asl xbyte
+      rol xbyte+1
+      dex
+    bne @-
+    
     ; add to the address of the list
     clc
     lda xbyte
@@ -579,21 +569,14 @@ DoNotIncHigher1
     ; Multiply number on list 1 by 40 and set address
     ; of the first erased char.
     lda HowManyOnTheListDef
-    sta xbyte+1 ; multiplier
-    lda #$00 ; higher byte of the Result
-    sta xbyte ; lower byte of the Result
-    ldx #$08
-Rotate05
-    lsr xbyte+1
-    bcc DoNotAddX02
-    clc
-    adc #40
-DoNotAddX02
-    ror
-    ror xbyte
-    dex
-    bne Rotate05
-    sta xbyte+1
+    sta xbyte ; multiplier (temporarily here, it will be erased anyway)
+    lda #$00 ; 
+    sta xbyte+1 ; higher byte of the Result
+    ldx #$05 ; 2^5
+@     asl xbyte
+      rol xbyte+1
+      dex
+    bne @-
 
     ; add to the address of the list
     clc
@@ -957,7 +940,7 @@ DefActivationEnd
 EraseLoop
     tya  ; lda #$00
     sta (xbyte),y
-    adw xbyte #40
+    adw xbyte #32
     dex
     bpl EraseLoop
 
@@ -970,7 +953,7 @@ EraseLoop
     ldx PositionOnTheList
     beq SelectList2 ; if there is 0 we add nothing
 AddLoop2
-    adw xbyte #40
+    adw xbyte #32
     dex
     bne AddLoop2
 SelectList2
@@ -992,7 +975,7 @@ CharToList1
     ldx PositionOnTheList
     beq SelectList1 ; if there is 0 we add nothing
 AddLoop1
-    adw xbyte #40
+    adw xbyte #32
     dex
     bne AddLoop1
 SelectList1
@@ -1003,7 +986,7 @@ SelectList1
     ldx OffsetDL1
     beq SetWindowList1 ; if zero then add nothing
 LoopWindow1
-    adw xbyte #40
+    adw xbyte #32
     dex
     bne LoopWindow1
 SetWindowList1
