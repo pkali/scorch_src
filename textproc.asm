@@ -1582,18 +1582,22 @@ end_found
 .proc TypeLine4x4 ;
 ;-------------------------------
     ;this routine prints line ending with $ff
-    ;address in LineAddress4x4
+    ;address in LineAddress4x4 (it is the same as `temp`)
     ;starting from LineXdraw, LineYdraw
+
+    lda #1
+
+staplot4x4color
+    sta plot4x4color
 
 
     ldy #0
     sty LineCharNr
-    mva #1 plot4x4color
 
 TypeLine4x4Loop
     ldy LineCharNr
 
-    mwa LineAddress4x4 temp
+    ;mwa LineAddress4x4 temp  ; LineAddress4x4 === temp
     lda (temp),y
     cmp #$ff
     beq EndOfTypeLine4x4

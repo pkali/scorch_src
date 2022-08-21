@@ -2427,6 +2427,11 @@ InverseScreenByte
     mva #sfx_plasma_2_2 sfx_effect
 
 	; display text 4x4 - fuel full
+    
+    mwa #hoverFull LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+    mva #4 LineYdraw
+    jsr TypeLine4x4
 	
 	; TankNr in X reg.
 	; now animate Up
@@ -2465,6 +2470,12 @@ ReachSky
 	jsr DrawTankRocketEngine
 
 	; display text 4x4 - fuel full (clear text)
+    mwa #hoverFull LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+    mva #4 LineYdraw
+    lda #0
+    jsr TypeLine4x4.staplot4x4color
+
 
 	; check keyboard/joy and move tank left/right - code copied from BeforeFire
 ;keyboard reading
@@ -2481,6 +2492,12 @@ KeyboardAndJoyCheck
 	nop
 	
 	; display text 4x4 - low fuel
+    mwa #hoverEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+    mva #4 LineYdraw
+    ;lda #0
+    jsr TypeLine4x4 ;.staplot4x4color
+
 	
 notpressed
 	; let's animate "engine"
@@ -2736,6 +2753,12 @@ ItIsMe
 GoDown
 
 	; display text 4x4 - low fuel (clear text)
+    mwa #hoverEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+    mva #4 LineYdraw
+    lda #0
+    jsr TypeLine4x4.staplot4x4color
+
 
 	mwa #mountaintable temp
 	clc

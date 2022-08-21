@@ -134,7 +134,7 @@
     .zpvar HowToDraw .byte
     .zpvar gravity .byte
     .zpvar LineLength .word
-    .zpvar LineAddress4x4 .word
+    ;.zpvar LineAddress4x4 .word
     .zpvar tracerflag .byte
     .zpvar isInventory .byte
     .zpvar DifficultyLevel .byte
@@ -146,7 +146,7 @@
 	.zpvar RMT_Zero_Page_V .byte
 
     displayposition = modify
-
+    LineAddress4x4 = temp
 
 ;-------------------------------
 
