@@ -255,8 +255,7 @@ ManualPurchase
 	jsr Purchase	; purchase weapons
 	bit escFlag
 	spl:rts
-	mva #$ff isInventory
-	jsr Purchase	; activate weapons
+	jsr DefensivesActivate	; activate weapons
 	bit escFlag
 	spl:rts	
 AfterManualPurchase
@@ -265,7 +264,17 @@ AfterManualPurchase
 	bne @-
 	rts
 .endp
-
+;--------------------------------------------------
+.proc DefensivesActivate
+;--------------------------------------------------
+; This proc call Inventory and set Defensives activation first
+    
+    mwa #ListOfDefensiveWeapons WeaponsListDL ;switch to the list of offensive weapons    
+    mva #$ff IsInventory
+    mva #$01 WhichList
+    ; offensive weapon - 0, deffensive - 1
+	jmp Purchase.GoToActivation
+.endp
 ;--------------------------------------------------
 .proc Purchase ;
 ;--------------------------------------------------
@@ -273,6 +282,14 @@ AfterManualPurchase
 ; that is buying weapons now (from 0).
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
+
+    mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
+        
+; we are clearing list of the weapons
+    mva #$00 WhichList
+    ; offensive weapon - 0, deffensive - 1
+GoToActivation
+    mva #$ff LastWeapon
 
 ;    mva #0 dmactl
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
@@ -286,22 +303,14 @@ AfterManualPurchase
 	bpl @+
 	lda #song_inventory
 @	jsr RmtSongSelect
-    
-    mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
-    
+
     ldx tankNr
     lda TankStatusColoursTable,x
     sta COLOR2
-    
-    
-; we are clearing list of the weapons
-    mva #$ff LastWeapon
-    mva #$00 WhichList
-    ; offensive weapon - 0, deffensive - 1
 
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
-    tay  ; 0 to y
+	ldy #0
     lda tanknr
     :3 asl  ; 8 chars per name
     tax
