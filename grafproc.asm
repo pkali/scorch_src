@@ -983,7 +983,7 @@ ToHighToParachute
 	jsr plot
 	inw xdraw
 	; plot 6 random color pixels
-	mva #6 FloatingAlt	; sorry reuse!
+	mva #6 temp
 @	lda Erase
 	eor #%00000001
 	and random
@@ -991,7 +991,7 @@ ToHighToParachute
 	sta color
 	jsr plot
 	inw xdraw
-	dec FloatingAlt
+	dec temp
 	bne @-
 	; clear last pixel under tank
 	mva #0 color

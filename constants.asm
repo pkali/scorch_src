@@ -423,7 +423,7 @@ WeaponUnits
   .by 3  ;Battery________
   .by 0  ;Bal_Guidance___
   .by 0  ;Horz_Guidance__
-  .by 5  ;Floating_Tank__
+  .by 2  ;Floating_Tank__
   .by 0  ;Lazy_Boy_______
   .by 3  ;Parachute______
   .by 2  ;StrongParachute

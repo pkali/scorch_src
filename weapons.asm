@@ -2438,7 +2438,10 @@ StoreMaxAlt
     
     mwa #hoverFull LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
-    mva #4 LineYdraw
+	sec
+	lda FloatingAlt
+	sbc #12
+    sta LineYdraw
     jsr TypeLine4x4
 	ldx TankNr
 	
@@ -2482,7 +2485,10 @@ ReachSky
 	; display text 4x4 - fuel full (clear text)
     mwa #hoverFull LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
-    mva #4 LineYdraw
+	sec
+	lda FloatingAlt
+	sbc #12
+    sta LineYdraw
     lda #0
     jsr TypeLine4x4.staplot4x4color
 	ldx TankNr
@@ -2504,7 +2510,10 @@ KeyboardAndJoyCheck
 	; display text 4x4 - low fuel
     mwa #hoverEmpty LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
-    mva #4 LineYdraw
+	sec
+	lda FloatingAlt
+	sbc #12
+    sta LineYdraw
     ;lda #0
     jsr TypeLine4x4 ;.staplot4x4color
 	ldx TankNr
@@ -2617,6 +2626,16 @@ NoLEdge
     jmp KeyboardAndJoyCheck
 
 pressedSpace
+	; display text 4x4 - low fuel (clear text)
+    mwa #hoverEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+	sec
+	lda FloatingAlt
+	sbc #12
+    sta LineYdraw
+    lda #0
+    jsr TypeLine4x4.staplot4x4color
+	ldx TankNr
     ;=================================
 	; left or right from center of screen ?
 	ldy #0
@@ -2712,14 +2731,6 @@ ItIsMe
 	and #%11111110		; correction for PM
 	sta XtankstableL,x
 GoDown
-
-	; display text 4x4 - low fuel (clear text)
-    mwa #hoverEmpty LineAddress4x4
-    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
-    mva #4 LineYdraw
-    lda #0
-    jsr TypeLine4x4.staplot4x4color
-	ldx TankNr
 
 	mwa #mountaintable temp
 	clc
