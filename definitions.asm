@@ -10,8 +10,8 @@ PMGraph =  $0800  ; real PM start = $0b00
 
 
 ; Generated tables
-linetableL = $0b00 - screenHeight*2
-linetableH = $0b00 - screenHeight
+linetableL = $0b00 - (screenHeight+1)*2
+linetableH = $0b00 - (screenHeight+1)
 
 display = $1010 ;screen takes $2K due to clearing routine
 

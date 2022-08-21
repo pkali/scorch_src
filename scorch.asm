@@ -200,7 +200,7 @@ FirstSTART
       sta (modify),y
       adw temp #40
       iny
-      cpy #screenheight
+      cpy #screenheight+1
     bne @-
 
 
@@ -1362,7 +1362,7 @@ UsageLoop
     sta temp2+1
 	
     cpw RandBoundaryLow temp2
-    bcs RandomizeForce
+    seq:bcs RandomizeForce
 
     cpw RandBoundaryHigh temp2
     bcc RandomizeForce
