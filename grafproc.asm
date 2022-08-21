@@ -1073,6 +1073,9 @@ ROLPoint2
     bne ByteBelowTank	
 NoGroundCheck
     ldx TankNr
+	lda Ytankstable,x
+	cmp #screenheight-1	; tank on lowest position (no falling down)
+	jcs EndOfFall
 	lda UnderTank1
 	bne NoFallingDown
 	; Tank falling down ----
@@ -1522,28 +1525,7 @@ EndDrawing
     rts
 .endp
 
-;--------------------------------------------------
-.proc CheckMaxMountain
-; in A return y coordinate of highest mountain
-;--------------------------------------------------
-    mwa #mountaintable modify
-    ldy #0
-    ldx #screenheight-1
-nextPointChecking
-	txa
-    cmp (modify),y
-	bcc NotHigher
-    lda (modify),y
-	tax
-NotHigher
-    inw modify
-    cpw modify #(mountaintable+screenwidth)
-    bne nextPointChecking
-	txa
-	rts
-.endp
-
-/*
+/* 
 ;--------------------------------------------------
 .proc calculatemountains0
 ; Only for testing - makes ground flat (0 pixels)
@@ -1568,7 +1550,29 @@ SetYofNextTank
     bpl SetYofNextTank
    rts
 .endp
-*/
+ */
+
+;--------------------------------------------------
+.proc CheckMaxMountain
+; in A return y coordinate of highest mountain
+;--------------------------------------------------
+    mwa #mountaintable modify
+    ldy #0
+    ldx #screenheight-1
+nextPointChecking
+	txa
+    cmp (modify),y
+	bcc NotHigher
+    lda (modify),y
+	tax
+NotHigher
+    inw modify
+    cpw modify #(mountaintable+screenwidth)
+    bne nextPointChecking
+	txa
+	rts
+.endp
+
 
 ; -----------------------------------------
 .proc unPlot
