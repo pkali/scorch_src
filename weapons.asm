@@ -1207,8 +1207,18 @@ notpressed
     bpl notpressed
     ;---esc pressed-quit game---
     rts
-
 @
+    cmp #$3f  ; A
+    bne @+
+callActivation
+    ; Hide all tanks - after inventory they may have other shapes
+    mva #1 Erase
+    jsr DrawTanks
+    mva #0 Erase
+	jsr DefensivesActivate
+	jmp afterInventory
+
+@	
     cmp #$0d  ; I
     bne @+
 callInventory
@@ -1219,6 +1229,7 @@ callInventory
 	;
     mva #$ff isInventory
     jsr Purchase
+afterInventory
 	mva #0 dmactls		; dark screen
 	jsr WaitOneFrame	
     lda #song_ingame
