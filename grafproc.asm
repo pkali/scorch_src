@@ -1521,6 +1521,28 @@ EndDrawing
 
     rts
 .endp
+
+;--------------------------------------------------
+.proc CheckMaxMountain
+; in A return y coordinate of highest mountain
+;--------------------------------------------------
+    mwa #mountaintable modify
+    ldy #0
+    ldx #screenheight-1
+nextPointChecking
+	txa
+    cmp (modify),y
+	bcc NotHigher
+    lda (modify),y
+	tax
+NotHigher
+    inw modify
+    cpw modify #(mountaintable+screenwidth)
+    bne nextPointChecking
+	txa
+	rts
+.endp
+
 /*
 ;--------------------------------------------------
 .proc calculatemountains0

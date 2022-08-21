@@ -2422,8 +2422,16 @@ InverseScreenByte
 ; X and TankNr - index of flying tank
 ; -------------------------------------------------
 	; Let's designate the flight altitude.
-	mva #17 FloatingAlt	; for testing
-;	mwa #mountaintable temp
+	jsr CheckMaxMountain
+	cmp #(12+18) ; tank witch shield (12) and max alt (18) check
+	bcc IsToHigh
+	sbc #12	; tank witch shield high correction
+	bne StoreMaxAlt
+IsToHigh	
+	lda #18
+StoreMaxAlt
+	sta FloatingAlt
+;	mva #18 FloatingAlt	; for testing
     mva #sfx_plasma_2_2 sfx_effect
 
 	; display text 4x4 - fuel full
@@ -2436,15 +2444,15 @@ InverseScreenByte
 	
 	; TankNr in X reg.
 	; now animate Up
-	mva #0 FloatingAlt	; now it's a counter 
+	mva #0 modify	;  it's a counter 
 TankGoUp
 	lda ytankstable,x
-	cmp #18		; Floating altitude
+	cmp FloatingAlt		; Floating altitude
 	bcc ReachSky
 	; first erase old tank position
 	mva #1 Erase
     jsr DrawTankNr
-	lda FloatingAlt
+	lda modify
 	cmp #5
 	bcc NoEngineClear
 	mva #0 color
@@ -2452,10 +2460,10 @@ TankGoUp
 NoEngineClear
 	mva #0 Erase
 	dec ytankstable,x
-	inc FloatingAlt
+	inc modify
 	; then draw tank on new position
     jsr DrawTankNr
-	lda FloatingAlt
+	lda modify
 	cmp #5
 	bcc NoEngine
 	lda random
@@ -2465,6 +2473,7 @@ NoEngineClear
 NoEngine
 ;	jsr WaitOneFrame
 	jmp TankGoUp
+
 ReachSky
 	; engine symbol erase
 	mva #0 color
