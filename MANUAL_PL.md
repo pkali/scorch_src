@@ -12,6 +12,13 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywwki:
 * szybkość lotu pocisków (nie ma wpływu na tor lotu - zmienia jedynie widoczną prędkość rysowania - nie zmienia nic w samej rozgrywce)
 * częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą “strzelać w próżnię” :) - jeśli grają tylko ludzie optymalne ustawienie to “norm”, w przypadku graczy sterowanych przez komputer… wedle uznania.
 * wysokość (i pofałdowanie) gór od prawie płaskich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
+* sposób działania ścian (krawędzi ekranu):
+	1. none - pociski, które wyleciały poza ekran nie wracają
+	2. wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony (i odwrotnie)
+	3. bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć
+	4. boxy - tak jak bump, tyle że "sufit" także odbija pociski
+	5. rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
+
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
@@ -122,16 +129,16 @@ A oto wartości promienia rażenia (ExplosionRadius) dla poszczególnych broni:
 | Baby Missile | 11 |
 | Missile | 17 |
 | Baby Nuke | 25 |
-| Nuke | 31 |
+| Nuke | 30 |
 | LeapFrog| 17 15 13 |
 | Funky Bomb | 21 11 (* 5) |
 | MIRV | 17 (* 5) |
-| Death's Head | 31 (* 5) |
+| Death's Head | 30 (* 5) |
 | Napalm | x 40 (ta broń jest inna i nie jest wyznaczana odległość od centrum, po prostu każdy czołg znajdujący się w zasięgu płomieni traci 40 jednostek energii - zmienna ExplosionRadius nie jest używana) |
 | Hot Napalm | x 80 (zasada taka jak w Napalm) |
 | Baby Roller | 11 |
 | Roller | 21 |
-| Heavy Roller | 31 |
+| Heavy Roller | 30 |
 | Riot Charge | 31 |
 | Riot Blast | 0 (tak na prawdę - 61 ale przy tych broniach nie jest brana pod uwagę przy liczeniu ubytku energii tylko szerokości gruntu do opadnięcia) |
 | Riot Bomb | 17 |

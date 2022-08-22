@@ -12,8 +12,15 @@ On the first screen, you can configure gameplay options:
 * number of rounds in a game
 * missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
- * The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
+* The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
+* the way the walls (edges of the screen) work:
+	1. none - projectiles that flew off the screen do not return
+	2. wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
+	3. bump - the right and left walls deflect projectiles that want to fly through them
+	4. boxy - just like bump, except that the "ceiling" also reflects projectiles
+	5. rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
 
+Translated with www.DeepL.com/Translator (free version)
 Select options with cursor keys or joystick.
 
 The [RETURN] key or Joystick button moves to the next screen.
@@ -126,16 +133,16 @@ And here are the `ExplosionRadius` values for each weapon:
 | Baby Missile | 11 |
 | Missile | 17 |
 | Baby Nuke | 25 |
-| Nuke | 31 |
+| Nuke | 30 |
 | LeapFrog| 17 15 13 |
 | Funky Bomb | 21 11 (* 5) |
 | MIRV | 17 (* 5) |
-| Death's Head | 31 (* 5) |
+| Death's Head | 30 (* 5) |
 | Napalm | x 40 (this weapon is different and the distance from the center is not determined, simply any tank within range of the flames loses 40 units of energy - the ExplosionRadius variable is not used) |
 | Hot Napalm | x 80 (the same principle as in Napalm) |
 | Baby Roller | 11 |
 | Roller | 21 |
-| Heavy Roller | 31 |
+| Heavy Roller | 30 |
 | Riot Charge | 31 |
 | Riot Blast | 0 (in reality - 61 but with these weapons it is not taken into account when counting energy loss only the width of the ground to fall) |
 | Riot Bomb | 17 |

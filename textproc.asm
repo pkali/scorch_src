@@ -204,7 +204,7 @@ OptionSetLoop
 ; next option
     adw temp  #40 ;jump to next line
     inc:lda temp2
-    cmp #maxoptions ;number of options
+    cmp #maxOptions ;number of options
     bne OptionsSetMainLoop
 
 ;inversing the first few chars of the selected line (OptionsY)
@@ -853,7 +853,9 @@ invSelectDef
     ; if activate battery, we do it differently
     mva #sfx_battery sfx_effect
     mva #99 Energy,x
+	phy
 	jsr MaxForceCalculate
+	ply
     jmp DecreaseDefensive ; bypass activation
 NotBattery
 	cmp #ind_Long_Barrel____
@@ -1105,6 +1107,7 @@ LastNameChar
 
     lda #$80 ; place cursor on the end
     sta NameAdr,y
+	dey
     sty PositionInName
 
 

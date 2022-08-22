@@ -29,7 +29,7 @@ skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning
 ;----------------------------------------------------
 variablesToInitialize
 ;Options DO NOT ZERO ON RESTART GAME - ticket #27
-OptionsTable .by 0,1,2,2,0,1,3,2
+OptionsTable .by 0,1,2,2,0,1,3,2,0
 RoundsInTheGame .by 10 ;how many rounds in the current game
 seppukuVal .by 75
 mountainDeltaH .by 3
@@ -138,7 +138,8 @@ MaxWind   .ds 1 ;
 WindOrientation  .DS 1 ;(0-right,1-left)
 ;----------------------------------------------------
 ;Counter  .DS 1  ;temporary Counter for outside loops
-;HitFlag  .DS 1 ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank 
+;HitFlag  .DS 1 ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank
+WallsType	.ds 1	; bits 6 and 7: 00 - none, 01 - bump, 10 - wrap, 11 - boxy
 ;----------------------------------------------------
 xtankstableL ;X positions of tanks (lower left point)
     .DS [MaxPlayers]

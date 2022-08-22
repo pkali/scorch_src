@@ -4,7 +4,7 @@
 
 ; initial values for some variables
 initialvaluesStart
-I_OptionsTable .by 0,1,2,2,0,1,3,2
+I_OptionsTable .by 0,1,2,2,0,1,3,2,0
 I_RoundsInTheGame .by 10 ;how many rounds in the current game
 I_seppukuVal .by 75
 I_mountainDeltaH .by 3

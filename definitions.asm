@@ -17,7 +17,7 @@ display = $1010 ;screen takes $2K due to clearing routine
 
 margin = 40 ;mountain drawing Y variable margin
 MaxPlayers = 6
-maxOptions = 8  ;number of all options
+maxOptions = 9  ;number of all options
 PMOffsetX = $2C ; P/M to graphics offset
 PMOffsetY = $23 ; P/M to graphics offset
 napalmRadius = 10

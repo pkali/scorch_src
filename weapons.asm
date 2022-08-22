@@ -1798,6 +1798,12 @@ NoWind
     mwa ytraj+1 ybyte
     jsr draw
     ;key
+	bit LaserFlag
+	bmi LaserNoWalls
+	; Check for walls
+	jsr MakeWalls
+	;
+LaserNoWalls
     mwa xtraj+1 XtrajOld+1
     mwa ytraj+1 YtrajOld+1
 
@@ -2333,7 +2339,49 @@ MIRValreadyAll
     ;jsr drawtanks
     rts
 .endp
-
+; -------------------------------------------------
+.proc MakeWalls
+; -------------------------------------------------
+	bit WallsType ; ; bits 6 and 7: 00 - none, 01 - bump, 10 - wrap, 11 - boxy
+	bpl WrapAndNone
+	bvc MakeBump
+	; top bounce
+	bit ytraj+2
+	bpl NoOnTop
+	sec
+	.rept 4
+        lda #$00
+        sbc vy+#
+        sta vy+#
+	.endr
+NoOnTop
+MakeBump
+	cpw xtraj+1 #screenwidth
+	bcc OnScreen
+	; inverse vx (bouncing wall)
+	sec
+	.rept 4
+        lda #$00
+        sbc vx+#
+        sta vx+#
+    .endr
+	rts
+WrapAndNone
+	bvc NoWall
+	cpw xtraj+1 #screenwidth
+	bcc OnScreen 	
+	; (wrapping wall)
+	bit xtraj+2
+	bmi LeftWrap
+RightWrap
+	sbw xtraj+1 #screenwidth
+	rts
+LeftWrap
+	adw xtraj+1 #screenwidth
+OnScreen
+NoWall
+	rts
+.endp
 ; -------------------------------------------------
 .proc WhiteFlag
 ; -------------------------------------------------
