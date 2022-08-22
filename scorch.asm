@@ -1590,6 +1590,10 @@ getkeyend
     lda SKSTAT
     cmp #$ff
     bne WaitForKeyRelease
+	lda CONSOL
+	and #%00000110	; Select and Option only
+	cmp #%00000110
+	bne WaitForKeyRelease
     rts
 .endp
 ;--------------------------------------------------
@@ -1626,7 +1630,7 @@ noKey
 .endp
 .proc WaitOneFrame
 	lda CONSOL
-	cmp #6  ; START KEY
+	and #%00000001 ; START KEY
 	beq @+
 	wait
 @	rts

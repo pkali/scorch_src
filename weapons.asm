@@ -1182,6 +1182,14 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
+	; Select and Option
+	lda CONSOL
+	tay
+	and #%00000100
+	beq callActivation	; Option key
+	tya
+	and #%00000010
+	jeq pressedTAB	; Select key
     lda SKSTAT
     cmp #$ff
     jeq checkJoy
@@ -2829,7 +2837,7 @@ GoDown
 FloatDown
 	lda ytankstable,x
 	cmp FloatingAlt
-	beq OnGround
+	bcs OnGround
 	; first erase old tank position
 	mva #1 Erase
     jsr DrawTankNr

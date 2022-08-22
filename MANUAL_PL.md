@@ -54,9 +54,9 @@ W linii statusowej widoczna jest informacja o tym który z graczy aktualnie moż
 
 Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana kąta nachylenia lufy, góra/dół - zmiana ustawienia siły strzału.
 * [SPACJA] lub przycisk joysticka naciśnięte krótko - oddanie strzału
-* [TAB] - wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory)
+* [TAB] lub [SELECT]- wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory)
 * Klawisz [I] lub dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną.
-* Klawisz [A] - bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych.
+* Klawisz [A] lub [OPTION]- bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych.
 * Klawisz [M] - wyłączenie/włączenie muzyki w tle
 * Klawisz [S] - wyłączenie/włączenie dźwięków efektów.
 * Klawisz [O] - wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza [ESC] z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy.
