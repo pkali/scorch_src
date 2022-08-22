@@ -219,7 +219,7 @@ FirstSTART
 START
     ; Startup sequence
     jsr Initialize
-	
+
 	;jsr GameOverScreen	; only for test !!!
     
     lda #song_main_menu
@@ -242,6 +242,7 @@ START
     ; for the round #1 shooting sequence is random
 	
 MainGameLoop
+	jsr SetWallsType
 	; first set default barrel lengths (fix for Long Schlong activation :) )
 	; we must do it before purchase/activate
     ldx #(MaxPlayers-1)
@@ -1508,7 +1509,24 @@ nextishigher
 
     rts
 .endp
-
+;--------------------------------------------------
+.proc SetWallsType
+;--------------------------------------------------
+	mva #0 WallsType
+	lda OptionsTable+8
+	cmp #4
+	beq SetRandomWalls
+	lsr
+	ror WallsType
+	lsr
+	ror WallsType
+	rts
+SetRandomWalls
+	lda random
+	and #%11000000
+	sta WallsType
+	rts
+.endp
 ;--------------------------------------------------
 .proc GetKey  ; waits for pressing a key and returns pressed value in A
 ; when [ESC] is pressed, escFlag is set to 1

@@ -17,6 +17,7 @@ OptionsHere
  dta d"Missiles :  slug slow norm fast hare    "
  dta d"Seppuku  :  nevr rare norm oftn alws    "
  dta d"Mountains:   NL   BE   CZ   CH   NP     "
+ dta d"Walls    :  none wrap bump boxy rand    "
 OptionsScreenEnd
 ;-----------------------------------------------
 ListOfWeapons
