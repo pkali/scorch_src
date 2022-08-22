@@ -12,6 +12,13 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywwki:
 * szybkość lotu pocisków (nie ma wpływu na tor lotu - zmienia jedynie widoczną prędkość rysowania - nie zmienia nic w samej rozgrywce)
 * częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą “strzelać w próżnię” :) - jeśli grają tylko ludzie optymalne ustawienie to “norm”, w przypadku graczy sterowanych przez komputer… wedle uznania.
 * wysokość (i pofałdowanie) gór od prawie płaskich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
+* sposób działania ścian (krawędzi ekranu):
+	1. none - pociski, które wyleciały poza ekran nie wracają
+	2. wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony (i odwrotnie)
+	3. bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć
+	4. boxy - tak jak bump, tyle że "sufit" także odbija pociski
+	5. rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
+
 
 Wybór opcji klawiszami kursora lub joystickiem.
 

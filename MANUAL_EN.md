@@ -12,8 +12,15 @@ On the first screen, you can configure gameplay options:
 * number of rounds in a game
 * missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
- * The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
+* The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
+* the way the walls (edges of the screen) work:
+	1. none - projectiles that flew off the screen do not return
+	2. wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
+	3. bump - the right and left walls deflect projectiles that want to fly through them
+	4. boxy - just like bump, except that the "ceiling" also reflects projectiles
+	5. rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
 
+Translated with www.DeepL.com/Translator (free version)
 Select options with cursor keys or joystick.
 
 The [RETURN] key or Joystick button moves to the next screen.
