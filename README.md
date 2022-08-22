@@ -48,6 +48,17 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changes:
 
+###### Version 1.11
+2022-08-22
+
+A release lollapalooza.
+
+The silliness indicator crashed. What are we doing?
+
+Changes:
+* A very silly buffer overflow bug fixed - it allowed for infinite (well... to the point) lengths of tank names, or rather for overwriting code with arbitrary values.
+* Gamefield walls added https://github.com/pkali/scorch_src/issues/50. Choosing a different wall effect from the main options menu allows for a sophisticated tactics change. 
+
 ###### Version 1.10
 2022-08-21
 
