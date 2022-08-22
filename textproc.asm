@@ -26,9 +26,9 @@
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
 	jsr SetPMWidth
-    mva #TextBackgroundColor colpf2s
-    mva #TextForegroundColor colpf3s
-	mva #$ca colpf1s
+    mva #TextBackgroundColor COLOR2
+    jsr ColorsOfSprites
+	mva #$ca COLOR1
    
     VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
 
@@ -45,7 +45,6 @@
 	jsr ClearPMmemory
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
-    jsr ColorsOfSprites
     jsr drawmountains ;draw them
 	ldx NumberOfPlayers
 	dex
@@ -240,68 +239,78 @@ OptionsYLoop
 .endp
 
 ;-------------------------------------------
-; call of the purchase screens for each tank
+; call of the purchase (and activate) screens for each tank
 .proc CallPurchaseForEveryTank
 
-    mva #0 TankNr
-    sta isInventory
+	mva #0 TankNr
+	sta isInventory
 @
-      ldx TankNr
-      lda SkillTable,x
-      beq ManualPurchase
-      jsr PurchaseAI
-      jmp AfterManualPurchase
-
+	ldx TankNr
+	lda SkillTable,x
+	beq ManualPurchase
+	jsr PurchaseAI	; remember to make ActivateAI :) !!!
+	jmp AfterManualPurchase
 ManualPurchase
-      jsr Purchase
-      bit escFlag
-      spl:rts
+	mva #0 isInventory
+	jsr Purchase	; purchase weapons
+	bit escFlag
+	spl:rts
+	jsr DefensivesActivate	; activate weapons
+	bit escFlag
+	spl:rts	
 AfterManualPurchase
-
-      inc:lda TankNr
-      cmp NumberOfPlayers
-    bne @-
-    rts
+	inc:lda TankNr
+	cmp NumberOfPlayers
+	bne @-
+	rts
 .endp
-
+;--------------------------------------------------
+.proc DefensivesActivate
+;--------------------------------------------------
+; This proc call Inventory and set Defensives activation first
+    
+    mwa #ListOfDefensiveWeapons WeaponsListDL ;switch to the list of offensive weapons    
+    mva #$ff IsInventory
+    mva #$01 WhichList
+    ; offensive weapon - 0, deffensive - 1
+	jmp Purchase.GoToActivation
+.endp
 ;--------------------------------------------------
 .proc Purchase ;
 ;--------------------------------------------------
-; TODO: when round ends with a weapon depleted the pointer points to an empty line
-
 ; In tanknr there is a number of the tank (player)
 ; that is buying weapons now (from 0).
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
+    mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
+        
+; we are clearing list of the weapons
+    mva #$00 WhichList
+    ; offensive weapon - 0, deffensive - 1
+GoToActivation
+    mva #$ff LastWeapon
+
 ;    mva #0 dmactl
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
     jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
-;    lda dmactls
-;    and #$fc
-;    ora #$02     ; normal screen width
-    lda #%00110010 ; normal screen width, DL on, P/M off
+    lda #@dmactl(narrow|dma) ; narro screen width, DL on, P/M off
     sta dmactls
 
     lda #song_supermarket
-    jsr RmtSongSelect
-    
-    mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
-    
+	bit IsInventory
+	bpl @+
+	lda #song_inventory
+@	jsr RmtSongSelect
+
     ldx tankNr
     lda TankStatusColoursTable,x
-    sta colpf2s
-    
-    
-; we are clearing list of the weapons
-    mva #$ff LastWeapon
-    mva #$00 WhichList
-    ; offensive weapon - 0, deffensive - 1
+    sta COLOR2
 
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
-    tay  ; 0 to y
+	ldy #0
     lda tanknr
     :3 asl  ; 8 chars per name
     tax
@@ -325,7 +334,7 @@ AfterPurchase
     sta decimal
     lda moneyH,x
     sta decimal+1
-    mwa #textbuffer2+28 displayposition
+    mwa #textbuffer2+26 displayposition
     jsr displaydec5
 
     ; in xbyte there is the address of the line that
@@ -351,11 +360,9 @@ CreateList
     jmi itIsInventory
     
     ; put "Purchase" on the screen
-     ldx #[purchaseTextEnd-purchaseText-1]
-@     lda purchaseText,x
-      sta purchaseActivate,x
-      dex
-    bpl @-
+	mwa #PurchaseDescription PurActDescAddr
+	; and Title
+	mwa #PurchaseTitle DLPurTitleAddr
 
     ; checking if we can afford buying this weapon
     ldx temp
@@ -372,34 +379,34 @@ CreateList
 
     ; first parentheses and other special chars
     ; (it's easier this way)
-    ldy #22
-    lda #08 ; "("
-    STA (XBYTE),y
-    ldy #32
-    lda #09 ; ")"
-    sta (xbyte),y
-    ldy #25
+    ;ldy #22
+    ;lda #08 ; "("
+    ;STA (XBYTE),y
+    ;ldy #32
+    ;lda #09 ; ")"
+    ;sta (xbyte),y
+    ldy #24
     lda #15 ; "/"
     sta (xbyte),y
-    ldy #31
+    ldy #30
     lda #16 ; "0"
     sta (xbyte),y
 
     ;now number of units (shells) to be purchased
-    adw xbyte #23 displayposition  ; 23 chars from the beginning of the line
+    adw xbyte #22 displayposition  ; 23 chars from the beginning of the line
     lda WeaponUnits,x
     sta decimal
     jsr displaybyte
     ldx temp ;getting back index of the weapon
 
     ; and now price of the weapon
-    adw xbyte #26 displayposition  ; 26 chars from the beginning of the line
+    adw xbyte #25 displayposition  ; 26 chars from the beginning of the line
     lda WeaponPriceL,x
     sta decimal
     lda WeaponPriceH,x
     sta decimal+1
     jsr displaydec5
-    ldy #26		; overwrite first digit (allways space - no digit :) )
+    ldy #25		; overwrite first digit (allways space - no digit :) )
     lda #04 ; "$"
     sta (xbyte),y
 
@@ -407,11 +414,9 @@ CreateList
 
 itIsInventory
     ; put "Activate" on the screen
-     ldx #[purchaseTextEnd-purchaseText-1]
-@     lda activateText,x
-      sta purchaseActivate,x
-      dex
-    bpl @-
+	mwa #ActivateDescription PurActDescAddr
+	; and Title
+	mwa #InventoryTitle DLPurTitleAddr
 
     ldx temp
     lda TanksWeaponsTableL,y
@@ -423,11 +428,11 @@ itIsInventory
     jeq noWeapon
 
     ; clear price area
-    ldy #22  ; beginning of the price area
+    ldy #21  ; beginning of the price area
     lda #0
 @     sta (XBYTE),y
       iny
-      cpy #32+1  ; end of price
+      cpy #32  ; end of price
     bne @-
 
 notInventory
@@ -503,7 +508,7 @@ DefenceList
     inc HowManyOnTheListDef
     ; If everything is copied then next line
 NextLineOfTheList
-    adw xbyte #40
+    adw xbyte #32
 TooLittleCash
 NoWeapon
 
@@ -532,27 +537,20 @@ WeHaveOffset
 
     ; now we have to erase empty position of both lists.
 
-    ; Multiply number on list 1 by 40 and set address
+    ; Multiply number on list 1 by 32 and set address
     ; of the first erased char.
     ; (multiplying taken from book of Ruszczyc 'Assembler 6502'
 
     lda HowManyOnTheListOff
-    sta xbyte+1 ; multiplier (temporarily here, it will be erased anyway)
-    lda #$00 ; higher byte of the Result
-    sta xbyte ; lower byte of the Result
-    ldx #$08
-Rotate04
-    lsr xbyte+1
-    bcc DoNotAddX01
-      clc
-      adc #40
-DoNotAddX01
-    ror
-    ror xbyte
-    dex
-    bne Rotate04
-    sta xbyte+1
-
+    sta xbyte ; multiplier (temporarily here, it will be erased anyway)
+    lda #$00 ; 
+    sta xbyte+1 ; higher byte of the Result
+    ldx #$05 ; 2^5
+@     asl xbyte
+      rol xbyte+1
+      dex
+    bne @-
+    
     ; add to the address of the list
     clc
     lda xbyte
@@ -580,21 +578,14 @@ DoNotIncHigher1
     ; Multiply number on list 1 by 40 and set address
     ; of the first erased char.
     lda HowManyOnTheListDef
-    sta xbyte+1 ; multiplier
-    lda #$00 ; higher byte of the Result
-    sta xbyte ; lower byte of the Result
-    ldx #$08
-Rotate05
-    lsr xbyte+1
-    bcc DoNotAddX02
-    clc
-    adc #40
-DoNotAddX02
-    ror
-    ror xbyte
-    dex
-    bne Rotate05
-    sta xbyte+1
+    sta xbyte ; multiplier (temporarily here, it will be erased anyway)
+    lda #$00 ; 
+    sta xbyte+1 ; higher byte of the Result
+    ldx #$05 ; 2^5
+@     asl xbyte
+      rol xbyte+1
+      dex
+    bne @-
 
     ; add to the address of the list
     clc
@@ -678,17 +669,19 @@ ChoosingItemForPurchase
 
 PurchaseKeyUp
     lda WhichList
-    beq GoUp1
+    beq GoUpOffensive
     dec PositionOnTheList
     bpl EndUpX
-    lda #$00
-    sta PositionOnTheList
+    ldy #0 ;HowManyOnTheListDef
+    ;dey
+    sty PositionOnTheList
     jmp ChoosingItemForPurchase
-GoUp1
+GoUpOffensive
     dec PositionOnTheList
     bpl MakeOffsetUp
-    lda #$00
-    sta PositionOnTheList
+    ldy #0 ;HowManyOnTheListOff
+    ;dey
+    sty PositionOnTheList
 
 MakeOffsetUp
     ; If offset is larger than pointer position,
@@ -701,7 +694,7 @@ EndUpX
     jmp ChoosingItemForPurchase
 PurchaseKeyDown
     lda WhichList
-    beq GoDown1
+    beq GoDownOffensive
     inc:lda PositionOnTheList
     cmp HowManyOnTheListDef
     bne EndGoDownX
@@ -709,7 +702,7 @@ PurchaseKeyDown
     dey
     sty PositionOnTheList
     jmp ChoosingItemForPurchase
-GoDown1
+GoDownOffensive
     inc:lda PositionOnTheList
     cmp HowManyOnTheListOff
     bne MakeOffsetDown
@@ -794,7 +787,34 @@ positiveMoney
     ; now we have to get address of
     ; the table of the weapon of the tank
     ; and add appropriate number of shells
+
+    sty LastWeapon ; store last purchased weapon
+    ; because we must put screen pointer next to it
     
+	; but if we purchasing "Buy me!" then we must draw the winning weapon.
+	
+	cpy #ind_Buy_me_________
+	bne NoSuprise
+	
+Suprise	; get a random weapon
+	lda random
+	cmp #51		; defensive weapons are less likely because they are more expensive - probability 255:51 (5:1)
+	bcc GetRandomDefensive
+GetRandomOffensive
+	randomize ind_Missile________ ind_Laser__________
+	cmp #ind_Buy_me_________
+	beq GetRandomOffensive
+	tay
+    lda WeaponUnits,y	; check if weapon exist
+	beq GetRandomOffensive	
+	bne NoSuprise	; Y always <> 0
+GetRandomDefensive
+	randomize ind_Battery________ ind_Nuclear_Winter_
+	tay
+    lda WeaponUnits,y	; check if weapon exist
+	beq GetRandomDefensive
+	
+NoSuprise
     lda TanksWeaponsTableL,x
     sta weaponPointer
     lda TanksWeaponsTableH,x
@@ -809,8 +829,6 @@ positiveMoney
       lda #99
       sta (weaponPointer),y
 LessThan100
-    sty LastWeapon ; store last purchased weapon
-    ; because we must put screen pointer next to it
 
     mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
     jmp Purchase.AfterPurchase
@@ -931,7 +949,7 @@ DefActivationEnd
 EraseLoop
     tya  ; lda #$00
     sta (xbyte),y
-    adw xbyte #40
+    adw xbyte #32
     dex
     bpl EraseLoop
 
@@ -944,7 +962,7 @@ EraseLoop
     ldx PositionOnTheList
     beq SelectList2 ; if there is 0 we add nothing
 AddLoop2
-    adw xbyte #40
+    adw xbyte #32
     dex
     bne AddLoop2
 SelectList2
@@ -966,7 +984,7 @@ CharToList1
     ldx PositionOnTheList
     beq SelectList1 ; if there is 0 we add nothing
 AddLoop1
-    adw xbyte #40
+    adw xbyte #32
     dex
     bne AddLoop1
 SelectList1
@@ -977,7 +995,7 @@ SelectList1
     ldx OffsetDL1
     beq SetWindowList1 ; if zero then add nothing
 LoopWindow1
-    adw xbyte #40
+    adw xbyte #32
     dex
     bne LoopWindow1
 SetWindowList1
@@ -1024,7 +1042,7 @@ NoArrowDown
     mva #0 TankNr
 @     tax
       lda TankStatusColoursTable,x
-      sta colpf2s  ; set color of player name line
+      sta COLOR2  ; set color of player name line
       jsr EnterPlayerName
       bit escFlag
       spl:rts
@@ -1070,14 +1088,20 @@ NoArrowDown
     
     ldy #0
 @     lda TanksNames,x
-      beq endOfTankName
+;      beq endOfTankName
       sta NameAdr,y
       inx
       iny
       cpy #8
     bne @-
 endOfTankName
-    
+
+@	lda NameAdr,y
+	bne LastNameChar
+	dey
+	bpl @-
+LastNameChar
+	iny
 
     lda #$80 ; place cursor on the end
     sta NameAdr,y
@@ -1199,10 +1223,18 @@ EndOfNick
 
     mva #sfx_next_player sfx_effect
 
-    lda NameAdr ; check if first char is " "
-    and #$7F  ; remove inverse (Cursor)
+
+    ; check if all chars are empty (" ")
+    ldy #7
+    lda #0
+@     ora NameAdr,y 
+      and #$7F  ; remove inverse (Cursor)
+      dey
+    bpl @-
+    tay
     beq MakeDefaultName
 
+    ldy #0
 nextchar04
     lda NameAdr,y
     and #$7f ; remove inverse (Cursor)
@@ -1379,18 +1411,19 @@ displayloop1
     lda xtankstableH,y
     sta temp+1
     ;now we should substract length of the text-1
-    
+    ;temp2 = (fx-1)*2
     ldy fx
     dey
     tya
     asl
     sta temp2
     mva #0 temp2+1
-    ;here we assume max length of text
-    ;to display is 127 chars!
-
     ;now we have HALF length in pixels
     ;stored in temp2
+
+    ;here we assume max length of text
+    ;to display is 127 chars, but later it turns out it must be max 63!
+
     sbw temp temp2 ; here begin of the text is in TEMP !!!!
     ;now we should check overflows
     ;lda temp+1  ; opty
@@ -1420,14 +1453,14 @@ DOTNnotLessThanZero
     ;so check if not greater than screenwitdth
     cpw temp2 #screenwidth
     bcc DOTNnoOverflow
+
     ;if end is greater than screenwidth
     ;then screenwidth - length is fine
-
-
     lda fx
     asl
     asl
     sta temp
+    mva #0 temp+1
 
     sec
     lda #<(screenwidth-1)
@@ -1539,14 +1572,12 @@ DOTNcharloop
     mwa temp TextAddress
 
     ;find length of the tank's name
-    ldy #0
+    ldy #7
 @
       lda (temp),y
-      beq end_found
-      iny
-      cpy #8
+      bne end_found
+      dey
     bne @-
-    dey    
    
 end_found
     iny
@@ -1560,18 +1591,22 @@ end_found
 .proc TypeLine4x4 ;
 ;-------------------------------
     ;this routine prints line ending with $ff
-    ;address in LineAddress4x4
+    ;address in LineAddress4x4 (it is the same as `temp`)
     ;starting from LineXdraw, LineYdraw
+
+    lda #1
+
+staplot4x4color
+    sta plot4x4color
 
 
     ldy #0
     sty LineCharNr
-    mva #1 plot4x4color
 
 TypeLine4x4Loop
     ldy LineCharNr
 
-    mwa LineAddress4x4 temp
+    ;mwa LineAddress4x4 temp  ; LineAddress4x4 === temp
     lda (temp),y
     cmp #$ff
     beq EndOfTypeLine4x4
@@ -1871,12 +1906,12 @@ FinishResultDisplay
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
     lda #%00100100  ; playfield before P/M
-    sta gtictls
+    sta GPRIOR
 	jsr SetPMWidth	
     jsr ColorsOfSprites
-    mva #0 colpf1s
+    mva #0 COLOR1
 	sta CreditsVScrol
-    mva #TextForegroundColor colpf2s
+    mva #TextForegroundColor COLOR2
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
 	; make text and color lines for each tank
     ldx NumberOfPlayers  ;we start from the highest (best) tank
@@ -2364,8 +2399,8 @@ NextChar02
     mva #GOSbeg hposp0
     mva #GOSbeg+12 hposp0+1
     
-    mva #15 COLPM0S
-    sta COLPM1S
+    mva #15 PCOLR0
+    sta PCOLR1
     
     rts
 .endp

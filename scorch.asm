@@ -36,14 +36,13 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"1.00" ; number of this build (3 bytes)
+	dta d"1.10" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
-;    icl 'artwork/sfx/rmt_feat.asm'
     
     
-    .zpvar xdraw            .word = $80 ;variable X for plot
+    .zpvar xdraw            .word = $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
     .zpvar ybyte            .word
@@ -89,36 +88,75 @@
     ;.zpvar dliY             .byte
 	.zpvar sfx_effect .byte
 	.zpvar RMT_blocked	.byte
-;-------------- 
 
-	displayposition = modify
+    ; --------------OPTIMIZATION VARIABLES--------------
+    .zpvar Force .word
+    .zpvar Force_ .byte ; Force is 3 bytes long
+    .zpvar Angle .byte
+    .zpvar Parachute .byte ; are you insured with parachute?
+    .zpvar color .byte
+    .zpvar Erase .byte  ; if 1 only mask of the character is printed
+                        ; on the graphics screen. if 0 character is printed normally
+    .zpvar radius .byte
+    .zpvar decimal .word
+    .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
+    .zpvar Counter .byte ;temporary Counter for outside loops
+    .zpvar ExplosionRadius .word ;because when adding in xdraw it is double byte
+    .zpvar ResultY .byte
+    .zpvar FallDown2 .byte
+    .zpvar xcircle .word
+    .zpvar ycircle .word
+    .zpvar vy .word
+    .zpvar vy_ .word ; 4 bytes
+    .zpvar vx .word
+    .zpvar vx_ .word ; 4 bytes
+    .zpvar HitFlag .byte ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank
+    .zpvar PositionOnTheList .byte ; pointer position on the list being displayed
+    .zpvar XHit .word
+    .zpvar delta .word
+    .zpvar HowMuchToFall .byte
+    .zpvar magic .word
+    .zpvar xtraj .word
+    .zpvar xtraj_ .byte  ; 3 bytes
+    .zpvar ytraj .word
+    .zpvar ytraj_ .byte  ; 3 bytes
+    .zpvar Wind .word
+    .zpvar Wind_ .word  ; 4 bytes
+    .zpvar RangeLeft .word
+    .zpvar RangeRight .word
+    .zpvar NewAngle .byte
+    .zpvar escFlag .byte
+    .zpvar LineYdraw .byte
+    .zpvar LineXdraw .word
+    .zpvar plot4x4color .byte
+    .zpvar Multiplier .word
+    .zpvar Multiplier_ .byte  ; 3 bytes
+    .zpvar HowToDraw .byte
+    .zpvar gravity .byte
+    .zpvar LineLength .word
+    ;.zpvar LineAddress4x4 .word
+    .zpvar tracerflag .byte
+    .zpvar isInventory .byte
+    .zpvar DifficultyLevel .byte
+    .zpvar goleft .byte
+    .zpvar OffsetDL1 .byte
+    .zpvar L1 .byte
 	
-
-    ;* RMT ZeroPage addresses
+    ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
 	.zpvar RMT_Zero_Page_V .byte
-;    .zpvar p_tis            .word
-;    .zpvar p_trackslbstable .word
-;    .zpvar p_trackshbstable .word
-;    .zpvar p_song           .word
-;    .zpvar ns               .word
-;    .zpvar nr               .word
-;    .zpvar nt               .word
-;    .zpvar reg1             .byte
-;    .zpvar reg2             .byte
-;    .zpvar reg3             .byte
-;    .zpvar tmp              .byte
-;    IFT FEAT_COMMAND2
-;      .zpvar frqaddcmd2     .byte
-;    EIF
-;    p_instrstable = p_tis
+
+    displayposition = modify
+    LineAddress4x4 = temp
 
 ;-------------------------------
 
-    icl 'lib/atari.hea'
+    icl 'lib/ATARISYS.ASM'
     icl 'lib/macro.hea'
 
     ;splash screen and musix
 	icl 'artwork/Scorch50.asm'
+
+
     ;Game loading address
     ORG  $3000
 WeaponFont
@@ -149,6 +187,22 @@ FirstSTART
 	sta variablesToInitialize,y
 	dey
 	bpl @-
+
+
+    ; generate linetables
+    mwa #display temp
+    mwa #linetableL temp2
+    mwa #linetableH modify
+    ldy #0
+@     lda temp
+      sta (temp2),y
+      lda temp+1
+      sta (modify),y
+      adw temp #40
+      iny
+      cpy #screenheight+1
+    bne @-
+
 
     ; RMT INIT
     lda #$f0                    ;initial value
@@ -188,6 +242,15 @@ START
     ; for the round #1 shooting sequence is random
 	
 MainGameLoop
+	; first set default barrel lengths (fix for Long Schlong activation :) )
+	; we must do it before purchase/activate
+    ldx #(MaxPlayers-1)
+SettingBarrel
+	lda #StandardBarrel	; standard barrel length
+	sta BarrelLength,x
+    dex
+    bpl SettingBarrel
+
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
@@ -348,8 +411,8 @@ NoGameOverYet
 
 	jsr SetPMWidth
 	lda #0
-	sta colpf2s	; status line "off"
-	sta colpf1s
+	sta COLOR2	; status line "off"
+	sta COLOR1
 	
 	tax
 @	  sta singleRoundVars,x
@@ -368,8 +431,6 @@ SettingEnergies
       sta Energy,x
       sta eXistenZ,x
       sta LASTeXistenZ,x
-	  lda #StandardBarrel	; standard barrel length
-	  sta BarrelLength,x
       ; anything in eXistenZ table means that this tank exist
       ; in the given round
       lda #<1000
@@ -416,7 +477,7 @@ SettingEnergies
 	mva #$00 TankSequencePointer
 
 ;---------round screen is ready---------
-	mva #TextForegroundColor colpf1s	; status line "on"
+	mva #TextForegroundColor COLOR1	; status line "on"
     rts
 .endp
 
@@ -497,7 +558,7 @@ DoNotFinishTheRound
 
     ldx tankNr
     lda TankStatusColoursTable,x
-    sta colpf2s  ; set color of status line
+    sta COLOR2  ; set color of status line
     jsr PutTankNameOnScreen
     jsr DisplayStatus
 
@@ -535,6 +596,8 @@ AfterManualShooting
 	; defensive weapons without flight handling
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
+	cmp #ind_Floating_Tank__ ; Floating Tank
+	beq GoFloat
 	cmp #ind_White_Flag_____ ; White Flag
 	beq ShootWhiteFlag
 	cmp #ind_Nuclear_Winter_
@@ -547,6 +610,13 @@ ShootWhiteFlag
 	; --- white flag ---
 	jsr WhiteFlag
 	jmp NextPlayerShoots ; and we skip shoot
+GoFloat
+	jsr TankFlying
+	lda #0
+	sta ActiveDefenceWeapon,x ; deactivate after use
+	bit escFlag
+	bpl ManualShooting ; after floating tank can shoot
+	rts
 StandardShoot
     inc noDeathCounter
 
@@ -579,14 +649,6 @@ continueMainRoundLoopAfterSeppuku
 
 
 AfterExplode
-    ; TODO: IS IT OK??? possibly a fix here needed for #56
-    ldy WeaponDepleted
-    bne @+
-      ldx TankNr
-      tya
-      sta ActiveWeapon,x 
-@
-
     ;temporary tanks removal (would fall down with soil)
     mva #1 Erase
     jsr drawtanks
@@ -608,8 +670,16 @@ TanksFallDown
 NoExistNoFall
     dex
     bpl TanksFallDown
-    mva tempor2 TankNr
+    mvx tempor2 TankNr
 missed
+
+    ; TODO: IS IT OK??? possibly a fix here needed for #56
+    ldy WeaponDepleted
+    bne @+
+      ldx TankNr
+      tya
+      sta ActiveWeapon,x 
+@
 
     ;here we clear offensive text (after a shoot)
     ;shit -- it's second time, but it must be like this
@@ -927,15 +997,15 @@ B0  DEY
 ;--------------------------------------------------
 .proc ColorsOfSprites     
     lda TankColoursTable ; colours of sprites under tanks
-    sta COLPM0S
+    sta PCOLR0
     lda TankColoursTable+1
-    sta COLPM1S
+    sta PCOLR1
     lda TankColoursTable+2
-    sta COLPM2S
+    sta PCOLR2
     lda TankColoursTable+3
-    sta COLPM3S
+    sta PCOLR3
     LDA TankColoursTable+4
-    STA COLPF3S     ; joined missiles (5th tank)
+    STA COLOR3     ; joined missiles (5th tank)
     rts
 .endp
 
@@ -972,7 +1042,8 @@ setBmissile
 deletePtr = temp
 
     ; clean variables
-    lda #0 
+    lda #0
+    sta escFlag
     tay
     mwa #variablesStart deletePtr
 @     tya
@@ -1008,14 +1079,11 @@ SetunPlots
     ;setting up P/M graphics
     lda #>pmgraph
     sta pmbase
-;    lda dmactls
-;    ora #$38     ; Players and Missiles single lined
-;    sta dmactls
     lda #$03    ; P/M on
-    sta pmcntl
+    sta GRACTL
 	jsr SetPMWidth
-    lda #%00100000 ; P/M priorities (multicolor players on)
-    sta gtictls
+    lda #%00100001 ; P/M priorities (multicolor players on) - prior=1
+    sta GPRIOR
     jsr PMoutofScreen
 
     ;let the tanks be visible!
@@ -1029,18 +1097,6 @@ MakeTanksVisible
     mva #1 CurrentRoundNr ;we start from round 1
     mva #6 NTSCcounter
     
-;    ; RMT INIT
-;    lda #$f0                    ;initial value
-;    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
-;
-;    lda #$ff                    ;initial value
-;    sta sfx_effect
-;
-;    lda #0
-;    jsr RmtSongSelect
-;
-;    VMAIN VBLinterrupt,7  		;jsr SetVBL
-
     rts
 .endp
 ;--------------------------------------------------
@@ -1105,16 +1161,16 @@ MakeTanksVisible
 	phy
 	lda dliCounter
 	bne EndofPMG
-    lda #%00100000	; playfield after P/M
+    lda #%00100001	; playfield after P/M - prior=1
 	STA WSYNC
-    sta gtictl
+    sta PRIOR
 	bne EndOfDLI_GO
 EndofPMG
 	cmp #1
 	bne ColoredLines
     lda #%00100100	; playfield before P/M
 	STA WSYNC
-    sta gtictl
+    sta PRIOR
 	bne EndOfDLI_GO
 ColoredLines
 	cmp #9
@@ -1306,7 +1362,7 @@ UsageLoop
     sta temp2+1
 	
     cpw RandBoundaryLow temp2
-    bcs RandomizeForce
+    seq:bcs RandomizeForce
 
     cpw RandBoundaryHigh temp2
     bcc RandomizeForce
@@ -1476,7 +1532,7 @@ checkJoyGetKey
       ;------------JOY-------------
       ;happy happy joy joy
       ;check for joystick now
-      lda JSTICK0
+      lda STICK0
       and #$0f
       cmp #$0f
       beq notpressedJoyGetKey
@@ -1486,7 +1542,7 @@ checkJoyGetKey
 
 notpressedJoyGetKey
       ;fire
-      lda TRIG0S
+      lda STRIG0
     bne @-
     lda #$0c ;Return key
     
@@ -1507,11 +1563,11 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    lda JSTICK0
+    lda STICK0
     and #$0f
     cmp #$0f
     bne WaitForKeyRelease
-    lda TRIG0S
+    lda STRIG0
     beq WaitForKeyRelease
     lda SKSTAT
     cmp #$ff
@@ -1525,7 +1581,7 @@ getkeyend
 	and #%00000100
 	beq @+
 	lda #1
-@	and TRIG0S
+@	and STRIG0
 	rts
 .endp
 ;--------------------------------------------------
@@ -1571,8 +1627,11 @@ noKey
 .proc RmtSongSelect
 ;--------------------------------------------------
 ;  starting song line 0-255 to A reg
+	cmp #song_ingame
+	bne noingame	; noMusic blck onlu ingame song
     bit noMusic
     spl:lda #song_silencio
+noingame
 	mvx #$ff RMT_blocked
     ldx #<MODUL                 ;low byte of RMT module to X reg
     ldy #>MODUL                 ;hi byte of RMT module to Y reg
@@ -1580,6 +1639,19 @@ noKey
 	mva #0 RMT_blocked
 	rts
 .endp
+;;--------------------------------------------------
+;.proc Randomizer
+;;--------------------------------------------------
+;    ;usage: randomize floor ceiling
+;    ;returns (in A) a random .byte between "floor" and "ceiling"
+;?rand
+;      lda random
+;      cmp #:1 ;floor
+;      bcc ?rand
+;      cmp #:2+1 ;ceiling
+;      bcs ?rand
+;      rts
+;.endp
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------
@@ -1611,7 +1683,7 @@ PLAYER
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/schorch_str2.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_str4.rmt"  ;include music RMT module
     opt h+
 ;
 ;

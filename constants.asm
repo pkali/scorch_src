@@ -21,8 +21,11 @@ initialvaluesCount = *-initialvaluesstart  ; MAX 128 bytes !
 ;===================================================================================
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
-TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$de
-TankStatusColoursTable  .BYTE $54,$24,$94,$c4,$74,$d4
+TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
+;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4	; standard order
+;TanksPMOrder	.BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
+TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94	; Adam's order
+TanksPMOrder	.BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
 TankShapesTable			.BYTE char_tank1___________,char_tank2___________,char_tank3___________
 						.BYTE char_tank1___________,char_tank2___________,char_tank3___________
 dliColorsBack
@@ -188,10 +191,10 @@ sintable
     .by 255
     .by 255 ;anti self destruction byte
 
-linetableL
-    :screenheight+1 .by <(display+screenBytes*#)
-linetableH
-    :screenheight+1 .by >(display+screenBytes*#)
+;linetableL
+;    :screenheight+1 .by <(display+screenBytes*#)
+;linetableH
+;    :screenheight+1 .by >(display+screenBytes*#)
 ;----------------------------
 bittable
     .by $80,$40,$20,$10,$08,$04,$02,$01
@@ -260,7 +263,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Ton_of_Dirt____
   .by >price_Liquid_Dirt____
   .by >price_Dirt_Charge____
-  .by >price_Earth_Disrupter
+  .by >price_Buy_me_________  
   .by >price_Plasma_Blast___
   .by >price_Laser__________
   .by >price______________33
@@ -282,7 +285,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Battery________
   .by >price_Bal_Guidance___
   .by >price_Horz_Guidance__
-  .by >price_Vert_Guidance__
+  .by >price_Floating_Tank__
   .by >price_Lazy_Boy_______
   .by >price_Parachute______
   .by >price_StrongParachute
@@ -326,7 +329,7 @@ WeaponPriceL
   .by <price_Ton_of_Dirt____
   .by <price_Liquid_Dirt____
   .by <price_Dirt_Charge____
-  .by <price_Earth_Disrupter
+  .by <price_Buy_me_________
   .by <price_Plasma_Blast___
   .by <price_Laser__________
   .by <price______________33
@@ -348,7 +351,7 @@ WeaponPriceL
   .by <price_Battery________
   .by <price_Bal_Guidance___
   .by <price_Horz_Guidance__
-  .by <price_Vert_Guidance__
+  .by <price_Floating_Tank__
   .by <price_Lazy_Boy_______
   .by <price_Parachute______
   .by <price_StrongParachute
@@ -398,8 +401,8 @@ WeaponUnits
   .by 1  ;Ton_of_Dirt____
   .by 4  ;Liquid_Dirt____
   .by 2  ;Dirt_Charge____
-  .by 10 ;Earth_Disrupter
-  .by 5  ;Plasma_Blast___
+  .by 1  ;Buy_me_________
+  .by 0  ;Plasma_Blast___
   .by 5  ;Laser__________
   .by 0  ;_____________33
   .by 0  ;_____________34
@@ -418,17 +421,17 @@ WeaponUnits
   .by 0  ;_____________47
   .by 1  ;White_Flag___48
   .by 3  ;Battery________
-  .by 2  ;Bal_Guidance___
-  .by 5  ;Horz_Guidance__
-  .by 5  ;Vert_Guidance__
-  .by 2  ;Lazy_Boy_______
+  .by 0  ;Bal_Guidance___
+  .by 0  ;Horz_Guidance__
+  .by 2  ;Floating_Tank__
+  .by 0  ;Lazy_Boy_______
   .by 3  ;Parachute______
   .by 2  ;StrongParachute
   .by 2  ;Mag_Deflector__
   .by 3  ;Shield_________
   .by 2  ;Heavy_Shield___
   .by 3  ;Force_Shield___
-  .by 2  ;Super_Mag______
+  .by 0  ;Super_Mag______
   .by 1  ;Auto_Defense___
   .by 2  ;Long_Barrel____
   .by 1  ;Nuclear_Winter_
@@ -445,13 +448,13 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
 	.by %00000000
 	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-	; "Liquid Dirt     ","Dirt Charge     ","Earth Disrupter ","Plasma Blast    "
+	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Plasma Blast    "
 	.by %00000000
 	; "Laser           "
 	.by %00000000
 	.by 0 ; offset to defensives
 	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	; "Hovercraft      ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000011
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
 	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
@@ -469,13 +472,13 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
 	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
 	.by %00000000
 	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-	; "Liquid Dirt     ","Dirt Charge     ","Earth Disrupter ","Plasma Blast    "
+	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Plasma Blast    "
 	.by %00000000
 	; "Laser           "
 	.by %00000000
 	.by 0 ; offset to defensives
 	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Vert Guidance   ","Lazy Boy        ","Parachute       ","Strong Parachute"
+	; "Hovercraft      ","Lazy Boy        ","Parachute       ","Strong Parachute"
 	.by %01000001
 	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
 	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
@@ -487,10 +490,10 @@ WeaponSymbols
     .by $40,$41,$42,$43,$44,$45,$46,$47
     .by $48,$49,$4a,$4b,$4c,$4d,$4e,$4f
     .by $50,$51,$52,$53,$54,$55,$56,$57
-    .by $58,$59,$5a,$5b,$60,$7b,$7c,$7d
+    .by $58,$59,$5a,$5b,$60,$7b,$1f,$7d
     .by $20,$00,$00,$00,$00,$00,$00,$00
     .by $00,$00,$00,$00,$00,$00,$00,$00
-    .by $5f,$1c,$03,$06,$1d,$0a,$1b,$1b  ; defensives
+    .by $5f,$1c,$03,$06,$06,$0a,$1b,$1b  ; defensives
     .by $1e,$3b,$3d,$3c,$3e,$3f,$1d,$7d
 
 ; Names of weapons (16 chars long)
@@ -525,7 +528,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Ton of Dirt     " ; 27
     dta d"Liquid Dirt     " ; 28
     dta d"Dirt Charge     " ; 29
-    dta d"Earth Disrupter " ; 30
+    dta d"Buy me!         " ; 30
     dta d"Plasma Blast    " ; 31
     dta d"Laser           " ; 32
     dta d"----------------" ; 33
@@ -548,7 +551,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Battery         " ; 49                                              
     dta d"Bal Guidance    " ; 50                                              
     dta d"Horz Guidance   " ; 51                                              
-    dta d"Vert Guidance   " ; 52                                              
+    dta d"Hovercraft      " ; 52                                              
     dta d"Lazy Boy        " ; 53                            
     dta d"Parachute       " ; 54    - no energy         
     dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
@@ -565,7 +568,7 @@ DefensiveEnergy = * - 48
 	.by 00	; Heat Guidance
 	.by 00	; Bal Guidance
 	.by 00	; Horz Guidance
-	.by 00	; Vert Guidance
+	.by 98	; Let's go!
 	.by 00	; Lazy Boy
 	.by 00	; Parachute       
 	.by 99	; Strong Parachute
@@ -590,14 +593,14 @@ keycodes ;tables for converting KeyCode to Screen Code (38 -1  characters)
     .by $0d,$01,$05,$00,$25,$23,$08,$0a
     .by $2f,$28,$3e,$2d,$0b,$10,$2e,$16
     .by $2b,$17,$1f,$1e,$1a,$18,$1d,$1b
-    .by $33,$35,$30,$32,$22 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
+    .by $33,$35,$30,$32,$22,$21 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
 keycodesEnd
 scrcodes
     dta d"abcdefgh"
     dta d"ijklmnop"
     dta d"qrstuvwx"
     dta d"yz123456"
-    dta d"7890." ; "-"
+    dta d"7890. " ; "-"
 ;-----------------------------------
 gameOverSpritesTop
     ; end of the Gover sprites by number of players
@@ -640,8 +643,12 @@ CreditsStart
 	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
 	dta d"brad-colbert, archon800, nowy80",d","*
 	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
+	dta d" "*
+	dta d"Additional testin",d"g"*
+	dta d"Arek Peck",d"o"*
 	dta d"  "*
 	dta d"Stay tuned for the FujiNet version",d"!"*
 	dta d"         "*
 CreditsEnd
+CreditsLines=44
 .endif

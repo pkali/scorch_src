@@ -19,7 +19,7 @@ QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-co
 
 You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https://atarionline.pl) forums.
 
-This source code was originally compiled under [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
+This source code was originally compiled with [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
 
 Compilation: `mads scorch.asm -o:scorch.xex`
 
@@ -44,9 +44,36 @@ Originally most variables were in Polish, comments were sparse, but we wanted to
 Because of being always short of time/energy (to finish the game) we decided it must go in 'English' to let other people work on it.
 It never happened, but we got some encouraging comments and we are still trying to do something from time to time.
 
-With the advent of fujinet (https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
+With the advent of [fujinet](https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changes:
+
+###### Version 1.00
+2022-08-21
+
+My hovercraft is full of eels.
+
+This release brings a swath of gameplay updates and a generous dose of a new silliness.
+[English](https://github.com/pkali/scorch_src/blob/master/MANUAL_EN.md) and [Polish](https://github.com/pkali/scorch_src/blob/master/MANUAL_PL.md) language manual drafts are available in the repository. Please help us with the English one as we are not native speakers.
+Version number bump reflects number of unreleased versions and amount of changes.
+
+Changes:
+* Defensive weapons can be activated before the round to make for the unbeatable aiming precision of the robotanks.
+* Fixed bug with Long Schlong activation taking one Schlong too many.
+* Smoke Tracer not disappearing smoke fixed.
+* Bug allowing for infinite shooting outside the screen fixed.
+* Tank colors and P/M sequence as devised by Adam, the gfx artist. Tanks differ more and look better. https://github.com/pkali/scorch_src/issues/119
+* New item in the shop - loot box "Buy me!" with a surprise inside. https://github.com/pkali/scorch_src/issues/97
+* Tank names can have  s p a c e s  now! https://github.com/pkali/scorch_src/issues/120
+* Tanks are mobile now thanks to the new defensive option - Hovercraft https://github.com/pkali/scorch_src/issues/52
+* Main atari library switched to a more standard version based on Mapping the Atari
+* Huge memory optimizations to allow for the new features.
+* Narrow screen in shop / inventory (many bytes saved).
+* Explosion range corrections for a rare event of non-lethal Nuke explosions.
+* Pressing [A] jumps into defensive weapons activation directly.
+* Elusive randomize force error causing rare hangups for Tosser fixed.
+* Activation of defensive weapons moved to front.
+* Additional SFX for new weapons.
 
 ###### Version 1.00
 2022-08-13

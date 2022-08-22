@@ -1,11 +1,11 @@
 STEREOMODE	equ 0
 ;* --------BEGIN--------
-;* C:\Atari\rmt\rmt128\schorch_str2.rmt
+;* C:\Atari\rmt\rmt128\scorch_str4.rmt
 FEAT_SFX		equ 1
 FEAT_GLOBALVOLUMEFADE	equ 0		;RMTGLOBALVOLUMEFADE variable
 FEAT_NOSTARTINGSONGLINE	equ 0
 FEAT_INSTRSPEED		equ 1
-FEAT_CONSTANTSPEED		equ 0		;(19 times)
+FEAT_CONSTANTSPEED		equ 0		;(21 times)
 FEAT_COMMAND1		equ 1		;(18 times)
 FEAT_COMMAND2		equ 0		;(0 times)
 FEAT_COMMAND3		equ 0		;(0 times)

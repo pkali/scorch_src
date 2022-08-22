@@ -90,7 +90,7 @@ tracer
 .proc nuke
     mva #sfx_nuke sfx_effect 
     inc FallDown2
-    mva #31 ExplosionRadius
+    mva #30 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
 .endp
@@ -194,7 +194,7 @@ EndOfLeapping
     mva #0 Erase
     pla
     sta TankNr
-
+	mva #1 color
     mva #5 FunkyBombCounter
 FunkyBombLoop
     mva #1 tracerflag
@@ -229,28 +229,28 @@ NoExplosionInFunkyBomb
 ; ------------------------
 .proc deathshead
     inc FallDown2
-    mva #31 ExplosionRadius
+    mva #30 ExplosionRadius
     jsr CalculateExplosionRange
 
     mva #sfx_nuke sfx_effect
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
-    sbw xdraw #35
+    sbw xdraw #34
     jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
-    adw xdraw #70
+    adw xdraw #68
     jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
-    sbw xdraw #35
+    sbw xdraw #34
     ;
-    sbw ydraw #35
+    sbw ydraw #34
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoUpperCircle
@@ -259,7 +259,7 @@ NoExplosionInFunkyBomb
     jsr xmissile
     UnSaveDrawXY
 NoUpperCircle
-    adw ydraw #70
+    adw ydraw #68
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
@@ -419,7 +419,7 @@ EndNurnedCheckLoop
 ; ------------------------
 .proc heavyroller
     inc FallDown2
-    mva #31 ExplosionRadius
+    mva #30 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
@@ -465,8 +465,8 @@ EndNurnedCheckLoop
 .endp
 ; ------------------------
 .proc xdigger
-    mwa xdraw digstartx
-    mwa ydraw digstarty
+    ;mwa xdraw digstartx
+    ;mwa ydraw digstarty
     ldx diggery
 WriteToBranches
     lda xdraw
@@ -1207,8 +1207,18 @@ notpressed
     bpl notpressed
     ;---esc pressed-quit game---
     rts
-
 @
+    cmp #$3f  ; A
+    bne @+
+callActivation
+    ; Hide all tanks - after inventory they may have other shapes
+    mva #1 Erase
+    jsr DrawTanks
+    mva #0 Erase
+	jsr DefensivesActivate
+	jmp afterInventory
+
+@	
     cmp #$0d  ; I
     bne @+
 callInventory
@@ -1219,6 +1229,7 @@ callInventory
 	;
     mva #$ff isInventory
     jsr Purchase
+afterInventory
 	mva #0 dmactls		; dark screen
 	jsr WaitOneFrame	
     lda #song_ingame
@@ -1261,7 +1272,7 @@ checkJoy
     ;------------JOY-------------
     ;happy happy joy joy
     ;check for joystick now
-    lda JSTICK0
+    lda STICK0
     and #$0f
     cmp #$0f
     beq notpressedJoy
@@ -1270,7 +1281,7 @@ checkJoy
     jmp jumpFromStick
 notpressedJoy
     ;fire
-    lda TRIG0S
+    lda STRIG0
     jeq pressedSpace
     mva #$ff pressTimer  ; stop counting frames
    jmp notpressed
@@ -1792,11 +1803,11 @@ NoWind
 
 	bit TestFlightFlag
 	bmi nowait
-    lda tracerflag
-    bne nowait
     lda color
-    beq nowait
- 
+    beq nonowait	; smoke tracer erases slowly
+    lda tracerflag	
+    bne nowait		; funky bomb explotes fast ( tracerflag in real is funkyflag :) )
+nonowait 
     jsr shellDelay
     
 nowait
@@ -1966,40 +1977,31 @@ BouncyCastle
 .proc SecondFlight
 ; ---------------- copied code fragment from before firing. not too elegant.
 ; ---------------- get fire parameters again
-    ldx TankNr
+
+	ldx TankNr
+	lda ActiveWeapon,x
     lda ForceTableL,x
     sta Force
     lda ForceTableH,x
     sta Force+1
-    lda #$0
-    sta Force+2
     lda AngleTable,x
     sta Angle
 
+    ; Shoots tank nr X !!! :)
+    ; set the starting coordinates of bullet with correction
+    ; to start where the tank's barrel ends
+    ; (without it bullet would go from the left lower corner of the tank)
+    ;ldx TankNr
+	
+	mwa EndOfTheBarrelX xtraj+1
+	mva EndOfTheBarrely ytraj+1
     lda #0
-    sta color
+    sta Force+2
+	sta ytraj+2
     sta xtraj
     sta ytraj
+	sta color
 
-    mwa EndOfTheBarrelX xbyte
-    mva EndOfTheBarrelY ybyte
-    mva #0 ybyte+1
-
-;    ldy Angle
-;    clc
-;    lda xtraj+1
-;    adc EndOfTheBarrelX,y   ; correction of X
-;    sta xtraj+1
-;    lda xtraj+2
-;    adc #0
-;    sta xtraj+2
-;    sec
-;    lda ytraj+1
-;    sbc EndOfTheBarrelY,y   ; correction of Y
-;    sta ytraj+1
-;    lda ytraj+2
-;    sbc #0
-;    sta ytraj+2
 	
     ldy #100           ; ???
 	mva #1 tracerflag  ; I do not know (I mean I think I know ;) )
@@ -2021,8 +2023,8 @@ MIRVcopyParameters
     sta xtraj01,x
     lda xtraj+2
     sta xtraj02,x
-    lda vx
-    sta vx00,x
+    ;lda vx
+    ;sta vx00,x
     lda vx+1
     sta vx01,x
     lda vx+2
@@ -2420,6 +2422,406 @@ InverseScreenByte
 	lda (temp),y
 	eor #$ff
 	sta (temp),y
+	rts
+.endp
+
+; -------------------------------------------------
+.proc TankFlying
+; -------------------------------------------------
+; This routine is run from inside of the main loop
+; and replaces Shoot and Flight routines
+; X and TankNr - index of flying tank
+; -------------------------------------------------
+	; Let's designate the flight altitude.
+	jsr CheckMaxMountain
+	cmp #(12+18) ; tank witch shield (12) and max alt (18) check
+	bcc IsToHigh
+	sbc #12	; tank witch shield high correction
+	bne StoreMaxAlt
+IsToHigh	
+	lda #18
+StoreMaxAlt
+	sta FloatingAlt
+;	mva #18 FloatingAlt	; for testing
+    mva #sfx_plasma_2_2 sfx_effect
+
+	; display text 4x4 - fuel full
+    
+    mwa #hoverFull LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+	sec
+	lda FloatingAlt
+	sbc #12
+    sta LineYdraw
+    jsr TypeLine4x4
+	ldx TankNr
+	
+	; TankNr in X reg.
+	; now animate Up
+	mva #0 modify	;  it's a counter 
+TankGoUp
+	lda ytankstable,x
+	cmp FloatingAlt		; Floating altitude
+	bcc ReachSky
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	lda modify
+	cmp #5
+	bcc NoEngineClear
+	mva #0 color
+	jsr DrawTankRocketEngine
+NoEngineClear
+	mva #0 Erase
+	dec ytankstable,x
+	inc modify
+	; then draw tank on new position
+    jsr DrawTankNr
+	lda modify
+	cmp #5
+	bcc NoEngine
+	lda random
+	and #%00000001
+	sta color
+	jsr DrawTankRocketEngine
+NoEngine
+;	jsr WaitOneFrame
+	jmp TankGoUp
+
+ReachSky
+	; engine symbol erase
+	mva #0 color
+	jsr DrawTankRocketEngine
+
+	; display text 4x4 - fuel full (clear text)
+    mwa #hoverFull LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+	sec
+	lda FloatingAlt
+	sbc #12
+    sta LineYdraw
+    lda #0
+    jsr TypeLine4x4.staplot4x4color
+	; and Soildown at the start (for correct mountaintable if tank was buried)
+	; calculate range
+	ldx TankNr
+	sec
+	lda XtankstableL,x
+	sbc #2
+	sta RangeLeft
+	lda XtankstableH,x
+	sbc #0
+	sta RangeLeft+1
+	clc
+	lda XtankstableL,x
+	adc #10
+	sta RangeRight
+	lda XtankstableH,x
+	adc #0
+	sta RangeRight+1
+	; hide tanks and ...
+	mva #1 Erase
+    jsr DrawTanks
+	jsr SoilDown2
+	mva #0 Erase
+    jsr DrawTanks
+	ldx TankNr
+
+	; check keyboard/joy and move tank left/right - code copied from BeforeFire
+;keyboard reading
+; KBCODE keeps code of last keybi
+; SKSTAT  $ff - nothing pressed
+;  $FB - any key
+;  $f7 - shift
+;  $f3 - shift+key
+KeyboardAndJoyCheck
+    mva #sfx_tank_move sfx_effect
+	lda ShieldEnergy,x
+	cmp #20
+	bne notpressed
+	nop
+	
+	; display text 4x4 - low fuel
+    mwa #hoverEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+	sec
+	lda FloatingAlt
+	sbc #12
+    sta LineYdraw
+    ;lda #0
+    jsr TypeLine4x4 ;.staplot4x4color
+	ldx TankNr
+
+	
+notpressed
+	; let's animate "engine"
+	jsr DrawTankEngine
+	; enimation ends
+	
+    lda SKSTAT
+    cmp #$ff
+    jeq checkJoy
+    cmp #$f7  ; SHIFT
+    jeq checkJoy
+
+    lda kbcode
+    and #%00111111 ; CTRL and SHIFT elimination
+
+    cmp #28  ; ESC
+    bne @+
+    jsr AreYouSure
+    bit escFlag
+    bpl notpressed
+    ;---esc pressed-quit game---
+    rts
+@
+jumpFromStick
+    cmp #$6
+    jeq pressedLeft
+    cmp #$7
+    jeq pressedRight
+    cmp #$21
+    jeq pressedSpace
+    jmp notpressed
+checkJoy
+    ;------------JOY-------------
+    ;happy happy joy joy
+    ;check for joystick now
+    lda STICK0
+    and #$0f
+    cmp #$0f
+    beq notpressedJoy
+    tay 
+    lda joyToKeyTable,y
+    jmp jumpFromStick
+notpressedJoy
+    ;fire
+    lda STRIG0
+    jeq pressedSpace
+    jmp notpressed
+
+
+pressedRight
+	lda ShieldEnergy,x
+	jeq pressedSpace
+	ldy #1
+	jsr DecreaseShieldEnergyX
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	lda XtankstableH,x
+	cmp #>(screenwidth-12)	; tank width correction +4 
+	bne @+
+	lda XtankstableL,x
+	cmp #<(screenwidth-12)	; tank width correction +4 pixels 
+@	bcs RightScreenEdge	
+	inc XtankstableL,x
+	sne:inc XtankstableH,x
+	jmp NoREdge
+RightScreenEdge
+    mva #sfx_dunno sfx_effect
+NoREdge
+	mva #18 AngleTable,x
+	; then draw tank on new position
+    jsr DrawTankNr
+	jsr DisplayStatus
+	jsr WaitOneFrame
+    jmp KeyboardAndJoyCheck
+
+pressedLeft
+	lda ShieldEnergy,x
+	beq pressedSpace
+	ldy #1
+	jsr DecreaseShieldEnergyX
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	lda XtankstableH,x
+	cmp #0
+	bne @+
+	lda XtankstableL,x
+	cmp #5	; 4 pixles from left edge
+@	bcc LeftScreenEdge
+	dec XtankstableL,x
+	lda XtankstableL,x
+	cmp #$ff
+	sne:dec XtankstableH,x
+	jmp NoLEdge
+LeftScreenEdge
+    mva #sfx_dunno sfx_effect
+NoLEdge
+	mva #162 AngleTable,x
+	; then draw tank on new position
+    jsr DrawTankNr
+	jsr DisplayStatus
+	jsr WaitOneFrame
+    jmp KeyboardAndJoyCheck
+
+pressedSpace
+	; display text 4x4 - low fuel (clear text)
+    mwa #hoverEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+	sec
+	lda FloatingAlt
+	sbc #12
+    sta LineYdraw
+    lda #0
+    jsr TypeLine4x4.staplot4x4color
+	ldx TankNr
+    ;=================================
+	; left or right from center of screen ?
+	ldy #0
+    lda XtankstableH,x
+	cmp #>((screenwidth/2)-8)
+	bne @+
+    lda XtankstableL,x
+	cmp #<((screenwidth/2)-8)
+@	bcc TankOnLeftSide
+TankOnRightSide
+	dey
+TankOnLeftSide
+	sty FloatingAlt ; I know, not elegant byt this variable it's free now (0 go right, $ff go left)
+	; now we have direction of bypassing tanks on screen
+
+	; clear "engine pixels" under tank
+    mva #1 erase
+	jsr DrawTankEngine
+
+CheckForTanksBelow
+	lda XtankstableL,x
+	sta xdraw
+	lda XtankstableH,x
+	sta xdraw+1
+	ldx NumberOfPlayers
+	dex
+CheckCollisionWithTankLoop
+	cpx TankNr
+	beq ItIsMe
+	lda eXistenZ,x
+	beq DeadTank
+	; now we use Y as low byte and A as high byte of checked position (left right edgs of shield)
+	; it is tricky but fast and much shorter
+    lda xtankstableL,x
+	sec
+	sbc #9		; 2 pixels more on left side + tan width
+	tay
+	lda xtankstableH,x
+	sbc #0
+	; bmi ShieldOverLeftEdge	; I do not know whether to check it. Probably not :) !!!
+    cmp xdraw+1
+    bne @+
+    cpy xdraw
+@
+    bcs LeftFromTheTank 
+	tya	;add 20 (tank size*2 +2 and +2)
+    clc
+    adc #20	
+    tay
+    lda xtankstableH,x
+    adc #0
+    cmp xdraw+1
+    bne @+
+    cpy xdraw
+@
+    bcc RightFromTheTank
+TankBelow
+	; tank below - we must move our tank
+	ldx TankNr
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	bit FloatingAlt
+	bmi PassLeft
+PassRight
+	inc XtankstableL,x
+	sne:inc XtankstableH,x
+	mva #18 AngleTable,x
+	bne Bypassing
+PassLeft
+	dec XtankstableL,x
+	lda XtankstableL,x
+	cmp #$ff
+	sne:dec XtankstableH,x
+	mva #162 AngleTable,x
+Bypassing
+	; then draw tank on new position
+    jsr DrawTankNr
+	jmp CheckForTanksBelow
+RightFromTheTank
+LeftFromTheTank
+DeadTank
+ItIsMe
+    dex
+    bpl CheckCollisionWithTankLoop
+	ldx TankNr
+    mva #sfx_shield_off sfx_effect
+	mva #1 Erase
+    jsr DrawTankNr
+	mva #0 Erase
+	lda XtankstableL,x
+	and #%11111110		; correction for PM
+	sta XtankstableL,x
+GoDown
+
+	mwa #mountaintable temp
+	clc
+	lda temp
+	adc XtankstableL,x
+	sta temp
+	lda temp+1
+	adc XtankstableH,x
+	sta temp+1
+	adw temp #4 	;	center of the tank
+	ldy #0
+	lda (temp),y
+	sta FloatingAlt
+FloatDown
+	lda ytankstable,x
+	cmp FloatingAlt
+	beq OnGround
+	; first erase old tank position
+	mva #1 Erase
+    jsr DrawTankNr
+    jsr DrawTankParachute
+	mva #0 Erase
+	inc ytankstable,x
+	; then draw tank on new position
+    jsr DrawTankNr
+    jsr DrawTankParachute
+	jsr WaitOneFrame
+	jmp FloatDown
+OnGround
+	; clear parachute
+	mva #1 Erase
+    jsr DrawTankParachute
+	mva #0 Erase
+    jsr WaitForKeyRelease
+	; and Soildown at the end (for correct mountaintable)
+	; calculate range
+	sec
+	lda XtankstableL,x
+	sbc #2
+	sta RangeLeft
+	lda XtankstableH,x
+	sbc #0
+	sta RangeLeft+1
+	clc
+	lda XtankstableL,x
+	adc #10
+	sta RangeRight
+	lda XtankstableH,x
+	adc #0
+	sta RangeRight+1
+	; hide tanks and ...
+	mva #1 Erase
+    jsr DrawTanks
+	jsr SoilDown2
+	mva #0 Erase
+    jsr DrawTanks
+	ldx TankNr
 	rts
 .endp
 

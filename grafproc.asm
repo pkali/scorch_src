@@ -611,6 +611,8 @@ DrawNextTank
     bne SkipHidingPM ; if energy=0 then no tank
 
     ; hide P/M
+	lda TanksPMOrder,x
+	tax
     lda #0
     cpx #$4 ; 5th tank is defferent
     bne No5thTankHide
@@ -626,6 +628,7 @@ No5thTankHide
 No6thTankHide
     sta hposp0,x
 @
+	ldx TankNr
     jmp DoNotDrawTankNr
 SkipHidingPM
 
@@ -646,6 +649,8 @@ DrawTankNrX
     ; now P/M graphics on the screen (only for 5 tanks)
     ; horizontal position
     ldx TankNr
+	lda TanksPMOrder,x
+	tax
     mwa xdraw xbyte
     rorw xbyte ; divide by 2 (carry does not matter)
     lda xbyte
@@ -910,6 +915,91 @@ ToHighToParachute
 .endp
 
 ;--------------------------------------------------
+.proc DrawTankRocketEngine
+; X - tank number
+; 
+; this proc change xdraw, ydraw  and temp!
+;--------------------------------------------------
+	clc
+	lda Ytankstable,x
+	adc #2	; 1 pixel down
+	sta ydraw
+	mva #0 ydraw+1
+	
+	clc
+	lda XtanksTableL,x
+	adc #2	; 2 pixels to right
+	sta xdraw
+	lda XtanksTableH,x
+	adc #0
+	sta xdraw+1
+
+	; draw first horizontal line 
+	mva #5 temp
+@
+	jsr plot
+	inw xdraw
+	dec temp
+	bne @-
+	
+	sbw xdraw #2	; 2 pixels left	
+	inw ydraw	; 1 pixel down
+	
+	; draw second horizontal line 
+	mva #3 temp
+@
+	jsr plot
+.nowarn	dew xdraw
+	dec temp
+	bne @-
+
+	adw xdraw #2	; 2 pixels right	
+	inw ydraw	; 1 pixel down
+
+	; and last pixel
+	jsr plot
+
+	ldx TankNr
+	rts
+.endp
+;--------------------------------------------------
+.proc DrawTankEngine
+; X - tank number
+; 
+; this proc change xdraw, ydraw  and temp!
+;--------------------------------------------------
+	; one pixel under tank
+	clc
+	lda Ytankstable,x
+	adc #1
+	sta ydraw
+	mva #0 ydraw+1
+	lda XtankstableL,x
+	sta xdraw
+	lda XtankstableH,x
+	sta xdraw+1
+	; clear first pixel under tank
+	mva #0 color
+	jsr plot
+	inw xdraw
+	; plot 6 random color pixels
+	mva #6 temp
+@	lda Erase
+	eor #%00000001
+	and random
+	and #%00000001
+	sta color
+	jsr plot
+	inw xdraw
+	dec temp
+	bne @-
+	; clear last pixel under tank
+	mva #0 color
+	jsr plot
+	ldx TankNr
+	rts
+.endp
+;--------------------------------------------------
 .proc TankFalls;
 ;--------------------------------------------------
     lda #0
@@ -966,7 +1056,7 @@ DoNotClearParachute
     lda #08
     sta temp  ; Loop Counter
 ByteBelowTank
-    jsr point
+    jsr point_plot
     beq EmptyPoint2
     sec
 	ror UnderTank2
@@ -983,6 +1073,9 @@ ROLPoint2
     bne ByteBelowTank	
 NoGroundCheck
     ldx TankNr
+	lda Ytankstable,x
+	cmp #screenheight-1	; tank on lowest position (no falling down)
+	jcs EndOfFall
 	lda UnderTank1
 	bne NoFallingDown
 	; Tank falling down ----
@@ -990,7 +1083,7 @@ NoGroundCheck
     and #1
     bne ParachutePresent
     ; decreasing energy 
-    ldy #2 ; how much energy to substract
+    ldy #2 ; how much energy to substract if no parachute
     jsr DecreaseEnergyX
 ParachutePresent
 	; check parachute type
@@ -998,7 +1091,7 @@ ParachutePresent
     cmp #ind_StrongParachute ; strong parachute
 	bne OneTimeParachute
     ; decreasing energy of parachute
-    ldy #2 ; how much energy to substract
+    ldy #1 ; how much parachute energy to substract
 	jsr DecreaseShieldEnergyX
 	cpy #0	; is necessary to reduce tenk energy ?
 	beq @+
@@ -1024,37 +1117,16 @@ NoFallingDown
 	ldy #7		; SlideLeftTable length -1 (from 0 to 7)
 @	lda SlideLeftTable,y
 	cmp UnderTank1
-	beq FallingRight
-	cmp UnderTank2
 	beq FallingLeft
+	cmp UnderTank2
+	beq FallingRight
 	dey
 	bpl @-
 	bmi NoLeftOrRight
-FallingLeft
-	; tank is falling left
-	bit PreviousFall	; bit 6 - right
-	bvs EndLeftFall
-    ; we finish falling left if the tank reached the edge of the screen
-    lda XtanksTableH,x
-    bne NotLeftEdge
-    lda XtanksTableL,x
-	cmp #2	; 2 pixels correction due to a barrel wider than tank
-    beq EndLeftFall
-NotLeftEdge
-    ; tank is falling left - modify coorinates
-    clc
-    lda XtankstableL,x
-    adc #1
-    sta XtankstableL,x
-    lda XtankstableH,x
-    adc #0
-    sta XtankstableH,x
-	mva #%10000000 PreviousFall	; set bit 7 - left
-	bne EndOfFCycle
 FallingRight
 	; tank is falling right
-	bit PreviousFall	; bit 7 - left
-	bmi EndRightFall
+	bit PreviousFall	; bit 6 - left
+	bvs EndRightFall
     ; we finish falling right if the tank reached the edge of the screen
     clc
     lda XtanksTableL,x
@@ -1064,8 +1136,29 @@ FallingRight
     adc #0
     sta temp+1
     cpw temp #screenwidth-2	; 2 pixels correction due to a barrel wider than tank
-    beq EndRightFall
+    bcs EndRightFall
+NotLeftEdge
     ; tank is falling right - modify coorinates
+    clc
+    lda XtankstableL,x
+    adc #1
+    sta XtankstableL,x
+    lda XtankstableH,x
+    adc #0
+    sta XtankstableH,x
+	mva #%10000000 PreviousFall	; set bit 7 - right
+	bne EndOfFCycle
+FallingLeft
+	; tank is falling left
+	bit PreviousFall	; bit 7 - right
+	bmi EndLeftFall
+    ; we finish falling left if the tank reached the edge of the screen
+    lda XtanksTableH,x
+    bne NotLeftEdge
+    lda XtanksTableL,x
+	cmp #3	; 2 pixels correction due to a barrel wider than tank
+    bcc EndLeftFall
+    ; tank is falling left - modify coorinates
     sec
     lda XtankstableL,x
     sbc #1
@@ -1073,7 +1166,7 @@ FallingRight
     lda XtankstableH,x
     sbc #0
     sta XtankstableH,x
-	mva #%01000000 PreviousFall	; set bit 6 - right
+	mva #%01000000 PreviousFall	; set bit 6 - left
 	bne EndOfFCycle
 EndLeftFall
 EndRightFall
@@ -1238,7 +1331,7 @@ drawmountainspixelloop
 NextColumn1
     mwa #0 ydraw
 NextPoint1
-    jsr point
+    jsr point_plot
     beq StillNothing
     ldy #0
     lda ydraw
@@ -1289,7 +1382,7 @@ FalloutOfLine
     sta (tempor2),y
     ; and checking if there is a pixel there
     sta ydraw
-    jsr point
+    jsr point_plot
     bne ThereIsPixelHere
     ; if no pixel we plot it
     mva #1 color
@@ -1431,7 +1524,8 @@ EndDrawing
 
     rts
 .endp
-/*
+
+/* 
 ;--------------------------------------------------
 .proc calculatemountains0
 ; Only for testing - makes ground flat (0 pixels)
@@ -1456,7 +1550,29 @@ SetYofNextTank
     bpl SetYofNextTank
    rts
 .endp
-*/
+ */
+
+;--------------------------------------------------
+.proc CheckMaxMountain
+; in A return y coordinate of highest mountain
+;--------------------------------------------------
+    mwa #mountaintable modify
+    ldy #0
+    ldx #screenheight-1
+nextPointChecking
+	txa
+    cmp (modify),y
+	bcc NotHigher
+    lda (modify),y
+	tax
+NotHigher
+    inw modify
+    cpw modify #(mountaintable+screenwidth)
+    bne nextPointChecking
+	txa
+	rts
+.endp
+
 
 ; -----------------------------------------
 .proc unPlot
@@ -1617,7 +1733,7 @@ ClearPlot
 .endp
 
 ; -----------------------------------------
-.proc point
+.proc point_plot
 ; -----------------------------------------
     ; checks state of the pixel (coordinates in xdraw and ydraw)
     ; result is in A (zero or appropriate bit is set)

@@ -1,14 +1,20 @@
 ;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
-;----------------------------------------------
-; Player/missile memory
-    
-PMGraph =  $0800
-display = $1010 ;screen takes $2K due to clearing routine
-
 screenheight = 200
 screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
+
+;----------------------------------------------
+; Player/missile memory
+PMGraph =  $0800  ; real PM start = $0b00
+
+
+; Generated tables
+linetableL = $0b00 - (screenHeight+1)*2
+linetableH = $0b00 - (screenHeight+1)
+
+display = $1010 ;screen takes $2K due to clearing routine
+
 margin = 40 ;mountain drawing Y variable margin
 MaxPlayers = 6
 maxOptions = 8  ;number of all options
@@ -65,7 +71,7 @@ price_Dirt_Ball______ = 130    ;_26
 price_Ton_of_Dirt____ = 171    ;_27
 price_Liquid_Dirt____ = 330    ;_28
 price_Dirt_Charge____ = 343    ;_29
-price_Earth_Disrupter = $ffff ;430    ;_30
+price_Buy_me_________ = 170	   ;430    ;_30
 price_Plasma_Blast___ = $ffff ;274    ;_31
 price_Laser__________ = 277    ;_32
 price______________33 = 0
@@ -87,7 +93,7 @@ price_White_Flag_____ = $0        ;_48_($30)
 price_Battery________ =   300     ;_49            
 price_Bal_Guidance___ = $ffff     ;_50            
 price_Horz_Guidance__ = $ffff     ;_51            
-price_Vert_Guidance__ = $ffff     ;_52            
+price_Floating_Tank__ = 352     ;_52            
 price_Lazy_Boy_______ = $ffff     ;_53            
 price_Parachute______ =   234     ;_54            
 price_StrongParachute =  1000     ;_55            
@@ -130,7 +136,7 @@ ind_Dirt_Ball______ = 26
 ind_Ton_of_Dirt____ = 27
 ind_Liquid_Dirt____ = 28
 ind_Dirt_Charge____ = 29
-ind_Earth_Disrupter = 30
+ind_Buy_me_________ = 30
 ind_Plasma_Blast___ = 31
 ind_Laser__________ = 32
 ind______________33 = 0
@@ -152,7 +158,7 @@ ind_White_Flag_____ = 48
 ind_Battery________ = 49            
 ind_Bal_Guidance___ = 50            
 ind_Horz_Guidance__ = 51            
-ind_Vert_Guidance__ = 52            
+ind_Floating_Tank__ = 52            
 ind_Lazy_Boy_______ = 53            
 ind_Parachute______ = 54            
 ind_StrongParachute = 55            
@@ -198,6 +204,7 @@ sfx_liquid_dirt = $1b ;2
 sfx_battery     = $1c ;3
 sfx_white_flag  = $1d ;4
 sfx_long_barrel = $1e
+sfx_tank_move	= $1f
 ;--------------------------------
 ; RMT songs (lines)
 ;--------------------------------
@@ -207,3 +214,4 @@ song_ingame     = $06
 song_round_over = $0b
 song_ending_looped = $0e
 song_supermarket = $1b
+song_inventory = $1d

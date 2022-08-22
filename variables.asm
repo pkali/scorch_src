@@ -10,6 +10,10 @@
 ;=====================================================
 OneTimeZeroVariables
 OneTimeZeroVariablesCount = variablesToInitialize-OneTimeZeroVariables  ; MAX 128 bytes !
+    .if OneTimeZeroVariablesCount > 127
+        .error "OneTimeZeroVariablesCount too large, ",OneTimeZeroVariablesCount
+    .endif
+
 noMusic .by 0  ; 0 - play music, $ff - do not play music
 noSfx   .by 0  ; 0 - play SFX, $ff - do not play SFX
 ;----------------------------------------------------
@@ -17,7 +21,7 @@ noSfx   .by 0  ; 0 - play SFX, $ff - do not play SFX
 	.by $00		; labels line color
 GameOverColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
 ;----------------------------------------------------
-TanksNames  ; DO NOT ZERO ON RESTART GAME - ticket #24
+TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
     :6 dta d"        "
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
@@ -42,7 +46,7 @@ RoundNrDisplay
 ;=====================================================
 variablesStart  ; zeroing starts here
 ;=====================================================
-isInventory .ds 1  ; 0 - purchase, $ff - inventory
+;isInventory .ds 1  ; 0 - purchase, $ff - inventory
 ;-------------- 
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
 ;-------------- 
@@ -51,7 +55,7 @@ noDeathCounter .ds 1
 OptionsY  .ds 1 ;vertical position of cursor on Options screen
 flyDelay .ds 1
 ;--------------
-NumberOfPlayers .DS 1  ;current number of players (counted from 1)
+;NumberOfPlayers .DS 1  ;current number of players (counted from 1)
 TankSequence .DS [MaxPlayers] ;sequence of shooting during the Round
 GameIsOver .DS 1 ; 1 means it was the last round in the game
 ;----------------------------------------------------
@@ -122,19 +126,19 @@ WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;  20203.5 => 128 : <20203 : >20203
 ;----------------------------------------------------
 
-L1       .DS 1 ; variable used in multiplications (by 10:)
-gravity  .DS 1 ;only the decimal part (1/10 = 25)
+;L1       .DS 1 ; variable used in multiplications (by 10:)
+;gravity  .DS 1 ;only the decimal part (1/10 = 25)
 ;----------------------------------------------------
 
-Wind  .ds 4 ;format: 0000.hhll
+;Wind  .ds 4 ;format: 0000.hhll
             ;walue displayed on the screen is
             ;decimal portion divided by 16 (>>4)
 ;----------------------------------------------------
 MaxWind   .ds 1 ;
 WindOrientation  .DS 1 ;(0-right,1-left)
 ;----------------------------------------------------
-Counter  .DS 1  ;temporary Counter for outside loops
-HitFlag  .DS 1 ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank 
+;Counter  .DS 1  ;temporary Counter for outside loops
+;HitFlag  .DS 1 ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank 
 ;----------------------------------------------------
 xtankstableL ;X positions of tanks (lower left point)
     .DS [MaxPlayers]
@@ -148,22 +152,22 @@ LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
 TargetTankNr	; Target tank index (for AI routines)
 	.DS 1	
 ;----------------------------------------------------
-Erase    .DS 1 ; if 1 only mask of the character is printed
+;Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally
 
 ;----------------------------------------------------
-RangeLeft  .DS 2 ;range of the soil to be fallen down
-RangeRight .DS 2 ;it is being set by all Explosions
+;RangeLeft  .DS 2 ;range of the soil to be fallen down
+;RangeRight .DS 2 ;it is being set by all Explosions
 ;----------------------------------------------------
 WeaponRangeLeft  .DS 2 ;Range of the Explosion of the given weapon
 WeaponRangeRight .DS 2
 ;----------------------------------------------------
 ;xroller
-HowMuchToFall   .ds 1
+;HowMuchToFall   .ds 1
 HeightRol .DS 1
 ;digger
-digstartx .DS 2
-digstarty .DS 2
+;digstartx .DS 2
+;digstarty .DS 2
 diggery  .DS 1
 DigLong  .DS 1
 digtabxL .DS [8]
@@ -176,34 +180,35 @@ FillCounter .ds 2
 ;sandhog
 sandhogflag .DS 1 ; (0 digger, 8 sandhog)
 ;ofdirt
-magic  .DS 2 ; was tempor2, but it was not compiling!!! (bug in OMC65)
+;magic  .DS 2 ; was tempor2, but it was not compiling!!! (bug in OMC65)
 ;draw
-HowToDraw .DS 1
+;HowToDraw .DS 1
     ; bits here mean
     ; 0 - negative X (go up)
     ; 1 - negative Y (left)
     ; 2 - directional value > 1 (more than 45 degrees)
     ; if all 0 then standart routine
-XHit  .DS 2
+;XHit  .DS 2
 YHit  .DS 2
-LineLength .DS 2
+;LineLength .DS 2
 ;circle
-radius .DS 1
-xcircle .DS 2
-ycircle .DS 2
+;radius .DS 1
+;xcircle .DS 2
+;ycircle .DS 2
 tempcir .DS 2
 ;TankFalls
 FallingSoundBit .DS 1
 PreviousFall  .DS 1
 EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
-Parachute .DS 1 ; are you insured with parachute?
+;Parachute .DS 1 ; are you insured with parachute?
+FloatingAlt	.DS 1	; floating tank altitude
 ;----------------------------------------------------
 ;Flight
 ;variables for 5 missiles (used for mirv)
 xtraj00   .DS [5]  ; 3 bytes of xtraj times 5. Lowest byte
 xtraj01   .DS [5]  ; middle byte
 xtraj02   .DS [5]  ; high byte
-vx00   .DS [5]
+;vx00   .DS [5]  ; looks like it is not really used anywhere
 vx01   .DS [5]
 vx02   .DS [5]
 vx03   .DS [5]
@@ -215,17 +220,17 @@ XposFlag .DS 1	; bullet positon X (0 - on screen , %1000000 - off-screen)
 YposFlag .DS 1  ; bullet positon Y (0 - on screen , %1000000 - over the screen , %0100000 - under the screen)
 ;----------------------------------------------------
 ;CheckCollisionWithTank
-vx  .ds 4 ; 0,0,0,0 ;two decimal bytes, two whole bytes (DC.BA)
-vy  .ds 4 ;0,0,0,0
-xtraj  .ds 3 ; 0,0,0
-ytraj  .ds 3 ; 0,0,0
+;vx  .ds 4 ; 0,0,0,0 ;two decimal bytes, two whole bytes (DC.BA)
+;vy  .ds 4 ;0,0,0,0
+;xtraj  .ds 3 ; 0,0,0
+;ytraj  .ds 3 ; 0,0,0
 xtrajold .ds 3 ; 0,0,0
 ytrajold .ds 3 ; 0,0,0
-Angle  .DS 1
-Force  .ds 3 ; 0,0,0
-Multiplier .ds 3 ; 0,0,0
+;Angle  .DS 1
+;Force  .ds 3 ; 0,0,0
+;Multiplier .ds 3 ; 0,0,0
 Multiplee .ds 2 ; 0,0
-goleft  .DS 1 ;if 1 then flights left
+;goleft  .DS 1 ;if 1 then flights left
 ;----------------------------------------------------
 ;unPlot
 WhichUnPlot .DS 1
@@ -239,7 +244,7 @@ FunkyBombCounter .DS 1
 xtrajfb  .DS 2
 ytrajfb  .DS 2
 ;
-tracerflag .DS 1
+;tracerflag .DS 1
 ;----------------------------------------------------
 ;TypeChar
 mask1  .DS [8]
@@ -247,10 +252,10 @@ mask2  .DS [8]
 
 char1  .DS [8]
 char2  .DS [8]
-color  .DS 1
+;color  .DS 1
 ybit  .DS 1
 tempbyte01 .DS 1
-delta  .DS 2
+;delta  .DS 2
 yfloat  .DS 2
 deltaX  .DS 1
 UpNdown  .DS 1
@@ -275,8 +280,8 @@ HowManyOnTheListOff
     .DS 1
 HowManyOnTheListDef
     .DS 1
-PositionOnTheList ; pointer position on the list being displayed
-    .DS 1
+;PositionOnTheList ; pointer position on the list being displayed
+;    .DS 1
 LastWeapon 
     ; number of the last previously purchased weapon
     ; it is necessary when after purchase some weapon
@@ -286,27 +291,27 @@ LastWeapon
 WhichList ; list currently on the screen
     ; (0-offensive, 1-defensive)
     .DS 1
-OffsetDL1 ; offset of the list screen (how many lines)....
-    .DS 1
+;OffsetDL1   .DS 1 ; offset of the list screen (how many lines)....
+
 
 ;----------------------------------------------------
 
 ;mark the level
 PositionInName ; cursor position in name of the player when name input
     .DS 1
-DifficultyLevel ; Difficulty Level (human/cpu)
-    .DS 1
+;DifficultyLevel .DS 1  ; Difficulty Level (human/cpu)
+
 ;----------------------------------------------------
 ;displaydecimal
-decimal  .DS 2
+;decimal  .DS 2
 decimalresult  .DS 5
 
 ;xmissile
-ExplosionRadius .DS 2  ;because when adding in xdraw it is double byte
+;ExplosionRadius .DS 2  ;because when adding in xdraw it is double byte
 ;round
 CurrentRoundNr .DS 1
 FallDown1  .DS 1
-FallDown2  .DS 1
+;FallDown2  .DS 1
 ;leapfrog
 LeapFrogAngle  .DS 1
 ;laser
@@ -352,14 +357,14 @@ TankTempY
 ;----------------------------------------------------
 singleRoundVars
 ;-------------- 
-escFlag .ds 1	; 0 - Esc or O not pressed, $80 - Esc pressed, $40 - O pressed
+;escFlag .ds 1   ; 0 - Esc or O not pressed, $80 - Esc pressed, $40 - O pressed
 ;-------------- 
 CurrentResult
     .DS 1
 ;--------------
 AngleTable ;Angle of the barrel of each tank during the round
     .DS [MaxPlayers]
-NewAngle  ; used in AI
+;NewAngle  ; used in AI
     .DS 1
 ;previousBarrelAngle
 ;    .DS [MaxPlayers]
@@ -386,20 +391,15 @@ singleRoundVarsEnd
 ;----------------------------------------------------
 ; 4x4 texts
 ;----------------------------------------------------
-LineAddress4x4
-    .DS 2
-LineCharNr
-    .DS 1
-LineXdraw
-    .DS 2
-LineYdraw
-    .DS 1
+;LineAddress4x4  .DS 2
+LineCharNr  .DS 1
+;LineXdraw   .DS 2
+;LineYdraw   .DS 1
 
 ;-----------
 ResultX
     .DS 2
-ResultY
-    .DS 1
+;ResultY .DS 1
 ResultOfTankNr
     .DS 1
 
@@ -412,7 +412,7 @@ StoreA4x4 .DS 1
 Xcounter4x4 .DS 1
 nibbler4x4  .DS 1
 CharCode4x4 .DS 1
-plot4x4color .DS 1 ;1-white, 0-background
+;plot4x4color .DS 1 ;1-white, 0-background
 
 
 

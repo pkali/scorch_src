@@ -1,4 +1,5 @@
 .proc talk
+; Maximum text length is 63 characters!!!
 L0   dta d"IN TIMES OF TROUBLE, GO WITH WHAT YOU KNOW."
 L1   dta d"DIE!"
 L2   dta d"EAT MY SHORTS!"
@@ -126,3 +127,7 @@ OffensiveTextTableH
 NumberOfOffensiveTexts=54
 NumberOfDeffensiveTexts=60
 .endp
+hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!", $ff
+hoverFullEnd
+hoverEmpty dta d"RUNNING OUT OF EELS", $ff
+hoverEmptyEnd
