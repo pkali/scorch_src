@@ -1107,6 +1107,7 @@ LastNameChar
 
     lda #$80 ; place cursor on the end
     sta NameAdr,y
+	dey
     sty PositionInName
 
 
