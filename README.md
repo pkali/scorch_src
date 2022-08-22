@@ -78,7 +78,7 @@ Changes:
 ###### Version 1.00
 2022-08-13
 
-Silly Version 1.00
+Silly Version 1.10
 This is an official Silly Venture Summer Edition Atari 50 release. The game reached version 1.00.
 
 The game manual is available at https://github.com/pkali/scorch_src/wiki
