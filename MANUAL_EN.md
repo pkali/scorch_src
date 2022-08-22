@@ -133,16 +133,16 @@ And here are the `ExplosionRadius` values for each weapon:
 | Baby Missile | 11 |
 | Missile | 17 |
 | Baby Nuke | 25 |
-| Nuke | 31 |
+| Nuke | 30 |
 | LeapFrog| 17 15 13 |
 | Funky Bomb | 21 11 (* 5) |
 | MIRV | 17 (* 5) |
-| Death's Head | 31 (* 5) |
+| Death's Head | 30 (* 5) |
 | Napalm | x 40 (this weapon is different and the distance from the center is not determined, simply any tank within range of the flames loses 40 units of energy - the ExplosionRadius variable is not used) |
 | Hot Napalm | x 80 (the same principle as in Napalm) |
 | Baby Roller | 11 |
 | Roller | 21 |
-| Heavy Roller | 31 |
+| Heavy Roller | 30 |
 | Riot Charge | 31 |
 | Riot Blast | 0 (in reality - 61 but with these weapons it is not taken into account when counting energy loss only the width of the ground to fall) |
 | Riot Bomb | 17 |
