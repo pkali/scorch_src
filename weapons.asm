@@ -861,6 +861,7 @@ dirtLoop
     lda radius
     cmp ExplosionRadius
     bne dirtLoop
+    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; -----------------
