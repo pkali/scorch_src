@@ -1532,6 +1532,7 @@ DOTNcharloop
     sta dx+1
     lda TextPositionY
     sta dy
+	mva #0 dy+1	; dy is 2 bytes value
     jsr PutChar4x4
 
     inc TextCounter
@@ -1617,6 +1618,7 @@ TypeLine4x4Loop
     sta CharCode4x4
     mwa LineXdraw dx
     mva LineYdraw dy
+	mva #0 dy+1  ;	dy is 2 bytes value
     jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
     inc LineCharNr

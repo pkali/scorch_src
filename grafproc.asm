@@ -1903,10 +1903,13 @@ EndPutChar
 ; all pixels are being drawn
 ; (empty and not empty)
 ;--------------------------------------------------
-    ; cpw ydraw #(screenheight-4)
-    ; jcs TypeChar.EndPutChar ;nearest RTS
-    ; cpw xdraw #(screenwidth-4)
-    ; jcs TypeChar.EndPutChar ;nearest RTS
+;	rts
+    cpw dy #(screenheight-1)
+    jcs TypeChar.EndPutChar ;nearest RTS
+	cpw dy #(4)
+    jcc TypeChar.EndPutChar ;nearest RTS	
+    cpw dx #(screenwidth-4)
+    jcs TypeChar.EndPutChar ;nearest RTS
 	; checks ommited.
 	lda plot4x4color
 	beq FontColor0
