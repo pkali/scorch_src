@@ -2357,12 +2357,15 @@ MIRValreadyAll
 	; top bounce
 	bit ytraj+2
 	bpl NoOnTop
+	bit vy+3
+	bmi FlyingDown
 	sec
 	.rept 4
         lda #$00
         sbc vy+#
         sta vy+#
 	.endr
+FlyingDown
 NoOnTop
 MakeBump
 	cpw xtraj+1 #screenwidth
