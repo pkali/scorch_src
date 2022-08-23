@@ -178,9 +178,9 @@ Only these points determine the order in the summary
 * **Nuclear Winter** - adds nothing, takes nothing away :) - in fact, it is not so much a defensive weapon as a double-edged one. It floods the area with "radioactive" fallout, which is ordinary soil. If you do not have at hand any weapon that digs up the terrain, and for that a shield (preferably disposable), then after such "fallout" you will have to shoot yourself - because being underground is otherwise impossible. Alternatively, **White Flag** always remains.
 * **Long Schlong** - a special weapon :) - Costs a lot, doesn't really help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated).
 
-Due to the different operations of **MIRV** weapons, **Bouncy Castle** and **Mag Deflector** only use the shielding function when hit by these weapons.
+Due to the different operations of **MIRV**, defensive weapons **Bouncy Castle** and **Mag Deflector** only use the shielding function when hit by these weapons. In addition, **MIRV** heads do not bounce or fly through sidewalls during descent!
 
-In addition, none of the shields protect against **Napalm**. **Bouncy Castle** or **Mag Deflector** on a direct hit will deflect it or carry it past, but just hit very close to a tank and its shield will not work.
+None of the shields protect against **Napalm**. **Bouncy Castle** or **Mag Deflector** on a direct hit will deflect it or carry it past, but just hit very close to a tank and its shield will not work.
 
 **White Flag**, **Hovercraft** and **Nuclear Winter** weapons, when selected, require activation, this is accomplished by "firing a shot" after the selection of that weapon. Of course, the shot of the offensive weapon is then not fired, but only the selected defensive weapon is activated.
 

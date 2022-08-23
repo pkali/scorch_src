@@ -203,6 +203,7 @@ PreviousFall  .DS 1
 EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 ;Parachute .DS 1 ; are you insured with parachute?
 FloatingAlt	.DS 1	; floating tank altitude
+FunkyWallFlag = FloatingAlt	; reuse this variable in different weapon (Funky Bomb)!
 ;----------------------------------------------------
 ;Flight
 ;variables for 5 missiles (used for mirv)

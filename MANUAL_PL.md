@@ -173,9 +173,9 @@ Tylko te punkty decydują o kolejności w podsumowaniu
 * **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broń nie tyle defensywna co obosieczna. Zasypuje teren opadem "radioaktywnym", który jest zwyczajną glebą. Jeśli nie mamy pod ręką żadnej broni odkopującej teren i do tego osłony (najlepiej jednorazowej), to po takim "opadzie" będzie trzeba strzelić do siebie - bo będąc pod ziemią inaczej się nie da. Ewentualnie pozostaje zawsze White Flag.
 * **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się ale tylko przy niewielkim przysypaniu ale fanie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej deaktywować).
 
-W związku z odmiennym działaniem broni **MIRV**, **Bouncy Castle** i **Mag Deflector** wykorzystują tylko funkcję osłony przy trafieniu tą bronią.
+W związku z odmiennym działaniem broni **MIRV**, bronie defensywne **Bouncy Castle** i **Mag Deflector** wykorzystują tylko funkcję osłony przy trafieniu tą bronią. Dodatkowo głowice **MIRV** w czasie opadania nie odbijają się i nie przelatują przez ściany boczne!
 
-Dodatkowo, żadna z osłon nie chroni przed Napalmem. Auto Defense czy Mag Deflector przy bezpośrednim trafieniu odbije je lub przeniesie obok, ale wystarczy trafić bardzo blisko czołgu i nie zadziała jego osłona.
+Żadna z osłon nie chroni przed **Napalm**. **Auto Defense** czy **Mag Deflector** przy bezpośrednim trafieniu odbije je lub przeniesie obok, ale wystarczy trafić bardzo blisko czołgu i nie zadziała jego osłona.
 
 Bronie **White Flag**, **Hovercraft** i **Nuclear Winter** po aktywacji wymagają uruchomienia, jest to realizowanie przez "oddanie strzału" po aktywacji tej broni. Oczywiście strzał bronią ofensywną nie jest wtedy oddawany, a jedynie uruchamiana jest wybrana broń defensywna.
 

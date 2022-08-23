@@ -1899,7 +1899,7 @@ EndPutChar
 ; puts 4x4 pixels char on the graphics screen
 ; in: dx, dy (LOWER left corner of the char)
 ; in: CharCode4x4 (.sbyte)
-; in: plot4x4color (0/1)
+; in: plot4x4color (0/255)
 ; all pixels are being drawn
 ; (empty and not empty)
 ;--------------------------------------------------
@@ -1911,11 +1911,6 @@ EndPutChar
     cpw dx #(screenwidth-4)
     jcs TypeChar.EndPutChar ;nearest RTS
 	; checks ommited.
-	lda plot4x4color
-	beq FontColor0
-	lda #$ff		; better option to check (plot4x4color = $00 or $ff)
-	sta plot4x4color
-FontColor0
     ; char to the table
     lda CharCode4x4
     and #%00000001

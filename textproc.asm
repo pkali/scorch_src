@@ -1598,7 +1598,7 @@ end_found
     ;address in LineAddress4x4 (it is the same as `temp`)
     ;starting from LineXdraw, LineYdraw
 
-    lda #1
+    lda #$ff
 
 staplot4x4color
     sta plot4x4color
@@ -1665,7 +1665,7 @@ skip01
     mva #3 di
     mva #4 ResultY
 @
-      mva #1 plot4x4color
+      mva #$ff plot4x4color
       mwa #lineClear LineAddress4x4
       mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
@@ -1734,7 +1734,7 @@ quit_seppuku
     jsr RoundOverSprites
 
     
-    mva #1 plot4x4color
+    mva #$ff plot4x4color
         
     ;centering the result screen
     mva #((ScreenHeight/2)-(8*4)) ResultY
