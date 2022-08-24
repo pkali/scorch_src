@@ -258,6 +258,9 @@ SettingBarrel
 	mva #0 dmactls		; dark screen
 	jsr WaitOneFrame
 
+    bit escFlag
+    bmi START
+
     jsr GetRandomWind
 
     jsr RoundInit
