@@ -2019,6 +2019,7 @@ EndPut4x4
 ;    and #$fc
 ;    ora #$02     ; 2=normal, 3 = wide screen width
     sta dmactls
+	mva WallsType COLBAKS	; set color of background 
     jsr WaitOneFrame
     rts
 .endp

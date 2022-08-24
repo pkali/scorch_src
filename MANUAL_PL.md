@@ -13,12 +13,12 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywwki:
 * częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą “strzelać w próżnię” :) - jeśli grają tylko ludzie optymalne ustawienie to “norm”, w przypadku graczy sterowanych przez komputer… wedle uznania.
 * wysokość (i pofałdowanie) gór od prawie płaskich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
 * sposób działania ścian (krawędzi ekranu):
-	1. none - pociski, które wyleciały poza ekran nie wracają
-	2. wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony (i odwrotnie)
-	3. bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć
-	4. boxy - tak jak bump, tyle że "sufit" także odbija pociski
-	5. rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
-
+	* none - pociski, które wyleciały poza ekran nie wracają
+	* wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony (i odwrotnie)
+	* bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć
+	* boxy - tak jak bump, tyle że "sufit" także odbija pociski
+	* rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
+	W trakcie rozgrywki aktualny sposób działania ścian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - niebieski, boxy - zielony.
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
@@ -69,9 +69,9 @@ A tutaj zręby opisu działania poszczególnych broni, zasad punktacji itp:
 ### Najpierw co wiemy o energii czołgów
 - Czołgi mają energię (a Ogry warstwy - jak cebula) - na starcie 99 jednostek
 - Energii czołgom ubywa na 3 sposoby:
-    1. jedna jednostka po oddaniu każdego strzału
-    2. w czasie spadania (jeden piksel w dół 2 jednostki)
-    3. w chwili trafienia w czołg lub obok niego jakiegoś pocisku - i tu ilość odejmowanej energii zależy od odległości od centrum eksplozji i typu/siły rażenia pocisku.
+    * jedna jednostka po oddaniu każdego strzału
+    * w czasie spadania (jeden piksel w dół 2 jednostki)
+    * w chwili trafienia w czołg lub obok niego jakiegoś pocisku - i tu ilość odejmowanej energii zależy od odległości od centrum eksplozji i typu/siły rażenia pocisku.
 
 ### Jak działa odejmowanie energii (i zarabianie kasy!)
 Po każdej rundzie wyliczana jest ilość zdobytych/straconych pieniędzy robione jest to na podstawie dwóch zmiennych gromadzonych przez każdy z czołgów w trakcie rundy. Te zmienne to:

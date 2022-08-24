@@ -29,6 +29,7 @@
     mva #TextBackgroundColor COLOR2
     jsr ColorsOfSprites
 	mva #$ca COLOR1
+	mva #$00 COLBAKS	; set color of background
    
     VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
 
@@ -311,6 +312,7 @@ GoToActivation
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
 	ldy #0
+	sty COLBAKS	; set color of background
     lda tanknr
     :3 asl  ; 8 chars per name
     tax
@@ -1042,6 +1044,7 @@ NoArrowDown
     VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
 
     mva #0 TankNr
+	sta COLBAKS	; set color of background
 @     tax
       lda TankStatusColoursTable,x
       sta COLOR2  ; set color of player name line
@@ -1915,6 +1918,7 @@ FinishResultDisplay
 	jsr SetPMWidth	
     jsr ColorsOfSprites
     mva #0 COLOR1
+	sta COLBAKS	; set color of background
 	sta CreditsVScrol
     mva #TextForegroundColor COLOR2
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen

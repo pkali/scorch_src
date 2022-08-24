@@ -14,11 +14,12 @@ On the first screen, you can configure gameplay options:
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
 * The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
 * the way the walls (edges of the screen) work:
-	1. none - projectiles that flew off the screen do not return
-	2. wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
-	3. bump - the right and left walls deflect projectiles that want to fly through them
-	4. boxy - just like bump, except that the "ceiling" also reflects projectiles
-	5. rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
+	* none - projectiles that flew off the screen do not return
+	* wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
+	* bump - the right and left walls deflect projectiles that want to fly through them
+	* boxy - just like bump, except that the "ceiling" also reflects projectiles
+	* rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
+	During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - blue, boxy - green.
 
 Translated with www.DeepL.com/Translator (free version)
 Select options with cursor keys or joystick.
@@ -71,9 +72,9 @@ And here's a rundown of the description of how each weapon works, scoring rules,
 ### First, what we know about tank energy
 - Tanks have energy (and Ogres have layers - like an onion) - 99 units at the start of a round.
 - Energy of tanks is depleted in 3 ways:
-    1. one unit after firing each shot,
-    2. while falling (one pixel down takes 2 units of energy),
-    3. when a projectile hits a tank or its proximity. The amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
+    * one unit after firing each shot,
+    * while falling (one pixel down takes 2 units of energy),
+    * when a projectile hits a tank or its proximity. The amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
 
 ### How energy subtraction works (and makes money!)
 
