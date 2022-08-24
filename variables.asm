@@ -35,13 +35,13 @@ seppukuVal .by 75
 mountainDeltaH .by 3
 mountainDeltaL .by $ff
 ;----------------------------------------------------
-; 4x4 text buffer
-ResultLineBuffer
-    dta d"                  ", $ff
 LineHeader1
     dta d"# ROUND: "
 RoundNrDisplay
     dta d"    #", $ff
+; 4x4 text buffer
+ResultLineBuffer
+    dta d"                  ", $ff
 
 ;=====================================================
 variablesStart  ; zeroing starts here

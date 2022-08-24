@@ -10,9 +10,6 @@ I_seppukuVal .by 75
 I_mountainDeltaH .by 3
 I_mountainDeltaL .by $ff
 ;----------------------------------------------------
-; 4x4 text buffer
-I_ResultLineBuffer
-    dta d"                  ", $ff
 I_LineHeader1
     dta d"# ROUND: "
 I_RoundNrDisplay
