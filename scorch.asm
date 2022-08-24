@@ -577,10 +577,10 @@ RoboTanks
     lda kbcode
     cmp #28  ; ESC
     bne @+
-      jsr AreYouSure
-      bit escFlag
-	  spl:rts
-@
+    jsr AreYouSure
+@	lda escFlag
+    seq:rts		; keys Esc or O
+
 
     jmp AfterManualShooting
 

@@ -1111,7 +1111,9 @@ LastNameChar
     lda #$80 ; place cursor on the end
     sta NameAdr,y
 	dey
-    sty PositionInName
+	bpl @+
+	iny	; if old name is empty or first time entering
+@   sty PositionInName
 
 
 CheckKeys
