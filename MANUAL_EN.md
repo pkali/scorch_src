@@ -19,9 +19,9 @@ On the first screen, you can configure gameplay options:
 	* bump - the right and left walls deflect projectiles that want to fly through them
 	* boxy - just like bump, except that the "ceiling" also reflects projectiles
 	* rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
+	
 	During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - blue, boxy - green.
 
-Translated with www.DeepL.com/Translator (free version)
 Select options with cursor keys or joystick.
 
 The [RETURN] key or Joystick button moves to the next screen.

@@ -18,6 +18,7 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywwki:
 	* bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć
 	* boxy - tak jak bump, tyle że "sufit" także odbija pociski
 	* rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
+	
 	W trakcie rozgrywki aktualny sposób działania ścian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - niebieski, boxy - zielony.
 
 Wybór opcji klawiszami kursora lub joystickiem.
