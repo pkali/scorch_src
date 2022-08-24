@@ -791,7 +791,7 @@ DoNotDrawTankNr
 	mva #18 fs  ; temp, how many times flash the tank
 tankflash_loop
     lda CONSOL  ; turbo mode
-    cmp #6  ; START
+	and #%00000001 ; START KEY
     sne:mva #1 fs  ; finish it     
     mva #1 Erase
 	ldx TankNr

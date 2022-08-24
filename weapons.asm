@@ -1188,6 +1188,9 @@ notpressed
 	; Select and Option
 	lda CONSOL
 	tay
+	and #%00000101	; Start + Option
+	beq QuitToGameover
+	tya
 	and #%00000100
 	beq callActivation	; Option key
 	tya
@@ -1208,6 +1211,7 @@ notpressed
     bit escFlag
     bpl notpressed
     ;---O pressed-quit game to game over screen---
+QuitToGameover
 	mva #$40 escFlag
     rts
 @

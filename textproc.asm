@@ -1689,7 +1689,7 @@ quit_areyousure
     mva #20 fs  ; temp, how many times blink the billboard
 seppuku_loop
       lda CONSOL  ; turbo mode
-      cmp #6  ; START
+	  and #%00000001 ; START KEY
       sne:mva #1 fs  ; finish it     
 
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
