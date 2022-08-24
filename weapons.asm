@@ -3095,7 +3095,10 @@ noBullets
 ;--------------------------------------------------
 .proc ShellDelay
     lda CONSOL
-    cmp #6
+	and #%00000101	; Start + Option
+	bne @+
+	mva #$40 escFlag	
+@	and #%00000001
     beq noShellDelay
     ldx flyDelay
 DelayLoop

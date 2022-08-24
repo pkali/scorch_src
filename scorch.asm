@@ -1630,7 +1630,10 @@ noKey
 .endp
 .proc WaitOneFrame
 	lda CONSOL
-	and #%00000001 ; START KEY
+	and #%00000101	; Start + Option
+	bne @+
+	mva #$40 escFlag	
+@	and #%00000001 ; START KEY
 	beq @+
 	wait
 @	rts
