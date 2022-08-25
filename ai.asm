@@ -324,6 +324,7 @@ NoUseDefensive
 	; use defensives like Tosser
 	jsr TosserDefensives
 	; now select best target
+	mva #$00 PreferHumansFlag
 	jsr FindBestTarget3
 	sty TargetTankNr
 	; aiming
@@ -364,6 +365,7 @@ HighForce
 	; use defensives like Tosser
 	jsr TosserDefensives
 	; now select best target
+	mva #$00 PreferHumansFlag
 	jsr FindBestTarget3
 	sty TargetTankNr
 	; aiming
@@ -403,6 +405,7 @@ HighForce
 	; use defensives like Tosser
 	jsr TosserDefensives
 	; now select best target
+	mva #$ff PreferHumansFlag
 	jsr FindBestTarget3
 	sty TargetTankNr
 	; aiming
@@ -441,7 +444,7 @@ HighForce
 ; direcion of shoot in A (0 - left, >0 - right)
 ;----------------------------------------------
 	jsr MakeLowResDistances
-	lda #101
+	lda #202
 	sta temp2 ; max possible energy
 	lda #0
 	sta tempor2	; direction of shoot
@@ -454,9 +457,16 @@ loop01
 	beq skipThisPlayer
 	lda eXistenZ,y
 	beq skipThisPlayer
-	
-	;enemy on the right
-	lda Energy,y
+
+	bit PreferHumansFlag
+	bpl NoPreferHumans
+	lda skilltable,y
+	beq ItIsHuman
+	lda #100
+ItIsHuman
+NoPreferHumans
+	clc
+	adc Energy,y	; if robotank energy=energy+100
 	cmp temp2 ; lowest
 	bcs lowestIsLower
 	sta temp2
@@ -465,6 +475,7 @@ loop01
 	lda LowResDistances,x
 	cmp LowResDistances,y
 	bcs EnemyOnTheLeft
+	; enemy on right
 	inc tempor2	; set direction to right
 	
 EnemyOnTheLeft	
