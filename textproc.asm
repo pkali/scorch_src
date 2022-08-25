@@ -1110,10 +1110,14 @@ LastNameChar
 
     lda #$80 ; place cursor on the end
     sta NameAdr,y
+	cpy #8
+	bne @+
 	dey
-	bpl @+
-	iny	; if old name is empty or first time entering
-@   sty PositionInName
+@	sty PositionInName
+;	dey
+;	bpl @+
+;	iny	; if old name is empty or first time entering
+;@   sty PositionInName
 
 
 CheckKeys
@@ -1213,6 +1217,15 @@ ChangeOfLevel3Down
     jmp CheckKeys
 ;----
 EndOfNick
+	; now check long press joy button (or Return...)
+    mva #0 pressTimer ; reset
+    jsr WaitForKeyRelease
+    lda pressTimer
+    cmp #25  ; 1/2s
+    bcc NotLongPress
+    jsr EnterNameByJoy
+    jmp CheckKeys
+NotLongPress
     ; storing name of the player and its level
 
     ; level of the computer opponent goes to
@@ -1263,6 +1276,26 @@ nextchar05
     rts
 .endp
 
+.proc EnterNameByJoy
+checkjoy
+	lda STICK0
+	and #$0f
+	cmp #$0f
+	bne JoyNotCentered
+
+notpressedJoy
+	;fire
+	lda STRIG0
+	beq checkjoy	; fire still pressed
+	rts
+
+JoyNotCentered
+	; this is a place for code :)
+	
+	
+	jmp checkjoy
+
+.endp
 
 .proc HighlightLevel
     ; this routine highlights the choosen
