@@ -324,7 +324,7 @@ NoUseDefensive
 	; use defensives like Tosser
 	jsr TosserDefensives
 	; now select best target
-	mva #$00 PreferHumansFlag
+	lda #$00 ; no prefer humans
 	jsr FindBestTarget3
 	sty TargetTankNr
 	; aiming
@@ -365,7 +365,7 @@ HighForce
 	; use defensives like Tosser
 	jsr TosserDefensives
 	; now select best target
-	mva #$00 PreferHumansFlag
+	lda #$00 ; no prefer humans
 	jsr FindBestTarget3
 	sty TargetTankNr
 	; aiming
@@ -405,7 +405,7 @@ HighForce
 	; use defensives like Tosser
 	jsr TosserDefensives
 	; now select best target
-	mva #$ff PreferHumansFlag
+	lda #100	; prefer humans
 	jsr FindBestTarget3
 	sty TargetTankNr
 	; aiming
@@ -440,9 +440,11 @@ HighForce
 .proc FindBestTarget3
 ; find target with lowest energy
 ; X - shooting tank number
+; A - 100 - prefer humans , 0 - equality :)
 ; returns target tank number in Y and
 ; direcion of shoot in A (0 - left, >0 - right)
 ;----------------------------------------------
+	sta PreferHumansFlag
 	jsr MakeLowResDistances
 	lda #202
 	sta temp2 ; max possible energy
@@ -458,15 +460,12 @@ loop01
 	lda eXistenZ,y
 	beq skipThisPlayer
 
-	bit PreferHumansFlag
-	bpl NoPreferHumans
 	lda skilltable,y
 	beq ItIsHuman
-	lda #100
+	lda PreferHumansFlag
 ItIsHuman
-NoPreferHumans
 	clc
-	adc Energy,y	; if robotank energy=energy+100
+	adc Energy,y	; if robotank energy=energy+100 (100 or 0 from PreferHumansFlag)
 	cmp temp2 ; lowest
 	bcs lowestIsLower
 	sta temp2
