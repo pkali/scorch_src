@@ -278,6 +278,7 @@ SettingBarrel
     mva #1 Erase
     jsr drawtanks
     mva #0 Erase
+	sta COLBAKS		; set background color to black
     jsr PMoutofScreen ;let P/M disappear
 
     ; here gains and losses should be displayed (dollars)
