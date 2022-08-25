@@ -455,25 +455,19 @@ loop01
 	lda eXistenZ,y
 	beq skipThisPlayer
 	
-	lda LowResDistances,x
-	cmp LowResDistances,y
-	bcs EnemyOnTheLeft
 	;enemy on the right
 	lda Energy,y
 	cmp temp2 ; lowest
 	bcs lowestIsLower
 	sta temp2
 	sty temp2+1 ; number of the closest tank
+	mva #0 tempor2
+	lda LowResDistances,x
+	cmp LowResDistances,y
+	bcs EnemyOnTheLeft
 	inc tempor2	; set direction to right
-	bne lowestIsLower
-
-EnemyOnTheLeft
-	lda Energy,y
-	cmp temp2 ; lowest
-	bcs lowestIsLower
-	sta temp2
-	sty temp2+1 ; number of the closest tank
 	
+EnemyOnTheLeft	
 lowestIsLower
 skipThisPlayer
 	dey
@@ -607,14 +601,8 @@ skipThisPlayer
 ; returns angle and power of shoot tank X (TankNr)
 ; in the appropriate variables (Angle and Force)
 ;----------------------------------------------
+	mva #$ff SecondTryFlag
 	; set initial Angle and Force values
-	; wind correction 90+(wind/8)
-	mwa Wind temp2
-	:7 lsrw temp2
-	clc
-	lda #90
-	adc temp2
-	sta NewAngle
 	lda OptionsTable+2	; selected gravity
 	asl 
 	tay
@@ -633,10 +621,19 @@ skipThisPlayer
 	adc #0
 	sta RandBoundaryHigh+1
     jsr RandomizeForce
+RepeatAim
 	lda ForceTableL,x
 	sta Force
 	lda ForceTableH,x
 	sta Force+1
+	; wind correction 90+(wind/8)
+	mwa Wind temp2
+	:7 lsrw temp2
+	clc
+	lda #90
+	adc temp2
+	sta NewAngle
+	; set virtual weapon :)
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 	; now we have initial valuses
@@ -673,7 +670,8 @@ GroundHitInFirstLoopR
 	lda NewAngle
 	adc #5	; 5 deg to right
 	cmp #(180-20)
-	bcs EndOfFirstLoopR	; if angle 180-20 or higher
+;	bcs EndOfFirstLoopR	; if angle 180-20 or higher
+	bcs AimSecondTry
 	sta NewAngle
 	jmp AimingRight
 NoHitInFirstLoopR
@@ -721,8 +719,20 @@ NoHitInSecondLoopR
 	; Angle 1 deg to right and end loop 
 	inc NewAngle
 EndOfSecondLoopR
+EndOfAim
 	rts
 
+AimSecondTry
+	bit SecondTryFlag
+	bpl EndOfAim	; closest RTS
+	inc SecondTryFlag
+	lda #<1000
+	sta ForceTableL,x
+	lda #>1000
+	sta ForceTableH,x
+	jsr RandomizeForce.LimitForce
+	jmp RepeatAim
+	
 AimingLeft
 	; make test Shoot (Flight)
 	jsr SetStartAndFlight
@@ -752,7 +762,8 @@ GroundHitInFirstLoopL
 	lda NewAngle
 	sbc #5	; 5 deg to left
 	cmp #21
-	bcc EndOfFirstLoopL	; if angle 180-20 or higher
+;	bcc EndOfFirstLoopL	; if angle 20 or lower
+	bcc AimSecondTry
 	sta NewAngle
 	jmp AimingLeft
 NoHitInFirstLoopL
