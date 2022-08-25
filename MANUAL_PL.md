@@ -13,12 +13,13 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywwki:
 * częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą “strzelać w próżnię” :) - jeśli grają tylko ludzie optymalne ustawienie to “norm”, w przypadku graczy sterowanych przez komputer… wedle uznania.
 * wysokość (i pofałdowanie) gór od prawie płaskich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
 * sposób działania ścian (krawędzi ekranu):
-	1. none - pociski, które wyleciały poza ekran nie wracają
-	2. wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony (i odwrotnie)
-	3. bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć
-	4. boxy - tak jak bump, tyle że "sufit" także odbija pociski
-	5. rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
-
+	* none - pociski, które wyleciały poza ekran nie wracają
+	* wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony (i odwrotnie)
+	* bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć
+	* boxy - tak jak bump, tyle że "sufit" także odbija pociski
+	* rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
+	
+	W trakcie rozgrywki aktualny sposób działania ścian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - niebieski, boxy - zielony.
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
@@ -54,12 +55,14 @@ W linii statusowej widoczna jest informacja o tym który z graczy aktualnie moż
 
 Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana kąta nachylenia lufy, góra/dół - zmiana ustawienia siły strzału.
 * [SPACJA] lub przycisk joysticka naciśnięte krótko - oddanie strzału
-* [TAB] - wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory)
+* [TAB] lub [SELECT]- wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory)
 * Klawisz [I] lub dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną.
-* Klawisz [A] - bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych.
+* Klawisz [A] lub [OPTION]- bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych.
 * Klawisz [M] - wyłączenie/włączenie muzyki w tle
 * Klawisz [S] - wyłączenie/włączenie dźwięków efektów.
+* [START] - przyspiesza/pomimja niektóre animacje w grze
 * Klawisz [O] - wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza [ESC] z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy.
+* [START] + [OPTION] - natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak [O] ale bez potwierdzenia.
 * [ESC] - w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem).
 
 ## 5. Zasady gry
@@ -69,9 +72,9 @@ A tutaj zręby opisu działania poszczególnych broni, zasad punktacji itp:
 ### Najpierw co wiemy o energii czołgów
 - Czołgi mają energię (a Ogry warstwy - jak cebula) - na starcie 99 jednostek
 - Energii czołgom ubywa na 3 sposoby:
-    1. jedna jednostka po oddaniu każdego strzału
-    2. w czasie spadania (jeden piksel w dół 2 jednostki)
-    3. w chwili trafienia w czołg lub obok niego jakiegoś pocisku - i tu ilość odejmowanej energii zależy od odległości od centrum eksplozji i typu/siły rażenia pocisku.
+    * jedna jednostka po oddaniu każdego strzału
+    * w czasie spadania (jeden piksel w dół 2 jednostki)
+    * w chwili trafienia w czołg lub obok niego jakiegoś pocisku - i tu ilość odejmowanej energii zależy od odległości od centrum eksplozji i typu/siły rażenia pocisku.
 
 ### Jak działa odejmowanie energii (i zarabianie kasy!)
 Po każdej rundzie wyliczana jest ilość zdobytych/straconych pieniędzy robione jest to na podstawie dwóch zmiennych gromadzonych przez każdy z czołgów w trakcie rundy. Te zmienne to:
@@ -173,9 +176,9 @@ Tylko te punkty decydują o kolejności w podsumowaniu
 * **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broń nie tyle defensywna co obosieczna. Zasypuje teren opadem "radioaktywnym", który jest zwyczajną glebą. Jeśli nie mamy pod ręką żadnej broni odkopującej teren i do tego osłony (najlepiej jednorazowej), to po takim "opadzie" będzie trzeba strzelić do siebie - bo będąc pod ziemią inaczej się nie da. Ewentualnie pozostaje zawsze White Flag.
 * **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się ale tylko przy niewielkim przysypaniu ale fanie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej deaktywować).
 
-W związku z odmiennym działaniem broni **MIRV**, **Bouncy Castle** i **Mag Deflector** wykorzystują tylko funkcję osłony przy trafieniu tą bronią.
+W związku z odmiennym działaniem broni **MIRV**, bronie defensywne **Bouncy Castle** i **Mag Deflector** wykorzystują tylko funkcję osłony przy trafieniu tą bronią. Dodatkowo głowice **MIRV** w czasie opadania nie odbijają się i nie przelatują przez ściany boczne!
 
-Dodatkowo, żadna z osłon nie chroni przed Napalmem. Auto Defense czy Mag Deflector przy bezpośrednim trafieniu odbije je lub przeniesie obok, ale wystarczy trafić bardzo blisko czołgu i nie zadziała jego osłona.
+Żadna z osłon nie chroni przed **Napalm**. **Auto Defense** czy **Mag Deflector** przy bezpośrednim trafieniu odbije je lub przeniesie obok, ale wystarczy trafić bardzo blisko czołgu i nie zadziała jego osłona.
 
 Bronie **White Flag**, **Hovercraft** i **Nuclear Winter** po aktywacji wymagają uruchomienia, jest to realizowanie przez "oddanie strzału" po aktywacji tej broni. Oczywiście strzał bronią ofensywną nie jest wtedy oddawany, a jedynie uruchamiana jest wybrana broń defensywna.
 

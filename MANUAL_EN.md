@@ -14,16 +14,17 @@ On the first screen, you can configure gameplay options:
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
 * The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
 * the way the walls (edges of the screen) work:
-	1. none - projectiles that flew off the screen do not return
-	2. wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
-	3. bump - the right and left walls deflect projectiles that want to fly through them
-	4. boxy - just like bump, except that the "ceiling" also reflects projectiles
-	5. rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
+	* none - projectiles that flew off the screen do not return
+	* wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
+	* bump - the right and left walls deflect projectiles that want to fly through them
+	* boxy - just like bump, except that the "ceiling" also reflects projectiles
+	* rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
+	
+	During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - blue, boxy - green.
 
-Translated with www.DeepL.com/Translator (free version)
-Select options with cursor keys or joystick.
+Select options with cursor keys or a joystick.
 
-The [RETURN] key or Joystick button moves to the next screen.
+The [RETURN] key or a joystick button moves to the next screen.
 
 ## 2. Entering the name of players and selecting the level of computer-controlled players
 
@@ -55,14 +56,15 @@ The status line shows which player is currently allowed to take a shot and a set
 
 The keyboard controls here are simple, cursor keys or joystick: left/right - change the angle of the barrel, up/down - change the the force of the shot.
 * [SPACE] or joystick button pressed briefly - firing a shot.
-* [TAB] - selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory).
+* [TAB] or [SELECT] - selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory).
 * [I] or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon.
-* [A] - go directly to the defensive weapons activation.
+* [A] or [OPTION] - go directly to the defensive weapons activation.
 * [M] key - disable/enable background music.
 * [S] key - disable/enable effect sounds.
 * [START] - speed up some game animations.
+* [O] - end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the [ESC] key with the difference that the summary and credits are displayed.
+* [START] + [OPTION] - immediately force the end of the game (Game Over), just like [O] but without confirmation.
 * [ESC] - during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the [ESC] key, which allows you to abort the game and return to the beginning (of course, there is protection against accidental pressing).
-* [O] - end the current game and jump to the Game Over screen with a summary.
 
 ## 5. Game mechanics 
 
@@ -71,9 +73,9 @@ And here's a rundown of the description of how each weapon works, scoring rules,
 ### First, what we know about tank energy
 - Tanks have energy (and Ogres have layers - like an onion) - 99 units at the start of a round.
 - Energy of tanks is depleted in 3 ways:
-    1. one unit after firing each shot,
-    2. while falling (one pixel down takes 2 units of energy),
-    3. when a projectile hits a tank or its proximity. The amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
+    * one unit after firing each shot,
+    * while falling (one pixel down takes 2 units of energy),
+    * when a projectile hits a tank or its proximity. The amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
 
 ### How energy subtraction works (and makes money!)
 
@@ -89,7 +91,9 @@ Specifically:
 
 ### After each round:
 `money = money + (2 * (gain + energy))`
+
 `money = money - lose`
+
 `if money < 0 then money = 0`
 
 (at the start of each round `gain` and `lose` have a value of 0)
@@ -160,27 +164,27 @@ And here are the `ExplosionRadius` values for each weapon:
 | Dirt Charge | 0 (61 - as above) |
 | Laser | x 100 (but here it is also different - equally 100 only in the case of a direct hit, the `ExplosionRadius` variable is not used, so there is no multiplication by 8 - we simply subtract 100 units of energy - that is, the tank always dies).|
 
-The big points received by the player are the number of tanks that died earlier than him. If any of the other tanks capitulated earlier (White Flag) is not added to those that died and does not give points.
+The big points received by the player are the number of tanks that died earlier than him. If any of the other tanks capitulated earlier (using **White Flag**), it is not counted and does not give big points.
 
-Only these points determine the order in the summary
+Only these big points determine the order in the summary.
 
-## 6. And now defensive weapons:
+## 6. And now for defensive weapons:
 
 * **White Flag** - causes the surrender of the player (can sometimes be useful in a hopeless situation). The advantage is that by surrendering you don't give a big point to your opponents and don't cause one of them to gain by killing us, you also limit the loss of your energy and also cash. An important note - this is the only defensive weapon that can be deactivated. All you have to do is re-enter inventory and once again select its activation.
 * **Battery** - when activated, it recharges the tank's energy to full (99 units) and at the same time is the only defensive weapon that does not deactivate other defensive weapons when used.
 * **Hovercraft** - a weapon that allows the tank to move. It has its own fuel supply in form of electric eels and in addition, it can be activated multiple times during the same turn, and after using it, you can activate another defensive weapon and fire a shot in the same turn. After using it, the tank rises above the mountains and using the cursor keys or a joystick you can move the tank to a new position. [SPACE] or the joystick button cause the tank to land in a new place. You can fly until the tank runs out of eels (presented on the status bar like the energy of a defensive weapon), if the eel fuel runs out the tank will fall down on its own. It is not possible to land on other tanks.
 * **Parachute** - does not protect against loss of energy due to a neighboring explosion, makes you not lose energy during ONE fall. After such a fall, it deactivates and a new parachute must be activated.
-* **Shield** - the simplest shield works exactly the opposite of **Parachute**, it does not protect against energy loss while falling, instead it protects against energy loss caused by ONE adjacent explosion. It protects once, no matter how strong the explosion is (whether it's just a "scratch" or a direct hit with a nuke), and deactivates immediately afterward.
+* **Shield** - the simplest shield works exactly the opposite of **Parachute**, it does not protect against energy loss while falling, instead it protects against energy loss caused by ONE adjacent explosion. It protects once, no matter how strong the explosion is (whether tis but a scratch or a direct hit with a nuke), and deactivates immediately afterward.
 * **Heavy Shield** - a shield with its own energy (at the start of 99 units), it works the same as **Shield** (does not protect against falling) with the exception that it has its own energy resource. When exploding, the energy of this shield is reduced first, and if it reaches 0, the shield deactivates and further reduces the tank's energy. Due to this action, a tank with this type of shield can be "killed" by undermining it, because falling reduces the energy of the tank and not the shield.
 * **Force Shield** - the strongest shield - works just like Heavy Shield only that it is combined with **Parachute**. What is important in this case, falling does not take energy away from the shield or the tank. It is only taken away by hits.
-* **Bouncy Castle** - a passive-aggressive weapon :) . It works as follows. In case of a direct hit on the tank (and cover), it causes the projectile to "bounce" in the opposite direction with the same force with which it was fired. In the absence of wind and a difference in level, the weapon then hits the tank that fired it. After such a bounce, it deactivates. As the weapon reacts in this way only to precise hits, it is also a shield that corresponds to the action of **Heavy Shield** and has 99 units at the start (you will probably have to rethink this value and give a smaller one here).
+* **Bouncy Castle** - a passive-aggressive weapon :). It works as follows - in a case of a direct tank hit (and shield), it causes the projectile to "bounce" in the opposite direction with the same force with which it was fired. In the absence of wind and a difference in level, the weapon then hits the tank that fired it. After such a bounce, it deactivates. As the weapon reacts in this way only to precise hits, it is also works like **Heavy Shield** and has 99 units at the start (we will probably have to rethink this value and give a smaller one here).
 * **Mag Deflector** - the second passive-aggressive weapon :) . In case of a direct hit on a tank (and shield), it causes the hit point to move randomly to the left or right side of the protected tank, but not very far, so you can get "shrapnel" with stronger weapons. As in the case of **Bouncy Castle**, it is also a shield that corresponds to the action of **Heavy Shield** and has 99 units at the start (probably here we will have also to rethink this value and give a smaller one).
 * **Nuclear Winter** - adds nothing, takes nothing away :) - in fact, it is not so much a defensive weapon as a double-edged one. It floods the area with "radioactive" fallout, which is ordinary soil. If you do not have at hand any weapon that digs up the terrain, and for that a shield (preferably disposable), then after such "fallout" you will have to shoot yourself - because being underground is otherwise impossible. Alternatively, **White Flag** always remains.
 * **Long Schlong** - a special weapon :) - Costs a lot, doesn't really help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated).
 
-Due to the different operations of **MIRV** weapons, **Bouncy Castle** and **Mag Deflector** only use the shielding function when hit by these weapons.
+Due to the different operations of **MIRV**, defensive weapons **Bouncy Castle** and **Mag Deflector** only use the shielding function when hit by these weapons. In addition, **MIRV** heads do not bounce or fly through sidewalls during descent!
 
-In addition, none of the shields protect against **Napalm**. **Bouncy Castle** or **Mag Deflector** on a direct hit will deflect it or carry it past, but just hit very close to a tank and its shield will not work.
+None of the shields protect against **Napalm**. **Bouncy Castle** or **Mag Deflector** on a direct hit will deflect it or carry it past, but just hit very close to a tank and its shield will not save it.
 
 **White Flag**, **Hovercraft** and **Nuclear Winter** weapons, when selected, require activation, this is accomplished by "firing a shot" after the selection of that weapon. Of course, the shot of the offensive weapon is then not fired, but only the selected defensive weapon is activated.
 
@@ -190,4 +194,4 @@ And of course, activating a weapon when you already have some other weapon activ
 
 ## 7. "Other" weapons:
 
-* **Buy me!** - this 'weapon' cannot be used in gameplay. Buying it draws one of the offensive or (more rarely) defensive weapons and adds it to the player's arsenal. It is a lottery in which you can lose (if you draw a weapon cheaper than the "Buy Me!" price) but also gain. You can get a weapon otherwise not affordable at all! 
+* **Buy me!** - this is a 'loot box', not a weapon per se. Buying it draws one of the offensive or (rarely) defensive weapons and adds it to the player's arsenal. It is a lottery in which you can lose (if you draw a weapon cheaper than the **Buy Me!** price) but also gain. You can get a weapon otherwise not affordable at all! 

@@ -104,18 +104,18 @@ OptionsScreen
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
 MoreUp
- dta d"             "
+ dta d"         "
  dta 92,92,92
  dta d"  more  "
  dta 92,92,92
- dta d"             "
+ dta d"         "
    .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 MoreDown
- dta d"             "
+ dta d"         "
  dta 93,93,93
  dta d"  more  "
  dta 93,93,93
- dta d"             "
+ dta d"         "
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
  dta d"Tab"*

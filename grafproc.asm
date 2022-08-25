@@ -791,7 +791,7 @@ DoNotDrawTankNr
 	mva #18 fs  ; temp, how many times flash the tank
 tankflash_loop
     lda CONSOL  ; turbo mode
-    cmp #6  ; START
+	and #%00000001 ; START KEY
     sne:mva #1 fs  ; finish it     
     mva #1 Erase
 	ldx TankNr
@@ -1899,20 +1899,18 @@ EndPutChar
 ; puts 4x4 pixels char on the graphics screen
 ; in: dx, dy (LOWER left corner of the char)
 ; in: CharCode4x4 (.sbyte)
-; in: plot4x4color (0/1)
+; in: plot4x4color (0/255)
 ; all pixels are being drawn
 ; (empty and not empty)
 ;--------------------------------------------------
-    ; cpw ydraw #(screenheight-4)
-    ; jcs TypeChar.EndPutChar ;nearest RTS
-    ; cpw xdraw #(screenwidth-4)
-    ; jcs TypeChar.EndPutChar ;nearest RTS
+;	rts
+    cpw dy #(screenheight-1)
+    jcs TypeChar.EndPutChar ;nearest RTS
+	cpw dy #(4)
+    jcc TypeChar.EndPutChar ;nearest RTS	
+    cpw dx #(screenwidth-4)
+    jcs TypeChar.EndPutChar ;nearest RTS
 	; checks ommited.
-	lda plot4x4color
-	beq FontColor0
-	lda #$ff		; better option to check (plot4x4color = $00 or $ff)
-	sta plot4x4color
-FontColor0
     ; char to the table
     lda CharCode4x4
     and #%00000001
@@ -2021,6 +2019,7 @@ EndPut4x4
 ;    and #$fc
 ;    ora #$02     ; 2=normal, 3 = wide screen width
     sta dmactls
+	mva WallsType COLBAKS	; set color of background 
     jsr WaitOneFrame
     rts
 .endp

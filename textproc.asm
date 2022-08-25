@@ -29,6 +29,7 @@
     mva #TextBackgroundColor COLOR2
     jsr ColorsOfSprites
 	mva #$ca COLOR1
+	mva #$00 COLBAKS	; set color of background
    
     VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
 
@@ -311,6 +312,7 @@ GoToActivation
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
 	ldy #0
+	sty COLBAKS	; set color of background
     lda tanknr
     :3 asl  ; 8 chars per name
     tax
@@ -852,8 +854,8 @@ invSelectDef
     bne NotBattery
     ; if activate battery, we do it differently
     mva #sfx_battery sfx_effect
-    mva #99 Energy,x
 	phy
+    mva #99 Energy,x
 	jsr MaxForceCalculate
 	ply
     jmp DecreaseDefensive ; bypass activation
@@ -1042,6 +1044,7 @@ NoArrowDown
     VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
 
     mva #0 TankNr
+	sta COLBAKS	; set color of background
 @     tax
       lda TankStatusColoursTable,x
       sta COLOR2  ; set color of player name line
@@ -1108,7 +1111,9 @@ LastNameChar
     lda #$80 ; place cursor on the end
     sta NameAdr,y
 	dey
-    sty PositionInName
+	bpl @+
+	iny	; if old name is empty or first time entering
+@   sty PositionInName
 
 
 CheckKeys
@@ -1532,6 +1537,7 @@ DOTNcharloop
     sta dx+1
     lda TextPositionY
     sta dy
+	mva #0 dy+1	; dy is 2 bytes value
     jsr PutChar4x4
 
     inc TextCounter
@@ -1597,7 +1603,7 @@ end_found
     ;address in LineAddress4x4 (it is the same as `temp`)
     ;starting from LineXdraw, LineYdraw
 
-    lda #1
+    lda #$ff
 
 staplot4x4color
     sta plot4x4color
@@ -1617,6 +1623,7 @@ TypeLine4x4Loop
     sta CharCode4x4
     mwa LineXdraw dx
     mva LineYdraw dy
+	mva #0 dy+1  ;	dy is 2 bytes value
     jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
     inc LineCharNr
@@ -1663,7 +1670,7 @@ skip01
     mva #3 di
     mva #4 ResultY
 @
-      mva #1 plot4x4color
+      mva #$ff plot4x4color
       mwa #lineClear LineAddress4x4
       mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
@@ -1684,7 +1691,7 @@ quit_areyousure
     mva #20 fs  ; temp, how many times blink the billboard
 seppuku_loop
       lda CONSOL  ; turbo mode
-      cmp #6  ; START
+	  and #%00000001 ; START KEY
       sne:mva #1 fs  ; finish it     
 
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
@@ -1732,7 +1739,7 @@ quit_seppuku
     jsr RoundOverSprites
 
     
-    mva #1 plot4x4color
+    mva #$ff plot4x4color
         
     ;centering the result screen
     mva #((ScreenHeight/2)-(8*4)) ResultY
@@ -1913,6 +1920,7 @@ FinishResultDisplay
 	jsr SetPMWidth	
     jsr ColorsOfSprites
     mva #0 COLOR1
+	sta COLBAKS	; set color of background
 	sta CreditsVScrol
     mva #TextForegroundColor COLOR2
     VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen

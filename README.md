@@ -48,6 +48,21 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changes:
 
+###### Version 1.12
+2022-08-24
+
+What is going on? Are we getting crazy or what?
+
+Changes:
+* Background color indicates type of walls. This is very useful when `rand` option is selected.
+* XEGS users requested that console keys are used when no keyboard attached! We delivered! [SELECT] to select an offensive weapon, [OPTION] to jump into inventory, defensive section, [START] + [OPTION] - immediate Game Over (no confirmation for you keyboardless folks)
+* A very silly bug detected by our young testers fixed - the game crashed when you built a very high mountain using Dirt Balls :)
+* Boxy infinite bounce bug fixed.
+* Funky bombs bouce off the walls!
+* First letter entered for a tank name was inserted in a wrong spot. How did it work at all? Magic.
+* [ESC] now correctly exits purchase screen.
+
+
 ###### Version 1.11
 2022-08-22
 

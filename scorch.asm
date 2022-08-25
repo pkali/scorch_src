@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"1.11" ; number of this build (3 bytes)
+	dta d"1.12" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -128,7 +128,7 @@
     .zpvar escFlag .byte
     .zpvar LineYdraw .byte
     .zpvar LineXdraw .word
-    .zpvar plot4x4color .byte
+    .zpvar plot4x4color .byte	; $00 / $ff 
     .zpvar Multiplier .word
     .zpvar Multiplier_ .byte  ; 3 bytes
     .zpvar HowToDraw .byte
@@ -257,6 +257,9 @@ SettingBarrel
     ; issue #72 (glitches when switches)
 	mva #0 dmactls		; dark screen
 	jsr WaitOneFrame
+
+    bit escFlag
+    bmi START
 
     jsr GetRandomWind
 
@@ -552,7 +555,7 @@ DoNotFinishTheRound
 
 
     
-    mva #1 plot4x4color
+    mva #$ff plot4x4color
     jsr DisplayTankNameAbove
     
     mva #1 color ;to display flying point
@@ -577,10 +580,10 @@ RoboTanks
     lda kbcode
     cmp #28  ; ESC
     bne @+
-      jsr AreYouSure
-      bit escFlag
-	  spl:rts
-@
+    jsr AreYouSure
+@	lda escFlag
+    seq:rts		; keys Esc or O
+
 
     jmp AfterManualShooting
 
@@ -592,7 +595,7 @@ ManualShooting
     seq:rts		; keys Esc or O
 
 AfterManualShooting
-    mva #0 plot4x4color
+    mva #$00 plot4x4color
     jsr DisplayTankNameAbove
 	; defensive weapons without flight handling
 	ldx TankNr
@@ -631,7 +634,7 @@ ShootNow
     jsr Shoot
     ;here we clear offensive text (after a shoot)
     ldy TankNr
-    mva #0 plot4x4color
+    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
     
     lda HitFlag ;0 if missed
@@ -685,7 +688,7 @@ missed
     ;here we clear offensive text (after a shoot)
     ;shit -- it's second time, but it must be like this
     ldy TankNr
-    mva #0 plot4x4color
+    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
 NextPlayerShoots
@@ -773,7 +776,7 @@ NoPlayerNoDeath
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
     sta TextNumberOff
     ldy TankTempY
-    mva #1 plot4x4color
+    mva #$ff plot4x4color
     jsr DisplayOffensiveTextNr
 	; tank flash
     ldy TankTempY
@@ -785,7 +788,7 @@ NoPlayerNoDeath
     ;Deffensive text cleanup
     ;here we clear Deffensive text (after a shoot)
     ldy TankTempY
-    mva #0 plot4x4color
+    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
     ; calculate position of the explosion (the post-death one)
@@ -1590,6 +1593,10 @@ getkeyend
     lda SKSTAT
     cmp #$ff
     bne WaitForKeyRelease
+	lda CONSOL
+	and #%00000110	; Select and Option only
+	cmp #%00000110
+	bne WaitForKeyRelease
     rts
 .endp
 ;--------------------------------------------------
@@ -1626,7 +1633,10 @@ noKey
 .endp
 .proc WaitOneFrame
 	lda CONSOL
-	cmp #6  ; START KEY
+	and #%00000101	; Start + Option
+	bne @+
+	mva #$40 escFlag	
+@	and #%00000001 ; START KEY
 	beq @+
 	wait
 @	rts

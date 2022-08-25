@@ -5,10 +5,7 @@
 .proc Explosion
 ;--------------------------------------------------
     ;cleanup of the soil fall down ranges (left and right)
-    mwa #screenwidth RangeLeft
-    lda #0
-    sta RangeRight
-    sta RangeRight+1
+	jsr ClearScreenSoilRange
 
     ldx TankNr
     lda ActiveWeapon,x
@@ -192,6 +189,7 @@ EndOfLeapping
     mva #1 Erase
     jsr drawtanks
     mva #0 Erase
+	sta FunkyWallFlag
     pla
     sta TankNr
 	mva #1 color
@@ -224,6 +222,10 @@ NoExplosionInFunkyBomb
     dec FunkyBombCounter
     bne FunkyBombLoop
     mva #0 tracerflag
+	lda FunkyWallFlag
+	beq NoWallsInFunky
+	jsr SetFullScreenSoilRange
+NoWallsInFunky
     rts
 .endp
 ; ------------------------
@@ -861,6 +863,7 @@ dirtLoop
     lda radius
     cmp ExplosionRadius
     bne dirtLoop
+    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; -----------------
@@ -1182,6 +1185,17 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
+	; Select and Option
+	lda CONSOL
+	tay
+	and #%00000101	; Start + Option
+	beq QuitToGameover
+	tya
+	and #%00000100
+	beq callActivation	; Option key
+	tya
+	and #%00000010
+	jeq pressedTAB	; Select key
     lda SKSTAT
     cmp #$ff
     jeq checkJoy
@@ -1197,6 +1211,7 @@ notpressed
     bit escFlag
     bpl notpressed
     ;---O pressed-quit game to game over screen---
+QuitToGameover
 	mva #$40 escFlag
     rts
 @
@@ -1510,7 +1525,7 @@ RandomizeOffensiveText
 
     sta TextNumberOff
     ldy TankNr
-    mva #1 plot4x4color
+    mva #$ff plot4x4color
     jsr DisplayOffensiveTextNr
 
 	mva #0 LaserFlag	; $ff - Laser
@@ -2090,10 +2105,7 @@ MIRVcopyParameters
     sta vx03+4
 
     ; clearing ranges of soil down registers
-    mwa #screenwidth RangeLeft
-    lda #0
-    sta RangeRight
-    sta RangeRight+1
+	jsr ClearScreenSoilRange
 
     ldx #$FF ; it will turn 0 in a moment anyway
     stx MirvMissileCounter
@@ -2325,7 +2337,7 @@ MIRValreadyAll
 
     ;first clean the offensive text...
     ldy TankNr
-    mva #0 plot4x4color
+    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
     ; temporary removing tanks from the screen (otherwise they will fall down with soil)
@@ -2348,12 +2360,15 @@ MIRValreadyAll
 	; top bounce
 	bit ytraj+2
 	bpl NoOnTop
+	bit vy+3
+	bmi FlyingDown
 	sec
 	.rept 4
         lda #$00
         sbc vy+#
         sta vy+#
 	.endr
+FlyingDown
 NoOnTop
 MakeBump
 	cpw xtraj+1 #screenwidth
@@ -2365,12 +2380,14 @@ MakeBump
         sbc vx+#
         sta vx+#
     .endr
+	inc FunkyWallFlag
 	rts
 WrapAndNone
 	bvc NoWall
 	cpw xtraj+1 #screenwidth
 	bcc OnScreen 	
 	; (wrapping wall)
+	inc FunkyWallFlag
 	bit xtraj+2
 	bmi LeftWrap
 RightWrap
@@ -2452,10 +2469,7 @@ NextLine2
 	lda #0
 	ldx TankNr
 	sta ActiveDefenceWeapon,x	; deactivate Nuclear Winter
-	
-	sta RangeLeft			; whole screen in range of soil down
-	sta RangeLeft+1
-	mwa #screenwidth RangeRight
+	jsr SetFullScreenSoilRange
     jsr SoilDown2
 	jsr drawtanks	; for restore PM
 	rts
@@ -2548,7 +2562,7 @@ ReachSky
 	lda FloatingAlt
 	sbc #12
     sta LineYdraw
-    lda #0
+    lda #$00
     jsr TypeLine4x4.staplot4x4color
 	; and Soildown at the start (for correct mountaintable if tank was buried)
 	; calculate range
@@ -2715,7 +2729,7 @@ pressedSpace
 	lda FloatingAlt
 	sbc #12
     sta LineYdraw
-    lda #0
+    lda #$00
     jsr TypeLine4x4.staplot4x4color
 	ldx TankNr
     ;=================================
@@ -2829,7 +2843,7 @@ GoDown
 FloatDown
 	lda ytankstable,x
 	cmp FloatingAlt
-	beq OnGround
+	bcs OnGround
 	; first erase old tank position
 	mva #1 Erase
     jsr DrawTankNr
@@ -2969,10 +2983,7 @@ CalculateExplosionRange0
     ;(for the first or single explosion)
 
     ;zero soil fall out ranges
-    mwa #screenwidth RangeLeft
-    lda #0
-    sta RangeRight
-    sta RangeRight+1
+	jsr ClearScreenSoilRange
 ;--------------------------------------------------
 .proc CalculateExplosionRange
 ;--------------------------------------------------
@@ -3004,7 +3015,26 @@ RangesChecked
 
     rts
 .endp    
-    
+
+;--------------------------------------------------
+.proc SetFullScreenSoilRange
+; whole screen in range of soil down
+;--------------------------------------------------
+	lda #0
+	sta RangeLeft
+	sta RangeLeft+1
+	mwa #screenwidth RangeRight
+	rts
+.endp
+;--------------------------------------------------
+.proc ClearScreenSoilRange
+; cleanup of the soil fall down ranges (left and right) ;--------------------------------------------------
+	mwa #screenwidth RangeLeft
+	lda #0
+	sta RangeRight
+	sta RangeRight+1
+	rts
+.endp
 ;--------------------------------------------------
 .proc DecreaseWeaponBeforeShoot
 ;--------------------------------------------------
@@ -3065,7 +3095,10 @@ noBullets
 ;--------------------------------------------------
 .proc ShellDelay
     lda CONSOL
-    cmp #6
+	and #%00000101	; Start + Option
+	bne @+
+	mva #$40 escFlag	
+@	and #%00000001
     beq noShellDelay
     ldx flyDelay
 DelayLoop

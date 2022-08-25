@@ -35,13 +35,13 @@ seppukuVal .by 75
 mountainDeltaH .by 3
 mountainDeltaL .by $ff
 ;----------------------------------------------------
-; 4x4 text buffer
-ResultLineBuffer
-    dta d"                  ", $ff
 LineHeader1
     dta d"# ROUND: "
 RoundNrDisplay
     dta d"    #", $ff
+; 4x4 text buffer
+ResultLineBuffer
+    dta d"                  ", $ff
 
 ;=====================================================
 variablesStart  ; zeroing starts here
@@ -203,6 +203,7 @@ PreviousFall  .DS 1
 EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 ;Parachute .DS 1 ; are you insured with parachute?
 FloatingAlt	.DS 1	; floating tank altitude
+FunkyWallFlag = FloatingAlt	; reuse this variable in different weapon (Funky Bomb)!
 ;----------------------------------------------------
 ;Flight
 ;variables for 5 missiles (used for mirv)
