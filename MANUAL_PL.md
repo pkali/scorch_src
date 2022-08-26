@@ -215,7 +215,9 @@ Próba zakupu broni (ofensywnej lub defensywnej) wygląda następująco:
 Na początku losowana jest jedna z broni (wśród wszystkich możliwych ofensywnych lub defensywnych). Następnie wykonywane jest sprawdzenie czy wylosowana broń jest na liście broni możliwych do zakupu przez czołg. Jeśli nie to w tej próbie żadna broń nie jest kupowana, a jeśli tak, to sprawdzana jest jej cena. Jeśli czołg ma tyle pieniędzy, broń jest kupowana, w przeciwnym wypadku próba kończy się bez dokonania zakupu.
 
 Tabela broni kupowanych przez: **Shooter**, **Poolshark**, **Tosser** i **Chooser**
+
 | bronie ofensywne | bronie defensywne |
+| --- | --- |
 | Missile | Battery |
 | Baby Nuke | Parachute |
 | Nuke | Strong Parachute |
@@ -230,7 +232,9 @@ Tabela broni kupowanych przez: **Shooter**, **Poolshark**, **Tosser** i **Choose
 | Heavy Roller | |
 
 Tabela broni kupowanych przez: **Spoiler** i **Cyborg**
+
 | bronie ofensywne | bronie defensywne |
+| --- | --- |
 | Baby Nuke | Battery |
 | Nuke | Strong Parachute |
 | Death's Head | Mag Deflector |

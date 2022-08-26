@@ -220,7 +220,9 @@ Trying to buy a weapon (offensive or defensive) is as follows:
 First, one of the weapons is drawn (among all possible offensive or defensive weapons). Then a check is performed to see if the drawn weapon is in the list of weapons possible for purchase by the tank. If not, no weapon is bought in this trial, and if so, its price is checked. If the tank has that much money, the weapon is bought, otherwise the trial ends without making a purchase.
 
 Table of weapons purchased by: **Shooter**, **Poolshark**, **Tosser** and **Chooser**.
+
 | Offensive weapons | Defensive weapons |
+| --- | --- |
 | Missile | Battery |
 | Baby Nuke | Parachute |
 | Nuke | Strong Parachute |
@@ -235,7 +237,9 @@ Table of weapons purchased by: **Shooter**, **Poolshark**, **Tosser** and **Choo
 | Heavy Roller | |
 
 Table of weapons purchased by: **Spoiler** and **Cyborg**.
+
 | Offensive weapons | Defensive weapons |
+| --- | --- |
 | Baby Nuke | Battery |
 | Nuke | Strong Parachute |
 | Death's Head | Mag Deflector |
