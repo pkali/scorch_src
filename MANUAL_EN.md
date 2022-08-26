@@ -215,3 +215,30 @@ The game has 8 difficulty levels of computer-controlled opponents. Or actually 7
 ** **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless low energy is required (the target is close). Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser**. He shops exactly like **Spoiler**.
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
+
+Trying to buy a weapon (offensive or defensive) is as follows:
+First, one of the weapons is drawn (among all possible offensive or defensive weapons). Then a check is performed to see if the drawn weapon is in the list of weapons possible for purchase by the tank. If not, no weapon is bought in this trial, and if so, its price is checked. If the tank has that much money, the weapon is bought, otherwise the trial ends without making a purchase.
+
+Table of weapons purchased by: **Shooter**, **Poolshark**, **Tosser** and **Chooser**.
+| Offensive weapons | Defensive weapons |
+| Missile | Battery |
+| Baby Nuke | Parachute |
+| Nuke | Strong Parachute |
+| LeapFrog | Mag Deflector |
+| Funky Bomb | Shield |
+| MIRV | Heavy Shield |
+| Death's Head | Force Shield |
+| Napalm | Bouncy Castle |
+| Hot Napalm | |
+| Baby Roller | |
+| Roller | |
+| Heavy Roller | |
+
+Table of weapons purchased by: **Spoiler** and **Cyborg**.
+| Offensive weapons | Defensive weapons |
+| Baby Nuke | Battery |
+| Nuke | Strong Parachute |
+| Death's Head | Mag Deflector |
+| Hot Napalm | Heavy Shield |
+| | Force Shield |
+| | Bouncy Castle |

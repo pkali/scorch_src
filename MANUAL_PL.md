@@ -210,3 +210,30 @@ Gra posiada 8 poziomów trudności przeciwników sterowanych przez komputer. A w
 * **Cyborg** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) lecz preferuje przeciwników sterowanych przez człowieka. Celuje bardzo dokładnie i w zdecydowanej większości przypadków trafia za pierwszym strzałem. Strzał oddaje najlepszą posiadaną bronią chyba że wymagana jest małą energia (cel jest blisko). Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Broni defensywnych używa dokładnie tak jak **Chooser**. Zakupy robi dokładnie tak jak **Spoiler**
 
 * **Unknown** - Przed oddaniem każdego strzału losowo wybiera sposób działania od **Poolsharka** do **Cyborga** i stosuje jego taktykę. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
+
+Próba zakupu broni (ofensywnej lub defensywnej) wygląda następująco:
+Na początku losowana jest jedna z broni (wśród wszystkich możliwych ofensywnych lub defensywnych). Następnie wykonywane jest sprawdzenie czy wylosowana broń jest na liście broni możliwych do zakupu przez czołg. Jeśli nie to w tej próbie żadna broń nie jest kupowana, a jeśli tak, to sprawdzana jest jej cena. Jeśli czołg ma tyle pieniędzy, broń jest kupowana, w przeciwnym wypadku próba kończy się bez dokonania zakupu.
+
+Tabela broni kupowanych przez: **Shooter**, **Poolshark**, **Tosser** i **Chooser**
+| bronie ofensywne | bronie defensywne |
+| Missile | Battery |
+| Baby Nuke | Parachute |
+| Nuke | Strong Parachute |
+| LeapFrog | Mag Deflector |
+| Funky Bomb | Shield |
+| MIRV | Heavy Shield |
+| Death's Head | Force Shield |
+| Napalm | Bouncy Castle |
+| Hot Napalm | |
+| Baby Roller | |
+| Roller | |
+| Heavy Roller | |
+
+Tabela broni kupowanych przez: **Spoiler** i **Cyborg**
+| bronie ofensywne | bronie defensywne |
+| Baby Nuke | Battery |
+| Nuke | Strong Parachute |
+| Death's Head | Mag Deflector |
+| Hot Napalm | Heavy Shield |
+| | Force Shield |
+| | Bouncy Castle |
