@@ -642,7 +642,7 @@ CreditsStart
 	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
 	dta d" "*
 	dta d"Additional testin",d"g"*
-	dta d"Arek Peck",d"o"*
+	dta d"Arek and Alex Peck",d"o"*
 	dta d"  "*
 	dta d"Stay tuned for the FujiNet version",d"!"*
 	dta d"         "*
