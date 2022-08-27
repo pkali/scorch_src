@@ -1079,12 +1079,12 @@ NoArrowDown
     jsr displaybyte
     jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 
-    ; clear tank name editor field
-    ldx #8
-    lda #0
-@     sta NameAdr,x
-      dex
-    bpl @-
+    ; clear tank name editor field - not necessary
+;    ldx #8
+;    lda #0
+;@     sta NameAdr,x
+;      dex
+;    bpl @-
     
     ; copy existing name and place cursor at end
     lda TankNr
@@ -1102,25 +1102,22 @@ NoArrowDown
 endOfTankName
 
 @	lda NameAdr,y
+	and #$7f
 	bne LastNameChar
 	dey
 	bpl @-
 LastNameChar
+	cpy #7
+	beq @+
 	iny
-
-    lda #$80 ; place cursor on the end
-    sta NameAdr,y
-	cpy #8
-	bne @+
-	dey
 @	sty PositionInName
-;	dey
-;	bpl @+
-;	iny	; if old name is empty or first time entering
-;@   sty PositionInName
+;	lda NameAdr,y
+;    ora #$80 ; place cursor on the end
+;    sta NameAdr,y
 
 
 CheckKeys
+	jsr CursorDisplay
     jsr getkey
     bit escFlag
     spl:rts
@@ -1143,13 +1140,12 @@ YesLetter
 NotFirstLetter
     sta NameAdr,x
     inx
-    lda #$80 ; cursor behind the char
-    sta NameAdr,x
+;    lda #$80 ; cursor behind the char
+;    sta NameAdr,x
     cpx #$08 ; is there 8 characters?
-    beq CheckKeys  ; if so, nothing increased
-    stx PositionInName ; if not, we store
-    ; position incremented by 1
-
+	bne @+
+	dex
+@	stx PositionInName ; if not, we store
     jmp CheckKeys
 CheckFurtherX01 ; here we check Tab, Return and Del
     cmp #$0c ; Return
@@ -1169,15 +1165,19 @@ CheckFurtherX01 ; here we check Tab, Return and Del
     bne CheckKeys
     ; handling backing one char
     ldx PositionInName
-    beq FirstChar
+    beq FirstChar	; ferst char - no go back
+	cpx #7
+	bne NotLastChar
+    lda NameAdr,x
+	and #$7f
+	bne LastIsNotSpace	; last char not empty - first clear last char (no go back)
+NotLastChar
     dex
+LastIsNotSpace
 FirstChar
-    lda #$80
-    sta NameAdr,x
-    lda #$00
-    sta NameAdr+1,x
-    sta NameAdr+2,x
     stx PositionInName
+    lda #0
+    sta NameAdr,x
     jmp CheckKeys
 ChangeOfLevelUp ; change difficulty level of computer opponent
     inc:lda DifficultyLevel
@@ -1275,13 +1275,27 @@ nextchar05
     bne nextchar05
     rts
 .endp
+.proc CursorDisplay
+	ldy #7
+CursorLoop
+	lda NameAdr,y
+	and #$7f
+	cpy PositionInName
+	bne @+
+    ora #$80 ; place cursor
+@    sta NameAdr,y
+	dey
+	bpl CursorLoop
+	rts
 
+.endp
 .proc EnterNameByJoy
 checkjoy
 	lda STICK0
-	and #$0f
-	cmp #$0f
-	bne JoyNotCentered
+; commented but necessary (memory problems) !!!
+;	and #$0f
+;	cmp #$0f
+;	bne JoyNotCentered
 
 notpressedJoy
 	;fire
