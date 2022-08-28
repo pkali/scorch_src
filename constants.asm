@@ -263,21 +263,21 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Buy_me_________  
   .by >price_Plasma_Blast___
   .by >price_Laser__________
-  .by >price______________33
-  .by >price______________34
-  .by >price______________35
-  .by >price______________36
-  .by >price______________37
-  .by >price______________38
-  .by >price______________39
-  .by >price______________40
-  .by >price______________41
-  .by >price______________42
-  .by >price______________43
-  .by >price______________44
-  .by >price______________45
-  .by >price______________46
-  .by >price______________47
+;  .by >price______________33
+;  .by >price______________34
+;  .by >price______________35
+;  .by >price______________36
+;  .by >price______________37
+;  .by >price______________38
+;  .by >price______________39
+;  .by >price______________40
+;  .by >price______________41
+;  .by >price______________42
+;  .by >price______________43
+;  .by >price______________44
+;  .by >price______________45
+;  .by >price______________46
+;  .by >price______________47
   .by >price_White_Flag_____
   .by >price_Battery________
   .by >price_Bal_Guidance___
@@ -329,21 +329,21 @@ WeaponPriceL
   .by <price_Buy_me_________
   .by <price_Plasma_Blast___
   .by <price_Laser__________
-  .by <price______________33
-  .by <price______________34
-  .by <price______________35
-  .by <price______________36
-  .by <price______________37
-  .by <price______________38
-  .by <price______________39
-  .by <price______________40
-  .by <price______________41
-  .by <price______________42
-  .by <price______________43
-  .by <price______________44
-  .by <price______________45
-  .by <price______________46
-  .by <price______________47
+ ; .by <price______________33
+ ; .by <price______________34
+ ; .by <price______________35
+ ; .by <price______________36
+ ; .by <price______________37
+ ; .by <price______________38
+ ; .by <price______________39
+ ; .by <price______________40
+ ; .by <price______________41
+ ; .by <price______________42
+ ; .by <price______________43
+ ; .by <price______________44
+ ; .by <price______________45
+ ; .by <price______________46
+ ; .by <price______________47
   .by <price_White_Flag_____
   .by <price_Battery________
   .by <price_Bal_Guidance___
@@ -401,21 +401,21 @@ WeaponUnits
   .by 1  ;Buy_me_________
   .by 0  ;Plasma_Blast___
   .by 5  ;Laser__________
-  .by 0  ;_____________33
-  .by 0  ;_____________34
-  .by 0  ;_____________35
-  .by 0  ;_____________36
-  .by 0  ;_____________37
-  .by 0  ;_____________38
-  .by 0  ;_____________39
-  .by 0  ;_____________40
-  .by 0  ;_____________41
-  .by 0  ;_____________42
-  .by 0  ;_____________43
-  .by 0  ;_____________44
-  .by 0  ;_____________45
-  .by 0  ;_____________46
-  .by 0  ;_____________47
+;  .by 0  ;_____________33
+;  .by 0  ;_____________34
+;  .by 0  ;_____________35
+;  .by 0  ;_____________36
+;  .by 0  ;_____________37
+;  .by 0  ;_____________38
+;  .by 0  ;_____________39
+;  .by 0  ;_____________40
+;  .by 0  ;_____________41
+;  .by 0  ;_____________42
+;  .by 0  ;_____________43
+;  .by 0  ;_____________44
+;  .by 0  ;_____________45
+;  .by 0  ;_____________46
+;  .by 0  ;_____________47
   .by 1  ;White_Flag___48
   .by 3  ;Battery________
   .by 0  ;Bal_Guidance___
@@ -488,8 +488,8 @@ WeaponSymbols
     .by $48,$49,$4a,$4b,$4c,$4d,$4e,$4f
     .by $50,$51,$52,$53,$54,$55,$56,$57
     .by $58,$59,$5a,$5b,$60,$7b,$1f,$7d
-    .by $20,$00,$00,$00,$00,$00,$00,$00
-    .by $00,$00,$00,$00,$00,$00,$00,$00
+    .by $20 ;,$00,$00,$00,$00,$00,$00,$00
+    ;.by $00,$00,$00,$00,$00,$00,$00,$00
     .by $5f,$1c,$03,$06,$06,$0a,$1b,$1b  ; defensives
     .by $1e,$3b,$3d,$3c,$3e,$3f,$1d,$7d
 
@@ -528,38 +528,38 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Buy me!         " ; 30
     dta d"Plasma Blast    " ; 31
     dta d"Laser           " ; 32
-    dta d"----------------" ; 33
-    dta d"----------------" ; 34
-    dta d"----------------" ; 35
-    dta d"----------------" ; 36
-    dta d"----------------" ; 37
-    dta d"----------------" ; 38
-    dta d"----------------" ; 39
-    dta d"----------------" ; 40
-    dta d"----------------" ; 41
-    dta d"----------------" ; 42
-    dta d"----------------" ; 43
-    dta d"----------------" ; 44
-    dta d"----------------" ; 45
-    dta d"----------------" ; 46
-    dta d"                " ; 47 ; special (no weapon) name to simplify display
+;    dta d"----------------" ; 33
+;    dta d"----------------" ; 34
+;    dta d"----------------" ; 35
+;    dta d"----------------" ; 36
+;    dta d"----------------" ; 37
+;    dta d"----------------" ; 38
+;    dta d"----------------" ; 39
+;    dta d"----------------" ; 40
+;    dta d"----------------" ; 41
+;    dta d"----------------" ; 42
+;    dta d"----------------" ; 43
+;    dta d"----------------" ; 44
+;    dta d"----------------" ; 45
+;    dta d"----------------" ; 46
+;    dta d"                " ; 47 ; special (no weapon) name to simplify display
 
-    dta d"White Flag      " ; 48 ($30)                                        
-    dta d"Battery         " ; 49                                              
-    dta d"Bal Guidance    " ; 50                                              
-    dta d"Horz Guidance   " ; 51                                              
-    dta d"Hovercraft      " ; 52                                              
-    dta d"Lazy Boy        " ; 53                            
-    dta d"Parachute       " ; 54    - no energy         
-    dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
-    dta d"Mag Deflector   " ; 56    - with shield and energy           
-    dta d"Shield          " ; 57    - shield for one shot - no energy       
-    dta d"Heavy Shield    " ; 58    - shield with energy          
-    dta d"Force Shield    " ; 59    - shield with energy and parachute
-    dta d"Super Mag       " ; 60               
-    dta d"Bouncy Castle   " ; 61    - with shield and energy 
-    dta d"Long Schlong    " ; 62                                              
-    dta d"Nuclear Winter  " ; 63
+    dta d"White Flag      " ; 33                                        
+    dta d"Battery         " ; 34                                              
+    dta d"Bal Guidance    " ; 35                                              
+    dta d"Horz Guidance   " ; 36                                              
+    dta d"Hovercraft      " ; 37                                              
+    dta d"Lazy Boy        " ; 38                            
+    dta d"Parachute       " ; 39    - no energy         
+    dta d"Strong Parachute" ; 40    - with energy  (earlier Battery)        
+    dta d"Mag Deflector   " ; 41    - with shield and energy           
+    dta d"Shield          " ; 42    - shield for one shot - no energy       
+    dta d"Heavy Shield    " ; 43    - shield with energy          
+    dta d"Force Shield    " ; 44    - shield with energy and parachute
+    dta d"Super Mag       " ; 45               
+    dta d"Bouncy Castle   " ; 46    - with shield and energy 
+    dta d"Long Schlong    " ; 47                                              
+    dta d"Nuclear Winter  " ; 48
 DefensiveEnergy = * - 48
 	.by 00	; White Flag
 	.by 00	; Heat Guidance
@@ -577,7 +577,7 @@ DefensiveEnergy = * - 48
 	.by 99	; Bouncy Castle
 	.by 00	; Long Barrel
 	.by 00	; Nuclear Winter
-weaponsOfDeath
+weaponsOfDeath  ; weapons used in tank death animations
 	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
 weaponsOfDeathEnd
 joyToKeyTable

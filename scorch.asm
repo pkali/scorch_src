@@ -154,7 +154,7 @@
     icl 'lib/macro.hea'
 
     ;splash screen and musix
-	icl 'artwork/Scorch50.asm'
+	;icl 'artwork/Scorch50.asm'
 
 
     ;Game loading address
@@ -1694,9 +1694,6 @@ noingame
 ;----------------------------------------------
     icl 'artwork/talk.asm'
 ;----------------------------------------------
-font4x4
-    ins 'artwork/font4x4s.bmp',+62
-;----------------------------------------------
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
@@ -1715,12 +1712,12 @@ MODUL    equ $b000                                 ;address of RMT module
     ins "artwork/sfx/scorch_str4.rmt"  ;include music RMT module
     opt h+
 ;
-;
-TheEnd
-    .ECHO 'TheEnd: ',TheEnd
-    ;.if TheEnd > PMGraph + $300
-    ;    .error "memory conflict"
-    ;.endif
+;----------------------------------------------
+    org $bf80
+font4x4
+    ins 'artwork/font4x4s.bmp',+62
+
+
 
 
 

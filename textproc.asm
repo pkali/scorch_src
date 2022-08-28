@@ -272,8 +272,8 @@ AfterManualPurchase
     
     mwa #ListOfDefensiveWeapons WeaponsListDL ;switch to the list of offensive weapons    
     mva #$ff IsInventory
-    mva #$01 WhichList
-    ; offensive weapon - 0, deffensive - 1
+    mva #%10000000 WhichList
+    ; offensive weapon - 0, defensive - %10000000
 	jmp Purchase.GoToActivation
 .endp
 ;--------------------------------------------------
@@ -288,15 +288,14 @@ AfterManualPurchase
         
 ; we are clearing list of the weapons
     mva #$00 WhichList
-    ; offensive weapon - 0, deffensive - 1
+    ; offensive weapon - 0, deffensive - %10000000
 GoToActivation
     mva #$ff LastWeapon
 
-;    mva #0 dmactl
     VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
     jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
-    lda #@dmactl(narrow|dma) ; narro screen width, DL on, P/M off
+    lda #@dmactl(narrow|dma) ; narrow screen width, DL on, P/M off
     sta dmactls
 
     lda #song_supermarket
@@ -345,7 +344,153 @@ AfterPurchase
     ldx #$00  ; index of the checked weapon
     stx HowManyOnTheListOff ; amounts of weapons (shells, bullets) in both lists
     stx HowManyOnTheListDef
+    
+    jsr CreateList
 
+    bit isInventory  ; 
+    bpl ChoosingItemForPurchase
+    
+    lda whichList
+    bne PositionDefensive
+     
+; calculate positionOnTheList from the activeWeapon (offensives)
+    ldx tankNr
+    lda activeWeapon,x
+    ldy #0
+@
+      cmp IndexesOfWeaponsL1,y
+      beq ?weaponfound
+      iny
+      cpy #(last_offensive_____ - first_offensive____)  ; maxOffensiveWeapons
+    bne @-
+    ; not found apparently?
+    ; TODO: check border case (the last weapon)
+    ldy #0
+    beq ?weaponFound  ; jmp
+PositionDefensive
+    jsr calcPosDefensive
+    
+
+?weaponFound
+    ; weapon index in Y
+    sty positionOnTheList
+
+; Here we have all we need
+; So choose the weapon for purchase ......
+;--------------------------------------------------
+ChoosingItemForPurchase
+;--------------------------------------------------
+    
+    jsr PutLitteChar ; Places pointer at the right position
+    jsr getkey
+    bit escFlag
+    spl:jmp WaitForKeyRelease  ; like jsr ... : rts
+    cmp #$2c ; Tab
+    jeq ListChange
+    cmp #$06  ; cursor left
+    jeq ListChange
+    cmp #$0c ; Return
+    sne:rts
+    cmp #$e
+    beq PurchaseKeyUp
+    cmp #$f
+    beq PurchaseKeyDown
+    cmp #$21 ; Space
+    jeq PurchaseWeaponNow
+    cmp #$07 ; cursor right
+    jeq PurchaseWeaponNow
+    bne ChoosingItemForPurchase
+
+PurchaseKeyUp
+    lda WhichList
+    bpl GoUpOffensive
+    dec PositionOnTheList
+    bpl EndUpX
+    ldy #0 ;HowManyOnTheListDef
+    ;dey
+    sty PositionOnTheList
+    jmp ChoosingItemForPurchase
+GoUpOffensive
+    dec PositionOnTheList
+    bpl MakeOffsetUp
+    ldy #0 ;HowManyOnTheListOff
+    ;dey
+    sty PositionOnTheList
+
+MakeOffsetUp
+    ; If offset is larger than pointer position,
+    ; it must be equal then.
+    lda PositionOnTheList
+    cmp OffsetDL1
+    bcs EndUpX ; do not modify the offset
+    sta OffsetDL1
+EndUpX
+    jmp ChoosingItemForPurchase
+PurchaseKeyDown
+    lda WhichList
+    bpl GoDownOffensive
+    inc:lda PositionOnTheList
+    cmp HowManyOnTheListDef
+    bne EndGoDownX
+    ldy HowManyOnTheListDef
+    dey
+    sty PositionOnTheList
+    jmp ChoosingItemForPurchase
+GoDownOffensive
+    inc:lda PositionOnTheList
+    cmp HowManyOnTheListOff
+    bne MakeOffsetDown
+    ldy HowManyOnTheListOff
+    dey
+    sty PositionOnTheList
+MakeOffsetDown
+    lda OffsetDL1
+    clc
+    adc #15
+    ;if offset+16 is lower than the position then it must =16
+    cmp PositionOnTheList
+    bcs EndGoDownX
+    sec
+    lda PositionOnTheList
+    sbc #15
+    sta OffsetDL1
+EndGoDownX
+    jmp ChoosingItemForPurchase
+
+; swapping the displayed list and setting pointer to position 0
+ListChange
+    mva #0 OffsetDL1
+
+    lda WhichList
+    eor #%10000000  ; flip WhichList
+    sta WhichList
+    bne DeffensiveSelected
+
+    mwa #ListOfWeapons WeaponsListDL
+    lda isInventory
+    beq @+
+    ; inventory
+    jsr calcPosOffensive
+    jmp ChoosingItemForPurchase
+@
+    mva #0 PositionOnTheList
+    jmp ChoosingItemForPurchase
+
+DeffensiveSelected
+    mwa #ListOfDefensiveWeapons WeaponsListDL
+    lda isInventory
+    beq @+
+    jsr calcPosDefensive
+    jmp ChoosingItemForPurchase
+@
+    mva #0 positionOnTheList
+    jmp ChoosingItemForPurchase
+
+.endp
+;
+;--------------------------------------------------
+.proc CreateList
+;--------------------------------------------------
 ; Creating full list of the available weapons for displaying
 ; in X there is an index of the weapon to be checked,
 ; in 'Xbyte' address of the first char in filled screen line
@@ -362,9 +507,9 @@ CreateList
     jmi itIsInventory
     
     ; put "Purchase" on the screen
-	mwa #PurchaseDescription PurActDescAddr
-	; and Title
-	mwa #PurchaseTitle DLPurTitleAddr
+    mwa #PurchaseDescription PurActDescAddr
+    ; and Title
+    mwa #PurchaseTitle DLPurTitleAddr
 
     ; checking if we can afford buying this weapon
     ldx temp
@@ -408,7 +553,7 @@ CreateList
     lda WeaponPriceH,x
     sta decimal+1
     jsr displaydec5
-    ldy #25		; overwrite first digit (allways space - no digit :) )
+    ldy #25     ; overwrite first digit (allways space - no digit :) )
     lda #04 ; "$"
     sta (xbyte),y
 
@@ -416,9 +561,9 @@ CreateList
 
 itIsInventory
     ; put "Activate" on the screen
-	mwa #ActivateDescription PurActDescAddr
-	; and Title
-	mwa #InventoryTitle DLPurTitleAddr
+    mwa #ActivateDescription PurActDescAddr
+    ; and Title
+    mwa #InventoryTitle DLPurTitleAddr
 
     ldx temp
     lda TanksWeaponsTableL,y
@@ -487,8 +632,8 @@ notInventory
 @
     cpx LastWeapon
     bne NotTheSameAsLastTime
-    lda WhichList
-    bne @+
+    bit WhichList
+    bmi @+
     lda HowManyOnTheListOff
     sta PositionOnTheList
     jmp NotTheSameAsLastTime
@@ -498,7 +643,7 @@ notInventory
 NotTheSameAsLastTime
     ; increase appropriate counter
     txa
-    cpx #$30
+    cpx #last_offensive_____+1
     bcs DefenceList
     ldy HowManyOnTheListOff
     sta IndexesOfWeaponsL1,y
@@ -516,14 +661,15 @@ NoWeapon
 
     ; next weapon. If no more weapons then finish!
     inx
-    cpx #$30
+    cpx #last_offensive_____+1
     bne NoDefense
 
 ; if we got to the defense weapons,
 ; we switch address to the second table.
     mwa #ListOfDefensiveWeapons xbyte
 NoDefense
-    cpx #$40
+    cpx #last_defensive_____+1
+    
     jne CreateList
 
     ; offset may be only too big
@@ -541,7 +687,6 @@ WeHaveOffset
 
     ; Multiply number on list 1 by 32 and set address
     ; of the first erased char.
-    ; (multiplying taken from book of Ruszczyc 'Assembler 6502'
 
     lda HowManyOnTheListOff
     sta xbyte ; multiplier (temporarily here, it will be erased anyway)
@@ -577,7 +722,7 @@ DoNotIncHigher1
 
     ; And the same we do with the second list
 
-    ; Multiply number on list 1 by 40 and set address
+    ; Multiply number on list 1 by 32 and set address
     ; of the first erased char.
     lda HowManyOnTheListDef
     sta xbyte ; multiplier (temporarily here, it will be erased anyway)
@@ -614,157 +759,19 @@ DoNotIncHigher2
 ; here we have pretty cool lists and there is no brute force
 ; screen clearing at each list refresh
 ; (it was very ugly - I checked it :)
-
-    bit isInventory  ; 
-    bpl ChoosingItemForPurchase
-    
-    lda whichList
-    bne PositionDefensive
-     
-; calculate positionOnTheList from the activeWeapon (offensives)
-    ldx tankNr
-    lda activeWeapon,x
-    ldy #0
-@
-      cmp IndexesOfWeaponsL1,y
-      beq ?weaponfound
-      iny
-      cpy #48  ; maxOffensiveWeapons
-    bne @-
-    ; not found apparently?
-    ; TODO: check border case (the last weapon)
-    ldy #0
-    beq ?weaponFound  ; jmp
-PositionDefensive
-    jsr calcPosDefensive
-    
-
-?weaponFound
-    ; weapon index in Y
-    sty positionOnTheList
-
-; Here we have all we need
-; So choose the weapon for purchase ......
-;--------------------------------------------------
-ChoosingItemForPurchase
-;--------------------------------------------------
-    
-    jsr PutLitteChar ; Places pointer at the right position
-    jsr getkey
-    bit escFlag
-    spl:jmp WaitForKeyRelease  ; like jsr ... : rts
-    cmp #$2c ; Tab
-    jeq ListChange
-    cmp #$06  ; cursor left
-    jeq ListChange
-    cmp #$0c ; Return
-    sne:rts
-    cmp #$e
-    beq PurchaseKeyUp
-    cmp #$f
-    beq PurchaseKeyDown
-    cmp #$21 ; Space
-    jeq PurchaseWeaponNow
-    cmp #$07 ; cursor right
-    jeq PurchaseWeaponNow
-    bne ChoosingItemForPurchase
-
-PurchaseKeyUp
-    lda WhichList
-    beq GoUpOffensive
-    dec PositionOnTheList
-    bpl EndUpX
-    ldy #0 ;HowManyOnTheListDef
-    ;dey
-    sty PositionOnTheList
-    jmp ChoosingItemForPurchase
-GoUpOffensive
-    dec PositionOnTheList
-    bpl MakeOffsetUp
-    ldy #0 ;HowManyOnTheListOff
-    ;dey
-    sty PositionOnTheList
-
-MakeOffsetUp
-    ; If offset is larger than pointer position,
-    ; it must be equal then.
-    lda PositionOnTheList
-    cmp OffsetDL1
-    bcs EndUpX ; do not modify the offset
-    sta OffsetDL1
-EndUpX
-    jmp ChoosingItemForPurchase
-PurchaseKeyDown
-    lda WhichList
-    beq GoDownOffensive
-    inc:lda PositionOnTheList
-    cmp HowManyOnTheListDef
-    bne EndGoDownX
-    ldy HowManyOnTheListDef
-    dey
-    sty PositionOnTheList
-    jmp ChoosingItemForPurchase
-GoDownOffensive
-    inc:lda PositionOnTheList
-    cmp HowManyOnTheListOff
-    bne MakeOffsetDown
-    ldy HowManyOnTheListOff
-    dey
-    sty PositionOnTheList
-MakeOffsetDown
-    lda OffsetDL1
-    clc
-    adc #15
-    ;if offset+16 is lower than the position then it must =16
-    cmp PositionOnTheList
-    bcs EndGoDownX
-    sec
-    lda PositionOnTheList
-    sbc #15
-    sta OffsetDL1
-EndGoDownX
-    jmp ChoosingItemForPurchase
-
-; swapping the displayed list and setting pointer to position 0
-ListChange
-    mva #0 OffsetDL1
-
-    lda WhichList
-    eor #$01
-    sta WhichList
-    bne DeffensiveSelected
-
-    mwa #ListOfWeapons WeaponsListDL
-    lda isInventory
-    beq @+
-    ; inventory
-    jsr calcPosOffensive
-    jmp ChoosingItemForPurchase
-@
-    mva #0 PositionOnTheList
-    jmp ChoosingItemForPurchase
-
-DeffensiveSelected
-    mwa #ListOfDefensiveWeapons WeaponsListDL
-    lda isInventory
-    beq @+
-    jsr calcPosDefensive
-    jmp ChoosingItemForPurchase
-@
-    mva #0 positionOnTheList
-    jmp ChoosingItemForPurchase
-
+    rts
 .endp
-; weapon purchase routne increases number of possessed bullets
-; decreases cash and jumps to screen refresh
+
 ;--------------------------------------------------
 .proc PurchaseWeaponNow
+; weapon purchase routne increases number of possessed bullets
+; decreases cash and jumps to screen refresh
 ;--------------------------------------------------
     bit isInventory
     bmi inventorySelect
 
-    lda WhichList
-    bne PurchaseDeffensive
+    bit WhichList
+    bmi PurchaseDeffensive
 
     ; here we purchase the offensive weapon
     ldy PositionOnTheList
@@ -836,8 +843,8 @@ LessThan100
     jmp Purchase.AfterPurchase
 
 inventorySelect
-    lda whichList
-    bne invSelectDef
+    bit whichList
+    bmi invSelectDef
 
     ldy PositionOnTheList
     lda IndexesOfWeaponsL1,y
@@ -909,7 +916,7 @@ DefActivationEnd
       cmp IndexesOfWeaponsL2,y
       beq ?weaponfound
       iny
-      cpy #8*2  ; maxDefensiveWeapon
+      cpy #(last_defensive_____ - first_defensive____)  ; maxDefensiveWeapon
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -932,7 +939,7 @@ DefActivationEnd
       cmp IndexesOfWeaponsL1,y
       beq ?weaponfound
       iny
-      cpy #8*5  ; maxOffensiveWeapon
+      cpy #(last_offensive_____ - first_offensive____)  ; maxOffensiveWeapon
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -948,25 +955,25 @@ DefActivationEnd
 .proc PutLitteChar
     ; first let's clear both lists from little chars
     mwa #ListOfWeapons xbyte
-    ldx #52 ; there are 52 lines total
+    ldx #last_defensive_____ ; there are 52 lines total
     ldy #$00
 EraseLoop
     tya  ; lda #$00
     sta (xbyte),y
-    adw xbyte #32
+    adw xbyte #32  ; narrow screen
     dex
     bpl EraseLoop
 
     ; now let's check which list is active now
-    lda WhichList
-    beq CharToList1
+    bit WhichList
+    bpl CharToList1
     ; we are on the second list (deffensive)
     ; so there is no problem with scrolling
     mwa #ListOfDefensiveWeapons xbyte
     ldx PositionOnTheList
     beq SelectList2 ; if there is 0 we add nothing
 AddLoop2
-    adw xbyte #32
+    adw xbyte #32  ; narrow screen
     dex
     bne AddLoop2
 SelectList2
@@ -988,7 +995,7 @@ CharToList1
     ldx PositionOnTheList
     beq SelectList1 ; if there is 0 we add nothing
 AddLoop1
-    adw xbyte #32
+    adw xbyte #32  ; narrow screen
     dex
     bne AddLoop1
 SelectList1
@@ -999,7 +1006,7 @@ SelectList1
     ldx OffsetDL1
     beq SetWindowList1 ; if zero then add nothing
 LoopWindow1
-    adw xbyte #32
+    adw xbyte #32  ; narrow screen
     dex
     bne LoopWindow1
 SetWindowList1
@@ -1021,7 +1028,7 @@ NoArrowUp
     ldx #<EmptyLine
     ldy #>EmptyLine
     sec
-    sbc #17
+    sbc #17  ; ????
     bmi NoArrowDown
     cmp OffsetDL1
     bcc NoArrowDown
@@ -1036,9 +1043,6 @@ NoArrowDown
 .proc EnterPlayerNames
     ;entering names of players
     mwa #NameDL dlptrs
-;    lda dmactls
-;    and #$fc
-;    ora #$01     ; narrow screen (32 chars)
     lda #%00110001 ; narrow screen width, DL on, P/M off
     sta dmactls
     VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
