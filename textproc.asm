@@ -1138,14 +1138,8 @@ IsLetter
 YesLetter
     lda scrcodes,x ; we have screen code of the char
     ldx PositionInName
-    bne NotFirstLetter
-    and #$3f ; First letter should be Capital letter
-    ; (nice trick does not affect digits)
-NotFirstLetter
     sta NameAdr,x
     inx
-;    lda #$80 ; cursor behind the char
-;    sta NameAdr,x
     cpx #$08 ; is there 8 characters?
 	bne @+
 	dex
@@ -1223,13 +1217,15 @@ ChangeOfLevel3Down
 EndOfNick
 	; now check long press joy button (or Return...)
     mva #0 pressTimer ; reset
-    jsr WaitForKeyRelease
+WaitForLongPress
+    lda STRIG0	; wait only for joy long press
+	bne ShortJoyPress
     lda pressTimer
     cmp #25  ; 1/2s
-    bcc NotLongPress
+    bcc WaitForLongPress
     jsr EnterNameByJoy
     jmp CheckKeys
-NotLongPress
+ShortJoyPress
     ; storing name of the player and its level
 
     ; level of the computer opponent goes to
@@ -1279,11 +1275,17 @@ nextchar05
     bne nextchar05
     rts
 .endp
+;--------------------------------------------------
 .proc CursorDisplay
 	ldy #7
 CursorLoop
 	lda NameAdr,y
 	and #$7f
+	cpy #0
+	bne NotFirstLetter
+	and #$3f ; First letter should be Capital letter
+    ; (nice trick does not affect digits)
+NotFirstLetter
 	cpy PositionInName
 	bne @+
     ora #$80 ; place cursor
@@ -1291,15 +1293,40 @@ CursorLoop
 	dey
 	bpl CursorLoop
 	rts
-
 .endp
+;--------------------------------------------------
 .proc EnterNameByJoy
-checkjoy
+    mva #sfx_keyclick sfx_effect
+	jsr CursorDisplay
+	ldy PositionInName
+	; now in Y we have PositionInName
+	ldx #(keycodesEnd-keycodes)
+SearchCharacter
+	lda NameAdr,y
+	and #$7f
+	cmp #$20
+	bcc CharOK	; digit or space
+	cmp #$60
+	bcs CharOK	; not capital letter
+	ora #$40
+CharOK
+	cmp scrcodes,x
+	beq CharacterFound
+	dex
+	bpl SearchCharacter
+	inx
+CharacterFound
+	; now in X we have Character (index) on PositionInName
+	; wait for centered joy
+@	lda STICK0
+	and #$0f
+	cmp #$0f
+	bne @-
+checkjoy	
 	lda STICK0
-; commented but necessary (memory problems) !!!
-;	and #$0f
-;	cmp #$0f
-;	bne JoyNotCentered
+	and #$0f
+	cmp #$0f
+	bne JoyNotCentered
 
 notpressedJoy
 	;fire
@@ -1309,12 +1336,49 @@ notpressedJoy
 
 JoyNotCentered
 	; this is a place for code :)
-	
-	
-	jmp checkjoy
+	cmp #7
+	bne NoRight
+	; joy right
+	cpy #7
+	beq GoToMainLoop	; jast character
+	iny
+	bne GoToMainLoop
+NoRight
+	cmp #11
+	bne NoLeft
+	; joy left
+	lda #0
+	sta NameAdr,y
+	dey
+	bpl GoToMainLoop
+	iny
+	beq GoToMainLoop
+NoLeft
+	cmp #14
+	bne NoUp
+	; joy up
+	cpx #(keycodesEnd-keycodes-1)
+	bne @+
+	ldx #$00 	; set to first character index (loop)
+	beq CharAndMainLoop
+@	inx
+	bne CharAndMainLoop
+NoUp
+	cmp #13
+	bne EnterNameByJoy	; not down
+	; joy down
+	dex
+	bpl CharAndMainLoop
+	ldx #(keycodesEnd-keycodes-1) 	; set to last character index (loop)
+CharAndMainLoop
+	lda scrcodes,x
+	sta NameAdr,y
+GoToMainLoop
+	sty PositionInName
+	jmp EnterNameByJoy
 
 .endp
-
+;--------------------------------------------------
 .proc HighlightLevel
     ; this routine highlights the choosen
     ; level of the computer opponent
