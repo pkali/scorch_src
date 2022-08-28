@@ -154,7 +154,7 @@
     icl 'lib/macro.hea'
 
     ;splash screen and musix
-	;icl 'artwork/Scorch50.asm'
+	icl 'artwork/Scorch50.asm'
 
 
     ;Game loading address
