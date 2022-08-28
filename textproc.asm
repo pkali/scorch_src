@@ -2330,7 +2330,8 @@ EndOfCredits
     lda #$00 ; space
     sta textbuffer+80+22
     sta textbuffer+80+39
-    lda #47 ; no weapon name
+    mwa #emptyLine temp
+    jmp ClearingOnly    
 ActiveDefence
     sta temp ;get back number of the weapon
     mva #0 temp+1
@@ -2342,7 +2343,7 @@ ActiveDefence
     bpl @-
  
     adw temp #NamesOfWeapons
-
+ClearingOnly
     ldy #15
 @
       lda (temp),y
