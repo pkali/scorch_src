@@ -1454,7 +1454,7 @@ displayloop
 	beq noleading0	; if 00000 - last 0 must be
 	cmp zero
 	bne noleading0
-	lda space
+	lda #space
 	beq displaychar	; space = 0 !
 noleading0
 	inx		; set flag (no leading zeroes to cut)
@@ -1501,7 +1501,7 @@ TooLittle001 dex
     lda decimalresult
     cmp zero
     bne decimalend1
-    lda space
+    lda #space
     sta decimalresult
 
 decimalend1
@@ -2327,7 +2327,7 @@ EndOfCredits
     lda ActiveDefenceWeapon,x
     bne ActiveDefence
     ; clear brackets
-    lda #$00 ; space
+    lda #space
     sta textbuffer+80+22
     sta textbuffer+80+39
     mwa #emptyLine temp
@@ -2365,7 +2365,7 @@ ClearingOnly
     ;displaying the energy of a tank shield (if exist)
     ;---------------------
     ; clear (if no shield)
-    lda #$00    ; space
+    lda #space
     sta textbuffer+40+10
     sta textbuffer+40+11
     sta textbuffer+40+12
@@ -2394,7 +2394,7 @@ NoShieldEnergy
     bmi DisplayLeftWind
     lda #$7f  ; (tab) char
     sta textbuffer+80+20
-    lda #0  ;space
+    lda #space
     sta textbuffer+80+17
     beq DisplayWindValue
 DisplayLeftWind
@@ -2407,7 +2407,7 @@ DisplayLeftWind
       sta temp+1
     lda #$7e  ;(del) char
     sta textbuffer+80+17
-    lda #0 ;space
+    lda #space
     sta textbuffer+80+20
 DisplayWindValue
     :4 lsrw temp ;divide by 16 to have a nice value on a screen
@@ -2449,7 +2449,7 @@ AngleToRight
     sta decimal
     lda #$7f  ; (tab) character
     sta textbuffer+40+25
-    lda #0  ;space
+    lda #space
     sta textbuffer+40+22
     beq AngleDisplay
 AngleToLeft
@@ -2460,13 +2460,13 @@ AngleToLeft
     sta decimal
     lda #$7e  ;(del) char
     sta textbuffer+40+22
-    lda #0 ;space
+    lda #space
     sta textbuffer+40+25
     beq AngleDisplay    
 VerticallyUp
     ; now we have value 90
     sta decimal
-    lda #0  ;space
+    lda #space
     sta textbuffer+40+25
     sta textbuffer+40+22
 

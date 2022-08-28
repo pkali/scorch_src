@@ -447,16 +447,14 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
 	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Plasma Blast    "
 	.by %00000000
-	; "Laser           "
-	.by %00000000
-	.by 0 ; offset to defensives
-	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Hovercraft      ","Lazy Boy        ","Parachute       ","Strong Parachute"
-	.by %01000011
-	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
-	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
-	.by %11110100
- 
+	; "Laser           ","White Flag      ","Battery         ","Bal Guidance    "
+    ; "Horz Guidance   ","Hovercraft      ","Lazy Boy        ","Parachute       "
+    .by %00100001
+	; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
+	; "Force Shield    ","Super Mag       ","Bouncy Castle   ","Long Barrel     "
+	.by %11111010
+	; "Nuclear Winter  "
+    .by %00000000
 PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
                 ;the comment is an index in the tables
 	; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
@@ -471,16 +469,14 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
 	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
 	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Plasma Blast    "
 	.by %00000000
-	; "Laser           "
-	.by %00000000
-	.by 0 ; offset to defensives
-	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Hovercraft      ","Lazy Boy        ","Parachute       ","Strong Parachute"
-	.by %01000001
-	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
-	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
-	.by %10110100
-
+	; "Laser           ","White Flag      ","Battery         ","Bal Guidance    "
+    ; "Horz Guidance   ","Hovercraft      ","Lazy Boy        ","Parachute       "
+	.by %00100000
+    ;,"Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
+    ;,"Force Shield    ","Super Mag       ","Bouncy Castle   ","Long Barrel     "
+	.by %11011010
+	;"Nuclear Winter  "
+    .by %00000000
 ;-------------------------------------------------
 ; Screen codes of icons (chars) representing a given weapon
 WeaponSymbols
@@ -546,43 +542,59 @@ NamesOfWeapons ;the comment is an index in the tables
 
     dta d"White Flag      " ; 33                                        
     dta d"Battery         " ; 34                                              
-    dta d"Bal Guidance    " ; 35                                              
-    dta d"Horz Guidance   " ; 36                                              
-    dta d"Hovercraft      " ; 37                                              
-    dta d"Lazy Boy        " ; 38                            
+    ;dta d"Bal Guidance    " ; 35                                              
+;-----------------------------------
+DefensiveEnergy  ; OPTIMIZATION - unused name of the weapon
+    .by 00  ; White Flag
+    .by 00  ; Heat Guidance
+    .by 00  ; Bal Guidance
+    .by 00  ; Horz Guidance
+    .by 98  ; Let's go!
+    .by 00  ; Lazy Boy
+    .by 00  ; Parachute       
+    .by 99  ; Strong Parachute
+    .by 99  ; Mag Deflector
+    .by 00  ; Shield
+    .by 99  ; Heavy Shield
+    .by 99  ; Force Shield
+    .by 00  ; Super Mag
+    .by 99  ; Bouncy Castle
+    .by 00  ; Long Barrel
+    .by 00  ; Nuclear Winter
+;-----------------------------------
+    ;dta d"Horz Guidance   " ; 36                                              
+;-----------------------------------
+weaponsOfDeath  ; weapons used in tank death animations
+    dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27  ; OPTIMIZATION - unused name of the weapon
+weaponsOfDeathEnd    dta d"Hovercraft      " ; 37
+;-----------------------------------
+    dta 0 ; ALIGN to 16                                              
+    ; dta d"Lazy Boy        " ; 38                            
+;-----------------------------------
+joyToKeyTable; OPTIMIZATION - unused name of the weapon
+  ; .by  00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15
+    .by $ff,$ff,$ff,$ff,$ff,$ff,$ff,$07,$ff,$ff,$ff,$06,$ff,$0f,$0e,$ff
+;-----------------------------------
     dta d"Parachute       " ; 39    - no energy         
     dta d"Strong Parachute" ; 40    - with energy  (earlier Battery)        
     dta d"Mag Deflector   " ; 41    - with shield and energy           
     dta d"Shield          " ; 42    - shield for one shot - no energy       
     dta d"Heavy Shield    " ; 43    - shield with energy          
     dta d"Force Shield    " ; 44    - shield with energy and parachute
-    dta d"Super Mag       " ; 45               
+    ;dta d"Super Mag       " ; 45               
+;-----------------------------------
+gameOverSpritesTop  ; OPTIMIZATION - unused name of the weapon
+    ; end of the Gover sprites by number of players
+    ;    1   2   3   4   5   6
+    .by 130,130,136,142,148,154
+;-------decimal constans
+zero
+digits   dta d"0123456789"
+;-----------------------------------
     dta d"Bouncy Castle   " ; 46    - with shield and energy 
     dta d"Long Schlong    " ; 47                                              
     dta d"Nuclear Winter  " ; 48
-DefensiveEnergy = * - 48
-	.by 00	; White Flag
-	.by 00	; Heat Guidance
-	.by 00	; Bal Guidance
-	.by 00	; Horz Guidance
-	.by 98	; Let's go!
-	.by 00	; Lazy Boy
-	.by 00	; Parachute       
-	.by 99	; Strong Parachute
-	.by 99	; Mag Deflector
-	.by 00	; Shield
-	.by 99	; Heavy Shield
-	.by 99	; Force Shield
-	.by 00	; Super Mag
-	.by 99	; Bouncy Castle
-	.by 00	; Long Barrel
-	.by 00	; Nuclear Winter
-weaponsOfDeath  ; weapons used in tank death animations
-	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
-weaponsOfDeathEnd
-joyToKeyTable
-  ; .by  00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15
-    .by $ff,$ff,$ff,$ff,$ff,$ff,$ff,$07,$ff,$ff,$ff,$06,$ff,$0f,$0e,$ff
+
 
 ;-----------------------------------
 keycodes ;tables for converting KeyCode to Screen Code (38 -1  characters)
@@ -598,16 +610,7 @@ scrcodes
     dta d"qrstuvwx"
     dta d"yz123456"
     dta d"7890. " ; "-"
-;-----------------------------------
-gameOverSpritesTop
-    ; end of the Gover sprites by number of players
-    ;    1   2   3   4   5   6
-    .by 130,130,136,142,148,154
-;-------decimal constans
-zero
-digits   dta d"0123456789"
-nineplus dta d"9"+1
-space    dta d" "
+
 ;------credits
 CreditsStart
 	dta d"         "*

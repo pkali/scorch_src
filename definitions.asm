@@ -26,6 +26,7 @@ LongBarrel = 20	; long barrel length
 
 TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
 TextForegroundColor = $0A
+space = 0  ; space in screencodes
 
 ;character codes for symbols (tank, parachute, etc. )
 char_parachute_______ = $02
