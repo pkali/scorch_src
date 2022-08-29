@@ -955,13 +955,13 @@ SorryNoPurchase
 ;----------------------------------------------
 .proc ShooterPurchase
 	; first try to buy defensives
-	mva #2 tempXroller; number of offensive purchases to perform
+;	mva #2 tempXroller; number of offensive purchases to perform
 	ldx TankNr
 @
 	randomize ind_Battery________ ind_StrongParachute
 	jsr TryToPurchaseOnePiece
-	dec tempXroller
-	bne @-
+;	dec tempXroller
+;	bne @-
 	
 	; and now offensives
 	mva #4 tempXroller; number of offensive purchases to perform
@@ -977,7 +977,7 @@ SorryNoPurchase
 ;----------------------------------------------
 .proc PoolsharkPurchase
 	; first try to buy defensives
-	mva #3 tempXroller; number of offensive purchases to perform
+	mva #2 tempXroller; number of offensive purchases to perform
 	ldx TankNr
 @
 	randomize ind_Battery________ ind_Bouncy_Castle__
@@ -986,7 +986,7 @@ SorryNoPurchase
 	bne @-
 	
 	; and now offensives
-	mva #8 tempXroller; number of purchases to perform
+	mva #7 tempXroller; number of purchases to perform
 	;ldx TankNr
 @
 	randomize ind_Missile________ ind_Dirt_Charge____
@@ -1001,15 +1001,15 @@ SorryNoPurchase
 
     ; what is my money level
     ldx TankNr
-;    lda MoneyH,x ; money / 256
-;    sta tempXroller ; perform this many purchase attempts
+    lda MoneyH,x ; money / 256
+    sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-    mva #1 tempXroller; number of defensive purchases to perform
+;    mva #1 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery________ ind_Bouncy_Castle__
     jsr TryToPurchaseOnePiece
     dec tempXroller
-    bne @-
+    bpl @-
     
     ; and now offensives
     lda MoneyH,x ; money / 256
@@ -1019,7 +1019,7 @@ SorryNoPurchase
     randomize ind_Missile________ ind_Dirt_Charge____
     jsr TryToPurchaseOnePiece
     dec tempXroller
-    bne @-
+    bpl @-
 
     rts 
 .endp
@@ -1028,25 +1028,25 @@ SorryNoPurchase
 
     ; what is my money level
     ldx TankNr
-    ;lda MoneyH,x ; money / 256
-    ;sta tempXroller ; perform this many purchase attempts
+    lda MoneyH,x ; money / 256
+    sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-    mva #1 tempXroller; number of defensive purchases to perform
+;    mva #1 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery________ ind_Bouncy_Castle__
     jsr TryToPurchaseOnePiece2
     dec tempXroller
-    bne @-
+    bpl @-
     
     ; and now offensives
     lda MoneyH,x ; money / 256
-    :4 asl  ;*16
+    :3 asl  ;*8
     sta tempXroller ; perform this many purchase attempts
 @
     randomize first_offensive____ last_offensive_____
     jsr TryToPurchaseOnePiece2
     dec tempXroller
-    bne @-
+    bpl @-
 
     rts 
 .endp
