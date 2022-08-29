@@ -704,7 +704,7 @@ WeHaveOffset
 ClearList1
     cpw xbyte #ListOfWeapons1End
 	beq ListCleared1
-    tya
+    tya ; now there is zero here
     sta (xbyte),y
     inw xbyte
     jmp ClearList1
@@ -724,26 +724,16 @@ ListCleared1
     bne @-
 
     ; add to the address of the list
-    clc
-    lda xbyte
-    adc #<ListOfDefensiveWeapons
-    tay
-    lda xbyte+1
-    adc #>ListOfDefensiveWeapons
-    sta xbyte+1
-    stx xbyte
-    txa ; now there is zero here
+    adw xbyte #ListOfDefensiveWeapons
+    ldy #0
 ClearList2
+    cpw xbyte #ListOfDefensiveWeaponsEnd
+	beq ListCleared2
+    tya ; now there is zero here
     sta (xbyte),y
-    iny
-    bne DoNotIncHigher2
-    inc xbyte+1
-DoNotIncHigher2
-    cpy #<ListOfDefensiveWeaponsEnd
-    bne ClearList2
-    ldx xbyte+1
-    cpx #>ListOfDefensiveWeaponsEnd
-    bne ClearList2
+    inw xbyte
+    jmp ClearList2
+ListCleared2
 
 ; here we have pretty cool lists and there is no brute force
 ; screen clearing at each list refresh
@@ -951,7 +941,7 @@ EraseLoop
     sta (xbyte),y
     adw xbyte #32  ; narrow screen
     dex
-    bne EraseLoop
+    bpl EraseLoop
 
     ; now let's check which list is active now
     bit WhichList
