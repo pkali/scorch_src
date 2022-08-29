@@ -34,7 +34,7 @@ OptionsScreenEnd
 ListOfWeapons
                        ;     0123456789012345678901234567890123456789
 ; :number_of_offensives dta d"                                "
-  :33 dta d"                                "
+  :32 dta d"                                "
 ListOfWeapons1End
 ListOfDefensiveWeapons
 ; :number_of_defensives dta d"                                "

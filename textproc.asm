@@ -702,12 +702,13 @@ WeHaveOffset
     adw xbyte #ListOfWeapons
     ldy #0
 ClearList1
+    cpw xbyte #ListOfWeapons1End
+	beq ListCleared1
     tya
     sta (xbyte),y
     inw xbyte
-    cpw xbyte #ListOfWeapons1End
-    bne ClearList1
-
+    jmp ClearList1
+ListCleared1
     ; And the same we do with the second list
 
     ; Multiply number on list 1 by 32 and set address
