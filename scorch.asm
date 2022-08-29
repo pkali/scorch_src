@@ -1709,7 +1709,7 @@ PLAYER
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_str4.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_str6.rmt"  ;include music RMT module
     opt h+
 ;
 ;----------------------------------------------

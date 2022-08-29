@@ -1,6 +1,6 @@
 STEREOMODE	equ 0
 ;* --------BEGIN--------
-;* C:\Atari\rmt\rmt128\scorch_str4.rmt
+;* C:\Atari\rmt\rmt128\scorch_str6.rmt
 FEAT_SFX		equ 1
 FEAT_GLOBALVOLUMEFADE	equ 0		;RMTGLOBALVOLUMEFADE variable
 FEAT_NOSTARTINGSONGLINE	equ 0
