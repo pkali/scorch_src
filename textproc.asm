@@ -1296,10 +1296,13 @@ CharOK
 CharacterFound
 	; now in X we have Character (index) on PositionInName
 	; wait for centered joy
+    mva #128-15 pressTimer ; reset (trick)
 @	lda STICK0
 	and #$0f
 	cmp #$0f
-	bne @-
+	beq checkjoy
+	bit pressTimer	; trick (no A change)
+	bpl @-
 checkjoy	
 	lda STICK0
 	and #$0f
