@@ -19,39 +19,38 @@
     pha
     rts
 ExplosionRoutines
-    .word babymissile-1
-    .word missile-1
-    .word babynuke-1
-    .word nuke-1
-    .word leapfrog-1
-    .word funkybomb-1
-    .word mirv-1
-    .word deathshead-1
-    .word napalm-1 ;napalm
-    .word hotnapalm-1 ;hotnapalm
-    .word tracer-1
-    .word tracer-1 ;smoketracer
-    .word babyroller-1
-    .word roller-1
-    .word heavyroller-1
-    .word riotcharge-1
-    .word riotblast-1
-    .word riotbomb-1
-    .word heavyriotbomb-1
-    .word babydigger-1
-    .word digger-1
-    .word heavydigger-1
-    .word babysandhog-1
-    .word sandhog-1
-    .word heavysandhog-1
-    .word dirtclod-1
-    .word dirtball-1
-    .word tonofdirt-1
-    .word liquiddirt-1
-    .word dirtcharge-1
-    .word VOID-1 ;earthdisrupter
-    .word VOID-1 ;plasmablast
-    .word laser-1
+    .word babymissile-1              ;Baby_Missile___;_00    
+    .word missile-1                  ;Missile________;_01
+    .word babynuke-1                 ;Baby_Nuke______;_02
+    .word nuke-1                     ;Nuke___________;_03
+    .word leapfrog-1                 ;LeapFrog_______;_04
+    .word funkybomb-1                ;Funky_Bomb_____;_05
+    .word mirv-1                     ;MIRV___________;_06
+    .word deathshead-1               ;Death_s_Head___;_07
+    .word napalm-1                   ;Napalm_________;_08
+    .word hotnapalm-1                ;Hot_Napalm_____;_09
+    .word tracer-1                   ;Tracer_________;_10
+    .word tracer-1                   ;Smoke_Tracer___;_11
+    .word babyroller-1               ;Baby_Roller____;_12
+    .word roller-1                   ;Roller_________;_13
+    .word heavyroller-1              ;Heavy_Roller___;_14
+    .word riotcharge-1               ;Riot_Charge____;_15
+    .word riotblast-1                ;Riot_Blast_____;_16
+    .word riotbomb-1                 ;Riot_Bomb______;_17
+    .word heavyriotbomb-1            ;Heavy_Riot_Bomb;_18
+    .word babydigger-1               ;Baby_Digger____;_19
+    .word digger-1                   ;Digger_________;_20
+    .word heavydigger-1              ;Heavy_Digger___;_21
+    .word babysandhog-1              ;Baby_Sandhog___;_22
+    .word sandhog-1                  ;Sandhog________;_23
+    .word heavysandhog-1             ;Heavy_Sandhog__;_24
+    .word dirtclod-1                 ;Dirt_Clod______;_25
+    .word dirtball-1                 ;Dirt_Ball______;_26
+    .word tonofdirt-1                ;Ton_of_Dirt____;_27
+    .word liquiddirt-1               ;Liquid_Dirt____;_28
+    .word dirtcharge-1               ;Dirt_Charge____;_29
+    .word VOID-1                     ;Buy_me_________;_30
+    .word laser-1                    ;Laser__________;_31
 
 VOID
 tracer
@@ -670,21 +669,6 @@ DiggerCharacter
     mva EndOfTheBarrelY ybyte
     mva #0 ybyte+1
     
-    ;clc
-    ;lda xtankstableL,x
-    ;adc EndOfTheBarrelX,y ; correction of the end of the barrel point (X)
-    ;sta xbyte
-    ;lda xtankstableH,x
-    ;adc #0
-    ;sta xbyte+1
-    ;sec
-    ;lda ytankstable,x
-    ;sbc EndOfTheBarrelY,y ; correction of the end of the barrel point (Y)
-    ;sta ybyte
-	;lda #$00
-	;sbc #$00
-    ;sta ybyte+1
-
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
@@ -3028,7 +3012,8 @@ RangesChecked
 .endp
 ;--------------------------------------------------
 .proc ClearScreenSoilRange
-; cleanup of the soil fall down ranges (left and right) ;--------------------------------------------------
+; cleanup of the soil fall down ranges (left and right) 
+;--------------------------------------------------
 	mwa #screenwidth RangeLeft
 	lda #0
 	sta RangeRight
@@ -3043,17 +3028,6 @@ RangesChecked
     jsr DecreaseWeapon
     ; and here we have amount of possessed ammo for given weapon
     sta WeaponDepleted
-;    ;cmp #0
-;    bne AmmunitionDecreased
-;      ;lda #0   ;if ammo for given weapon ends
-;      sta ActiveWeapon,x ;then set to default weapon (baby missile)
-;AmmunitionDecreased
-;    lda #99
-;    ldy #0
-;    sta (weaponPointer),y  ;baby missile - always 99 pieces
-;
-;    ;there is a good value in weaponPointer after jsr DecreaseWeapon
-;
     rts
 .endp
 

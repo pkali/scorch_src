@@ -273,9 +273,9 @@ temptankNr .DS 1
     ; tables with indexes of weapons on the right lists
     ; OK (2022) so, L1 is list of offensive weapons, L2 - defensive
 IndexesOfWeaponsL1
-    .ds (last_offensive_____ - first_offensive____)
+    .ds (last_offensive_____ - first_offensive____+1)
 IndexesOfWeaponsL2
-    .ds (last_defensive_____ - first_defensive____)
+    .ds (last_defensive_____ - first_defensive____+1)
 ;----------------------------------------------------
 
 ; variables storing amount of weapons on the first and second
@@ -329,17 +329,17 @@ LaserCoordinate .DS 8 ; 2,2,2,2
 ; from $30 the defensive weapons begin
 TanksWeapons
 TanksWeapon1
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon2
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon3
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon4
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon5
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon6
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 
 mountaintable ;table of mountains (size=screenwidth)
     .DS [screenwidth]

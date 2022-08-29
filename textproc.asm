@@ -699,25 +699,13 @@ WeHaveOffset
     bne @-
     
     ; add to the address of the list
-    clc
-    lda xbyte
-    adc #<ListOfWeapons
-    tay
-    lda xbyte+1
-    adc #>ListOfWeapons
-    sta xbyte+1
-    stx xbyte
-    txa ; now there is zero here
+    adw xbyte #ListOfWeapons
+    ldy #0
 ClearList1
+    tya
     sta (xbyte),y
-    iny
-    bne DoNotIncHigher1
-    inc xbyte+1
-DoNotIncHigher1
-    cpy #<ListOfWeapons1End
-    bne ClearList1
-    ldx xbyte+1
-    cpx #>ListOfWeapons1End
+    inw xbyte
+    cpw xbyte #ListOfWeapons1End
     bne ClearList1
 
     ; And the same we do with the second list
@@ -955,14 +943,14 @@ DefActivationEnd
 .proc PutLitteChar
     ; first let's clear both lists from little chars
     mwa #ListOfWeapons xbyte
-    ldx #last_defensive_____ ; there are 52 lines total
+    ldx #last_defensive_____ ; there are xx lines total
     ldy #$00
 EraseLoop
     tya  ; lda #$00
     sta (xbyte),y
     adw xbyte #32  ; narrow screen
     dex
-    bpl EraseLoop
+    bne EraseLoop
 
     ; now let's check which list is active now
     bit WhichList
@@ -979,8 +967,7 @@ AddLoop2
 SelectList2
     lda #$7f ; little char (tab) - this is the pointer
     sta (xbyte),y
-    ; now we clear flags of presence of list "out of screen"
-    ; unfortunately I am now sure what it means... :(
+    ; now we clear up and down arrows indicating more content below or above screen
     ldx #<EmptyLine
     ldy #>EmptyLine
     stx MoreUpdl

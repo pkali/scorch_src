@@ -601,7 +601,7 @@ AfterManualShooting
 	; defensive weapons without flight handling
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
-	cmp #ind_Floating_Tank__ ; Floating Tank
+	cmp #ind_Hovercraft_____
 	beq GoFloat
 	cmp #ind_White_Flag_____ ; White Flag
 	beq ShootWhiteFlag
@@ -1192,9 +1192,9 @@ CreditsScroll
 	sta COLPF2
 	inc CreditsVScrol
 	lda CreditsVScrol
-	cmp #32		;not to fast
+	cmp #32		;not too fast
 	beq nextlinedisplay
-	:2 lsr		;not to fast
+	:2 lsr		;not too fast
 	sta VSCROL
 	jmp EndOfDLI_GO
 nextlinedisplay

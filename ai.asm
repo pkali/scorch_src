@@ -155,7 +155,7 @@ endo
 	
 	; choose the best weapon
 	
-	ldy #32 ;the last  weapon	
+	ldy #last_offensive_____ ;the last  weapon	
 loop
 	dey
 	lda (temp),y  ; this is set up before calling the routine, has address of TanksWeaponsTable
@@ -1043,7 +1043,7 @@ SorryNoPurchase
     :4 asl  ;*16
     sta tempXroller ; perform this many purchase attempts
 @
-    randomize ind_Missile________ ind_Plasma_Blast___
+    randomize first_offensive____ last_offensive_____
     jsr TryToPurchaseOnePiece2
     dec tempXroller
     bne @-
