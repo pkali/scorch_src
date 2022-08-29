@@ -1433,12 +1433,14 @@ CTRLPressedLeft
 pressedTAB
     mva #sfx_purchase sfx_effect
     ldx TankNr
-    inc ActiveWeapon,x
-    lda ActiveWeapon,x
-    cmp #$30 ; number of offensive weapons
-    bne @+
-      lda #0
+	lda ActiveWeapon,x
+	cmp #last_offensive_____ ; the last possible offensive weapon
+	bne ?notlasttofirst
+      lda #first_offensive____	; #0
       sta ActiveWeapon,x
+	  beq @+	; allways = 0
+?notlasttofirst	
+    inc ActiveWeapon,x
 @
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....
@@ -1448,10 +1450,14 @@ pressedTAB
 
 CTRLpressedTAB
     ldx TankNr
-    dec ActiveWeapon,x
-    bpl @+
-      lda #$2f ; the last possible offensive weapon
+	lda ActiveWeapon,x
+	cmp #first_offensive____	; #0
+	bne ?notfirsttolast
+      lda #last_offensive_____ ; the last possible offensive weapon
       sta ActiveWeapon,x
+	  bne @+	; allways <> 0
+?notfirsttolast
+    dec ActiveWeapon,x
 @
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....

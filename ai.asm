@@ -262,10 +262,10 @@ EnoughEnergy
 	; first check check if any is in use
 	lda ActiveDefenceWeapon,x
 	bne DefensiveInUse
-	ldy #ind_Nuclear_Winter_+1 ;the last defensive weapon
+	ldy #last_defensive_____+1 ;the last defensive weapon
 @
 	dey
-	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
+	cpy #ind_Battery________ ;first defensive weapon	(White Flag and Battery - never use)
 	beq NoUseDefensive
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
@@ -297,10 +297,10 @@ DefensiveInUse
 	; first check check if any is in use
 	lda ActiveDefenceWeapon,x
 	bne DefensiveInUse
-	ldy #ind_Nuclear_Winter_+1 ;the last defensive weapon	
+	ldy #last_defensive_____+1 ;the last defensive weapon	
 @
 	dey
-	cpy #ind_Battery________ ;first defensive weapon	(White Flag nad Battery - never use)
+	cpy #ind_Battery________ ;first defensive weapon	(White Flag and Battery - never use)
 	beq NoUseDefensive
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 

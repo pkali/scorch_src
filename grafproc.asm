@@ -1100,8 +1100,9 @@ ParachutePresent
 	; check energy of parachute	
 	lda ShieldEnergy,x
 	bne OneTimeParachute
-	mva #0 Parachute
-	mva #0 ActiveDefenceWeapon,x ; deactivate defence
+	lda #$00
+	sta Parachute
+	sta ActiveDefenceWeapon,x ; deactivate defence
 OneTimeParachute
     lda Parachute
     ora #2 ; we set bit nr 1 (nr 0 means that parachute is present)
