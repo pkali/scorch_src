@@ -27,9 +27,10 @@ Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
 ## 2. Wprowadzanie nazwy graczy i wybór poziomu graczy sterowanych przez komputer
 Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joysticjiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też kompute (pozostałe opcje). Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
-Po naciśnięciu klawisza [RETURN] lub przycisku Joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla każdego z nich.
+Po naciśnięciu klawisza [RETURN] lub krótkim naciśnięciu przycisku Joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla każdego z nich.
+Nazwę gracza można wprowadzać także przy pomocy joysticka. Po wciśnięciu i przytrzymaniu przycisku ponad 1s. za pomocą ruchów góra/dół można zmienić wprowadzaną literę, a lewo/prawo jej pozycję w nazwie. Puszczenie przycisku kończy wprowadzanie nazwy i wraca do wyboru poziomu.
 
-Jeśli nazwa nie zostanie wpisana (bo np operujemy wyłącznie joystickiem), to zostanie uzupełniona nazwą domyślną.
+Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 
 ## 3. Ekran zakupów (przed każdą rundą)
 

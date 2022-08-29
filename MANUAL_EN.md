@@ -29,9 +29,10 @@ The [RETURN] key or a joystick button moves to the next screen.
 ## 2. Entering the name of players and selecting the level of computer-controlled players
 
 The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options). At the same time, you can enter the name of the selected player from the keyboard.
-When you press the [RETURN] key or the joystick button, the screen switches to the next player until the difficulty levels for each player are selected.
+When the [RETURN] key is pressed or the Joystick button is pressed briefly, the screen switches to the next player until the difficulty levels for each player are selected.
+The player's name can also be entered with the joystick. After pressing and holding the button for more than 1s. you can use up/down movements to change the letter being entered, and left/right movements to change its position in the name. Releasing the button ends the name entry and returns to the level selection.
 
-If the name is not entered (because, for example, you use a joystick only), it will be supplemented with the default name.
+If the name is not entered, it will be supplemented with the default name.
 
 ## 3. Shopping screen (before each round)
 
