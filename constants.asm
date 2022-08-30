@@ -261,36 +261,16 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Liquid_Dirt____
   .by >price_Dirt_Charge____
   .by >price_Buy_me_________  
-  .by >price_Plasma_Blast___
   .by >price_Laser__________
-  .by >price______________33
-  .by >price______________34
-  .by >price______________35
-  .by >price______________36
-  .by >price______________37
-  .by >price______________38
-  .by >price______________39
-  .by >price______________40
-  .by >price______________41
-  .by >price______________42
-  .by >price______________43
-  .by >price______________44
-  .by >price______________45
-  .by >price______________46
-  .by >price______________47
   .by >price_White_Flag_____
   .by >price_Battery________
-  .by >price_Bal_Guidance___
-  .by >price_Horz_Guidance__
-  .by >price_Floating_Tank__
-  .by >price_Lazy_Boy_______
+  .by >price_Hovercraft_____
   .by >price_Parachute______
   .by >price_StrongParachute
   .by >price_Mag_Deflector__
   .by >price_Shield_________
   .by >price_Heavy_Shield___
   .by >price_Force_Shield___
-  .by >price_Super_Mag______
   .by >price_Bouncy_Castle__
   .by >price_Long_Barrel____
   .by >price_Nuclear_Winter_
@@ -327,36 +307,16 @@ WeaponPriceL
   .by <price_Liquid_Dirt____
   .by <price_Dirt_Charge____
   .by <price_Buy_me_________
-  .by <price_Plasma_Blast___
   .by <price_Laser__________
-  .by <price______________33
-  .by <price______________34
-  .by <price______________35
-  .by <price______________36
-  .by <price______________37
-  .by <price______________38
-  .by <price______________39
-  .by <price______________40
-  .by <price______________41
-  .by <price______________42
-  .by <price______________43
-  .by <price______________44
-  .by <price______________45
-  .by <price______________46
-  .by <price______________47
   .by <price_White_Flag_____
   .by <price_Battery________
-  .by <price_Bal_Guidance___
-  .by <price_Horz_Guidance__
-  .by <price_Floating_Tank__
-  .by <price_Lazy_Boy_______
+  .by <price_Hovercraft_____
   .by <price_Parachute______
   .by <price_StrongParachute
   .by <price_Mag_Deflector__
   .by <price_Shield_________
   .by <price_Heavy_Shield___
   .by <price_Force_Shield___
-  .by <price_Super_Mag______
   .by <price_Bouncy_Castle__
   .by <price_Long_Barrel____
   .by <price_Nuclear_Winter_
@@ -368,70 +328,50 @@ WeaponPriceL
 ; is not present in the game.
 ; This is the slot for adding new weapons.
 WeaponUnits
-  .by 10 ;Baby_Missile___
-  .by 5  ;Missile________
-  .by 2  ;Baby_Nuke______
-  .by 1  ;Nuke___________
-  .by 2  ;LeapFrog_______
-  .by 3  ;Funky_Bomb_____
-  .by 2  ;MIRV___________
-  .by 1  ;Death_s_Head___
-  .by 4  ;Napalm_________
-  .by 2  ;Hot_Napalm_____
-  .by 20 ;Tracer_________
-  .by 10 ;Smoke_Tracer___
-  .by 5  ;Baby_Roller____
-  .by 3  ;Roller_________
-  .by 2  ;Heavy_Roller___
-  .by 5  ;Riot_Charge____
-  .by 2  ;Riot_Blast_____
-  .by 5  ;Riot_Bomb______
-  .by 2  ;Heavy_Riot_Bomb
-  .by 10 ;Baby_Digger____
-  .by 5  ;Digger_________
-  .by 2  ;Heavy_Digger___
-  .by 10 ;Baby_Sandhog___
-  .by 5  ;Sandhog________
-  .by 2  ;Heavy_Sandhog__
-  .by 5 ;Dirt_Clod______
-  .by 3  ;Dirt_Ball______
-  .by 1  ;Ton_of_Dirt____
-  .by 4  ;Liquid_Dirt____
-  .by 2  ;Dirt_Charge____
-  .by 1  ;Buy_me_________
-  .by 0  ;Plasma_Blast___
-  .by 5  ;Laser__________
-  .by 0  ;_____________33
-  .by 0  ;_____________34
-  .by 0  ;_____________35
-  .by 0  ;_____________36
-  .by 0  ;_____________37
-  .by 0  ;_____________38
-  .by 0  ;_____________39
-  .by 0  ;_____________40
-  .by 0  ;_____________41
-  .by 0  ;_____________42
-  .by 0  ;_____________43
-  .by 0  ;_____________44
-  .by 0  ;_____________45
-  .by 0  ;_____________46
-  .by 0  ;_____________47
-  .by 1  ;White_Flag___48
-  .by 3  ;Battery________
-  .by 0  ;Bal_Guidance___
-  .by 0  ;Horz_Guidance__
-  .by 2  ;Floating_Tank__
-  .by 0  ;Lazy_Boy_______
-  .by 3  ;Parachute______
-  .by 2  ;StrongParachute
-  .by 2  ;Mag_Deflector__
-  .by 3  ;Shield_________
-  .by 2  ;Heavy_Shield___
-  .by 3  ;Force_Shield___
-  .by 0  ;Super_Mag______
-  .by 1  ;Auto_Defense___
-  .by 2  ;Long_Barrel____
-  .by 1  ;Nuclear_Winter_
+  .by 10 ;Baby_Missile___;_00
+  .by 5  ;Missile________;_01
+  .by 2  ;Baby_Nuke______;_02
+  .by 1  ;Nuke___________;_03
+  .by 2  ;LeapFrog_______;_04
+  .by 3  ;Funky_Bomb_____;_05
+  .by 2  ;MIRV___________;_06
+  .by 1  ;Death_s_Head___;_07
+  .by 4  ;Napalm_________;_08
+  .by 2  ;Hot_Napalm_____;_09
+  .by 20 ;Tracer_________;_10
+  .by 10 ;Smoke_Tracer___;_11
+  .by 5  ;Baby_Roller____;_12
+  .by 3  ;Roller_________;_13
+  .by 2  ;Heavy_Roller___;_14
+  .by 5  ;Riot_Charge____;_15
+  .by 2  ;Riot_Blast_____;_16
+  .by 5  ;Riot_Bomb______;_17
+  .by 2  ;Heavy_Riot_Bomb;_18
+  .by 10 ;Baby_Digger____;_19
+  .by 5  ;Digger_________;_20
+  .by 2  ;Heavy_Digger___;_21
+  .by 10 ;Baby_Sandhog___;_22
+  .by 5  ;Sandhog________;_23
+  .by 2  ;Heavy_Sandhog__;_24
+  .by 5  ;Dirt_Clod______;_25
+  .by 3  ;Dirt_Ball______;_26
+  .by 1  ;Ton_of_Dirt____;_27
+  .by 4  ;Liquid_Dirt____;_28
+  .by 2  ;Dirt_Charge____;_29
+  .by 1  ;Buy_me_________;_30
+  .by 5  ;Laser__________;_31
+  .by 1  ;White_Flag_____;_32
+  .by 3  ;Battery________;_33
+  .by 2  ;Floating_Tank__;_34
+  .by 3  ;Parachute______;_35
+  .by 2  ;StrongParachute;_36
+  .by 2  ;Mag_Deflector__;_37
+  .by 3  ;Shield_________;_38
+  .by 2  ;Heavy_Shield___;_39
+  .by 3  ;Force_Shield___;_40
+  .by 1  ;Auto_Defense___;_41
+  .by 2  ;Long_Barrel____;_42
+  .by 1  ;Nuclear_Winter_;_43
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
                 ;the comment is an index in the tables
@@ -445,53 +385,81 @@ PurchaseMeTable ;weapons good to be purchased by the robot
 	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
 	.by %00000000
 	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Plasma Blast    "
+	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Laser           "
 	.by %00000000
-	; "Laser           "
-	.by %00000000
-	.by 0 ; offset to defensives
-	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Hovercraft      ","Lazy Boy        ","Parachute       ","Strong Parachute"
-	.by %01000011
-	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
-	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
-	.by %11110100
- 
+	; "White Flag      ","Battery         ","Hovercraft      ","Parachute       "
+    ; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
+    .by %01011111
+	; "Force Shield    ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
+	.by %11000000
+
 PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
                 ;the comment is an index in the tables
-	; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
-	; "LeapFrog        ","Funky Bomb      ","MIRV            ","Death's Head    "
-	.by %00110001
-	; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
-	; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
-	.by %01000000
-	; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
-	; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
-	.by %00000000
-	; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-	; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Plasma Blast    "
-	.by %00000000
-	; "Laser           "
-	.by %00000000
-	.by 0 ; offset to defensives
-	; "White Flag      ","Battery         ","Bal Guidance    ","Horz Guidance   "
-	; "Hovercraft      ","Lazy Boy        ","Parachute       ","Strong Parachute"
-	.by %01000001
-	; "Mag Deflector   ","Shield          ","Heavy Shield    ","Force Shield    "
-	; "Super Mag       ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
-	.by %10110100
+    ; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
+    ; "LeapFrog        ","Funky Bomb      ","MIRV            ","Death's Head    "
+    .by %00110001
+    ; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
+    ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
+    .by %01000000
+    ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
+    ; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+    .by %00000000
+    ; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
+    ; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Laser           "
+    .by %00000000
+    ; "White Flag      ","Battery         ","Hovercraft      ","Parachute       "
+    ; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
+    .by %01001101
+    ; "Force Shield    ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
+    .by %11000000
 
 ;-------------------------------------------------
 ; Screen codes of icons (chars) representing a given weapon
 WeaponSymbols
-    .by $40,$41,$42,$43,$44,$45,$46,$47
-    .by $48,$49,$4a,$4b,$4c,$4d,$4e,$4f
-    .by $50,$51,$52,$53,$54,$55,$56,$57
-    .by $58,$59,$5a,$5b,$60,$7b,$1f,$7d
-    .by $20,$00,$00,$00,$00,$00,$00,$00
-    .by $00,$00,$00,$00,$00,$00,$00,$00
-    .by $5f,$1c,$03,$06,$06,$0a,$1b,$1b  ; defensives
-    .by $1e,$3b,$3d,$3c,$3e,$3f,$1d,$7d
+    .by $40 ;ind_Baby_Missile___ ;_00
+    .by $41 ;ind_Missile________ ;_01
+    .by $42 ;ind_Baby_Nuke______ ;_02
+    .by $43 ;ind_Nuke___________ ;_03
+    .by $44 ;ind_LeapFrog_______ ;_04
+    .by $45 ;ind_Funky_Bomb_____ ;_05
+    .by $46 ;ind_MIRV___________ ;_06
+    .by $47 ;ind_Death_s_Head___ ;_07
+    .by $48 ;ind_Napalm_________ ;_08
+    .by $49 ;ind_Hot_Napalm_____ ;_09
+    .by $4a ;ind_Tracer_________ ;_10
+    .by $4b ;ind_Smoke_Tracer___ ;_11
+    .by $4c ;ind_Baby_Roller____ ;_12
+    .by $4d ;ind_Roller_________ ;_13
+    .by $4e ;ind_Heavy_Roller___ ;_14
+    .by $4f ;ind_Riot_Charge____ ;_15
+    .by $50 ;ind_Riot_Blast_____ ;_16
+    .by $51 ;ind_Riot_Bomb______ ;_17
+    .by $52 ;ind_Heavy_Riot_Bomb ;_18
+    .by $53 ;ind_Baby_Digger____ ;_19
+    .by $54 ;ind_Digger_________ ;_20
+    .by $55 ;ind_Heavy_Digger___ ;_21
+    .by $56 ;ind_Baby_Sandhog___ ;_22
+    .by $57 ;ind_Sandhog________ ;_23
+    .by $58 ;ind_Heavy_Sandhog__ ;_24
+    .by $59 ;ind_Dirt_Clod______ ;_25
+    .by $5a ;ind_Dirt_Ball______ ;_26
+    .by $5b ;ind_Ton_of_Dirt____ ;_27
+    .by $60 ;ind_Liquid_Dirt____ ;_28
+    .by $7b ;ind_Dirt_Charge____ ;_29
+    .by $1f ;ind_Buy_me_________ ;_30
+    .by $20 ;ind_Laser__________ ;_31
+    .by $5f ;ind_White_Flag_____ ;_32
+    .by $1c ;ind_Battery________ ;_33
+    .by $06 ;ind_Floating_Tank__ ;_34
+    .by $1b ;ind_Parachute______ ;_35
+    .by $1b ;ind_StrongParachute ;_36
+    .by $1e ;ind_Mag_Deflector__ ;_37
+    .by $3b ;ind_Shield_________ ;_38
+    .by $3d ;ind_Heavy_Shield___ ;_39
+    .by $3c ;ind_Force_Shield___ ;_40
+    .by $3f ;ind_Bouncy_Castle__ ;_41
+    .by $1d ;ind_Long_Barrel____ ;_42
+    .by $7d ;ind_Nuclear_Winter_ ;_43
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
@@ -526,58 +494,34 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Liquid Dirt     " ; 28
     dta d"Dirt Charge     " ; 29
     dta d"Buy me!         " ; 30
-    dta d"Plasma Blast    " ; 31
-    dta d"Laser           " ; 32
-    dta d"----------------" ; 33
-    dta d"----------------" ; 34
-    dta d"----------------" ; 35
-    dta d"----------------" ; 36
-    dta d"----------------" ; 37
-    dta d"----------------" ; 38
-    dta d"----------------" ; 39
-    dta d"----------------" ; 40
-    dta d"----------------" ; 41
-    dta d"----------------" ; 42
-    dta d"----------------" ; 43
-    dta d"----------------" ; 44
-    dta d"----------------" ; 45
-    dta d"----------------" ; 46
-    dta d"                " ; 47 ; special (no weapon) name to simplify display
-
-    dta d"White Flag      " ; 48 ($30)                                        
-    dta d"Battery         " ; 49                                              
-    dta d"Bal Guidance    " ; 50                                              
-    dta d"Horz Guidance   " ; 51                                              
-    dta d"Hovercraft      " ; 52                                              
-    dta d"Lazy Boy        " ; 53                            
-    dta d"Parachute       " ; 54    - no energy         
-    dta d"Strong Parachute" ; 55    - with energy  (earlier Battery)        
-    dta d"Mag Deflector   " ; 56    - with shield and energy           
-    dta d"Shield          " ; 57    - shield for one shot - no energy       
-    dta d"Heavy Shield    " ; 58    - shield with energy          
-    dta d"Force Shield    " ; 59    - shield with energy and parachute
-    dta d"Super Mag       " ; 60               
-    dta d"Bouncy Castle   " ; 61    - with shield and energy 
-    dta d"Long Schlong    " ; 62                                              
-    dta d"Nuclear Winter  " ; 63
-DefensiveEnergy = * - 48
+    dta d"Laser           " ; 31
+;------defensives
+    dta d"White Flag      " ; 32                                        
+    dta d"Battery         " ; 33                                              
+    dta d"Hovercraft      " ; 34                                              
+    dta d"Parachute       " ; 35    - no energy         
+    dta d"Strong Parachute" ; 36    - with energy  (earlier Battery)        
+    dta d"Mag Deflector   " ; 37    - with shield and energy           
+    dta d"Shield          " ; 38    - shield for one shot - no energy       
+    dta d"Heavy Shield    " ; 39    - shield with energy          
+    dta d"Force Shield    " ; 40    - shield with energy and parachute
+    dta d"Bouncy Castle   " ; 41    - with shield and energy 
+    dta d"Long Schlong    " ; 42                                              
+    dta d"Nuclear Winter  " ; 43
+DefensiveEnergy = *-(last_offensive_____ - first_offensive____ +1)  ; to fake the table for ALL weapons
 	.by 00	; White Flag
 	.by 00	; Heat Guidance
-	.by 00	; Bal Guidance
-	.by 00	; Horz Guidance
 	.by 98	; Let's go!
-	.by 00	; Lazy Boy
 	.by 00	; Parachute       
 	.by 99	; Strong Parachute
 	.by 99	; Mag Deflector
 	.by 00	; Shield
 	.by 99	; Heavy Shield
 	.by 99	; Force Shield
-	.by 00	; Super Mag
 	.by 99	; Bouncy Castle
 	.by 00	; Long Barrel
 	.by 00	; Nuclear Winter
-weaponsOfDeath
+weaponsOfDeath  ; weapons used in tank death animations
 	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
 weaponsOfDeathEnd
 joyToKeyTable
@@ -606,8 +550,7 @@ gameOverSpritesTop
 ;-------decimal constans
 zero
 digits   dta d"0123456789"
-nineplus dta d"9"+1
-space    dta d" "
+
 ;------credits
 CreditsStart
 	dta d"         "*
@@ -642,7 +585,7 @@ CreditsStart
 	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
 	dta d" "*
 	dta d"Additional testin",d"g"*
-	dta d"Arek Peck",d"o"*
+	dta d"Arek and Alex Peck",d"o"*
 	dta d"  "*
 	dta d"Stay tuned for the FujiNet version",d"!"*
 	dta d"         "*

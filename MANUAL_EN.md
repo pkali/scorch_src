@@ -14,13 +14,13 @@ On the first screen, you can configure gameplay options:
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
 * The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
 * the way the walls (edges of the screen) work:
-	* none - projectiles that flew off the screen do not return
-	* wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
-	* bump - the right and left walls deflect projectiles that want to fly through them
-	* boxy - just like bump, except that the "ceiling" also reflects projectiles
-	* rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
-	
-	During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - blue, boxy - green.
+    * none - projectiles that flew off the screen do not return
+    * wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
+    * bump - the right and left walls deflect projectiles that want to fly through them
+    * boxy - just like bump, except that the "ceiling" also reflects projectiles
+    * rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
+
+    During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - blue, boxy - green.
 
 Select options with cursor keys or a joystick.
 
@@ -29,9 +29,10 @@ The [RETURN] key or a joystick button moves to the next screen.
 ## 2. Entering the name of players and selecting the level of computer-controlled players
 
 The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options). At the same time, you can enter the name of the selected player from the keyboard.
-When you press the [RETURN] key or the joystick button, the screen switches to the next player until the difficulty levels for each player are selected.
+When the [RETURN] key is pressed or the Joystick button is pressed briefly, the screen switches to the next player until the difficulty levels for each player are selected.
+The player's name can also be entered with the joystick. After pressing and holding the button for more than 1s. you can use up/down movements to change the letter being entered, and left/right movements to change its position in the name. Releasing the button ends the name entry and returns to the level selection.
 
-If the name is not entered (because, for example, you use a joystick only), it will be supplemented with the default name.
+If the name is not entered, it will be supplemented with the default name.
 
 ## 3. Shopping screen (before each round)
 
@@ -195,3 +196,54 @@ And of course, activating a weapon when you already have some other weapon activ
 ## 7. "Other" weapons:
 
 * **Buy me!** - this is a 'loot box', not a weapon per se. Buying it draws one of the offensive or (rarely) defensive weapons and adds it to the player's arsenal. It is a lottery in which you can lose (if you draw a weapon cheaper than the **Buy Me!** price) but also gain. You can get a weapon otherwise not affordable at all! 
+
+## 8. difficulty levels of computer-controlled opponents:
+
+The game has 8 difficulty levels of computer-controlled opponents. Or actually 7 different ones and one "surprise". Each has its own way of buying defensive and offensive weapons and a different method of target selection and targeting itself, as well as weapon selection. They are arranged in the list according to increasing "skills":
+
+* **Moron** - the dumbest of opponents (which does not mean the safest). Shoots completely at random using only one weapon - **Baby Missile**. He doesn't buy anything and doesn't know how to use defensive weapons.
+
+* **Shooter** - This opponent does not shoot blindly. He chooses one direction for himself. Based on his own position - he shoots in the direction from which there is more space assuming that this is where the other tanks are. He starts firing from a high angle and shot after shot changes this angle to a lower and lower angle trying to fire the entire area on the chosen side. He always fires with the best weapon he has (the highest on the list of weapons he has - that is, not necessarily the best). He does not use defensive weapons even though he buys them! At the beginning of the round, he makes 1 attempt to buy defensive weapons (only from the **Battery** - **Strong Parachute** range) and 4 offensive weapons (from the **Missile** - **Heavy Roller** range).
+
+* **Poolshark** - When attacking, he sets the nearest tank as his target, then selects the angle of the shot, and tries to select its strength by drawing it from the selected range. He always shoots with the best weapon he has. He uses defensive weapons. With a probability of 1:3, he activates the best defensive weapon he owns (the highest on the list of weapons he owns - that is, not necessarily the best) before firing. If his energy level drops below 30 units - he uses **Battery** (of course, if he bought it before), if the energy drops below 5 and he has no **Battery** he surrenders - **White Flag**. At the beginning of the round he makes 1 attemp to buy defensive weapons and 6 offensive weapons.
+
+** **Tosser** - When attacking, he acts exactly like **Poolshark** however, he may have a "better" weapon inventory due to a different purchase tactic. He always activates the best defensive weapon he has before shooting. And just like **Poolshark** he uses **Battery** and **White Flag**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/1250) attempts to buy offensive weapons.
+
+** **Chooser** - Takes as a target the weakest opponent (with the least amount of energy) and aims very precisely, but before the shot the energy of the shot is modified by the parameter of luck :) , that is, despite the precise aiming it does not always hit. He shoots with the best weapon he has unless low energy is required (the target is close). Then he changes his weapon to **Baby Missile** to avoid hitting himself. He always activates the best defensive weapon he has before shooting and, like **Poolshark**, uses **Battery** and **White Flag**. He purchases just like **Tosser**.
+
+* **Spoiler** - He shoots exactly like **Chooser** except that he has more luck :) , which means that even if he doesn't hit the target of his choice, it can be a more precise shot than **Chooser**. He uses defensive weapons exactly like **Chooser**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/320) attempts to buy offensive weapons. When buying defensive weapons, he buys only strong and precise weapons - that is, weapons that won't accidentally hurt him.
+
+** **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless low energy is required (the target is close). Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser**. He shops exactly like **Spoiler**.
+
+* **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
+
+Trying to buy a weapon (offensive or defensive) is as follows:
+First, one of the weapons is drawn (among all possible offensive or defensive weapons). Then a check is performed to see if the drawn weapon is in the list of weapons possible for purchase by the tank. If not, no weapon is bought in this trial, and if so, its price is checked. If the tank has that much money, the weapon is bought, otherwise the trial ends without making a purchase.
+
+Table of weapons purchased by: **Shooter**, **Poolshark**, **Tosser** and **Chooser**.
+
+| Offensive weapons | Defensive weapons |
+| --- | --- |
+| Missile | Battery |
+| Baby Nuke | Parachute |
+| Nuke | Strong Parachute |
+| LeapFrog | Mag Deflector |
+| Funky Bomb | Shield |
+| MIRV | Heavy Shield |
+| Death's Head | Force Shield |
+| Napalm | Bouncy Castle |
+| Hot Napalm | |
+| Baby Roller | |
+| Roller | |
+| Heavy Roller | |
+
+Table of weapons purchased by: **Spoiler** and **Cyborg**.
+
+| Offensive weapons | Defensive weapons |
+| --- | --- |
+| Baby Nuke | Battery |
+| Nuke | Strong Parachute |
+| Death's Head | Mag Deflector |
+| Hot Napalm | Heavy Shield |
+| | Force Shield |
+| | Bouncy Castle |

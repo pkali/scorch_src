@@ -1100,8 +1100,9 @@ ParachutePresent
 	; check energy of parachute	
 	lda ShieldEnergy,x
 	bne OneTimeParachute
-	mva #0 Parachute
-	mva #0 ActiveDefenceWeapon,x ; deactivate defence
+	lda #$00
+	sta Parachute
+	sta ActiveDefenceWeapon,x ; deactivate defence
 OneTimeParachute
     lda Parachute
     ora #2 ; we set bit nr 1 (nr 0 means that parachute is present)
@@ -1128,16 +1129,13 @@ FallingRight
 	bit PreviousFall	; bit 6 - left
 	bvs EndRightFall
     ; we finish falling right if the tank reached the edge of the screen
-    clc
-    lda XtanksTableL,x
-    adc #$08 ; we'll check right side of the char
-    sta temp
     lda XtanksTableH,x
-    adc #0
-    sta temp+1
-    cpw temp #screenwidth-2	; 2 pixels correction due to a barrel wider than tank
-    bcs EndRightFall
-NotLeftEdge
+	cmp #>(screenwidth-8-2) ; 2 pixels correction due to a barrel wider than tank
+	bne @+
+    lda XtanksTableL,x
+	cmp #<(screenwidth-8-2) ; 2 pixels correction due to a barrel wider than tank
+@   bcs EndRightFall
+NotRightEdge
     ; tank is falling right - modify coorinates
     clc
     lda XtankstableL,x
@@ -1158,6 +1156,7 @@ FallingLeft
     lda XtanksTableL,x
 	cmp #3	; 2 pixels correction due to a barrel wider than tank
     bcc EndLeftFall
+NotLeftEdge
     ; tank is falling left - modify coorinates
     sec
     lda XtankstableL,x
@@ -1205,7 +1204,7 @@ DoNotDrawParachute
 ForceFallLeft
 	sta UnderTank1
 	sty UnderTank2
-	jne TankFallsX
+	jmp TankFallsX
 EndOfFall
     mva #1 Erase
 ;    ldx TankNr

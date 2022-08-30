@@ -151,7 +151,9 @@ LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS [MaxPlayers]
 ;----------------------------------------------------
 TargetTankNr	; Target tank index (for AI routines)
-	.DS 1	
+	.DS 1
+SecondTryFlag	; For precise AI aiming
+	.DS 1
 ;----------------------------------------------------
 ;Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally
@@ -204,6 +206,7 @@ EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 ;Parachute .DS 1 ; are you insured with parachute?
 FloatingAlt	.DS 1	; floating tank altitude
 FunkyWallFlag = FloatingAlt	; reuse this variable in different weapon (Funky Bomb)!
+PreferHumansFlag = FloatingAlt ; second reuse in AI Aim proc
 ;----------------------------------------------------
 ;Flight
 ;variables for 5 missiles (used for mirv)
@@ -270,9 +273,9 @@ temptankNr .DS 1
     ; tables with indexes of weapons on the right lists
     ; OK (2022) so, L1 is list of offensive weapons, L2 - defensive
 IndexesOfWeaponsL1
-    .ds 8*5 ;  max 40 offensive weapons. this is wrong, should be 48, still only 32 defined.
+    .ds (last_offensive_____ - first_offensive____+1)
 IndexesOfWeaponsL2
-    .ds 8*2 ;  max 16 defensive weapons. 
+    .ds (last_defensive_____ - first_defensive____+1)
 ;----------------------------------------------------
 
 ; variables storing amount of weapons on the first and second
@@ -291,7 +294,7 @@ LastWeapon
     ; and the cursor must be placed elsewhere
     .DS 1
 WhichList ; list currently on the screen
-    ; (0-offensive, 1-defensive)
+    ; (0-offensive, %10000000 - defensive (check with bit:bmi for defensives)
     .DS 1
 ;OffsetDL1   .DS 1 ; offset of the list screen (how many lines)....
 
@@ -326,17 +329,17 @@ LaserCoordinate .DS 8 ; 2,2,2,2
 ; from $30 the defensive weapons begin
 TanksWeapons
 TanksWeapon1
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon2
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon3
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon4
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon5
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 TanksWeapon6
-    .DS [64]
+    .DS [last_defensive_____ - first_offensive____ +1]
 
 mountaintable ;table of mountains (size=screenwidth)
     .DS [screenwidth]

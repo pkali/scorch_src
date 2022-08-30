@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"1.12" ; number of this build (3 bytes)
+	dta d"1.13" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -278,6 +278,7 @@ SettingBarrel
     mva #1 Erase
     jsr drawtanks
     mva #0 Erase
+	sta COLBAKS		; set background color to black
     jsr PMoutofScreen ;let P/M disappear
 
     ; here gains and losses should be displayed (dollars)
@@ -600,7 +601,7 @@ AfterManualShooting
 	; defensive weapons without flight handling
 	ldx TankNr
 	lda ActiveDefenceWeapon,x
-	cmp #ind_Floating_Tank__ ; Floating Tank
+	cmp #ind_Hovercraft_____
 	beq GoFloat
 	cmp #ind_White_Flag_____ ; White Flag
 	beq ShootWhiteFlag
@@ -1191,9 +1192,9 @@ CreditsScroll
 	sta COLPF2
 	inc CreditsVScrol
 	lda CreditsVScrol
-	cmp #32		;not to fast
+	cmp #32		;not too fast
 	beq nextlinedisplay
-	:2 lsr		;not to fast
+	:2 lsr		;not too fast
 	sta VSCROL
 	jmp EndOfDLI_GO
 nextlinedisplay
@@ -1693,9 +1694,6 @@ noingame
 ;----------------------------------------------
     icl 'artwork/talk.asm'
 ;----------------------------------------------
-font4x4
-    ins 'artwork/font4x4s.bmp',+62
-;----------------------------------------------
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
@@ -1711,15 +1709,15 @@ PLAYER
 
 MODUL    equ $b000                                 ;address of RMT module
     opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_str4.rmt"  ;include music RMT module
+    ins "artwork/sfx/scorch_str6.rmt"  ;include music RMT module
     opt h+
 ;
-;
-TheEnd
-    .ECHO 'TheEnd: ',TheEnd
-    ;.if TheEnd > PMGraph + $300
-    ;    .error "memory conflict"
-    ;.endif
+;----------------------------------------------
+    org $bf80
+font4x4
+    ins 'artwork/font4x4s.bmp',+62
+
+
 
 
 

@@ -27,9 +27,10 @@ Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
 ## 2. Wprowadzanie nazwy graczy i wybór poziomu graczy sterowanych przez komputer
 Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joysticjiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też kompute (pozostałe opcje). Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
-Po naciśnięciu klawisza [RETURN] lub przycisku Joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla każdego z nich.
+Po naciśnięciu klawisza [RETURN] lub krótkim naciśnięciu przycisku Joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla każdego z nich.
+Nazwę gracza można wprowadzać także przy pomocy joysticka. Po wciśnięciu i przytrzymaniu przycisku ponad 1s. za pomocą ruchów góra/dół można zmienić wprowadzaną literę, a lewo/prawo jej pozycję w nazwie. Puszczenie przycisku kończy wprowadzanie nazwy i wraca do wyboru poziomu.
 
-Jeśli nazwa nie zostanie wpisana (bo np operujemy wyłącznie joystickiem), to zostanie uzupełniona nazwą domyślną.
+Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 
 ## 3. Ekran zakupów (przed każdą rundą)
 
@@ -189,3 +190,55 @@ Oczywiście aktywacja broni w momencie kiedy mamy już aktywowaną jakąś inną
 ## 7. Bronie 'inne' :) :
 
 * **Buy me!** - tej 'broni' nie można używać w rozgrywce. Jej zakup powoduje wylosowanie jesdnej z broni ofensywnych lub (żadziej) defensywnych i dodanie jej do arsenału gracza. Jest to loteria w której można stracić (jeśli wylosuje się broń tańsza niż cena **Buy Me!** ale też zyskać. Jeśli wylosuje się broń dużo droższa możemy otrzymać do dyspozycji broń, na którą nie było nas stać!
+
+
+## 8. Poziomy trudności przeciwników sterowanych przez komputer:
+
+Gra posiada 8 poziomów trudności przeciwników sterowanych przez komputer. A właściwie 7 różnych i jeden "niespodziankę". Każdy z nich ma swój sposób kupowania broni defensywnych i ofensywnych oraz inną metodę wyboru celu i samego celowania, oraz wyboru broni. Ułożone są one na liście według wzrastających "umiejętności":
+
+* **Moron** - najgłupszy z przeciwników (co nie znaczy że najbezpieczniejszy). Strzela całkowicie przypadkowo używając wyłącznie jednej broni - **Baby Missile**. Nie kupuje nic, nie umie stosować broni defensywnych.
+
+* **Shooter** - Ten przeciwnik nie strzela na oślep. Wybiera sobie jeden kierunek. Na podstawie własnej pozycji - strzela w stronę z której jest więcej przestrzeni zakładając, że to tam są inne czołgi. Ostrzeliwanie zaczyna od wysokiego kąta i strzał po strzale zmienia ten kąt na coraz niższy starając się ostrzelać cały obszar po wybranej stronie. Strzał oddaje zawsze najlepszą posiadaną bronią (najwyższą na liście posiadanych broni - czyli nie koniecznie najlepszą). Nie używa broni defensywnych mimo, że je kupuje! Na początku rundy podejmuje 1 próbę zakupu broni defensywnych (tylko z zakresu **Battery** - **Strong Parachute**) i 4 ofensywnych (z zakresu **Missile** - **Heavy Roller**).
+
+* **Poolshark** - Atakując wyznacza sobie za cel najbliższy czołg, następnie dobiera kąt strzału, a jego siłę stara się dobrać losując ją z wybranego przedziału. Strzał oddaje zawsze najlepszą posiadaną bronią. Używa broni defensywnych. Z prawdopodobieństwem 1:3 aktywuje przed oddaniem strzału najlepszą posiadaną broń defensywną (najwyższą na liście posiadanych broni - czyli nie koniecznie najlepszą). Jeżeli poziom jego energii spadnie poniżej 30 jednostek - używa **Battery** (oczywiście jeśli wcześniej ją kupił), jeżeli energia spadniej poniżej 5 i nie ma **Battery** poddaje się - **White Flag**. Na początku rundy podejmuje 1 próbę zakupu broni defensywnych i 6 ofensywnych.
+
+* **Tosser** - Atakując działa dokładnie tak jak **Poolshark** jednak może posiadać "lepszy" zasób broni dzięki innej taktyce zakupów. Zawsze przed strzałem aktywuje najlepszą posiadaną broń defensywną. i tak jak **Poolshark** stosuje **Battery** i **White Flag**. Na początku rundy ocenia ile ma pieniędzy i w zależności od tego podejmuje (pieniądze/5100) prób zakupu broni defensywnych a następnie jeszcze raz sprawdza ile pieniędzy mu zostało i podejmuje (pieniądze/1250) prób zakupu broni ofensywnych.
+
+* **Chooser** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) i celuje bardzo dokładnie, jednak przed samym strzałem energia strzału modyfikowana jest o parametr szczęścia :) , czyli mimo precyzyjnego wycelowania nie zawsze trafia. Strzał oddaje najlepszą posiadaną bronią chyba że wymagana jest małą energia (cel jest blisko). Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Zawsze przed strzałem aktywuje najlepszą posiadaną broń defensywną i tak jak **Poolshark** stosuje **Battery** i **White Flag**. Zakupów dokonuje tak samo jak **Tosser**.
+
+* **Spoiler** - Strzela dokładnie tak jak **Chooser** tyle, że ma więcej szczęścia :) , co oznacza że nawet jeśli nie trafi w wybrany cel, to może być to strzał precyzyjniejszy niż **Chooser**. Broni defensywnych używa dokładnie tak jak **Chooser**. Na początku rundy ocenia ile ma pieniędzy i w zależności od tego podejmuje (pieniądze/5100) prób zakupu broni defensywnych a następnie jeszcze raz sprawdza ile pieniędzy mu zostało i podejmuje (pieniądze/320) prób zakupu broni ofensywnych. Przy zakupie broni defensywnych kupuje tylko bronie silne i precyzyjne - czyli takie, które nie zrobią mu przypadkiem krzywdy.
+
+* **Cyborg** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) lecz preferuje przeciwników sterowanych przez człowieka. Celuje bardzo dokładnie i w zdecydowanej większości przypadków trafia za pierwszym strzałem. Strzał oddaje najlepszą posiadaną bronią chyba że wymagana jest małą energia (cel jest blisko). Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Broni defensywnych używa dokładnie tak jak **Chooser**. Zakupy robi dokładnie tak jak **Spoiler**
+
+* **Unknown** - Przed oddaniem każdego strzału losowo wybiera sposób działania od **Poolsharka** do **Cyborga** i stosuje jego taktykę. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
+
+Próba zakupu broni (ofensywnej lub defensywnej) wygląda następująco:
+Na początku losowana jest jedna z broni (wśród wszystkich możliwych ofensywnych lub defensywnych). Następnie wykonywane jest sprawdzenie czy wylosowana broń jest na liście broni możliwych do zakupu przez czołg. Jeśli nie to w tej próbie żadna broń nie jest kupowana, a jeśli tak, to sprawdzana jest jej cena. Jeśli czołg ma tyle pieniędzy, broń jest kupowana, w przeciwnym wypadku próba kończy się bez dokonania zakupu.
+
+Tabela broni kupowanych przez: **Shooter**, **Poolshark**, **Tosser** i **Chooser**
+
+| bronie ofensywne | bronie defensywne |
+| --- | --- |
+| Missile | Battery |
+| Baby Nuke | Parachute |
+| Nuke | Strong Parachute |
+| LeapFrog | Mag Deflector |
+| Funky Bomb | Shield |
+| MIRV | Heavy Shield |
+| Death's Head | Force Shield |
+| Napalm | Bouncy Castle |
+| Hot Napalm | |
+| Baby Roller | |
+| Roller | |
+| Heavy Roller | |
+
+Tabela broni kupowanych przez: **Spoiler** i **Cyborg**
+
+| bronie ofensywne | bronie defensywne |
+| --- | --- |
+| Baby Nuke | Battery |
+| Nuke | Strong Parachute |
+| Death's Head | Mag Deflector |
+| Hot Napalm | Heavy Shield |
+| | Force Shield |
+| | Bouncy Castle |
