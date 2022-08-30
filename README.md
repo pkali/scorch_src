@@ -48,6 +48,23 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changes:
 
+###### Version 1.13
+2022-08-30
+
+Getting ready for porting the game!
+
+Several heavy optimizations and code cleanups in preparation for an unexpected port.
+
+Changes:
+* Overhaul of AI - Cyborgs, Spoilers, and Choosers aim much better.
+* Cyborgs prefer to kill humans.
+* Fine tuning of AI purchases makes the difficulty level aligned with the robot level.
+* Fixed a very difficult and elusive bug that was causing tanks to freeze when falling close to the right edge of the screen fixed.
+* Updated music by @Miker
+* It is now possible to enter tank names with a joystick - all essential game functions are available without touching the keyboard!
+* Manuals updated with AI strategy information and more.
+
+
 ###### Version 1.12
 2022-08-24
 
