@@ -315,7 +315,6 @@ decimalresult  .DS 5
 ;ExplosionRadius .DS 2  ;because when adding in xdraw it is double byte
 ;round
 CurrentRoundNr .DS 1
-FallDown1  .DS 1
 ;FallDown2  .DS 1
 ;leapfrog
 LeapFrogAngle  .DS 1

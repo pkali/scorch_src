@@ -642,7 +642,6 @@ ShootNow
     beq missed
     
     lda #0
-    sta FallDown1
 ;    sta FallDown2
     jsr Explosion
 
@@ -811,7 +810,6 @@ NoPlayerNoDeath
     ;cleanup of the soil fall down ranges (left and right)
     sta RangeRight
     sta RangeRight+1
-    sta FallDown1
 ;    sta FallDown2
     mwa #screenwidth RangeLeft
 
@@ -919,7 +917,6 @@ NotNegativeShieldEnergy
 ;---------------------------------
 .proc Seppuku
     lda #0
-    sta FallDown1
     ;sta FallDown2
     sta ydraw+1
     ; get position of the tank
