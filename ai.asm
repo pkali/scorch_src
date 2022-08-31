@@ -155,13 +155,8 @@ endo
 	
 	; choose the best weapon
 	
-	ldy #last_offensive_____ ;the last  weapon	
-loop
-	dey
-	lda (temp),y  ; this is set up before calling the routine, has address of TanksWeaponsTable
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	ldy #last_offensive_____ ;the last weapon to choose +1	
+	jsr ChooseBestOffensive
     rts
     .endp
 ;----------------------------------------------
@@ -207,17 +202,8 @@ endo
 	
 	; choose the best weapon
 	
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	ldy #ind_Laser__________ ;the last offensive weapon	
-loop
-	dey
-	lda (temp),y
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	ldy #ind_Laser__________ ;the last offensive weapon	to choose +1
+	jsr ChooseBestOffensive
     rts
     
 ;----------------------------------------------
@@ -331,17 +317,8 @@ NoUseDefensive
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
-loop
-	dey
-	lda (temp),y
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use +1
+	jsr ChooseBestOffensive
 
 	; randomizing force +-100
 	sbw Force #100 RandBoundaryLow
@@ -372,17 +349,8 @@ HighForce
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
-loop
-	dey
-	lda (temp),y
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use +1
+	jsr ChooseBestOffensive
 
 	; randomizing force +-50
 	sbw Force #50 RandBoundaryLow
@@ -412,17 +380,8 @@ HighForce
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
-loop
-	dey
-	lda (temp),y
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use +1
+	jsr ChooseBestOffensive
 
 	lda Force
 	sta ForceTableL,x
@@ -1051,4 +1010,23 @@ SorryNoPurchase
     bpl @-
 
     rts 
+.endp
+;----------------------------------------------
+.proc ChooseBestOffensive
+; choose the best weapon
+; Y - the last offensive weapon to use + 1
+; X - TankNr
+;----------------------------------------------
+	
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+loop
+	dey
+	lda (temp),y
+	beq loop 
+	tya
+	sta ActiveWeapon,x
+	rts
 .endp
