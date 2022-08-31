@@ -204,11 +204,11 @@ Gra posiada 8 poziomów trudności przeciwników sterowanych przez komputer. A w
 
 * **Tosser** - Atakując działa dokładnie tak jak **Poolshark** jednak może posiadać "lepszy" zasób broni dzięki innej taktyce zakupów. Zawsze przed strzałem aktywuje najlepszą posiadaną broń defensywną. i tak jak **Poolshark** stosuje **Battery** i **White Flag**. Na początku rundy ocenia ile ma pieniędzy i w zależności od tego podejmuje (pieniądze/5100) prób zakupu broni defensywnych a następnie jeszcze raz sprawdza ile pieniędzy mu zostało i podejmuje (pieniądze/1250) prób zakupu broni ofensywnych.
 
-* **Chooser** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) i celuje bardzo dokładnie, jednak przed samym strzałem energia strzału modyfikowana jest o parametr szczęścia :) , czyli mimo precyzyjnego wycelowania nie zawsze trafia. Strzał oddaje najlepszą posiadaną bronią chyba że wymagana jest małą energia (cel jest blisko). Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Zawsze przed strzałem aktywuje najlepszą posiadaną broń defensywną i tak jak **Poolshark** stosuje **Battery** i **White Flag**. Zakupów dokonuje tak samo jak **Tosser**.
+* **Chooser** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) i celuje bardzo dokładnie, jednak przed samym strzałem energia strzału modyfikowana jest o parametr szczęścia :) , czyli mimo precyzyjnego wycelowania nie zawsze trafia. Strzał oddaje najlepszą posiadaną bronią chyba że cel jest blisko. Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Zawsze przed strzałem aktywuje najlepszą posiadaną broń defensywną i tak jak **Poolshark** stosuje **Battery** i **White Flag**. Zakupów dokonuje tak samo jak **Tosser**.
 
 * **Spoiler** - Strzela dokładnie tak jak **Chooser** tyle, że ma więcej szczęścia :) , co oznacza że nawet jeśli nie trafi w wybrany cel, to może być to strzał precyzyjniejszy niż **Chooser**. Broni defensywnych używa dokładnie tak jak **Chooser**. Na początku rundy ocenia ile ma pieniędzy i w zależności od tego podejmuje (pieniądze/5100) prób zakupu broni defensywnych a następnie jeszcze raz sprawdza ile pieniędzy mu zostało i podejmuje (pieniądze/320) prób zakupu broni ofensywnych. Przy zakupie broni defensywnych kupuje tylko bronie silne i precyzyjne - czyli takie, które nie zrobią mu przypadkiem krzywdy.
 
-* **Cyborg** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) lecz preferuje przeciwników sterowanych przez człowieka. Celuje bardzo dokładnie i w zdecydowanej większości przypadków trafia za pierwszym strzałem. Strzał oddaje najlepszą posiadaną bronią chyba że wymagana jest małą energia (cel jest blisko). Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Broni defensywnych używa dokładnie tak jak **Chooser**. Zakupy robi dokładnie tak jak **Spoiler**
+* **Cyborg** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) lecz preferuje przeciwników sterowanych przez człowieka. Celuje bardzo dokładnie i w zdecydowanej większości przypadków trafia za pierwszym strzałem. Strzał oddaje najlepszą posiadaną bronią chyba że cel jest blisko. Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Broni defensywnych używa dokładnie tak jak **Chooser**. Zakupy robi dokładnie tak jak **Spoiler**
 
 * **Unknown** - Przed oddaniem każdego strzału losowo wybiera sposób działania od **Poolsharka** do **Cyborga** i stosuje jego taktykę. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
 
@@ -236,9 +236,9 @@ Tabela broni kupowanych przez: **Spoiler** i **Cyborg**
 
 | bronie ofensywne | bronie defensywne |
 | --- | --- |
-| Baby Nuke | Battery |
-| Nuke | Strong Parachute |
-| Death's Head | Mag Deflector |
+| Missile | Battery |
+| Baby Nuke | Strong Parachute |
+| Nuke | Mag Deflector |
 | Hot Napalm | Heavy Shield |
 | | Force Shield |
 | | Bouncy Castle |

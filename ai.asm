@@ -155,7 +155,6 @@ endo
 	
 	; choose the best weapon
 	
-	ldy #last_offensive_____ ;the last weapon to choose +1	
 	jsr ChooseBestOffensive
     rts
     .endp
@@ -202,7 +201,6 @@ endo
 	
 	; choose the best weapon
 	
-	ldy #ind_Laser__________ ;the last offensive weapon	to choose +1
 	jsr ChooseBestOffensive
     rts
     
@@ -317,7 +315,6 @@ NoUseDefensive
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use +1
 	jsr ChooseBestOffensive
 
 	; randomizing force +-100
@@ -327,9 +324,10 @@ NoUseDefensive
 NotNegativeEnergy
 	adw Force #100 RandBoundaryHigh
     jsr RandomizeForce
-	lda ForceTableH,x
-	bne HighForce
-	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	; if target distance lower than 24 - set weapon to Baby Missile (for security :) 
+	jsr GetDistance
+	cpw temp2 #24
+	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 HighForce
@@ -349,7 +347,6 @@ HighForce
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use +1
 	jsr ChooseBestOffensive
 
 	; randomizing force +-50
@@ -359,9 +356,10 @@ HighForce
 NotNegativeEnergy
 	adw Force #50 RandBoundaryHigh
     jsr RandomizeForce
-	lda ForceTableH,x
-	bne HighForce
-	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	; if target distance lower than 24 - set weapon to Baby Missile (for security :) 
+	jsr GetDistance
+	cpw temp2 #24
+	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 HighForce
@@ -380,15 +378,17 @@ HighForce
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use +1
-	jsr ChooseBestOffensive
+	ldy ind_Nuke___________+1
+	jsr ChooseBestOffensive.NotFromAll
 
 	lda Force
 	sta ForceTableL,x
 	lda Force+1
 	sta ForceTableH,x
-	bne HighForce
-	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	; if target distance lower than 32 - set weapon to Baby Missile (for security :) 
+	jsr GetDistance
+	cpw temp2 #32
+	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 HighForce
@@ -1014,10 +1014,11 @@ SorryNoPurchase
 ;----------------------------------------------
 .proc ChooseBestOffensive
 ; choose the best weapon
-; Y - the last offensive weapon to use + 1
 ; X - TankNr
 ;----------------------------------------------
-	
+	ldy #last_offensive_____+1 ;the last weapon to choose +1	
+NotFromAll	
+; Y - the last offensive weapon to use + 1
 	lda TanksWeaponsTableL,x
 	sta temp
 	lda TanksWeaponsTableH,x
@@ -1028,5 +1029,34 @@ loop
 	beq loop 
 	tya
 	sta ActiveWeapon,x
+	rts
+.endp
+;----------------------------------------------
+.proc GetDistance
+; calculates distance from tank X to TargetTankNr(Y)
+; result in temp2
+;----------------------------------------------
+	ldy TargetTankNr
+	lda xTanksTableH,x
+	cmp xTanksTableH,y
+	bne @+
+	lda xTanksTableL,x
+	cmp xTanksTableL,y
+@	bcs YisLower
+	sec
+	lda xTanksTableL,y
+	sbc xTanksTableL,x
+	sta temp2
+	lda xTanksTableH,y
+	sbc xTanksTableH,x
+	sta temp2+1
+	rts
+YisLower
+	lda xTanksTableL,x
+	sbc xTanksTableL,y
+	sta temp2
+	lda xTanksTableH,x
+	sbc xTanksTableH,y
+	sta temp2+1
 	rts
 .endp
