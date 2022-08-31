@@ -1263,20 +1263,37 @@ drawmountainsloop
 	beq NoMountain
     sta ydraw
 	sty ydraw+1
-    jsr DrawLine
+;    jsr DrawLine
+;	there was Drawline proc 
+    lda #screenheight
+    sec
+    sbc ydraw
+    sta tempbyte01
+    jsr plot.MakePlot
+	; after plot we have: (xbyte),y - addres of screen byte; X - index in bittable (number of bit)
+;    jmp IntoDraw    ; jumps inside Draw routine
+                    ; because one pixel is already plotted (and who cares? :) )
+@
+	lda (xbyte),y
+	and bittable2,x
+	sta (xbyte),y
+;IntoDraw
+	adw xbyte #screenBytes
+	dec tempbyte01
+	bne @-
+;	end of Drawline proc
 NoMountain
     inw modify
     inw xdraw
     cpw xdraw #screenwidth
     bne drawmountainsloop
     rts
+/*
 ;--------------------------------------------------
-drawmountainspixel
+drawmountainspixel		; never used ?
 ;--------------------------------------------------
     mwa #0 xdraw
     mwa #mountaintable modify
-
-
 drawmountainspixelloop
     ldy #0
     lda (modify),y
@@ -1287,8 +1304,8 @@ drawmountainspixelloop
     inw xdraw
     cpw xdraw #screenwidth
     bne drawmountainspixelloop
-
     rts
+ */
 .endp
 ;--------------------------------------------------
 .proc SoilDown2
@@ -1761,31 +1778,8 @@ ClearPlot
     eor #$ff
     and bittable,x
     rts
-.endp;--------------------------------------------------
-.proc DrawLine
-;--------------------------------------------------
-    mva #0 ydraw+1
-    lda #screenheight
-    sec
-    sbc ydraw
-    sta tempbyte01
-    jsr plot.MakePlot
-    ;rts
-    jmp IntoDraw    ; jumps inside Draw routine
-                    ; because one pixel is already plotted
-
-@
-      lda (xbyte),y
-	  and bittable2,x
-      sta (xbyte),y
-IntoDraw
-	  adw xbyte #screenBytes
-      dec tempbyte01
-      bne @-
-    rts
 .endp
-
-; ------------------------------------------
+;--------------------------------------------------
 .proc TypeChar
 ; puts char on the graphics screen
 ; in: CharCode

@@ -17,6 +17,7 @@
     pha
     lda ExplosionRoutines,x
     pha
+;    inc FallDown2
     rts
 ExplosionRoutines
     .word babymissile-1              ;Baby_Missile___;_00    
@@ -61,7 +62,7 @@ tracer
 ; ------------------------
 .proc babymissile
     mva #sfx_baby_missile sfx_effect 
-    inc FallDown2
+;    inc FallDown2
     mva #11 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
@@ -69,7 +70,7 @@ tracer
 ; ------------------------
 .proc missile ;
     mva #sfx_baby_missile sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
@@ -77,7 +78,7 @@ tracer
 ; ------------------------
 .proc babynuke
     mva #sfx_nuke sfx_effect 
-    inc FallDown2
+;    inc FallDown2
     mva #25 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
@@ -85,7 +86,7 @@ tracer
 ; ------------------------
 .proc nuke
     mva #sfx_nuke sfx_effect 
-    inc FallDown2
+;    inc FallDown2
     mva #30 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xmissile
@@ -93,7 +94,7 @@ tracer
 ; ------------------------
 .proc leapfrog
     mva #sfx_baby_missile sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
     jsr xmissile
@@ -163,7 +164,7 @@ EndOfLeapping
 .endp
 ; ------------------------
 .proc mirv ;  the whole mirv is performed by Flight routine
-    inc FallDown2
+;    inc FallDown2
     rts
 .endp
 ; ------------------------
@@ -171,7 +172,7 @@ EndOfLeapping
     mva #sfx_baby_missile sfx_effect
     mwa xtraj+1 xtrajfb
     sbw ytraj+1 #$05 ytrajfb	; funky missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
-    inc FallDown2
+;    inc FallDown2
     ;central Explosion
     mva #21 ExplosionRadius
     jsr CalculateExplosionRange0
@@ -229,7 +230,7 @@ NoWallsInFunky
 .endp
 ; ------------------------
 .proc deathshead
-    inc FallDown2
+;    inc FallDown2
     mva #30 ExplosionRadius
     jsr CalculateExplosionRange
 
@@ -285,7 +286,7 @@ NoLowerCircle
 ; ------------------------
 .proc napalm
     mva #sfx_napalm sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #0 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
@@ -294,7 +295,7 @@ NoLowerCircle
 ; ------------------------
 .proc hotnapalm
     mva #sfx_napalm sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #1 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
@@ -359,7 +360,7 @@ CharOffTheScreen
 	dec magic
 	jpl RepeatNapalm
 	; after napalm 
-	inc FallDown2
+;	inc FallDown2
 ;now we must check tanks in range
     ldx NumberOfPlayers
 	dex
@@ -407,32 +408,32 @@ EndNurnedCheckLoop
 .endp
 ; ------------------------
 .proc babyroller
-    inc FallDown2
+;    inc FallDown2
     mva #11 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc roller ;
-    inc FallDown2
+;    inc FallDown2
     mva #21 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc heavyroller
-    inc FallDown2
+;    inc FallDown2
     mva #30 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc riotbomb
-    inc FallDown2
+;    inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
 .endp
 ; ------------------------
 .proc heavyriotbomb
-    inc FallDown2
+;    inc FallDown2
     mva #29 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
@@ -441,7 +442,7 @@ EndNurnedCheckLoop
 .proc babydigger
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
     jmp xdigger
@@ -450,7 +451,7 @@ EndNurnedCheckLoop
 .proc digger ;
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
     jmp xdigger
@@ -459,7 +460,7 @@ EndNurnedCheckLoop
 .proc heavydigger
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #7 diggery  ; how many branches  (-1)
     jmp xdigger
@@ -583,7 +584,7 @@ DiggerCharacter
 .proc babysandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
     jmp xdigger
@@ -592,7 +593,7 @@ DiggerCharacter
 .proc sandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
     jmp xdigger
@@ -601,35 +602,35 @@ DiggerCharacter
 .proc heavysandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #5 diggery  ; how many branches (-1)
     jmp xdigger
 .endp
 ; ------------------------
 .proc dirtclod
-    inc FallDown2
+;    inc FallDown2
     mva #12 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc dirtball
-    inc FallDown2
+;    inc FallDown2
     mva #22 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc tonofdirt
-    inc FallDown2
+;    inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc dirtcharge
-    inc FallDown2
+;    inc FallDown2
     mva #61 ExplosionRadius
     jsr CalculateExplosionRange
     jmp ofdirt
@@ -637,7 +638,7 @@ DiggerCharacter
 ; ------------------------
 .proc riotcharge
     mva #sfx_riot_blast sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
     jmp cleanDirt
@@ -645,7 +646,7 @@ DiggerCharacter
 ; ------------------------
 .proc riotblast
     mva #sfx_riot_blast sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #61 ExplosionRadius
     jsr CalculateExplosionRange
     jmp cleanDirt

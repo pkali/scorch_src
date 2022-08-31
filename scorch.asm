@@ -103,7 +103,7 @@
     .zpvar Counter .byte ;temporary Counter for outside loops
     .zpvar ExplosionRadius .word ;because when adding in xdraw it is double byte
     .zpvar ResultY .byte
-    .zpvar FallDown2 .byte
+;    .zpvar FallDown2 .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
     .zpvar vy .word
@@ -643,7 +643,7 @@ ShootNow
     
     lda #0
     sta FallDown1
-    sta FallDown2
+;    sta FallDown2
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku
@@ -658,9 +658,9 @@ AfterExplode
     mva #1 Erase
     jsr drawtanks
     mva #0 Erase
-    lda FallDown2
-    beq NoFallDown2
-    jsr SoilDown2
+;    lda FallDown2
+;    beq NoFallDown2
+    jsr SoilDown2	; allways
 
 NoFallDown2
     ;here tanks are falling down
@@ -812,7 +812,7 @@ NoPlayerNoDeath
     sta RangeRight
     sta RangeRight+1
     sta FallDown1
-    sta FallDown2
+;    sta FallDown2
     mwa #screenwidth RangeLeft
 
     ; We are randomizing the weapon now.
@@ -920,7 +920,7 @@ NotNegativeShieldEnergy
 .proc Seppuku
     lda #0
     sta FallDown1
-    sta FallDown2
+    ;sta FallDown2
     sta ydraw+1
     ; get position of the tank
     ldx TankNr
