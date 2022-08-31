@@ -8,26 +8,6 @@
 ; - shoots random direction and force
 ; greeeting to myself 10 years older in 2013-11-09... still no idea
 
-;----------------------------------------------
-.proc MakeLowResDistances 
-	; create low precision table of positions
-	; by dividing positions by 4
-
-	ldy #MaxPlayers-1
-loop
-	lda xtankstableL,y
-	sta temp
-	lda xtankstableH,y
-	sta temp+1
-	
-	;= /4
-	:2 lsrw temp
-	lda temp
-	sta LowResDistances,y
-	dey
-	bpl loop
-	rts
-.endp
 
 ;----------------------------------------------
 .proc ArtificialIntelligence ;
@@ -42,6 +22,25 @@ loop
     pha
     lda AIRoutines,y
     pha
+
+;----------------------------------------------
+;.proc MakeLowResDistances 
+	; create low precision table of positions
+	; by dividing positions by 4
+	ldy #MaxPlayers-1
+loop
+	lda xtankstableL,y
+	sta temp
+	lda xtankstableH,y
+	sta temp+1
+	;= /4
+	:2 lsrw temp
+	lda temp
+	sta LowResDistances,y
+	dey
+	bpl loop
+;	rts
+;.endp
 
     ; common values used in AI routines
     ; address of weapons table (for future use)
@@ -326,7 +325,7 @@ NotNegativeEnergy
     jsr RandomizeForce
 	; if target distance lower than 24 - set weapon to Baby Missile (for security :) 
 	jsr GetDistance
-	cpw temp2 #24
+	cmp #6 ; 24/4
 	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
@@ -358,7 +357,7 @@ NotNegativeEnergy
     jsr RandomizeForce
 	; if target distance lower than 24 - set weapon to Baby Missile (for security :) 
 	jsr GetDistance
-	cpw temp2 #24
+	cmp #6	; 24/4
 	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
@@ -378,7 +377,7 @@ HighForce
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	ldy ind_Nuke___________+1
+	ldy #ind_Nuke___________+1
 	jsr ChooseBestOffensive.NotFromAll
 
 	lda Force
@@ -387,7 +386,7 @@ HighForce
 	sta ForceTableH,x
 	; if target distance lower than 32 - set weapon to Baby Missile (for security :) 
 	jsr GetDistance
-	cpw temp2 #32
+	cmp #8	;32/4
 	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
@@ -404,7 +403,7 @@ HighForce
 ; direcion of shoot in A (0 - left, >0 - right)
 ;----------------------------------------------
 	sta PreferHumansFlag
-	jsr MakeLowResDistances
+;	jsr MakeLowResDistances
 	lda #202
 	sta temp2 ; max possible energy
 	lda #0
@@ -456,7 +455,7 @@ skipThisPlayer
 ; returns target tank number in Y and
 ; direcion of shoot in A (0 - left, >0 - right)
 ;----------------------------------------------
-	jsr MakeLowResDistances
+;	jsr MakeLowResDistances
 	mva #$ff temp2 ; min possible distance
 	mva #0 tempor2	; direction of shoot
 
@@ -1033,30 +1032,19 @@ loop
 .endp
 ;----------------------------------------------
 .proc GetDistance
-; calculates distance from tank X to TargetTankNr(Y)
-; result in temp2
+; calculates lores ( /4 ) distance from tank X to TargetTankNr(Y)
+; result in A
 ;----------------------------------------------
 	ldy TargetTankNr
-	lda xTanksTableH,x
-	cmp xTanksTableH,y
-	bne @+
-	lda xTanksTableL,x
-	cmp xTanksTableL,y
+	lda LowResDistances,x
+	cmp LowResDistances,y
 @	bcs YisLower
 	sec
-	lda xTanksTableL,y
-	sbc xTanksTableL,x
-	sta temp2
-	lda xTanksTableH,y
-	sbc xTanksTableH,x
-	sta temp2+1
+	lda LowResDistances,y
+	sbc LowResDistances,x
 	rts
 YisLower
-	lda xTanksTableL,x
-	sbc xTanksTableL,y
-	sta temp2
-	lda xTanksTableH,x
-	sbc xTanksTableH,y
-	sta temp2+1
+	lda LowResDistances,x
+	sbc LowResDistances,y
 	rts
 .endp
