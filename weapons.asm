@@ -1230,8 +1230,7 @@ callInventory
     mva #$ff isInventory
     jsr Purchase
 afterInventory
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame	
+	jsr MakeDarkScreen	
     lda #song_ingame
     jsr RmtSongSelect
     mva #0 escFlag

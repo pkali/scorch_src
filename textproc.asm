@@ -2161,8 +2161,7 @@ FastTank
     bpl AllTanksFloatingDown
 	jsr IsKeyPressed
     bne MainTanksFloatingLoop   ; neverending loop
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
 	jsr GameOverResultsClear
     rts
 RandomizeTankPos

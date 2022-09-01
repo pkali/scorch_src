@@ -171,8 +171,7 @@ WeaponFont
 ; Game Code
 ;--------------------------------------------------
 FirstSTART
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
 
 	; one time zero variables in RAM (non zero page)
 	lda #0
@@ -227,14 +226,12 @@ START
     
 
     jsr Options  ;startup screen
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
     bit escFlag
     bmi START
 
     jsr EnterPlayerNames
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
     bit escFlag
     bmi START
 
@@ -255,8 +252,7 @@ SettingBarrel
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
 
     bit escFlag
     bmi START
@@ -386,14 +382,12 @@ eskipzeroing
     lda GameIsOver
 	beq NoGameOverYet
 GoGameOver
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
 	jsr GameOverScreen
     jmp START
 NoGameOverYet
     inc CurrentRoundNr
-    lda #$0
-    sta dmactls  ; issue #72
+    jsr MakeDarkScreen   ; issue #72
     jsr RmtSongSelect
     mva #sfx_silencer sfx_effect
     jsr PMoutofscreen
@@ -1629,6 +1623,9 @@ peopleAreHere
 noKey
 	rts
 .endp
+MakeDarkScreen
+	mva #0 dmactls		; dark screen
+	; and wait one frame :)
 .proc WaitOneFrame
 	lda CONSOL
 	and #%00000101	; Start + Option
