@@ -271,11 +271,8 @@ SettingBarrel
     jsr SortSequence
     
     ; Hide all (easier than hide last ;) ) tanks
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
+    jsr cleartanks
 	sta COLBAKS		; set background color to black
-    jsr PMoutofScreen ;let P/M disappear
 
     ; here gains and losses should be displayed (dollars)
     ; finally we have changed our minds and money of players
@@ -410,6 +407,7 @@ NoGameOverYet
 
 	jsr SetPMWidth
 	lda #0
+	sta Erase
 	sta COLOR2	; status line "off"
 	sta COLOR1
 	
@@ -647,14 +645,7 @@ continueMainRoundLoopAfterSeppuku
 
 
 AfterExplode
-    ;temporary tanks removal (would fall down with soil)
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
-;    lda FallDown2
-;    beq NoFallDown2
     jsr SoilDown2	; allways
-
 NoFallDown2
     ;here tanks are falling down
     mva tankNr tempor2

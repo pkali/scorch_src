@@ -64,7 +64,6 @@ tracer
     mva #sfx_baby_missile sfx_effect 
 ;    inc FallDown2
     mva #11 ExplosionRadius
-    jsr CalculateExplosionRange
     jmp xmissile
 .endp
 ; ------------------------
@@ -72,7 +71,6 @@ tracer
     mva #sfx_baby_missile sfx_effect
 ;    inc FallDown2
     mva #17 ExplosionRadius
-    jsr CalculateExplosionRange
     jmp xmissile
 .endp
 ; ------------------------
@@ -80,7 +78,6 @@ tracer
     mva #sfx_nuke sfx_effect 
 ;    inc FallDown2
     mva #25 ExplosionRadius
-    jsr CalculateExplosionRange
     jmp xmissile
 .endp
 ; ------------------------
@@ -88,7 +85,6 @@ tracer
     mva #sfx_nuke sfx_effect 
 ;    inc FallDown2
     mva #30 ExplosionRadius
-    jsr CalculateExplosionRange
     jmp xmissile
 .endp
 ; ------------------------
@@ -96,20 +92,11 @@ tracer
     mva #sfx_baby_missile sfx_effect
 ;    inc FallDown2
     mva #17 ExplosionRadius
-    jsr CalculateExplosionRange
     jsr xmissile
 
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
-    lda TankNr
-    pha
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
     jsr SoilDown2
-    jsr drawtanks
-    pla
-    sta TankNr
 
     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
@@ -128,19 +115,11 @@ tracer
     mva #15 ExplosionRadius
     jsr CalculateExplosionRange0
     mva #sfx_baby_missile sfx_effect
-    jsr xmissile
+    jsr xmissile.NoRangeCalc
 
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
-    lda TankNr
-    pha
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
     jsr SoilDown2
-    jsr drawtanks
-    pla
-    sta TankNr
 
     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
@@ -158,7 +137,7 @@ tracer
     mva #13 ExplosionRadius
     jsr CalculateExplosionRange0
     mva #sfx_baby_missile sfx_effect
-    jmp xmissile
+    jmp xmissile.NoRangeCalc
 EndOfLeapping
     rts
 .endp
@@ -176,22 +155,12 @@ EndOfLeapping
     ;central Explosion
     mva #21 ExplosionRadius
     jsr CalculateExplosionRange0
-    jsr xmissile
-    
-    lda TankNr
-    pha
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
+    jsr xmissile.NoRangeCalc
     
     jsr SoilDown2
     ;
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
+    jsr cleartanks	; maybe not?
 	sta FunkyWallFlag
-    pla
-    sta TankNr
 	mva #1 color
     mva #5 FunkyBombCounter
 FunkyBombLoop
@@ -212,7 +181,6 @@ FunkyBombLoop
     mva #sfx_funky_hit sfx_effect
     jsr Flight
 
-    jsr CalculateExplosionRange
     lda HitFlag
     beq NoExplosionInFunkyBomb
       mva #sfx_baby_missile sfx_effect
@@ -232,20 +200,16 @@ NoWallsInFunky
 .proc deathshead
 ;    inc FallDown2
     mva #30 ExplosionRadius
-    jsr CalculateExplosionRange
-
     mva #sfx_nuke sfx_effect
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
     sbw xdraw #34
-    jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
     adw xdraw #68
-    jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
     SaveDrawXY 
     jsr xmissile
@@ -720,6 +684,8 @@ LaserMisses
 ; -----------------
 .proc xmissile ;
 ; -----------------
+    jsr CalculateExplosionRange
+NoRangeCalc
     lda #1
     sta radius
     sta color
@@ -931,7 +897,6 @@ ExplodeNow
     mwa ycircle ydraw ;(bad)
 
     ; finally a little explosion
-    jsr CalculateExplosionRange
     mva #sfx_baby_missile sfx_effect
     jmp xmissile
     rts
@@ -1212,9 +1177,7 @@ QuitToGameover
     bne @+
 callActivation
     ; Hide all tanks - after inventory they may have other shapes
-    mva #1 Erase
-    jsr DrawTanks
-    mva #0 Erase
+    jsr ClearTanks
 	jsr DefensivesActivate
 	jmp afterInventory
 
@@ -1223,9 +1186,7 @@ callActivation
     bne @+
 callInventory
     ; Hide all tanks - after inventory they may have other shapes
-    mva #1 Erase
-    jsr DrawTanks
-    mva #0 Erase
+    jsr ClearTanks
 	;
     mva #$ff isInventory
     jsr Purchase
@@ -1234,6 +1195,7 @@ afterInventory
     lda #song_ingame
     jsr RmtSongSelect
     mva #0 escFlag
+	sta Erase	; why?
     jsr DisplayStatus
     jsr SetMainScreen   
     jsr WaitOneFrame
@@ -2331,14 +2293,8 @@ MIRValreadyAll
     jsr DisplayOffensiveTextNr
 
     ; temporary removing tanks from the screen (otherwise they will fall down with soil)
-    mva TankNr tempor2
-    mva #1 Erase
-    jsr drawtanks
-    mva tempor2 TankNr
-    mva #0 Erase
     jsr SoilDown2
     mva #$ff HitFlag		; but why ??
-    ;jsr drawtanks
     rts
 .endp
 ; -------------------------------------------------
@@ -2460,8 +2416,7 @@ NextLine2
 	ldx TankNr
 	sta ActiveDefenceWeapon,x	; deactivate Nuclear Winter
 	jsr SetFullScreenSoilRange
-    jsr SoilDown2
-	jsr drawtanks	; for restore PM
+    jsr SoilDown2.NoClearTanks
 	rts
 
 	; in order to optimize the fragment repeated in both internal loops
@@ -2572,11 +2527,7 @@ ReachSky
 	adc #0
 	sta RangeRight+1
 	; hide tanks and ...
-	mva #1 Erase
-    jsr DrawTanks
 	jsr SoilDown2
-	mva #0 Erase
-    jsr DrawTanks
 	ldx TankNr
 
 	; check keyboard/joy and move tank left/right - code copied from BeforeFire
@@ -2868,11 +2819,7 @@ OnGround
 	adc #0
 	sta RangeRight+1
 	; hide tanks and ...
-	mva #1 Erase
-    jsr DrawTanks
 	jsr SoilDown2
-	mva #0 Erase
-    jsr DrawTanks
 	ldx TankNr
 	rts
 .endp

@@ -584,6 +584,11 @@ UnequalTanks
 .endp
 
 ;-------------------------------------------------
+.proc ClearTanks
+	jsr PMoutofScreen
+    mva #1 Erase	; erase tanks flag
+.endp
+;--
 .proc drawtanks
 ;-------------------------------------------------
     lda TankNr
@@ -601,6 +606,7 @@ DrawNextTank
     pla
     sta TankNr
 
+    mva #1 Erase	; no erase tanks flag
     rts
 .endp
 ;---------
@@ -645,7 +651,8 @@ DrawTankNrX
     jsr SetupXYdraw
 
     jsr TypeChar
-
+	lda Erase
+	jne noTankNoPM
     ; now P/M graphics on the screen (only for 5 tanks)
     ; horizontal position
     ldx TankNr
@@ -729,7 +736,7 @@ ZeroesToGo6
     bne ClearPM6
 
 NoPlayerMissile
-
+noTankNoPM
 	ldy #$01
 	lda Erase
 	beq @+
@@ -1334,8 +1341,8 @@ drawmountainspixelloop
 ; how it works. I have just translated Polish comment
 ; but I do not understand a word of it :)
 ; If you know how it works, please write here :))))
-
-    jsr PMoutofscreen
+	jsr ClearTanks
+NoClearTanks
 
 ; First we look for highest pixels and fill with their coordinates
 ; both tables
@@ -1433,6 +1440,7 @@ ColumnIsReady
 ; now correct heights are in the mountaintable
     sta color	; Pozor! :)  we know - now A=1
     mva #sfx_silencer sfx_effect
+	jsr DrawTanks
     rts
 .endp
 
