@@ -343,7 +343,7 @@ BurnedCheckLoop
 @
 	bcs TankOutOfFire
 	; let's calculate left edge of the fire
-	sbw xcircle #(napalmRadius+8+4-4) xdraw	; 10 pixels on left + character width (tank) + half character - correction
+	sbw xcircle #(napalmRadius+TankWidth+4-4) xdraw	; 10 pixels on left + character width (tank) + half character - correction
 	bpl @+
 	mwa #0 xdraw	; left screen edge
 @
@@ -2623,10 +2623,10 @@ pressedRight
     jsr DrawTankNr
 	mva #0 Erase
 	lda XtankstableH,x
-	cmp #>(screenwidth-12)	; tank width correction +4 
+	cmp #>(screenwidth-TankWidth-4)	; tank width correction +4 
 	bne @+
 	lda XtankstableL,x
-	cmp #<(screenwidth-12)	; tank width correction +4 pixels 
+	cmp #<(screenwidth-TankWidth-4)	; tank width correction +4 pixels 
 @	bcs RightScreenEdge	
 	inc XtankstableL,x
 	sne:inc XtankstableH,x
@@ -2686,10 +2686,10 @@ pressedSpace
 	; left or right from center of screen ?
 	ldy #0
     lda XtankstableH,x
-	cmp #>((screenwidth/2)-8)
+	cmp #>((screenwidth/2)-TankWidth)
 	bne @+
     lda XtankstableL,x
-	cmp #<((screenwidth/2)-8)
+	cmp #<((screenwidth/2)-TankWidth)
 @	bcc TankOnLeftSide
 TankOnRightSide
 	dey
@@ -2865,11 +2865,13 @@ CheckCollisionWithTankLoop
     lda xtankstableL,x
     cmp xdraw
 @
-    bcs LeftFromTheTank ;add 8 double byte
+    bcs LeftFromTheTank
+	; add 8 double byte
 	; now we use Y as low byte and A as high byte of checked position (right edge of tank)
 	; it is tricky but fast and much shorter
     clc
-    adc #8
+    lda xtankstableL,x
+    adc #TankWidth
     tay
     lda xtankstableH,x
     adc #0
@@ -2910,7 +2912,7 @@ CheckCollisionWithShieldedTank
     bcs LeftFromTheTank 
 	tya	;add 16 double byte
     clc
-    adc #16	
+    adc #TankWidth+4+4	
     tay
     lda xtankstableH,x
     adc #0

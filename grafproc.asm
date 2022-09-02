@@ -1137,10 +1137,10 @@ FallingRight
 	bvs EndRightFall
     ; we finish falling right if the tank reached the edge of the screen
     lda XtanksTableH,x
-	cmp #>(screenwidth-8-2) ; 2 pixels correction due to a barrel wider than tank
+	cmp #>(screenwidth-TankWidth-2) ; 2 pixels correction due to a barrel wider than tank
 	bne @+
     lda XtanksTableL,x
-	cmp #<(screenwidth-8-2) ; 2 pixels correction due to a barrel wider than tank
+	cmp #<(screenwidth-TankWidth-2) ; 2 pixels correction due to a barrel wider than tank
 @   bcs EndRightFall
 NotRightEdge
     ; tank is falling right - modify coorinates
