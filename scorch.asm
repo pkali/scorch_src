@@ -407,7 +407,6 @@ NoGameOverYet
 
 	jsr SetPMWidth
 	lda #0
-	sta Erase
 	sta COLOR2	; status line "off"
 	sta COLOR1
 	

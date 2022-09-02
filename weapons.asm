@@ -1117,6 +1117,7 @@ ContinueToCheckMaxForce2
       lda MaxForceTableL,x
       sta ForceTableL,x
 @
+	mva #0 Erase
     jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
 
@@ -1194,7 +1195,6 @@ afterInventory
     lda #song_ingame
     jsr RmtSongSelect
     mva #0 escFlag
-	sta Erase	; why?
     jsr DisplayStatus
     jsr SetMainScreen   
     jsr WaitOneFrame
@@ -1866,12 +1866,19 @@ EndOfFlight2
 @
 	; tank hit - check defensive weapon of this tank
 	tax
-	dex		; index of tank in X
+	dex		; index of hitted tank in X
+	ldy TankNr
+	lda ActiveWeapon,y
+	cmp #ind_Tracer_________	; defence not fire by tracers
+	beq JNoDefence
+	cmp #ind_Smoke_Tracer___
+	beq JNoDefence
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Bouncy_Castle__		; Auto Defence
 	jeq BouncyCastle
 	cmp #ind_Mag_Deflector__		; Mag Deflector
 	beq MagDeflector
+JNoDefence
 	jmp NoDefence
 MagDeflector
 	; now run defensive-aggressive weapon - Mag Deflector!
@@ -1921,8 +1928,6 @@ NoDefence
 BouncyCastle
     mva #sfx_shield_on sfx_effect
 	; now run defensive-aggressive weapon - Bouncy Castle (previously known as Auto Defence)!
-	sbb #180 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
-	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
 	mva #1 Erase
 	lda TankNr
 	pha			; store TankNr
@@ -1933,13 +1938,18 @@ BouncyCastle
 	sta ShieldEnergy,x
     sta xtraj		; prepare coordinates
     sta ytraj
-	sta xtraj+2
-	sta ytraj+2
+;	sta xtraj+2
+;	sta ytraj+2
 	sta Erase
 	jsr DrawTankNr	; draw tank without shield
-	ldx TankNr	; restore X value :)
+;	ldx TankNr	; restore X value :) ... but we don't need X now ..
 	pla
 	sta TankNr	; restore TankNr value :)
+	sec
+	lda #180
+	sbc LeapFrogAngle
+	sta Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
+	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
 	mwa XHit xtraj+1
 	sbw YHit #5 ytraj+1
 	mva #1 color
