@@ -1101,7 +1101,6 @@ ToHighFill
 ;first, get current parameters (angle+force)
 ;for an active tank and display them
 ;(these values are taken from the previous round)
-	mva #0 Erase
 
     ldx TankNr
 

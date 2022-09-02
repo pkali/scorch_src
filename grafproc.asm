@@ -606,7 +606,7 @@ DrawNextTank
     pla
     sta TankNr
 
-    mva #1 Erase	; no erase tanks flag
+    mva #0 Erase	; no erase tanks flag
     rts
 .endp
 ;---------
