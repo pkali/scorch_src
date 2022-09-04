@@ -35,8 +35,17 @@
 ;and due to being always short of time/energy (to finish the game)
 ;we decided it must go in 'English' to let other people work on it
 
+.def target = 800 ;5200  ; or 800
+
 .macro build
 	dta d"1.13" ; number of this build (3 bytes)
+.endm
+
+.macro RMTSong
+    .IF target != 5200
+      lda #:1
+      jsr RMTSongSelect
+    .ENDIF
 .endm
 
     icl 'definitions.asm'
@@ -153,9 +162,10 @@
     icl 'lib/ATARISYS.ASM'
     icl 'lib/macro.hea'
 
-    ;splash screen and musix
-	icl 'artwork/Scorch50.asm'
-
+    .IF target !=5200
+      ;splash screen and musix
+	  icl 'artwork/Scorch50.asm'
+    .ENDIF
 
     ;Game loading address
     ORG  $3000
@@ -165,6 +175,7 @@ WeaponFont
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
     icl 'display.asm'
+    icl 'display_static.asm'
 ;----------------------------------------------
     
 ;--------------------------------------------------
@@ -221,9 +232,7 @@ START
 
 	;jsr GameOverScreen	; only for test !!!
     
-    lda #song_main_menu
-    jsr RmtSongSelect
-    
+    RMTSong song_main_menu
 
     jsr Options  ;startup screen
 	jsr MakeDarkScreen
@@ -281,8 +290,7 @@ SettingBarrel
     ; Results are number of other deaths
     ; before the player dies itself
 
-    lda #song_round_over
-    jsr RmtSongSelect
+    RmtSong song_round_over
     jsr DisplayResults
 
 	jsr DemoModeOrKey
@@ -385,7 +393,7 @@ GoGameOver
 NoGameOverYet
     inc CurrentRoundNr
     jsr MakeDarkScreen   ; issue #72
-    jsr RmtSongSelect
+    ; jsr RmtSongSelect  ; ?????
     mva #sfx_silencer sfx_effect
     jsr PMoutofscreen
 
@@ -402,8 +410,7 @@ NoGameOverYet
 ; the shooting angle is randomized
 ; of course gains an loses are zeroed
 
-    lda #song_ingame
-    jsr RmtSongSelect
+    RmtSong song_ingame
 
 	jsr SetPMWidth
 	lda #0
@@ -1641,7 +1648,7 @@ MakeDarkScreen
 ;--------------------------------------------------
 ;  starting song line 0-255 to A reg
 	cmp #song_ingame
-	bne noingame	; noMusic blck onlu ingame song
+	bne noingame	; noMusic blocks only ingame song
     bit noMusic
     spl:lda #song_silencio
 noingame
@@ -1691,11 +1698,20 @@ PLAYER
     .ECHO 'PLAYER: ',*
     icl 'artwork/sfx/rmtplayr.a65'
 
+    .IF target=5200
 MODUL    equ $b000                                 ;address of RMT module
-    opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_str6.rmt"  ;include music RMT module
-    opt h+
+      opt h-                                         ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_SFX-only-str.rmt"  ;include music RMT module
+      opt h+
+
+    .ELSE    
+MODUL    equ $b000                                 ;address of RMT module
+      opt h-                                         ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_str6.rmt"  ;include music RMT module
+      opt h+
+    .ENDIF
 ;
+MODULEND
 ;----------------------------------------------
     org $bf80
 font4x4

@@ -298,12 +298,14 @@ GoToActivation
     lda #@dmactl(narrow|dma) ; narrow screen width, DL on, P/M off
     sta dmactls
 
+    .IF target != 5200
     lda #song_supermarket
 	bit IsInventory
 	bpl @+
 	lda #song_inventory
 @	jsr RmtSongSelect
-
+    .ENDIF 
+    
     ldx tankNr
     lda TankStatusColoursTable,x
     sta COLOR2
@@ -1864,8 +1866,7 @@ quit_seppuku
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
-    lda #song_round_over
-    jsr RmtSongSelect
+    RmtSong song_round_over
     mwa #LineGameOver LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
@@ -2113,8 +2114,7 @@ MakeAllTanksVisible
 	jsr SetStandardBarrels
 
 	; start music and animations
-    lda #song_ending_looped
-    jsr RmtSongSelect
+    RmtSong song_ending_looped
     ; initial tank positions randomization
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
 @
