@@ -66,12 +66,10 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 * [START] + [OPTION] - natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak [O] ale bez potwierdzenia.
 * [ESC] - w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem).
 
-## 5. Zasady gry
+## 5. Zasady gry - bronie ofensywne
 
-A tutaj zręby opisu działania poszczególnych broni, zasad punktacji itp:
-
-### Najpierw co wiemy o energii czołgów
-- Czołgi mają energię (a Ogry warstwy - jak cebula) - na starcie 99 jednostek
+### Energia czołgów
+- Na początku każdej rundy każdy czołg ma 99 jesnostek energii.
 - Energii czołgom ubywa na 3 sposoby:
     * jedna jednostka po oddaniu każdego strzału
     * w czasie spadania (jeden piksel w dół 2 jednostki)
@@ -89,9 +87,9 @@ Dodatkowo czołg który wygrał rundę ma parametr gain (przechwyconej od trafio
 Konkretnie:
 
 ### Po każdej rundzie:
-`money = money + (2 * (gain+energy))`
+`money = money + (20 * (gain+energy))`
 
-`money = money - lose`
+`money = money - (10 * lose)`
 
 `if money <0 then money=0`
 
@@ -107,58 +105,50 @@ gdzie `EnergyDecrease` to utrata energii w wyniku trafienia.
 
 Oczywiście jednocześnie trafiony czołg traci ilość energii zapisaną w `EnergyDecrease`, z tym że tutaj strata nie może przekroczyć posiadanej energii.
 
-Uwaga! Ekranowa reprezentacja pieniędzy ma na końcu dopisane dodatkowe 0 więc faktyczne mamy 10 razy więcej kasy niż wynika z powyższych obliczeń :)
-
 ## Jak działa trafienie.
 
-Każda broń, która skutkuje eksplozją, ma swój promień rażenia (`ExplosionRadius`).
+Każda broń, która skutkuje eksplozją, ma swój promień rażenia.
 
 Po eksplozji każdy czołg w jej zasięgu traci energię.
 
-Działa to tak, że obliczana jest odległość trafianego czołgu od centrum eksplozji, zmniejszony o tę odległość ExplosionRadius jest mnożony przez 8 i w wyniku otrzymujemy `EnergyDecrease`.
+Działa to tak, że jeśli trafienie jst dokładnie w centralny punkt czołgu `EnergyDecrease` otrzymuje maksymalną wartość dla danej broni, a za każdym pikselem odległości od centrum czołgu wartość ta jest zmniejszana o 8.
 
-Czyli w przypadku trafienia centralnie w czołg:
-`EnergyDecrease = ExplosionRadius * 8`
+Przykładowo jeśli strał oddany za pomocą broni Baby Missile trafi idelanie w centum czołgu to straci on dokładnie 88 jednostek energii (plus to co straci spadając po eksplozji).
+W przypadku tafienia tą samą bronią w odległości 10ciu pikseli od centrum czołgu strata ta będzie wynośiła już tyko 8 jednostek.
 
-a z każdym pikselem dalej od centrum ubywa o 8 jednostek mniej.
+A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli broń eksploduje kilka razy, każda z eksplozji jest obliczana niezależnie (dodatkowe wartości w tabeli):
 
-Nie wiem czy to zrozumiałe - ja rozumiem :)
-
-Przykładowo, jeśli czołg zostanie trafiony centralnie przy pomocy Baby Missile - odejmowane jest mu 88 jednostek energii (11 * 8), co także oznacza, że przy trafieniu tym pociskiem w odległości 12 pikseli od czołgu - nie traci on energii wcale.
-
-A oto wartości promienia rażenia (ExplosionRadius) dla poszczególnych broni:
-
-| Weapon | `ExplosionRadius` |
+| Broń ofensywna | maksymalna wartość ubytku energii |
 | --- | --- |
-| Baby Missile | 11 |
-| Missile | 17 |
-| Baby Nuke | 25 |
-| Nuke | 30 |
-| LeapFrog| 17 15 13 |
-| Funky Bomb | 21 11 (* 5) |
-| MIRV | 17 (* 5) |
-| Death's Head | 30 (* 5) |
-| Napalm | x 40 (ta broń jest inna i nie jest wyznaczana odległość od centrum, po prostu każdy czołg znajdujący się w zasięgu płomieni traci 40 jednostek energii - zmienna ExplosionRadius nie jest używana) |
-| Hot Napalm | x 80 (zasada taka jak w Napalm) |
-| Baby Roller | 11 |
-| Roller | 21 |
-| Heavy Roller | 30 |
-| Riot Charge | 31 |
-| Riot Blast | 0 (tak na prawdę - 61 ale przy tych broniach nie jest brana pod uwagę przy liczeniu ubytku energii tylko szerokości gruntu do opadnięcia) |
-| Riot Bomb | 17 |
-| Heavy Riot Bomb | 29 |
-| Baby Digger | 0 (60 - jak w Riot Blast) |
-| Digger | 0 (60 - jak wyżej) |
-| Heavy Digger | 0 (60 - jak wyżej) |
-| Baby Sandhog | 0 (60 - jak wyżej) |
-| Sandhog | 0 (60 - jak wyżej) |
-| Heavy Sandhog | 0 (60 - jak wyżej) |
-| Dirt Clod | 12 |
-| Dirt Ball | 22 |
-| Ton of Dirt |  31 |
-| Liquid Dirt | 0 (może warto to zmienić?) |
-| Dirt Charge | 0 (61 - jak wyżej) |
-| Laser | x 100 (ale tu także jest inaczej - równo 100 tylko w przypadku bezpośredniego trafienia, zmienna ExplosionRadius nie jest używana, więc nie ma mnożenia przez 8 - po prostu odejmujemy 100 jednostek energii - czyli czołg zawsze ginie).|
+| Baby Missile | 88 |
+| Missile | 136 |
+| Baby Nuke | 200 |
+| Nuke | 240 |
+| LeapFrog| 136 120 104 |
+| Funky Bomb | 168 88 (* 5) |
+| MIRV | 136 (* 5) |
+| Death's Head | 240 (* 5) |
+| Napalm | 40 (ta broń jest inna i nie jest wyznaczana odległość od centrum, po prostu każdy czołg znajdujący się w zasięgu płomieni traci 40 jednostek energii) |
+| Hot Napalm | 80 (zasada taka jak w Napalm) |
+| Baby Roller | 88 |
+| Roller | 168 |
+| Heavy Roller | 240 |
+| Riot Charge | 0 (nie jest odejmowana energia, ale usuwana jest część gruntu w górę od punktu trafienia w promieniu 31 pikseli) |
+| Riot Blast | 0 (jak w Dirt Charge, tyle że w promieniu 61 pikseli) |
+| Riot Bomb | 0 (nie jest odejmowana energia, ale niszczony jest grunt w promieniu 17 pikseli od punktu trafienia - tak jak w wypadku Missile. Broń przydatna do odkopywania się po zasypaniu, bądź podkopywania przeciwnika) |
+| Heavy Riot Bomb | 0 (jak w Riot Bomb, ale promień eksplozji to 29 pikseli od punktu trafienia - tak jak w wypadku Nuke) |
+| Baby Digger | 0 (nie jest odejmowana energia, ale podkopywana jest część gruntu promieniu 60 pikseli od punktu trafienia) |
+| Digger | 0 (jak wyżej - większy podkop) |
+| Heavy Digger | 0 (jak wyżej - największy podkop) |
+| Baby Sandhog | 0 (jak wyżej - inny sposób podkopywania) |
+| Sandhog | 0 (jak wyżej - większy podkop) |
+| Heavy Sandhog | 0 (jak wyżej - największy podkop) |
+| Dirt Clod | 0 (nie jest odejmowana energia, ale tworzona jest kula gruntu o promieniu 12 pikseli od punktu trafienia. Broń przydatna do zakopywania przeciwnika) |
+| Dirt Ball | 0 (jak wyżej, ale promień kuli to 22 piksele) |
+| Ton of Dirt | 0 (jak wyżej, ale promień kuli to 31 pikseli) |
+| Liquid Dirt | 0 (zalewa grunt w punkcie trafienia płynną glebą wypełniając zagłębienia) |
+| Dirt Charge | 0 (nie jest odejmowana energia, ale usypywany jest dodatkowy grunt w górę od punktu trafienia w promieniu 61 pikseli. Broń przydatna do zakopywania przeciwnika) |
+| Laser | x 100 (ale tu także jest inaczej - równo 100 tylko w przypadku bezpośredniego trafienia po prostu odejmujemy 100 jednostek energii - czyli czołg zawsze ginie).|
 
 Duże punkty otrzymane przez gracza to ilość czołgów, które zginęły wcześniej niż on. Jeśli któryś z innych czołgów skapitulował wcześniej (Biała Flaga) nie jest doliczany do tych które zginęły i nie daje punktów.
 Tylko te punkty decydują o kolejności w podsumowaniu
