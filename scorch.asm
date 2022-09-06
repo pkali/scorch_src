@@ -35,7 +35,7 @@
 ;and due to being always short of time/energy (to finish the game)
 ;we decided it must go in 'English' to let other people work on it
 
-.def target = 800 ;5200  ; or 800
+.def target = 800 ; 5200  ; or 800
 
 .macro build
 	dta d"1.13" ; number of this build (3 bytes)
@@ -168,7 +168,12 @@
     .ENDIF
 
     ;Game loading address
-    ORG  $3000
+    .IF target = 5200
+      ORG  $3000
+    .ELSE
+      ORG $3000
+    .ENDIF
+    
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
@@ -1700,8 +1705,8 @@ PLAYER
 
     .IF target=5200
 MODUL    equ $b000                                 ;address of RMT module
-      opt h-                                         ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_SFX-only-str.rmt"  ;include music RMT module
+      opt h-                                       ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_SFX-only-str.rmt"    ;include music RMT module
       opt h+
 
     .ELSE    
