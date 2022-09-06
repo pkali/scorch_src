@@ -397,7 +397,7 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
                 ;the comment is an index in the tables
     ; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
     ; "LeapFrog        ","Funky Bomb      ","MIRV            ","Death's Head    "
-    .by %00110001
+    .by %01110000
     ; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
     ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
     .by %01000000

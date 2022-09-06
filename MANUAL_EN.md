@@ -67,107 +67,91 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 * [START] + [OPTION] - immediately force the end of the game (Game Over), just like [O] but without confirmation.
 * [ESC] - during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the [ESC] key, which allows you to abort the game and return to the beginning (of course, there is protection against accidental pressing).
 
-## 5. Game mechanics 
+## 5. Game mechanics - offensive weapons
 
-And here's a rundown of the description of how each weapon works, scoring rules, etc:
+### Energy of tanks.
+- At the beginning of each round, each tank has 99 ash units of energy.
+- Tanks' energy is depleted in 3 ways:
+    * one unit after each shot is fired
+    * while falling (one pixel down 2 units).
+    * when a projectile hits the tank or next to it - and here the amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
 
-### First, what we know about tank energy
-- Tanks have energy (and Ogres have layers - like an onion) - 99 units at the start of a round.
-- Energy of tanks is depleted in 3 ways:
-    * one unit after firing each shot,
-    * while falling (one pixel down takes 2 units of energy),
-    * when a projectile hits a tank or its proximity. The amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
+### How energy subtraction works (and earning money!).
+After each round the amount of money gained/lost is calculated this is done on the basis of two variables accumulated by each tank during the round. These variables are:
 
-### How energy subtraction works (and makes money!)
+`gain` - energy "captured" from tanks hit (also if you hit yourself :) and here's the catch, if you have very little energy left it can be profitable to hit yourself with a powerful weapon!
 
-After each round, the amount of money gained/lost is calculated. This is done on the basis of two variables accumulated by each tank during the round. These variables are:
+`lose` - energy lost due to explosion/fall (and here it is important to count the total loss of energy even if the tank has less at the moment of hit).
 
-`gain` - energy "captured" from hit tanks (also when you hit yourself :) and here's the catch, if you have very little energy left it may be profitable to hit yourself with a powerful weapon!
-
-`lose` - energy lost due to explosion/fall (important - the total potential loss of energy is taken into account even if the tank has less at the time of the hit).
-
-In addition, the tank that won the round has a `gain` parameter (captured energy from tanks hit) increased by the energy remaining at the end of the round (because it did not die and should have it - although the survival of the fittest is not guaranteed :) )
+In addition, the tank that won the round has a parameter gain (captured from hit tanks energy) increased by the remaining energy at the end of the round (because it did not die and should have it - although it also happens otherwise :) )
 
 Specifically:
 
 ### After each round:
-`money = money + (2 * (gain + energy))`
+`money = money + (20 * (gain+energy))`.
 
-`money = money - lose`
+`money = money - (10 * lose)`.
 
-`if money < 0 then money = 0`
+`if money <0 then money=0`.
 
-(at the start of each round `gain` and `lose` have a value of 0)
+(at the start of each round `gain` and `lose` have a value of 0).
 
 During a round, if another tank is hit as a result of a shot fired by a tank, the tank firing the shot "gets the energy" taken away from the hit tank.
+### tank taking a shot:
+`gain = gain + EnergyDecrease`.
+### tank hit:
+`lose = lose + EnergyDecrease`.
 
-### For tank firing a shot:
+Where `EnergyDecrease` is the loss of energy due to the hit.
 
-`gain = gain + EnergyDecrease`
+Of course, at the same time the hit tank loses the amount of energy stored in `EnergyDecrease`, except that here the loss cannot exceed the energy you have.
 
-### Tank being hit:
+## How a hit works.
 
-`lose = lose + EnergyDecrease`
-
-Where `EnergyDecrease` is the loss of energy due to a hit.
-
-Of course, at the same time, the hit tank loses the amount of energy stored in `EnergyDecrease`, except that here the loss can not exceed the energy held.
-
-Note that the screen representation of money has an extra 0 added at the end so you actually have 10 times more cash than the above calculation shows :)
-
-## How the hit works.
-
-Each weapon that results in an explosion has a radius of fire (`ExplosionRadius`).
+Each weapon that results in an explosion has its own blast radius.
 
 After the explosion, every tank in its range loses energy.
 
-The way it works is that the distance of the hit tank from the center of the explosion is calculated, the `ExplosionRadius` reduced by this distance is multiplied by 8 and the result is `EnergyDecrease`.
+It works in such a way that if the hit is exactly on the center point of the tank `EnergyDecrease` receives the maximum value for the weapon, and for each pixel of distance from the center of the tank this value is reduced by 8.
 
-That is, in the case of hitting a tank centrally:
-`EnergyDecrease = ExplosionRadius * 8`
-and with each pixel farther from the center, 8 fewer units are lost.
+For example, if a hit with the Baby Missile weapon hits the center of the tank perfectly, it will lose exactly 88 units of energy (plus what it loses falling after the explosion).
+If you hit with the same weapon at a distance of 10 pixels from the center of the tank, the loss will be only 8 units.
 
-I don't know if it's understandable - I do understand it :)
+And here are the values of maximum energy loss for individual weapons. If a weapon explodes several times, each explosion is calculated independently (additional values in the table):
 
-For example, if a tank is hit centrally with a Baby Missile - it is subtracted 88 units of energy (11 * 8), which also means that when this missile hits at a distance of 12 pixels from the tank - it does not lose energy at all.
-
-And here are the `ExplosionRadius` values for each weapon:
-
-| Weapon | `ExplosionRadius` |
+| Offensive weapons | maximum energy loss |
 | --- | --- |
-| Baby Missile | 11 |
-| Missile | 17 |
-| Baby Nuke | 25 |
-| Nuke | 30 |
-| LeapFrog| 17 15 13 |
-| Funky Bomb | 21 11 (* 5) |
-| MIRV | 17 (* 5) |
-| Death's Head | 30 (* 5) |
-| Napalm | x 40 (this weapon is different and the distance from the center is not determined, simply any tank within range of the flames loses 40 units of energy - the ExplosionRadius variable is not used) |
-| Hot Napalm | x 80 (the same principle as in Napalm) |
-| Baby Roller | 11 |
-| Roller | 21 |
-| Heavy Roller | 30 |
-| Riot Charge | 31 |
-| Riot Blast | 0 (in reality - 61 but with these weapons it is not taken into account when counting energy loss only the width of the ground to fall) |
-| Riot Bomb | 17 |
-| Heavy Riot Bomb | 29 |
-| Baby Digger | 0 (60 - as in Riot Blast) |
-| Digger | 0 (60 - as above) |
-| Heavy Digger | 0 (60 - as above) |
-| Baby Sandhog | 0 (60 - as above) |
-| Sandhog | 0 (60 - as above) |
-| Heavy Sandhog | 0 (60 - as above) |
-| Dirt Clod | 12 |
-| Dirt Ball | 22 |
-| Ton of Dirt |  31 |
-| Liquid Dirt | 0 (maybe it's worth changing?) |
-| Dirt Charge | 0 (61 - as above) |
-| Laser | x 100 (but here it is also different - equally 100 only in the case of a direct hit, the `ExplosionRadius` variable is not used, so there is no multiplication by 8 - we simply subtract 100 units of energy - that is, the tank always dies).|
+| Baby Missile | 88 |
+| Missile | 136 |
+| Baby Nuke | 200 |
+| Nuke | 240 |
+| LeapFrog| 136 120 104 |
+| Funky Bomb | 168 88 (* 5) |
+| MIRV | 136 (* 5) |
+| Death's Head | 240 (* 5) |
+| Napalm | 40 (this weapon is different and the distance from the center is not determined, simply any tank in range of the flames loses 40 units of energy) |
+| Hot Napalm | 80 (the rule is the same as in Napalm) |
+| Baby Roller | 88 |
+| Roller | 168 |
+| Heavy Roller | 240 |
+| Riot Charge | 0 (no energy is subtracted, but a portion of the ground upward from the hit point in a 31-pixel radius is removed) |
+| Riot Blast | 0 (as in Dirt Charge, but in a radius of 61 pixels) |
+| Riot Bomb | 0 (no energy is subtracted, but the ground in a radius of 17 pixels from the hit point is destroyed - as in the case of Missile. The weapon is useful for digging out after being buried, or for undermining an opponent) |
+| Heavy Riot Bomb | 0 (as in Riot Bomb, but the explosion radius is 29 pixels from the point of impact - as in the case of Nuke) |
+| Baby Digger | 0 (no energy is subtracted, but a portion of the ground is undermined in a radius of 60 pixels from the point of impact) |
+| Digger | 0 (as above - greater undermining) |
+| Heavy Digger | 0 (as above - greatest undermining) |
+| Baby Sandhog | (as above - another way of undermining) |
+| Sandhog | 0 (as above - larger dig) |
+| Heavy Sandhog | 0 (as above - largest dig) |
+| Dirt Clod | 0 (no energy is subtracted, but a ground ball with a radius of 12 pixels from the hit point is created. The weapon is useful for burying the opponent) |
+| Dirt Ball | 0 (as above, but the radius of the ball is 22 pixels) |
+| Ton of Dirt | 0 (as above, but the radius of the ball is 31 pixels) |
+| Liquid Dirt | 0 (floods the ground at the point of hit with liquid soil, filling in the depressions) |
+| Laser | x 100 (but here it is also different - equally 100 only in the case of a direct hit simply subtract 100 units of energy - that is, the tank always dies) |
 
-The big points received by the player are the number of tanks that died earlier than him. If any of the other tanks capitulated earlier (using **White Flag**), it is not counted and does not give big points.
-
-Only these big points determine the order in the summary.
+Large points received by the player is the number of tanks that died earlier than him. If any of the other tanks capitulated earlier (**White Flag**) is not added to those that died and does not give points.
+Only these points determine the order in the summary
 
 ## 6. And now for defensive weapons:
 
@@ -209,11 +193,11 @@ The game has 8 difficulty levels of computer-controlled opponents. Or actually 7
 
 ** **Tosser** - When attacking, he acts exactly like **Poolshark** however, he may have a "better" weapon inventory due to a different purchase tactic. He always activates the best defensive weapon he has before shooting. And just like **Poolshark** he uses **Battery** and **White Flag**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/1250) attempts to buy offensive weapons.
 
-** **Chooser** - Takes as a target the weakest opponent (with the least amount of energy) and aims very precisely, but before the shot the energy of the shot is modified by the parameter of luck :) , that is, despite the precise aiming it does not always hit. He shoots with the best weapon he has unless low energy is required (the target is close). Then he changes his weapon to **Baby Missile** to avoid hitting himself. He always activates the best defensive weapon he has before shooting and, like **Poolshark**, uses **Battery** and **White Flag**. He purchases just like **Tosser**.
+** **Chooser** - Takes as a target the weakest opponent (with the least amount of energy) and aims very precisely, but before the shot the energy of the shot is modified by the parameter of luck :) , that is, despite the precise aiming it does not always hit. He shoots with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He always activates the best defensive weapon he has before shooting and, like **Poolshark**, uses **Battery** and **White Flag**. He purchases just like **Tosser**.
 
 * **Spoiler** - He shoots exactly like **Chooser** except that he has more luck :) , which means that even if he doesn't hit the target of his choice, it can be a more precise shot than **Chooser**. He uses defensive weapons exactly like **Chooser**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/320) attempts to buy offensive weapons. When buying defensive weapons, he buys only strong and precise weapons - that is, weapons that won't accidentally hurt him.
 
-** **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless low energy is required (the target is close). Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser**. He shops exactly like **Spoiler**.
+** **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser**. He shops exactly like **Spoiler**.
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
 
@@ -241,9 +225,9 @@ Table of weapons purchased by: **Spoiler** and **Cyborg**.
 
 | Offensive weapons | Defensive weapons |
 | --- | --- |
-| Baby Nuke | Battery |
-| Nuke | Strong Parachute |
-| Death's Head | Mag Deflector |
+| Missile | Battery |
+| Baby Nuke | Strong Parachute |
+| Nuke | Mag Deflector |
 | Hot Napalm | Heavy Shield |
 | | Force Shield |
 | | Bouncy Castle |

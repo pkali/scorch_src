@@ -584,6 +584,11 @@ UnequalTanks
 .endp
 
 ;-------------------------------------------------
+.proc ClearTanks
+	jsr PMoutofScreen
+    mva #1 Erase	; erase tanks flag
+.endp
+;--
 .proc drawtanks
 ;-------------------------------------------------
     lda TankNr
@@ -601,6 +606,7 @@ DrawNextTank
     pla
     sta TankNr
 
+    mva #0 Erase	; no erase tanks flag
     rts
 .endp
 ;---------
@@ -645,7 +651,8 @@ DrawTankNrX
     jsr SetupXYdraw
 
     jsr TypeChar
-
+	lda Erase
+	jne noTankNoPM
     ; now P/M graphics on the screen (only for 5 tanks)
     ; horizontal position
     ldx TankNr
@@ -729,7 +736,7 @@ ZeroesToGo6
     bne ClearPM6
 
 NoPlayerMissile
-
+noTankNoPM
 	ldy #$01
 	lda Erase
 	beq @+
@@ -1130,10 +1137,10 @@ FallingRight
 	bvs EndRightFall
     ; we finish falling right if the tank reached the edge of the screen
     lda XtanksTableH,x
-	cmp #>(screenwidth-8-2) ; 2 pixels correction due to a barrel wider than tank
+	cmp #>(screenwidth-TankWidth-2) ; 2 pixels correction due to a barrel wider than tank
 	bne @+
     lda XtanksTableL,x
-	cmp #<(screenwidth-8-2) ; 2 pixels correction due to a barrel wider than tank
+	cmp #<(screenwidth-TankWidth-2) ; 2 pixels correction due to a barrel wider than tank
 @   bcs EndRightFall
 NotRightEdge
     ; tank is falling right - modify coorinates
@@ -1263,20 +1270,37 @@ drawmountainsloop
 	beq NoMountain
     sta ydraw
 	sty ydraw+1
-    jsr DrawLine
+;    jsr DrawLine
+;	there was Drawline proc 
+    lda #screenheight
+    sec
+    sbc ydraw
+    sta tempbyte01
+    jsr plot.MakePlot
+	; after plot we have: (xbyte),y - addres of screen byte; X - index in bittable (number of bit)
+;    jmp IntoDraw    ; jumps inside Draw routine
+                    ; because one pixel is already plotted (and who cares? :) )
+@
+	lda (xbyte),y
+	and bittable2,x
+	sta (xbyte),y
+;IntoDraw
+	adw xbyte #screenBytes
+	dec tempbyte01
+	bne @-
+;	end of Drawline proc
 NoMountain
     inw modify
     inw xdraw
     cpw xdraw #screenwidth
     bne drawmountainsloop
     rts
+/*
 ;--------------------------------------------------
-drawmountainspixel
+drawmountainspixel		; never used ?
 ;--------------------------------------------------
     mwa #0 xdraw
     mwa #mountaintable modify
-
-
 drawmountainspixelloop
     ldy #0
     lda (modify),y
@@ -1287,8 +1311,8 @@ drawmountainspixelloop
     inw xdraw
     cpw xdraw #screenwidth
     bne drawmountainspixelloop
-
     rts
+ */
 .endp
 ;--------------------------------------------------
 .proc SoilDown2
@@ -1317,8 +1341,8 @@ drawmountainspixelloop
 ; how it works. I have just translated Polish comment
 ; but I do not understand a word of it :)
 ; If you know how it works, please write here :))))
-
-    jsr PMoutofscreen
+	jsr ClearTanks
+NoClearTanks
 
 ; First we look for highest pixels and fill with their coordinates
 ; both tables
@@ -1416,6 +1440,7 @@ ColumnIsReady
 ; now correct heights are in the mountaintable
     sta color	; Pozor! :)  we know - now A=1
     mva #sfx_silencer sfx_effect
+	jsr DrawTanks
     rts
 .endp
 
@@ -1761,31 +1786,8 @@ ClearPlot
     eor #$ff
     and bittable,x
     rts
-.endp;--------------------------------------------------
-.proc DrawLine
-;--------------------------------------------------
-    mva #0 ydraw+1
-    lda #screenheight
-    sec
-    sbc ydraw
-    sta tempbyte01
-    jsr plot.MakePlot
-    ;rts
-    jmp IntoDraw    ; jumps inside Draw routine
-                    ; because one pixel is already plotted
-
-@
-      lda (xbyte),y
-	  and bittable2,x
-      sta (xbyte),y
-IntoDraw
-	  adw xbyte #screenBytes
-      dec tempbyte01
-      bne @-
-    rts
 .endp
-
-; ------------------------------------------
+;--------------------------------------------------
 .proc TypeChar
 ; puts char on the graphics screen
 ; in: CharCode

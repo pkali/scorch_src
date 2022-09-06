@@ -4,6 +4,7 @@ screenheight = 200
 screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 
+TankWidth	=	8
 ;----------------------------------------------
 ; Player/missile memory
 PMGraph =  $0800  ; real PM start = $0b00

@@ -1,12 +1,9 @@
 ;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 .IF *>0 ;this is a trick that prevents compiling this file alone
-; -------------------------------------------------
- ;   .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 ;-----------------------------------------------
-;------------------------
 ; start of "variables" (RAM)
-; ---------------
+;-----------------------------------------------
 OptionsHere   
      ; 0123456789012345678901234567890123456789
  dta d"Players  :    2    3    4    5    6     "
@@ -105,7 +102,7 @@ DLCreditsAddr
        .word GameOverDL
 ;------------------------
 ; end of "variables" (RAM)
-; ---------------
+;------------------------
 ; start of "constants" (ROM)
 ;-----------------------------------------------
 ;Screen displays go first to avoid crossing 4kb barrier
@@ -122,7 +119,6 @@ MoreUp
  dta d"  more  "
  dta 92,92,92
  dta d"         "
-   .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 MoreDown
  dta d"         "
  dta 93,93,93
@@ -163,40 +159,6 @@ GameOverTitle2
 ;-----------------------------------------------------
 ;-------------display-lists---------------------------
 ;-----------------------------------------------------
-OptionsDL
-        .byte $70
-		.byte $47
-		.word OptionsTitle
-        .byte $70,$70
-       .byte $42
-        .word OptionsScreen
-        .byte $30,$02,$02,$70
-		.byte $42
-		.word OptionsHere
-		.byte $10
-        :maxOptions-1 .by $02,$10
-		:(9-maxOptions) .by $70,$10
-		.byte $80
-        .byte $4f
-        .word (display+140*40)
-        :21 .by $0f                     ;76
-        .byte $41
-        .word OptionsDL
-;------------------------
-;Enter names of tanks DL
-NameDL
-        .byte $70
-		.byte $47
-		.word DifficultyTitle
-		.byte $70,$70
-        .byte $42
-        .word NameScreen
-        .byte $30
-        .byte $02,$30+$80,$02
-        .byte $10,$02,$02,$02,$30,$02,$02
-        .byte $41
-        .word NameDL
-; -------------------------------------------------
 
 dl ; MAIN game display list
         .byte 0
@@ -245,6 +207,41 @@ dl ; MAIN game display list
         .byte $41
         .word dl
 ;-----------------------------------------------
+        .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
+OptionsDL
+        .byte $70
+		.byte $47
+		.word OptionsTitle
+        .byte $70,$70
+       .byte $42
+        .word OptionsScreen
+        .byte $30,$02,$02,$70
+		.byte $42
+		.word OptionsHere
+		.byte $10
+        :maxOptions-1 .by $02,$10
+		:(9-maxOptions) .by $70,$10
+		.byte $80
+        .byte $4f
+        .word (display+140*40)
+        :21 .by $0f                     ;76
+        .byte $41
+        .word OptionsDL
+;------------------------
+;Enter names of tanks DL
+NameDL
+        .byte $70
+		.byte $47
+		.word DifficultyTitle
+		.byte $70,$70
+        .byte $42
+        .word NameScreen
+        .byte $30
+        .byte $02,$30+$80,$02
+        .byte $10,$02,$02,$02,$30,$02,$02
+        .byte $41
+        .word NameDL
+; -------------------------------------------------
 GameOverResults = display+$0ff0 ; reuse after game
 Credits = GameOverResults +(6*40)
 CreditsLastLine = Credits + (CreditsLines*40)

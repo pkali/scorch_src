@@ -17,6 +17,7 @@
     pha
     lda ExplosionRoutines,x
     pha
+;    inc FallDown2
     rts
 ExplosionRoutines
     .word babymissile-1              ;Baby_Missile___;_00    
@@ -61,54 +62,41 @@ tracer
 ; ------------------------
 .proc babymissile
     mva #sfx_baby_missile sfx_effect 
-    inc FallDown2
+;    inc FallDown2
     mva #11 ExplosionRadius
-    jsr CalculateExplosionRange
     jmp xmissile
 .endp
 ; ------------------------
 .proc missile ;
     mva #sfx_baby_missile sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #17 ExplosionRadius
-    jsr CalculateExplosionRange
     jmp xmissile
 .endp
 ; ------------------------
 .proc babynuke
     mva #sfx_nuke sfx_effect 
-    inc FallDown2
+;    inc FallDown2
     mva #25 ExplosionRadius
-    jsr CalculateExplosionRange
     jmp xmissile
 .endp
 ; ------------------------
 .proc nuke
     mva #sfx_nuke sfx_effect 
-    inc FallDown2
+;    inc FallDown2
     mva #30 ExplosionRadius
-    jsr CalculateExplosionRange
     jmp xmissile
 .endp
 ; ------------------------
 .proc leapfrog
     mva #sfx_baby_missile sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #17 ExplosionRadius
-    jsr CalculateExplosionRange
     jsr xmissile
 
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
-    lda TankNr
-    pha
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
     jsr SoilDown2
-    jsr drawtanks
-    pla
-    sta TankNr
 
     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
@@ -127,19 +115,11 @@ tracer
     mva #15 ExplosionRadius
     jsr CalculateExplosionRange0
     mva #sfx_baby_missile sfx_effect
-    jsr xmissile
+    jsr xmissile.NoRangeCalc
 
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
-    lda TankNr
-    pha
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
     jsr SoilDown2
-    jsr drawtanks
-    pla
-    sta TankNr
 
     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
@@ -157,13 +137,13 @@ tracer
     mva #13 ExplosionRadius
     jsr CalculateExplosionRange0
     mva #sfx_baby_missile sfx_effect
-    jmp xmissile
+    jmp xmissile.NoRangeCalc
 EndOfLeapping
     rts
 .endp
 ; ------------------------
 .proc mirv ;  the whole mirv is performed by Flight routine
-    inc FallDown2
+;    inc FallDown2
     rts
 .endp
 ; ------------------------
@@ -171,26 +151,16 @@ EndOfLeapping
     mva #sfx_baby_missile sfx_effect
     mwa xtraj+1 xtrajfb
     sbw ytraj+1 #$05 ytrajfb	; funky missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
-    inc FallDown2
+;    inc FallDown2
     ;central Explosion
     mva #21 ExplosionRadius
     jsr CalculateExplosionRange0
-    jsr xmissile
-    
-    lda TankNr
-    pha
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
+    jsr xmissile.NoRangeCalc
     
     jsr SoilDown2
     ;
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
+    jsr cleartanks	; maybe not?
 	sta FunkyWallFlag
-    pla
-    sta TankNr
 	mva #1 color
     mva #5 FunkyBombCounter
 FunkyBombLoop
@@ -211,7 +181,6 @@ FunkyBombLoop
     mva #sfx_funky_hit sfx_effect
     jsr Flight
 
-    jsr CalculateExplosionRange
     lda HitFlag
     beq NoExplosionInFunkyBomb
       mva #sfx_baby_missile sfx_effect
@@ -229,22 +198,18 @@ NoWallsInFunky
 .endp
 ; ------------------------
 .proc deathshead
-    inc FallDown2
+;    inc FallDown2
     mva #30 ExplosionRadius
-    jsr CalculateExplosionRange
-
     mva #sfx_nuke sfx_effect
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
     sbw xdraw #34
-    jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
     SaveDrawXY 
     jsr xmissile
     UnSaveDrawXY
     adw xdraw #68
-    jsr CalculateExplosionRange
     mva #sfx_nuke sfx_effect 
     SaveDrawXY 
     jsr xmissile
@@ -285,7 +250,7 @@ NoLowerCircle
 ; ------------------------
 .proc napalm
     mva #sfx_napalm sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #0 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
@@ -294,7 +259,7 @@ NoLowerCircle
 ; ------------------------
 .proc hotnapalm
     mva #sfx_napalm sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #1 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
@@ -359,7 +324,7 @@ CharOffTheScreen
 	dec magic
 	jpl RepeatNapalm
 	; after napalm 
-	inc FallDown2
+;	inc FallDown2
 ;now we must check tanks in range
     ldx NumberOfPlayers
 	dex
@@ -378,7 +343,7 @@ BurnedCheckLoop
 @
 	bcs TankOutOfFire
 	; let's calculate left edge of the fire
-	sbw xcircle #(napalmRadius+8+4-4) xdraw	; 10 pixels on left + character width (tank) + half character - correction
+	sbw xcircle #(napalmRadius+TankWidth+4-4) xdraw	; 10 pixels on left + character width (tank) + half character - correction
 	bpl @+
 	mwa #0 xdraw	; left screen edge
 @
@@ -407,32 +372,32 @@ EndNurnedCheckLoop
 .endp
 ; ------------------------
 .proc babyroller
-    inc FallDown2
+;    inc FallDown2
     mva #11 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc roller ;
-    inc FallDown2
+;    inc FallDown2
     mva #21 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc heavyroller
-    inc FallDown2
+;    inc FallDown2
     mva #30 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc riotbomb
-    inc FallDown2
+;    inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
 .endp
 ; ------------------------
 .proc heavyriotbomb
-    inc FallDown2
+;    inc FallDown2
     mva #29 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
@@ -441,7 +406,7 @@ EndNurnedCheckLoop
 .proc babydigger
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
     jmp xdigger
@@ -450,7 +415,7 @@ EndNurnedCheckLoop
 .proc digger ;
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
     jmp xdigger
@@ -459,7 +424,7 @@ EndNurnedCheckLoop
 .proc heavydigger
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #7 diggery  ; how many branches  (-1)
     jmp xdigger
@@ -583,7 +548,7 @@ DiggerCharacter
 .proc babysandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
     jmp xdigger
@@ -592,7 +557,7 @@ DiggerCharacter
 .proc sandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
     jmp xdigger
@@ -601,35 +566,35 @@ DiggerCharacter
 .proc heavysandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-    inc FallDown2
+;    inc FallDown2
     mva #13 DigLong
     mva #5 diggery  ; how many branches (-1)
     jmp xdigger
 .endp
 ; ------------------------
 .proc dirtclod
-    inc FallDown2
+;    inc FallDown2
     mva #12 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc dirtball
-    inc FallDown2
+;    inc FallDown2
     mva #22 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc tonofdirt
-    inc FallDown2
+;    inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc dirtcharge
-    inc FallDown2
+;    inc FallDown2
     mva #61 ExplosionRadius
     jsr CalculateExplosionRange
     jmp ofdirt
@@ -637,7 +602,7 @@ DiggerCharacter
 ; ------------------------
 .proc riotcharge
     mva #sfx_riot_blast sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
     jmp cleanDirt
@@ -645,7 +610,7 @@ DiggerCharacter
 ; ------------------------
 .proc riotblast
     mva #sfx_riot_blast sfx_effect
-    inc FallDown2
+;    inc FallDown2
     mva #61 ExplosionRadius
     jsr CalculateExplosionRange
     jmp cleanDirt
@@ -719,6 +684,8 @@ LaserMisses
 ; -----------------
 .proc xmissile ;
 ; -----------------
+    jsr CalculateExplosionRange
+NoRangeCalc
     lda #1
     sta radius
     sta color
@@ -930,7 +897,6 @@ ExplodeNow
     mwa ycircle ydraw ;(bad)
 
     ; finally a little explosion
-    jsr CalculateExplosionRange
     mva #sfx_baby_missile sfx_effect
     jmp xmissile
     rts
@@ -1135,7 +1101,6 @@ ToHighFill
 ;first, get current parameters (angle+force)
 ;for an active tank and display them
 ;(these values are taken from the previous round)
-	mva #0 Erase
 
     ldx TankNr
 
@@ -1152,6 +1117,7 @@ ContinueToCheckMaxForce2
       lda MaxForceTableL,x
       sta ForceTableL,x
 @
+	mva #0 Erase
     jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
 
@@ -1211,9 +1177,7 @@ QuitToGameover
     bne @+
 callActivation
     ; Hide all tanks - after inventory they may have other shapes
-    mva #1 Erase
-    jsr DrawTanks
-    mva #0 Erase
+    jsr ClearTanks
 	jsr DefensivesActivate
 	jmp afterInventory
 
@@ -1222,15 +1186,12 @@ callActivation
     bne @+
 callInventory
     ; Hide all tanks - after inventory they may have other shapes
-    mva #1 Erase
-    jsr DrawTanks
-    mva #0 Erase
+    jsr ClearTanks
 	;
     mva #$ff isInventory
     jsr Purchase
 afterInventory
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame	
+	jsr MakeDarkScreen	
     lda #song_ingame
     jsr RmtSongSelect
     mva #0 escFlag
@@ -1905,12 +1866,19 @@ EndOfFlight2
 @
 	; tank hit - check defensive weapon of this tank
 	tax
-	dex		; index of tank in X
+	dex		; index of hitted tank in X
+	ldy TankNr
+	lda ActiveWeapon,y
+	cmp #ind_Tracer_________	; defence not fire by tracers
+	beq JNoDefence
+	cmp #ind_Smoke_Tracer___
+	beq JNoDefence
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Bouncy_Castle__		; Auto Defence
 	jeq BouncyCastle
 	cmp #ind_Mag_Deflector__		; Mag Deflector
 	beq MagDeflector
+JNoDefence
 	jmp NoDefence
 MagDeflector
 	; now run defensive-aggressive weapon - Mag Deflector!
@@ -1960,8 +1928,6 @@ NoDefence
 BouncyCastle
     mva #sfx_shield_on sfx_effect
 	; now run defensive-aggressive weapon - Bouncy Castle (previously known as Auto Defence)!
-	sbb #180 LeapFrogAngle Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
-	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
 	mva #1 Erase
 	lda TankNr
 	pha			; store TankNr
@@ -1972,13 +1938,18 @@ BouncyCastle
 	sta ShieldEnergy,x
     sta xtraj		; prepare coordinates
     sta ytraj
-	sta xtraj+2
-	sta ytraj+2
+;	sta xtraj+2
+;	sta ytraj+2
 	sta Erase
 	jsr DrawTankNr	; draw tank without shield
-	ldx TankNr	; restore X value :)
+;	ldx TankNr	; restore X value :) ... but we don't need X now ..
 	pla
 	sta TankNr	; restore TankNr value :)
+	sec
+	lda #180
+	sbc LeapFrogAngle
+	sta Angle	; swap angle (LeapFrogAngle - because we have strored angle in this variable)
+	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
 	mwa XHit xtraj+1
 	sbw YHit #5 ytraj+1
 	mva #1 color
@@ -2331,14 +2302,8 @@ MIRValreadyAll
     jsr DisplayOffensiveTextNr
 
     ; temporary removing tanks from the screen (otherwise they will fall down with soil)
-    mva TankNr tempor2
-    mva #1 Erase
-    jsr drawtanks
-    mva tempor2 TankNr
-    mva #0 Erase
     jsr SoilDown2
     mva #$ff HitFlag		; but why ??
-    ;jsr drawtanks
     rts
 .endp
 ; -------------------------------------------------
@@ -2460,8 +2425,7 @@ NextLine2
 	ldx TankNr
 	sta ActiveDefenceWeapon,x	; deactivate Nuclear Winter
 	jsr SetFullScreenSoilRange
-    jsr SoilDown2
-	jsr drawtanks	; for restore PM
+    jsr SoilDown2.NoClearTanks
 	rts
 
 	; in order to optimize the fragment repeated in both internal loops
@@ -2572,11 +2536,7 @@ ReachSky
 	adc #0
 	sta RangeRight+1
 	; hide tanks and ...
-	mva #1 Erase
-    jsr DrawTanks
 	jsr SoilDown2
-	mva #0 Erase
-    jsr DrawTanks
 	ldx TankNr
 
 	; check keyboard/joy and move tank left/right - code copied from BeforeFire
@@ -2663,10 +2623,10 @@ pressedRight
     jsr DrawTankNr
 	mva #0 Erase
 	lda XtankstableH,x
-	cmp #>(screenwidth-12)	; tank width correction +4 
+	cmp #>(screenwidth-TankWidth-4)	; tank width correction +4 
 	bne @+
 	lda XtankstableL,x
-	cmp #<(screenwidth-12)	; tank width correction +4 pixels 
+	cmp #<(screenwidth-TankWidth-4)	; tank width correction +4 pixels 
 @	bcs RightScreenEdge	
 	inc XtankstableL,x
 	sne:inc XtankstableH,x
@@ -2726,10 +2686,10 @@ pressedSpace
 	; left or right from center of screen ?
 	ldy #0
     lda XtankstableH,x
-	cmp #>((screenwidth/2)-8)
+	cmp #>((screenwidth/2)-TankWidth)
 	bne @+
     lda XtankstableL,x
-	cmp #<((screenwidth/2)-8)
+	cmp #<((screenwidth/2)-TankWidth)
 @	bcc TankOnLeftSide
 TankOnRightSide
 	dey
@@ -2868,11 +2828,7 @@ OnGround
 	adc #0
 	sta RangeRight+1
 	; hide tanks and ...
-	mva #1 Erase
-    jsr DrawTanks
 	jsr SoilDown2
-	mva #0 Erase
-    jsr DrawTanks
 	ldx TankNr
 	rts
 .endp
@@ -2909,11 +2865,13 @@ CheckCollisionWithTankLoop
     lda xtankstableL,x
     cmp xdraw
 @
-    bcs LeftFromTheTank ;add 8 double byte
+    bcs LeftFromTheTank
+	; add 8 double byte
 	; now we use Y as low byte and A as high byte of checked position (right edge of tank)
 	; it is tricky but fast and much shorter
     clc
-    adc #8
+    lda xtankstableL,x
+    adc #TankWidth
     tay
     lda xtankstableH,x
     adc #0
@@ -2954,7 +2912,7 @@ CheckCollisionWithShieldedTank
     bcs LeftFromTheTank 
 	tya	;add 16 double byte
     clc
-    adc #16	
+    adc #TankWidth+4+4	
     tay
     lda xtankstableH,x
     adc #0

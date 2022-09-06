@@ -8,26 +8,6 @@
 ; - shoots random direction and force
 ; greeeting to myself 10 years older in 2013-11-09... still no idea
 
-;----------------------------------------------
-.proc MakeLowResDistances 
-	; create low precision table of positions
-	; by dividing positions by 4
-
-	ldy #MaxPlayers-1
-loop
-	lda xtankstableL,y
-	sta temp
-	lda xtankstableH,y
-	sta temp+1
-	
-	;= /4
-	:2 lsrw temp
-	lda temp
-	sta LowResDistances,y
-	dey
-	bpl loop
-	rts
-.endp
 
 ;----------------------------------------------
 .proc ArtificialIntelligence ;
@@ -42,6 +22,25 @@ loop
     pha
     lda AIRoutines,y
     pha
+
+;----------------------------------------------
+;.proc MakeLowResDistances 
+	; create low precision table of positions
+	; by dividing positions by 4
+	ldy #MaxPlayers-1
+loop
+	lda xtankstableL,y
+	sta temp
+	lda xtankstableH,y
+	sta temp+1
+	;= /4
+	:2 lsrw temp
+	lda temp
+	sta LowResDistances,y
+	dey
+	bpl loop
+;	rts
+;.endp
 
     ; common values used in AI routines
     ; address of weapons table (for future use)
@@ -155,13 +154,7 @@ endo
 	
 	; choose the best weapon
 	
-	ldy #last_offensive_____ ;the last  weapon	
-loop
-	dey
-	lda (temp),y  ; this is set up before calling the routine, has address of TanksWeaponsTable
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	jsr ChooseBestOffensive
     rts
     .endp
 ;----------------------------------------------
@@ -207,17 +200,7 @@ endo
 	
 	; choose the best weapon
 	
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	ldy #ind_Laser__________ ;the last offensive weapon	
-loop
-	dey
-	lda (temp),y
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	jsr ChooseBestOffensive
     rts
     
 ;----------------------------------------------
@@ -331,17 +314,7 @@ NoUseDefensive
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
-loop
-	dey
-	lda (temp),y
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	jsr ChooseBestOffensive
 
 	; randomizing force +-100
 	sbw Force #100 RandBoundaryLow
@@ -350,9 +323,10 @@ loop
 NotNegativeEnergy
 	adw Force #100 RandBoundaryHigh
     jsr RandomizeForce
-	lda ForceTableH,x
-	bne HighForce
-	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	; if target distance lower than 24 - set weapon to Baby Missile (for security :) 
+	jsr GetDistance
+	cmp #6 ; 24/4
+	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 HighForce
@@ -372,17 +346,7 @@ HighForce
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
-loop
-	dey
-	lda (temp),y
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	jsr ChooseBestOffensive
 
 	; randomizing force +-50
 	sbw Force #50 RandBoundaryLow
@@ -391,9 +355,10 @@ loop
 NotNegativeEnergy
 	adw Force #50 RandBoundaryHigh
     jsr RandomizeForce
-	lda ForceTableH,x
-	bne HighForce
-	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	; if target distance lower than 24 - set weapon to Baby Missile (for security :) 
+	jsr GetDistance
+	cmp #6	; 24/4
+	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 HighForce
@@ -412,24 +377,17 @@ HighForce
 	jsr TakeAim		; direction still in A (0 - left, >0 - right)
 	
 	; choose the best weapon
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	ldy #ind_LeapFrog_______ ;the last offensive weapon	to use
-loop
-	dey
-	lda (temp),y
-	beq loop 
-	tya
-	sta ActiveWeapon,x
+	ldy #ind_Nuke___________+1
+	jsr ChooseBestOffensive.NotFromAll
 
 	lda Force
 	sta ForceTableL,x
 	lda Force+1
 	sta ForceTableH,x
-	bne HighForce
-	; if Force lower than 256 - set weapon to Baby Missile (for security :) )
+	; if target distance lower than 32 - set weapon to Baby Missile (for security :) 
+	jsr GetDistance
+	cmp #8	;32/4
+	bcs HighForce
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 HighForce
@@ -445,7 +403,7 @@ HighForce
 ; direcion of shoot in A (0 - left, >0 - right)
 ;----------------------------------------------
 	sta PreferHumansFlag
-	jsr MakeLowResDistances
+;	jsr MakeLowResDistances
 	lda #202
 	sta temp2 ; max possible energy
 	lda #0
@@ -497,7 +455,7 @@ skipThisPlayer
 ; returns target tank number in Y and
 ; direcion of shoot in A (0 - left, >0 - right)
 ;----------------------------------------------
-	jsr MakeLowResDistances
+;	jsr MakeLowResDistances
 	mva #$ff temp2 ; min possible distance
 	mva #0 tempor2	; direction of shoot
 
@@ -1051,4 +1009,42 @@ SorryNoPurchase
     bpl @-
 
     rts 
+.endp
+;----------------------------------------------
+.proc ChooseBestOffensive
+; choose the best weapon
+; X - TankNr
+;----------------------------------------------
+	ldy #last_offensive_____+1 ;the last weapon to choose +1	
+NotFromAll	
+; Y - the last offensive weapon to use + 1
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+loop
+	dey
+	lda (temp),y
+	beq loop 
+	tya
+	sta ActiveWeapon,x
+	rts
+.endp
+;----------------------------------------------
+.proc GetDistance
+; calculates lores ( /4 ) distance from tank X to TargetTankNr(Y)
+; result in A
+;----------------------------------------------
+	ldy TargetTankNr
+	lda LowResDistances,x
+	cmp LowResDistances,y
+@	bcs YisLower
+	sec
+	lda LowResDistances,y
+	sbc LowResDistances,x
+	rts
+YisLower
+	lda LowResDistances,x
+	sbc LowResDistances,y
+	rts
 .endp

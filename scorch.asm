@@ -36,7 +36,7 @@
 ;we decided it must go in 'English' to let other people work on it
 
 .macro build
-	dta d"1.13" ; number of this build (3 bytes)
+	dta d"1.14" ; number of this build (3 bytes)
 .endm
 
     icl 'definitions.asm'
@@ -103,7 +103,7 @@
     .zpvar Counter .byte ;temporary Counter for outside loops
     .zpvar ExplosionRadius .word ;because when adding in xdraw it is double byte
     .zpvar ResultY .byte
-    .zpvar FallDown2 .byte
+;    .zpvar FallDown2 .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
     .zpvar vy .word
@@ -171,8 +171,7 @@ WeaponFont
 ; Game Code
 ;--------------------------------------------------
 FirstSTART
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
 
 	; one time zero variables in RAM (non zero page)
 	lda #0
@@ -227,14 +226,12 @@ START
     
 
     jsr Options  ;startup screen
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
     bit escFlag
     bmi START
 
     jsr EnterPlayerNames
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
     bit escFlag
     bmi START
 
@@ -255,8 +252,7 @@ SettingBarrel
 	jsr CallPurchaseForEveryTank
 
     ; issue #72 (glitches when switches)
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
 
     bit escFlag
     bmi START
@@ -275,11 +271,8 @@ SettingBarrel
     jsr SortSequence
     
     ; Hide all (easier than hide last ;) ) tanks
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
+    jsr cleartanks
 	sta COLBAKS		; set background color to black
-    jsr PMoutofScreen ;let P/M disappear
 
     ; here gains and losses should be displayed (dollars)
     ; finally we have changed our minds and money of players
@@ -386,14 +379,12 @@ eskipzeroing
     lda GameIsOver
 	beq NoGameOverYet
 GoGameOver
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
 	jsr GameOverScreen
     jmp START
 NoGameOverYet
     inc CurrentRoundNr
-    lda #$0
-    sta dmactls  ; issue #72
+    jsr MakeDarkScreen   ; issue #72
     jsr RmtSongSelect
     mva #sfx_silencer sfx_effect
     jsr PMoutofscreen
@@ -642,8 +633,7 @@ ShootNow
     beq missed
     
     lda #0
-    sta FallDown1
-    sta FallDown2
+;    sta FallDown2
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku
@@ -654,14 +644,7 @@ continueMainRoundLoopAfterSeppuku
 
 
 AfterExplode
-    ;temporary tanks removal (would fall down with soil)
-    mva #1 Erase
-    jsr drawtanks
-    mva #0 Erase
-    lda FallDown2
-    beq NoFallDown2
-    jsr SoilDown2
-
+    jsr SoilDown2	; allways
 NoFallDown2
     ;here tanks are falling down
     mva tankNr tempor2
@@ -811,8 +794,7 @@ NoPlayerNoDeath
     ;cleanup of the soil fall down ranges (left and right)
     sta RangeRight
     sta RangeRight+1
-    sta FallDown1
-    sta FallDown2
+;    sta FallDown2
     mwa #screenwidth RangeLeft
 
     ; We are randomizing the weapon now.
@@ -919,8 +901,7 @@ NotNegativeShieldEnergy
 ;---------------------------------
 .proc Seppuku
     lda #0
-    sta FallDown1
-    sta FallDown2
+    ;sta FallDown2
     sta ydraw+1
     ; get position of the tank
     ldx TankNr
@@ -1632,6 +1613,9 @@ peopleAreHere
 noKey
 	rts
 .endp
+MakeDarkScreen
+	mva #0 dmactls		; dark screen
+	; and wait one frame :)
 .proc WaitOneFrame
 	lda CONSOL
 	and #%00000101	; Start + Option

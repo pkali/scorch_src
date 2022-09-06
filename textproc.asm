@@ -789,18 +789,18 @@ Suprise	; get a random weapon
 	cmp #51		; defensive weapons are less likely because they are more expensive - probability 255:51 (5:1)
 	bcc GetRandomDefensive
 GetRandomOffensive
-	randomize ind_Missile________ ind_Laser__________
+	randomize ind_Missile________ last_offensive_____
 	cmp #ind_Buy_me_________
 	beq GetRandomOffensive
 	tay
-    lda WeaponUnits,y	; check if weapon exist
-	beq GetRandomOffensive	
+;    lda WeaponUnits,y	; check if weapon exist
+;	beq GetRandomOffensive	
 	bne NoSuprise	; Y always <> 0
 GetRandomDefensive
-	randomize ind_Battery________ ind_Nuclear_Winter_
+	randomize ind_Battery________ last_defensive_____
 	tay
-    lda WeaponUnits,y	; check if weapon exist
-	beq GetRandomDefensive
+;    lda WeaponUnits,y	; check if weapon exist
+;	beq GetRandomDefensive
 	
 NoSuprise
     lda TanksWeaponsTableL,x
@@ -1267,7 +1267,7 @@ NotFirstLetter
 	cpy PositionInName
 	bne @+
     ora #$80 ; place cursor
-@    sta NameAdr,y
+@	sta NameAdr,y
 	dey
 	bpl CursorLoop
 	rts
@@ -2161,8 +2161,7 @@ FastTank
     bpl AllTanksFloatingDown
 	jsr IsKeyPressed
     bne MainTanksFloatingLoop   ; neverending loop
-	mva #0 dmactls		; dark screen
-	jsr WaitOneFrame
+	jsr MakeDarkScreen
 	jsr GameOverResultsClear
     rts
 RandomizeTankPos
