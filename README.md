@@ -48,6 +48,21 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changes:
 
+###### Version 1.14
+2022-09-05
+
+Minor bugfixes and optimizations.
+Just a small update to allow for more testing and having fun before the bigger release.
+
+Changes:
+* Numerous optimizations that require a solid test. Please have fun and report issues!
+* Small DrawTanks fix.
+* Bouncy Castle bounces like it should.
+* Tracer and Smoke Tracer are not causing defense weapons to trigger anymore.
+* In rare cases direct hit was not accounted for correctly.
+* Manuals updated. 
+
+
 ###### Version 1.13
 2022-08-30
 
