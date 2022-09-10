@@ -35,7 +35,7 @@
 ;and due to being always short of time/energy (to finish the game)
 ;we decided it must go in 'English' to let other people work on it
 
-.def target = 800 ; 5200  ; or 800
+.def target = 5200  ; or 800
 
 .macro build
 	dta d"1.13" ; number of this build (3 bytes)
