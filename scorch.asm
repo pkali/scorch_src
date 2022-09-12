@@ -3,40 +3,22 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000,2001,2002,2003,2009,2012,2013
-;Miami&Warsaw 2022
-;you can contact us at pecus@poczta.fm or pirx@5oft.pl
-;home page of this project is https://github.com/pkali/scorch_src
+;Miami & Warsaw 2022
 
-;this source code was compiled under OMC65 crossassembler 
-;(https://github.com/pkali/omc65)
-;and on 2012-06-21 translated to mads
-;
-;game source code is split into 5+2 parts:
-;scorch.asm is the main game code (with many assorted routines)
-;grafproc.asm - graphics routines like line or circle
-;textproc.asm - text routines like list of weapons and shop
-;variables.asm - all non-zero page variables and constans
-;display.asm - display lists and text screen definitions
-;ai.asm - artificial stupidity of computer opponents
-;weapons.asm - general arsenal of tankies
-
-;we were trying to use as much macros and pseudoops as possible
-;they are defined in atari.hea and macro.hea files together with many
-;atari constans. This way it shoud be relatively easy to
-;port this code to e.g. C64
-;
-;After those N years of working on this piece of code
-;we are sure it would be much wiser to write it in C, Action!
-;or MadPascal but on the other hand it is so much fun to type 150 chars
-;where you want to have y=ax+b :)
-;
-;originally most variables were in Polish, comments were sparse
-;but we wanted to release this piece of code to public
-;and due to being always short of time/energy (to finish the game)
-;we decided it must go in 'English' to let other people work on it
+.def target = 800 ;5200  ; or 800
 
 .macro build
 	dta d"1.14" ; number of this build (3 bytes)
+<<<<<<< HEAD
+=======
+.endm
+
+.macro RMTSong
+ ;   .IF target != 5200
+      lda #:1
+      jsr RMTSongSelect
+;    .ENDIF
+>>>>>>> 5200
 .endm
 
     icl 'definitions.asm'
@@ -83,9 +65,6 @@
 	.zpvar pressTimer       .byte
 	.zpvar NTSCcounter      .byte
 	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
-    ;.zpvar dliA             .byte
-    ;.zpvar dliX             .byte
-    ;.zpvar dliY             .byte
 	.zpvar sfx_effect .byte
 	.zpvar RMT_blocked	.byte
 
@@ -143,7 +122,6 @@
     .zpvar L1 .byte
 	
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
-	.zpvar RMT_Zero_Page_V .byte
 
     displayposition = modify
     LineAddress4x4 = temp
@@ -153,18 +131,27 @@
     icl 'lib/ATARISYS.ASM'
     icl 'lib/macro.hea'
 
-    ;splash screen and musix
-	icl 'artwork/Scorch50.asm'
-
+    .IF target !=5200
+      ;splash screen and musix
+	  icl 'artwork/Scorch50.asm'
+    .ENDIF
 
     ;Game loading address
-    ORG  $3000
+    .IF target = 5200
+        ORG linetableL - (variablesEnd - OneTimeZeroVariables + 1)
+        icl 'variables.asm'
+        ORG $4000
+    .ELSE
+        ORG $3000
+    .ENDIF
+    
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
     icl 'display.asm'
+    icl 'display_static.asm'
 ;----------------------------------------------
     
 ;--------------------------------------------------
@@ -202,6 +189,20 @@ FirstSTART
       cpy #screenheight+1
     bne @-
 
+;    .if target = 5200
+;    ; move RMT player from ROM to RAM (it modifies itself)
+;    mwa #PlayerBlob temp
+;    mwa #PlayerBlobDest temp2
+;@
+;      ldy #0
+;      lda (temp),y
+;      sta (temp2),y
+;      inw temp
+;      inw temp2
+;      cpw temp #PlayerBlobEnd
+;   bne @-
+;   .endif
+
 
     ; RMT INIT
     lda #$f0                    ;initial value
@@ -221,9 +222,7 @@ START
 
 	;jsr GameOverScreen	; only for test !!!
     
-    lda #song_main_menu
-    jsr RmtSongSelect
-    
+    RMTSong song_main_menu
 
     jsr Options  ;startup screen
 	jsr MakeDarkScreen
@@ -281,8 +280,7 @@ SettingBarrel
     ; Results are number of other deaths
     ; before the player dies itself
 
-    lda #song_round_over
-    jsr RmtSongSelect
+    RmtSong song_round_over
     jsr DisplayResults
 
 	jsr DemoModeOrKey
@@ -385,7 +383,7 @@ GoGameOver
 NoGameOverYet
     inc CurrentRoundNr
     jsr MakeDarkScreen   ; issue #72
-    jsr RmtSongSelect
+    ; jsr RmtSongSelect  ; ?????
     mva #sfx_silencer sfx_effect
     jsr PMoutofscreen
 
@@ -402,8 +400,7 @@ NoGameOverYet
 ; the shooting angle is randomized
 ; of course gains an loses are zeroed
 
-    lda #song_ingame
-    jsr RmtSongSelect
+    RmtSong song_ingame
 
 	jsr SetPMWidth
 	lda #0
@@ -1641,7 +1638,7 @@ MakeDarkScreen
 ;--------------------------------------------------
 ;  starting song line 0-255 to A reg
 	cmp #song_ingame
-	bne noingame	; noMusic blck onlu ingame song
+	bne noingame	; noMusic blocks only ingame song
     bit noMusic
     spl:lda #song_silencio
 noingame
@@ -1681,21 +1678,43 @@ noingame
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
-    icl 'variables.asm'
+    .if target != 5200
+        icl 'variables.asm'
+    .endif
 ;----------------------------------------------
 
-; reserved space for RMT player
+;RMT PLAYER and song loading shenaningans
+
+;    .IF target = 5200
+;;----------------------------------------------
+;      ; 5200 memory layout
+;
+;    .ds $0320
+;    .align $100
+; 
+;PLAYER    icl 'artwork/sfx/rmtplayr_modified.asm'
+;
+;    org $b500
+;        
+;MODUL 
+;      ;opt h-                                       ;RMT module is standard Atari binary file already
+;      ins "artwork/sfx/scorch_SFX-only-str.rmt",6  ;so remove the header to reallocate
+;      ;opt h+
+;    .ELSE
+;;----------------------------------------------
+    ; normal (A800) memory layout
+    ; reserved space for RMT player
     .ds $0320
     .align $100
 PLAYER
-    .ECHO 'PLAYER: ',*
-    icl 'artwork/sfx/rmtplayr.a65'
-
+    icl 'artwork/sfx/rmtplayr_modified.asm'
 MODUL    equ $b000                                 ;address of RMT module
-    opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_str6.rmt"  ;include music RMT module
-    opt h+
+      opt h-                                       ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_str6.rmt"            ;include music RMT module
+      opt h+
+;    .ENDIF
 ;
+MODULEND
 ;----------------------------------------------
     org $bf80
 font4x4

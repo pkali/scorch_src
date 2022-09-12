@@ -559,8 +559,6 @@ CreditsStart
 	dta d"Warsaw, Miam",d"i"*
 	dta d"2000-202",d"2"*
 	dta d" "*
-	dta d"B",d"y"*
-	dta d" "*
 	dta d"Programmin",d"g"*
 	dta d"Tomasz 'Pecus' Peck",d"o"*
 	dta d"Pawel 'pirx' Kalinowsk",d"i"*
@@ -568,15 +566,19 @@ CreditsStart
 	dta d"SFX, Music and Suppor",d"t"*
 	dta d"Michal 'Miker' Szpilowsk",d"i"*
 	dta d" "*
-	dta d"Additional Musi",d"c"*
-	dta d"Mario 'Emkay' Kri",d"x"*
-	dta d" "*
+	.IF target != 5200
+	  dta d"Additional Musi",d"c"*
+	  dta d"Mario 'Emkay' Kri",d"x"*
+	  dta d" "*
+	.ENDIF
 	dta d"Code Optimizatio",d"n"*
 	dta d"Piotr '0xF' Fusi",d"k"*
 	dta d" "*
 	dta d"Ar",d"t"*
 	dta d"Adam Wachowsk",d"i"*
-	dta d"Krzysztof 'Kaz' Ziembi",d"k"*
+	.IF target != 5200
+	  dta d"Krzysztof 'Kaz' Ziembi",d"k"*
+	.ENDIF
 	dta d" "*
 	dta d"Ideas and Q",d"A"*
 	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
@@ -586,9 +588,16 @@ CreditsStart
 	dta d" "*
 	dta d"Additional testin",d"g"*
 	dta d"Arek and Alex Peck",d"o"*
-	dta d"  "*
-	dta d"Stay tuned for the FujiNet version",d"!"*
+	.IF target != 5200
+	  dta d"  "*
+	  dta d"Stay tuned for the FujiNet version",d"!"*
+	.ENDIF
 	dta d"         "*
 CreditsEnd
-CreditsLines=44
+.IF target = 5200
+  CreditsLines=36
+.ELSE
+  CreditsLines=42  ; 34 in reality. add 7?
+.ENDIF
+
 .endif

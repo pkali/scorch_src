@@ -1192,8 +1192,7 @@ callInventory
     jsr Purchase
 afterInventory
 	jsr MakeDarkScreen	
-    lda #song_ingame
-    jsr RmtSongSelect
+    RmtSong song_ingame
     mva #0 escFlag
     jsr DisplayStatus
     jsr SetMainScreen   
@@ -1430,8 +1429,7 @@ pressedM
     ; have you tried turning the music off and on again?
     lda #$ff
     eor:sta noMusic
-    lda #song_ingame
-    jsr RmtSongSelect
+    RmtSong song_ingame
     jsr WaitForKeyRelease
     jmp BeforeFire
 
