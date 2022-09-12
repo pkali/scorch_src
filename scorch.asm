@@ -5,7 +5,7 @@
 ;Warsaw 2000,2001,2002,2003,2009,2012,2013
 ;Miami & Warsaw 2022
 
-.def target = 5200  ; or 800
+.def target = 800 ;5200  ; or 800
 
 .macro build
 	dta d"1.13" ; number of this build (3 bytes)
@@ -62,9 +62,6 @@
 	.zpvar pressTimer       .byte
 	.zpvar NTSCcounter      .byte
 	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
-    ;.zpvar dliA             .byte
-    ;.zpvar dliX             .byte
-    ;.zpvar dliY             .byte
 	.zpvar sfx_effect .byte
 	.zpvar RMT_blocked	.byte
 
@@ -122,7 +119,6 @@
     .zpvar L1 .byte
 	
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
-	.zpvar RMT_Zero_Page_V .byte
 
     displayposition = modify
     LineAddress4x4 = temp
