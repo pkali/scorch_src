@@ -106,7 +106,7 @@ dl ; MAIN game display list
         .byte $41
         .word dl
 ;-----------------------------------------------
-        .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
+        ;.ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 OptionsDL
         .byte $70
 		.byte $47

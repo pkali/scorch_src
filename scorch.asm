@@ -5,17 +5,17 @@
 ;Warsaw 2000,2001,2002,2003,2009,2012,2013
 ;Miami & Warsaw 2022
 
-.def target = 800 ;5200  ; or 800
+.def target = 5200  ; or 800
 
 .macro build
 	dta d"1.13" ; number of this build (3 bytes)
 .endm
 
 .macro RMTSong
-    .IF target != 5200
+ ;   .IF target != 5200
       lda #:1
       jsr RMTSongSelect
-    .ENDIF
+;    .ENDIF
 .endm
 
     icl 'definitions.asm'
@@ -139,7 +139,7 @@
 
     ;Game loading address
     .IF target = 5200
-        ORG rmt_memory_start - (variablesEnd - OneTimeZeroVariables + 1)
+        ORG linetableL - (variablesEnd - OneTimeZeroVariables + 1)
         icl 'variables.asm'
         ORG $4000
     .ELSE
@@ -1686,33 +1686,23 @@ TankFont
 
 ;RMT PLAYER and song loading shenaningans
 
-    .IF target = 5200
-;----------------------------------------------
-      ; 5200 memory layout
-PLAYER = $1500
-;RASTERMUSICTRACKER = PLAYER
-;RMTSFXVOLUME = $1669
-PlayerBlobDest = $1282
-PlayerBlob
-      ; this is rmtplayr.a65 compiled with artwork/sfx/rmt_player_bin_blob.asm
-      ; the compiled .xex was loaded to atari memory in Altirra and saved with
-      ; .writemem rmtplr_blob.bin 1282 L614
-      ; I hate this solution, but the alternative would be rewriting RMT player so it uses no ORG inside
-      ; the player in 5200 mode takes memory from $11E0 !!!
-      ; WARNING!!!! Adding zpage vars require recompilation of rmt_player_bin_blob.asm !!!!!!!!
-;      ins 'artwork/sfx/rmtplr_blob.bin'
-PlayerBlobEnd
-    ORG PLAYER
-    icl 'artwork/sfx/rmtplayr.a65'
-    .align $100
-    org $b400
-        
-MODUL 
-      ;opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_SFX-only-str.rmt",+6  ;so remove the header to reallocate
-      ;opt h+
-    .ELSE
-;----------------------------------------------
+;    .IF target = 5200
+;;----------------------------------------------
+;      ; 5200 memory layout
+;
+;    .ds $0320
+;    .align $100
+; 
+;PLAYER    icl 'artwork/sfx/rmtplayr_modified.asm'
+;
+;    org $b500
+;        
+;MODUL 
+;      ;opt h-                                       ;RMT module is standard Atari binary file already
+;      ins "artwork/sfx/scorch_SFX-only-str.rmt",6  ;so remove the header to reallocate
+;      ;opt h+
+;    .ELSE
+;;----------------------------------------------
     ; normal (A800) memory layout
     ; reserved space for RMT player
     .ds $0320
@@ -1723,7 +1713,7 @@ MODUL    equ $b000                                 ;address of RMT module
       opt h-                                       ;RMT module is standard Atari binary file already
       ins "artwork/sfx/scorch_str6.rmt"            ;include music RMT module
       opt h+
-    .ENDIF
+;    .ENDIF
 ;
 MODULEND
 ;----------------------------------------------

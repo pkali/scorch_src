@@ -28,15 +28,6 @@ OptionsHere
 OptionsScreenEnd
 
 ;-----------------------------------------------
-ListOfWeapons
-                       ;     0123456789012345678901234567890123456789
-; :number_of_offensives dta d"                                "
-  :32 dta d"                                "
-ListOfWeapons1End
-ListOfDefensiveWeapons
-; :number_of_defensives dta d"                                "
-  :16 dta d"                                "
-ListOfDefensiveWeaponsEnd ;constant useful when clearing
 NameScreen
  dta d"    Enter names of players      "
  dta d"   Tank  01    Name:"

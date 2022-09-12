@@ -26,7 +26,7 @@ TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
     .ds 6*8
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ;----------------------------------------------------
 variablesToInitialize
 ;Options DO NOT ZERO ON RESTART GAME - ticket #27
@@ -47,6 +47,18 @@ ResultLineBuffer
 ;=====================================================
 variablesStart  ; zeroing starts here
 ;=====================================================
+; This is moved from display.asm to be easier to relocate
+ListOfWeapons
+                       ;     0123456789012345678901234567890123456789
+; :number_of_offensives dta d"                                "
+  ;:32 dta d"                                "
+    .ds 32*32
+ListOfWeapons1End
+ListOfDefensiveWeapons
+; :number_of_defensives dta d"                                "
+  ;:16 dta d"                                "
+    .ds 16*32
+ListOfDefensiveWeaponsEnd ;constant useful when clearing
 ;isInventory .ds 1  ; 0 - purchase, $ff - inventory
 ;-------------- 
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
@@ -57,69 +69,69 @@ OptionsY  .ds 1 ;vertical position of cursor on Options screen
 flyDelay .ds 1
 ;--------------
 ;NumberOfPlayers .DS 1  ;current number of players (counted from 1)
-TankSequence .DS [MaxPlayers] ;sequence of shooting during the Round
+TankSequence .DS MaxPlayers ;sequence of shooting during the Round
 GameIsOver .DS 1 ; 1 means it was the last round in the game
 ;----------------------------------------------------
 moneyH ;we place zero at the end of prices and money
     ;and have range from 0 to 99990 (not too much)
     ;money players have (maybe one more byte is needed?)
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 moneyL
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ;----------------------------------------------------
 gainH ;how much money player gets after the round
     ;it is gathered during the round basing on energy
     ;opponents lose after player's shoots
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 gainL
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ;----------------------------------------------------
 loseH ;how much player looses after the round
     ;calculated from REAL energy loss
     ;(not only to zero energy)
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 loseL
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ;----------------------------------------------------
 Energy
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ShieldEnergy
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 EnergyDecrease  .DS 1
 eXistenZ
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 LASTeXistenZ ; eXistenZ before shoot
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 
 ResultsTable ;the results in the gameeeeee
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 TempResults
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 DirectHitsH
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 DirectHitsL
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 EarnedMoneyH
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 EarnedMoneyL
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ;----------------------------------------------------
 ForceTableL ;shooting Force of the tank during the round
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ForceTableH
-    .DS [MaxPlayers]  ;maxplayers=6
+    .DS MaxPlayers  ;maxplayers=6
 MaxForceTableL ;Energy of the tank during the round
     ;(limes superior force of the Shoot)
-    .DS [MaxPlayers] ;1000 is the default
+    .DS MaxPlayers ;1000 is the default
 MaxForceTableH
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ;----------------------------------------------------
 BarrelLength ;length of the tank barrel - dont forget to set it to 6 at round start!
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ActiveWeapon ;number of the selected weapon
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ActiveDefenceWeapon ;number of the activated defence weapon - 0 
-    .DS [MaxPlayers]	
+    .DS MaxPlayers	
 WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;----------------------------------------------------
 
@@ -143,13 +155,13 @@ WindOrientation  .DS 1 ;(0-right,1-left)
 WallsType	.ds 1	; bits 6 and 7: 00 - none, 01 - bump, 10 - wrap, 11 - boxy
 ;----------------------------------------------------
 xtankstableL ;X positions of tanks (lower left point)
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 xtankstableH
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ytankstable ;Y positions of tanks (lower left point)
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ;----------------------------------------------------
 TargetTankNr	; Target tank index (for AI routines)
 	.DS 1
@@ -368,24 +380,24 @@ CurrentResult
     .DS 1
 ;--------------
 AngleTable ;Angle of the barrel of each tank during the round
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 ;NewAngle  ; used in AI
     .DS 1
 ;previousBarrelAngle
-;    .DS [MaxPlayers]
+;    .DS MaxPlayers
 EndOfTheBarrelX
     .ds 2
 EndOfTheBarrelY
     .ds 1
 ;----------------------------------------------------
 previousAngle
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 previousEnergyL
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 previousLeftRange
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 previousEnergyH
-    .DS [MaxPlayers]
+    .DS MaxPlayers
 RandBoundaryLow
     .ds 2
 RandBoundaryHigh
