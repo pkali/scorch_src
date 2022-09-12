@@ -8,9 +8,7 @@
 .def target = 800 ;5200  ; or 800
 
 .macro build
-	dta d"1.14" ; number of this build (3 bytes)
-<<<<<<< HEAD
-=======
+	dta d"1.15" ; number of this build (3 bytes)
 .endm
 
 .macro RMTSong
@@ -18,7 +16,6 @@
       lda #:1
       jsr RMTSongSelect
 ;    .ENDIF
->>>>>>> 5200
 .endm
 
     icl 'definitions.asm'
