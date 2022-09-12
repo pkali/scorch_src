@@ -28,18 +28,26 @@ TRACKS		equ 4
 ;FEAT_EFFECTS equ FEAT_EFFECTVIBRATO||FEAT_EFFECTFSHIFT
 ;
 ; RMT ZeroPage addresses
-.zpvar p_tis .word ;= RMT_Zero_Page_V
+.zpvar p_tis            .word
 p_instrstable = p_tis
-.zpvar p_trackslbstable	.word
-.zpvar p_trackshbstable	.word
-.zpvar p_song			.word
-.zpvar ns				.word
-.zpvar nr				.word
-.zpvar nt				.byte
-.zpvar reg1			.byte
-.zpvar reg2			.byte
-.zpvar reg3			.byte
-.zpvar tmp				.byte
+.zpvar p_trackslbstable .word
+.zpvar p_trackshbstable .word
+.zpvar p_song           .word
+.zpvar ns               .word
+.zpvar nr               .word
+.zpvar nt               .byte
+.zpvar reg1             .byte
+.zpvar reg2	            .byte
+.zpvar reg3             .byte
+.zpvar tmp              .byte
+.zpvar v_audctl         .byte  ; de-self-modification vars
+.zpvar v_ainstrspeed    .byte
+.zpvar v_maxtracklen    .byte
+.zpvar v_abeat          .byte
+.zpvar v_bspeed         .byte
+.zpvar v_speed          .byte
+.zpvar RMTSFXVOLUME     .byte
+
 	org PLAYER-$400+$e0
 track_variables
 trackn_db	.ds TRACKS
@@ -252,8 +260,8 @@ nn3
 GetTrackLine
 oo0
 oo0a
-	lda #$ff
-v_speed equ *-1
+	lda v_speed
+
 	sta v_bspeed
 	ldx #-1
 oo1
@@ -296,8 +304,8 @@ oo1a
 oo1x
 xtracks03sub1	cpx #TRACKS-1
 	bne oo1
-	lda #$ff
-v_bspeed equ *-1
+	lda v_bspeed
+
 	sta v_speed
 	sta v_aspeed
 	jmp InitOfNewSetInstrumentsOnly
@@ -345,8 +353,8 @@ p2x1 ldy trackn_instrx2,x
 	jmp p2x0
 rmt_sfx
 	sta trackn_note,x
-	lda #$f0				;* sfx note volume*16
-RMTSFXVOLUME equ *-1		;* label for sfx note volume parameter overwriting
+	lda RMTSFXVOLUME				;* sfx note volume*16
+		;* label for sfx note volume parameter overwriting
 	sta trackn_volume,x
 SetUpInstrumentY2
 	lda (p_instrstable),y
@@ -414,10 +422,10 @@ rmt_p2
 	dec v_aspeed
 	bne rmt_p3
 	inc v_abeat
-	lda #$ff
-v_abeat equ *-1
-	cmp #$ff
-v_maxtracklen equ *-1
+	lda v_abeat
+
+	cmp v_maxtracklen
+
 	beq p2o3
 	jmp GetTrackLine
 p2o3
@@ -608,12 +616,12 @@ qq3
 qq5
 	stx v_audctl
 rmt_p5
-	lda #$ff
-v_ainstrspeed equ *-1
+	lda v_ainstrspeed
+
 	rts
 SetPokey
-	ldy #$ff
-v_audctl equ *-1
+	ldy v_audctl
+
 	lda trackn_audf+0
 	ldx trackn_audc+0
 	sta $d200
