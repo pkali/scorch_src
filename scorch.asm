@@ -3,39 +3,9 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000,2001,2002,2003,2009,2012,2013
-;Miami&Warsaw 2022
-;you can contact us at pecus@poczta.fm or pirx@5oft.pl
-;home page of this project is https://github.com/pkali/scorch_src
+;Miami & Warsaw 2022
 
-;this source code was compiled under OMC65 crossassembler 
-;(https://github.com/pkali/omc65)
-;and on 2012-06-21 translated to mads
-;
-;game source code is split into 5+2 parts:
-;scorch.asm is the main game code (with many assorted routines)
-;grafproc.asm - graphics routines like line or circle
-;textproc.asm - text routines like list of weapons and shop
-;variables.asm - all non-zero page variables and constans
-;display.asm - display lists and text screen definitions
-;ai.asm - artificial stupidity of computer opponents
-;weapons.asm - general arsenal of tankies
-
-;we were trying to use as much macros and pseudoops as possible
-;they are defined in atari.hea and macro.hea files together with many
-;atari constans. This way it shoud be relatively easy to
-;port this code to e.g. C64
-;
-;After those N years of working on this piece of code
-;we are sure it would be much wiser to write it in C, Action!
-;or MadPascal but on the other hand it is so much fun to type 150 chars
-;where you want to have y=ax+b :)
-;
-;originally most variables were in Polish, comments were sparse
-;but we wanted to release this piece of code to public
-;and due to being always short of time/energy (to finish the game)
-;we decided it must go in 'English' to let other people work on it
-
-.def target = 5200  ; or 800
+.def target = 800 ;5200  ; or 800
 
 .macro build
 	dta d"1.13" ; number of this build (3 bytes)
@@ -169,9 +139,11 @@
 
     ;Game loading address
     .IF target = 5200
-      ORG  $3000
+        ORG rmt_memory_start - (variablesEnd - OneTimeZeroVariables + 1)
+        icl 'variables.asm'
+        ORG $4000
     .ELSE
-      ORG $3000
+        ORG $3000
     .ENDIF
     
 WeaponFont
@@ -217,6 +189,20 @@ FirstSTART
       iny
       cpy #screenheight+1
     bne @-
+
+;    .if target = 5200
+;    ; move RMT player from ROM to RAM (it modifies itself)
+;    mwa #PlayerBlob temp
+;    mwa #PlayerBlobDest temp2
+;@
+;      ldy #0
+;      lda (temp),y
+;      sta (temp2),y
+;      inw temp
+;      inw temp2
+;      cpw temp #PlayerBlobEnd
+;   bne @-
+;   .endif
 
 
     ; RMT INIT
@@ -1693,26 +1679,49 @@ noingame
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
-    icl 'variables.asm'
+    .if target != 5200
+        icl 'variables.asm'
+    .endif
 ;----------------------------------------------
 
-; reserved space for RMT player
+;RMT PLAYER and song loading shenaningans
+
+    .IF target = 5200
+;----------------------------------------------
+      ; 5200 memory layout
+PLAYER = $1500
+;RASTERMUSICTRACKER = PLAYER
+;RMTSFXVOLUME = $1669
+PlayerBlobDest = $1282
+PlayerBlob
+      ; this is rmtplayr.a65 compiled with artwork/sfx/rmt_player_bin_blob.asm
+      ; the compiled .xex was loaded to atari memory in Altirra and saved with
+      ; .writemem rmtplr_blob.bin 1282 L614
+      ; I hate this solution, but the alternative would be rewriting RMT player so it uses no ORG inside
+      ; the player in 5200 mode takes memory from $11E0 !!!
+      ; WARNING!!!! Adding zpage vars require recompilation of rmt_player_bin_blob.asm !!!!!!!!
+;      ins 'artwork/sfx/rmtplr_blob.bin'
+PlayerBlobEnd
+    ORG PLAYER
+    icl 'artwork/sfx/rmtplayr.a65'
+    .align $100
+    org $b400
+        
+MODUL 
+      ;opt h-                                       ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_SFX-only-str.rmt",+6  ;so remove the header to reallocate
+      ;opt h+
+    .ELSE
+;----------------------------------------------
+    ; normal (A800) memory layout
+    ; reserved space for RMT player
     .ds $0320
     .align $100
 PLAYER
-    .ECHO 'PLAYER: ',*
-    icl 'artwork/sfx/rmtplayr.a65'
-
-    .IF target=5200
+    icl 'artwork/sfx/rmtplayr_modified.asm'
 MODUL    equ $b000                                 ;address of RMT module
       opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_SFX-only-str.rmt"    ;include music RMT module
-      opt h+
-
-    .ELSE    
-MODUL    equ $b000                                 ;address of RMT module
-      opt h-                                         ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str6.rmt"  ;include music RMT module
+      ins "artwork/sfx/scorch_str6.rmt"            ;include music RMT module
       opt h+
     .ENDIF
 ;

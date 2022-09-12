@@ -14,34 +14,35 @@ OneTimeZeroVariablesCount = variablesToInitialize-OneTimeZeroVariables  ; MAX 12
         .error "OneTimeZeroVariablesCount too large, ",OneTimeZeroVariablesCount
     .endif
 
-noMusic .by 0  ; 0 - play music, $ff - do not play music
-noSfx   .by 0  ; 0 - play SFX, $ff - do not play SFX
+noMusic .ds 1 ;.by 0  ; 0 - play music, $ff - do not play music
+noSfx   .ds 1 ;.by 0  ; 0 - play SFX, $ff - do not play SFX
 ;----------------------------------------------------
 ; Color table for Game Over Screen (created in a gameover routine)
-	.by $00		; labels line color
-GameOverColoursTable  .BYTE $80,$40,$c4,$20,$c0,$e4
+	.ds 1 ;.by $00		; labels line color
+GameOverColoursTable  .ds MaxPlayers; .BYTE $80,$40,$c4,$20,$c0,$e4
 ;----------------------------------------------------
 TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
-    :6 dta d"        "
+    ;:6 dta d"        "
+    .ds 6*8
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS [MaxPlayers]
 ;----------------------------------------------------
 variablesToInitialize
 ;Options DO NOT ZERO ON RESTART GAME - ticket #27
-OptionsTable .by 0,1,2,2,0,1,3,2,0
-RoundsInTheGame .by 10 ;how many rounds in the current game
-seppukuVal .by 75
-mountainDeltaH .by 3
-mountainDeltaL .by $ff
+OptionsTable .ds maxOptions ;.by 0,1,2,2,0,1,3,2,0
+RoundsInTheGame .ds 1 ;.by 10 ;how many rounds in the current game
+seppukuVal .ds 1 ;.by 75
+mountainDeltaH .ds 1 ;.by 3
+mountainDeltaL .ds 1 ;.by $ff
 ;----------------------------------------------------
 LineHeader1
-    dta d"# ROUND: "
+    .ds 9 ;dta d"# ROUND: "
 RoundNrDisplay
-    dta d"    #", $ff
+    .ds 7 ;dta d"    #", $ff
 ; 4x4 text buffer
 ResultLineBuffer
-    dta d"                  ", $ff
+    .ds 19 ;dta d"                  ", $ff
 
 ;=====================================================
 variablesStart  ; zeroing starts here
