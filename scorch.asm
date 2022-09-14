@@ -12,10 +12,8 @@
 .endm
 
 .macro RMTSong
- ;   .IF target != 5200
       lda #:1
       jsr RMTSongSelect
-;    .ENDIF
 .endm
 
     icl 'definitions.asm'
@@ -134,13 +132,9 @@
     .ENDIF
 
     ;Game loading address
-    .IF target = 5200
-        ORG linetableL - (variablesEnd - OneTimeZeroVariables + 1)
+        ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables + 1)
         icl 'variables.asm'
         ORG $4000
-    .ELSE
-        ORG $3000
-    .ENDIF
     
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
@@ -1675,31 +1669,9 @@ noingame
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
-    .if target != 5200
-        icl 'variables.asm'
-    .endif
-;----------------------------------------------
 
 ;RMT PLAYER and song loading shenaningans
 
-;    .IF target = 5200
-;;----------------------------------------------
-;      ; 5200 memory layout
-;
-;    .ds $0320
-;    .align $100
-; 
-;PLAYER    icl 'artwork/sfx/rmtplayr_modified.asm'
-;
-;    org $b500
-;        
-;MODUL 
-;      ;opt h-                                       ;RMT module is standard Atari binary file already
-;      ins "artwork/sfx/scorch_SFX-only-str.rmt",6  ;so remove the header to reallocate
-;      ;opt h+
-;    .ELSE
-;;----------------------------------------------
-    ; normal (A800) memory layout
     ; reserved space for RMT player
     .ds $0320
     .align $100

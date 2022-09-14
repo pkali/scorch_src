@@ -43,22 +43,13 @@ RoundNrDisplay
 ; 4x4 text buffer
 ResultLineBuffer
     .ds 19 ;dta d"                  ", $ff
-
+linetableL  ; = PMGraph + $0300 - (screenHeight+1)*2
+    .ds (screenHeight+1)
+linetableH  ; = PMGraph + $0300 - (screenHeight+1)
+    .ds (screenHeight+1)
 ;=====================================================
 variablesStart  ; zeroing starts here
 ;=====================================================
-; This is moved from display.asm to be easier to relocate
-ListOfWeapons
-                       ;     0123456789012345678901234567890123456789
-; :number_of_offensives dta d"                                "
-  ;:32 dta d"                                "
-    .ds 32*32
-ListOfWeapons1End
-ListOfDefensiveWeapons
-; :number_of_defensives dta d"                                "
-  ;:16 dta d"                                "
-    .ds 16*32
-ListOfDefensiveWeaponsEnd ;constant useful when clearing
 ;isInventory .ds 1  ; 0 - purchase, $ff - inventory
 ;-------------- 
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
@@ -430,6 +421,18 @@ Xcounter4x4 .DS 1
 nibbler4x4  .DS 1
 CharCode4x4 .DS 1
 ;plot4x4color .DS 1 ;1-white, 0-background
+; This is moved from display.asm to be easier to relocate
+ListOfWeapons
+                       ;     0123456789012345678901234567890123456789
+; :number_of_offensives dta d"                                "
+  ;:32 dta d"                                "
+    .ds 32*32
+ListOfWeapons1End
+ListOfDefensiveWeapons
+; :number_of_defensives dta d"                                "
+  ;:16 dta d"                                "
+    .ds 16*32
+ListOfDefensiveWeaponsEnd ;constant useful when clearing
 
 
 

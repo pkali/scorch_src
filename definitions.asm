@@ -5,23 +5,11 @@ screenBytes = 40
 screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 
 TankWidth	=	8
-    .if target = 5200
 ;----------------------------------------------
 ; Player/missile memory
 PMGraph =  $1800  ; real PM start = PMGraph + $0300
 ; Generated tables
-linetableL = PMGraph + $0300 - (screenHeight+1)*2
-linetableH = PMGraph + $0300 - (screenHeight+1)
 display = $2010 ;screen takes $1f68 because it has screenHeight+1 lines because of out of screen tracer(?)
-    .else
-;----------------------------------------------
-; Player/missile memory
-PMGraph =  $0800  ; real PM start = $0b00
-; Generated tables
-linetableL = PMGraph + $0300 - (screenHeight+1)*2
-linetableH = PMGraph + $0300 - (screenHeight+1)
-display = $1010 ;screen takes $1f68 because it has screenHeight+1 lines because of out of screen tracer(?)
-    .endif
 ;----------------------------------------------
 
 margin = 40 ;mountain drawing Y variable margin
