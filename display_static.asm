@@ -9,9 +9,23 @@
 OptionsScreen
  dta d"Welcome to Scorch v. "
  build  ; 4 bytes from scorch.asm (fancy method) :) 
- dta d"  (un)2000-2022"
+ dta                          d"  (un)2000-2022"
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
+     ; 0123456789012345678901234567890123456789
+;-----------------------------------------------
+NameScreen
+ dta d"    Enter names of players      "
+NameScreen3
+ dta d" Human/Atari (difficulty level) "
+NameScreen5
+ dta d"  "
+ dta   d"Tab"*
+ dta      d" - Player/Difficulty level "
+ dta d"       "
+ dta        d"Return"*
+ dta              d" - Proceed         "
+;-----------------------------------------------
 MoreUp
  dta d"         "
  dta 92,92,92
@@ -132,12 +146,23 @@ NameDL
         .byte $70
 		.byte $47
 		.word DifficultyTitle
-		.byte $70,$70
+		.byte $70,$70	; 16 empty lines
         .byte $42
         .word NameScreen
-        .byte $30
-        .byte $02,$30+$80,$02
-        .byte $10,$02,$02,$02,$30,$02,$02
+        .byte $30	; 4 empty lines
+		.byte $42
+		.word NameScreen2
+		.byte $30+$80	; 4 empty lines + DLI
+		.byte $42
+		.word NameScreen3
+        .byte $10	; 2 empty lines
+		.byte $42
+		.word NameScreen4
+		.byte $02,$02
+		.byte $30	; 4 empty lines
+		.byte $42
+		.word NameScreen5
+		.byte $02
         .byte $41
         .word NameDL
 ; -------------------------------------------------

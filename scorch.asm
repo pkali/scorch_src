@@ -77,7 +77,6 @@
     .zpvar Counter .byte ;temporary Counter for outside loops
     .zpvar ExplosionRadius .word ;because when adding in xdraw it is double byte
     .zpvar ResultY .byte
-;    .zpvar FallDown2 .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
     .zpvar vy .word
@@ -620,8 +619,6 @@ ShootNow
     lda HitFlag ;0 if missed
     beq missed
     
-    lda #0
-;    sta FallDown2
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku
@@ -647,8 +644,8 @@ NoExistNoFall
     dex
     bpl TanksFallDown
     mvx tempor2 TankNr
-missed
 
+missed
     ; TODO: IS IT OK??? possibly a fix here needed for #56
     ldy WeaponDepleted
     bne @+
@@ -782,7 +779,6 @@ NoPlayerNoDeath
     ;cleanup of the soil fall down ranges (left and right)
     sta RangeRight
     sta RangeRight+1
-;    sta FallDown2
     mwa #screenwidth RangeLeft
 
     ; We are randomizing the weapon now.
@@ -889,11 +885,10 @@ NotNegativeShieldEnergy
 ;---------------------------------
 .proc Seppuku
     lda #0
-    ;sta FallDown2
     sta ydraw+1
     ; get position of the tank
     ldx TankNr
-    lda #0  ; turn off defense weapons when hara-kiring
+;    lda #0  ; turn off defense weapons when hara-kiring
     sta ActiveDefenceWeapon,x
     sta ShieldEnergy,x
     jsr SetupXYdraw

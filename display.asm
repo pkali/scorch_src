@@ -28,23 +28,16 @@ OptionsHere
 OptionsScreenEnd
 
 ;-----------------------------------------------
-NameScreen
- dta d"    Enter names of players      "
+NameScreen2
  dta d"   Tank  01    Name:"
 NameAdr
- dta d"            "
- dta d" Human/Atari (difficulty level) "
+ dta                     d"            "
+NameScreen4
  dta d" "
 NamesOfLevels
  dta  d" HUMAN     Moron     Shooter   "
  dta d"  Poolshark Tosser    Chooser   "
  dta d"  Spoiler   Cyborg    Unknown   "
- dta d"  "
- dta d"Tab"*
- dta d" - Player/Difficulty level "
- dta d"       "
- dta d"Return"*
- dta d" - Proceed         "
 ;---------------------------------------------------
 textbuffer
      ; 0123456789012345678901234567890123456789
