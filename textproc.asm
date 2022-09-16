@@ -1059,7 +1059,7 @@ NoArrowDown
     sta difficultyLevel
     inx
     stx decimal
-    mwa #(NameScreen+41) displayposition
+    mwa #(NameScreen2+9) displayposition
     jsr displaybyte
     jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 
