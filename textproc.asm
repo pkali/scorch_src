@@ -306,13 +306,11 @@ GoToActivation
     lda #@dmactl(narrow|dma) ; narrow screen width, DL on, P/M off
     sta dmactls
 
-    .IF target != 5200
     lda #song_supermarket
 	bit IsInventory
 	bpl @+
 	lda #song_inventory
 @	jsr RmtSongSelect
-    .ENDIF 
     
     ldx tankNr
     lda TankStatusColoursTable,x
@@ -2517,29 +2515,6 @@ NextChar02
     mva #15 PCOLR0
     sta PCOLR1
     
-    rts
-.endp
-;-------------------------------------------------
-
-.proc CopyFromROM
-;copy from CART to RAM
-; trashes Y
-; temp: source
-; temp2: destination
-; modify: destination-end
-;usage:
-;    mwa #DisplayCopyRom temp
-;    mwa #display temp2
-;    mwa #DisplayCopyEnd+1 modify
-;    jsr CopyFromROM
-
-    ldy #0
-@     lda (temp),y
-      sta (temp2),y
-      inw temp
-      inw temp2
-      cpw temp2 modify
-    bne @-
     rts
 .endp
 

@@ -140,23 +140,29 @@ WeaponFont
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
+
     DisplayCopyRom = *
     org display, DisplayCopyRom
 DisplayCopyStart
     icl 'display_main_menu.asm'
 DisplayCopyEnd
-    org DisplayCopyRom + (DisplayCopyEnd - DisplayCopyStart +1)
+    org DisplayCopyRom + (DisplayCopyEnd - DisplayCopyStart)
     
     DisplayCopyPurchaseDlROM = *
     org DisplayCopyPurchase, DisplayCopyPurchaseDlROM
 DisplayCopyPurchaseStart
     icl 'display_purchasedl.asm'
 DisplayCopyPurchaseEnd
-    org DisplayCopyPurchaseDlROM + (DisplayCopyPurchaseEnd - DisplayCopyPurchaseStart +1)
+    org DisplayCopyPurchaseDlROM + (DisplayCopyPurchaseEnd - DisplayCopyPurchaseStart)
     
-    
-    
+    StatusBufferROM = *
+    org StatusBufferCopy, StatusBufferROM
+StatusBufferCopyStart
     icl 'display_status.asm'
+StatusBufferCopyEnd
+    org StatusBufferROM + (StatusBufferCopyEnd - StatusBufferCopyStart)
+    
+
     icl 'display_static.asm'
 ;----------------------------------------------
     
@@ -194,21 +200,6 @@ FirstSTART
       iny
       cpy #screenheight+1
     bne @-
-
-;    .if target = 5200
-;    ; move RMT player from ROM to RAM (it modifies itself)
-;    mwa #PlayerBlob temp
-;    mwa #PlayerBlobDest temp2
-;@
-;      ldy #0
-;      lda (temp),y
-;      sta (temp2),y
-;      inw temp
-;      inw temp2
-;      cpw temp #PlayerBlobEnd
-;   bne @-
-;   .endif
-
 
     ; RMT INIT
     lda #$f0                    ;initial value
@@ -454,6 +445,12 @@ SettingEnergies
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
+
+
+    mwa #StatusBufferROM temp
+    mwa #StatusBufferCopy temp2
+    mwa #StatusBufferCopyEnd+1 modify
+    jsr CopyFromROM
 
     jsr SetMainScreen
     jsr ColorsOfSprites
@@ -1645,6 +1642,29 @@ noingame
     jsr RASTERMUSICTRACKER      ;Init
 	mva #0 RMT_blocked
 	rts
+.endp
+;-------------------------------------------------
+.proc CopyFromROM
+;-------------------------------------------------
+;copy from CART to RAM
+; trashes Y
+; temp: source
+; temp2: destination
+; modify: destination-end
+;usage:
+;    mwa #DisplayCopyRom temp
+;    mwa #display temp2
+;    mwa #DisplayCopyEnd+1 modify
+;    jsr CopyFromROM
+
+    ldy #0
+@     lda (temp),y
+      sta (temp2),y
+      inw temp
+      inw temp2
+      cpw temp2 modify
+    bne @-
+    rts
 .endp
 ;;--------------------------------------------------
 ;.proc Randomizer
