@@ -140,7 +140,22 @@ WeaponFont
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
-    icl 'display.asm'
+    DisplayCopyRom = *
+    org display, DisplayCopyRom
+DisplayCopyStart
+    icl 'display_main_menu.asm'
+DisplayCopyEnd
+    org DisplayCopyRom + (DisplayCopyEnd - DisplayCopyStart +1)
+    
+    DisplayCopyPurchaseDlROM = *
+    org DisplayCopyPurchase, DisplayCopyPurchaseDlROM
+DisplayCopyPurchaseStart
+    icl 'display_purchasedl.asm'
+DisplayCopyPurchaseEnd
+    org DisplayCopyPurchaseDlROM + (DisplayCopyPurchaseEnd - DisplayCopyPurchaseStart +1)
+    
+    
+    
     icl 'display_status.asm'
     icl 'display_static.asm'
 ;----------------------------------------------

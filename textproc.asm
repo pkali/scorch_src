@@ -18,11 +18,13 @@
 
     jsr clearscreen   ;let the screen be clean
 
+    mwa #DisplayCopyRom temp
+    mwa #display temp2
+    mwa #DisplayCopyEnd+1 modify
+    jsr CopyFromROM
+
     mwa #OptionsDL dlptrs
-;    lda dmactls
-;    and #$fc
-;    ora #$02     ; normal screen width
-;    lda #%00110010 ; normal screen width, DL on, P/M off
+
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
 	jsr SetPMWidth
@@ -42,7 +44,7 @@
     sta mountainDeltaL
 	mva #6 NumberOfPlayers
     jsr PMoutofScreen ;let P/M disappear
-    jsr clearscreen   ;let the screen be clean
+    ;jsr clearscreen   ;let the screen be clean (clean-ish already)
 	jsr ClearPMmemory
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
@@ -284,6 +286,12 @@ AfterManualPurchase
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
+    mwa #DisplayCopyPurchaseDlROM temp
+    mwa #DisplayCopyPurchase temp2
+    mwa #DisplayCopyPurchaseEnd+1 modify
+    jsr CopyFromROM
+
+
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
         
 ; we are clearing list of the weapons
@@ -319,7 +327,7 @@ GoToActivation
     tax
 NextChar03
     lda tanksnames,x
-    sta textbuffer2+8,y
+    sta purchaseTextBuffer+8,y
     inx
     iny
     cpy #$08
@@ -337,7 +345,7 @@ AfterPurchase
     sta decimal
     lda moneyH,x
     sta decimal+1
-    mwa #textbuffer2+26 displayposition
+    mwa #purchaseTextBuffer+26 displayposition
     jsr displaydec5
 
     ; in xbyte there is the address of the line that
@@ -2258,9 +2266,9 @@ EndOfCredits
     ;displaying symbol of the weapon
     ;---------------------
     ;display name and symbol of the weapon
-    ;textbuffer+18  - symbol (1 char)
-    ;textbuffer+20  - quantity left
-    ;textbuffer+23  - name
+    ;statusBuffer+18  - symbol (1 char)
+    ;statusBuffer+20  - quantity left
+    ;statusBuffer+23  - name
     ldx TankNr
     ldy ActiveWeapon,x
     lda WeaponSymbols,y
@@ -2512,5 +2520,27 @@ NextChar02
     rts
 .endp
 ;-------------------------------------------------
+
+.proc CopyFromROM
+;copy from CART to RAM
+; trashes Y
+; temp: source
+; temp2: destination
+; modify: destination-end
+;usage:
+;    mwa #DisplayCopyRom temp
+;    mwa #display temp2
+;    mwa #DisplayCopyEnd+1 modify
+;    jsr CopyFromROM
+
+    ldy #0
+@     lda (temp),y
+      sta (temp2),y
+      inw temp
+      inw temp2
+      cpw temp2 modify
+    bne @-
+    rts
+.endp
 
 .endif

@@ -38,47 +38,6 @@ NamesOfLevels
  dta  d" HUMAN     Moron     Shooter   "
  dta d"  Poolshark Tosser    Chooser   "
  dta d"  Spoiler   Cyborg    Unknown   "
-;---------------------------------------------------
-textbuffer2
- dta d"Player:             Cash:      0"  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
-
-; DLs fragments (modified by game code)
-; all Purchase DL :)
-PurchaseDL
-        .byte $70
-		.byte $47
-DLPurTitleAddr
-		.word PurchaseTitle
-		.byte $50
-        .byte $42+$80
-        .word textbuffer2
-        .byte $60,$42
-MoreUpdl
-        .word EmptyLine
-        .byte 0,$42
-WeaponsListDL
-        .word ListOfWeapons
- :15 .byte 0,2
- .byte 0, $42
-MoreDownDL
- .word EmptyLine
- .byte $40,$42
- .word WeaponsDescription
- .byte $0,$42
-PurActDescAddr
- .word PurchaseDescription
-        .byte $41
-        .word PurchaseDL
-;------------------------
-DLCreditsFragm
-       .byte $60+$80
-	   .byte $42+$20	; VSCRL
-DLCreditsAddr
-	   .word Credits
-	   :6 .byte $02+$20
-	   .byte $02
-       .byte $41
-       .word GameOverDL
 ;------------------------
 ; end of "variables" (RAM)
 ;------------------------

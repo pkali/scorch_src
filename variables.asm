@@ -47,6 +47,8 @@ linetableL  ; = PMGraph + $0300 - (screenHeight+1)*2
     .ds (screenHeight+1)
 linetableH  ; = PMGraph + $0300 - (screenHeight+1)
     .ds (screenHeight+1)
+DisplayCopyPurchase
+    .ds (DisplayCopyPurchaseEnd - DisplayCopyPurchaseStart +1)
 ;=====================================================
 variablesStart  ; zeroing starts here
 ;=====================================================
