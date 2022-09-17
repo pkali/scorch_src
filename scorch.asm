@@ -141,6 +141,7 @@ WeaponFont
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
     icl 'display.asm'
+    icl 'display_status.asm'
     icl 'display_static.asm'
 ;----------------------------------------------
     
@@ -231,12 +232,7 @@ MainGameLoop
 	jsr SetWallsType
 	; first set default barrel lengths (fix for Long Schlong activation :) )
 	; we must do it before purchase/activate
-    ldx #(MaxPlayers-1)
-SettingBarrel
-	lda #StandardBarrel	; standard barrel length
-	sta BarrelLength,x
-    dex
-    bpl SettingBarrel
+    jsr SetStandardBarrels
 
 	jsr CallPurchaseForEveryTank
 

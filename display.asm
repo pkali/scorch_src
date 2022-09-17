@@ -39,11 +39,6 @@ NamesOfLevels
  dta d"  Poolshark Tosser    Chooser   "
  dta d"  Spoiler   Cyborg    Unknown   "
 ;---------------------------------------------------
-textbuffer
-     ; 0123456789012345678901234567890123456789
- dta d"Player:                                 "
- dta d"Energy:        Angle:        Force:     "
- dta d"Round:     Wind:                        "
 textbuffer2
  dta d"Player:             Cash:      0"  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
 

@@ -2264,7 +2264,7 @@ EndOfCredits
     ldx TankNr
     ldy ActiveWeapon,x
     lda WeaponSymbols,y
-    sta TextBuffer+18
+    sta statusBuffer+18
 
     ;---------------------
     ;displaying quantity of the given weapon
@@ -2272,7 +2272,7 @@ EndOfCredits
     lda ActiveWeapon,x
     jsr HowManyBullets
     sta decimal
-    mwa #textbuffer+20 displayposition
+    mwa #statusBuffer+20 displayposition
     jsr displaybyte
 
     ;---------------------
@@ -2293,7 +2293,7 @@ EndOfCredits
     ldy #15
 @
       lda (temp),y
-      sta textbuffer+23,y
+      sta statusBuffer+23,y
       dey
     bpl @-
 
@@ -2301,15 +2301,15 @@ EndOfCredits
     ;displaying name of the defence weapon (if active)
     ;---------------------
     lda #$08 ; (
-    sta textbuffer+80+22
+    sta statusBuffer+80+22
     lda #$09    ; )
-    sta textbuffer+80+39
+    sta statusBuffer+80+39
     lda ActiveDefenceWeapon,x
     bne ActiveDefence
     ; clear brackets
     lda #space
-    sta textbuffer+80+22
-    sta textbuffer+80+39
+    sta statusBuffer+80+22
+    sta statusBuffer+80+39
     mwa #emptyLine temp
     jmp ClearingOnly    
 ActiveDefence
@@ -2327,7 +2327,7 @@ ClearingOnly
     ldy #15
 @
       lda (temp),y
-      sta textbuffer+40+40+23,y
+      sta statusBuffer+40+40+23,y
       dey
     bpl @-
 
@@ -2338,7 +2338,7 @@ ClearingOnly
     lda Energy,x
 
     sta decimal
-    mwa #textbuffer+48 displayposition
+    mwa #statusBuffer+48 displayposition
     jsr displaybyte
 
     ;---------------------
@@ -2346,10 +2346,10 @@ ClearingOnly
     ;---------------------
     ; clear (if no shield)
     lda #space
-    sta textbuffer+40+10
-    sta textbuffer+40+11
-    sta textbuffer+40+12
-    sta textbuffer+40+13
+    sta statusBuffer+40+10
+    sta statusBuffer+40+11
+    sta statusBuffer+40+12
+    sta statusBuffer+40+13
     ; check shield energy and display it
     ldx TankNr
     lda ActiveDefenceWeapon,x
@@ -2358,11 +2358,11 @@ ClearingOnly
     beq NoShieldEnergy
     sta decimal ; displayed value
     lda #$08 ; (
-    sta textbuffer+40+10
-    mwa #textbuffer+40+11 displayposition
+    sta statusBuffer+40+10
+    mwa #statusBuffer+40+11 displayposition
     jsr displaybyte
     lda #$09    ; )
-    sta textbuffer+40+13
+    sta statusBuffer+40+13
 NoDefenceWeapon 
 NoShieldEnergy
 
@@ -2373,9 +2373,9 @@ NoShieldEnergy
     lda Wind+3 ; highest byte of 4 byte wind
     bmi DisplayLeftWind
     lda #$7f  ; (tab) char
-    sta textbuffer+80+20
+    sta statusBuffer+80+20
     lda #space
-    sta textbuffer+80+17
+    sta statusBuffer+80+17
     beq DisplayWindValue
 DisplayLeftWind
       sec  ; Wind = -Wind
@@ -2386,14 +2386,14 @@ DisplayLeftWind
       sbc temp+1
       sta temp+1
     lda #$7e  ;(del) char
-    sta textbuffer+80+17
+    sta statusBuffer+80+17
     lda #space
-    sta textbuffer+80+20
+    sta statusBuffer+80+20
 DisplayWindValue
     :4 lsrw temp ;divide by 16 to have a nice value on a screen
     lda temp
     sta decimal
-    mwa #textbuffer+80+18 displayposition
+    mwa #statusBuffer+80+18 displayposition
     jsr displaybyte
     
     ;=========================
@@ -2401,7 +2401,7 @@ DisplayWindValue
     ;=========================
     lda CurrentRoundNr
     sta decimal
-    mwa #textbuffer+80+7 displayposition
+    mwa #statusBuffer+80+7 displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
 
     ;=========================
@@ -2412,7 +2412,7 @@ DisplayWindValue
     sta decimal
     lda ForceTableH,x
     sta decimal+1
-    mwa #textbuffer+40+35 displayposition
+    mwa #statusBuffer+40+35 displayposition
     jsr displaydec5
 
     ;=========================
@@ -2428,9 +2428,9 @@ AngleToRight
     ; now we have values from 0 to 89 and right angle
     sta decimal
     lda #$7f  ; (tab) character
-    sta textbuffer+40+25
+    sta statusBuffer+40+25
     lda #space
-    sta textbuffer+40+22
+    sta statusBuffer+40+22
     beq AngleDisplay
 AngleToLeft
     sec
@@ -2439,19 +2439,19 @@ AngleToLeft
     ; angles 180 - 91 converted to 0 - 89
     sta decimal
     lda #$7e  ;(del) char
-    sta textbuffer+40+22
+    sta statusBuffer+40+22
     lda #space
-    sta textbuffer+40+25
+    sta statusBuffer+40+25
     beq AngleDisplay    
 VerticallyUp
     ; now we have value 90
     sta decimal
     lda #space
-    sta textbuffer+40+25
-    sta textbuffer+40+22
+    sta statusBuffer+40+25
+    sta statusBuffer+40+22
 
 AngleDisplay
-    mwa #textbuffer+40+23 displayposition
+    mwa #statusBuffer+40+23 displayposition
     jsr displaybyte
     ldx TankNr   
     rts
@@ -2467,7 +2467,7 @@ AngleDisplay
     tax
 NextChar02
     lda tanksnames,x
-    sta textbuffer+7,y
+    sta statusBuffer+7,y
     inx
     iny
     cpy #$08

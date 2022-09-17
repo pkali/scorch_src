@@ -76,7 +76,7 @@ GameOverTitle2
 dl ; MAIN game display list
         .byte 0
         .byte $42 
-        .word textbuffer
+        .word statusBuffer
         .byte $02, $02 +$80 ;DLI
         .byte $10  ; 2 blank lines 
 
