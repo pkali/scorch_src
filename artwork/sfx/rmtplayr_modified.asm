@@ -48,42 +48,43 @@ p_instrstable = p_tis
 .zpvar v_speed          .byte
 .zpvar RMTSFXVOLUME     .byte
 
-	org PLAYER-$400+$e0
-track_variables
-trackn_db	.ds TRACKS
-trackn_hb	.ds TRACKS
-trackn_idx	.ds TRACKS
-trackn_pause	.ds TRACKS
-trackn_note	.ds TRACKS
-trackn_volume	.ds TRACKS
-trackn_distor 	.ds TRACKS
-trackn_shiftfrq	.ds TRACKS
-trackn_instrx2	.ds TRACKS
-trackn_instrdb	.ds TRACKS
-trackn_instrhb	.ds TRACKS
-trackn_instridx	.ds TRACKS
-trackn_instrlen	.ds TRACKS
-trackn_instrlop	.ds TRACKS
-trackn_instrreachend	.ds TRACKS
-trackn_volumeslidedepth .ds TRACKS
-trackn_volumeslidevalue .ds TRACKS
-trackn_effdelay			.ds TRACKS
-trackn_effvibratoa		.ds TRACKS
-trackn_effshift		.ds TRACKS
-trackn_tabletypespeed .ds TRACKS
-trackn_tablenote	.ds TRACKS
-trackn_tablea		.ds TRACKS
-trackn_tableend		.ds TRACKS
-trackn_tablelop		.ds TRACKS
-trackn_tablespeeda	.ds TRACKS
-trackn_command		.ds TRACKS
-trackn_filter		.ds TRACKS
-trackn_audf	.ds TRACKS
-trackn_audc	.ds TRACKS
-trackn_audctl	.ds TRACKS
-v_aspeed		.ds 1
-track_endvariables
-		org PLAYER-$100-$140-$40+2
+;  MOVED TO variables.asm
+;	org PLAYER-$400+$e0
+;track_variables
+;trackn_db	.ds TRACKS
+;trackn_hb	.ds TRACKS
+;trackn_idx	.ds TRACKS
+;trackn_pause	.ds TRACKS
+;trackn_note	.ds TRACKS
+;trackn_volume	.ds TRACKS
+;trackn_distor 	.ds TRACKS
+;trackn_shiftfrq	.ds TRACKS
+;trackn_instrx2	.ds TRACKS
+;trackn_instrdb	.ds TRACKS
+;trackn_instrhb	.ds TRACKS
+;trackn_instridx	.ds TRACKS
+;trackn_instrlen	.ds TRACKS
+;trackn_instrlop	.ds TRACKS
+;trackn_instrreachend	.ds TRACKS
+;trackn_volumeslidedepth .ds TRACKS
+;trackn_volumeslidevalue .ds TRACKS
+;trackn_effdelay			.ds TRACKS
+;trackn_effvibratoa		.ds TRACKS
+;trackn_effshift		.ds TRACKS
+;trackn_tabletypespeed .ds TRACKS
+;trackn_tablenote	.ds TRACKS
+;trackn_tablea		.ds TRACKS
+;trackn_tableend		.ds TRACKS
+;trackn_tablelop		.ds TRACKS
+;trackn_tablespeeda	.ds TRACKS
+;trackn_command		.ds TRACKS
+;trackn_filter		.ds TRACKS
+;trackn_audf	.ds TRACKS
+;trackn_audc	.ds TRACKS
+;trackn_audctl	.ds TRACKS
+;v_aspeed		.ds 1
+;track_endvariables
+
 INSTRPAR	equ 12
 tabbeganddistor
  dta frqtabpure-frqtab,$00
@@ -104,8 +105,7 @@ vibtabnext
 		dta vib1-vib0+1,vib1-vib0+2,vib1-vib0+3,vib1-vib0+0
 		dta vib2-vib0+1,vib2-vib0+2,vib2-vib0+3,vib2-vib0+4,vib2-vib0+5,vib2-vib0+0
 		dta vib3-vib0+1,vib3-vib0+2,vib3-vib0+3,vib3-vib0+4,vib3-vib0+5,vib3-vib0+6,vib3-vib0+7,vib3-vib0+8,vib3-vib0+9,vib3-vib0+0
-		org PLAYER-$100-$140
-		org PLAYER-$100-$100
+    .align $100
 frqtab
 	ERT [<frqtab]!=0	;* frqtab must begin at the memory page bound! (i.e. $..00 address)
 frqtabbass1
@@ -123,7 +123,8 @@ frqtabpure
 	dta $60,$5B,$55,$51,$4C,$48,$44,$40,$3C,$39,$35,$32,$2F,$2D,$2A,$28
 	dta $25,$23,$21,$1F,$1D,$1C,$1A,$18,$17,$16,$14,$13,$12,$11,$10,$0F
 	dta $0E,$0D,$0C,$0B,$0A,$09,$08,$07,$06,$05,$04,$03,$02,$01,$00,$00
-		org PLAYER-$0100
+
+    .align $100
 volumetab
 	dta $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 	dta $00,$00,$00,$00,$00,$00,$00,$00,$01,$01,$01,$01,$01,$01,$01,$01
@@ -141,7 +142,6 @@ volumetab
 	dta $00,$01,$02,$03,$03,$04,$05,$06,$07,$08,$09,$0A,$0A,$0B,$0C,$0D
 	dta $00,$01,$02,$03,$04,$05,$06,$07,$07,$08,$09,$0A,$0B,$0C,$0D,$0E
 	dta $00,$01,$02,$03,$04,$05,$06,$07,$08,$09,$0A,$0B,$0C,$0D,$0E,$0F
-	org PLAYER
 ;*
 ;* Set of RMT main vectors:
 ;*

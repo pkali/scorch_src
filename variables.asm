@@ -437,8 +437,40 @@ ListOfDefensiveWeapons
   ;:16 dta d"                                "
     .ds 16*32
 ListOfDefensiveWeaponsEnd ;constant useful when clearing
-
-
+track_variables
+trackn_db   .ds TRACKS
+trackn_hb   .ds TRACKS
+trackn_idx  .ds TRACKS
+trackn_pause    .ds TRACKS
+trackn_note .ds TRACKS
+trackn_volume   .ds TRACKS
+trackn_distor   .ds TRACKS
+trackn_shiftfrq .ds TRACKS
+trackn_instrx2  .ds TRACKS
+trackn_instrdb  .ds TRACKS
+trackn_instrhb  .ds TRACKS
+trackn_instridx .ds TRACKS
+trackn_instrlen .ds TRACKS
+trackn_instrlop .ds TRACKS
+trackn_instrreachend    .ds TRACKS
+trackn_volumeslidedepth .ds TRACKS
+trackn_volumeslidevalue .ds TRACKS
+trackn_effdelay         .ds TRACKS
+trackn_effvibratoa      .ds TRACKS
+trackn_effshift     .ds TRACKS
+trackn_tabletypespeed .ds TRACKS
+trackn_tablenote    .ds TRACKS
+trackn_tablea       .ds TRACKS
+trackn_tableend     .ds TRACKS
+trackn_tablelop     .ds TRACKS
+trackn_tablespeeda  .ds TRACKS
+trackn_command      .ds TRACKS
+trackn_filter       .ds TRACKS
+trackn_audf .ds TRACKS
+trackn_audc .ds TRACKS
+trackn_audctl   .ds TRACKS
+v_aspeed        .ds 1
+track_endvariables
 
 variablesEnd
 ;----------------------------------------------------

@@ -278,6 +278,15 @@ AfterManualPurchase
     ; offensive weapon - 0, defensive - %10000000
 	jmp Purchase.GoToActivation
 .endp
+
+;--------------------------------------------------
+.proc CopyFromPurchaseAndGameOver
+    mwa #DisplayCopyPurchaseDlROM temp
+    mwa #DisplayCopyPurchase temp2
+    mwa #DisplayCopyPurchaseEnd+1 modify
+    jmp CopyFromROM ; jsr:rts
+.endp
+
 ;--------------------------------------------------
 .proc Purchase ;
 ;--------------------------------------------------
@@ -286,11 +295,7 @@ AfterManualPurchase
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
-    mwa #DisplayCopyPurchaseDlROM temp
-    mwa #DisplayCopyPurchase temp2
-    mwa #DisplayCopyPurchaseEnd+1 modify
-    jsr CopyFromROM
-
+    jsr CopyFromPurchaseAndGameOver
 
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
         
@@ -2015,6 +2020,7 @@ FinishResultDisplay
     jsr ClearPMmemory
 	jsr PrepareCredits
 	jsr GameOverResultsClear
+    jsr CopyFromPurchaseAndGameOver
     mwa #GameOverDL dlptrs
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls

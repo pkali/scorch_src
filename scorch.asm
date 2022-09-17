@@ -1697,18 +1697,11 @@ TankFont
 ;----------------------------------------------
 
 ;RMT PLAYER and song loading shenaningans
-
-    ; reserved space for RMT player
-    .ds $0320
-    .align $100
-PLAYER
     icl 'artwork/sfx/rmtplayr_modified.asm'
 MODUL    equ $b000                                 ;address of RMT module
       opt h-                                       ;RMT module is standard Atari binary file already
       ins "artwork/sfx/scorch_str6.rmt"            ;include music RMT module
       opt h+
-;    .ENDIF
-;
 MODULEND
 ;----------------------------------------------
     org $bf80
