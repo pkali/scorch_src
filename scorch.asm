@@ -2,13 +2,15 @@
 ;Atari 8-bit Scorched Earth source code
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
-;Warsaw 2000,2001,2002,2003,2009,2012,2013
+;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
 ;Miami & Warsaw 2022
+
+    OPT r+  ; saves 12 bytes :O
 
 .def target = 800 ;5200  ; or 800
 
 .macro build
-	dta d"1.15" ; number of this build (3 bytes)
+	dta d"1.15" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -121,19 +123,22 @@
     LineAddress4x4 = temp
 
 ;-------------------------------
-
-    icl 'lib/ATARISYS.ASM'
+    .IF TARGET = 5200
+      icl 'lib/5200SYS.ASM'
+    .ELSE
+      icl 'lib/ATARISYS.ASM'
+      icl 'artwork/Scorch50.asm'  ; splash screen and musix
+    .ENDIF
+    
     icl 'lib/macro.hea'
 
-    .IF target !=5200
-      ;splash screen and musix
-	  icl 'artwork/Scorch50.asm'
-    .ENDIF
-
-    ;Game loading address
-        ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables + 1)
-        icl 'variables.asm'
-        ORG $4000
+    ; variable declarations in RAM (no code)
+    ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables + 1)
+    icl 'variables.asm'
+        
+    ; Game loading address
+    ORG $4000
+    ;opt f+  ; single block
     
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
@@ -1698,19 +1703,25 @@ TankFont
 
 ;RMT PLAYER and song loading shenaningans
     icl 'artwork/sfx/rmtplayr_modified.asm'
-MODUL    equ $b000                                 ;address of RMT module
-      opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str6.rmt"            ;include music RMT module
-      opt h+
+    org $b000
+MODUL ;   equ $b000                                 ;address of RMT module
+      ;opt h-                                       ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_str6.rmt",+6            ;include music RMT module
+      ;opt h+
 MODULEND
 ;----------------------------------------------
-    org $bf80
 font4x4
     ins 'artwork/font4x4s.bmp',+62
 
 
-
-
-
-
+ .IF target = 5200
+    org $bfe8
+    ;     "01234567890123456789"
+    .byte " SCORCH 5200 v"    ;20 characters title
+    build ;              "    "
+    .byte                    " "
+    .byte '22'          ;2 characters year
+    .word FirstSTART
+ .ELSE
     run FirstSTART
+ .ENDIF

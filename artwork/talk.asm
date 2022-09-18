@@ -1,6 +1,6 @@
 .proc talk
 ; Maximum text length is 63 characters!!!
-L0   dta d"IN TIMES OF TROUBLE, GO WITH WHAT YOU KNOW."
+L0   dta d"CTO XYEB"
 L1   dta d"DIE!"
 L2   dta d"EAT MY SHORTS!"
 L3   dta d"YOU'RE TOAST!"
