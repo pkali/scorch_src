@@ -34,7 +34,7 @@ COLBAKS EQU COLOR4
 CONSOL     = $280           ;There are no console keys on Atari 5200, so we replace console h/w reads with a new shadow based on the keypad keys
 consol_reset = $07          ;The constant value representing that no consol key is pressed
 ; ---------------------------------------------------------------------------
-POKEY 	EQU	$EB200
+POKEY 	EQU	$EB00
 ; ---------------------------------------------------------------------------
 ;
 ; READ
