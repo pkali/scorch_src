@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def target =  5200  ; or 800
+.def target =  800 ;5200  ; or 800
 ;---------------------------------------------------
 
     OPT r+  ; saves 12 bytes :O
@@ -130,6 +130,7 @@
 ; libraries
 ;-----------------------------------------------
     .IF TARGET = 5200
+      OPT h-f+
       icl 'lib/5200SYS.ASM'
       icl 'lib/5200MACRO.ASM'
     .ELSE
@@ -1195,9 +1196,6 @@ DLIinterruptNone
 .endp
 ;--------------------------------------------------
 .proc VBLinterrupt
-	pha
-	phx
-	phy
 	mva #0 dliCounter
 	
 	lda PAL
@@ -1233,11 +1231,33 @@ lab2
     ; ------- RMT -------
 SkipRMTVBL	   
 exitVBL
-    ply
-    plx
-	pla
 	.IF target = 5200
-    	pla
+;        center = 114            ;Read analog stick and make it look like a digital stick
+;        threshold = 60
+;    
+;        lda pot0            ;Read POT0 value (horizontal position)
+;        cmp #center+threshold       ;Compare with right threshold
+;        rol stick0          ;Feed carry into digital stick value
+;        cmp #center-threshold       ;Compare with left threshold
+;        rol stick0          ;Feed carry into digital stick value
+;    
+;        lda pot1            ;Read POT1 value (vertical position)
+;        cmp #center+threshold       ;Compare with down threshold
+;        rol stick0          ;Feed carry into digital stick value
+;        cmp #center-threshold       ;Compare with down threshold
+;        rol stick0          ;Feed carry into digital stick value
+;    
+;        lda stick0          ;0 indicates a press so the right/down values need to be inverted
+;        eor #2+8
+;        and #$0f
+;        sta stick0
+;    
+;        mva trig0 strig0        ;Move hardware to shadow
+;    
+;        lda skstat          ;Reset consol key shadow is no key is pressed anymore
+;        and #4
+;        seq:mva #consol_reset consol
+        pla
         tay
         pla
         tax
@@ -1564,20 +1584,24 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    lda STICK0
-    and #$0f
-    cmp #$0f
-    bne WaitForKeyRelease
-    lda STRIG0
-    beq WaitForKeyRelease
-    lda SKSTAT
-    cmp #$ff
-    bne WaitForKeyRelease
-	lda CONSOL
-	and #%00000110	; Select and Option only
-	cmp #%00000110
-	bne WaitForKeyRelease
-    rts
+    .IF TARGET = 5200
+      rts
+    .ELSE
+      lda STICK0
+      and #$0f
+      cmp #$0f
+      bne WaitForKeyRelease
+      lda STRIG0
+      beq WaitForKeyRelease
+      lda SKSTAT
+      cmp #$ff
+      bne WaitForKeyRelease
+      lda CONSOL
+      and #%00000110	; Select and Option only
+      cmp #%00000110
+      bne WaitForKeyRelease
+      rts
+    .ENDIF
 .endp
 ;--------------------------------------------------
 .proc IsKeyPressed	; A=0 - yes , A>0 - no
@@ -1722,10 +1746,10 @@ font4x4
     .ENDIF
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
-    .byte " SCORCH 5200 v"    ;20 characters title
-    build ;              "    "
-    .byte                    " "
-    .byte '7A'          ;2 characters year .. 1900 + $7A = 2020
+    .byte " SCORCH 5200  v"    ;20 characters title
+    build ;               "    "
+    .byte                      " "
+    .byte "7A"          ;2 characters year .. 1900 + $7A = 2020
     .word FirstSTART
   .ELSE
      run FirstSTART
