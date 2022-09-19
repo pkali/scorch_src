@@ -2,6 +2,8 @@
 ;*                            ATARI 5200 CONSOLE                            *
 ;*                              SYSTEM EQUATES                              *
 ;****************************************************************************
+; based on https://web.archive.org/web/20200831200348/http://www.atarimuseum.com/videogames/consoles/5200/conv_to_5200.html
+;
 ; OS VARIABLES FOR 5200
 ; 
 ; PAGE 0
@@ -9,14 +11,9 @@ POKMSK  = $00               ;pokmsk at $00 on Atari 5200 instead of $10 on Atari
 RTCLOK  = $01               ;Actually $01/$02
 CRITIC  = $03
 ATRACT  = $04               ;attact at $04 on Atari 5200 instead of $4D on Atari XL             
-
-; PAGE 2
 DLPTRS  = $05               ;sdlstl at $05/$06 on Atari 5200 instead of $230 on Atari XL
 DMACTLS = $07               ;sdmactl at $07 on Atari 5200 instead of $22f on Atari XL
 SSKCTL  = skctl             ;There is no shadow on Atari 5200
-STICK0  = $278              ;There is no stick0 but we will make the analog stick look like a digital one and store it here
-STRIG0  = $284              ;There is no strig0 but we will make this the shadow of the TRIG0 ($c010) of GITA
-
 PCOLR0  EQU $08   ;P0 COLOR
 PCOLR1  EQU $09   ;P1 COLOR
 PCOLR2  EQU $0a   ;P2 COLOR
@@ -27,6 +24,36 @@ COLOR2  EQU $0e
 COLOR3  EQU $0f
 COLOR4  EQU $10
 COLBAKS EQU COLOR4
+PADDL0  EQU $11
+PADDL1  EQU $12
+PADDL2  EQU $13
+PADDL3  EQU $14
+PADDL4  EQU $15
+PADDL5  EQU $16
+PADDL6  EQU $17
+PADDL7  EQU $18
+STICK0  = $19     ;There is no stick0 but we will make the analog stick look like a digital one and store it here
+STRIG0  = $1a     ;There is no strig0 but we will make this the shadow of the TRIG0 ($c010) of GTIA
+chbas   = $1b     ;There is no strig0 but we will make this the shadow of the CHBASE
+
+; PAGE 2
+VIMIRQ  EQU $0200   ;IMMED IRQ VECTOR
+VVBLKI  EQU $0202   ;IMM VBLK NMI VECTOR
+VVBLKD  EQU $0204   ;DEF VBLK NMI VECTOR
+VDSLST  EQU $0206   ;DSP LIST NMI VECTOR
+VKEYBD  EQU $0208   ;POKEY KB IRQ VECTOR
+VKEYCNT EQU $020A   ;Keypad routine continuation vector
+BRKKY   EQU $023C   ;BREAK KEY VECTOR
+VBREAK  EQU $020E   ;BRK INST IRQ VECTOR
+VSERIN  EQU $0210   ;POKEY INPUT RDY IRQ
+VSEROR  EQU $0212   ;POKEY OUTPUT RDY
+VSEROC  EQU $0214   ;POKEY OUTPUT DONE
+VTIMR1  EQU $0216   ;POKEY TIMER 1 IRQ
+VTIMR2  EQU $0218   ;POKEY TIMER 2 IRQ
+VTIMR4  EQU $021A   ;POKEY TIMER 4 IRQ
+
+
+ROM_SETTINGS = $bfe8  ; game ROM info start (24 bytes total, 20b title, 2b year, 2b start vector)
 
 ; HARDWARE REGISTERS
 
@@ -108,6 +135,7 @@ COLPF2	EQU	GTIA+$18
 COLPF3	EQU	GTIA+$19
 COLBAK	EQU	GTIA+$1a
 PRIOR 	EQU	GTIA+$1b
+GPRIOR = PRIOR  ; no PRIOR shadow (GPRIOR)
 VDELAY	EQU	GTIA+$1c
 GRACTL	EQU	GTIA+$1d
 HITCLR	EQU	GTIA+$1e

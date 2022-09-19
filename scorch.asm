@@ -5,10 +5,13 @@
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
 ;Miami & Warsaw 2022
 
+;---------------------------------------------------
+.def target =  5200  ; or 800
+;---------------------------------------------------
+
     OPT r+  ; saves 12 bytes :O
 
-.def target = 800 ;5200  ; or 800
-
+;---------------------------------------------------
 .macro build
 	dta d"1.15" ; number of this build (4 bytes)
 .endm
@@ -18,8 +21,9 @@
       jsr RMTSongSelect
 .endm
 
+;---------------------------------------------------
     icl 'definitions.asm'
-    
+;---------------------------------------------------
     
     .zpvar xdraw            .word = $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -122,17 +126,21 @@
     displayposition = modify
     LineAddress4x4 = temp
 
-;-------------------------------
+;-----------------------------------------------
+; libraries
+;-----------------------------------------------
     .IF TARGET = 5200
       icl 'lib/5200SYS.ASM'
+      icl 'lib/5200MACRO.ASM'
     .ELSE
       icl 'lib/ATARISYS.ASM'
+      icl 'lib/MACRO.ASM'
       icl 'artwork/Scorch50.asm'  ; splash screen and musix
     .ENDIF
     
-    icl 'lib/macro.hea'
-
-    ; variable declarations in RAM (no code)
+;-----------------------------------------------
+; variable declarations in RAM (no code)
+;-----------------------------------------------
     ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables + 1)
     icl 'variables.asm'
         
@@ -142,10 +150,10 @@
     
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
+
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
-
     DisplayCopyRom = *
     org display, DisplayCopyRom
 DisplayCopyStart
@@ -460,13 +468,6 @@ SettingEnergies
     jsr SetMainScreen
     jsr ColorsOfSprites
 
-;    lda #90 ; barrel fully erect
-;    ldx #MaxPlayers-1
-;@     sta previousBarrelAngle,x
-;      dex
-;    bpl @-
-
-
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
@@ -635,11 +636,6 @@ ShootNow
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku
-    ;here we clear offensive text (after a shoot)
-    ;ldy TankNr
-    ;mva #0 plot4x4color
-    ;jsr DisplayOffensiveTextNr
-
 
 AfterExplode
     jsr SoilDown2	; allways
@@ -659,7 +655,6 @@ NoExistNoFall
     mvx tempor2 TankNr
 
 missed
-    ; TODO: IS IT OK??? possibly a fix here needed for #56
     ldy WeaponDepleted
     bne @+
       ldx TankNr
@@ -668,7 +663,6 @@ missed
 @
 
     ;here we clear offensive text (after a shoot)
-    ;shit -- it's second time, but it must be like this
     ldy TankNr
     mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
@@ -740,7 +734,6 @@ NoPlayerNoDeath
     ;clear NoDeathCounter here
     sta noDeathCounter
 
-
     ; display defensive text here (well, defensive
     ; is not the real meaning, it should be pre-death,
     ; but I am too lazy to change names of variables)
@@ -754,7 +747,7 @@ NoPlayerNoDeath
     inc CurrentResult
 
     mva #sfx_death_begin sfx_effect
-;RandomizeDeffensiveText
+    ; RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
     sta TextNumberOff
     ldy TankTempY
@@ -1243,7 +1236,16 @@ exitVBL
     ply
     plx
 	pla
-	jmp XITVBV
+	.IF target = 5200
+    	pla
+        tay
+        pla
+        tax
+        pla
+        rti
+    .ELSE	
+	   jmp XITVBV
+	.ENDIF
 .endp
 ;----------------------------------------------
 .proc RandomizeSequence0
@@ -1462,7 +1464,7 @@ Bubble
 BubbleBobble
     lda TempResults,x
     cmp TempResults+1,x
-    beq nextishigher ; this is to block hangs when 2 same values meet
+    beq nextishigher ; this is to block hangs when 2 equal values meet
     bcc nextishigher
     ;here we must swap values
     ;because next is smaller than previous
@@ -1713,15 +1715,18 @@ MODULEND
 font4x4
     ins 'artwork/font4x4s.bmp',+62
 
-
- .IF target = 5200
-    org $bfe8
+;----------------------------------------------
+  .IF target = 5200
+    .IF * > ROM_SETTINGS-1
+      .ERROR 'Code too long to fit in 5200'
+    .ENDIF
+    org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
     .byte " SCORCH 5200 v"    ;20 characters title
     build ;              "    "
     .byte                    " "
-    .byte '22'          ;2 characters year
+    .byte '7A'          ;2 characters year .. 1900 + $7A = 2020
     .word FirstSTART
- .ELSE
-    run FirstSTART
- .ENDIF
+  .ELSE
+     run FirstSTART
+  .ENDIF
