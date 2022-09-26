@@ -11,8 +11,8 @@ POKMSK  = $00               ;pokmsk at $00 on Atari 5200 instead of $10 on Atari
 RTCLOK  = $01               ;Actually $01/$02
 CRITIC  = $03
 ATRACT  = $04               ;attact at $04 on Atari 5200 instead of $4D on Atari XL             
-DLPTRS  = $05               ;sdlstl at $05/$06 on Atari 5200 instead of $230 on Atari XL
-DMACTLS = $07               ;sdmactl at $07 on Atari 5200 instead of $22f on Atari XL
+DLPTRS  = $05               ;DLPTRS at $05/$06 on Atari 5200 instead of $230 on Atari XL
+DMACTLS = $07               ;DMACTLS at $07 on Atari 5200 instead of $22f on Atari XL
 SSKCTL  = skctl             ;There is no shadow on Atari 5200
 PCOLR0  EQU $08   ;P0 COLOR
 PCOLR1  EQU $09   ;P1 COLOR
@@ -34,7 +34,9 @@ PADDL6  EQU $17
 PADDL7  EQU $18
 STICK0  = $19     ;There is no stick0 but we will make the analog stick look like a digital one and store it here
 STRIG0  = $1a     ;There is no strig0 but we will make this the shadow of the TRIG0 ($c010) of GTIA
-chbas   = $1b     ;There is no strig0 but we will make this the shadow of the CHBASE
+chbas   = $1b     ;There is no CHBAS but we will make this the shadow of the CHBASE
+CONSOL  = $1c     ;There are no console keys on Atari 5200, so we replace console h/w reads with a new shadow based on the keypad keys
+consol_reset = $07;The constant value representing that no consol key is pressed
 
 ; PAGE 2
 VIMIRQ  EQU $0200   ;IMMED IRQ VECTOR
@@ -57,9 +59,6 @@ ROM_SETTINGS = $bfe8  ; game ROM info start (24 bytes total, 20b title, 2b year,
 
 ; HARDWARE REGISTERS
 
-; GTIA
-CONSOL     = $280           ;There are no console keys on Atari 5200, so we replace console h/w reads with a new shadow based on the keypad keys
-consol_reset = $07          ;The constant value representing that no consol key is pressed
 ; ---------------------------------------------------------------------------
 POKEY 	EQU	$EB00
 ; ---------------------------------------------------------------------------

@@ -624,20 +624,20 @@ SetPokey
 
 	lda trackn_audf+0
 	ldx trackn_audc+0
-	sta $d200
-	stx $d201
+	sta AUDF1
+	stx AUDC1
 	lda trackn_audf+1
 	ldx trackn_audc+1
-	sta $d200+2
-	stx $d201+2
+	sta AUDF2
+	stx AUDC2
 	lda trackn_audf+2
 	ldx trackn_audc+2
-	sta $d200+4
-	stx $d201+4
+	sta AUDF3
+	stx AUDC3
 	lda trackn_audf+3
 	ldx trackn_audc+3
-	sta $d200+6
-	stx $d201+6
-	sty $d208
+	sta AUDF4
+	stx AUDC4
+	sty AUDCTL
 	rts
 RMTPLAYEREND

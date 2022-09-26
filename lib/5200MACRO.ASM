@@ -45,7 +45,8 @@
 @   lda vcount
     bne @-
     mwa #:1 VVBLKD
-    lda #$40            ;Enable IRQ interrupts
+    mva #$40 nmien
+    ;Enable IRQ interrupts
     sta pokmsk
     sta irqen
     cli

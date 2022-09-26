@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def target =  800 ;5200  ; or 800
+.def TARGET = 800; 5200  ; or 800
 ;---------------------------------------------------
 
     OPT r+  ; saves 12 bytes :O
@@ -222,9 +222,11 @@ FirstSTART
     lda #$ff                    ;initial value
     sta sfx_effect
 
-    lda #0
-    jsr RmtSongSelect
+    RMTSong 0
 
+    .IF TARGET = 5200
+        mva #$0f STICK0
+    .ENDIF
     VMAIN VBLinterrupt,7  		;jsr SetVBL
 	
 START
@@ -1104,8 +1106,9 @@ MakeTanksVisible
 	ldy dliCounter
 	lda dliColorsBack,y
 	ldy dliColorsFore
-	nop
-	nop
+    .IF TARGET = 800
+	   nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+    .ENDIF
 	nop
     sta COLPF1
 	sty COLPF2
@@ -1152,7 +1155,7 @@ ColoredLines
 	cmp #9
 	beq CreditsScroll
 	tay
-	lda GameOverColoursTable-3,y	; -2 becouse this is DLI nr 2 and -1 (labels line)
+	lda GameOverColoursTable-3,y	; -2 because this is DLI nr 2 and -1 (labels line)
 	ldy #$0a	; text colour (brightnes)
 	STA WSYNC
 	sta COLPF2
@@ -1186,8 +1189,9 @@ EndOfDLI_GO
 .proc DLIinterruptText
 	;sta dliA
     pha
+    lda #TextBackgroundColor
 	sta WSYNC
-    mva #TextBackgroundColor COLPF2
+    sta COLPF2
     mva #TextForegroundColor COLPF3
 	;lda dliA
     pla
@@ -1231,32 +1235,35 @@ lab2
     ; ------- RMT -------
 SkipRMTVBL	   
 exitVBL
-	.IF target = 5200
-;        center = 114            ;Read analog stick and make it look like a digital stick
-;        threshold = 60
-;    
-;        lda pot0            ;Read POT0 value (horizontal position)
-;        cmp #center+threshold       ;Compare with right threshold
-;        rol stick0          ;Feed carry into digital stick value
-;        cmp #center-threshold       ;Compare with left threshold
-;        rol stick0          ;Feed carry into digital stick value
-;    
-;        lda pot1            ;Read POT1 value (vertical position)
-;        cmp #center+threshold       ;Compare with down threshold
-;        rol stick0          ;Feed carry into digital stick value
-;        cmp #center-threshold       ;Compare with down threshold
-;        rol stick0          ;Feed carry into digital stick value
-;    
-;        lda stick0          ;0 indicates a press so the right/down values need to be inverted
-;        eor #2+8
-;        and #$0f
-;        sta stick0
-;    
-;        mva trig0 strig0        ;Move hardware to shadow
-;    
-;        lda skstat          ;Reset consol key shadow is no key is pressed anymore
-;        and #4
-;        seq:mva #consol_reset consol
+	.IF TARGET = 5200
+        center = 114            ;Read analog stick and make it look like a digital stick
+        threshold = 60
+    
+        lda paddl0            ;Read POT0 value (horizontal position)
+        cmp #center+threshold       ;Compare with right threshold
+        rol stick0          ;Feed carry into digital stick value
+        cmp #center-threshold       ;Compare with left threshold
+        rol stick0          ;Feed carry into digital stick value
+    
+        lda paddl1            ;Read POT1 value (vertical position)
+        cmp #center+threshold       ;Compare with down threshold
+        rol stick0          ;Feed carry into digital stick value
+        cmp #center-threshold       ;Compare with down threshold
+        rol stick0          ;Feed carry into digital stick value
+    
+        lda stick0          ;0 indicates a press so the right/down values need to be inverted
+        eor #2+8
+        and #$0f
+        sta stick0
+    
+        mva trig0 strig0        ;Move hardware to shadow
+        
+        mva chbas chbase
+    
+        lda skstat          ;Reset consol key shadow is no key is pressed anymore
+        and #4
+        seq:mva #consol_reset consol
+
         pla
         tay
         pla
@@ -1536,19 +1543,20 @@ SetRandomWalls
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @
-      lda SKSTAT
-      cmp #$ff
-      beq checkJoyGetKey ; key not pressed, check Joy
-      cmp #$f7  ; SHIFT
-      beq checkJoyGetKey
-        
-      lda kbcode
-      and #$3f ;CTRL and SHIFT ellimination
-      cmp #28  ; ESC
-      bne getkeyend
-        mvx #$80 escFlag
-      bne getkeyend
-
+      .IF TARGET = 800
+          lda SKSTAT
+          cmp #$ff
+          beq checkJoyGetKey ; key not pressed, check Joy
+          cmp #$f7  ; SHIFT
+          beq checkJoyGetKey
+            
+          lda kbcode
+          and #$3f ;CTRL and SHIFT ellimination
+          cmp #28  ; ESC
+          bne getkeyend
+            mvx #$80 escFlag
+          bne getkeyend
+      .ENDIF
 checkJoyGetKey
       ;------------JOY-------------
       ;happy happy joy joy
@@ -1584,15 +1592,13 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    .IF TARGET = 5200
-      rts
-    .ELSE
       lda STICK0
       and #$0f
       cmp #$0f
       bne WaitForKeyRelease
       lda STRIG0
       beq WaitForKeyRelease
+    .IF TARGET = 800
       lda SKSTAT
       cmp #$ff
       bne WaitForKeyRelease
@@ -1637,6 +1643,7 @@ noKey
 .endp
 MakeDarkScreen
 	mva #0 dmactls		; dark screen
+    sta dmactl
 	; and wait one frame :)
 .proc WaitOneFrame
 	lda CONSOL
@@ -1678,7 +1685,7 @@ noingame
 .proc CopyFromROM
 ;-------------------------------------------------
 ;copy from CART to RAM
-; trashes Y
+; trashes: Y
 ; temp: source
 ; temp2: destination
 ; modify: destination-end
@@ -1732,7 +1739,7 @@ TankFont
     org $b000
 MODUL ;   equ $b000                                 ;address of RMT module
       ;opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str6.rmt",+6            ;include music RMT module
+      ins "artwork/sfx/scorch_str6.rmt",+6          ;include music RMT module
       ;opt h+
 MODULEND
 ;----------------------------------------------
