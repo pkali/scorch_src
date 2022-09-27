@@ -10,21 +10,40 @@ OptionsScreen
  dta d"Welcome to Scorch v. "
  build  ; 4 bytes from scorch.asm (fancy method) :) 
  dta                          d"  (un)2000-2022"
+
+.IF TARGET = 800
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
+.ELIF TARGET = 5200
+ dta d" Please select option with joystick one "
+ dta d"       and press FIRE to proceed        "
+.ENDIF
      ; 0123456789012345678901234567890123456789
 ;-----------------------------------------------
 NameScreen
- dta d"    Enter names of players      "
+.IF TARGET = 800
+ dta d"     Enter names of players     "
+.ELIF TARGET = 5200
+ dta d"    Hold FIRE to enter names    "
+.ENDIF
 NameScreen3
  dta d" Human/Atari (difficulty level) "
 NameScreen5
+ .IF TARGET = 800
  dta d"  "
- dta   d"Tab"*
+ dta   d"TAB"*
  dta      d" - Player/Difficulty level "
  dta d"       "
  dta        d"Return"*
  dta              d" - Proceed         "
+.ELIF TARGET = 5200
+ dta d"  "
+ dta   d"Joy"*
+ dta      d" - Player/Difficulty level "
+ dta d"        "
+ dta        d"FIRE"*
+ dta             d" - Proceed          "
+.ENDIF
 ;-----------------------------------------------
 MoreUp
  dta d"         "
@@ -40,20 +59,39 @@ MoreDown
  dta d"         "
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
+ .IF TARGET = 800
  dta d"Tab"*
  dta d   ": Defensive/Offensive weapon "
+.ELIF TARGET = 5200
+ dta d"Left"*
+ dta d    ": Defensive/Offensive weapon"
+.ENDIF
 PurchaseDescription
      ; 0123456789012345678901234567890123456789
+ .IF TARGET = 800
  dta d"Space"*
  dta      d": Purchase  "
  dta                  d"Return"*
  dta                        d": Finish "
+.ELIF TARGET = 5200
+ dta d"Right"*
+ dta      d": Purchase    "
+ dta                    d"FIRE"*
+ dta                        d": Finish "
+.ENDIF
 ActivateDescription
      ; 0123456789012345678901234567890123456789
+ .IF TARGET = 800
  dta d"Space"*
  dta      d": Activate  "
  dta                  d"Return"*
  dta                        d": Finish "
+.ELIF TARGET = 5200
+ dta d"Right"*
+ dta      d": Activate    "
+ dta                    d"FIRE"*
+ dta                        d": Finish "
+.ENDIF
 EmptyLine
  dta d"                                        "
 ;---------------------------------------------------
@@ -120,7 +158,6 @@ dl ; MAIN game display list
         .byte $41
         .word dl
 ;-----------------------------------------------
-        ;.ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 OptionsDL
         .byte $70
 		.byte $47

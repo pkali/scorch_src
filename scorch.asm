@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800 ;5200  ; or 800
+.def TARGET = 5200  ; or 800
 ;---------------------------------------------------
 
     OPT r+  ; saves 12 bytes :O
@@ -226,6 +226,7 @@ FirstSTART
 
     .IF TARGET = 5200
         mva #$0f STICK0
+        mva #$04 CONSOL5200          ;Speaker off, Pots enabled, port #1 selected
     .ENDIF
     VMAIN VBLinterrupt,7  		;jsr SetVBL
 	
