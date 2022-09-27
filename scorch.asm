@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800; 5200  ; or 800
+.def TARGET = 800 ;5200  ; or 800
 ;---------------------------------------------------
 
     OPT r+  ; saves 12 bytes :O
@@ -228,6 +228,8 @@ FirstSTART
         mva #$0f STICK0
     .ENDIF
     VMAIN VBLinterrupt,7  		;jsr SetVBL
+	
+	mva #2 chactl  ; necessary for 5200
 	
 START
     ; Startup sequence
@@ -1753,7 +1755,7 @@ font4x4
     .ENDIF
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
-    .byte " SCORCH 5200  v"    ;20 characters title
+    .byte " scorch 5200  v"    ;20 characters title
     build ;               "    "
     .byte                      " "
     .byte "7A"          ;2 characters year .. 1900 + $7A = 2020
