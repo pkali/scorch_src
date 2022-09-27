@@ -24,7 +24,9 @@ NameScreen
 .IF TARGET = 800
  dta d"     Enter names of players     "
 .ELIF TARGET = 5200
- dta d"    Hold FIRE to enter names    "
+ dta d"Hold "
+ dta d     "FIRE"*
+ dta d         " to enter player names "
 .ENDIF
 NameScreen3
  dta d" Human/Atari (difficulty level) "
