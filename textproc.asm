@@ -2508,7 +2508,7 @@ NextChar02
     
     ; set background
     lda #$ff
-    ldx #100 ; top of the sprites
+    ldx #100+7 ; top of the sprites
 @     sta PMGraph+$400,x
       sta PMGraph+$500,x
       inx

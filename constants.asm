@@ -546,7 +546,7 @@ scrcodes
 gameOverSpritesTop
     ; end of the Gover sprites by number of players
     ;    1   2   3   4   5   6
-    .by 130,130,136,142,148,154
+    .by 130+7,130+7,136+7,142+7,148+7,154+7
 ;-------decimal constans
 zero
 digits   dta d"0123456789"

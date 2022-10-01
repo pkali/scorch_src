@@ -114,7 +114,7 @@ GameOverTitle2
 ;-----------------------------------------------------
 
 dl ; MAIN game display list
-        .byte 0
+        .byte $70
         .byte $42 
         .word statusBuffer
         .byte $02, $02 +$80 ;DLI
@@ -174,6 +174,7 @@ OptionsDL
         :maxOptions-1 .by $02,$10
 		:(9-maxOptions) .by $70,$10
 		.byte $80
+		.byte $70  ; to match moved sprites
         .byte $4f
         .word (display+140*40)
         :21 .by $0f                     ;76
@@ -212,6 +213,7 @@ GameOverDL
        .byte $70,$40
        .byte $47    ; 16 gr8 lines
        .word GameOverTitle
+       .byte $60  ; 7 lines down to match new sprite position
        .byte $4f   ; 1 line
        .word display+(40*72)
        :28 .byte $0f   ; 28 lines

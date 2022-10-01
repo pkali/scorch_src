@@ -1172,6 +1172,7 @@ CreditsScroll
 	cmp #32		;not too fast
 	beq nextlinedisplay
 	:2 lsr		;not too fast
+    sta WSYNC
 	sta VSCROL
 	jmp EndOfDLI_GO
 nextlinedisplay
