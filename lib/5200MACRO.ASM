@@ -102,7 +102,7 @@
         sta :1+1
     .endm
 ;-------------------------------------
-    .macro randomize
+    .macro randomizer
     ;usage: randomize floor ceiling
     ;returns (in A) a random .byte between "floor" and "ceiling"
     .if :2 < :1

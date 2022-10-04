@@ -249,3 +249,23 @@ scr32   = @dmactl(narrow|dma|players|missiles|lineX1)
     mode10  = %10000000
     mode11  = %11000000
 .ende
+/*
+; commented out to be replaced by the application specific A800 --> 5200 keypad translation
+.enum @kbcode 
+    _0
+    _1
+    _2
+    _3
+    _4
+    _5
+    _6
+    _7
+    _8
+    _9
+    _asterisk = $0a
+    _hash = $0b
+    _start = $0c
+    _pause = $0d
+    _reset = $0e
+.ende
+*/

@@ -525,8 +525,22 @@ weaponsOfDeath  ; weapons used in tank death animations
 	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
 weaponsOfDeathEnd
 joyToKeyTable
-  ; .by  00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15
-    .by $ff,$ff,$ff,$ff,$ff,$ff,$ff,$07,$ff,$ff,$ff,$06,$ff,$0f,$0e,$ff
+    .by $ff  ;00
+    .by $ff  ;01
+    .by $ff  ;02
+    .by $ff  ;03
+    .by $ff  ;04
+    .by $ff  ;05
+    .by $ff  ;06
+    .by @kbcode._right  ;07
+    .by $ff  ;08
+    .by $ff  ;09
+    .by $ff  ;0a
+    .by @kbcode._left  ;0b
+    .by $ff  ;0c
+    .by @kbcode._down  ;0d
+    .by @kbcode._up  ;0e
+    .by $ff  ;0f
 
 ;-----------------------------------
 keycodes ;tables for converting KeyCode to Screen Code (38 -1  characters)

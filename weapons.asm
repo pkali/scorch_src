@@ -1126,7 +1126,7 @@ notpressed
     lda kbcode
     and #%10111111 ; SHIFT elimination
 
-    cmp #$08  ; O
+    cmp #@kbcode._O  ; $08  ; O
     bne @+
     jsr AreYouSure
     bit escFlag
@@ -1136,7 +1136,7 @@ QuitToGameover
 	mva #$40 escFlag
     rts
 @
-    cmp #28  ; ESC
+    cmp #@kbcode._esc  ; 28  ; ESC
     bne @+
     jsr AreYouSure
     bit escFlag
@@ -1144,7 +1144,7 @@ QuitToGameover
     ;---esc pressed-quit game---
     rts
 @
-    cmp #$3f  ; A
+    cmp #@kbcode._A  ; $3f  ; A
     bne @+
 callActivation
     ; Hide all tanks - after inventory they may have other shapes
@@ -1153,7 +1153,7 @@ callActivation
 	jmp afterInventory
 
 @	
-    cmp #$0d  ; I
+    cmp #@kbcode._I  ; $0d  ; I
     bne @+
 callInventory
     ; Hide all tanks - after inventory they may have other shapes
@@ -1172,30 +1172,30 @@ afterInventory
     jsr WaitForKeyRelease
     jmp BeforeFire   
 @
-    cmp #$8e
+    cmp #$80|@kbcode._up
     jeq CTRLPressedUp
-    cmp #$8f
+    cmp #$80|@kbcode._down
     jeq CTRLPressedDown
-    cmp #$ac
+    cmp #$80|@kbcode._tab
     jeq CTRLPressedTAB
 
     and #$3f ;CTRL and SHIFT ellimination
 jumpFromStick
-    cmp #$e
+    cmp #@kbcode._up  ; $e
     jeq pressedUp
-    cmp #$f
+    cmp #@kbcode._down  ; $f
     jeq pressedDown
-    cmp #$6
+    cmp #@kbcode._left  ; $6
     jeq pressedLeft
-    cmp #$7
+    cmp #@kbcode._right  ; $7
     jeq pressedRight
-    cmp #$21
+    cmp #@kbcode._space  ; $21
     jeq pressedSpace
-    cmp #$2c
+    cmp #@kbcode._tab  ; $2c
     jeq pressedTAB
-    cmp #$25  ; M
+    cmp #@kbcode._M  ; $25  ; M
     jeq pressedM
-    cmp #$3e  ; S
+    cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
     jmp notpressed
 checkJoy
@@ -1516,7 +1516,7 @@ ShotUnderGround
 ;xtraj=xtraj+vx - without Wind
 ;vx=vx+Wind (Wind is a small fraction)
 ;plot xtraj,ytraj - there is clearing in plot
-;goto begin
+;goto begin-
 
 
 
@@ -2548,7 +2548,7 @@ notpressed
     lda kbcode
     and #%00111111 ; CTRL and SHIFT elimination
 
-    cmp #28  ; ESC
+    cmp #@kbcode._esc  ; 28  ; ESC
     bne @+
     jsr AreYouSure
     bit escFlag
@@ -2557,11 +2557,11 @@ notpressed
     rts
 @
 jumpFromStick
-    cmp #$6
+    cmp #@kbcode._left  ; $6
     jeq pressedLeft
-    cmp #$7
+    cmp #@kbcode._right  ; $7
     jeq pressedRight
-    cmp #$21
+    cmp #@kbcode._space  ; $21
     jeq pressedSpace
     jmp notpressed
 checkJoy

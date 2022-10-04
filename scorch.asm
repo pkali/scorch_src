@@ -7,6 +7,8 @@
 
 ;---------------------------------------------------
 .def TARGET = 800 ;5200  ; or 800
+;atari800  -5200 -cart ${outputFilePath} -cart-type 4
+;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
 
     OPT r+  ; saves 12 bytes :O
@@ -133,6 +135,41 @@
       OPT h-f+
       icl 'lib/5200SYS.ASM'
       icl 'lib/5200MACRO.ASM'
+      .enum @kbcode 
+        /*
+        _0
+        _1
+        _2
+        _3
+        _4
+        _5
+        _6
+        _7
+        _8
+        _9
+        _asterisk = $0a
+        _hash = $0b
+        _start = $0c
+        _pause = $0d
+        _reset = $0e
+        */
+        _space = $00
+        _Y     = $01
+        _up    = $02
+        _O     = $03
+        _left  = $04
+        _tab   = $05
+        _right = $06
+        _A     = $07
+        _down  = $08
+        _I     = $09
+        _esc   = $0a
+        _ret   = $0b
+        _M     = $0d
+        _S     = $0e
+        _del = $0e  ; not used in 5200
+
+      .ende
     .ELSE
       icl 'lib/ATARISYS.ASM'
       icl 'lib/MACRO.ASM'
@@ -577,7 +614,7 @@ RoboTanks
 	jsr DisplayStatus	; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
     lda kbcode
-    cmp #28  ; ESC
+    cmp #@kbcode._esc ; 28  ; ESC
     bne @+
     jsr AreYouSure
 @	lda escFlag
@@ -1556,7 +1593,7 @@ SetRandomWalls
             
           lda kbcode
           and #$3f ;CTRL and SHIFT ellimination
-          cmp #28  ; ESC
+          cmp #@kbcode._esc  ; 28  ; ESC
           bne getkeyend
             mvx #$80 escFlag
           bne getkeyend
@@ -1577,7 +1614,7 @@ notpressedJoyGetKey
       ;fire
       lda STRIG0
     bne @-
-    lda #$0c ;Return key
+    lda #@kbcode._ret ;Return key
     
 getkeyend
     mvx #sfx_keyclick sfx_effect
@@ -1638,13 +1675,12 @@ checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
     ;pause 150
     ldy #75
     jsr PauseYFrames
-    jmp noKey
+    rts
 
 peopleAreHere
-    jsr getkey
-noKey
-	rts
+    jmp getkey  ; jsr:rts
 .endp
+
 MakeDarkScreen
 	mva #0 dmactls		; dark screen
     sta dmactl
@@ -1652,13 +1688,12 @@ MakeDarkScreen
 .proc WaitOneFrame
 	lda CONSOL
 	and #%00000101	; Start + Option
-	bne @+
-	mva #$40 escFlag	
-@	and #%00000001 ; START KEY
-	beq @+
-	wait
-@	rts
+	sne:mva #$40 escFlag	
+	and #%00000001 ; START KEY
+	seq:wait
+    rts
 .endp
+
 .proc PauseYFrames
 ; Y - number of frames to wait (divided by 2)
 ; pauses for maximally 510 frames (255 * 2)
@@ -1708,19 +1743,51 @@ noingame
     bne @-
     rts
 .endp
-;;--------------------------------------------------
-;.proc Randomizer
-;;--------------------------------------------------
-;    ;usage: randomize floor ceiling
-;    ;returns (in A) a random .byte between "floor" and "ceiling"
-;?rand
-;      lda random
-;      cmp #:1 ;floor
-;      bcc ?rand
-;      cmp #:2+1 ;ceiling
-;      bcs ?rand
-;      rts
-;.endp
+;--------------------------------------------------
+.macro randomize floor ceiling
+;--------------------------------------------------
+    ;usage: randomize floor ceiling
+    ;returns (in A) a random .byte between "floor" and "ceiling"
+        jsr _randomizator
+        .byte :floor
+        .byte :ceiling
+.endm
+
+.proc _randomizator
+; private function that accompanies `randomize` macro
+; trashes: magic, temp, Y
+    pla
+    sta magic
+    pla
+    sta magic+1
+    ldy #1  ; add 1 to the value got from the stack to point to the input parameters
+    lda (magic),y
+    sta temp
+    iny
+    lda (magic),y
+    sta temp+1
+
+?rand
+      lda random
+      cmp temp ;floor
+      bcc ?rand
+      cmp temp+1 ;ceiling
+      bcs ?rand
+      tay  ; save the result
+      
+    ; point the PC to a byte after the parameters
+    clc
+    lda magic
+    adc #2 ; length of the parameters in bytes
+    sta magic
+    lda magic+1
+    adc #0
+    pha
+    lda magic
+    pha
+    tya ; retrieve the result
+    rts
+.endp
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------

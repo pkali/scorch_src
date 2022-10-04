@@ -68,7 +68,7 @@ OptionsMainLoop
     bit escFlag
     spl:rts
        
-    cmp #$f  ;cursor down
+    cmp #@kbcode._down  ; $f  ;cursor down
     bne OptionsNoDown
     inc:lda OptionsY
     cmp #maxoptions
@@ -77,7 +77,7 @@ OptionsMainLoop
     jmp OptionsMainLoop
 
 OptionsNoDown
-    cmp #$e ;cursor up
+    cmp #@kbcode._up  ; $e ;cursor up
     bne OptionsNoUp
     dec OptionsY
     bpl OptionsMainLoop
@@ -85,7 +85,7 @@ OptionsNoDown
     jmp OptionsMainLoop
 
 OptionsNoUp
-    cmp #$6 ;cursor left
+    cmp #@kbcode._left  ; $6 ;cursor left
     bne OptionsNoLeft
     ldx OptionsY
     dec OptionsTable,X
@@ -95,19 +95,19 @@ OptionsNoUp
     jmp OptionsMainLoop
 
 OptionsNoLeft
-    cmp #$7 ;cursor right
+    cmp #@kbcode._right  ; $7 ;cursor right
     bne OptionsNoRight
 
     ldx OptionsY
     inc OptionsTable,X
     lda OptionsTable,X
-    cmp #5
+    cmp #5  ; number of columns in options
     bne OptionsMainLoop
     dec OptionsTable,X
     jmp OptionsMainLoop
 
 OptionsNoRight
-    cmp #$c ;Return key
+    cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
     jmp OptionsFinished
 OptionsNoReturn
@@ -398,19 +398,19 @@ ChoosingItemForPurchase
     jsr getkey
     bit escFlag
     spl:jmp WaitForKeyRelease  ; like jsr ... : rts
-    cmp #$2c ; Tab
+    cmp #@kbcode._esc  ; $2c ; Tab
     jeq ListChange
-    cmp #$06  ; cursor left
+    cmp #@kbcode._left  ; $06  ; cursor left
     jeq ListChange
-    cmp #$0c ; Return
+    cmp #@kbcode._ret  ; $0c ; Return
     sne:rts
-    cmp #$e
+    cmp #@kbcode._up  ; $e
     beq PurchaseKeyUp
-    cmp #$f
+    cmp #@kbcode._down  ;  $f
     beq PurchaseKeyDown
-    cmp #$21 ; Space
+    cmp #@kbcode._space  ; $21 ; Space
     jeq PurchaseWeaponNow
-    cmp #$07 ; cursor right
+    cmp #@kbcode._right  ; $07 ; cursor right
     jeq PurchaseWeaponNow
     bne ChoosingItemForPurchase
 
@@ -1137,20 +1137,20 @@ YesLetter
 @	stx PositionInName ; if not, we store
     jmp CheckKeys
 CheckFurtherX01 ; here we check Tab, Return and Del
-    cmp #$0c ; Return
+    cmp #@kbcode._ret  ; $0c ; Return
     jeq EndOfNick
-    cmp #$2c ; Tab
+    cmp #@kbcode._tab  ; $2c ; Tab
     beq ChangeOfLevelUp
-    cmp #$7 ;cursor right
+    cmp #@kbcode._right  ; $7 ;cursor right
     beq ChangeOfLevelUp
-    cmp #$6 ;cursor left
+    cmp #@kbcode._left  ; $6 ;cursor left
     beq ChangeOfLevelDown
-    cmp #$f ;cursor down
+    cmp #@kbcode._down  ; $f ;cursor down
     beq ChangeOfLevel3Up
-    cmp #$e ;cursor up
+    cmp #@kbcode._up  ; $e ;cursor up
     beq ChangeOfLevel3Down
 
-    cmp #$34 ; Backspace (del)
+    cmp #@kbcode._del  ; $34 ; Backspace (del)
     bne CheckKeys
     ; handling backing one char
     ldx PositionInName
@@ -1334,7 +1334,7 @@ JoyNotCentered
 	bne NoRight
 	; joy right
 	cpy #7
-	beq GoToMainLoop	; jast character
+	beq GoToMainLoop	; the last character
 	iny
 	bne GoToMainLoop
 NoRight
@@ -1353,7 +1353,7 @@ NoLeft
 	; joy up
 	cpx #(keycodesEnd-keycodes-1)
 	bne @+
-	ldx #$00 	; set to first character index (loop)
+	ldx #$00 	; set to the first character index (loop)
 	beq CharAndMainLoop
 @	inx
 	bne CharAndMainLoop
@@ -1363,7 +1363,7 @@ NoUp
 	; joy down
 	dex
 	bpl CharAndMainLoop
-	ldx #(keycodesEnd-keycodes-1) 	; set to last character index (loop)
+	ldx #(keycodesEnd-keycodes-1) 	; set to the last character index (loop)
 CharAndMainLoop
 	lda scrcodes,x
 	sta NameAdr,y
@@ -1767,7 +1767,7 @@ EndOfTypeLine4x4
     
 
     jsr GetKey
-    cmp #$2b  ; "Y"
+    cmp #@kbcode._Y  ; $2b  ; "Y"
     bne @+
     mva #$80 escFlag
     bne skip01
