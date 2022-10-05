@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800 ;5200  ; or 800
+.def TARGET = 800; 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -135,7 +135,7 @@
       OPT h-f+
       icl 'lib/5200SYS.ASM'
       icl 'lib/5200MACRO.ASM'
-      .enum @kbcode 
+/*      .enum @kbcode 
         /*
         _0
         _1
@@ -153,7 +153,7 @@
         _pause = $0d
         _reset = $0e
         */
-        _space = $00
+/*        _space = $00
         _Y     = $01
         _up    = $02
         _O     = $03
@@ -169,7 +169,7 @@
         _S     = $0e
         _del = $0e  ; not used in 5200
 
-      .ende
+      .ende */
     .ELSE
       icl 'lib/ATARISYS.ASM'
       icl 'lib/MACRO.ASM'
