@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800; 5200  ; or 800
+.def TARGET = 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -134,7 +134,7 @@
       OPT h-f+  ; no headers, single block --> cart bin file
       icl 'lib/5200SYS.ASM'
       icl 'lib/5200MACRO.ASM'
-/*      .enum @kbcode 
+      .enum @kbcode 
         /*
         _0
         _1
@@ -152,7 +152,7 @@
         _pause = $0d
         _reset = $0e
         */
-/*        _space = $00
+        _space = $00
         _Y     = $01
         _up    = $02
         _O     = $03
@@ -163,10 +163,10 @@
         _down  = $08
         _I     = $09
         _esc   = $0a
-        _ret   = $0b
+        _ret   = $fa ;$0b
         _M     = $0d
         _S     = $0e
-        _del = $0e  ; not used in 5200
+        _del = $fe ; not used in 5200
 
       .ende */
     .ELSE
@@ -262,6 +262,7 @@ FirstSTART
     .IF TARGET = 5200
         mva #$0f STICK0
         mva #$04 CONSOL5200          ;Speaker off, Pots enabled, port #1 selected
+        mwa #kb_continue VKEYCNT     ;Keyboard handler
     .ENDIF
     VMAIN VBLinterrupt,7  		;jsr SetVBL
 	
@@ -1003,27 +1004,6 @@ B0  DEY
     sta MaxForceTableL,x
 	rts
 .endp
-;--------------------------------------------------
-.proc PMoutofScreen
-;--------------------------------------------------
-    lda #$00 ; let all P/M disappear
-    :8 sta hposp0+#
-    rts
-.endp
-;--------------------------------------------------
-.proc ColorsOfSprites     
-    lda TankColoursTable ; colours of sprites under tanks
-    sta PCOLR0
-    lda TankColoursTable+1
-    sta PCOLR1
-    lda TankColoursTable+2
-    sta PCOLR2
-    lda TankColoursTable+3
-    sta PCOLR3
-    LDA TankColoursTable+4
-    STA COLOR3     ; joined missiles (5th tank)
-    rts
-.endp
 
 ;--------------------------------------------------
 .proc WeaponCleanup;
@@ -1122,17 +1102,6 @@ MakeTanksVisible
 @	sta BarrelLength,x
 	dex
 	bpl @-
-	rts
-.endp
-;--------------------------------------------------
-.proc SetPMWidth
-    lda #$00
-    sta sizep0 ; P0-P3 widths
-    sta sizep0+1
-    sta sizep0+2
-    sta sizep0+3
-	lda #%01010101
-    sta sizem ; all missiles, double width
 	rts
 .endp
 ;--------------------------------------------------
@@ -1313,6 +1282,17 @@ exitVBL
 	   jmp XITVBV
 	.ENDIF
 .endp
+    .IF TARGET = 5200
+.proc kb_continue
+    sta kbcode          ;Store key code in shadow.
+exit    pla
+    tay
+    pla
+    tax
+    pla
+    rti
+.endp    
+    .ENDIF
 ;----------------------------------------------
 .proc RandomizeSequence0
     ldx #0
@@ -1787,15 +1767,15 @@ noingame
     rts
 .endp
 ;----------------------------------------------
-    icl 'weapons.asm'
+    icl 'constants.asm'
 ;----------------------------------------------
     icl 'textproc.asm'
 ;----------------------------------------------
     icl 'grafproc.asm'
 ;----------------------------------------------
-    icl 'ai.asm'
+    icl 'weapons.asm'
 ;----------------------------------------------
-    icl 'constants.asm'
+    icl 'ai.asm'
 ;----------------------------------------------
     icl 'artwork/talk.asm'
 ;----------------------------------------------
@@ -1823,8 +1803,8 @@ font4x4
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
     .byte " scorch 5200  v"    ;20 characters title
-    build ;               "    "
-    .byte                      " "
+    build ;              "    "
+    .byte                    " "
     .byte "7A"          ;2 characters year .. 1900 + $7A = 2020
     .word FirstSTART
   .ELSE

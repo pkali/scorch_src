@@ -2181,5 +2181,37 @@ ybarrel
     
     rts
 .endp
+;--------------------------------------------------
+.proc PMoutofScreen
+;--------------------------------------------------
+    lda #$00 ; let all P/M disappear
+    :8 sta hposp0+#
+    rts
+.endp
+;--------------------------------------------------
+.proc ColorsOfSprites     
+    lda TankColoursTable ; colours of sprites under tanks
+    sta PCOLR0
+    lda TankColoursTable+1
+    sta PCOLR1
+    lda TankColoursTable+2
+    sta PCOLR2
+    lda TankColoursTable+3
+    sta PCOLR3
+    LDA TankColoursTable+4
+    STA COLOR3     ; joined missiles (5th tank)
+    rts
+.endp
+;--------------------------------------------------
+.proc SetPMWidth
+    lda #$00
+    sta sizep0 ; P0-P3 widths
+    sta sizep0+1
+    sta sizep0+2
+    sta sizep0+3
+    lda #%01010101
+    sta sizem ; all missiles, double width
+    rts
+.endp
 
 .endif

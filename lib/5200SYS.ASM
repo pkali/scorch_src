@@ -37,6 +37,7 @@ STRIG0  = $1a     ;There is no strig0 but we will make this the shadow of the TR
 chbas   = $1b     ;There is no CHBAS but we will make this the shadow of the CHBASE
 CONSOL  = $1c     ;There are no console keys on Atari 5200, so we replace console h/w reads with a new shadow based on the keypad keys
 consol_reset = $07;The constant value representing that no consol key is pressed
+kbcode  = $1d     ;There is no keyboard on the Atari 5200, so replace kbcode h/w reads with a byte variable read based on the keypad keys
 
 ; PAGE 2
 VIMIRQ  EQU $0200   ;IMMED IRQ VECTOR
@@ -74,7 +75,7 @@ POT5  	EQU	POKEY+$05
 POT6  	EQU	POKEY+$06
 POT7  	EQU	POKEY+$07
 ALLPOT	EQU	POKEY+$08
-KBCODE	EQU	POKEY+$09
+KBCODE_5200	EQU	POKEY+$09
 RANDOM	EQU	POKEY+$0a
 POTGO 	EQU	POKEY+$0b
 SERIN 	EQU	POKEY+$0d
@@ -269,69 +270,3 @@ scr32   = @dmactl(narrow|dma|players|missiles|lineX1)
     _reset = $0e
 .ende
 */
-
-.enum @kbcode
-    _none = 255
-    _esc = 28
-    _1 = 31
-    _2 = 30
-    _3 = 26
-    _4 = 24
-    _5 = 29
-    _6 = 27
-    _7 = 51
-    _8 = 53
-    _9 = 48
-    _0 = 50
-    _lt = 54
-    _gt = 55
-    _del = 52
-    _tab = 44
-    _Q = 47
-    _W = 46
-    _E = 42
-    _R = 40
-    _T = 45
-    _Y = 43
-    _U = 11
-    _I = 13
-    _O = 8
-    _P = 10
-    _min = 14
-    _up =  14  ; cursor function 
-    _eq = 15
-    _down = 15 ; cursor function
-    _ret = 12
-    _A = 63
-    _S = 62
-    _D = 58
-    _F = 56
-    _G = 61
-    _H = 57
-    _J = 1
-    _K = 5
-    _L = 0
-    _semicolon = 2
-    _plus = 6
-    _left = 6  ; cursor function
-    _asterisk = 7
-    _right = 7 ; cursor function
-    _caps = 60
-    _Z = 23
-    _X = 22
-    _C = 18
-    _V = 16
-    _B = 21
-    _N = 36
-    _M = 37
-    _comma = 32
-    _dot = 34
-    _slash = 38
-    _atari = 39
-    _help = 17
-    _F1 = 3
-    _F2 = 4
-    _F3 = 19
-    _F4 = 20
-    _space = 33
-.ende
