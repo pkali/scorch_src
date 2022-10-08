@@ -115,7 +115,6 @@
     .zpvar HowToDraw .byte
     .zpvar gravity .byte
     .zpvar LineLength .word
-    ;.zpvar LineAddress4x4 .word
     .zpvar tracerflag .byte
     .zpvar isInventory .byte
     .zpvar DifficultyLevel .byte
@@ -132,7 +131,7 @@
 ; libraries
 ;-----------------------------------------------
     .IF TARGET = 5200
-      OPT h-f+
+      OPT h-f+  ; no headers, single block --> cart bin file
       icl 'lib/5200SYS.ASM'
       icl 'lib/5200MACRO.ASM'
 /*      .enum @kbcode 
@@ -184,7 +183,6 @@
         
     ; Game loading address
     ORG $4000
-    ;opt f+  ; single block
     
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
@@ -226,15 +224,15 @@ FirstSTART
 	; one time zero variables in RAM (non zero page)
 	lda #0
 	ldy #OneTimeZeroVariablesCount-1
-@	sta OneTimeZeroVariables,y
-	dey
+@	  sta OneTimeZeroVariables,y
+	  dey
 	bpl @-
 	
 	; initialize variables in RAM (non zero page)
 	ldy #initialvaluesCount-1
-@	lda initialvaluesStart,y
-	sta variablesToInitialize,y
-	dey
+@	  lda initialvaluesStart,y
+	  sta variablesToInitialize,y
+	  dey
 	bpl @-
 
 
