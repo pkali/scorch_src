@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.15" ; number of this build (4 bytes)
+	dta d"1.16" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -154,19 +154,20 @@
         */
         _space = $00
         _Y     = $01
-        _up    = $02
+        _up    = $f2  ;02
         _O     = $03
-        _left  = $04
+        _left  = $f4  ;04
         _tab   = $05
-        _right = $06
+        _right = $f6  ;06
         _A     = $07
-        _down  = $08
+        _down  = $f8  ;08
         _I     = $09
         _esc   = $0a
-        _ret   = $fa ;$0b
+        _ret   = $fb  ;$0b ;not used in 5200
+        _del   = $fc  ;$0c ;not used in 5200
         _M     = $0d
         _S     = $0e
-        _del = $fe ; not used in 5200
+        _none = $0f
 
       .ende */
     .ELSE
@@ -1270,7 +1271,10 @@ exitVBL
     
         lda skstat          ;Reset consol key shadow is no key is pressed anymore
         and #4
-        seq:mva #consol_reset consol
+        beq @+
+          mva #consol_reset consol
+          mva #@kbcode._none kbcode
+@
 
         pla
         tay
@@ -1568,14 +1572,16 @@ SetRandomWalls
           beq checkJoyGetKey ; key not pressed, check Joy
           cmp #$f7  ; SHIFT
           beq checkJoyGetKey
-            
+      .ENDIF            
           lda kbcode
+          cmp #@kbcode._none
+          beq checkJoyGetKey
           and #$3f ;CTRL and SHIFT ellimination
           cmp #@kbcode._esc  ; 28  ; ESC
           bne getkeyend
             mvx #$80 escFlag
           bne getkeyend
-      .ENDIF
+
 checkJoyGetKey
       ;------------JOY-------------
       ;happy happy joy joy
