@@ -17,7 +17,6 @@
     pha
     lda ExplosionRoutines,x
     pha
-;    inc FallDown2
     rts
 ExplosionRoutines
     .word babymissile-1              ;Baby_Missile___;_00    
@@ -62,35 +61,30 @@ tracer
 ; ------------------------
 .proc babymissile
     mva #sfx_baby_missile sfx_effect 
-;    inc FallDown2
     mva #11 ExplosionRadius
     jmp xmissile
 .endp
 ; ------------------------
 .proc missile ;
     mva #sfx_baby_missile sfx_effect
-;    inc FallDown2
     mva #17 ExplosionRadius
     jmp xmissile
 .endp
 ; ------------------------
 .proc babynuke
     mva #sfx_nuke sfx_effect 
-;    inc FallDown2
     mva #25 ExplosionRadius
     jmp xmissile
 .endp
 ; ------------------------
 .proc nuke
     mva #sfx_nuke sfx_effect 
-;    inc FallDown2
     mva #30 ExplosionRadius
     jmp xmissile
 .endp
 ; ------------------------
 .proc leapfrog
     mva #sfx_baby_missile sfx_effect
-;    inc FallDown2
     mva #17 ExplosionRadius
     jsr xmissile
 
@@ -143,7 +137,6 @@ EndOfLeapping
 .endp
 ; ------------------------
 .proc mirv ;  the whole mirv is performed by Flight routine
-;    inc FallDown2
     rts
 .endp
 ; ------------------------
@@ -151,7 +144,6 @@ EndOfLeapping
     mva #sfx_baby_missile sfx_effect
     mwa xtraj+1 xtrajfb
     sbw ytraj+1 #$05 ytrajfb	; funky missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
-;    inc FallDown2
     ;central Explosion
     mva #21 ExplosionRadius
     jsr CalculateExplosionRange0
@@ -198,7 +190,6 @@ NoWallsInFunky
 .endp
 ; ------------------------
 .proc deathshead
-;    inc FallDown2
     mva #30 ExplosionRadius
     mva #sfx_nuke sfx_effect
     SaveDrawXY 
@@ -250,7 +241,6 @@ NoLowerCircle
 ; ------------------------
 .proc napalm
     mva #sfx_napalm sfx_effect
-;    inc FallDown2
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #0 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
@@ -259,7 +249,6 @@ NoLowerCircle
 ; ------------------------
 .proc hotnapalm
     mva #sfx_napalm sfx_effect
-;    inc FallDown2
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #1 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
@@ -324,7 +313,6 @@ CharOffTheScreen
 	dec magic
 	jpl RepeatNapalm
 	; after napalm 
-;	inc FallDown2
 ;now we must check tanks in range
     ldx NumberOfPlayers
 	dex
@@ -372,32 +360,27 @@ EndNurnedCheckLoop
 .endp
 ; ------------------------
 .proc babyroller
-;    inc FallDown2
     mva #11 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc roller ;
-;    inc FallDown2
     mva #21 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc heavyroller
-;    inc FallDown2
     mva #30 ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc riotbomb
-;    inc FallDown2
     mva #17 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
 .endp
 ; ------------------------
 .proc heavyriotbomb
-;    inc FallDown2
     mva #29 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
@@ -406,7 +389,6 @@ EndNurnedCheckLoop
 .proc babydigger
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-;    inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
     jmp xdigger
@@ -415,7 +397,6 @@ EndNurnedCheckLoop
 .proc digger ;
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-;    inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
     jmp xdigger
@@ -424,7 +405,6 @@ EndNurnedCheckLoop
 .proc heavydigger
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
-;    inc FallDown2
     mva #13 DigLong
     mva #7 diggery  ; how many branches  (-1)
     jmp xdigger
@@ -548,7 +528,6 @@ DiggerCharacter
 .proc babysandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-;    inc FallDown2
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
     jmp xdigger
@@ -557,7 +536,6 @@ DiggerCharacter
 .proc sandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-;    inc FallDown2
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
     jmp xdigger
@@ -566,35 +544,30 @@ DiggerCharacter
 .proc heavysandhog
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
-;    inc FallDown2
     mva #13 DigLong
     mva #5 diggery  ; how many branches (-1)
     jmp xdigger
 .endp
 ; ------------------------
 .proc dirtclod
-;    inc FallDown2
     mva #12 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc dirtball
-;    inc FallDown2
     mva #22 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc tonofdirt
-;    inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
     jmp xdirt
 .endp
 ; ------------------------
 .proc dirtcharge
-;    inc FallDown2
     mva #61 ExplosionRadius
     jsr CalculateExplosionRange
     jmp ofdirt
@@ -602,7 +575,6 @@ DiggerCharacter
 ; ------------------------
 .proc riotcharge
     mva #sfx_riot_blast sfx_effect
-;    inc FallDown2
     mva #31 ExplosionRadius
     jsr CalculateExplosionRange
     jmp cleanDirt
@@ -610,7 +582,6 @@ DiggerCharacter
 ; ------------------------
 .proc riotblast
     mva #sfx_riot_blast sfx_effect
-;    inc FallDown2
     mva #61 ExplosionRadius
     jsr CalculateExplosionRange
     jmp cleanDirt
@@ -1155,7 +1126,7 @@ notpressed
     lda kbcode
     and #%10111111 ; SHIFT elimination
 
-    cmp #$08  ; O
+    cmp #@kbcode._O  ; $08  ; O
     bne @+
     jsr AreYouSure
     bit escFlag
@@ -1165,7 +1136,7 @@ QuitToGameover
 	mva #$40 escFlag
     rts
 @
-    cmp #28  ; ESC
+    cmp #@kbcode._esc  ; 28  ; ESC
     bne @+
     jsr AreYouSure
     bit escFlag
@@ -1173,7 +1144,7 @@ QuitToGameover
     ;---esc pressed-quit game---
     rts
 @
-    cmp #$3f  ; A
+    cmp #@kbcode._A  ; $3f  ; A
     bne @+
 callActivation
     ; Hide all tanks - after inventory they may have other shapes
@@ -1182,7 +1153,7 @@ callActivation
 	jmp afterInventory
 
 @	
-    cmp #$0d  ; I
+    cmp #@kbcode._I  ; $0d  ; I
     bne @+
 callInventory
     ; Hide all tanks - after inventory they may have other shapes
@@ -1192,8 +1163,7 @@ callInventory
     jsr Purchase
 afterInventory
 	jsr MakeDarkScreen	
-    lda #song_ingame
-    jsr RmtSongSelect
+    RmtSong song_ingame
     mva #0 escFlag
     jsr DisplayStatus
     jsr SetMainScreen   
@@ -1202,30 +1172,30 @@ afterInventory
     jsr WaitForKeyRelease
     jmp BeforeFire   
 @
-    cmp #$8e
+    cmp #$80|@kbcode._up
     jeq CTRLPressedUp
-    cmp #$8f
+    cmp #$80|@kbcode._down
     jeq CTRLPressedDown
-    cmp #$ac
+    cmp #$80|@kbcode._tab
     jeq CTRLPressedTAB
 
     and #$3f ;CTRL and SHIFT ellimination
 jumpFromStick
-    cmp #$e
+    cmp #@kbcode._up  ; $e
     jeq pressedUp
-    cmp #$f
+    cmp #@kbcode._down  ; $f
     jeq pressedDown
-    cmp #$6
+    cmp #@kbcode._left  ; $6
     jeq pressedLeft
-    cmp #$7
+    cmp #@kbcode._right  ; $7
     jeq pressedRight
-    cmp #$21
+    cmp #@kbcode._space  ; $21
     jeq pressedSpace
-    cmp #$2c
+    cmp #@kbcode._tab  ; $2c
     jeq pressedTAB
-    cmp #$25  ; M
+    cmp #@kbcode._M  ; $25  ; M
     jeq pressedM
-    cmp #$3e  ; S
+    cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
     jmp notpressed
 checkJoy
@@ -1430,8 +1400,7 @@ pressedM
     ; have you tried turning the music off and on again?
     lda #$ff
     eor:sta noMusic
-    lda #song_ingame
-    jsr RmtSongSelect
+    RmtSong song_ingame
     jsr WaitForKeyRelease
     jmp BeforeFire
 
@@ -1547,7 +1516,7 @@ ShotUnderGround
 ;xtraj=xtraj+vx - without Wind
 ;vx=vx+Wind (Wind is a small fraction)
 ;plot xtraj,ytraj - there is clearing in plot
-;goto begin
+;goto begin-
 
 
 
@@ -1895,7 +1864,7 @@ MagDeflector
 	bit random	; left or right deflection ?
 	bpl RightDeflection
 LeftDeflection
-	sbw XHit #18	; 18 pixels to right and explode...
+	sbw XHit #18	; 18 pixels to left and explode...
 	bit XHit+1	; if off-screen ...
 	bpl EndOfMagDeflector	; hit of course but we need RTS
 	adw XHit #36	; change to right :)
@@ -2579,7 +2548,7 @@ notpressed
     lda kbcode
     and #%00111111 ; CTRL and SHIFT elimination
 
-    cmp #28  ; ESC
+    cmp #@kbcode._esc  ; 28  ; ESC
     bne @+
     jsr AreYouSure
     bit escFlag
@@ -2588,11 +2557,11 @@ notpressed
     rts
 @
 jumpFromStick
-    cmp #$6
+    cmp #@kbcode._left  ; $6
     jeq pressedLeft
-    cmp #$7
+    cmp #@kbcode._right  ; $7
     jeq pressedRight
-    cmp #$21
+    cmp #@kbcode._space  ; $21
     jeq pressedSpace
     jmp notpressed
 checkJoy

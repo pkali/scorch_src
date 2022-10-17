@@ -18,11 +18,13 @@
 
     jsr clearscreen   ;let the screen be clean
 
+    mwa #DisplayCopyRom temp
+    mwa #display temp2
+    mwa #DisplayCopyEnd+1 modify
+    jsr CopyFromROM
+
     mwa #OptionsDL dlptrs
-;    lda dmactls
-;    and #$fc
-;    ora #$02     ; normal screen width
-;    lda #%00110010 ; normal screen width, DL on, P/M off
+
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
 	jsr SetPMWidth
@@ -42,7 +44,7 @@
     sta mountainDeltaL
 	mva #6 NumberOfPlayers
     jsr PMoutofScreen ;let P/M disappear
-    jsr clearscreen   ;let the screen be clean
+    ;jsr clearscreen   ;let the screen be clean (clean-ish already)
 	jsr ClearPMmemory
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
@@ -66,7 +68,7 @@ OptionsMainLoop
     bit escFlag
     spl:rts
        
-    cmp #$f  ;cursor down
+    cmp #@kbcode._down  ; $f  ;cursor down
     bne OptionsNoDown
     inc:lda OptionsY
     cmp #maxoptions
@@ -75,7 +77,7 @@ OptionsMainLoop
     jmp OptionsMainLoop
 
 OptionsNoDown
-    cmp #$e ;cursor up
+    cmp #@kbcode._up  ; $e ;cursor up
     bne OptionsNoUp
     dec OptionsY
     bpl OptionsMainLoop
@@ -83,7 +85,7 @@ OptionsNoDown
     jmp OptionsMainLoop
 
 OptionsNoUp
-    cmp #$6 ;cursor left
+    cmp #@kbcode._left  ; $6 ;cursor left
     bne OptionsNoLeft
     ldx OptionsY
     dec OptionsTable,X
@@ -93,19 +95,19 @@ OptionsNoUp
     jmp OptionsMainLoop
 
 OptionsNoLeft
-    cmp #$7 ;cursor right
+    cmp #@kbcode._right  ; $7 ;cursor right
     bne OptionsNoRight
 
     ldx OptionsY
     inc OptionsTable,X
     lda OptionsTable,X
-    cmp #5
+    cmp #5  ; number of columns in options
     bne OptionsMainLoop
     dec OptionsTable,X
     jmp OptionsMainLoop
 
 OptionsNoRight
-    cmp #$c ;Return key
+    cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
     jmp OptionsFinished
 OptionsNoReturn
@@ -276,6 +278,15 @@ AfterManualPurchase
     ; offensive weapon - 0, defensive - %10000000
 	jmp Purchase.GoToActivation
 .endp
+
+;--------------------------------------------------
+.proc CopyFromPurchaseAndGameOver
+    mwa #DisplayCopyPurchaseDlROM temp
+    mwa #DisplayCopyPurchase temp2
+    mwa #DisplayCopyPurchaseEnd+1 modify
+    jmp CopyFromROM ; jsr:rts
+.endp
+
 ;--------------------------------------------------
 .proc Purchase ;
 ;--------------------------------------------------
@@ -283,6 +294,8 @@ AfterManualPurchase
 ; that is buying weapons now (from 0).
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
+
+    jsr CopyFromPurchaseAndGameOver
 
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
         
@@ -303,7 +316,7 @@ GoToActivation
 	bpl @+
 	lda #song_inventory
 @	jsr RmtSongSelect
-
+    
     ldx tankNr
     lda TankStatusColoursTable,x
     sta COLOR2
@@ -317,7 +330,7 @@ GoToActivation
     tax
 NextChar03
     lda tanksnames,x
-    sta textbuffer2+8,y
+    sta purchaseTextBuffer+8,y
     inx
     iny
     cpy #$08
@@ -335,7 +348,7 @@ AfterPurchase
     sta decimal
     lda moneyH,x
     sta decimal+1
-    mwa #textbuffer2+26 displayposition
+    mwa #purchaseTextBuffer+26 displayposition
     jsr displaydec5
 
     ; in xbyte there is the address of the line that
@@ -385,19 +398,19 @@ ChoosingItemForPurchase
     jsr getkey
     bit escFlag
     spl:jmp WaitForKeyRelease  ; like jsr ... : rts
-    cmp #$2c ; Tab
+    cmp #@kbcode._esc  ; $2c ; Tab
     jeq ListChange
-    cmp #$06  ; cursor left
+    cmp #@kbcode._left  ; $06  ; cursor left
     jeq ListChange
-    cmp #$0c ; Return
+    cmp #@kbcode._ret  ; $0c ; Return
     sne:rts
-    cmp #$e
+    cmp #@kbcode._up  ; $e
     beq PurchaseKeyUp
-    cmp #$f
+    cmp #@kbcode._down  ;  $f
     beq PurchaseKeyDown
-    cmp #$21 ; Space
+    cmp #@kbcode._space  ; $21 ; Space
     jeq PurchaseWeaponNow
-    cmp #$07 ; cursor right
+    cmp #@kbcode._right  ; $07 ; cursor right
     jeq PurchaseWeaponNow
     bne ChoosingItemForPurchase
 
@@ -1057,7 +1070,7 @@ NoArrowDown
     sta difficultyLevel
     inx
     stx decimal
-    mwa #(NameScreen+41) displayposition
+    mwa #(NameScreen2+9) displayposition
     jsr displaybyte
     jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 
@@ -1124,20 +1137,20 @@ YesLetter
 @	stx PositionInName ; if not, we store
     jmp CheckKeys
 CheckFurtherX01 ; here we check Tab, Return and Del
-    cmp #$0c ; Return
+    cmp #@kbcode._ret  ; $0c ; Return
     jeq EndOfNick
-    cmp #$2c ; Tab
+    cmp #@kbcode._tab  ; $2c ; Tab
     beq ChangeOfLevelUp
-    cmp #$7 ;cursor right
+    cmp #@kbcode._right  ; $7 ;cursor right
     beq ChangeOfLevelUp
-    cmp #$6 ;cursor left
+    cmp #@kbcode._left  ; $6 ;cursor left
     beq ChangeOfLevelDown
-    cmp #$f ;cursor down
+    cmp #@kbcode._down  ; $f ;cursor down
     beq ChangeOfLevel3Up
-    cmp #$e ;cursor up
+    cmp #@kbcode._up  ; $e ;cursor up
     beq ChangeOfLevel3Down
 
-    cmp #$34 ; Backspace (del)
+    cmp #@kbcode._del  ; $34 ; Backspace (del)
     bne CheckKeys
     ; handling backing one char
     ldx PositionInName
@@ -1321,7 +1334,7 @@ JoyNotCentered
 	bne NoRight
 	; joy right
 	cpy #7
-	beq GoToMainLoop	; jast character
+	beq GoToMainLoop	; the last character
 	iny
 	bne GoToMainLoop
 NoRight
@@ -1340,7 +1353,7 @@ NoLeft
 	; joy up
 	cpx #(keycodesEnd-keycodes-1)
 	bne @+
-	ldx #$00 	; set to first character index (loop)
+	ldx #$00 	; set to the first character index (loop)
 	beq CharAndMainLoop
 @	inx
 	bne CharAndMainLoop
@@ -1350,7 +1363,7 @@ NoUp
 	; joy down
 	dex
 	bpl CharAndMainLoop
-	ldx #(keycodesEnd-keycodes-1) 	; set to last character index (loop)
+	ldx #(keycodesEnd-keycodes-1) 	; set to the last character index (loop)
 CharAndMainLoop
 	lda scrcodes,x
 	sta NameAdr,y
@@ -1754,7 +1767,7 @@ EndOfTypeLine4x4
     
 
     jsr GetKey
-    cmp #$2b  ; "Y"
+    cmp #@kbcode._Y  ; $2b  ; "Y"
     bne @+
     mva #$80 escFlag
     bne skip01
@@ -1864,8 +1877,7 @@ quit_seppuku
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
-    lda #song_round_over
-    jsr RmtSongSelect
+    RmtSong song_round_over
     mwa #LineGameOver LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
@@ -2008,6 +2020,7 @@ FinishResultDisplay
     jsr ClearPMmemory
 	jsr PrepareCredits
 	jsr GameOverResultsClear
+    jsr CopyFromPurchaseAndGameOver
     mwa #GameOverDL dlptrs
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
@@ -2113,8 +2126,7 @@ MakeAllTanksVisible
 	jsr SetStandardBarrels
 
 	; start music and animations
-    lda #song_ending_looped
-    jsr RmtSongSelect
+    RmtSong song_ending_looped
     ; initial tank positions randomization
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
 @
@@ -2258,13 +2270,13 @@ EndOfCredits
     ;displaying symbol of the weapon
     ;---------------------
     ;display name and symbol of the weapon
-    ;textbuffer+18  - symbol (1 char)
-    ;textbuffer+20  - quantity left
-    ;textbuffer+23  - name
+    ;statusBuffer+18  - symbol (1 char)
+    ;statusBuffer+20  - quantity left
+    ;statusBuffer+23  - name
     ldx TankNr
     ldy ActiveWeapon,x
     lda WeaponSymbols,y
-    sta TextBuffer+18
+    sta statusBuffer+18
 
     ;---------------------
     ;displaying quantity of the given weapon
@@ -2272,7 +2284,7 @@ EndOfCredits
     lda ActiveWeapon,x
     jsr HowManyBullets
     sta decimal
-    mwa #textbuffer+20 displayposition
+    mwa #statusBuffer+20 displayposition
     jsr displaybyte
 
     ;---------------------
@@ -2293,7 +2305,7 @@ EndOfCredits
     ldy #15
 @
       lda (temp),y
-      sta textbuffer+23,y
+      sta statusBuffer+23,y
       dey
     bpl @-
 
@@ -2301,15 +2313,15 @@ EndOfCredits
     ;displaying name of the defence weapon (if active)
     ;---------------------
     lda #$08 ; (
-    sta textbuffer+80+22
+    sta statusBuffer+80+22
     lda #$09    ; )
-    sta textbuffer+80+39
+    sta statusBuffer+80+39
     lda ActiveDefenceWeapon,x
     bne ActiveDefence
     ; clear brackets
     lda #space
-    sta textbuffer+80+22
-    sta textbuffer+80+39
+    sta statusBuffer+80+22
+    sta statusBuffer+80+39
     mwa #emptyLine temp
     jmp ClearingOnly    
 ActiveDefence
@@ -2327,7 +2339,7 @@ ClearingOnly
     ldy #15
 @
       lda (temp),y
-      sta textbuffer+40+40+23,y
+      sta statusBuffer+40+40+23,y
       dey
     bpl @-
 
@@ -2338,7 +2350,7 @@ ClearingOnly
     lda Energy,x
 
     sta decimal
-    mwa #textbuffer+48 displayposition
+    mwa #statusBuffer+48 displayposition
     jsr displaybyte
 
     ;---------------------
@@ -2346,10 +2358,10 @@ ClearingOnly
     ;---------------------
     ; clear (if no shield)
     lda #space
-    sta textbuffer+40+10
-    sta textbuffer+40+11
-    sta textbuffer+40+12
-    sta textbuffer+40+13
+    sta statusBuffer+40+10
+    sta statusBuffer+40+11
+    sta statusBuffer+40+12
+    sta statusBuffer+40+13
     ; check shield energy and display it
     ldx TankNr
     lda ActiveDefenceWeapon,x
@@ -2358,11 +2370,11 @@ ClearingOnly
     beq NoShieldEnergy
     sta decimal ; displayed value
     lda #$08 ; (
-    sta textbuffer+40+10
-    mwa #textbuffer+40+11 displayposition
+    sta statusBuffer+40+10
+    mwa #statusBuffer+40+11 displayposition
     jsr displaybyte
     lda #$09    ; )
-    sta textbuffer+40+13
+    sta statusBuffer+40+13
 NoDefenceWeapon 
 NoShieldEnergy
 
@@ -2373,9 +2385,9 @@ NoShieldEnergy
     lda Wind+3 ; highest byte of 4 byte wind
     bmi DisplayLeftWind
     lda #$7f  ; (tab) char
-    sta textbuffer+80+20
+    sta statusBuffer+80+20
     lda #space
-    sta textbuffer+80+17
+    sta statusBuffer+80+17
     beq DisplayWindValue
 DisplayLeftWind
       sec  ; Wind = -Wind
@@ -2386,14 +2398,14 @@ DisplayLeftWind
       sbc temp+1
       sta temp+1
     lda #$7e  ;(del) char
-    sta textbuffer+80+17
+    sta statusBuffer+80+17
     lda #space
-    sta textbuffer+80+20
+    sta statusBuffer+80+20
 DisplayWindValue
     :4 lsrw temp ;divide by 16 to have a nice value on a screen
     lda temp
     sta decimal
-    mwa #textbuffer+80+18 displayposition
+    mwa #statusBuffer+80+18 displayposition
     jsr displaybyte
     
     ;=========================
@@ -2401,7 +2413,7 @@ DisplayWindValue
     ;=========================
     lda CurrentRoundNr
     sta decimal
-    mwa #textbuffer+80+7 displayposition
+    mwa #statusBuffer+80+7 displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
 
     ;=========================
@@ -2412,7 +2424,7 @@ DisplayWindValue
     sta decimal
     lda ForceTableH,x
     sta decimal+1
-    mwa #textbuffer+40+35 displayposition
+    mwa #statusBuffer+40+35 displayposition
     jsr displaydec5
 
     ;=========================
@@ -2428,9 +2440,9 @@ AngleToRight
     ; now we have values from 0 to 89 and right angle
     sta decimal
     lda #$7f  ; (tab) character
-    sta textbuffer+40+25
+    sta statusBuffer+40+25
     lda #space
-    sta textbuffer+40+22
+    sta statusBuffer+40+22
     beq AngleDisplay
 AngleToLeft
     sec
@@ -2439,19 +2451,19 @@ AngleToLeft
     ; angles 180 - 91 converted to 0 - 89
     sta decimal
     lda #$7e  ;(del) char
-    sta textbuffer+40+22
+    sta statusBuffer+40+22
     lda #space
-    sta textbuffer+40+25
+    sta statusBuffer+40+25
     beq AngleDisplay    
 VerticallyUp
     ; now we have value 90
     sta decimal
     lda #space
-    sta textbuffer+40+25
-    sta textbuffer+40+22
+    sta statusBuffer+40+25
+    sta statusBuffer+40+22
 
 AngleDisplay
-    mwa #textbuffer+40+23 displayposition
+    mwa #statusBuffer+40+23 displayposition
     jsr displaybyte
     ldx TankNr   
     rts
@@ -2467,7 +2479,7 @@ AngleDisplay
     tax
 NextChar02
     lda tanksnames,x
-    sta textbuffer+7,y
+    sta statusBuffer+7,y
     inx
     iny
     cpy #$08
@@ -2496,7 +2508,7 @@ NextChar02
     
     ; set background
     lda #$ff
-    ldx #100 ; top of the sprites
+    ldx #100+7 ; top of the sprites
 @     sta PMGraph+$400,x
       sta PMGraph+$500,x
       inx
@@ -2511,6 +2523,5 @@ NextChar02
     
     rts
 .endp
-;-------------------------------------------------
 
 .endif

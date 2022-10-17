@@ -525,8 +525,22 @@ weaponsOfDeath  ; weapons used in tank death animations
 	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
 weaponsOfDeathEnd
 joyToKeyTable
-  ; .by  00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15
-    .by $ff,$ff,$ff,$ff,$ff,$ff,$ff,$07,$ff,$ff,$ff,$06,$ff,$0f,$0e,$ff
+    .by $ff  ;00
+    .by $ff  ;01
+    .by $ff  ;02
+    .by $ff  ;03
+    .by $ff  ;04
+    .by $ff  ;05
+    .by $ff  ;06
+    .by @kbcode._right  ;07
+    .by $ff  ;08
+    .by $ff  ;09
+    .by $ff  ;0a
+    .by @kbcode._left  ;0b
+    .by $ff  ;0c
+    .by @kbcode._down  ;0d
+    .by @kbcode._up  ;0e
+    .by $ff  ;0f
 
 ;-----------------------------------
 keycodes ;tables for converting KeyCode to Screen Code (38 -1  characters)
@@ -546,7 +560,7 @@ scrcodes
 gameOverSpritesTop
     ; end of the Gover sprites by number of players
     ;    1   2   3   4   5   6
-    .by 130,130,136,142,148,154
+    .by 130+7,130+7,136+7,142+7,148+7,154+7
 ;-------decimal constans
 zero
 digits   dta d"0123456789"
@@ -559,8 +573,6 @@ CreditsStart
 	dta d"Warsaw, Miam",d"i"*
 	dta d"2000-202",d"2"*
 	dta d" "*
-	dta d"B",d"y"*
-	dta d" "*
 	dta d"Programmin",d"g"*
 	dta d"Tomasz 'Pecus' Peck",d"o"*
 	dta d"Pawel 'pirx' Kalinowsk",d"i"*
@@ -568,15 +580,19 @@ CreditsStart
 	dta d"SFX, Music and Suppor",d"t"*
 	dta d"Michal 'Miker' Szpilowsk",d"i"*
 	dta d" "*
-	dta d"Additional Musi",d"c"*
-	dta d"Mario 'Emkay' Kri",d"x"*
-	dta d" "*
+	.IF target != 5200
+	  dta d"Additional Musi",d"c"*
+	  dta d"Mario 'Emkay' Kri",d"x"*
+	  dta d" "*
+	.ENDIF
 	dta d"Code Optimizatio",d"n"*
 	dta d"Piotr '0xF' Fusi",d"k"*
 	dta d" "*
 	dta d"Ar",d"t"*
 	dta d"Adam Wachowsk",d"i"*
-	dta d"Krzysztof 'Kaz' Ziembi",d"k"*
+	.IF target != 5200
+	  dta d"Krzysztof 'Kaz' Ziembi",d"k"*
+	.ENDIF
 	dta d" "*
 	dta d"Ideas and Q",d"A"*
 	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
@@ -586,9 +602,16 @@ CreditsStart
 	dta d" "*
 	dta d"Additional testin",d"g"*
 	dta d"Arek and Alex Peck",d"o"*
-	dta d"  "*
-	dta d"Stay tuned for the FujiNet version",d"!"*
+	.IF target != 5200
+	  dta d"  "*
+	  dta d"Stay tuned for the FujiNet version",d"!"*
+	.ENDIF
 	dta d"         "*
 CreditsEnd
-CreditsLines=44
+.IF target = 5200
+  CreditsLines=36
+.ELSE
+  CreditsLines=42  ; 34 in reality. add 7?
+.ENDIF
+
 .endif

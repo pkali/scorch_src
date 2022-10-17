@@ -1,107 +1,6 @@
 ;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 .IF *>0 ;this is a trick that prevents compiling this file alone
-;-----------------------------------------------
-; start of "variables" (RAM)
-;-----------------------------------------------
-OptionsHere   
-     ; 0123456789012345678901234567890123456789
- dta d"Players  :    2    3    4    5    6     "
- dta d"Cash     :  none  2K   8K   12K  20K    "
- dta d"Gravity  :  0.2G 0.5G  1G   2G   4G     "
- dta d"Wind     :   1B   3B   5B   7B   9B     "
- dta d"Rounds   :   10   20   30   40   50     "
- dta d"Missiles :  slug slow norm fast hare    "
- dta d"Seppuku  :  nevr rare norm oftn alws    "
- dta d"Mountains:   NL   BE   CZ   CH   NP     "
- dta d"Walls    :  none wrap bump boxy rand    "
-;;      01234567890123456789012345678901
-; dta d"Players:  2    3    4    5    6 "
-; dta d"Cash   :none  2K   8K   12K  20K"
-; dta d"Gravity:0.2G 0.5G  1G   2G   4G "
-; dta d"Wind   : 1B   3B   5B   7B   9B "
-; dta d"Rounds : 10   20   30   40   50 "
-; dta d"Missile:slug slow norm fast hare"
-; dta d"Seppuku:nevr rare norm oftn alws"
-; dta d"Hills  : NL   BE   CZ   CH   NP "
-; dta d"Walls  :none wrap bump boxy rand"
-OptionsScreenEnd
-
-;-----------------------------------------------
-ListOfWeapons
-                       ;     0123456789012345678901234567890123456789
-; :number_of_offensives dta d"                                "
-  :32 dta d"                                "
-ListOfWeapons1End
-ListOfDefensiveWeapons
-; :number_of_defensives dta d"                                "
-  :16 dta d"                                "
-ListOfDefensiveWeaponsEnd ;constant useful when clearing
-NameScreen
- dta d"    Enter names of players      "
- dta d"   Tank  01    Name:"
-NameAdr
- dta d"            "
- dta d" Human/Atari (difficulty level) "
- dta d" "
-NamesOfLevels
- dta  d" HUMAN     Moron     Shooter   "
- dta d"  Poolshark Tosser    Chooser   "
- dta d"  Spoiler   Cyborg    Unknown   "
- dta d"  "
- dta d"Tab"*
- dta d" - Player/Difficulty level "
- dta d"       "
- dta d"Return"*
- dta d" - Proceed         "
-;---------------------------------------------------
-textbuffer
-     ; 0123456789012345678901234567890123456789
- dta d"Player:                                 "
- dta d"Energy:        Angle:        Force:     "
- dta d"Round:     Wind:                        "
-textbuffer2
- dta d"Player:             Cash:      0"  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
-
-; DLs fragments (modified by game code)
-; all Purchase DL :)
-PurchaseDL
-        .byte $70
-		.byte $47
-DLPurTitleAddr
-		.word PurchaseTitle
-		.byte $50
-        .byte $42+$80
-        .word textbuffer2
-        .byte $60,$42
-MoreUpdl
-        .word EmptyLine
-        .byte 0,$42
-WeaponsListDL
-        .word ListOfWeapons
- :15 .byte 0,2
- .byte 0, $42
-MoreDownDL
- .word EmptyLine
- .byte $40,$42
- .word WeaponsDescription
- .byte $0,$42
-PurActDescAddr
- .word PurchaseDescription
-        .byte $41
-        .word PurchaseDL
-;------------------------
-DLCreditsFragm
-       .byte $60+$80
-	   .byte $42+$20	; VSCRL
-DLCreditsAddr
-	   .word Credits
-	   :6 .byte $02+$20
-	   .byte $02
-       .byte $41
-       .word GameOverDL
-;------------------------
-; end of "variables" (RAM)
 ;------------------------
 ; start of "constants" (ROM)
 ;-----------------------------------------------
@@ -110,9 +9,44 @@ DLCreditsAddr
 OptionsScreen
  dta d"Welcome to Scorch v. "
  build  ; 4 bytes from scorch.asm (fancy method) :) 
- dta d"  (un)2000-2022"
+ dta                          d"  (un)2000-2022"
+
+.IF TARGET = 800
  dta d" Please select option with cursor keys  "
  dta d"     and press (Return) to proceed      "
+.ELIF TARGET = 5200
+ dta d" Please select option with joystick one "
+ dta d"       and press FIRE to proceed        "
+.ENDIF
+     ; 0123456789012345678901234567890123456789
+;-----------------------------------------------
+NameScreen
+.IF TARGET = 800
+ dta d"     Enter names of players     "
+.ELIF TARGET = 5200
+ dta d"Hold "
+ dta d     "FIRE"*
+ dta d         " to enter player names "
+.ENDIF
+NameScreen3
+ dta d" Human/Atari (difficulty level) "
+NameScreen5
+ .IF TARGET = 800
+ dta d"  "
+ dta   d"TAB"*
+ dta      d" - Player/Difficulty level "
+ dta d"       "
+ dta        d"Return"*
+ dta              d" - Proceed         "
+.ELIF TARGET = 5200
+ dta d"  "
+ dta   d"Joy"*
+ dta      d" - Player/Difficulty level "
+ dta d"        "
+ dta        d"FIRE"*
+ dta             d" - Proceed          "
+.ENDIF
+;-----------------------------------------------
 MoreUp
  dta d"         "
  dta 92,92,92
@@ -127,20 +61,39 @@ MoreDown
  dta d"         "
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
+ .IF TARGET = 800
  dta d"Tab"*
  dta d   ": Defensive/Offensive weapon "
+.ELIF TARGET = 5200
+ dta d"Left"*
+ dta d    ": Defensive/Offensive weapon"
+.ENDIF
 PurchaseDescription
      ; 0123456789012345678901234567890123456789
+ .IF TARGET = 800
  dta d"Space"*
  dta      d": Purchase  "
  dta                  d"Return"*
  dta                        d": Finish "
+.ELIF TARGET = 5200
+ dta d"Right"*
+ dta      d": Purchase    "
+ dta                    d"FIRE"*
+ dta                        d": Finish "
+.ENDIF
 ActivateDescription
      ; 0123456789012345678901234567890123456789
+ .IF TARGET = 800
  dta d"Space"*
  dta      d": Activate  "
  dta                  d"Return"*
  dta                        d": Finish "
+.ELIF TARGET = 5200
+ dta d"Right"*
+ dta      d": Activate    "
+ dta                    d"FIRE"*
+ dta                        d": Finish "
+.ENDIF
 EmptyLine
  dta d"                                        "
 ;---------------------------------------------------
@@ -161,9 +114,9 @@ GameOverTitle2
 ;-----------------------------------------------------
 
 dl ; MAIN game display list
-        .byte 0
+        .byte $70
         .byte $42 
-        .word textbuffer
+        .word statusBuffer
         .byte $02, $02 +$80 ;DLI
         .byte $10  ; 2 blank lines 
 
@@ -207,7 +160,6 @@ dl ; MAIN game display list
         .byte $41
         .word dl
 ;-----------------------------------------------
-        .ALIGN $1000  ; WARNING!!!! 4KiB barrier crossing here, might need reassignment!!!
 OptionsDL
         .byte $70
 		.byte $47
@@ -222,6 +174,7 @@ OptionsDL
         :maxOptions-1 .by $02,$10
 		:(9-maxOptions) .by $70,$10
 		.byte $80
+		.byte $70  ; to match moved sprites
         .byte $4f
         .word (display+140*40)
         :21 .by $0f                     ;76
@@ -233,12 +186,23 @@ NameDL
         .byte $70
 		.byte $47
 		.word DifficultyTitle
-		.byte $70,$70
+		.byte $70,$70	; 16 empty lines
         .byte $42
         .word NameScreen
-        .byte $30
-        .byte $02,$30+$80,$02
-        .byte $10,$02,$02,$02,$30,$02,$02
+        .byte $30	; 4 empty lines
+		.byte $42
+		.word NameScreen2
+		.byte $30+$80	; 4 empty lines + DLI
+		.byte $42
+		.word NameScreen3
+        .byte $10	; 2 empty lines
+		.byte $42
+		.word NameScreen4
+		.byte $02,$02
+		.byte $30	; 4 empty lines
+		.byte $42
+		.word NameScreen5
+		.byte $02
         .byte $41
         .word NameDL
 ; -------------------------------------------------
@@ -249,6 +213,7 @@ GameOverDL
        .byte $70,$40
        .byte $47    ; 16 gr8 lines
        .word GameOverTitle
+       .byte $60  ; 7 lines down to match new sprite position
        .byte $4f   ; 1 line
        .word display+(40*72)
        :28 .byte $0f   ; 28 lines

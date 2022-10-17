@@ -7,20 +7,16 @@ screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
 TankWidth	=	8
 ;----------------------------------------------
 ; Player/missile memory
-PMGraph =  $0800  ; real PM start = $0b00
-
-
+PMGraph =  $1800  ; real PM start = PMGraph + $0300
 ; Generated tables
-linetableL = $0b00 - (screenHeight+1)*2
-linetableH = $0b00 - (screenHeight+1)
-
-display = $1010 ;screen takes $1f68 because it has screenHeight+1 lines because of out of screen tracer(?)
+display = $2010 ;screen takes $1f68 because it has screenHeight+1 lines because of out of screen tracer(?)
+;----------------------------------------------
 
 margin = 40 ;mountain drawing Y variable margin
 MaxPlayers = 6
 maxOptions = 9  ;number of all options
 PMOffsetX = $2C ; P/M to graphics offset
-PMOffsetY = $23 ; P/M to graphics offset
+PMOffsetY = $2A ; P/M to graphics offset
 napalmRadius = 10
 StandardBarrel = 6 ; standard tank barrel length
 LongBarrel = 20	; long barrel length

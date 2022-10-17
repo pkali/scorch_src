@@ -2,45 +2,30 @@
 ;Atari 8-bit Scorched Earth source code
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
-;Warsaw 2000,2001,2002,2003,2009,2012,2013
-;Miami&Warsaw 2022
-;you can contact us at pecus@poczta.fm or pirx@5oft.pl
-;home page of this project is https://github.com/pkali/scorch_src
+;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
+;Miami & Warsaw 2022
 
-;this source code was compiled under OMC65 crossassembler 
-;(https://github.com/pkali/omc65)
-;and on 2012-06-21 translated to mads
-;
-;game source code is split into 5+2 parts:
-;scorch.asm is the main game code (with many assorted routines)
-;grafproc.asm - graphics routines like line or circle
-;textproc.asm - text routines like list of weapons and shop
-;variables.asm - all non-zero page variables and constans
-;display.asm - display lists and text screen definitions
-;ai.asm - artificial stupidity of computer opponents
-;weapons.asm - general arsenal of tankies
+;---------------------------------------------------
+.def TARGET = 800 ;5200  ; or 800
+;atari800  -5200 -cart ${outputFilePath} -cart-type 4
+;atari800  -run ${outputFilePath}
+;---------------------------------------------------
 
-;we were trying to use as much macros and pseudoops as possible
-;they are defined in atari.hea and macro.hea files together with many
-;atari constans. This way it shoud be relatively easy to
-;port this code to e.g. C64
-;
-;After those N years of working on this piece of code
-;we are sure it would be much wiser to write it in C, Action!
-;or MadPascal but on the other hand it is so much fun to type 150 chars
-;where you want to have y=ax+b :)
-;
-;originally most variables were in Polish, comments were sparse
-;but we wanted to release this piece of code to public
-;and due to being always short of time/energy (to finish the game)
-;we decided it must go in 'English' to let other people work on it
+    OPT r+  ; saves 12 bytes :O
 
+;---------------------------------------------------
 .macro build
-	dta d"1.14" ; number of this build (3 bytes)
+	dta d"1.16" ; number of this build (4 bytes)
 .endm
 
+.macro RMTSong
+      lda #:1
+      jsr RMTSongSelect
+.endm
+
+;---------------------------------------------------
     icl 'definitions.asm'
-    
+;---------------------------------------------------
     
     .zpvar xdraw            .word = $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -83,9 +68,6 @@
 	.zpvar pressTimer       .byte
 	.zpvar NTSCcounter      .byte
 	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
-    ;.zpvar dliA             .byte
-    ;.zpvar dliX             .byte
-    ;.zpvar dliY             .byte
 	.zpvar sfx_effect .byte
 	.zpvar RMT_blocked	.byte
 
@@ -103,7 +85,6 @@
     .zpvar Counter .byte ;temporary Counter for outside loops
     .zpvar ExplosionRadius .word ;because when adding in xdraw it is double byte
     .zpvar ResultY .byte
-;    .zpvar FallDown2 .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
     .zpvar vy .word
@@ -134,7 +115,6 @@
     .zpvar HowToDraw .byte
     .zpvar gravity .byte
     .zpvar LineLength .word
-    ;.zpvar LineAddress4x4 .word
     .zpvar tracerflag .byte
     .zpvar isInventory .byte
     .zpvar DifficultyLevel .byte
@@ -143,28 +123,97 @@
     .zpvar L1 .byte
 	
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
-	.zpvar RMT_Zero_Page_V .byte
 
     displayposition = modify
     LineAddress4x4 = temp
 
-;-------------------------------
+;-----------------------------------------------
+; libraries
+;-----------------------------------------------
+    .IF TARGET = 5200
+      OPT h-f+  ; no headers, single block --> cart bin file
+      icl 'lib/5200SYS.ASM'
+      icl 'lib/5200MACRO.ASM'
+      .enum @kbcode 
+        /*
+        _0
+        _1
+        _2
+        _3
+        _4
+        _5
+        _6
+        _7
+        _8
+        _9
+        _asterisk = $0a
+        _hash = $0b
+        _start = $0c
+        _pause = $0d
+        _reset = $0e
+        */
+        _space = $00
+        _Y     = $01
+        _up    = $f2  ;02
+        _O     = $03
+        _left  = $f4  ;04
+        _tab   = $05
+        _right = $f6  ;06
+        _A     = $07
+        _down  = $f8  ;08
+        _I     = $09
+        _esc   = $0a
+        _ret   = $fb  ;$0b ;not used in 5200
+        _del   = $fc  ;$0c ;not used in 5200
+        _M     = $0d
+        _S     = $0e
+        _none = $0f
 
-    icl 'lib/ATARISYS.ASM'
-    icl 'lib/macro.hea'
-
-    ;splash screen and musix
-	icl 'artwork/Scorch50.asm'
-
-
-    ;Game loading address
-    ORG  $3000
+      .ende */
+    .ELSE
+      icl 'lib/ATARISYS.ASM'
+      icl 'lib/MACRO.ASM'
+      icl 'artwork/Scorch50.asm'  ; splash screen and musix
+    .ENDIF
+    
+;-----------------------------------------------
+; variable declarations in RAM (no code)
+;-----------------------------------------------
+    ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables + 1)
+    icl 'variables.asm'
+        
+    ; Game loading address
+    ORG $4000
+    
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
+
 ;-----------------------------------------------
 ;Screen displays go here to avoid crossing 4kb barrier
 ;-----------------------------------------------
-    icl 'display.asm'
+    DisplayCopyRom = *
+    org display, DisplayCopyRom
+DisplayCopyStart
+    icl 'display_main_menu.asm'
+DisplayCopyEnd
+    org DisplayCopyRom + (DisplayCopyEnd - DisplayCopyStart)
+    
+    DisplayCopyPurchaseDlROM = *
+    org DisplayCopyPurchase, DisplayCopyPurchaseDlROM
+DisplayCopyPurchaseStart
+    icl 'display_purchasedl.asm'
+DisplayCopyPurchaseEnd
+    org DisplayCopyPurchaseDlROM + (DisplayCopyPurchaseEnd - DisplayCopyPurchaseStart)
+    
+    StatusBufferROM = *
+    org StatusBufferCopy, StatusBufferROM
+StatusBufferCopyStart
+    icl 'display_status.asm'
+StatusBufferCopyEnd
+    org StatusBufferROM + (StatusBufferCopyEnd - StatusBufferCopyStart)
+    
+
+    icl 'display_static.asm'
 ;----------------------------------------------
     
 ;--------------------------------------------------
@@ -176,15 +225,15 @@ FirstSTART
 	; one time zero variables in RAM (non zero page)
 	lda #0
 	ldy #OneTimeZeroVariablesCount-1
-@	sta OneTimeZeroVariables,y
-	dey
+@	  sta OneTimeZeroVariables,y
+	  dey
 	bpl @-
 	
 	; initialize variables in RAM (non zero page)
 	ldy #initialvaluesCount-1
-@	lda initialvaluesStart,y
-	sta variablesToInitialize,y
-	dey
+@	  lda initialvaluesStart,y
+	  sta variablesToInitialize,y
+	  dey
 	bpl @-
 
 
@@ -202,7 +251,6 @@ FirstSTART
       cpy #screenheight+1
     bne @-
 
-
     ; RMT INIT
     lda #$f0                    ;initial value
     sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
@@ -210,10 +258,16 @@ FirstSTART
     lda #$ff                    ;initial value
     sta sfx_effect
 
-    lda #0
-    jsr RmtSongSelect
+    RMTSong 0
 
+    .IF TARGET = 5200
+        mva #$0f STICK0
+        mva #$04 CONSOL5200          ;Speaker off, Pots enabled, port #1 selected
+        mwa #kb_continue VKEYCNT     ;Keyboard handler
+    .ENDIF
     VMAIN VBLinterrupt,7  		;jsr SetVBL
+	
+	mva #2 chactl  ; necessary for 5200
 	
 START
     ; Startup sequence
@@ -221,9 +275,7 @@ START
 
 	;jsr GameOverScreen	; only for test !!!
     
-    lda #song_main_menu
-    jsr RmtSongSelect
-    
+    RMTSong song_main_menu
 
     jsr Options  ;startup screen
 	jsr MakeDarkScreen
@@ -242,12 +294,7 @@ MainGameLoop
 	jsr SetWallsType
 	; first set default barrel lengths (fix for Long Schlong activation :) )
 	; we must do it before purchase/activate
-    ldx #(MaxPlayers-1)
-SettingBarrel
-	lda #StandardBarrel	; standard barrel length
-	sta BarrelLength,x
-    dex
-    bpl SettingBarrel
+    jsr SetStandardBarrels
 
 	jsr CallPurchaseForEveryTank
 
@@ -281,8 +328,7 @@ SettingBarrel
     ; Results are number of other deaths
     ; before the player dies itself
 
-    lda #song_round_over
-    jsr RmtSongSelect
+    RmtSong song_round_over
     jsr DisplayResults
 
 	jsr DemoModeOrKey
@@ -385,7 +431,7 @@ GoGameOver
 NoGameOverYet
     inc CurrentRoundNr
     jsr MakeDarkScreen   ; issue #72
-    jsr RmtSongSelect
+    ; jsr RmtSongSelect  ; ?????
     mva #sfx_silencer sfx_effect
     jsr PMoutofscreen
 
@@ -402,8 +448,7 @@ NoGameOverYet
 ; the shooting angle is randomized
 ; of course gains an loses are zeroed
 
-    lda #song_ingame
-    jsr RmtSongSelect
+    RmtSong song_ingame
 
 	jsr SetPMWidth
 	lda #0
@@ -457,15 +502,14 @@ SettingEnergies
     jsr calculatemountains ;let mountains be easy for the eye
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
 
+
+    mwa #StatusBufferROM temp
+    mwa #StatusBufferCopy temp2
+    mwa #StatusBufferCopyEnd+1 modify
+    jsr CopyFromROM
+
     jsr SetMainScreen
     jsr ColorsOfSprites
-
-;    lda #90 ; barrel fully erect
-;    ldx #MaxPlayers-1
-;@     sta previousBarrelAngle,x
-;      dex
-;    bpl @-
-
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
@@ -570,7 +614,7 @@ RoboTanks
 	jsr DisplayStatus	; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
     lda kbcode
-    cmp #28  ; ESC
+    cmp #@kbcode._esc ; 28  ; ESC
     bne @+
     jsr AreYouSure
 @	lda escFlag
@@ -632,16 +676,9 @@ ShootNow
     lda HitFlag ;0 if missed
     beq missed
     
-    lda #0
-;    sta FallDown2
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku
-    ;here we clear offensive text (after a shoot)
-    ;ldy TankNr
-    ;mva #0 plot4x4color
-    ;jsr DisplayOffensiveTextNr
-
 
 AfterExplode
     jsr SoilDown2	; allways
@@ -659,9 +696,8 @@ NoExistNoFall
     dex
     bpl TanksFallDown
     mvx tempor2 TankNr
-missed
 
-    ; TODO: IS IT OK??? possibly a fix here needed for #56
+missed
     ldy WeaponDepleted
     bne @+
       ldx TankNr
@@ -670,7 +706,6 @@ missed
 @
 
     ;here we clear offensive text (after a shoot)
-    ;shit -- it's second time, but it must be like this
     ldy TankNr
     mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
@@ -742,7 +777,6 @@ NoPlayerNoDeath
     ;clear NoDeathCounter here
     sta noDeathCounter
 
-
     ; display defensive text here (well, defensive
     ; is not the real meaning, it should be pre-death,
     ; but I am too lazy to change names of variables)
@@ -756,7 +790,7 @@ NoPlayerNoDeath
     inc CurrentResult
 
     mva #sfx_death_begin sfx_effect
-;RandomizeDeffensiveText
+    ; RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
     sta TextNumberOff
     ldy TankTempY
@@ -794,7 +828,6 @@ NoPlayerNoDeath
     ;cleanup of the soil fall down ranges (left and right)
     sta RangeRight
     sta RangeRight+1
-;    sta FallDown2
     mwa #screenwidth RangeLeft
 
     ; We are randomizing the weapon now.
@@ -901,11 +934,10 @@ NotNegativeShieldEnergy
 ;---------------------------------
 .proc Seppuku
     lda #0
-    ;sta FallDown2
     sta ydraw+1
     ; get position of the tank
     ldx TankNr
-    lda #0  ; turn off defense weapons when hara-kiring
+;    lda #0  ; turn off defense weapons when hara-kiring
     sta ActiveDefenceWeapon,x
     sta ShieldEnergy,x
     jsr SetupXYdraw
@@ -972,27 +1004,6 @@ B0  DEY
     lda L1
     sta MaxForceTableL,x
 	rts
-.endp
-;--------------------------------------------------
-.proc PMoutofScreen
-;--------------------------------------------------
-    lda #$00 ; let all P/M disappear
-    :8 sta hposp0+#
-    rts
-.endp
-;--------------------------------------------------
-.proc ColorsOfSprites     
-    lda TankColoursTable ; colours of sprites under tanks
-    sta PCOLR0
-    lda TankColoursTable+1
-    sta PCOLR1
-    lda TankColoursTable+2
-    sta PCOLR2
-    lda TankColoursTable+3
-    sta PCOLR3
-    LDA TankColoursTable+4
-    STA COLOR3     ; joined missiles (5th tank)
-    rts
 .endp
 
 ;--------------------------------------------------
@@ -1095,17 +1106,6 @@ MakeTanksVisible
 	rts
 .endp
 ;--------------------------------------------------
-.proc SetPMWidth
-    lda #$00
-    sta sizep0 ; P0-P3 widths
-    sta sizep0+1
-    sta sizep0+2
-    sta sizep0+3
-	lda #%01010101
-    sta sizem ; all missiles, double width
-	rts
-.endp
-;--------------------------------------------------
 .proc DLIinterruptGraph
     ;sta dliA
 	;sty dliY
@@ -1114,8 +1114,9 @@ MakeTanksVisible
 	ldy dliCounter
 	lda dliColorsBack,y
 	ldy dliColorsFore
-	nop
-	nop
+    .IF TARGET = 800
+	   nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+    .ENDIF
 	nop
     sta COLPF1
 	sty COLPF2
@@ -1162,7 +1163,7 @@ ColoredLines
 	cmp #9
 	beq CreditsScroll
 	tay
-	lda GameOverColoursTable-3,y	; -2 becouse this is DLI nr 2 and -1 (labels line)
+	lda GameOverColoursTable-3,y	; -2 because this is DLI nr 2 and -1 (labels line)
 	ldy #$0a	; text colour (brightnes)
 	STA WSYNC
 	sta COLPF2
@@ -1176,6 +1177,7 @@ CreditsScroll
 	cmp #32		;not too fast
 	beq nextlinedisplay
 	:2 lsr		;not too fast
+    sta WSYNC
 	sta VSCROL
 	jmp EndOfDLI_GO
 nextlinedisplay
@@ -1196,8 +1198,9 @@ EndOfDLI_GO
 .proc DLIinterruptText
 	;sta dliA
     pha
+    lda #TextBackgroundColor
 	sta WSYNC
-    mva #TextBackgroundColor COLPF2
+    sta COLPF2
     mva #TextForegroundColor COLPF3
 	;lda dliA
     pla
@@ -1206,9 +1209,6 @@ DLIinterruptNone
 .endp
 ;--------------------------------------------------
 .proc VBLinterrupt
-	pha
-	phx
-	phy
 	mva #0 dliCounter
 	
 	lda PAL
@@ -1244,11 +1244,59 @@ lab2
     ; ------- RMT -------
 SkipRMTVBL	   
 exitVBL
-    ply
-    plx
-	pla
-	jmp XITVBV
+	.IF TARGET = 5200
+        center = 114            ;Read analog stick and make it look like a digital stick
+        threshold = 60
+    
+        lda paddl0            ;Read POT0 value (horizontal position)
+        cmp #center+threshold       ;Compare with right threshold
+        rol stick0          ;Feed carry into digital stick value
+        cmp #center-threshold       ;Compare with left threshold
+        rol stick0          ;Feed carry into digital stick value
+    
+        lda paddl1            ;Read POT1 value (vertical position)
+        cmp #center+threshold       ;Compare with down threshold
+        rol stick0          ;Feed carry into digital stick value
+        cmp #center-threshold       ;Compare with down threshold
+        rol stick0          ;Feed carry into digital stick value
+    
+        lda stick0          ;0 indicates a press so the right/down values need to be inverted
+        eor #2+8
+        and #$0f
+        sta stick0
+    
+        mva trig0 strig0        ;Move hardware to shadow
+        
+        mva chbas chbase
+    
+        lda skstat          ;Reset consol key shadow is no key is pressed anymore
+        and #4
+        beq @+
+          mva #consol_reset consol
+          mva #@kbcode._none kbcode
+@
+
+        pla
+        tay
+        pla
+        tax
+        pla
+        rti
+    .ELSE	
+	   jmp XITVBV
+	.ENDIF
 .endp
+    .IF TARGET = 5200
+.proc kb_continue
+    sta kbcode          ;Store key code in shadow.
+exit    pla
+    tay
+    pla
+    tax
+    pla
+    rti
+.endp    
+    .ENDIF
 ;----------------------------------------------
 .proc RandomizeSequence0
     ldx #0
@@ -1466,7 +1514,7 @@ Bubble
 BubbleBobble
     lda TempResults,x
     cmp TempResults+1,x
-    beq nextishigher ; this is to block hangs when 2 same values meet
+    beq nextishigher ; this is to block hangs when 2 equal values meet
     bcc nextishigher
     ;here we must swap values
     ;because next is smaller than previous
@@ -1518,18 +1566,21 @@ SetRandomWalls
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @
-      lda SKSTAT
-      cmp #$ff
-      beq checkJoyGetKey ; key not pressed, check Joy
-      cmp #$f7  ; SHIFT
-      beq checkJoyGetKey
-        
-      lda kbcode
-      and #$3f ;CTRL and SHIFT ellimination
-      cmp #28  ; ESC
-      bne getkeyend
-        mvx #$80 escFlag
-      bne getkeyend
+      .IF TARGET = 800
+          lda SKSTAT
+          cmp #$ff
+          beq checkJoyGetKey ; key not pressed, check Joy
+          cmp #$f7  ; SHIFT
+          beq checkJoyGetKey
+      .ENDIF            
+          lda kbcode
+          cmp #@kbcode._none
+          beq checkJoyGetKey
+          and #$3f ;CTRL and SHIFT ellimination
+          cmp #@kbcode._esc  ; 28  ; ESC
+          bne getkeyend
+            mvx #$80 escFlag
+          bne getkeyend
 
 checkJoyGetKey
       ;------------JOY-------------
@@ -1547,7 +1598,7 @@ notpressedJoyGetKey
       ;fire
       lda STRIG0
     bne @-
-    lda #$0c ;Return key
+    lda #@kbcode._ret ;Return key
     
 getkeyend
     mvx #sfx_keyclick sfx_effect
@@ -1566,20 +1617,22 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    lda STICK0
-    and #$0f
-    cmp #$0f
-    bne WaitForKeyRelease
-    lda STRIG0
-    beq WaitForKeyRelease
-    lda SKSTAT
-    cmp #$ff
-    bne WaitForKeyRelease
-	lda CONSOL
-	and #%00000110	; Select and Option only
-	cmp #%00000110
-	bne WaitForKeyRelease
-    rts
+      lda STICK0
+      and #$0f
+      cmp #$0f
+      bne WaitForKeyRelease
+      lda STRIG0
+      beq WaitForKeyRelease
+    .IF TARGET = 800
+      lda SKSTAT
+      cmp #$ff
+      bne WaitForKeyRelease
+      lda CONSOL
+      and #%00000110	; Select and Option only
+      cmp #%00000110
+      bne WaitForKeyRelease
+      rts
+    .ENDIF
 .endp
 ;--------------------------------------------------
 .proc IsKeyPressed	; A=0 - yes , A>0 - no
@@ -1606,26 +1659,25 @@ checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
     ;pause 150
     ldy #75
     jsr PauseYFrames
-    jmp noKey
+    rts
 
 peopleAreHere
-    jsr getkey
-noKey
-	rts
+    jmp getkey  ; jsr:rts
 .endp
+
 MakeDarkScreen
 	mva #0 dmactls		; dark screen
+    sta dmactl
 	; and wait one frame :)
 .proc WaitOneFrame
 	lda CONSOL
 	and #%00000101	; Start + Option
-	bne @+
-	mva #$40 escFlag	
-@	and #%00000001 ; START KEY
-	beq @+
-	wait
-@	rts
+	sne:mva #$40 escFlag	
+	and #%00000001 ; START KEY
+	seq:wait
+    rts
 .endp
+
 .proc PauseYFrames
 ; Y - number of frames to wait (divided by 2)
 ; pauses for maximally 510 frames (255 * 2)
@@ -1641,7 +1693,7 @@ MakeDarkScreen
 ;--------------------------------------------------
 ;  starting song line 0-255 to A reg
 	cmp #song_ingame
-	bne noingame	; noMusic blck onlu ingame song
+	bne noingame	; noMusic blocks only ingame song
     bit noMusic
     spl:lda #song_silencio
 noingame
@@ -1652,58 +1704,115 @@ noingame
 	mva #0 RMT_blocked
 	rts
 .endp
-;;--------------------------------------------------
-;.proc Randomizer
-;;--------------------------------------------------
-;    ;usage: randomize floor ceiling
-;    ;returns (in A) a random .byte between "floor" and "ceiling"
-;?rand
-;      lda random
-;      cmp #:1 ;floor
-;      bcc ?rand
-;      cmp #:2+1 ;ceiling
-;      bcs ?rand
-;      rts
-;.endp
+;-------------------------------------------------
+.proc CopyFromROM
+;-------------------------------------------------
+;copy from CART to RAM
+; trashes: Y
+; temp: source
+; temp2: destination
+; modify: destination-end
+;usage:
+;    mwa #DisplayCopyRom temp
+;    mwa #display temp2
+;    mwa #DisplayCopyEnd+1 modify
+;    jsr CopyFromROM
+
+    ldy #0
+@     lda (temp),y
+      sta (temp2),y
+      inw temp
+      inw temp2
+      cpw temp2 modify
+    bne @-
+    rts
+.endp
+;--------------------------------------------------
+.macro randomize floor ceiling
+;--------------------------------------------------
+    ;usage: randomize floor ceiling
+    ;returns (in A) a random .byte between "floor" and "ceiling"
+        jsr _randomizator
+        .byte :floor
+        .byte :ceiling
+.endm
+
+.proc _randomizator
+; private function that accompanies `randomize` macro
+; trashes: magic, temp, Y
+    pla
+    sta magic
+    pla
+    sta magic+1
+    ldy #1  ; add 1 to the value got from the stack to point to the input parameters
+    lda (magic),y
+    sta temp
+    iny
+    lda (magic),y
+    sta temp+1
+
+?rand
+      lda random
+      cmp temp ;floor
+      bcc ?rand
+      cmp temp+1 ;ceiling
+      bcs ?rand
+      tay  ; save the result
+      
+    ; point the PC to a byte after the parameters
+    clc
+    lda magic
+    adc #2 ; length of the parameters in bytes
+    sta magic
+    lda magic+1
+    adc #0
+    pha
+    lda magic
+    pha
+    tya ; retrieve the result
+    rts
+.endp
 ;----------------------------------------------
-    icl 'weapons.asm'
+    icl 'constants.asm'
 ;----------------------------------------------
     icl 'textproc.asm'
 ;----------------------------------------------
     icl 'grafproc.asm'
 ;----------------------------------------------
-    icl 'ai.asm'
+    icl 'weapons.asm'
 ;----------------------------------------------
-    icl 'constants.asm'
+    icl 'ai.asm'
 ;----------------------------------------------
     icl 'artwork/talk.asm'
 ;----------------------------------------------
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
-    icl 'variables.asm'
-;----------------------------------------------
 
-; reserved space for RMT player
-    .ds $0320
-    .align $100
-PLAYER
-    .ECHO 'PLAYER: ',*
-    icl 'artwork/sfx/rmtplayr.a65'
-
-MODUL    equ $b000                                 ;address of RMT module
-    opt h-                                         ;RMT module is standard Atari binary file already
-    ins "artwork/sfx/scorch_str6.rmt"  ;include music RMT module
-    opt h+
-;
+;RMT PLAYER and song loading shenaningans
+    icl 'artwork/sfx/rmtplayr_modified.asm'
+    org $b000
+MODUL ;   equ $b000                                 ;address of RMT module
+      ;opt h-                                       ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_str6.rmt",+6          ;include music RMT module
+      ;opt h+
+MODULEND
 ;----------------------------------------------
-    org $bf80
 font4x4
     ins 'artwork/font4x4s.bmp',+62
 
-
-
-
-
-
-    run FirstSTART
+;----------------------------------------------
+  .IF target = 5200
+    .IF * > ROM_SETTINGS-1
+      .ERROR 'Code too long to fit in 5200'
+    .ENDIF
+    org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
+    ;     "01234567890123456789"
+    .byte " scorch 5200  v"    ;20 characters title
+    build ;              "    "
+    .byte                    " "
+    .byte "7A"          ;2 characters year .. 1900 + $7A = 2020
+    .word FirstSTART
+  .ELSE
+     run FirstSTART
+  .ENDIF
