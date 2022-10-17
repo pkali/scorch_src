@@ -46,7 +46,20 @@ It never happened, but we got some encouraging comments and we are still trying 
 
 With the advent of [fujinet](https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
-## Changes:
+## Changelog:
+
+###### Version 1.16
+2022-10-16
+
+The official release of our game for the Atari 5200 SuperSystem. Grab the `scorch.bin` file and burn a cart!
+This is all thanks to @miker who supported us all this time of uncertainty and despair. 
+Cramming the game into a 32KiB cart and 16KiB RAM was a big task - it required a rewrite of the RMT player, a crazy number of size optimizations, and counting each byte.
+
+The release is not perfect - we have a number of glitches and improvements to the 5200 controller procedures to work on, but the game is playable.
+
+Changes
+* numerous, but not very visible
+
 
 ###### Version 1.14
 2022-09-05
@@ -60,7 +73,7 @@ Changes:
 * Bouncy Castle bounces like it should.
 * Tracer and Smoke Tracer are not causing defense weapons to trigger anymore.
 * In rare cases direct hit was not accounted for correctly.
-* Manuals updated. 
+* Manuals updated. https://github.com/pkali/scorch_src/releases/tag/v1.16
 
 
 ###### Version 1.13
