@@ -70,6 +70,7 @@
 	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
 	.zpvar sfx_effect .byte
 	.zpvar RMT_blocked	.byte
+	.zpvar ScrollFlag .byte
 
     ; --------------OPTIMIZATION VARIABLES--------------
     .zpvar Force .word
@@ -1172,22 +1173,6 @@ ColoredLines
 CreditsScroll
 	lda #$00
 	sta COLPF2
-	inc CreditsVScrol
-	lda CreditsVScrol
-	cmp #32		;not too fast
-	beq nextlinedisplay
-	:2 lsr		;not too fast
-    sta WSYNC
-	sta VSCROL
-	jmp EndOfDLI_GO
-nextlinedisplay
-	lda #0
-	sta CreditsVScrol
-	sta VSCROL
-	adw DLCreditsAddr #40
-	cpw DLCreditsAddr #CreditsLastLine
-	bne EndOfDLI_GO
-	mwa #Credits DLCreditsAddr
 EndOfDLI_GO
 	inc dliCounter
 	ply
@@ -1244,6 +1229,37 @@ lab2
     ; ------- RMT -------
 SkipRMTVBL	   
 exitVBL
+	bit ScrollFlag
+	bpl EndOfCreditsVBI
+CreditsVBI
+	inc CreditsVScrol
+	lda CreditsVScrol
+	cmp #32		;not too fast
+	beq nextlinedisplay
+	:2 lsr		;not too fast
+	sta VSCROL
+	jmp EndOfCreditsVBI
+nextlinedisplay
+	lda #0
+	sta CreditsVScrol
+	sta VSCROL
+	clc
+	lda DLCreditsAddr
+	adc #40
+	sta DLCreditsAddr
+	bcc @+
+	inc DLCreditsAddr+1
+@
+	cmp #<CreditsLastLine
+	bne EndOfCreditsVBI
+	lda DLCreditsAddr+1
+	cmp #>CreditsLastLine
+	bne EndOfCreditsVBI
+;	adw DLCreditsAddr #40
+;	cpw DLCreditsAddr #CreditsLastLine
+;	bne EndOfCreditsVBI
+	mwa #Credits DLCreditsAddr
+EndOfCreditsVBI	
 	.IF TARGET = 5200
         center = 114            ;Read analog stick and make it look like a digital stick
         threshold = 60

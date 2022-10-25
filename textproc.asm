@@ -2022,6 +2022,7 @@ FinishResultDisplay
 	jsr GameOverResultsClear
     jsr CopyFromPurchaseAndGameOver
     mwa #GameOverDL dlptrs
+	mva #$ff ScrollFlag ; credits scroll on
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
     lda #%00100100  ; playfield before P/M
@@ -2173,6 +2174,7 @@ FastTank
     bpl AllTanksFloatingDown
 	jsr IsKeyPressed
     bne MainTanksFloatingLoop   ; neverending loop
+	mva #$00 ScrollFlag	; credits scroll off
 	jsr MakeDarkScreen
 	jsr GameOverResultsClear
     rts
