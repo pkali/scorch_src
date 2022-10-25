@@ -1617,6 +1617,8 @@ notpressedJoyGetKey
     lda #@kbcode._ret ;Return key
     
 getkeyend
+	ldx #0
+    stx ATRACT	; reset atract mode	
     mvx #sfx_keyclick sfx_effect
     rts
 .endp

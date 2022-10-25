@@ -1206,7 +1206,8 @@ checkJoy
     and #$0f
     cmp #$0f
     beq notpressedJoy
-    tay 
+    tay
+    mva #0 ATRACT	; reset atract mode	
     lda joyToKeyTable,y
     jmp jumpFromStick
 notpressedJoy
@@ -1415,8 +1416,9 @@ pressedS
 pressedSpace
     ;=================================
     ;we shoot here!!!
-
-    mva #0 pressTimer ; reset
+	lda #0
+    sta ATRACT	; reset atract mode	
+    sta pressTimer ; reset
     jsr WaitForKeyRelease
     lda pressTimer
     cmp #25  ; 1/2s
