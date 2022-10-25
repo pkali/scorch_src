@@ -57,7 +57,7 @@ Cramming the game into a 32KiB cart and 16KiB RAM was a big task - it required a
 
 The release is not perfect - we have a number of glitches and improvements to the 5200 controller procedures to work on, but the game is playable.
 
-Changes
+Changes:
 * numerous, but not very visible
 
 

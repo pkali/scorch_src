@@ -1115,9 +1115,9 @@ MakeTanksVisible
 	lda dliColorsBack,y
 	ldy dliColorsFore
     .IF TARGET = 800
-	   nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+        nop
     .ENDIF
-	nop
     sta COLPF1
 	sty COLPF2
 	inc dliCounter
