@@ -398,7 +398,7 @@ ChoosingItemForPurchase
     jsr getkey
     bit escFlag
     spl:jmp WaitForKeyRelease  ; like jsr ... : rts
-    cmp #@kbcode._esc  ; $2c ; Tab
+    cmp #@kbcode._tab  ; $2c ; Tab
     jeq ListChange
     cmp #@kbcode._left  ; $06  ; cursor left
     jeq ListChange
@@ -2139,7 +2139,7 @@ MainTanksFloatingLoop
 AllTanksFloatingDown    
     stx TankNr
     lda Ytankstable,x
-	cmp #72		; tank under screen - no erase
+	cmp #(72-7)		; tank under screen - no erase
 	bcs NoEraseTank
 	mva #1 Erase
     jsr DrawTankNr
@@ -2154,9 +2154,9 @@ NoEraseTank
 NotFastTank
     lda Ytankstable,x
 ;   cmp #32     ; tank over screen - not visible
-    cmp #80     ; tank under screen - new tank randomize
+    cmp #(80-7)     ; tank under screen - new tank randomize
     bcs TankUnderScreen
-    cmp #72     ; tank under screen but.... parachute
+    cmp #(72-7)     ; tank under screen but.... parachute
     bcs DrawOnlyParachute
     bcc TankOnScreen
 TankUnderScreen
@@ -2177,7 +2177,7 @@ FastTank
 	jsr GameOverResultsClear
     rts
 RandomizeTankPos
-    randomize 10 32	; 10 not 8 - barrel !! :)
+    randomize 10 (32-7)	; 10 not 8 - barrel !! :)
     sta Ytankstable,x
     randomize 0 180
     sta AngleTable,x
