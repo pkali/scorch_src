@@ -252,6 +252,23 @@ FirstSTART
       cpy #screenheight+1
     bne @-
 
+    .IF TARGET = 800
+	lda PAL
+	and #%00001110
+	bne NoRMT_PALchange
+	;it is PAL here
+	; Change RMT to PAL version
+	; 5 values in RMT file
+	; not elegant :(
+	mva #$06 MODUL-6+$941
+	mva #$10 MODUL-6+$a43
+	mva #$06 MODUL-6+$b9d
+	mva #$04 MODUL-6+$bd2
+	mva #$08 MODUL-6+$e17
+NoRMT_PALchange 
+    .ENDIF
+
+
     ; RMT INIT
     lda #$f0                    ;initial value
     sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
@@ -1203,12 +1220,14 @@ DLIinterruptNone
     dec NTSCcounter
     bne itsPAL
     mva #6 NTSCcounter
-    bne exitVBL ; skip doing VBL things each 6 frames in Amerika, Amerika
+    bne SkippedIfNTSC ; skip doing VBL things each 6 frames in Amerika, Amerika
                 ; We're all living in Amerika, Coca Cola, Wonderbra
 
 itsPAL
     ; pressTimer is trigger tick counter. always 50 ticks / s
     bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
+	
+SkippedIfNTSC
 
 	bit RMT_blocked
 	bmi SkipRMTVBL
@@ -1228,7 +1247,6 @@ lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
     ; ------- RMT -------
 SkipRMTVBL	   
-exitVBL
 	bit ScrollFlag
 	bpl EndOfCreditsVBI
 CreditsVBI
@@ -1812,7 +1830,7 @@ TankFont
     org $b000
 MODUL ;   equ $b000                                 ;address of RMT module
       ;opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str6.rmt",+6          ;include music RMT module
+      ins "artwork/sfx/scorch_str6-NTSC.rmt",+6          ;include music RMT module
       ;opt h+
 MODULEND
 ;----------------------------------------------
