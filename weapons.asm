@@ -1897,6 +1897,13 @@ NoDefence
 	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
     rts		; END !!!	
 BouncyCastle
+	; now in Y we have number of of the attacking player (TankNr) !
+	lda ActiveWeapon,y
+	; if Bouncy Castle bounced Funky Bomb - whole screen in range of soil down
+	cmp #ind_Funky_Bomb_____
+	bne @+
+	jsr SetFullScreenSoilRange
+@
     mva #sfx_shield_on sfx_effect
 	; now run defensive-aggressive weapon - Bouncy Castle (previously known as Auto Defence)!
 	mva #1 Erase
