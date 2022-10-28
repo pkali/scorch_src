@@ -265,6 +265,7 @@ FirstSTART
 	mva #$06 MODUL-6+$b9d
 	mva #$04 MODUL-6+$bd2
 	mva #$08 MODUL-6+$e17
+	mva #$06 MODUL-6+$e3d
 NoRMT_PALchange 
     .ENDIF
 
