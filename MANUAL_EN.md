@@ -14,10 +14,10 @@ On the first screen, you can configure gameplay options:
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
 * The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
 * the way the walls (edges of the screen) work:
-    * none - projectiles that flew off the screen do not return
-    * wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
-    * bump - the right and left walls deflect projectiles that want to fly through them
-    * boxy - just like bump, except that the "ceiling" also reflects projectiles
+    * none - projectiles that flew off the screen do not return (black color of the screen frame)
+    * wrap - the screen "wraps" and projectiles that flew to the right appear on the left side and vice versa (purple color of the screen frame)
+    * bump - the right and left walls deflect projectiles that want to fly through them (dark blue color of the screen frame)
+    * boxy - just like bump, except that the "ceiling" also reflects projectiles (green color of the screen frame)
     * rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
 
     During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - blue, boxy - green.

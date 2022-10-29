@@ -77,8 +77,10 @@
 ;	WAIT
 ;	waits one frame (1/50 s(PAL) or 1/60s(NTSC))
 ?zero	 LDA VCOUNT
-		 beq ?zero
-		 bpl ?WA
+		cmp #$05
+		 bcc ?zero
+		 cmp #$70
+		 bcc ?WA
 		 sbc #10	; last lines correction
 ?WA		 cmp VCOUNT
 		 beq ?WA
