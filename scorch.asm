@@ -1125,7 +1125,7 @@ MakeTanksVisible
 	rts
 .endp
 ;--------------------------------------------------
-.proc DLIinterruptGraph
+/* .proc DLIinterruptGraph
     ;sta dliA
 	;sty dliY
 	pha
@@ -1143,6 +1143,25 @@ MakeTanksVisible
 	;ldy dliY
     ;lda dliA
     ply
+    pla
+    rti
+.endp */
+
+.proc DLIinterruptGraph
+	pha
+	lda dliColorsFore
+	nop
+	nop
+    .IF TARGET = 800
+	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+        nop
+		nop
+    .ENDIF
+	sta COLPF2
+	lda DliColorBack
+    sta COLPF1
+	eor #$02
+	sta DliColorBack
     pla
     rti
 .endp
@@ -1213,6 +1232,7 @@ DLIinterruptNone
 ;--------------------------------------------------
 .proc VBLinterrupt
 	mva #0 dliCounter
+	mva #$02 DliColorBack
 	
 	lda PAL
 	and #%00001110

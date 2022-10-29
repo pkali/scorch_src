@@ -117,8 +117,8 @@ dl ; MAIN game display list
         .byte $70
         .byte $42 
         .word statusBuffer
-        .byte $02, $02 +$80 ;DLI
-        .byte $10  ; 2 blank lines 
+        .byte $02, $02
+        .byte $10+$80  ; 2 blank lines + DLI
 
         .byte $4f
         .word display                   ; 1 line
