@@ -1168,14 +1168,14 @@ MakeTanksVisible
 	lda dliCounter
 	bne EndofPMG
     lda #%00100001	; playfield after P/M - prior=1
-	STA WSYNC
+	;STA WSYNC
     sta PRIOR
 	bne EndOfDLI_GO
 EndofPMG
 	cmp #1
 	bne ColoredLines
     lda #%00100100	; playfield before P/M
-	STA WSYNC
+	;STA WSYNC
     sta PRIOR
 	bne EndOfDLI_GO
 ColoredLines
@@ -1184,7 +1184,7 @@ ColoredLines
 	tay
 	lda GameOverColoursTable-3,y	; -2 because this is DLI nr 2 and -1 (labels line)
 	ldy #$0a	; text colour (brightnes)
-	STA WSYNC
+	;STA WSYNC
 	sta COLPF2
 	sty COLPF1
 	bne EndOfDLI_GO
@@ -1202,7 +1202,7 @@ EndOfDLI_GO
 	;sta dliA
     pha
     lda #TextBackgroundColor
-	sta WSYNC
+	;sta WSYNC
     sta COLPF2
     mva #TextForegroundColor COLPF3
 	;lda dliA
