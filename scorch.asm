@@ -26,7 +26,7 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-    
+    .zpvar DliColorBack		.byte = $63
     .zpvar xdraw            .word = $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -1674,22 +1674,27 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
+	mva #128-KeyRepeatSpeed pressTimer	; tricky
+StillWait	
+	bit pressTimer
+	bmi KeyReleased
       lda STICK0
       and #$0f
       cmp #$0f
-      bne WaitForKeyRelease
+      bne StillWait
       lda STRIG0
-      beq WaitForKeyRelease
+      beq StillWait
     .IF TARGET = 800
       lda SKSTAT
       cmp #$ff
-      bne WaitForKeyRelease
+      bne StillWait
       lda CONSOL
       and #%00000110	; Select and Option only
       cmp #%00000110
-      bne WaitForKeyRelease
-      rts
+      bne StillWait
     .ENDIF
+KeyReleased
+      rts
 .endp
 ;--------------------------------------------------
 .proc IsKeyPressed	; A=0 - yes , A>0 - no

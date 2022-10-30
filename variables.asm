@@ -414,8 +414,6 @@ ResultX
 ;ResultY .DS 1
 ResultOfTankNr
     .DS 1
-DliColorBack
-	.ds 1
 
 ;----------------------------------------------------
 ;PutChar4x4

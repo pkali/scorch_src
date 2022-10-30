@@ -1419,7 +1419,7 @@ pressedSpace
 	lda #0
     sta ATRACT	; reset atract mode	
     sta pressTimer ; reset
-    jsr WaitForKeyRelease
+    jsr WaitForKeyRelease.StillWait
     lda pressTimer
     cmp #25  ; 1/2s
     bcc fire
