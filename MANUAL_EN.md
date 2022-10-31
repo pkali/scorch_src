@@ -20,7 +20,7 @@ On the first screen, you can configure gameplay options:
     * boxy - just like bump, except that the "ceiling" also reflects projectiles (green color of the screen frame)
     * rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
 
-    During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - blue, boxy - green.
+    During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - dark blue, boxy - green.
 
 Select options with cursor keys or a joystick.
 
@@ -64,7 +64,7 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 | [I] | [9] | or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon. |
 | [A] or [OPTION] | [7] | go directly to the defensive weapons activation.
 | [M] | [PAUSE] | disable/enable background music. |
-| [S] key | [RESET] | disable/enable effect sounds. |
+| [S] | [RESET] | disable/enable effect sounds. |
 | [START] | N/A | speed up some game animations. |
 | [O] | [3] | end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the [ESC] key with the difference that the summary and credits are displayed. |
 | [START] + [OPTION] | N/A | immediately force the end of the game (Game Over), just like [O] but without confirmation.
@@ -76,15 +76,15 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 - At the beginning of each round, each tank has 99 ash units of energy.
 - Tanks' energy is depleted in 3 ways:
     * one unit after each shot is fired
-    * while falling (one pixel down 2 units).
+    * while falling (one pixel down - 2 units).
     * when a projectile hits the tank or next to it - and here the amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
 
 ### How energy subtraction works (and earning money!).
-After each round the amount of money gained/lost is calculated this is done on the basis of two variables accumulated by each tank during the round. These variables are:
+After each round the amount of money gained/lost is calculated, this is done on the basis of two variables accumulated by each tank during the round. These variables are:
 
 `gain` - energy "captured" from tanks hit (also if you hit yourself :) and here's the catch, if you have very little energy left it can be profitable to hit yourself with a powerful weapon!
 
-`lose` - energy lost due to explosion/fall (and here it is important to count the total loss of energy even if the tank has less at the moment of hit).
+`lose` - energy lost due to explosion/fall (and here it is important - to count the total loss of energy even if the tank has less at the moment of hit).
 
 In addition, the tank that won the round has a parameter gain (captured from hit tanks energy) increased by the remaining energy at the end of the round (because it did not die and should have it - although it also happens otherwise :) )
 
@@ -138,7 +138,7 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Roller | 168 |
 | Heavy Roller | 240 |
 | Riot Charge | 0 (no energy is subtracted, but a portion of the ground upward from the hit point in a 31-pixel radius is removed) |
-| Riot Blast | 0 (as in Dirt Charge, but in a radius of 61 pixels) |
+| Riot Blast | 0 (as in Riot Charge, but in a radius of 61 pixels) |
 | Riot Bomb | 0 (no energy is subtracted, but the ground in a radius of 17 pixels from the hit point is destroyed - as in the case of Missile. The weapon is useful for digging out after being buried, or for undermining an opponent) |
 | Heavy Riot Bomb | 0 (as in Riot Bomb, but the explosion radius is 29 pixels from the point of impact - as in the case of Nuke) |
 | Baby Digger | 0 (no energy is subtracted, but a portion of the ground is undermined in a radius of 60 pixels from the point of impact) |
