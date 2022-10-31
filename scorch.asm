@@ -26,7 +26,8 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-    .zpvar DliColorBack		.byte = $62
+FirstZpageVariable = $62
+    .zpvar DliColorBack		.byte = FirstZpageVariable
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -229,6 +230,12 @@ FirstSTART
 @	  sta OneTimeZeroVariables,y
 	  dey
 	bpl @-
+	
+	; one time zero variables in RAM (zero page)
+	ldy #FirstZpageVariable
+@	sta $0000,y
+	iny
+	bne @-
 	
 	; initialize variables in RAM (non zero page)
 	ldy #initialvaluesCount-1
