@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800 ;5200  ; or 800
+.def TARGET = 800; 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.16" ; number of this build (4 bytes)
+	dta d"1.17" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -26,7 +26,7 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-    
+    .zpvar DliColorBack		.byte = $63
     .zpvar xdraw            .word = $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -70,6 +70,7 @@
 	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
 	.zpvar sfx_effect .byte
 	.zpvar RMT_blocked	.byte
+	.zpvar ScrollFlag .byte
 
     ; --------------OPTIMIZATION VARIABLES--------------
     .zpvar Force .word
@@ -250,6 +251,24 @@ FirstSTART
       iny
       cpy #screenheight+1
     bne @-
+
+    .IF TARGET = 800
+	lda PAL
+	and #%00001110
+	bne NoRMT_PALchange
+	;it is PAL here
+	; Change RMT to PAL version
+	; 5 values in RMT file
+	; not elegant :(
+	mva #$06 MODUL-6+$941
+	mva #$10 MODUL-6+$a43
+	mva #$06 MODUL-6+$b9d
+	mva #$04 MODUL-6+$bd2
+	mva #$08 MODUL-6+$e17
+	mva #$06 MODUL-6+$e3d
+NoRMT_PALchange 
+    .ENDIF
+
 
     ; RMT INIT
     lda #$f0                    ;initial value
@@ -1106,7 +1125,7 @@ MakeTanksVisible
 	rts
 .endp
 ;--------------------------------------------------
-.proc DLIinterruptGraph
+/* .proc DLIinterruptGraph
     ;sta dliA
 	;sty dliY
 	pha
@@ -1115,15 +1134,35 @@ MakeTanksVisible
 	lda dliColorsBack,y
 	ldy dliColorsFore
     .IF TARGET = 800
-	   nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+        nop
     .ENDIF
-	nop
     sta COLPF1
 	sty COLPF2
 	inc dliCounter
 	;ldy dliY
     ;lda dliA
     ply
+    pla
+    rti
+.endp */
+
+.proc DLIinterruptGraph
+	pha
+	lda dliColorsFore
+	nop
+	nop
+    nop
+    .IF TARGET = 800
+	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+        nop
+
+    .ENDIF
+	sta COLPF2
+	lda DliColorBack
+    sta COLPF1
+	eor #$02
+	sta DliColorBack
     pla
     rti
 .endp
@@ -1149,14 +1188,14 @@ MakeTanksVisible
 	lda dliCounter
 	bne EndofPMG
     lda #%00100001	; playfield after P/M - prior=1
-	STA WSYNC
+	;STA WSYNC
     sta PRIOR
 	bne EndOfDLI_GO
 EndofPMG
 	cmp #1
 	bne ColoredLines
     lda #%00100100	; playfield before P/M
-	STA WSYNC
+	;STA WSYNC
     sta PRIOR
 	bne EndOfDLI_GO
 ColoredLines
@@ -1165,29 +1204,13 @@ ColoredLines
 	tay
 	lda GameOverColoursTable-3,y	; -2 because this is DLI nr 2 and -1 (labels line)
 	ldy #$0a	; text colour (brightnes)
-	STA WSYNC
+	;STA WSYNC
 	sta COLPF2
 	sty COLPF1
 	bne EndOfDLI_GO
 CreditsScroll
 	lda #$00
 	sta COLPF2
-	inc CreditsVScrol
-	lda CreditsVScrol
-	cmp #32		;not too fast
-	beq nextlinedisplay
-	:2 lsr		;not too fast
-    sta WSYNC
-	sta VSCROL
-	jmp EndOfDLI_GO
-nextlinedisplay
-	lda #0
-	sta CreditsVScrol
-	sta VSCROL
-	adw DLCreditsAddr #40
-	cpw DLCreditsAddr #CreditsLastLine
-	bne EndOfDLI_GO
-	mwa #Credits DLCreditsAddr
 EndOfDLI_GO
 	inc dliCounter
 	ply
@@ -1199,7 +1222,7 @@ EndOfDLI_GO
 	;sta dliA
     pha
     lda #TextBackgroundColor
-	sta WSYNC
+	;sta WSYNC
     sta COLPF2
     mva #TextForegroundColor COLPF3
 	;lda dliA
@@ -1210,6 +1233,7 @@ DLIinterruptNone
 ;--------------------------------------------------
 .proc VBLinterrupt
 	mva #0 dliCounter
+	mva #$02 DliColorBack
 	
 	lda PAL
 	and #%00001110
@@ -1218,12 +1242,14 @@ DLIinterruptNone
     dec NTSCcounter
     bne itsPAL
     mva #6 NTSCcounter
-    bne exitVBL ; skip doing VBL things each 6 frames in Amerika, Amerika
+    bne SkippedIfNTSC ; skip doing VBL things each 6 frames in Amerika, Amerika
                 ; We're all living in Amerika, Coca Cola, Wonderbra
 
 itsPAL
     ; pressTimer is trigger tick counter. always 50 ticks / s
     bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
+	
+SkippedIfNTSC
 
 	bit RMT_blocked
 	bmi SkipRMTVBL
@@ -1243,7 +1269,37 @@ lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
     ; ------- RMT -------
 SkipRMTVBL	   
-exitVBL
+	bit ScrollFlag
+	bpl EndOfCreditsVBI
+CreditsVBI
+	inc CreditsVScrol
+	lda CreditsVScrol
+	cmp #32		;not too fast
+	beq nextlinedisplay
+	:2 lsr		;not too fast
+	sta VSCROL
+	jmp EndOfCreditsVBI
+nextlinedisplay
+	lda #0
+	sta CreditsVScrol
+	sta VSCROL
+	clc
+	lda DLCreditsAddr
+	adc #40
+	sta DLCreditsAddr
+	bcc @+
+	inc DLCreditsAddr+1
+@
+	cmp #<CreditsLastLine
+	bne EndOfCreditsVBI
+	lda DLCreditsAddr+1
+	cmp #>CreditsLastLine
+	bne EndOfCreditsVBI
+;	adw DLCreditsAddr #40
+;	cpw DLCreditsAddr #CreditsLastLine
+;	bne EndOfCreditsVBI
+	mwa #Credits DLCreditsAddr
+EndOfCreditsVBI	
 	.IF TARGET = 5200
         center = 114            ;Read analog stick and make it look like a digital stick
         threshold = 60
@@ -1601,6 +1657,8 @@ notpressedJoyGetKey
     lda #@kbcode._ret ;Return key
     
 getkeyend
+	ldx #0
+    stx ATRACT	; reset atract mode	
     mvx #sfx_keyclick sfx_effect
     rts
 .endp
@@ -1617,22 +1675,27 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
+	mva #128-KeyRepeatSpeed pressTimer	; tricky
+StillWait	
+	bit pressTimer
+	bmi KeyReleased
       lda STICK0
       and #$0f
       cmp #$0f
-      bne WaitForKeyRelease
+      bne StillWait
       lda STRIG0
-      beq WaitForKeyRelease
+      beq StillWait
     .IF TARGET = 800
       lda SKSTAT
       cmp #$ff
-      bne WaitForKeyRelease
+      bne StillWait
       lda CONSOL
       and #%00000110	; Select and Option only
       cmp #%00000110
-      bne WaitForKeyRelease
-      rts
+      bne StillWait
     .ENDIF
+KeyReleased
+      rts
 .endp
 ;--------------------------------------------------
 .proc IsKeyPressed	; A=0 - yes , A>0 - no
@@ -1794,7 +1857,7 @@ TankFont
     org $b000
 MODUL ;   equ $b000                                 ;address of RMT module
       ;opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str6.rmt",+6          ;include music RMT module
+      ins "artwork/sfx/scorch_str6-NTSC.rmt",+6          ;include music RMT module
       ;opt h+
 MODULEND
 ;----------------------------------------------

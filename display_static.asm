@@ -117,8 +117,8 @@ dl ; MAIN game display list
         .byte $70
         .byte $42 
         .word statusBuffer
-        .byte $02, $02 +$80 ;DLI
-        .byte $10  ; 2 blank lines 
+        .byte $02, $02
+        .byte $10+$80  ; 2 blank lines + DLI
 
         .byte $4f
         .word display                   ; 1 line
@@ -213,13 +213,13 @@ GameOverDL
        .byte $70,$40
        .byte $47    ; 16 gr8 lines
        .word GameOverTitle
-       .byte $60  ; 7 lines down to match new sprite position
+;       .byte $60  ; 7 lines down to match new sprite position
        .byte $4f   ; 1 line
        .word display+(40*72)
        :28 .byte $0f   ; 28 lines
        .byte $0f+$80
        .byte $4f   ; 1 line
-       .word display+(40*32)
+       .word display+(40*(32-7)) ;7 lines up to match new sprite position
        :30 .byte $0f   ; 30 lines
        .byte $0f+$80   ; 1 line
        .byte $4f   ; 1 line

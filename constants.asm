@@ -594,11 +594,14 @@ CreditsStart
 	  dta d"Krzysztof 'Kaz' Ziembi",d"k"*
 	.ENDIF
 	dta d" "*
-	dta d"Ideas and Q",d"A"*
+	dta d"Ideas, help and Q",d"A"*
 	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
 	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
 	dta d"brad-colbert, archon800, nowy80",d","*
 	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
+	.IF target = 5200
+    dta d"x-usr(1536), Aking, JAC!, phaero",d"n"*
+	.ENDIF
 	dta d" "*
 	dta d"Additional testin",d"g"*
 	dta d"Arek and Alex Peck",d"o"*
@@ -609,7 +612,7 @@ CreditsStart
 	dta d"         "*
 CreditsEnd
 .IF target = 5200
-  CreditsLines=36
+  CreditsLines=37
 .ELSE
   CreditsLines=42  ; 34 in reality. add 7?
 .ENDIF

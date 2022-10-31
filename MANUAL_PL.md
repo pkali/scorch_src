@@ -13,10 +13,10 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywwki:
 * częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą “strzelać w próżnię” :) - jeśli grają tylko ludzie optymalne ustawienie to “norm”, w przypadku graczy sterowanych przez komputer… wedle uznania.
 * wysokość (i pofałdowanie) gór od prawie płaskich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
 * sposób działania ścian (krawędzi ekranu):
-	* none - pociski, które wyleciały poza ekran nie wracają
-	* wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony (i odwrotnie)
-	* bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć
-	* boxy - tak jak bump, tyle że "sufit" także odbija pociski
+	* none - pociski, które wyleciały poza ekran nie wracają (czarny kolor ramki ekranu)
+	* wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony i odwrotnie (fioletowy kolor ramki ekranu)
+	* bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć (granatowy kolor ramki ekranu)
+	* boxy - tak jak bump, tyle że "sufit" także odbija pociski (zielony kolor ramki ekranu)
 	* rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
 	
 	W trakcie rozgrywki aktualny sposób działania ścian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - niebieski, boxy - zielony.

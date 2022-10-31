@@ -1206,7 +1206,8 @@ checkJoy
     and #$0f
     cmp #$0f
     beq notpressedJoy
-    tay 
+    tay
+    mva #0 ATRACT	; reset atract mode	
     lda joyToKeyTable,y
     jmp jumpFromStick
 notpressedJoy
@@ -1415,9 +1416,10 @@ pressedS
 pressedSpace
     ;=================================
     ;we shoot here!!!
-
-    mva #0 pressTimer ; reset
-    jsr WaitForKeyRelease
+	lda #0
+    sta ATRACT	; reset atract mode	
+    sta pressTimer ; reset
+    jsr WaitForKeyRelease.StillWait
     lda pressTimer
     cmp #25  ; 1/2s
     bcc fire
@@ -1895,6 +1897,13 @@ NoDefence
 	lsrw Force	; Force = Force / 2 - because earlier we multiplied by 2
     rts		; END !!!	
 BouncyCastle
+	; now in Y we have number of of the attacking player (TankNr) !
+	lda ActiveWeapon,y
+	; if Bouncy Castle bounced Funky Bomb - whole screen in range of soil down
+	cmp #ind_Funky_Bomb_____
+	bne @+
+	jsr SetFullScreenSoilRange
+@
     mva #sfx_shield_on sfx_effect
 	; now run defensive-aggressive weapon - Bouncy Castle (previously known as Auto Defence)!
 	mva #1 Erase

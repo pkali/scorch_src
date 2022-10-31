@@ -14,10 +14,10 @@ On the first screen, you can configure gameplay options:
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
 * The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
 * the way the walls (edges of the screen) work:
-    * none - projectiles that flew off the screen do not return
-    * wrap - the screen "wraps" and projectiles that flew to the right appear on the left side (and vice versa)
-    * bump - the right and left walls deflect projectiles that want to fly through them
-    * boxy - just like bump, except that the "ceiling" also reflects projectiles
+    * none - projectiles that flew off the screen do not return (black color of the screen frame)
+    * wrap - the screen "wraps" and projectiles that flew to the right appear on the left side and vice versa (purple color of the screen frame)
+    * bump - the right and left walls deflect projectiles that want to fly through them (dark blue color of the screen frame)
+    * boxy - just like bump, except that the "ceiling" also reflects projectiles (green color of the screen frame)
     * rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
 
     During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - blue, boxy - green.
@@ -56,16 +56,19 @@ The status line shows which player is currently allowed to take a shot and a set
 * in parentheses is the name of the active defensive weapon - if there is any activated by the player.
 
 The keyboard controls here are simple, cursor keys or joystick: left/right - change the angle of the barrel, up/down - change the the force of the shot.
-* [SPACE] or joystick button pressed briefly - firing a shot.
-* [TAB] or [SELECT] - selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory).
-* [I] or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon.
-* [A] or [OPTION] - go directly to the defensive weapons activation.
-* [M] key - disable/enable background music.
-* [S] key - disable/enable effect sounds.
-* [START] - speed up some game animations.
-* [O] - end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the [ESC] key with the difference that the summary and credits are displayed.
-* [START] + [OPTION] - immediately force the end of the game (Game Over), just like [O] but without confirmation.
-* [ESC] - during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the [ESC] key, which allows you to abort the game and return to the beginning (of course, there is protection against accidental pressing).
+
+| A800 | 5200 | function |
+| --- | --- | --- |
+| [SPACE] | [0] | or joystick button pressed briefly - firing a shot. |
+| [TAB] or [SELECT] | [5] | selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory) |
+| [I] | [9] | or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon. |
+| [A] or [OPTION] | [7] | go directly to the defensive weapons activation.
+| [M] | [PAUSE] | disable/enable background music. |
+| [S] key | [RESET] | disable/enable effect sounds. |
+| [START] | N/A | speed up some game animations. |
+| [O] | [3] | end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the [ESC] key with the difference that the summary and credits are displayed. |
+| [START] + [OPTION] | N/A | immediately force the end of the game (Game Over), just like [O] but without confirmation.
+| [ESC] | [*] | during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the [ESC] key, which allows you to abort the game and return to the beginning (of course, there is protection against accidental pressing). |
 
 ## 5. Game mechanics - offensive weapons
 

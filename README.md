@@ -46,7 +46,35 @@ It never happened, but we got some encouraging comments and we are still trying 
 
 With the advent of [fujinet](https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
-## Changes:
+## Changelog:
+
+###### Version 1.17
+2022-10-31
+
+Mostly 5200 console port and NTSC improvements.
+* Updated songs from Miker do not require skipping frames on NTSC machines. Crucial for the next point.
+* Bouncy Castle bouncing of Funky Bomb fixed https://github.com/pkali/scorch_src/issues/129
+* 5200 version had various graphical and sound glitches. Although mostly harmless, it hurt our sense of aesthetics. First of all the flickering credits roll is all good now.
+* Rare hang-ups on NTSC machines fixed
+* Screen lowered down by 7 scan lines to help top status line on NTSC CRTs.
+* 5200 ATTRACT mode not going away fixed
+* Autorepeat added to menus what should help 5200 users with their non-centering abomination of a controller.
+* DLI interrupts optimized, few cycles saved.
+* 5200 keypad sort-of-works. Please refer to manual for key bindings.
+
+
+###### Version 1.16
+2022-10-16
+
+The official release of our game for the Atari 5200 SuperSystem. Grab the `scorch.bin` file and burn a cart!
+This is all thanks to @miker who supported us all this time of uncertainty and despair. 
+Cramming the game into a 32KiB cart and 16KiB RAM was a big task - it required a rewrite of the RMT player, a crazy number of size optimizations, and counting each byte.
+
+The release is not perfect - we have a number of glitches and improvements to the 5200 controller procedures to work on, but the game is playable.
+
+Changes:
+* numerous, but not very visible
+
 
 ###### Version 1.14
 2022-09-05
@@ -60,7 +88,7 @@ Changes:
 * Bouncy Castle bounces like it should.
 * Tracer and Smoke Tracer are not causing defense weapons to trigger anymore.
 * In rare cases direct hit was not accounted for correctly.
-* Manuals updated. 
+* Manuals updated. https://github.com/pkali/scorch_src/releases/tag/v1.16
 
 
 ###### Version 1.13

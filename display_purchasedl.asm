@@ -13,9 +13,10 @@ PurchaseDL
 DLPurTitleAddr
         .word PurchaseTitle
         .byte $50
-        .byte $42+$80
+        .byte $42
         .word purchaseTextBuffer
-        .byte $60,$42
+		.byte $00+$80
+        .byte $50,$42
 MoreUpdl
         .word EmptyLine
         .byte 0,$42
