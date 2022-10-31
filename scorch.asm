@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800; 5200  ; or 800
+.def TARGET = 800 ; 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -26,8 +26,8 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-    .zpvar DliColorBack		.byte = $63
-    .zpvar xdraw            .word = $64 ;variable X for plot
+    .zpvar DliColorBack		.byte = $62
+    .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
     .zpvar ybyte            .word
@@ -43,7 +43,7 @@
     .zpvar tempXROLLER      .word ;same as above for XROLLER routine (used also in result display routine)
     .zpvar xtempDRAW        .word ;same as above for XDRAW routine
     .zpvar ytempDRAW        .word ;same as above for XDRAW routine
-    .zpvar tempor2          .byte
+    .zpvar tempor2          .word
 	.zpvar CreditsVScrol	.byte
     ;--------------temps used in circle routine
     .zpvar xi               .word ;X (word) in draw routine
