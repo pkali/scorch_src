@@ -58,8 +58,8 @@ The status line shows which player is currently allowed to take a shot and a set
 The keyboard controls here are simple, cursor keys or joystick: left/right - change the angle of the barrel, up/down - change the the force of the shot.
 
 | A800 | 5200 | function |
-| --- | --- |
-| [SPACE] | [0] | or joystick button pressed briefly - firing a shot.|
+| --- | --- | --- |
+| [SPACE] | [0] | or joystick button pressed briefly - firing a shot. |
 | [TAB] or [SELECT] | [5] | selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory) |
 | [I] | [9] | or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon. |
 | [A] or [OPTION] | [7] | go directly to the defensive weapons activation.
