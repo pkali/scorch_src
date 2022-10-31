@@ -56,6 +56,7 @@ The status line shows which player is currently allowed to take a shot and a set
 * in parentheses is the name of the active defensive weapon - if there is any activated by the player.
 
 The keyboard controls here are simple, cursor keys or joystick: left/right - change the angle of the barrel, up/down - change the the force of the shot.
+
 | A800 | 5200 | function |
 | --- | --- |
 | [SPACE] | [0] | or joystick button pressed briefly - firing a shot.|
