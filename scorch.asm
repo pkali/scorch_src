@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800 ;5200  ; or 800
+.def TARGET = 800; 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.16" ; number of this build (4 bytes)
+	dta d"1.17" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -1152,10 +1152,11 @@ MakeTanksVisible
 	lda dliColorsFore
 	nop
 	nop
+    nop
     .IF TARGET = 800
 	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
         nop
-		nop
+
     .ENDIF
 	sta COLPF2
 	lda DliColorBack

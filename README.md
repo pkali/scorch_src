@@ -48,6 +48,21 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.17
+2022-10-31
+
+Mostly 5200 console port and NTSC improvements.
+* Updated songs from Miker do not require skipping frames on NTSC machines. Crucial for the next point.
+* Bouncy Castle bouncing of Funky Bomb fixed https://github.com/pkali/scorch_src/issues/129
+* 5200 version had various graphical and sound glitches. Although mostly harmless, it hurt our sense of aesthetics. First of all the flickering credits roll is all good now.
+* Rare hang-ups on NTSC machines fixed
+* Screen lowered down by 7 scan lines to help top status line on NTSC CRTs.
+* 5200 ATTRACT mode not going away fixed
+* Autorepeat added to menus what should help 5200 users with their non-centering abomination of a controller.
+* DLI interrupts optimized, few cycles saved.
+* 5200 keypad sort-of-works. Please refer to manual for key bindings.
+
+
 ###### Version 1.16
 2022-10-16
 
