@@ -26,7 +26,7 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $62
+FirstZpageVariable = $61
     .zpvar DliColorBack		.byte = FirstZpageVariable
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -72,6 +72,7 @@ FirstZpageVariable = $62
 	.zpvar sfx_effect .byte
 	.zpvar RMT_blocked	.byte
 	.zpvar ScrollFlag .byte
+	.zpvar SkStatSimulator	.byte
 
     ; --------------OPTIMIZATION VARIABLES--------------
     .zpvar Force .word
@@ -156,13 +157,13 @@ FirstZpageVariable = $62
         */
         _space = $00
         _Y     = $01
-        _up    = $f2  ;02
+        _up    = $02
         _O     = $03
-        _left  = $f4  ;04
+        _left  = $04
         _tab   = $05
-        _right = $f6  ;06
+        _right = $06
         _A     = $07
-        _down  = $f8  ;08
+        _down  = $08
         _I     = $09
         _esc   = $0a
         _ret   = $fb  ;$0b ;not used in 5200
@@ -273,7 +274,9 @@ FirstSTART
 	mva #$04 MODUL-6+$bd2
 	mva #$08 MODUL-6+$e17
 	mva #$06 MODUL-6+$e3d
-NoRMT_PALchange 
+NoRMT_PALchange
+	.ELSE
+	mva #$7f SkStatSimulator
     .ENDIF
 
 
@@ -1308,6 +1311,10 @@ nextlinedisplay
 	mwa #Credits DLCreditsAddr
 EndOfCreditsVBI	
 	.IF TARGET = 5200
+		lda SkStatSimulator
+		bmi @+
+		inc SkStatSimulator
+@
         center = 114            ;Read analog stick and make it look like a digital stick
         threshold = 60
     
@@ -1352,6 +1359,7 @@ EndOfCreditsVBI
     .IF TARGET = 5200
 .proc kb_continue
     sta kbcode          ;Store key code in shadow.
+	mva #0 SkStatSimulator
 exit    pla
     tay
     pla
@@ -1635,6 +1643,10 @@ SetRandomWalls
           beq checkJoyGetKey ; key not pressed, check Joy
           cmp #$f7  ; SHIFT
           beq checkJoyGetKey
+	  .ELSE
+		  lda SkStatSimulator
+		  and #%11111110
+		  bne checkJoyGetKey ; key not pressed, check Joy
       .ENDIF            
           lda kbcode
           cmp #@kbcode._none
@@ -1700,6 +1712,10 @@ StillWait
       and #%00000110	; Select and Option only
       cmp #%00000110
       bne StillWait
+	.ELSE
+	lda SkStatSimulator
+	and #%11111110
+	beq StillWait
     .ENDIF
 KeyReleased
       rts
