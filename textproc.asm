@@ -1117,6 +1117,7 @@ CheckKeys
     bit escFlag
     spl:rts
     
+	.IF TARGET = 800	; only the A800 has a keyboard
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
 IsLetter
@@ -1136,6 +1137,7 @@ YesLetter
 	dex
 @	stx PositionInName ; if not, we store
     jmp CheckKeys
+	.ENDIF
 CheckFurtherX01 ; here we check Tab, Return and Del
     cmp #@kbcode._ret  ; $0c ; Return
     jeq EndOfNick
