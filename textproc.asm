@@ -419,17 +419,17 @@ PurchaseKeyUp
     bpl GoUpOffensive
     dec PositionOnTheList
     bpl EndUpX
-    ldy #0 ;HowManyOnTheListDef
-    ;dey
+    ldy HowManyOnTheListDef
+    dey
     sty PositionOnTheList
-    jmp ChoosingItemForPurchase
+    jmp MakeOffsetDown
 GoUpOffensive
     dec PositionOnTheList
     bpl MakeOffsetUp
-    ldy #0 ;HowManyOnTheListOff
-    ;dey
+    ldy HowManyOnTheListOff
+    dey
     sty PositionOnTheList
-
+	jmp MakeOffsetDown
 MakeOffsetUp
     ; If offset is larger than pointer position,
     ; it must be equal then.
@@ -445,17 +445,16 @@ PurchaseKeyDown
     inc:lda PositionOnTheList
     cmp HowManyOnTheListDef
     bne EndGoDownX
-    ldy HowManyOnTheListDef
-    dey
+    ldy #0
     sty PositionOnTheList
-    jmp ChoosingItemForPurchase
+	beq MakeOffsetUp
 GoDownOffensive
     inc:lda PositionOnTheList
     cmp HowManyOnTheListOff
     bne MakeOffsetDown
-    ldy HowManyOnTheListOff
-    dey
+    ldy #0
     sty PositionOnTheList
+	beq MakeOffsetUp
 MakeOffsetDown
     lda OffsetDL1
     clc
