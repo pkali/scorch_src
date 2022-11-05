@@ -1232,14 +1232,23 @@ EndOfDLI_GO
 .proc DLIinterruptText
 	;sta dliA
     pha
+	lda dliCounter
+	bne MoreBarsColorChange
     lda #TextBackgroundColor
 	;sta WSYNC
     sta COLPF2
     mva #TextForegroundColor COLPF3
-	;lda dliA
+	bne EndOfDLI_Text
+MoreBarsColorChange
+	and #%00000001
+	rol
+	sta COLPF2
+EndOfDLI_Text
+	inc dliCounter
     pla
 DLIinterruptNone
 	rti
+	
 .endp
 ;--------------------------------------------------
 .proc VBLinterrupt

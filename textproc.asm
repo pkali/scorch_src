@@ -323,6 +323,8 @@ GoToActivation
 
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
+	lda #$ca
+	sta COLOR1 ; set color of header text
 	ldy #0
 	sty COLBAKS	; set color of background
     lda tanknr
