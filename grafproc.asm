@@ -1590,19 +1590,8 @@ nextPointChecking
     lda (modify),y
 	tax
 NotHigher
-;    inw modify
-;    cpw modify #(mountaintable+screenwidth)
-	; --
-	; better code (with Y reg)
-	iny
-	bne @+
-	inc modify+1
-@
-	lda modify+1
-	cmp #>(mountaintable+screenwidth)
-	bne @+
-	cpy #<screenwidth
-@
+    inw modify
+    cpw modify #(mountaintable+screenwidth)
     bne nextPointChecking
 	txa
 	rts
