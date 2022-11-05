@@ -187,13 +187,14 @@ OptionsInversionLoop1
 
     mwa #OptionsHere temp
     mva #0 temp2  ;option number pointer
-    adw temp  #11 ;offset of the first option=11
+    adw temp  #10 ;offset of the first option=11
 OptionsSetMainLoop
     ldx temp2
     lda OptionsTable,x
     asl
     asl
     adc OptionsTable,x  ;OptionsTable value * 5
+    adc OptionsTable,x  ;OptionsTable value * 6
     tay
     ldx #6-1  ; width of the highlight bar (6 chars)
 OptionSetLoop
