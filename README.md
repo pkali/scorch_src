@@ -8,14 +8,17 @@ by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
 
 Contributors:
+- Miker (@mikerro) - in-game music and sfx, ideas, QA
 - Kaz - splash screen, ideas
-- Miker (@mikerro) - game sfx, ideas, QA
-- Adam (@6502adam) - font, ideas, QA
+- Adam (@6502adam) - font, design, QA
 - Bocianu (@bocianu) - important ideas, FujiNet implementation, QA
 - Emkay - splash screen music
 - Fox (@pfusik) - plot and point optimization
 
-QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert, archon800, Shaggy the Atarian
+QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert, archon800,
+Shaggy the Atarian, x=usr(1536), Aking, Kenshi
+
+Special thanks to tebe (@tebe6502), JAC! (@peterdell) and phaeron for their fantastic tools and support.
 
 You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https://atarionline.pl) forums.
 
@@ -30,7 +33,7 @@ Game source code is split into 5+4 parts:
 - textproc.asm - text routines like list of weapons and shop
 - variables.asm - all non-zero page variables
 - constants.asm - various tables of constants 
-- display.asm - display lists and text screen definitions
+- display_*.asm - display lists and text screen definitions
 - ai.asm - artificial stupidity of computer opponents
 - weapons.asm - general arsenal of tankies
 - definitions.asm - label definitions, moved to make it work better with Altirra debug (it doesn't).
@@ -47,6 +50,21 @@ It never happened, but we got some encouraging comments and we are still trying 
 With the advent of [fujinet](https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changelog:
+
+###### Version 1.18
+2022-11-07
+
+Possibly the final single-player version of the game, unless our dear players find another breaking issue!
+* 5200 keypad works as it should. You can now press these finicky foils to your hearth's desire.
+* "Unknown" type Robotanks were attacking with Nuclear Winter every time. Fixed!
+* One of variables was declared as a byte but used as a word which might cause some rare instabilities.
+* Page zero variables are cleared prior to the game start to eliminate rare issues in some software/hardware configurations.
+* The new version of music in NTSC eliminates issues with tempo (not that anyone but the artist noticed that, but still it is an improvement!)
+* You can now wrap around inventory and shop to faster access these options far down below.
+* Visual improvement of the main menu and fixed some color issues with the title headers.
+* Hovercraft was always flying to the top of the screen, it was not intended, it is now hovering just above the mountains!
+* The main menu does not blink now when changing options. This was a very minor thing but it bothered me to some extend. Fixing it required a complete rewrite of this portion of the menu.
+
 
 ###### Version 1.17
 2022-10-31
