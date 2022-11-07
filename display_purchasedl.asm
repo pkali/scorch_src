@@ -16,17 +16,17 @@ DLPurTitleAddr
         .byte $42
         .word purchaseTextBuffer
 		.byte $00+$80
-        .byte $50,$42
+        .byte $20+$80,$10+$80,$42
 MoreUpdl
         .word EmptyLine
-        .byte 0,$42
+        .byte $10+$80,$42
 WeaponsListDL
         .word ListOfWeapons
  :15 .byte 0,2
- .byte 0, $42
+ .byte $10+$80, $42
 MoreDownDL
  .word EmptyLine
- .byte $40,$42
+ .byte $40+$80,$42
  .word WeaponsDescription
  .byte $0,$42
 PurActDescAddr

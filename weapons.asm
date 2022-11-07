@@ -2428,9 +2428,9 @@ InverseScreenByte
 ; -------------------------------------------------
 	; Let's designate the flight altitude.
 	jsr CheckMaxMountain
-	cmp #(12+18) ; tank witch shield (12) and max alt (18) check
+	cmp #(12+18) ; tank with shield (12) and max alt (18) check
 	bcc IsToHigh
-	sbc #12	; tank witch shield high correction
+	sbc #12	; tank with shield high correction
 	bne StoreMaxAlt
 IsToHigh	
 	lda #18

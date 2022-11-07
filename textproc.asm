@@ -168,76 +168,64 @@ OptionsFinished
     
     
     rts
+    .endp
 ;--------
 ; inversing selected option (cursor)
 ;--------
-OptionsInversion
-    ;clean options loop
-    ;TODO: (optionally) - convert to single byte loop if no new options
-    mwa #OptionsHere temp
-    ldy #0
-OptionsInversionLoop1
-    lda (temp),y
-    and #$7F
-    sta (temp),y
-    inw temp
-    cpw temp #OptionsScreenEnd
-    bne OptionsInversionLoop1
-    ;here all past inversions are gone...
-
-    mwa #OptionsHere temp
-    mva #0 temp2  ;option number pointer
-    adw temp  #11 ;offset of the first option=11
+.proc OptionsInversion
+YPos = temp2
+XPos = temp2+1
+optionWidth = 6
+nameWidth = 10
+    mwa #OptionsHere temp  ; offset of the first option=11
+    mva #0 YPos  ;option number pointer
+    mva #0 Xpos  ;X position in the menu
+    tay  ; Y is zero here...
 OptionsSetMainLoop
-    ldx temp2
-    lda OptionsTable,x
-    asl
-    asl
-    adc OptionsTable,x  ;OptionsTable value * 5
-    tay
-    ldx #6-1  ; width of the highlight bar (6 chars)
-OptionSetLoop
-    lda (temp),y
-    ora #$80
-    sta (temp),y
-    iny
-    dex
-    bpl OptionSetLoop ;here option is highlighted
-;
-; next option
-    adw temp  #40 ;jump to next line
-    inc:lda temp2
-    cmp #maxOptions ;number of options
-    bne OptionsSetMainLoop
-
+    ldx YPos  ; Y position in the menu
 ;inversing the first few chars of the selected line (OptionsY)
-    mva OptionsY temp
-    mva #0 temp+1
-    asl temp
-    rol temp+1
-    asl temp
-    rol temp+1
-    asl temp
-    rol temp+1
-    mwa temp temp2 ;here is OptionsY*8
-    asl temp
-    rol temp+1
-    asl temp
-    rol temp+1
-    ;here is 32*OptionsY
-    adw temp temp2
-    ;in temp is 40*OptionsY
-    adw temp #OptionsHere
-    ;now in temp is adres of the line to be inversed
-    ldy #8 ;9 letters to invers
-OptionsYLoop
-    lda (temp),y
-    ora #$80
+    cpx OptionsY
+    jsr _inverter
+    cpy #nameWidth-1
+    bne OptionsSetMainLoop
+    adw temp #nameWidth
+    ldy #0
+
+OptionsLoop
+    lda XPos
+    cmp OptionsTable,x
+    jsr _inverter
+    cpy #optionWidth  ; width of the option highlight
+    bne OptionsLoop
+    ldy #0
+    ; next X position of the 
+    adw temp #optionWidth  ; width of the option highlight
+    inc:lda XPos
+    cmp #5  ; number of options in a row
+    bne OptionsLoop
+    ; next line
+    ;adw temp #nameWidth  ; beginning of the next line
+    mva #0 Xpos
+    tay
+    inc:lda Ypos
+    cmp #maxOptions
+    bne OptionsSetMainLoop
+    rts
+
+_inverter
+    beq invertme
+    ; clean inversion otherwise
+    lda (temp),y 
+    and #$7f  ; clear the top bit
     sta (temp),y
-    dey
-    bpl OptionsYLoop
-
-
+    bpl @+  ; JMP
+invertme
+    lda (temp),y 
+    ora #$80  ; set the top bit
+    sta (temp),y
+@
+    ; next character in an option
+    iny
     rts
 .endp
 
@@ -323,6 +311,8 @@ GoToActivation
 
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
+	lda #$ca
+	sta COLOR1 ; set color of header text
 	ldy #0
 	sty COLBAKS	; set color of background
     lda tanknr
@@ -419,17 +409,17 @@ PurchaseKeyUp
     bpl GoUpOffensive
     dec PositionOnTheList
     bpl EndUpX
-    ldy #0 ;HowManyOnTheListDef
-    ;dey
+    ldy HowManyOnTheListDef
+    dey
     sty PositionOnTheList
-    jmp ChoosingItemForPurchase
+    jmp MakeOffsetDown
 GoUpOffensive
     dec PositionOnTheList
     bpl MakeOffsetUp
-    ldy #0 ;HowManyOnTheListOff
-    ;dey
+    ldy HowManyOnTheListOff
+    dey
     sty PositionOnTheList
-
+	jmp MakeOffsetDown
 MakeOffsetUp
     ; If offset is larger than pointer position,
     ; it must be equal then.
@@ -445,17 +435,16 @@ PurchaseKeyDown
     inc:lda PositionOnTheList
     cmp HowManyOnTheListDef
     bne EndGoDownX
-    ldy HowManyOnTheListDef
-    dey
+    ldy #0
     sty PositionOnTheList
-    jmp ChoosingItemForPurchase
+	beq MakeOffsetUp
 GoDownOffensive
     inc:lda PositionOnTheList
     cmp HowManyOnTheListOff
     bne MakeOffsetDown
-    ldy HowManyOnTheListOff
-    dey
+    ldy #0
     sty PositionOnTheList
+	beq MakeOffsetUp
 MakeOffsetDown
     lda OffsetDL1
     clc
@@ -1117,6 +1106,7 @@ CheckKeys
     bit escFlag
     spl:rts
     
+	.IF TARGET = 800	; only the A800 has a keyboard
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
 IsLetter
@@ -1136,6 +1126,7 @@ YesLetter
 	dex
 @	stx PositionInName ; if not, we store
     jmp CheckKeys
+	.ENDIF
 CheckFurtherX01 ; here we check Tab, Return and Del
     cmp #@kbcode._ret  ; $0c ; Return
     jeq EndOfNick
