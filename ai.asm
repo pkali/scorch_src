@@ -22,9 +22,11 @@
     pha
     lda AIRoutines,y
     pha
-
+	jsr PrepareAIShoot
+	rts
+.endp	
 ;----------------------------------------------
-;.proc MakeLowResDistances 
+.proc PrepareAIShoot 
 	; create low precision table of positions
 	; by dividing positions by 4
 	ldy #MaxPlayers-1
@@ -39,8 +41,6 @@ loop
 	sta LowResDistances,y
 	dey
 	bpl loop
-;	rts
-;.endp
 
     ; common values used in AI routines
     ; address of weapons table (for future use)

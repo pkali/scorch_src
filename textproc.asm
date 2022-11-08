@@ -848,6 +848,26 @@ invSelectDef
 	ply
     jmp DecreaseDefensive ; bypass activation
 NotBattery
+	cmp #ind_Lazy_Boy_______
+	bne NoLazyBoy
+	; Lazy Boy - do it like battery
+    mva #sfx_smoke_cloud sfx_effect
+	phy
+	jsr PrepareAIShoot
+	;jsr FindBestTarget3 ; find target with lowest energy
+	jsr FindBestTarget2 ; find nearest tank neighbour
+	sty TargetTankNr
+	; aiming
+	jsr TakeAim		; direction still in A (0 - left, >0 - right)
+	lda Force
+	sta ForceTableL,x
+	lda Force+1
+	sta ForceTableH,x
+	lda NewAngle
+	sta AngleTable,x
+	ply
+    jmp DecreaseDefensive ; bypass activation
+NoLazyBoy
 	cmp #ind_Long_Barrel____
 	bne NotBarrel
 	; if activate long barrel, we do it differently too
