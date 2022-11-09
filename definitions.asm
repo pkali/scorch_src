@@ -86,7 +86,7 @@ price_Long_Barrel____ = 2100  ;_42
 price_Nuclear_Winter_ = 1000  ;_43
 price_Lazy_Boy_______ =  500  ;_44
 price_Lazy_Darwin____ =  500  ;_45
-price_Auto_Defense___ =  150  ;_46
+price_Auto_Defense___ =  250  ;_46
 ;Weapon indexes (numbers)
 ind_Baby_Missile___ = 0
 first_offensive____ = ind_Baby_Missile___

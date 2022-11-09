@@ -52,7 +52,8 @@ W linii statusowej widoczna jest informacja o tym który z graczy aktualnie moż
 * ustawiona przez gracza siła strzału (maksymalna siła strzału jest ograniczana przez energię gracza - nie może przekroczyć energii * 10 . Oznacza to, że mając małą ilość energii możemy oddać słabsze strzały
 * numer aktualnej rundy rozgrywki
 * prędkość i kierunek wiatru
-* w nawiasie nazwę aktywnej broni defensywnej - jeśli jest jakaś aktywowana przez gracz
+* symbol "A" jeśli aktywna jest **Auto Defense**
+* w nawiasie nazwę aktywnej broni defensywnej - jeśli jest jakaś aktywowana przez gracza
 
 Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana kąta nachylenia lufy, góra/dół - zmiana ustawienia siły strzału.
 
@@ -158,7 +159,7 @@ Tylko te punkty decydują o kolejności w podsumowaniu
 
 ## 6. A teraz bronie defensywne:
 * **White Flag** - powoduje poddanie gracza (może czasem przydać się w sytuacji beznadziejnej). Zaletą jest to, że poddając się nie dajemy dużego punktu przeciwnikom i nie powodujemy, że któryś zyska na tym, że nas zgładzi, ograniczamy też stratę swojej energii czyli także kasy. I tu także ważna uwaga - to jedyna broń defensywna, którą można dezaktywować. Wystarczy ponownie wejść do inventory i jeszcze raz wybrać jej aktywację.
-* **Battery** - w momencie aktywacji doładowuje energię czołgu do pełna (99 jednostek) i jednocześnie jest to jedyna broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
+* **Battery** - w momencie aktywacji doładowuje energię czołgu do pełna (99 jednostek). Jest to jedna z dwóch broni defensywnych, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 * **Hovercraft** - broń umożliwiająca przemieszczanie się czołgu. Posiada własny zasób paliwa a dodatkowo może być aktywowana wielokrotnie w czasie tej samej tury, a po jej użyciu możemy w tej samej turze aktywować inną broń defensywną i oddać strzał. Po jej użyciu czołg uniesie się ponad góry i za pomocą klawiszy kursora lub joysticka: lewo/prawo możemy przemieścić czołg na nową pozycję a [SPACJA] lub przycisk joysticka powodują wylądowanie czołgu w nowym miejscu. Latać można do chwili skończenia się "paliwa" (prezentowanego na pasku statusu tak jak energia broni defensywnej), jeśli paliwo się skończy czołg opadnie samodzielnie. Nie da się lądować na innych czołgach.
 * **Parachute** - nie chroni przed ubytkiem energii z powodu sąsiedniej eksplozji, powoduje że nie ubywa energii w czasie JEDNEGO spadania. Po takim upadku dezaktywuje się i trzeba aktywować nowy spadochron.
 * **Strong Parachute** - spadochron z własną energią (na starcie 99 jednostek), działa tak samo jak Parachute (nie chroni przed eksplozjami) ma za to swój własny zasób energii przy spadaniu w pierwszej kolejności zmniejszana jest energia tego spadochronu (1 jednostka na jeden pixel opadania - inaczej niż czołg!) i jeśli dojdzie ona do 0 to spadochron dezaktywuje się i dalej zmniejszana jest energia czołgu (tutaj już standardowo - 2 jednostki na jeden pikxel).
@@ -171,6 +172,7 @@ Tylko te punkty decydują o kolejności w podsumowaniu
 * **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się ale tylko przy niewielkim przysypaniu ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej dezaktywować).
 * **Lazy Boy** - nie jest to właściwie broń defensywna. Jest to wspomaganie celowania. Po jej aktywacji czołg stara się wycelować w najbliższego przeciwnika i automatycznie ustawia siłę strzału oraz kąt. W przypadku posiadania zbyt małej ilości energii może czasem wycelować źle (do celowania stosuje metodę taką jak **Cyborg**). Tak jak **Battery** nie dezaktywuje innych broni defensywnych w przypadku jej użycia. Uwaga! Nie ma sensu aktywacja tej broni przed rundą, celowanie nie odbędzie się bo nie ma jeszcze do czego celować.
 * **Lazy Darwin** - działa dokładnie jak **Lazy Boy** ale celuje w najsłabszego przeciwnika.
+* **Auto Defense** - włącza tryb automatycznej aktywacji broni defensywnych. Po jej aktywowaniu czołg automatycznie aktywuje najmocniejszą posiadaną osłonę (zużywając ją oczywiście) w każdej chwili, kiedy nie ma żadnej osłony (także pomiędzy strzałami innych graczy). Jednocześnie jeżeli poziom energii czołgu spadnie poniżej 30 jednostek, automatycznie aktywuje **Battery** jeżeli ją posiada. Ta broń pozostaje aktywna do końca rundy i jest sygnalizowana literą "A" przed nazwą aktywnej broni defensywnej w linii statusowej. Jest to druga broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 
 W związku z odmiennym działaniem broni **MIRV**, bronie defensywne **Bouncy Castle** i **Mag Deflector** wykorzystują tylko funkcję osłony przy trafieniu tą bronią. Dodatkowo głowice **MIRV** w czasie opadania nie odbijają się i nie przelatują przez ściany boczne!
 

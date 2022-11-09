@@ -617,14 +617,15 @@ DoNotFinishTheRound
     ldx NumberOfPlayers
     dex
 CheckNextTankAD
-    lda Energy,x
+    lda Energy,x	; only active players
     beq @+
-	lda AutoDefenseFlag,x
+	lda AutoDefenseFlag,x	; with Auto Defence activated
 	beq @+
 	; run auto defense for tank in X
 	jsr AutoDefense
 @   dex
     bpl CheckNextTankAD
+	jsr DrawTanks	; redraw tanks witch new defences
 ;
     ldx TankSequencePointer
     lda TankSequence,x

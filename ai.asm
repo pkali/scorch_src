@@ -255,7 +255,7 @@ NoBatteries
 	ldy #last_real_defensive+1 ;the last defensive weapon
 @
 	dey
-	cpy #ind_Battery________ ;first defensive weapon	(White Flag and Battery - never use)
+	cpy #ind_Hovercraft_____ ;first defensive weapon	(White Flag, Battery and Hovercraft - never use)
 	beq NoUseDefensive
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
@@ -290,7 +290,7 @@ DefensiveInUse
 	ldy #last_real_defensive+1 ;the last defensive weapon	
 @
 	dey
-	cpy #ind_Battery________ ;first defensive weapon	(White Flag and Battery - never use)
+	cpy #ind_Hovercraft_____ ;first defensive weapon	(White Flag, Battery and Hovercraft - never use)
 	beq NoUseDefensive
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
