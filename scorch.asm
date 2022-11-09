@@ -324,6 +324,7 @@ MainGameLoop
 	jsr SetWallsType
 	; first set default barrel lengths (fix for Long Schlong activation :) )
 	; we must do it before purchase/activate
+	; and set Auto Defense to off
     jsr SetStandardBarrels
 
 	jsr CallPurchaseForEveryTank
@@ -612,6 +613,19 @@ DoNotFinishTheRound
     jmp Seppuku
 
 @
+	; Auto Defense - activates defensives
+    ldx NumberOfPlayers
+    dex
+CheckNextTankAD
+    lda Energy,x
+    beq @+
+	lda AutoDefenseFlag,x
+	beq @+
+	; run auto defense for tank in X
+	jsr AutoDefense
+@   dex
+    bpl CheckNextTankAD
+;
     ldx TankSequencePointer
     lda TankSequence,x
     sta TankNr
@@ -1129,8 +1143,10 @@ MakeTanksVisible
 ;--------------------------------------------------
 .proc SetStandardBarrels
     ldx #maxPlayers-1
-	lda #StandardBarrel	; standard barrel length
-@	sta BarrelLength,x
+@	lda #StandardBarrel	; standard barrel length
+	sta BarrelLength,x
+	lda #$00	; deactivate Auto Defense
+	sta AutoDefenseFlag,x
 	dex
 	bpl @-
 	rts

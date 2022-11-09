@@ -126,7 +126,9 @@ BarrelLength ;length of the tank barrel - dont forget to set it to 6 at round st
 ActiveWeapon ;number of the selected weapon
     .DS MaxPlayers
 ActiveDefenceWeapon ;number of the activated defence weapon - 0 
-    .DS MaxPlayers	
+    .DS MaxPlayers
+AutoDefenseFlag ; 0 - not activated, >$7f - activated 
+    .DS MaxPlayers
 WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;----------------------------------------------------
 

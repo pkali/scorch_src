@@ -848,6 +848,13 @@ invSelectDef
 	ply
     jmp DecreaseDefensive ; bypass activation
 NotBattery
+	cmp #ind_Auto_Defense___
+	bne NoAutoDefense
+    ; Auto Defense - do it like battery
+    mva #sfx_battery sfx_effect
+    mva #$A1 AutoDefenseFlag,x	; this is "A" in inverse - for status line :)
+    jmp DecreaseDefensive ; bypass activation
+NoAutoDefense
 	cmp #ind_Lazy_Boy_______
 	bne NoLazyBoy
 	; Lazy Boy - do it like battery
@@ -2343,6 +2350,8 @@ EndOfCredits
     ;---------------------
     ;displaying name of the defence weapon (if active)
     ;---------------------
+	lda AutoDefenseFlag,x	; Auto Defense symbol (space or "A" in inverse)
+	sta statusBuffer+80+21
     lda #$08 ; (
     sta statusBuffer+80+22
     lda #$09    ; )

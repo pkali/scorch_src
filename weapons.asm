@@ -2418,7 +2418,17 @@ InverseScreenByte
 	sta (temp),y
 	rts
 .endp
-
+; -------------------------------------------------
+.proc AutoDefense
+; -------------------------------------------------
+; This routine is run from inside of the main loop
+; X - index of  tank
+; -------------------------------------------------
+	jsr PrepareAIShoot.WepTableToTemp
+	jsr UseBattery
+	jsr TosserDefensives
+	rts
+.endp
 ; -------------------------------------------------
 .proc TankFlying
 ; -------------------------------------------------
