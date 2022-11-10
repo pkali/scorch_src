@@ -173,9 +173,6 @@ Only these points determine the order in the summary
 * **Lazy Darwin** - works exactly like **Lazy Boy** but targets the weakest opponent.
 * **Auto Defense** - activates the mode of automatic activation of defensive weapons. After its activation, the tank automatically activates the strongest shield it has (consuming it, of course) at any time when there is no shield (also between shots of other players). At the same time, if the tank's energy level drops below 30 units, it automatically activates **Battery** if it has it. This weapon remains active until the end of the round and is indicated by the letter "A" before the name of the active defensive weapon in the status line. It is the second defensive weapon that does not deactivate other defensive weapons when used.
 
-Translated with www.DeepL.com/Translator (free version)
-Due to the different operations of **MIRV**, defensive weapons **Bouncy Castle** and **Mag Deflector** only use the shielding function when hit by these weapons. In addition, **MIRV** heads do not bounce or fly through sidewalls during descent!
-
 None of the shields protect against **Napalm**. **Bouncy Castle** or **Mag Deflector** on a direct hit will deflect it or carry it past, but just hit very close to a tank and its shield will not save it.
 
 **White Flag**, **Hovercraft** and **Nuclear Winter** weapons, when selected, require activation, this is accomplished by "firing a shot" after the selection of that weapon. Of course, the shot of the offensive weapon is then not fired, but only the selected defensive weapon is activated.
