@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.18" ; number of this build (4 bytes)
+	dta d"1.19" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -268,13 +268,13 @@ FirstSTART
 	; Change RMT to PAL version
 	; 5 values in RMT file
 	; not elegant :(
-	mva #$06 MODUL-6+$941
-	mva #$10 MODUL-6+$a43
-	mva #$06 MODUL-6+$b9d
-	mva #$04 MODUL-6+$bd2
-	mva #$08 MODUL-6+$e17
-	mva #$06 MODUL-6+$e3d
-	mva #$06 MODUL-6+$e8c
+	mva #$06 MODUL-6+$9af
+	mva #$10 MODUL-6+$ab1
+	mva #$06 MODUL-6+$c0b
+	mva #$04 MODUL-6+$c40
+	mva #$08 MODUL-6+$e85
+	mva #$06 MODUL-6+$eb1
+	mva #$06 MODUL-6+$f04
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
@@ -1904,19 +1904,17 @@ noingame
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
-
+font4x4
+    ins 'artwork/font4x4s.bmp',+62
+;----------------------------------------------
 ;RMT PLAYER and song loading shenaningans
     icl 'artwork/sfx/rmtplayr_modified.asm'
     org $b000
 MODUL ;   equ $b000                                 ;address of RMT module
       ;opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str6-NTSC.rmt",+6          ;include music RMT module
+      ins "artwork/sfx/scorch_str8-NTSC.rmt",+6          ;include music RMT module
       ;opt h+
 MODULEND
-;----------------------------------------------
-font4x4
-    ins 'artwork/font4x4s.bmp',+62
-
 ;----------------------------------------------
   .IF target = 5200
     .IF * > ROM_SETTINGS-1

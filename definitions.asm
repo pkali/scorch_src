@@ -179,6 +179,8 @@ sfx_battery     = $1c ;3
 sfx_white_flag  = $1d ;4
 sfx_long_barrel = $1e
 sfx_tank_move	= $1f
+sfx_auto_defense= $2b
+sfx_lazy_boys	= $2c
 ;--------------------------------
 ; RMT songs (lines)
 ;--------------------------------

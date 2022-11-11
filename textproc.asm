@@ -851,14 +851,14 @@ NotBattery
 	cmp #ind_Auto_Defense___
 	bne NoAutoDefense
     ; Auto Defense - do it like battery
-    mva #sfx_battery sfx_effect
+    mva #sfx_auto_defense sfx_effect
     mva #$A1 AutoDefenseFlag,x	; this is "A" in inverse - for status line :)
     jmp DecreaseDefensive ; bypass activation
 NoAutoDefense
 	cmp #ind_Lazy_Boy_______
 	bne NoLazyBoy
 	; Lazy Boy - do it like battery
-    mva #sfx_smoke_cloud sfx_effect
+    mva #sfx_lazy_boys sfx_effect
 	phy
 	jsr PrepareAIShoot
 	jsr FindBestTarget2 ; find nearest tank neighbour
@@ -869,7 +869,7 @@ NoLazyBoy
 	cmp #ind_Lazy_Darwin____
 	bne NoLazyDarwin
 	; Lazy Darwin - do it like battery
-    mva #sfx_smoke_cloud sfx_effect
+    mva #sfx_lazy_boys sfx_effect
 	phy
 	jsr PrepareAIShoot
 	jsr FindBestTarget3 ; find target with lowest energy
