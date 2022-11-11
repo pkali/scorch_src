@@ -1305,9 +1305,8 @@ pressedRight
     mva #sfx_set_power_2 sfx_effect
 	mva #1 Erase
 	jsr DrawTankNr.BarrelChange
-    dec AngleTable,x
-    lda AngleTable,x
-    cmp #255 ; -1
+    dec:lda AngleTable,x
+    cmp #0 
     jne BeforeFire
     lda #179
     sta AngleTable,x

@@ -2109,10 +2109,23 @@ YangleUnder90
     sta vy
 
     lda #0  ; all arithmetic to zero
-    sta vx+1
-    sta vy+1
     sta fx
     sta fy
+    sta vx+1
+    sta vy+1
+
+    ;; add 0.5 to vx and vy for better rounding
+    ;clc
+    ;lda vx
+    ;adc #128  ; 1/2
+    ;sta vx
+    ;scc:inc vx+1
+    ;
+    ;clc
+    ;lda vy
+    ;adc #128  ; 1/2
+    ;sta vy
+    ;scc:inc vy+1
     
     ; draw by vx vy
     ; in each step 
@@ -2124,42 +2137,43 @@ YangleUnder90
 barrelLoop
     
     lda goleft
-    bne @+
+    bne goright
     clc
     lda fx
     adc vx
     sta fx
+    bcc @+
     lda xdraw
-    adc #0
+    adc vx+1
     sta xdraw
-    lda xdraw+1
-    adc #0
-    sta xdraw+1
-    jmp ybarrel
+    bcc @+
+    inc xdraw+1
 @
+    jmp ybarrel
+goright
     sec
     lda fx
     sbc vx
     sta fx
+    bcs @+
     lda xdraw
-    sbc #0
+    sbc vx+1
     sta xdraw
-    lda xdraw+1
-    sbc #0
-    sta xdraw+1
-
+    bne @+
+    dec xdraw+1
+@
 ybarrel
     sec
     lda fy
     sbc vy
     sta fy
+    bcs @+
     lda ydraw
-    sbc #0
+    sbc vy+1
     sta ydraw
-    lda ydraw+1
-    sbc #0
-    sta ydraw+1
-    
+    bcs @+
+    dec ydraw+1
+@    
     jsr plot ;.MakePlot
 
     dec yc

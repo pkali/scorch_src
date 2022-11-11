@@ -55,15 +55,15 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 2022-11-07
 
 Possibly the final single-player version of the game, unless our dear players find another breaking issue!
-* 5200 keypad works as it should. You can now press these finicky foils to your hearth's desire.
+* 5200 keypad works as it should. You can now press these finicky foils to your heart's desire.
 * "Unknown" type Robotanks were attacking with Nuclear Winter every time. Fixed!
-* One of variables was declared as a byte but used as a word which might cause some rare instabilities.
+* One of the variables was declared as a byte but used as a word that might cause some rare instabilities.
 * Page zero variables are cleared prior to the game start to eliminate rare issues in some software/hardware configurations.
 * The new version of music in NTSC eliminates issues with tempo (not that anyone but the artist noticed that, but still it is an improvement!)
 * You can now wrap around inventory and shop to faster access these options far down below.
 * Visual improvement of the main menu and fixed some color issues with the title headers.
 * Hovercraft was always flying to the top of the screen, it was not intended, it is now hovering just above the mountains!
-* The main menu does not blink now when changing options. This was a very minor thing but it bothered me to some extend. Fixing it required a complete rewrite of this portion of the menu.
+* The main menu does not blink now when changing options. This was a very minor thing but it bothered me to some extent. Fixing it required a complete rewrite of this portion of the menu.
 
 
 ###### Version 1.17
