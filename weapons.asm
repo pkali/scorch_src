@@ -1163,12 +1163,16 @@ callInventory
     jsr Purchase
 afterInventory
 	jsr MakeDarkScreen	
-    RmtSong song_ingame
-    mva #0 escFlag
     jsr DisplayStatus
     jsr SetMainScreen   
     jsr WaitOneFrame
     jsr DrawTanks
+	bit SpyHardFlag
+	bpl NoSpyHard
+	jsr SpyHard
+NoSpyHard
+    RmtSong song_ingame
+    mva #0 escFlag
     jsr WaitForKeyRelease
     jmp BeforeFire   
 @
@@ -2426,6 +2430,52 @@ InverseScreenByte
 	jsr PrepareAIShoot.WepTableToTemp
 	jsr UseBattery
 	jsr TosserDefensives
+	rts
+.endp
+; -------------------------------------------------
+.proc SpyHard
+; -------------------------------------------------
+	mvx TankNr TargetTankNr	; save
+RepeatSpy
+	mvx #0 TankNr
+CheckNextTankSH
+	cpx TargetTankNr
+	beq ThisTankItsMe
+    lda Energy,x	; only active players
+    beq ThisTankIsDead
+	; run SpyHard for tank in X
+	jsr DisplaySpyInfo
+	jsr FlashTank
+@	jsr GetKey
+    bit escFlag
+    bmi SpyHardEnd
+	cmp #@kbcode._space  ; $21 ; Space
+	beq SpyHardEnd
+	cmp #@kbcode._ret ; Return key (5200 - fire)
+	beq SpyHardEnd
+    cmp #@kbcode._left  ; $6
+	beq SelectNextTank
+    cmp #@kbcode._right  ; $07 ; cursor right
+	bne @-
+ThisTankIsDead
+ThisTankItsMe
+SelectNextTank
+    inc TankNr
+	ldx TankNr
+	cpx NumberOfPlayers
+    bne CheckNextTankSH
+	beq RepeatSpy
+SpyHardEnd
+	mvx TargetTankNr TankNr ; restore
+	jsr DisplaySpyInfo	
+	mva #0 SpyHardFlag
+	rts
+.endp
+.proc DisplaySpyInfo
+    lda TankStatusColoursTable,x
+    sta COLOR2  ; set color of status line
+    jsr PutTankNameOnScreen
+    jsr DisplayStatus
 	rts
 .endp
 ; -------------------------------------------------

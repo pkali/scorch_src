@@ -164,6 +164,8 @@ TargetTankNr	; Target tank index (for AI routines)
 	.DS 1
 SecondTryFlag	; For precise AI aiming
 	.DS 1
+SpyHardFlag	; >$7f - run SpyHard after inventory
+	.DS 1
 ;----------------------------------------------------
 ;Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally

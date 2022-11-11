@@ -87,6 +87,7 @@ price_Nuclear_Winter_ = 1000  ;_43
 price_Lazy_Boy_______ =  500  ;_44
 price_Lazy_Darwin____ =  500  ;_45
 price_Auto_Defense___ =  250  ;_46
+price_Spy_Hard_______ =   83  ;_47
 ;Weapon indexes (numbers)
 ind_Baby_Missile___ = 0
 first_offensive____ = ind_Baby_Missile___
@@ -138,7 +139,8 @@ ind_Nuclear_Winter_ = 43
 ind_Lazy_Boy_______ = 44
 ind_Lazy_Darwin____ = 45
 ind_Auto_Defense___ = 46
-last_defensive_____ = ind_Auto_Defense___
+ind_Spy_Hard_______ = 47
+last_defensive_____ = ind_Spy_Hard_______
 last_real_defensive = ind_Bouncy_Castle__
 number_of_offensives = last_offensive_____ - first_offensive____+1
 number_of_defensives = (last_defensive_____ - first_defensive____+1)

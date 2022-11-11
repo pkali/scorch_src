@@ -328,6 +328,7 @@ MainGameLoop
     jsr SetStandardBarrels
 
 	jsr CallPurchaseForEveryTank
+	mva #0 SpyHardFlag
 
     ; issue #72 (glitches when switches)
 	jsr MakeDarkScreen
@@ -1681,7 +1682,7 @@ SetRandomWalls
           and #$3f ;CTRL and SHIFT ellimination
           cmp #@kbcode._esc  ; 28  ; ESC
           bne getkeyend
-            mvx #$80 escFlag
+            mvy #$80 escFlag
           bne getkeyend
 
 checkJoyGetKey
@@ -1703,9 +1704,9 @@ notpressedJoyGetKey
     lda #@kbcode._ret ;Return key
     
 getkeyend
-	ldx #0
-    stx ATRACT	; reset atract mode	
-    mvx #sfx_keyclick sfx_effect
+	ldy #0
+    sty ATRACT	; reset atract mode	
+    mvy #sfx_keyclick sfx_effect
     rts
 .endp
 

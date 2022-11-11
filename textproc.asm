@@ -875,8 +875,13 @@ NoLazyBoy
 	jsr FindBestTarget3 ; find target with lowest energy
 	jsr LazyAim
 	ply
-    jmp DecreaseDefensive ; bypass activation	
+    jmp DecreaseDefensive ; bypass activation
 NoLazyDarwin
+	cmp #ind_Spy_Hard_______
+	bne NotSpy
+	mva #$ff SpyHardFlag
+    jmp DecreaseDefensive ; bypass activation	
+NotSpy
 	cmp #ind_Long_Barrel____
 	bne NotBarrel
 	; if activate long barrel, we do it differently too
