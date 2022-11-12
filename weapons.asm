@@ -153,7 +153,7 @@ EndOfLeapping
     ;
     jsr cleartanks	; maybe not?
 	mva #1 color
-	sta FunkyWallFlag
+	mva #0 FunkyWallFlag
     mva #5 FunkyBombCounter
 FunkyBombLoop
     mva #1 tracerflag
