@@ -268,13 +268,13 @@ FirstSTART
 	; Change RMT to PAL version
 	; 5 values in RMT file
 	; not elegant :(
-	mva #$06 MODUL-6+$9af
-	mva #$10 MODUL-6+$ab1
-	mva #$06 MODUL-6+$c0b
-	mva #$04 MODUL-6+$c40
-	mva #$08 MODUL-6+$e85
-	mva #$06 MODUL-6+$eb1
-	mva #$06 MODUL-6+$f04
+	mva #$06 MODUL-6+$967	; $07 > $06
+	mva #$10 MODUL-6+$a69	; $12 > $10
+	mva #$06 MODUL-6+$bc3	; $07 > $06
+	mva #$04 MODUL-6+$bf8	; $05 > $04
+	mva #$08 MODUL-6+$e3d	; $0a > $08
+	mva #$06 MODUL-6+$e69	; $08 > $06
+	mva #$06 MODUL-6+$ebc	; $08 > $06
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
@@ -1912,7 +1912,7 @@ font4x4
     org $b000
 MODUL ;   equ $b000                                 ;address of RMT module
       ;opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str8-NTSC.rmt",+6          ;include music RMT module
+      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6          ;include music RMT module
       ;opt h+
 MODULEND
 ;----------------------------------------------
