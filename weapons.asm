@@ -152,8 +152,8 @@ EndOfLeapping
     jsr SoilDown2
     ;
     jsr cleartanks	; maybe not?
-	sta FunkyWallFlag
 	mva #1 color
+	sta FunkyWallFlag
     mva #5 FunkyBombCounter
 FunkyBombLoop
     mva #1 tracerflag
@@ -172,7 +172,8 @@ FunkyBombLoop
     mwa ytrajfb ytraj+1
     mva #sfx_funky_hit sfx_effect
     jsr Flight
-
+	mva #1 ExplosionRadius	; if no explosion (off screen)
+	jsr CalculateExplosionRange	; add end of flight coordinates to soildown range
     lda HitFlag
     beq NoExplosionInFunkyBomb
       mva #sfx_baby_missile sfx_effect
