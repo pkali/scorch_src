@@ -219,7 +219,7 @@ PutPixelinDraw
     bit drawFunction
     bpl @+
     inw LineLength
-    bne ContinueDraw  ; ==jmp
+    jmp ContinueDraw  ; was `bne` - not good, because LineLength starts from $ffff
 @
     bvc @+
 DrawCheck
