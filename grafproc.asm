@@ -2159,7 +2159,7 @@ goright
     lda xdraw
     sbc vx+1
     sta xdraw
-    bne @+
+    bcs @+
     dec xdraw+1
 @
 ybarrel
