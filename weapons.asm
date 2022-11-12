@@ -1032,7 +1032,7 @@ UpNotYet2
     beq FillNow
 HowMuchToFallRight3
     inw xdraw
-    cpw xdraw #(screenwidth+1)
+    cpw xdraw #screenwidth
     jne RollinContinuesLiquid
 FillNow
      ; finally one pixel more
