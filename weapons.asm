@@ -1310,9 +1310,9 @@ pressedRight
 	mva #1 Erase
 	jsr DrawTankNr.BarrelChange
     dec:lda AngleTable,x
-    cmp #0 
+    cmp #255  ; -1 
     jne BeforeFire
-    lda #179
+    lda #180
     sta AngleTable,x
     jmp BeforeFire
 
@@ -1327,7 +1327,7 @@ CTRLPressedRight
     sta AngleTable,x
     cmp #4  ; smallest angle for speed rotating
     jcs BeforeFire
-    lda #179
+    lda #180
     sta AngleTable,x
     jmp BeforeFire
         

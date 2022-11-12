@@ -2111,7 +2111,7 @@ YangleUnder90
     lda #0  ; all arithmetic to zero
     sta vx+1
     sta vy+1
-;	lda #128 	; ; add 0.5 to fx and fy (not vx and vx) for better rounding - it's my opinion (Pecus)
+	lda #128 	; ; add 0.5 to fx and fy (not vx and vx) for better rounding - it's my opinion (Pecus)
     sta fx
     sta fy
 
