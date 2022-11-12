@@ -172,7 +172,18 @@ FunkyBombLoop
     mwa ytrajfb ytraj+1
     mva #sfx_funky_hit sfx_effect
     jsr Flight
-	mva #1 ExplosionRadius	; if no explosion (off screen)
+	mva #0 ExplosionRadius	; if no explosion (off screen)
+	; if xdraw if over range then fix it
+	lda xdraw+1
+	bpl NoOnLeftEdge
+	lda #0
+	sta xdraw
+	sta xdraw+1
+NoOnLeftEdge
+	cpw xdraw #screenwidth
+	bcc NoOnRightEdge
+	mwa #screenwidth xdraw
+NoOnRightEdge
 	jsr CalculateExplosionRange	; add end of flight coordinates to soildown range
     lda HitFlag
     beq NoExplosionInFunkyBomb
