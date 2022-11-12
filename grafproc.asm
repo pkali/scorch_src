@@ -2115,19 +2115,6 @@ YangleUnder90
     sta fx
     sta fy
 
-/*     ; add 0.5 to vx and vy for better rounding
-    clc
-    lda vx
-    adc #128  ; 1/2
-    sta vx
-    scc:inc vx+1
-    
-    clc
-    lda vy
-    adc #128  ; 1/2
-    sta vy
-    scc:inc vy+1
- */    
     ; draw by vx vy
     ; in each step 
     ; 1. plot(xdraw, ydraw)
