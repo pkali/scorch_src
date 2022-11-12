@@ -2109,24 +2109,25 @@ YangleUnder90
     sta vy
 
     lda #0  ; all arithmetic to zero
-    sta fx
-    sta fy
     sta vx+1
     sta vy+1
+;	lda #128 	; ; add 0.5 to fx and fy (not vx and vx) for better rounding - it's my opinion (Pecus)
+    sta fx
+    sta fy
 
-    ;; add 0.5 to vx and vy for better rounding
-    ;clc
-    ;lda vx
-    ;adc #128  ; 1/2
-    ;sta vx
-    ;scc:inc vx+1
-    ;
-    ;clc
-    ;lda vy
-    ;adc #128  ; 1/2
-    ;sta vy
-    ;scc:inc vy+1
+/*     ; add 0.5 to vx and vy for better rounding
+    clc
+    lda vx
+    adc #128  ; 1/2
+    sta vx
+    scc:inc vx+1
     
+    clc
+    lda vy
+    adc #128  ; 1/2
+    sta vy
+    scc:inc vy+1
+ */    
     ; draw by vx vy
     ; in each step 
     ; 1. plot(xdraw, ydraw)
