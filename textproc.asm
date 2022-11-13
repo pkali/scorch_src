@@ -387,7 +387,10 @@ ChoosingItemForPurchase
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
     bit escFlag
-    spl:jmp WaitForKeyRelease  ; like jsr ... : rts
+    bpl @+
+    mva #0 escFlag
+    jmp WaitForKeyRelease  ; like jsr ... : rts
+@
     cmp #@kbcode._tab  ; $2c ; Tab
     jeq ListChange
     cmp #@kbcode._left  ; $06  ; cursor left

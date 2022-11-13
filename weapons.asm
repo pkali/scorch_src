@@ -601,7 +601,7 @@ DiggerCharacter
 ; ------------------------
 .proc liquiddirt
     mva #sfx_liquid_dirt sfx_effect
-	mwa #254 FillCounter
+	mwa #510 FillCounter
 	jmp xliquiddirt
 .endp
 ; ------------------------
