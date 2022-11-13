@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800 ;5200  ; or 800
+.def TARGET = 800; 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -1909,16 +1909,21 @@ font4x4
 ;----------------------------------------------
 ;RMT PLAYER and song loading shenaningans
     icl 'artwork/sfx/rmtplayr_modified.asm'
-    org $b000
-MODUL ;   equ $b000                                 ;address of RMT module
-      ;opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6          ;include music RMT module
-      ;opt h+
+    .IF * > MODUL-1
+      .ERROR 'Code and data too long'
+    .ENDIF
+    .ECHO "Bytes left: ",$b000-*
+    
+    
+    org $b000                                    ;address of RMT module
+MODUL                                            
+                                                 ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6  ;include music RMT module
 MODULEND
 ;----------------------------------------------
   .IF target = 5200
     .IF * > ROM_SETTINGS-1
-      .ERROR 'Code too long to fit in 5200'
+      .ERROR 'Code and RMT song too long to fit in 5200'
     .ENDIF
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
