@@ -1088,6 +1088,7 @@ NoArrowDown
       jsr EnterPlayerName
       bit escFlag
       spl:rts
+	  jsr CheckTankCheat
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -2357,6 +2358,9 @@ EndOfCredits
     ;displaying name of the defence weapon (if active)
     ;---------------------
 	lda AutoDefenseFlag,x	; Auto Defense symbol (space or "A" in inverse)
+	bpl @+
+	lda #$5e	; Auto Defense symbol
+@
 	sta statusBuffer+80+21
     lda #$08 ; (
     sta statusBuffer+80+22
@@ -2518,7 +2522,7 @@ AngleDisplay
 .proc PutTankNameOnScreen
 ; puts name of the tank on the screen
     ldy #$00
-    lda tanknr
+    lda TankNr
     asl
     asl
     asl ; 8 chars per name
@@ -2530,6 +2534,36 @@ NextChar02
     iny
     cpy #$08
     bne NextChar02
+    rts
+.endp
+;-------------------------------------------------
+.proc CheckTankCheat
+; puts name of the tank on the screen
+    ldy #$07
+    lda TankNr
+    asl
+    asl
+    asl ; 8 chars per name
+    tax
+@
+    lda tanksnames,x
+    cmp CheatName,y
+	bne NoCheat
+    inx
+    dey
+    bpl @-
+YesCheat
+	ldx TankNr
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+	lda #99
+@	iny
+	sta (temp),y
+	cpy #(last_defensive_____ - first_offensive____)
+	bne @-
+NoCheat
     rts
 .endp
 ;-------------------------------------------------

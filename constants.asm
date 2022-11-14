@@ -228,7 +228,8 @@ TanksNamesDefault
     dta d"4th.Tank"
     dta d"5th.Tank"
     dta d"6th.Tank"
-
+CheatName
+	dta d"   008.T"
 WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Baby_Missile___
   .by >price_Missile________

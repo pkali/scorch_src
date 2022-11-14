@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.19" ; number of this build (4 bytes)
+	dta d"1.20" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -1909,7 +1909,9 @@ font4x4
 ;----------------------------------------------
 ;RMT PLAYER and song loading shenaningans
     icl 'artwork/sfx/rmtplayr_modified.asm'
+;----------------------------------------------
     .IF * > MODUL-1
+	  .ECHO *
       .ERROR 'Code and data too long'
     .ENDIF
     .ECHO "Bytes left: ",$b000-*
