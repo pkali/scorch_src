@@ -51,7 +51,7 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
-###### Version 1.18
+###### Version 1.19
 2022-11-04
 
 This is the final round of weapon additions! Also. our beloved testers and players found a number of issues and we were extremely happy to address them.
