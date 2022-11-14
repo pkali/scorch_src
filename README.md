@@ -69,6 +69,7 @@ This is the final round of weapon additions! Also. our beloved testers and playe
 * Not all traces were correctly erased after Funky Bomb, fixed again (for the 3rt time I guess).
 * Soil sedimentation speed after Funky Bomb improved.
 * Pressing [ESC] when in inventory/store was quitting the game, now it quits the menu only.
+* A bug in MADS optimization was causing parts of SEPPUKU message to stay on screen.
 * BIGGEST OF ALL: the lonely pixel after Nuclear Winter was eliminated. https://github.com/pkali/scorch_src/issues/103 We have spent a disproportionately large amount of time trying to slap this bug. It is still there, but is not manifesting itself ;)
 
 
