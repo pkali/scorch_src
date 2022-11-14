@@ -3,7 +3,7 @@
 Grać można przy użyciu klawiatury (wszystkie funkcjonalności) lub joysticka (wszystkie funkcjonalności niezbędne w rozgrywce).
 
 ## 1. Wybór opcji gry.
-Na pierwszym ekranie możemy skonfigurować opcje rozgrywwki:
+Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 * ilość graczy (2 - 6) obejmuje tak ludzi jak graczy sterowanych przez komputer
 * początkową ilość gotówki każdego z graczy (8k to wybrana przez nas wartość optymalna, lecz przy krótkich rozgrywkach warto wybrać większą wartość)
 * grawitacja
@@ -52,7 +52,8 @@ W linii statusowej widoczna jest informacja o tym który z graczy aktualnie moż
 * ustawiona przez gracza siła strzału (maksymalna siła strzału jest ograniczana przez energię gracza - nie może przekroczyć energii * 10 . Oznacza to, że mając małą ilość energii możemy oddać słabsze strzały
 * numer aktualnej rundy rozgrywki
 * prędkość i kierunek wiatru
-* w nawiasie nazwę aktywnej broni defensywnej - jeśli jest jakaś aktywowana przez gracz
+* symbol "A" jeśli aktywna jest **Auto Defense**
+* w nawiasie nazwę aktywnej broni defensywnej - jeśli jest jakaś aktywowana przez gracza
 
 Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana kąta nachylenia lufy, góra/dół - zmiana ustawienia siły strzału.
 
@@ -64,7 +65,7 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 | [A] lub [OPTION] | [7] | bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych. |
 | [M] | [PAUSE] | wyłączenie/włączenie muzyki w tle |
 | [S] | [RESET] | wyłączenie/włączenie dźwięków efektów. |
-| [START] | brak | przyspiesza/pomimja niektóre animacje w grze |
+| [START] | brak | przyspiesza/pomija niektóre animacje w grze |
 | [O] | [3] | wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza [ESC] z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy. |
 | [START] + [OPTION] | brak | natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak [O] ale bez potwierdzenia. |
 | [ESC] | [*] | w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem). |
@@ -116,8 +117,8 @@ Po eksplozji każdy czołg w jej zasięgu traci energię.
 
 Działa to tak, że jeśli trafienie jest dokładnie w centralny punkt czołgu `EnergyDecrease` otrzymuje maksymalną wartość dla danej broni, a z każdym pikselem odległości od centrum czołgu wartość ta jest zmniejszana o 8.
 
-Przykładowo jeśli strzał oddany za pomocą broni Baby Missile trafi idelanie w centum czołgu to straci on dokładnie 88 jednostek energii (plus to co straci spadając po eksplozji).
-W przypadku tafienia tą samą bronią w odległości 10ciu pikseli od centrum czołgu strata ta będzie wynośiła już tyko 8 jednostek.
+Przykładowo jeśli strzał oddany za pomocą broni Baby Missile trafi idealnie w centum czołgu to straci on dokładnie 88 jednostek energii (plus to co straci spadając po eksplozji).
+W przypadku trafienia tą samą bronią w odległości 10ciu pikseli od centrum czołgu strata ta będzie wynosiła już tyko 8 jednostek.
 
 A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli broń eksploduje kilka razy, każda z eksplozji jest obliczana niezależnie (dodatkowe wartości w tabeli):
 
@@ -157,18 +158,22 @@ Duże punkty otrzymane przez gracza to ilość czołgów, które zginęły wcze�
 Tylko te punkty decydują o kolejności w podsumowaniu
 
 ## 6. A teraz bronie defensywne:
-* **White Flag** - powoduje poddanie gracza (może czasem przydać się w sytuacji beznadziejnej). Zaletą jest to, że poddając się nie dajemy dużego punktu przeciwnikom i nie powodujemy, że któryś zyska na tym, że nas zgładzi, ograniczamy też stratę swojej energii czyli także kasy. I tu także ważna uwaga - to jedyna broń defensywna, którą można deaktywować. Wystarczy ponownie wejść do inventory i jeszcze raz wybrać jej aktywację.
-* **Battery** - w momencie aktywacji doładowuje energię czołgu do pełna (99 jednostek) i jednocześnie jest to jedyna broń defensywna, która nie deaktywuje innych broni defensywnych w przypadku jej użycia.
+* **White Flag** - powoduje poddanie gracza (może czasem przydać się w sytuacji beznadziejnej). Zaletą jest to, że poddając się nie dajemy dużego punktu przeciwnikom i nie powodujemy, że któryś zyska na tym, że nas zgładzi, ograniczamy też stratę swojej energii czyli także kasy. I tu także ważna uwaga - to jedyna broń defensywna, którą można dezaktywować. Wystarczy ponownie wejść do inventory i jeszcze raz wybrać jej aktywację.
+* **Battery** - w momencie aktywacji doładowuje energię czołgu do pełna (99 jednostek). Jest to jedna z trzech broni defensywnych, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 * **Hovercraft** - broń umożliwiająca przemieszczanie się czołgu. Posiada własny zasób paliwa a dodatkowo może być aktywowana wielokrotnie w czasie tej samej tury, a po jej użyciu możemy w tej samej turze aktywować inną broń defensywną i oddać strzał. Po jej użyciu czołg uniesie się ponad góry i za pomocą klawiszy kursora lub joysticka: lewo/prawo możemy przemieścić czołg na nową pozycję a [SPACJA] lub przycisk joysticka powodują wylądowanie czołgu w nowym miejscu. Latać można do chwili skończenia się "paliwa" (prezentowanego na pasku statusu tak jak energia broni defensywnej), jeśli paliwo się skończy czołg opadnie samodzielnie. Nie da się lądować na innych czołgach.
-* **Parachute** - nie chroni przed ubytkiem energii z powodu sąsiedniej eksplozji, powoduje że nie ubywa energii w czasie JEDNEGO spadania. Po takim upadku deaktywuje się i trzeba aktywować nowy spadochron.
-* **Strong Parachute** - spadochron z własną energią (na starcie 99 jednostek), działa tak samo jak Parachute (nie chroni przed eksplozjami) ma za to swój własny zasób energii przy spadaniu w pierwszej kolejności zmniejszana jest energia tego spadochronu (1 jednostka na jeden pixel opadania - inaczej niż czołg!) i jeśli dojdzie ona do 0 to spadochron deaktywuje się i dalej zmniejszana jest energia czołgu (tutaj już standardowo - 2 jednoski na jeden pikxel).
-* **Shield** - najprostsza osłona działa dokładnie przeciwnie niż Parachute, nie chroni przed ubytkiem energii w czasie spadania, chroni za to przed ubytkiem energii spowodowanym JEDNĄ sąsiednią eksplozją. Chroni jednorazowo, bez znaczenia jak silna jest eksplozja (czy jest to tylko "draśnięcie", czy też bezpośrednie trafienie atomówką) i od razu po niej deaktywuje się.
-* **Heavy Shield** - osłona z własną energią (na starcie 99 jednostek), działa tak samo jak Shield (nie chroni przed upadkiem) z tym wyjątkiem, że ma własny zasób energii. Przy eksplozji w pierwszej kolejności zmniejszana jest energia tej osłony i jeśli dojdzie ona do 0 to osłona deaktywuje się i dalej zmniejszana jest energia czołgu. W związku z takim działaniem, czołg z tym typem osłony można "zabić" podkopując go, bo spadanie zmniejsza energię czołgu a nie osłony.
+* **Parachute** - nie chroni przed ubytkiem energii z powodu sąsiedniej eksplozji, powoduje że nie ubywa energii w czasie JEDNEGO spadania. Po takim upadku dezaktywuje się i trzeba aktywować nowy spadochron.
+* **Strong Parachute** - spadochron z własną energią (na starcie 99 jednostek), działa tak samo jak Parachute (nie chroni przed eksplozjami) ma za to swój własny zasób energii przy spadaniu w pierwszej kolejności zmniejszana jest energia tego spadochronu (1 jednostka na jeden pixel opadania - inaczej niż czołg!) i jeśli dojdzie ona do 0 to spadochron dezaktywuje się i dalej zmniejszana jest energia czołgu (tutaj już standardowo - 2 jednostki na jeden pikxel).
+* **Shield** - najprostsza osłona działa dokładnie przeciwnie niż Parachute, nie chroni przed ubytkiem energii w czasie spadania, chroni za to przed ubytkiem energii spowodowanym JEDNĄ sąsiednią eksplozją. Chroni jednorazowo, bez znaczenia jak silna jest eksplozja (czy jest to tylko "draśnięcie", czy też bezpośrednie trafienie atomówką) i od razu po niej dezaktywuje się.
+* **Heavy Shield** - osłona z własną energią (na starcie 99 jednostek), działa tak samo jak Shield (nie chroni przed upadkiem) z tym wyjątkiem, że ma własny zasób energii. Przy eksplozji w pierwszej kolejności zmniejszana jest energia tej osłony i jeśli dojdzie ona do 0 to osłona dezaktywuje się i dalej zmniejszana jest energia czołgu. W związku z takim działaniem, czołg z tym typem osłony można "zabić" podkopując go, bo spadanie zmniejsza energię czołgu a nie osłony.
 * **Force Shield** - najmocniejsza osłona - działa tak jak Heavy Shield tyle że połączona z Parachute. Co ważne w jej przypadku upadek nie zabiera energii osłonie ani czołgowi. Zabierają ją tylko trafienia.
-* **Bouncy Castle** - broń agresywna :) . Działa następująco. W przypadku bezpośredniego trafienia w czołg (i osłonę) powoduje "odbicie" pocisku w przeciwnym kierunku z tą samą siłą z jaką był wystrzelony. W przypadku braku wiatru i różnicy poziomów broń trafia wtedy w czołg, który ją wystrzelił. Po takim odbiciu deaktywuje się. W związku z tym, że broń ta reaguje w ten sposób tylko na precyzyjne trafienia, jest także osłoną odpowiadającą działaniu Heavy Shield i ma na starcie 99 jednostek (prawdopodobnie trzeba będzie przemyśleć tę wartość i dać tu mniejszą).
+* **Bouncy Castle** - broń agresywna :) . Działa następująco. W przypadku bezpośredniego trafienia w czołg (i osłonę) powoduje "odbicie" pocisku w przeciwnym kierunku z tą samą siłą z jaką był wystrzelony. W przypadku braku wiatru i różnicy poziomów broń trafia wtedy w czołg, który ją wystrzelił. Po takim odbiciu dezaktywuje się. W związku z tym, że broń ta reaguje w ten sposób tylko na precyzyjne trafienia, jest także osłoną odpowiadającą działaniu Heavy Shield i ma na starcie 99 jednostek (prawdopodobnie trzeba będzie przemyśleć tę wartość i dać tu mniejszą).
 * **Mag Deflector** - druga broń agresywna :) . W przypadku bezpośredniego trafienia w czołg (i osłonę) powoduje przesunięcie punktu trafienia losowo w lewo lub prawą stronę chronionego czołgu, ale niezbyt daleko, więc można dostać "odłamkiem" przy silniejszej broni. Tak jak w przypadku Bouncy Castle jest także osłoną odpowiadającą działaniu Heavy Shield i ma na starcie 99 jednostek (prawdopodobnie i tutaj trzeba będzie przemyśleć tę wartość i dać mniejszą).
 * **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broń nie tyle defensywna co obosieczna. Zasypuje teren opadem "radioaktywnym", który jest zwyczajną glebą. Jeśli nie mamy pod ręką żadnej broni odkopującej teren i do tego osłony (najlepiej jednorazowej), to po takim "opadzie" będzie trzeba strzelić do siebie - bo będąc pod ziemią inaczej się nie da. Ewentualnie pozostaje zawsze White Flag.
-* **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się ale tylko przy niewielkim przysypaniu ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej deaktywować).
+* **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się ale tylko przy niewielkim przysypaniu ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej dezaktywować).
+* **Lazy Boy** - nie jest to właściwie broń defensywna. Jest to wspomaganie celowania. Po jej aktywacji czołg stara się wycelować w najbliższego przeciwnika i automatycznie ustawia siłę strzału oraz kąt. W przypadku posiadania zbyt małej ilości energii może czasem wycelować źle (do celowania stosuje metodę taką jak **Cyborg**). Tak jak **Battery** nie dezaktywuje innych broni defensywnych w przypadku jej użycia. Uwaga! Nie ma sensu aktywacja tej broni przed rundą, celowanie nie odbędzie się bo nie ma jeszcze do czego celować.
+* **Lazy Darwin** - działa dokładnie jak **Lazy Boy** ale celuje w najsłabszego przeciwnika.
+* **Auto Defense** - włącza tryb automatycznej aktywacji broni defensywnych. Po jej aktywowaniu czołg automatycznie aktywuje najmocniejszą posiadaną osłonę (zużywając ją oczywiście) w każdej chwili, kiedy nie ma żadnej osłony (także pomiędzy strzałami innych graczy). Jednocześnie jeżeli poziom energii czołgu spadnie poniżej 30 jednostek, automatycznie aktywuje **Battery** jeżeli ją posiada. Ta broń pozostaje aktywna do końca rundy i jest sygnalizowana literą "A" przed nazwą aktywnej broni defensywnej w linii statusowej. Jest to druga broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
+* **Spy Hard** - Pomoc dla zapominalskich :) . Po aktywacji pokazuje kolejno podgląd informacji o kolejnych przeciwnikach. Lewo/Prawo - zmienia "szpiegowany" czołg. Fire/Space/Return/Esc - kończy "szpiegowanie". Jest to ostatnia broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 
 W związku z odmiennym działaniem broni **MIRV**, bronie defensywne **Bouncy Castle** i **Mag Deflector** wykorzystują tylko funkcję osłony przy trafieniu tą bronią. Dodatkowo głowice **MIRV** w czasie opadania nie odbijają się i nie przelatują przez ściany boczne!
 
@@ -182,7 +187,7 @@ Oczywiście aktywacja broni w momencie kiedy mamy już aktywowaną jakąś inną
 
 ## 7. Bronie 'inne' :) :
 
-* **Buy me!** - tej 'broni' nie można używać w rozgrywce. Jej zakup powoduje wylosowanie jesdnej z broni ofensywnych lub (żadziej) defensywnych i dodanie jej do arsenału gracza. Jest to loteria w której można stracić (jeśli wylosuje się broń tańsza niż cena **Buy Me!** ale też zyskać. Jeśli wylosuje się broń dużo droższa możemy otrzymać do dyspozycji broń, na którą nie było nas stać!
+* **Buy me!** - tej 'broni' nie można używać w rozgrywce. Jej zakup powoduje wylosowanie jednej z broni ofensywnych lub (rzadziej) defensywnych i dodanie jej do arsenału gracza. Jest to loteria w której można stracić (jeśli wylosuje się broń tańsza niż cena **Buy Me!** ale też zyskać. Jeśli wylosuje się broń dużo droższa możemy otrzymać do dyspozycji broń, na którą nie było nas stać!
 
 
 ## 8. Poziomy trudności przeciwników sterowanych przez komputer:

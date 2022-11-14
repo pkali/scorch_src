@@ -219,7 +219,7 @@ PutPixelinDraw
     bit drawFunction
     bpl @+
     inw LineLength
-    bne ContinueDraw  ; ==jmp
+    jmp ContinueDraw  ; was `bne` - not good, because LineLength starts from $ffff
 @
     bvc @+
 DrawCheck
@@ -1344,6 +1344,15 @@ drawmountainspixelloop
 	jsr ClearTanks
 NoClearTanks
 
+; Fix for lonely pixel after nuclear winter :) #103
+	lda #0
+	sta xdraw
+	sta xdraw+1
+	sta ydraw
+	sta ydraw+1
+	sta color
+	jsr plot
+
 ; First we look for highest pixels and fill with their coordinates
 ; both tables
 
@@ -1894,7 +1903,7 @@ EndPutChar
     rts
 .endp
 
-; ------------------------------------------
+;--------------------------------------------------
 .proc PutChar4x4
 ; puts 4x4 pixels char on the graphics screen
 ; in: dx, dy (LOWER left corner of the char)
@@ -1903,7 +1912,6 @@ EndPutChar
 ; all pixels are being drawn
 ; (empty and not empty)
 ;--------------------------------------------------
-;	rts
     cpw dy #(screenheight-1)
     jcs TypeChar.EndPutChar ;nearest RTS
 	cpw dy #(4)
@@ -2111,9 +2119,10 @@ YangleUnder90
     lda #0  ; all arithmetic to zero
     sta vx+1
     sta vy+1
+	lda #128 	; ; add 0.5 to fx and fy (not vx and vx) for better rounding - it's my opinion (Pecus)
     sta fx
     sta fy
-    
+
     ; draw by vx vy
     ; in each step 
     ; 1. plot(xdraw, ydraw)
@@ -2124,42 +2133,43 @@ YangleUnder90
 barrelLoop
     
     lda goleft
-    bne @+
+    bne goright
     clc
     lda fx
     adc vx
     sta fx
+    bcc @+
     lda xdraw
-    adc #0
+    adc vx+1
     sta xdraw
-    lda xdraw+1
-    adc #0
-    sta xdraw+1
-    jmp ybarrel
+    bcc @+
+    inc xdraw+1
 @
+    jmp ybarrel
+goright
     sec
     lda fx
     sbc vx
     sta fx
+    bcs @+
     lda xdraw
-    sbc #0
+    sbc vx+1
     sta xdraw
-    lda xdraw+1
-    sbc #0
-    sta xdraw+1
-
+    bcs @+
+    dec xdraw+1
+@
 ybarrel
     sec
     lda fy
     sbc vy
     sta fy
+    bcs @+
     lda ydraw
-    sbc #0
+    sbc vy+1
     sta ydraw
-    lda ydraw+1
-    sbc #0
-    sta ydraw+1
-    
+    bcs @+
+    dec ydraw+1
+@    
     jsr plot ;.MakePlot
 
     dec yc

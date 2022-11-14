@@ -84,6 +84,10 @@ price_Force_Shield___ = 1100  ;_40
 price_Bouncy_Castle__ =  512  ;_41            
 price_Long_Barrel____ = 2100  ;_42            
 price_Nuclear_Winter_ = 1000  ;_43
+price_Lazy_Boy_______ =  500  ;_44
+price_Lazy_Darwin____ =  500  ;_45
+price_Auto_Defense___ =  250  ;_46
+price_Spy_Hard_______ =   83  ;_47
 ;Weapon indexes (numbers)
 ind_Baby_Missile___ = 0
 first_offensive____ = ind_Baby_Missile___
@@ -132,7 +136,12 @@ ind_Force_Shield___ = 40
 ind_Bouncy_Castle__ = 41            
 ind_Long_Barrel____ = 42            
 ind_Nuclear_Winter_ = 43
-last_defensive_____ = ind_Nuclear_Winter_
+ind_Lazy_Boy_______ = 44
+ind_Lazy_Darwin____ = 45
+ind_Auto_Defense___ = 46
+ind_Spy_Hard_______ = 47
+last_defensive_____ = ind_Spy_Hard_______
+last_real_defensive = ind_Bouncy_Castle__
 number_of_offensives = last_offensive_____ - first_offensive____+1
 number_of_defensives = (last_defensive_____ - first_defensive____+1)
 ;--------------------------------
@@ -170,6 +179,8 @@ sfx_battery     = $1c ;3
 sfx_white_flag  = $1d ;4
 sfx_long_barrel = $1e
 sfx_tank_move	= $1f
+sfx_auto_defense= $2b
+sfx_lazy_boys	= $2c
 ;--------------------------------
 ; RMT songs (lines)
 ;--------------------------------

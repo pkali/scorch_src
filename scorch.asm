@@ -6,16 +6,16 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800; 5200  ; or 800
+.def TARGET = 800 ;5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
 
-    OPT r+  ; saves 12 bytes :O
+   ;OPT r+  ; saves 12 bytes :O
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.18" ; number of this build (4 bytes)
+	dta d"1.19" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -268,13 +268,13 @@ FirstSTART
 	; Change RMT to PAL version
 	; 5 values in RMT file
 	; not elegant :(
-	mva #$06 MODUL-6+$941
-	mva #$10 MODUL-6+$a43
-	mva #$06 MODUL-6+$b9d
-	mva #$04 MODUL-6+$bd2
-	mva #$08 MODUL-6+$e17
-	mva #$06 MODUL-6+$e3d
-	mva #$06 MODUL-6+$e8c
+	mva #$06 MODUL-6+$967	; $07 > $06
+	mva #$10 MODUL-6+$a69	; $12 > $10
+	mva #$06 MODUL-6+$bc3	; $07 > $06
+	mva #$04 MODUL-6+$bf8	; $05 > $04
+	mva #$08 MODUL-6+$e3d	; $0a > $08
+	mva #$06 MODUL-6+$e69	; $08 > $06
+	mva #$06 MODUL-6+$ebc	; $08 > $06
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
@@ -324,9 +324,11 @@ MainGameLoop
 	jsr SetWallsType
 	; first set default barrel lengths (fix for Long Schlong activation :) )
 	; we must do it before purchase/activate
+	; and set Auto Defense to off
     jsr SetStandardBarrels
 
 	jsr CallPurchaseForEveryTank
+	mva #0 SpyHardFlag
 
     ; issue #72 (glitches when switches)
 	jsr MakeDarkScreen
@@ -612,6 +614,20 @@ DoNotFinishTheRound
     jmp Seppuku
 
 @
+	; Auto Defense - activates defensives
+    ldx NumberOfPlayers
+    dex
+CheckNextTankAD
+    lda Energy,x	; only active players
+    beq @+
+	lda AutoDefenseFlag,x	; with Auto Defence activated
+	beq @+
+	; run auto defense for tank in X
+	jsr AutoDefense
+@   dex
+    bpl CheckNextTankAD
+	jsr DrawTanks	; redraw tanks witch new defences
+;
     ldx TankSequencePointer
     lda TankSequence,x
     sta TankNr
@@ -1129,8 +1145,10 @@ MakeTanksVisible
 ;--------------------------------------------------
 .proc SetStandardBarrels
     ldx #maxPlayers-1
-	lda #StandardBarrel	; standard barrel length
-@	sta BarrelLength,x
+@	lda #StandardBarrel	; standard barrel length
+	sta BarrelLength,x
+	lda #$00	; deactivate Auto Defense
+	sta AutoDefenseFlag,x
 	dex
 	bpl @-
 	rts
@@ -1664,7 +1682,7 @@ SetRandomWalls
           and #$3f ;CTRL and SHIFT ellimination
           cmp #@kbcode._esc  ; 28  ; ESC
           bne getkeyend
-            mvx #$80 escFlag
+            mvy #$80 escFlag
           bne getkeyend
 
 checkJoyGetKey
@@ -1686,9 +1704,9 @@ notpressedJoyGetKey
     lda #@kbcode._ret ;Return key
     
 getkeyend
-	ldx #0
-    stx ATRACT	; reset atract mode	
-    mvx #sfx_keyclick sfx_effect
+	ldy #0
+    sty ATRACT	; reset atract mode	
+    mvy #sfx_keyclick sfx_effect
     rts
 .endp
 
@@ -1886,23 +1904,26 @@ noingame
 TankFont
     ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
 ;----------------------------------------------
-
-;RMT PLAYER and song loading shenaningans
-    icl 'artwork/sfx/rmtplayr_modified.asm'
-    org $b000
-MODUL ;   equ $b000                                 ;address of RMT module
-      ;opt h-                                       ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str6-NTSC.rmt",+6          ;include music RMT module
-      ;opt h+
-MODULEND
-;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
-
+;----------------------------------------------
+;RMT PLAYER and song loading shenaningans
+    icl 'artwork/sfx/rmtplayr_modified.asm'
+    .IF * > MODUL-1
+      .ERROR 'Code and data too long'
+    .ENDIF
+    .ECHO "Bytes left: ",$b000-*
+    
+    
+    org $b000                                    ;address of RMT module
+MODUL                                            
+                                                 ;RMT module is standard Atari binary file already
+      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6  ;include music RMT module
+MODULEND
 ;----------------------------------------------
   .IF target = 5200
     .IF * > ROM_SETTINGS-1
-      .ERROR 'Code too long to fit in 5200'
+      .ERROR 'Code and RMT song too long to fit in 5200'
     .ENDIF
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"

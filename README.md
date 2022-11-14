@@ -52,18 +52,39 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 ## Changelog:
 
 ###### Version 1.18
+2022-11-04
+
+This is the final round of weapon additions! Also. our beloved testers and players found a number of issues and we were extremely happy to address them.
+* New defensive weapon "Lazy Boy" - aims at the closest enemy.
+* New defensive weapon "Lazy Darwin" - aims at the weakest link, an enemy I mean.
+* New defensive weapon "Auto Defense" - activate it to be automatically protected by shields and stuff (where available)
+* New defensive weapon "Spy Hard" - quickly view energies, weapons and shields of your opponents.
+* New SFXes, improvements in SFX, and music by @mikerro
+* Shooting with angle 0 caused the sudden death of the operator. Fixed.
+* Angles were asymmetrical, now you can go from 0 to 90 and to 0 again (181 degrees of freedom). Fixed with an improved arithmetic rounding of our sub-pixel accuracy.
+* Drawing a barrel when a tank was on the edge of X==256 pixels caused a lonely pixel to appear randomly. Fixed.
+* Liquid Dirt was overflowing from the right edge of the screen to the left. Fixed.
+* Liquid Dirt volume increased significantly, it is now a formidable attack!
+* A single pixel was erroneously plotted when measuring distance (was visible in e.g., Death's Head). Fixed.
+* Not all traces were correctly erased after Funky Bomb, fixed again (for the 3rt time I guess).
+* Soil sedimentation speed after Funky Bomb improved.
+* Pressing [ESC] when in inventory/store was quitting the game, now it quits the menu only.
+* BIGGEST OF ALL: the lonely pixel after Nuclear Winter was eliminated. https://github.com/pkali/scorch_src/issues/103 We have spent a disproportionately large amount of time trying to slap this bug. It is still there, but is not manifesting itself ;)
+
+
+###### Version 1.18
 2022-11-07
 
 Possibly the final single-player version of the game, unless our dear players find another breaking issue!
-* 5200 keypad works as it should. You can now press these finicky foils to your hearth's desire.
+* 5200 keypad works as it should. You can now press these finicky foils to your heart's desire.
 * "Unknown" type Robotanks were attacking with Nuclear Winter every time. Fixed!
-* One of variables was declared as a byte but used as a word which might cause some rare instabilities.
+* One of the variables was declared as a byte but used as a word that might cause some rare instabilities.
 * Page zero variables are cleared prior to the game start to eliminate rare issues in some software/hardware configurations.
 * The new version of music in NTSC eliminates issues with tempo (not that anyone but the artist noticed that, but still it is an improvement!)
 * You can now wrap around inventory and shop to faster access these options far down below.
 * Visual improvement of the main menu and fixed some color issues with the title headers.
 * Hovercraft was always flying to the top of the screen, it was not intended, it is now hovering just above the mountains!
-* The main menu does not blink now when changing options. This was a very minor thing but it bothered me to some extend. Fixing it required a complete rewrite of this portion of the menu.
+* The main menu does not blink now when changing options. This was a very minor thing but it bothered me to some extent. Fixing it required a complete rewrite of this portion of the menu.
 
 
 ###### Version 1.17

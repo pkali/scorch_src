@@ -22,9 +22,11 @@
     pha
     lda AIRoutines,y
     pha
-
+	jsr PrepareAIShoot
+	rts
+.endp	
 ;----------------------------------------------
-;.proc MakeLowResDistances 
+.proc PrepareAIShoot 
 	; create low precision table of positions
 	; by dividing positions by 4
 	ldy #MaxPlayers-1
@@ -39,11 +41,10 @@ loop
 	sta LowResDistances,y
 	dey
 	bpl loop
-;	rts
-;.endp
 
     ; common values used in AI routines
     ; address of weapons table (for future use)
+WepTableToTemp
     lda TanksWeaponsTableL,x
     sta temp
     lda TanksWeaponsTableH,x
@@ -210,6 +211,19 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 .endp
 ;----------------------------------------------
 .proc UseBatteryOrFlag
+	jsr UseBattery	; as subroutine for reuse in AutoDefense
+	; if very low energy and no battery then use White Flag
+	lda Energy,x
+	cmp #5
+	bcs EnoughEnergy
+	; lower than 5 units - white flag
+	lda #ind_White_Flag_____
+	sta ActiveDefenceWeapon,x
+EnoughEnergy
+	rts
+.endp
+;
+.proc UseBattery
 	; if low energy ten use battery
 	lda Energy,x
 	cmp #30
@@ -219,20 +233,13 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq NoBatteries
 	; we have batteries - use one
-	clc
+	sec
 	sbc #1
 	sta (temp),y
 	lda #99
 	sta Energy,x
-NoBatteries
-	; if very low energy and no battery then use White Flag
-	lda Energy,x
-	cmp #5
-	bcs EnoughEnergy
-	; lower than 5 units - white flag
-	lda #ind_White_Flag_____
-	sta ActiveDefenceWeapon,x
 EnoughEnergy
+NoBatteries
 	rts
 .endp
 ;----------------------------------------------
@@ -245,15 +252,15 @@ EnoughEnergy
 	; first check check if any is in use
 	lda ActiveDefenceWeapon,x
 	bne DefensiveInUse
-	ldy #last_defensive_____+1 ;the last defensive weapon
+	ldy #last_real_defensive+1 ;the last defensive weapon
 @
 	dey
-	cpy #ind_Battery________ ;first defensive weapon	(White Flag and Battery - never use)
+	cpy #ind_Hovercraft_____ ;first defensive weapon	(White Flag, Battery and Hovercraft - never use)
 	beq NoUseDefensive
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
 	; decrease in inventory
-	clc
+	sec
 	sbc #1
 	sta (temp),y  ; has address of TanksWeaponsTable
 	; activate defensive weapon
@@ -280,15 +287,15 @@ DefensiveInUse
 	; first check check if any is in use
 	lda ActiveDefenceWeapon,x
 	bne DefensiveInUse
-	ldy #last_defensive_____+1 ;the last defensive weapon	
+	ldy #last_real_defensive+1 ;the last defensive weapon	
 @
 	dey
-	cpy #ind_Battery________ ;first defensive weapon	(White Flag and Battery - never use)
+	cpy #ind_Hovercraft_____ ;first defensive weapon	(White Flag, Battery and Hovercraft - never use)
 	beq NoUseDefensive
 	lda (temp),y  ; has address of TanksWeaponsTable
 	beq @- 
 	; decrease in inventory
-	clc
+	sec
 	sbc #1
 	sta (temp),y  ; has address of TanksWeaponsTable
 	; activate defensive weapon
@@ -575,7 +582,7 @@ skipThisPlayer
 	asl 
 	tay
 	; force correction - lower tank Y position - higher possible force
-	clc
+	sec
 	lda #screenheight
 	sbc Ytankstable,x
 	sta temp2

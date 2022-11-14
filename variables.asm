@@ -126,7 +126,9 @@ BarrelLength ;length of the tank barrel - dont forget to set it to 6 at round st
 ActiveWeapon ;number of the selected weapon
     .DS MaxPlayers
 ActiveDefenceWeapon ;number of the activated defence weapon - 0 
-    .DS MaxPlayers	
+    .DS MaxPlayers
+AutoDefenseFlag ; 0 - not activated, >$7f - activated 
+    .DS MaxPlayers
 WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;----------------------------------------------------
 
@@ -161,6 +163,8 @@ LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
 TargetTankNr	; Target tank index (for AI routines)
 	.DS 1
 SecondTryFlag	; For precise AI aiming
+	.DS 1
+SpyHardFlag	; >$7f - run SpyHard after inventory
 	.DS 1
 ;----------------------------------------------------
 ;Erase    .DS 1 ; if 1 only mask of the character is printed

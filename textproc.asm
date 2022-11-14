@@ -387,7 +387,10 @@ ChoosingItemForPurchase
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
     bit escFlag
-    spl:jmp WaitForKeyRelease  ; like jsr ... : rts
+    bpl @+
+    mva #0 escFlag
+    jmp WaitForKeyRelease  ; like jsr ... : rts
+@
     cmp #@kbcode._tab  ; $2c ; Tab
     jeq ListChange
     cmp #@kbcode._left  ; $06  ; cursor left
@@ -848,6 +851,40 @@ invSelectDef
 	ply
     jmp DecreaseDefensive ; bypass activation
 NotBattery
+	cmp #ind_Auto_Defense___
+	bne NoAutoDefense
+    ; Auto Defense - do it like battery
+    mva #sfx_auto_defense sfx_effect
+    mva #$A1 AutoDefenseFlag,x	; this is "A" in inverse - for status line :)
+    jmp DecreaseDefensive ; bypass activation
+NoAutoDefense
+	cmp #ind_Lazy_Boy_______
+	bne NoLazyBoy
+	; Lazy Boy - do it like battery
+    mva #sfx_lazy_boys sfx_effect
+	phy
+	jsr PrepareAIShoot
+	jsr FindBestTarget2 ; find nearest tank neighbour
+	jsr LazyAim
+	ply
+    jmp DecreaseDefensive ; bypass activation
+NoLazyBoy
+	cmp #ind_Lazy_Darwin____
+	bne NoLazyDarwin
+	; Lazy Darwin - do it like battery
+    mva #sfx_lazy_boys sfx_effect
+	phy
+	jsr PrepareAIShoot
+	jsr FindBestTarget3 ; find target with lowest energy
+	jsr LazyAim
+	ply
+    jmp DecreaseDefensive ; bypass activation
+NoLazyDarwin
+	cmp #ind_Spy_Hard_______
+	bne NotSpy
+	mva #$ff SpyHardFlag
+    jmp DecreaseDefensive ; bypass activation	
+NotSpy
 	cmp #ind_Long_Barrel____
 	bne NotBarrel
 	; if activate long barrel, we do it differently too
@@ -885,6 +922,22 @@ DecreaseDefensive
 DefActivationEnd
     jmp WaitForKeyRelease ; rts
 
+.endp
+.proc LazyAim
+	; aiming proc for Lazy ... weapons
+	; as proc for memory optimisation
+	; Y - target tan nr
+	; A - target direction
+	sty TargetTankNr
+	; aiming
+	jsr TakeAim		; direction still in A (0 - left, >0 - right)
+	lda Force
+	sta ForceTableL,x
+	lda Force+1
+	sta ForceTableH,x
+	lda NewAngle
+	sta AngleTable,x
+	rts
 .endp
 ; -----------------------------------------------------
 .proc calcPosDefensive
@@ -1745,13 +1798,9 @@ EndOfTypeLine4x4
     jsr TL4x4_top
     adb ResultY  #4 ;next line
     
-    ;seppuku
+    ;sure?
     mwa #areYouSureText LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-    mva ResultY LineYdraw
-    jsr TypeLine4x4
-    adb ResultY  #4 ;next line
-    
+    jsr _sep_opty    
     ;bottom frame
     mva ResultY LineYdraw
     jsr TL4x4_bottom
@@ -1772,17 +1821,22 @@ skip01
 @
       mva #$ff plot4x4color
       mwa #lineClear LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-      mva ResultY LineYdraw
-      jsr TypeLine4x4
-      adb ResultY  #4 ;next line
-  
+      jsr _sep_opty  
       dec di
       bne @-
 
 quit_areyousure
     rts
 .endp
+
+.proc _sep_opty
+      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+      mva ResultY LineYdraw
+      jsr TypeLine4x4
+      adb ResultY  #4 ;next line
+    rts
+.endp
+
 ;--------------------------------
 .proc DisplaySeppuku
 ;using 4x4 font
@@ -1803,11 +1857,8 @@ seppuku_loop
       
       ;seppuku
       mwa #seppukuText LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-      mva ResultY LineYdraw
-      jsr TypeLine4x4
-      adb ResultY  #4 ;next line
-      
+      jsr _sep_opty
+            
       ;bottom frame
       mva ResultY LineYdraw
       jsr TL4x4_bottom  ; just go
@@ -1815,22 +1866,22 @@ seppuku_loop
     ;clean seppuku
     
     mva #3 di
-    mva #4 ResultY
-@
+    ;mva #4 ResultY
+    lda #4
+    sta ResultY
+loplop ;@
       mwa #lineClear LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-      mva ResultY LineYdraw
-      jsr TypeLine4x4
-      adb ResultY  #4 ;next line
+      jsr _sep_opty
   
       dec di
-      bne @-
+      bne loplop ;@-
 
      dec fs
     jne seppuku_loop
 
 quit_seppuku
     rts
+   
 .endp
 ;--------------------------------
 .proc DisplayResults ;
@@ -2305,6 +2356,8 @@ EndOfCredits
     ;---------------------
     ;displaying name of the defence weapon (if active)
     ;---------------------
+	lda AutoDefenseFlag,x	; Auto Defense symbol (space or "A" in inverse)
+	sta statusBuffer+80+21
     lda #$08 ; (
     sta statusBuffer+80+22
     lda #$09    ; )

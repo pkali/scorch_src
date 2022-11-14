@@ -274,7 +274,10 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Bouncy_Castle__
   .by >price_Long_Barrel____
   .by >price_Nuclear_Winter_
-
+  .by >price_Lazy_Boy_______
+  .by >price_Lazy_Darwin____
+  .by >price_Auto_Defense___
+  .by >price_Spy_Hard_______
 WeaponPriceL
   .by <price_Baby_Missile___
   .by <price_Missile________
@@ -320,6 +323,10 @@ WeaponPriceL
   .by <price_Bouncy_Castle__
   .by <price_Long_Barrel____
   .by <price_Nuclear_Winter_
+  .by <price_Lazy_Boy_______
+  .by <price_Lazy_Darwin____
+  .by <price_Auto_Defense___
+  .by <price_Spy_Hard_______
 
 ;-------------------------------------------------
 ; how many units (bulletd) of a given weapon we get for a given price
@@ -372,6 +379,10 @@ WeaponUnits
   .by 1  ;Auto_Defense___;_41
   .by 2  ;Long_Barrel____;_42
   .by 1  ;Nuclear_Winter_;_43
+  .by 2	 ;Lazy_Boy_______;_44
+  .by 2  ;Lazy_Darwin____;_45
+  .by 2  ;Auto_Defense___;_46
+  .by 4  ;Spy_Hard_______;_47
 
 PurchaseMeTable ;weapons good to be purchased by the robot 
                 ;the comment is an index in the tables
@@ -391,6 +402,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     ; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
     .by %01011111
 	; "Force Shield    ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
+	; "Lazy Boy        ","Lazy Darwin     ","Auto Defense    ","Spy Hard        "
 	.by %11000000
 
 PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
@@ -411,6 +423,7 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
     ; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
     .by %01001101
     ; "Force Shield    ","Bouncy Castle   ","Long Barrel     ","Nuclear Winter  "
+	; "Lazy Boy        ","Lazy Darwin     ","Auto Defense    ","Spy Hard        "
     .by %11000000
 
 ;-------------------------------------------------
@@ -460,6 +473,10 @@ WeaponSymbols
     .by $3f ;ind_Bouncy_Castle__ ;_41
     .by $1d ;ind_Long_Barrel____ ;_42
     .by $7d ;ind_Nuclear_Winter_ ;_43
+	.by $02 ;ind_Lazy_Boy_______ ;_44
+	.by $03 ;ind_Lazy_Darwin____ ;_45
+	.by $5e ;ind_Auto_Defense___ ;_46
+	.by $7c ;ind_Spy_Hard_______ ;_47
 
 ; Names of weapons (16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
@@ -508,6 +525,11 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Bouncy Castle   " ; 41    - with shield and energy 
     dta d"Long Schlong    " ; 42                                              
     dta d"Nuclear Winter  " ; 43
+	dta d"Lazy Boy        " ; 44
+	dta d"Lazy Darwin     " ; 45
+	dta d"Auto Defense    " ; 46
+	dta d"Spy Hard        " ; 47
+
 DefensiveEnergy = *-(last_offensive_____ - first_offensive____ +1)  ; to fake the table for ALL weapons
 	.by 00	; White Flag
 	.by 00	; Heat Guidance
@@ -521,6 +543,10 @@ DefensiveEnergy = *-(last_offensive_____ - first_offensive____ +1)  ; to fake th
 	.by 99	; Bouncy Castle
 	.by 00	; Long Barrel
 	.by 00	; Nuclear Winter
+	.by 00  ; Lazy Boy
+	.by 00  ; Lazy Darwin
+	.by 00  ; Auto Defense
+	.by 00  ; Spy Hard
 weaponsOfDeath  ; weapons used in tank death animations
 	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
 weaponsOfDeathEnd
