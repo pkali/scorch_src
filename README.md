@@ -52,6 +52,27 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 ## Changelog:
 
 ###### Version 1.18
+2022-11-04
+
+This is the final round of weapon additions! Also. our beloved testers and players found a number of issues and we were extremely happy to address them.
+* New defensive weapon "Lazy Boy" - aims at the closest enemy.
+* New defensive weapon "Lazy Darwin" - aims at the weakest link, an enemy I mean.
+* New defensive weapon "Auto Defense" - activate it to be automatically protected by shields and stuff (where available)
+* New defensive weapon "Spy Hard" - quickly view energies, weapons and shields of your opponents.
+* New SFXes, improvements in SFX, and music by @mikerro
+* Shooting with angle 0 caused the sudden death of the operator. Fixed.
+* Angles were asymmetrical, now you can go from 0 to 90 and to 0 again (181 degrees of freedom). Fixed with an improved arithmetic rounding of our sub-pixel accuracy.
+* Drawing a barrel when a tank was on the edge of X==256 pixels caused a lonely pixel to appear randomly. Fixed.
+* Liquid Dirt was overflowing from the right edge of the screen to the left. Fixed.
+* Liquid Dirt volume increased significantly, it is now a formidable attack!
+* A single pixel was erroneously plotted when measuring distance (was visible in e.g., Death's Head). Fixed.
+* Not all traces were correctly erased after Funky Bomb, fixed again (for the 3rt time I guess).
+* Soil sedimentation speed after Funky Bomb improved.
+* Pressing [ESC] when in inventory/store was quitting the game, now it quits the menu only.
+* BIGGEST OF ALL: the lonely pixel after Nuclear Winter was eliminated. https://github.com/pkali/scorch_src/issues/103 We have spent a disproportionately large amount of time trying to slap this bug. It is still there, but is not manifesting itself ;)
+
+
+###### Version 1.18
 2022-11-07
 
 Possibly the final single-player version of the game, unless our dear players find another breaking issue!
