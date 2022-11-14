@@ -1909,6 +1909,39 @@ font4x4
 ;----------------------------------------------
 ;RMT PLAYER and song loading shenaningans
     icl 'artwork/sfx/rmtplayr_modified.asm'
+;-------------------------------------------------
+.proc CheckTankCheat
+    ldy #$07
+    lda TankNr
+    asl
+    asl
+    asl ; 8 chars per name
+    tax
+@
+    lda CheatName,y
+	sec
+    sbc tanksnames,x
+	cmp #$27
+	bne NoCheat
+    inx
+    dey
+    bpl @-
+YesCheat
+	ldx TankNr
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+	lda #99
+@	iny
+	sta (temp),y
+	cpy #(last_defensive_____ - first_offensive____)
+	bne @-
+NoCheat
+    rts
+.endp
+CheatName
+	dta d"   008.T"+$27
 ;----------------------------------------------
     .IF * > MODUL-1
 	  .ECHO *
