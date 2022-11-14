@@ -1798,13 +1798,9 @@ EndOfTypeLine4x4
     jsr TL4x4_top
     adb ResultY  #4 ;next line
     
-    ;seppuku
+    ;sure?
     mwa #areYouSureText LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-    mva ResultY LineYdraw
-    jsr TypeLine4x4
-    adb ResultY  #4 ;next line
-    
+    jsr _sep_opty    
     ;bottom frame
     mva ResultY LineYdraw
     jsr TL4x4_bottom
@@ -1825,17 +1821,22 @@ skip01
 @
       mva #$ff plot4x4color
       mwa #lineClear LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-      mva ResultY LineYdraw
-      jsr TypeLine4x4
-      adb ResultY  #4 ;next line
-  
+      jsr _sep_opty  
       dec di
       bne @-
 
 quit_areyousure
     rts
 .endp
+
+.proc _sep_opty
+      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
+      mva ResultY LineYdraw
+      jsr TypeLine4x4
+      adb ResultY  #4 ;next line
+    rts
+.endp
+
 ;--------------------------------
 .proc DisplaySeppuku
 ;using 4x4 font
@@ -1856,11 +1857,8 @@ seppuku_loop
       
       ;seppuku
       mwa #seppukuText LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-      mva ResultY LineYdraw
-      jsr TypeLine4x4
-      adb ResultY  #4 ;next line
-      
+      jsr _sep_opty
+            
       ;bottom frame
       mva ResultY LineYdraw
       jsr TL4x4_bottom  ; just go
@@ -1868,22 +1866,22 @@ seppuku_loop
     ;clean seppuku
     
     mva #3 di
-    mva #4 ResultY
-@
+    ;mva #4 ResultY
+    lda #4
+    sta ResultY
+loplop ;@
       mwa #lineClear LineAddress4x4
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-      mva ResultY LineYdraw
-      jsr TypeLine4x4
-      adb ResultY  #4 ;next line
+      jsr _sep_opty
   
       dec di
-      bne @-
+      bne loplop ;@-
 
      dec fs
     jne seppuku_loop
 
 quit_seppuku
     rts
+   
 .endp
 ;--------------------------------
 .proc DisplayResults ;

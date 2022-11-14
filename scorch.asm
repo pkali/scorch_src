@@ -6,12 +6,12 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800; 5200  ; or 800
+.def TARGET = 800 ;5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
 
-    OPT r+  ; saves 12 bytes :O
+   ;OPT r+  ; saves 12 bytes :O
 
 ;---------------------------------------------------
 .macro build

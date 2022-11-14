@@ -1894,7 +1894,7 @@ EndPutChar
     rts
 .endp
 
-; ------------------------------------------
+;--------------------------------------------------
 .proc PutChar4x4
 ; puts 4x4 pixels char on the graphics screen
 ; in: dx, dy (LOWER left corner of the char)
@@ -1903,7 +1903,6 @@ EndPutChar
 ; all pixels are being drawn
 ; (empty and not empty)
 ;--------------------------------------------------
-;	rts
     cpw dy #(screenheight-1)
     jcs TypeChar.EndPutChar ;nearest RTS
 	cpw dy #(4)
