@@ -1344,6 +1344,15 @@ drawmountainspixelloop
 	jsr ClearTanks
 NoClearTanks
 
+; Fix for lonely pixel after nuclear winter :) #103
+	lda #0
+	sta xdraw
+	sta xdraw+1
+	sta ydraw
+	sta ydraw+1
+	sta color
+	jsr plot
+
 ; First we look for highest pixels and fill with their coordinates
 ; both tables
 
