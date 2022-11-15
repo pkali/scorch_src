@@ -626,7 +626,7 @@ CheckNextTankAD
 	jsr AutoDefense
 @   dex
     bpl CheckNextTankAD
-	jsr DrawTanks	; redraw tanks witch new defences
+	jsr DrawTanks	; redraw tanks with new defences
 ;
     ldx TankSequencePointer
     lda TankSequence,x

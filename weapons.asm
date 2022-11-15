@@ -1506,7 +1506,7 @@ AfterStrongShoot
 	tay	; A=0 !
 	adw xtraj+1 #mountaintable temp
     lda ytraj+1
-    cmp (temp),y	; check collision witch mountains
+    cmp (temp),y	; check collision with mountains
     bcs ShotUnderGround
     jsr Flight
     mva #1 color
@@ -1761,6 +1761,8 @@ LaserNoWalls
 
 	bit TestFlightFlag
 	bmi nowait
+	bit LaserFlag	; faster laser prepare
+	bmi nowait
     lda color
     beq nonowait	; smoke tracer erases slowly
     lda tracerflag	
@@ -1777,7 +1779,7 @@ nowait
 	; If laser fires, edges of the screen finish "flying" and laser hits.
 	lda ytraj+2
 	bmi LaserHitEdge
-	cpw xtraj+1 #screenwidth+1
+	cpw xtraj+1 #screenwidth ;+1
 	bcc LaserNoHitEdge
 LaserHitEdge
     mwa xdraw XHit
@@ -2216,7 +2218,7 @@ MIRVcheckCollision
 
     ldy #0
     lda ytraj+1
-    cmp (temp),y	; check collision witch mountains
+    cmp (temp),y	; check collision with mountains
     bcs mrHit
 
 mrSkipCollisionCheck
