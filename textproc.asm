@@ -795,11 +795,9 @@ Suprise	; get a random weapon
 	bcc GetRandomDefensive
 GetRandomOffensive
 	randomize ind_Missile________ last_offensive_____
-	cmp #ind_Buy_me_________
-	beq GetRandomOffensive
+	;cmp #ind_Buy_me_________ ; buy me do not buy buy me :)
+	;beq GetRandomOffensive
 	tay
-;    lda WeaponUnits,y	; check if weapon exist
-;	beq GetRandomOffensive	
 	bne NoSuprise	; Y always <> 0
 GetRandomDefensive
 	randomize ind_Battery________ last_defensive_____

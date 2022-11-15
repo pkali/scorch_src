@@ -279,6 +279,7 @@ UpNdown  .DS 1
 
 temptankX .DS 2
 temptankNr .DS 1
+AfterBFGflag .DS 1
 
 ;----------------------------------------------------
 ;Variables from textproc.s65

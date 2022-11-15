@@ -49,7 +49,7 @@ ExplosionRoutines
     .word tonofdirt-1                ;Ton_of_Dirt____;_27
     .word liquiddirt-1               ;Liquid_Dirt____;_28
     .word dirtcharge-1               ;Dirt_Charge____;_29
-    .word VOID-1                     ;Buy_me_________;_30
+    .word BFG-1                      ;Buy_me_________;_30
     .word laser-1                    ;Laser__________;_31
 
 VOID
@@ -57,7 +57,20 @@ tracer
     rts
 .endp
 ; ------------------------
-
+.proc BFG
+	; Kill all :)
+    ldx NumberOfPlayers
+    dex
+	lda #$00
+CheckNextTankBFG
+	cpx TankNr	; not me!
+	beq @+
+    sta Energy,x
+@   dex
+    bpl CheckNextTankBFG
+	stx AfterBFGflag ; $ff
+	rts
+.endp
 ; ------------------------
 .proc babymissile
     mva #sfx_baby_missile sfx_effect 
@@ -1396,6 +1409,7 @@ pressedTAB
     jmp BeforeFire
 
 CTRLpressedTAB
+    mva #sfx_purchase sfx_effect
     ldx TankNr
 	lda ActiveWeapon,x
 	cmp #first_offensive____	; #0

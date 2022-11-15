@@ -484,6 +484,7 @@ NoGameOverYet
 
 	jsr SetPMWidth
 	lda #0
+	sta AfterBFGflag	; reset BFG flag
 	sta COLOR2	; status line "off"
 	sta COLOR1
 	
@@ -836,8 +837,12 @@ NoPlayerNoDeath
     inc CurrentResult
 
     mva #sfx_death_begin sfx_effect
+	lda #77	; mumber of defensive text after BFG!
+	bit AfterBFGflag
+	bmi TextAfterBFG
     ; RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
+TextAfterBFG
     sta TextNumberOff
     ldy TankTempY
     mva #$ff plot4x4color
