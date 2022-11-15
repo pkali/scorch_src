@@ -238,6 +238,7 @@ EnoughEnergy
 	sta (temp),y
 	lda #99
 	sta Energy,x
+	jsr MaxForceCalculate
 EnoughEnergy
 NoBatteries
 	rts
