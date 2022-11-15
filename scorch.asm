@@ -824,26 +824,29 @@ NoPlayerNoDeath
     ;clear NoDeathCounter here
     sta noDeathCounter
 
+    mva #sfx_death_begin sfx_effect
+
     ; display defensive text here (well, defensive
     ; is not the real meaning, it should be pre-death,
     ; but I am too lazy to change names of variables)
 
     ; in X there is a number of tank that died
 
+	lda #77	; mumber of defensive text after BFG!
+	bit AfterBFGflag	; check BFG flag
+	bmi TextAfterBFG
+	; if BFG then no points for dead tanks ...
     lda CurrentResult
     clc
     adc ResultsTable,x
     sta ResultsTable,x
-    inc CurrentResult
-
-    mva #sfx_death_begin sfx_effect
-	lda #77	; mumber of defensive text after BFG!
-	bit AfterBFGflag
-	bmi TextAfterBFG
+    ;inc CurrentResult
+	
     ; RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
 TextAfterBFG
     sta TextNumberOff
+    inc CurrentResult	; ... but increase result of winner (BFG)
     ldy TankTempY
     mva #$ff plot4x4color
     jsr DisplayOffensiveTextNr
