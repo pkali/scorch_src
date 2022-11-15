@@ -185,7 +185,7 @@ And of course, activating a weapon when you already have some other weapon activ
 
 ## 7. "Other" weapons:
 
-* **Buy me!** - this is a 'loot box', not a weapon per se. Buying it draws one of the offensive or (rarely) defensive weapons and adds it to the player's arsenal. It is a lottery in which you can lose (if you draw a weapon cheaper than the **Buy Me!** price) but also gain. You can get a weapon otherwise not affordable at all! 
+* **Best F...g Gifts** - this is a 'loot box', not a weapon per se. Buying it draws one of the offensive or (rarely) defensive weapons and adds it to the player's arsenal. It is a lottery in which you can lose (if you draw a weapon cheaper than the **Best F...g Gifts** price) but also gain. You can get a weapon otherwise not affordable at all! There is a small probability of drawing by **Best F...g Gifts** itself :). You can then try to use it in battle.
 
 ## 8. difficulty levels of computer-controlled opponents:
 

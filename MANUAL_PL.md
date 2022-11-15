@@ -187,8 +187,7 @@ Oczywiście aktywacja broni w momencie kiedy mamy już aktywowaną jakąś inną
 
 ## 7. Bronie 'inne' :) :
 
-* **Buy me!** - tej 'broni' nie można używać w rozgrywce. Jej zakup powoduje wylosowanie jednej z broni ofensywnych lub (rzadziej) defensywnych i dodanie jej do arsenału gracza. Jest to loteria w której można stracić (jeśli wylosuje się broń tańsza niż cena **Buy Me!** ale też zyskać. Jeśli wylosuje się broń dużo droższa możemy otrzymać do dyspozycji broń, na którą nie było nas stać!
-
+* **Best F...g Gifts** - tej 'broni' nie używa śię w rozgrywce. Jej zakup powoduje wylosowanie jednej z broni ofensywnych lub (rzadziej) defensywnych i dodanie jej do arsenału gracza. Jest to loteria w której można stracić (jeśli wylosuje się broń tańsza niż cena **Best F...g Gifts** ale też zyskać. Jeśli wylosuje się broń dużo droższa możemy otrzymać do dyspozycji broń, na którą nie było nas stać! Istnieje niewielkie prawdopodobieństwo wylosowania przez **Best F...g Gifts** samej siebie :). Można wtedy spróbować użyć jej w walce.
 
 ## 8. Poziomy trudności przeciwników sterowanych przez komputer:
 
