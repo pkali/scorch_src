@@ -57,10 +57,8 @@ tracer
     rts
 .endp
 .proc BFG
-    mva #sfx_baby_missile sfx_effect 
+    mva #sfx_plasma_2_2 sfx_effect 
 	jsr BFGblink
-	;wait 50
-	;VDLI DLIinterruptGraph	; blinking off (but no memory :) )
 	; Kill all :)
     ldx NumberOfPlayers
     dex

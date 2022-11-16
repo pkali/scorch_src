@@ -1849,8 +1849,22 @@ noingame
     bne @-
     rts
 .endp
-
-
+;--------------------------------------------------
+.macro SetDLI
+;	SetDLI #WORD
+;	Initialises Display List Interrupts
+         LDY # <:1
+         LDX # >:1
+		 jsr _SetDLIproc
+.endm
+.proc _SetDLIproc
+	LDA #$C0
+	STY VDSLST
+	STX VDSLST+1
+	STA NMIEN
+	rts
+.endp
+;--------------------------------------------------
 /* ;--------------------------------------------------
 .macro randomize floor ceiling
 ;--------------------------------------------------
@@ -1972,7 +1986,10 @@ EndofBFGDLI
 .endp
 ; ------------------------
 .proc BFGblink
-	VDLI DLIinterruptBFG
+	SetDLI DLIinterruptBFG	; blinking on
+	ldy #50
+	jsr PauseYFrames
+	SetDLI DLIinterruptGraph	; blinking off
 	rts
 .endp
 ;--------------------------------------------------

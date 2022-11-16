@@ -33,7 +33,7 @@
 	mva #$ca COLOR1
 	mva #$00 COLBAKS	; set color of background
    
-    VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
+    SetDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
 
 ; -------- setup bottom (tanks) line	
 	lda NumberOfPlayers
@@ -293,7 +293,7 @@ AfterManualPurchase
 GoToActivation
     mva #$ff LastWeapon
 
-    VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
+    SetDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
     jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
     lda #@dmactl(narrow|dma) ; narrow screen width, DL on, P/M off
@@ -1076,7 +1076,7 @@ NoArrowDown
     mwa #NameDL dlptrs
     lda #%00110001 ; narrow screen width, DL on, P/M off
     sta dmactls
-    VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
+    SetDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
 
     mva #0 TankNr
 	sta COLBAKS	; set color of background
@@ -2074,7 +2074,7 @@ FinishResultDisplay
 	sta COLBAKS	; set color of background
 	sta CreditsVScrol
     mva #TextForegroundColor COLOR2
-    VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
+    SetDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
 	; make text and color lines for each tank
     ldx NumberOfPlayers  ;we start from the highest (best) tank
     dex   ;and it is the last one
