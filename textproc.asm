@@ -377,6 +377,7 @@ PositionDefensive
 ?weaponFound
     ; weapon index in Y
     sty positionOnTheList
+	jsr _MakeOffsetDown		; set list screen offset
 
 ; Here we have all we need
 ; So choose the weapon for purchase ......
@@ -449,18 +450,23 @@ GoDownOffensive
     sty PositionOnTheList
 	beq MakeOffsetUp
 MakeOffsetDown
+	jsr _MakeOffsetDown
+EndGoDownX
+    jmp ChoosingItemForPurchase
+
+_MakeOffsetDown
     lda OffsetDL1
     clc
     adc #15
     ;if offset+16 is lower than the position then it must =16
     cmp PositionOnTheList
-    bcs EndGoDownX
+    bcs _EndGoDownX
     sec
     lda PositionOnTheList
     sbc #15
     sta OffsetDL1
-EndGoDownX
-    jmp ChoosingItemForPurchase
+_EndGoDownX
+	rts
 
 ; swapping the displayed list and setting pointer to position 0
 ListChange
@@ -476,6 +482,7 @@ ListChange
     beq @+
     ; inventory
     jsr calcPosOffensive
+	jsr _MakeOffsetDown		; set list screen offset
     jmp ChoosingItemForPurchase
 @
     mva #0 PositionOnTheList
