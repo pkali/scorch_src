@@ -56,8 +56,11 @@ VOID
 tracer
     rts
 .endp
-; ------------------------
 .proc BFG
+    mva #sfx_baby_missile sfx_effect 
+	jsr BFGblink
+	;wait 50
+	;VDLI DLIinterruptGraph	; blinking off (but no memory :) )
 	; Kill all :)
     ldx NumberOfPlayers
     dex

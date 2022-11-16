@@ -1951,6 +1951,31 @@ NoCheat
 CheatName
 	dta d"   008.T"+$27
 ;----------------------------------------------
+.proc DLIinterruptBFG
+	pha
+	lda dliCounter
+	bne EndofBFGDLI
+	lda dliColorsFore
+	bit random
+	bmi @+
+	lda DliColorBack
+@	sta COLPF2
+	lda dliColorsFore
+	bit random
+	bmi @+
+	lda DliColorBack
+@	sta COLPF1
+EndofBFGDLI
+	inc dliCounter
+    pla
+    rti
+.endp
+; ------------------------
+.proc BFGblink
+	VDLI DLIinterruptBFG
+	rts
+.endp
+;--------------------------------------------------
     .IF * > MODUL-1
 	  .ECHO *
       .ERROR 'Code and data too long'
