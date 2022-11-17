@@ -577,6 +577,8 @@ skipThisPlayer
 ; returns angle and power of shoot tank X (TankNr)
 ; in the appropriate variables (Angle and Force)
 ;----------------------------------------------
+	lda ActiveWeapon,x
+	pha					; store active weapon
 	mva #$ff SecondTryFlag
 	; set initial Angle and Force values
 	lda OptionsTable+2	; selected gravity
@@ -696,6 +698,8 @@ NoHitInSecondLoopR
 	inc NewAngle
 EndOfSecondLoopR
 EndOfAim
+	pla					; and restore active weapon
+	sta ActiveWeapon,x
 	rts
 
 AimSecondTry
@@ -787,8 +791,7 @@ NoHitInSecondLoopL
 	; Angle 1 deg to left and end loop 
 	dec NewAngle
 EndOfSecondLoopL
-
-	rts
+	jmp EndOfAim
 	
 SetStartAndFlight	; set start point (virtual barrel end :) ) and make test flight
 	; xtraj+1 and ytraj+1 set
