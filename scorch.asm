@@ -354,8 +354,9 @@ MainGameLoop
     jsr SortSequence
     
     ; Hide all (easier than hide last ;) ) tanks
-    jsr cleartanks
+    jsr cleartanks	; A=0
 	sta COLBAKS		; set background color to black
+	sta JoystickNumber	; set joystick port for player
 
     ; here gains and losses should be displayed (dollars)
     ; finally we have changed our minds and money of players
@@ -1352,27 +1353,28 @@ nextlinedisplay
 ;	bne EndOfCreditsVBI
 	mwa #Credits DLCreditsAddr
 EndOfCreditsVBI
-	; support for joysticks :)
-	ldx JoystickNumber
-	lda STICK0,x
-	sta STICK0
-	lda STRIG0,x
-	sta STRIG0
 	.IF TARGET = 5200
 		lda SkStatSimulator
 		bmi @+
 		inc SkStatSimulator
 @
+		lda JoystickNumber		; select port
+		ora #%00000100          ; Speaker off, Pots enabled
+        sta CONSOL5200
+
         center = 114            ;Read analog stick and make it look like a digital stick
         threshold = 60
-    
-        lda paddl0            ;Read POT0 value (horizontal position)
+		
+		lda JoystickNumber
+		asl
+		tax
+        lda paddl0,x            ;Read POT0 value (horizontal position)
         cmp #center+threshold       ;Compare with right threshold
         rol stick0          ;Feed carry into digital stick value
         cmp #center-threshold       ;Compare with left threshold
         rol stick0          ;Feed carry into digital stick value
     
-        lda paddl1            ;Read POT1 value (vertical position)
+        lda paddl1,x            ;Read POT1 value (vertical position)
         cmp #center+threshold       ;Compare with down threshold
         rol stick0          ;Feed carry into digital stick value
         cmp #center-threshold       ;Compare with down threshold
@@ -1382,8 +1384,10 @@ EndOfCreditsVBI
         eor #2+8
         and #$0f
         sta stick0
-    
-        mva trig0 strig0        ;Move hardware to shadow
+		
+		ldx JoystickNumber
+		lda trig0,x
+		sta strig0        ;Move hardware to shadow
         
         mva chbas chbase
     
@@ -1399,9 +1403,15 @@ EndOfCreditsVBI
         pla
         tax
         pla
-        rti
+		rti
     .ELSE	
-	   jmp XITVBV
+		; support for joysticks :)
+		ldx JoystickNumber
+		lda STICK0,x
+		sta STICK0
+		lda STRIG0,x
+		sta STRIG0
+		jmp XITVBV
 	.ENDIF
 .endp
     .IF TARGET = 5200

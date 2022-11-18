@@ -1371,8 +1371,8 @@ pressedLeft
     INC AngleTable,x
     lda AngleTable,x
     cmp #180
-    jne BeforeFire
-    lda #1
+    jcc BeforeFire
+    lda #0
     sta AngleTable,x
     jmp BeforeFire
 
@@ -1387,7 +1387,7 @@ CTRLPressedLeft
     sta AngleTable,x
     cmp #180-4
     jcc BeforeFire
-    lda #1
+    lda #0
     sta AngleTable,x
     jmp BeforeFire
 
