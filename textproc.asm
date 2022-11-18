@@ -1116,10 +1116,8 @@ NoArrowDown
     ldx tanknr
     lda skillTable,x
     sta difficultyLevel
-    inx
-    stx decimal
-    mwa #(NameScreen2+9) displayposition
-    jsr displaybyte
+	lda digits+1,x
+    sta NameScreen2+7
     jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 
     ; clear tank name editor field - not necessary
@@ -1160,6 +1158,11 @@ LastNameChar
 
 
 CheckKeys
+	ldx TankNr
+	lda JoyNumber,x
+    tax
+	lda digits+1,x
+    sta NameScreen2+12	
 	jsr CursorDisplay
     jsr getkey
     bit escFlag
@@ -1190,7 +1193,7 @@ CheckFurtherX01 ; here we check Tab, Return and Del
     cmp #@kbcode._ret  ; $0c ; Return
     jeq EndOfNick
     cmp #@kbcode._tab  ; $2c ; Tab
-    beq ChangeOfLevelUp
+    beq ChangeOfJoyUp
     cmp #@kbcode._right  ; $7 ;cursor right
     beq ChangeOfLevelUp
     cmp #@kbcode._left  ; $6 ;cursor left
@@ -1217,6 +1220,10 @@ FirstChar
     stx PositionInName
     lda #0
     sta NameAdr,x
+    jmp CheckKeys
+ChangeOfJoyUp
+	ldx TankNr
+	inc JoyNumber,x
     jmp CheckKeys
 ChangeOfLevelUp ; change difficulty level of computer opponent
     inc:lda DifficultyLevel

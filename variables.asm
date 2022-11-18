@@ -159,6 +159,8 @@ ytankstable ;Y positions of tanks (lower left point)
     .DS MaxPlayers
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS MaxPlayers
+JoyNumber	; Joystick port number (from 0 to 3 or 1)
+	.DS MaxPlayers
 ;----------------------------------------------------
 TargetTankNr	; Target tank index (for AI routines)
 	.DS 1
