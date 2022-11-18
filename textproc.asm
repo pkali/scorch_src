@@ -242,6 +242,8 @@ invertme
 	jsr PurchaseAI	; remember to make ActivateAI :) !!!
 	jmp AfterManualPurchase
 ManualPurchase
+	lda JoyNumber,x
+	sta JoystickNumber	; set joystick port for player
 	mva #0 isInventory
 	jsr Purchase	; purchase weapons
 	bit escFlag
@@ -1224,6 +1226,9 @@ FirstChar
 ChangeOfJoyUp
 	ldx TankNr
 	inc JoyNumber,x
+	lda JoyNumber,x
+	and #%00000011	; max 4 joysticks
+	sta JoyNumber,x
     jmp CheckKeys
 ChangeOfLevelUp ; change difficulty level of computer opponent
     inc:lda DifficultyLevel
@@ -2087,6 +2092,7 @@ FinishResultDisplay
     mva #0 COLOR1
 	sta COLBAKS	; set color of background
 	sta CreditsVScrol
+	sta JoystickNumber	; set joystick port for player
     mva #TextForegroundColor COLOR2
     SetDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
 	; make text and color lines for each tank

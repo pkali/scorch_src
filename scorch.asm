@@ -26,8 +26,9 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $61
+FirstZpageVariable = $60
     .zpvar DliColorBack		.byte = FirstZpageVariable
+	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -269,12 +270,15 @@ FirstSTART
 	; 5 values in RMT file
 	; not elegant :(
 	mva #$06 MODUL-6+$967	; $07 > $06
+	;mva #$06 MODUL-6+$bc3	; $07 > $06
+	;mva #$06 MODUL-6+$e69	; $08 > $06
+	;mva #$06 MODUL-6+$ebc	; $08 > $06
+	sta MODUL-6+$bc3	; $07 > $06
+	sta MODUL-6+$e69	; $08 > $06
+	sta MODUL-6+$ebc	; $08 > $06
 	mva #$10 MODUL-6+$a69	; $12 > $10
-	mva #$06 MODUL-6+$bc3	; $07 > $06
 	mva #$04 MODUL-6+$bf8	; $05 > $04
 	mva #$08 MODUL-6+$e3d	; $0a > $08
-	mva #$06 MODUL-6+$e69	; $08 > $06
-	mva #$06 MODUL-6+$ebc	; $08 > $06
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
@@ -671,7 +675,8 @@ RoboTanks
     jmp AfterManualShooting
 
 ManualShooting
-
+	lda JoyNumber,x
+	sta JoystickNumber	; set joystick port for player
     jsr WaitForKeyRelease
     jsr BeforeFire
     lda escFlag
@@ -1095,6 +1100,7 @@ deletePtr = temp
     ; clean variables
     lda #0
     sta escFlag
+	sta JoystickNumber
     tay
     mwa #variablesStart deletePtr
 @     tya
@@ -1345,7 +1351,13 @@ nextlinedisplay
 ;	cpw DLCreditsAddr #CreditsLastLine
 ;	bne EndOfCreditsVBI
 	mwa #Credits DLCreditsAddr
-EndOfCreditsVBI	
+EndOfCreditsVBI
+	; support for joysticks :)
+	ldx JoystickNumber
+	lda STICK0,x
+	sta STICK0
+	lda STRIG0,x
+	sta STRIG0
 	.IF TARGET = 5200
 		lda SkStatSimulator
 		bmi @+

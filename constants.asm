@@ -573,24 +573,28 @@ keycodes ;tables for converting KeyCode to Screen Code (38 -1  characters)
     .by $3f,$15,$12,$3a,$2a,$38,$3d,$39
     .by $0d,$01,$05,$00,$25,$23,$08,$0a
     .by $2f,$28,$3e,$2d,$0b,$10,$2e,$16
-    .by $2b,$17,$1f,$1e,$1a,$18,$1d,$1b
-    .by $33,$35,$30,$32,$22,$21 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
+    .by $2b,$17
+	.by $32,$1f,$1e,$1a,$18,$1d,$1b
+    .by $33,$35,$30,$22,$21 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
 keycodesEnd
 scrcodes
     dta d"abcdefgh"
     dta d"ijklmnop"
     dta d"qrstuvwx"
-    dta d"yz123456"
-    dta d"7890. " ; "-"
+    dta d"yz"
+zero
+digits	; decimal constans
+	dta d"0123456"
+    dta d"789. " ; "-"
+;-------decimal constans
+;zero
+;digits   dta d"0123456789"
+
 ;-----------------------------------
 gameOverSpritesTop
     ; end of the Gover sprites by number of players
     ;    1   2   3   4   5   6
     .by 130+7,130+7,136+7,142+7,148+7,154+7
-;-------decimal constans
-zero
-digits   dta d"0123456789"
-
 ;------credits
 CreditsStart
 	dta d"         "*
