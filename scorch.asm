@@ -312,7 +312,6 @@ START
     RMTSong song_main_menu
 
     jsr Options  ;startup screen
-	jsr PMoutofScreen
 	jsr MakeDarkScreen
     bit escFlag
     bmi START
@@ -463,13 +462,11 @@ eskipzeroing
     lda GameIsOver
 	beq NoGameOverYet
 GoGameOver
-	jsr PMoutofScreen
 	jsr MakeDarkScreen
 	jsr GameOverScreen
     jmp START
 NoGameOverYet
     inc CurrentRoundNr
-    jsr PMoutofscreen
     jsr MakeDarkScreen   ; issue #72
     ; jsr RmtSongSelect  ; ?????
     mva #sfx_silencer sfx_effect
@@ -1822,6 +1819,7 @@ peopleAreHere
 .endp
 
 MakeDarkScreen
+	jsr PMoutofScreen
 	mva #0 dmactls		; dark screen
     sta dmactl
 	; and wait one frame :)
