@@ -1728,11 +1728,21 @@ checkJoyGetKey
       bne getkeyend
 
 notpressedJoyGetKey
-      ;fire
-      lda STRIG0
+	;fire
+	lda STRIG0
+ 	beq JoyButton
+	.IF TARGET = 800	; Select key only on A800
+	bne checkSelectKey
+checkSelectKey
+	lda CONSOL
+	and #%00000010
+	.ENDIF
     bne @-
-    lda #@kbcode._ret ;Return key
-    
+OptionPressed
+	lda #@kbcode._tab	; Select key
+	bne getkeyend
+JoyButton
+    lda #@kbcode._ret ;Return key    
 getkeyend
 	ldy #0
     sty ATRACT	; reset atract mode	
