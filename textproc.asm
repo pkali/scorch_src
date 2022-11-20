@@ -1507,7 +1507,7 @@ displayloop
 	cpx #0
 	bne noleading0
 	cpy #4
-	beq noleading0	; if 00000 - last 0 must be
+	beq noleading0	; if 00000 - last 0 must stay
 	cmp zero
 	bne noleading0
 	lda #space
@@ -1579,7 +1579,7 @@ displayloop1
     ;parameters are:
     ;Y - number of tank above which text is displayed
     ;fx - length of text
-    ;textAddress - address of the text
+    ;LineAddress4x4 - address of the text
 
     ;lets calculate position of the text first!
     ;that's easy because we have number of tank
@@ -1651,7 +1651,7 @@ DOTNnotLessThanZero
 DOTNnoOverflow
     ;here in temp we have really good x position of text
 
-    mwa temp TextPositionX
+    mwa temp LineXdraw
 
     ;now let's get y position
     ;we will try to put text as low as possible
@@ -1681,58 +1681,29 @@ DOTOldLowestValue
     cpy #$ff
     bne DOTLowestMountainValueLoop
 
-
-
     sec
     lda temp2
     sbc #(4+9) ;9 pixels above ground (and tanks...)
-    sta TextPositionY
+    sta LineYdraw
 
-    mva #0 TextCounter
-    mwa TextAddress temp
-DOTNcharloop
-    ldy TextCounter
+    jmp TypeLine4x4.noLengthNoColor  ; rts
 
-    lda (temp),y
-    and #$3f ;always CAPITAL letters
-
-    sta CharCode4x4
-    lda TextCounter
-    asl
-    asl
-    clc
-    adc TextPositionX
-    sta dx
-    lda #0
-    adc TextPositionX+1
-    sta dx+1
-    lda TextPositionY
-    sta dy
-	mva #0 dy+1	; dy is 2 bytes value
-    jsr PutChar4x4
-
-    inc TextCounter
-    lda fx
-    cmp TextCounter
-    bne DOTNcharloop
-
-    rts
 .endp
 
 ;--------------------------------------------------------
 .proc DisplayOffensiveTextNr ;
     ldx TextNumberOff
     lda talk.OffensiveTextTableL,x
-    sta TextAddress
+    sta LineAddress4x4
     lda talk.OffensiveTextTableH,x
-    sta TextAddress+1
+    sta LineAddress4x4+1
     inx ; the next text
     lda talk.OffensiveTextTableH,x
     sta temp+1
     lda talk.OffensiveTextTableL,x
     sta temp  ; opty possible
     ; substract address of the next text from previous to get text length
-    sbw temp TextAddress temp2
+    sbw temp LineAddress4x4 temp2
     mva temp2 fx 
 
     jsr Display4x4AboveTank
@@ -1749,7 +1720,7 @@ DOTNcharloop
     lda #0
     adc #>Tanksnames
     sta temp+1  ; TextAddress+1
-    mwa temp TextAddress
+    mwa temp LineAddress4x4
 
     ;find length of the tank's name
     ldy #7
@@ -1770,15 +1741,19 @@ end_found
 ;-------------------------------
 .proc TypeLine4x4 ;
 ;-------------------------------
-    ;this routine prints line ending with $ff
-    ;address in LineAddress4x4 (it is the same as `temp`)
+    ;this routine prints line of length `fx`
+    ;address in LineAddress4x4
     ;starting from LineXdraw, LineYdraw
 
-    lda #$ff
+    lda #14 ; default length of 4x4 texts
+    sta fx
+
+variableLength
+    lda #$ff  ; $ff - visible characters, $00 - clearing
 
 staplot4x4color
     sta plot4x4color
-
+noLengthNoColor
 
     ldy #0
     sty LineCharNr
@@ -1786,19 +1761,17 @@ staplot4x4color
 TypeLine4x4Loop
     ldy LineCharNr
 
-    ;mwa LineAddress4x4 temp  ; LineAddress4x4 === temp
-    lda (temp),y
-    cmp #$ff
-    beq EndOfTypeLine4x4
-
+    lda (LineAddress4x4),y
+    and #$3f ;always CAPITAL letters
     sta CharCode4x4
     mwa LineXdraw dx
     mva LineYdraw dy
 	mva #0 dy+1  ;	dy is 2 bytes value
     jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
-    inc LineCharNr
-    jmp TypeLine4x4Loop
+    inc:lda LineCharNr
+    cmp fx
+    bne TypeLine4x4Loop
 
 EndOfTypeLine4x4
     rts
@@ -2022,10 +1995,6 @@ TankNameCopyLoop
     ;just after the digits
     ;it means |
     mva #$3 ResultLineBuffer+13
-
-
-    ;it means end of line
-    mva #$ff ResultLineBuffer+14
 
     ;result line display
     mwa #ResultLineBuffer LineAddress4x4

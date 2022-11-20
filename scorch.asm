@@ -129,7 +129,7 @@ FirstZpageVariable = $60
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
 
     displayposition = modify
-    LineAddress4x4 = temp
+    LineAddress4x4 = xcircle
 
 ;-----------------------------------------------
 ; libraries
@@ -1961,7 +1961,7 @@ TankFont
 font4x4
     ins 'artwork/font4x4s.bmp',+62
 ;----------------------------------------------
-;RMT PLAYER and song loading shenaningans
+;RMT PLAYER loading shenaningans
     icl 'artwork/sfx/rmtplayr_modified.asm'
 ;-------------------------------------------------
 .proc CheckTankCheat
@@ -2038,6 +2038,10 @@ MODUL
       ins "artwork/sfx/scorch_str9-NTSC.rmt",+6  ;include music RMT module
 MODULEND
 ;----------------------------------------------
+    icl 'constants_top.asm'
+;----------------------------------------------
+  
+  .ECHO "Bytes on top left: ",$bfe8-* ;ROM_SETTINGS-*
   .IF target = 5200
     .IF * > ROM_SETTINGS-1
       .ERROR 'Code and RMT song too long to fit in 5200'
