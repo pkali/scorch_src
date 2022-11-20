@@ -125,7 +125,7 @@ OffensiveTextTableH
     dta >L53,>L54,>L55,>L56,>L57,>L58,>L59,>L60,>L61,>L62,>L63,>L64,>L65,>L66,>L67,>L68,>L69,>L70,>L71,>L72,>L73,>L74,>L75,>L76,>L77,>L78,>L79,>L80,>L81,>L82,>L83,>L84,>L85,>L86,>L87,>L88,>L89,>L90,>L91,>L92,>L93,>L94,>L95,>L96,>L97,>L98,>L99,>L100,>L101,>L102,>L103,>L104,>L105,>L106,>L107,>L108,>L109,>L110,>L111,>L112,>L113
     dta >LEND
 NumberOfOffensiveTexts=54
-NumberOfDeffensiveTexts=50 ;60  (sorry - memory)
+NumberOfDeffensiveTexts=60
 .endp
 hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"
 hoverFullEnd
