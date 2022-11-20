@@ -127,7 +127,7 @@ OffensiveTextTableH
 NumberOfOffensiveTexts=54
 NumberOfDeffensiveTexts=50 ;60  (sorry - memory)
 .endp
-hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!", $ff
+hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"
 hoverFullEnd
-hoverEmpty dta d"RUNNING OUT OF EELS", $ff
+hoverEmpty dta d"RUNNING OUT OF EELS"
 hoverEmptyEnd
