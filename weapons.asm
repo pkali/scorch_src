@@ -2531,11 +2531,13 @@ StoreMaxAlt
     
     mwa #hoverFull LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+    mva #hoverFullEnd-hoverFull-1 fx ; length
 	sec
 	lda FloatingAlt
 	sbc #12
     sta LineYdraw
-    jsr TypeLine4x4
+    jsr TypeLine4x4.variableLength
+
 	ldx TankNr
 	
 	; TankNr in X reg.
@@ -2578,6 +2580,7 @@ ReachSky
 	; display text 4x4 - fuel full (clear text)
     mwa #hoverFull LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+    mva #(hoverFullEnd-hoverFull-1) fx ; length
 	sec
 	lda FloatingAlt
 	sbc #12
@@ -2622,15 +2625,15 @@ KeyboardAndJoyCheck
 	; display text 4x4 - low fuel
     mwa #hoverEmpty LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+    mva #hoverEmptyEnd-hoverEmpty-1 fx ; length
 	sec
 	lda FloatingAlt
 	sbc #12
     sta LineYdraw
-    ;lda #0
-    jsr TypeLine4x4 ;.staplot4x4color
+    jsr TypeLine4x4.variableLength
+
 	ldx TankNr
 
-	
 notpressed
 	; let's animate "engine"
 	jsr DrawTankEngine
@@ -2741,6 +2744,7 @@ pressedSpace
 	; display text 4x4 - low fuel (clear text)
     mwa #hoverEmpty LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+	mva #hoverEmptyEnd-hoverEmpty-1 fx  ; length
 	sec
 	lda FloatingAlt
 	sbc #12
