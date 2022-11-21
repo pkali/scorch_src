@@ -366,7 +366,7 @@ AfterPurchase
       cmp IndexesOfWeaponsL1,y
       beq ?weaponfound
       iny
-      cpy #(last_offensive_____ - first_offensive____)  ; maxOffensiveWeapons
+      cpy #(last_offensive_____ - first_offensive____)+1  ; maxOffensiveWeapons
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -957,7 +957,7 @@ DefActivationEnd
       cmp IndexesOfWeaponsL2,y
       beq ?weaponfound
       iny
-      cpy #(last_defensive_____ - first_defensive____)  ; maxDefensiveWeapon
+      cpy #(last_defensive_____ - first_defensive____)+1  ; maxDefensiveWeapon
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
