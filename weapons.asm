@@ -3008,14 +3008,34 @@ CalculateExplosionRange0
 ;calculates total horizontal range of explosion by
 ;"summing up" ranges of all separate explosions
 
-    adw xdraw ExplosionRadius WeaponRangeRight
-    cpw WeaponRangeRight #screenwidth-1
-    bcc NotOutOfTheScreenRight
+	; WeaponRangeRight = xdraw + ExplosionRadius
+	clc
+	lda xdraw
+	adc ExplosionRadius
+	sta WeaponRangeRight
+	lda xdraw+1
+	adc #$00
+	sta WeaponRangeRight+1
+    ; adw xdraw ExplosionRadius WeaponRangeRight  ; Pozor! ExplosionRadius is one byte now
+    ; cpw WeaponRangeRight #screenwidth-1
+	cmp #>(screenwidth-1)
+	bne @+
+	lda WeaponRangeRight
+	cmp #<(screenwidth-1)
+@	bcc NotOutOfTheScreenRight
     mwa #screenwidth-1 WeaponRangeRight
 
 NotOutOfTheScreenRight
-    sbw xdraw ExplosionRadius WeaponRangeLeft
-    lda WeaponRangeLeft+1
+	; WeaponRangeLeft = xdraw - ExplosionRadius
+	sec
+	lda xdraw
+	sbc ExplosionRadius
+	sta WeaponRangeLeft
+	lda xdraw+1
+	sbc #$00
+	sta WeaponRangeLeft+1
+    ; sbw xdraw ExplosionRadius WeaponRangeLeft  ; Pozor! ExplosionRadius is one byte now
+    ; lda WeaponRangeLeft+1
     bpl NotOutOfTheScreenLeft
     lda #0
     sta WeaponRangeLeft

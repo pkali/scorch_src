@@ -26,7 +26,7 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $60
+FirstZpageVariable = $61
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
@@ -87,7 +87,7 @@ FirstZpageVariable = $60
     .zpvar decimal .word
     .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
     .zpvar Counter .byte ;temporary Counter for outside loops
-    .zpvar ExplosionRadius .word ;because when adding in xdraw it is double byte
+    .zpvar ExplosionRadius .byte
     .zpvar ResultY .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
