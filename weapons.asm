@@ -1876,6 +1876,8 @@ EndOfFlight2
 	beq JNoDefence
 	cmp #ind_Smoke_Tracer___
 	beq JNoDefence
+	cmp #ind_Laser__________	; Bouncy and Mag not fire by Laser
+	beq JNoDefence
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Bouncy_Castle__		; Auto Defence
 	jeq BouncyCastle
@@ -2926,9 +2928,17 @@ CheckCollisionWithTankLoop
     cmp ydraw
     bcs OverTheTank
 	; with or without shield ?
-	lda ShieldEnergy,x
+/* 
+	lda ActiveDefenceWeapon,x
+	cmp #ind_Mag_Deflector__	; first shielded weapon
+	bcc CheckCollisionWithNotShieldedTank
+	cmp #ind_Bouncy_Castle__+1	; last shielded weapon
+	bcs CheckCollisionWithShieldedTank	; tank with shield is bigger :) 
+*/	
+	lda ShieldEnergy,x		; there is wrong method to check shield :)
 	bne CheckCollisionWithShieldedTank	; tank with shield is bigger :)
-
+	
+CheckCollisionWithNotShieldedTank
     lda xtankstableH,x
     cmp xdraw+1
     bne @+
