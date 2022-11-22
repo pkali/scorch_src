@@ -2347,6 +2347,11 @@ MakeBump
         sbc vx+#
         sta vx+#
     .endr
+	; and bouce feapfrog :)
+	sec
+	lda #180
+	sbc LeapFrogAngle
+	sta LeapFrogAngle	; swap angle (LeapFrogAngle)	
 	inc FunkyWallFlag
 	rts
 WrapAndNone
