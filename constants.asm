@@ -76,7 +76,7 @@ pmtableH
     .by >(pmgraph+$300)
 ;-----------
 sintable
-    .by 0
+    .by 1
     .by 4
     .by 8
     .by 13

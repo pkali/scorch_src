@@ -2928,15 +2928,15 @@ CheckCollisionWithTankLoop
     cmp ydraw
     bcs OverTheTank
 	; with or without shield ?
-/* 
+
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Mag_Deflector__	; first shielded weapon
 	bcc CheckCollisionWithNotShieldedTank
 	cmp #ind_Bouncy_Castle__+1	; last shielded weapon
-	bcs CheckCollisionWithShieldedTank	; tank with shield is bigger :) 
-*/	
-	lda ShieldEnergy,x		; there is wrong method to check shield :)
-	bne CheckCollisionWithShieldedTank	; tank with shield is bigger :)
+	bcc CheckCollisionWithShieldedTank	; tank with shield is bigger :) 
+	
+	;lda ShieldEnergy,x		; there is wrong method to check shield :)
+	;bne CheckCollisionWithShieldedTank	; tank with shield is bigger :)
 	
 CheckCollisionWithNotShieldedTank
     lda xtankstableH,x
