@@ -39,10 +39,10 @@ mountainDeltaL .ds 1 ;.by $ff
 LineHeader1
     .ds 9 ;dta d"# ROUND: "
 RoundNrDisplay
-    .ds 7 ;dta d"    #", $ff
+    .ds 5 ;dta d"    #", $ff
 ; 4x4 text buffer
 ResultLineBuffer
-    .ds 19 ;dta d"                  ", $ff
+    .ds 14 ;dta d"                  ", $ff
 linetableL  ; = PMGraph + $0300 - (screenHeight+1)*2
     .ds (screenHeight+1)
 linetableH  ; = PMGraph + $0300 - (screenHeight+1)
@@ -159,6 +159,8 @@ ytankstable ;Y positions of tanks (lower left point)
     .DS MaxPlayers
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS MaxPlayers
+JoyNumber	; Joystick port number (from 0 to 3 or 1)
+	.DS MaxPlayers
 ;----------------------------------------------------
 TargetTankNr	; Target tank index (for AI routines)
 	.DS 1
@@ -279,6 +281,7 @@ UpNdown  .DS 1
 
 temptankX .DS 2
 temptankNr .DS 1
+AfterBFGflag .DS 1
 
 ;----------------------------------------------------
 ;Variables from textproc.s65
@@ -360,10 +363,6 @@ mountaintable2 ;table of mountains (size=screenwidth)
     .DS 1 ; additional byte for fallout (sometimes 1 pixel)
 MountaintableEnd ;good for table clearing
 ;----------------------------------------------------
-TextPositionX .DS 2
-TextPositionY .DS 1
-TextAddress .DS 2
-TextCounter .DS 1
 TextNumberOff .DS 1
 ;--------------
 TankTempY
@@ -380,10 +379,6 @@ CurrentResult
 ;--------------
 AngleTable ;Angle of the barrel of each tank during the round
     .DS MaxPlayers
-;NewAngle  ; used in AI
-    .DS 1
-;previousBarrelAngle
-;    .DS MaxPlayers
 EndOfTheBarrelX
     .ds 2
 EndOfTheBarrelY
@@ -413,19 +408,12 @@ LineCharNr  .DS 1
 ;LineYdraw   .DS 1
 
 ;-----------
-ResultX
-    .DS 2
-;ResultY .DS 1
 ResultOfTankNr
     .DS 1
 
 ;----------------------------------------------------
 ;PutChar4x4
 ;----------------------------------------------------
-LoopCounter4x4 .DS 1
-y4x4 .DS 1
-StoreA4x4 .DS 1
-Xcounter4x4 .DS 1
 nibbler4x4  .DS 1
 CharCode4x4 .DS 1
 ;plot4x4color .DS 1 ;1-white, 0-background

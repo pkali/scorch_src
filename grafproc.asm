@@ -2021,7 +2021,7 @@ EndPut4x4
 
 .proc SetMainScreen
 ;    mva #0 dmactls 
-    VDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
+    SetDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
     mwa #dl dlptrs  ; issue #72 (glitches when switches)
     lda #%00111110
 ;    and #$fc

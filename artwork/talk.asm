@@ -78,7 +78,7 @@ L73  dta d"OH MAN!"
 L74  dta d"DOOUGH!"
 L75  dta d"ANOTHER DAY, ANOTHER BOMB."
 L76  dta d"THIS IS THE END, MY ONLY FRIEND."
-L77  dta d"IT'S ALL OVER."
+L77  dta d"VERY FUNNY."
 L78  dta d"THE FAT LADY SANG."
 L79  dta d"WHY DOES EVERYTHING HAPPEN TO ME?"
 L80  dta d"I'M GOING DOWN."
@@ -89,7 +89,7 @@ L84  dta d"BIF!"
 L85  dta d"BAM!"
 L86  dta d"ZONK!"
 L87  dta d"I SHOULD'VE LISTENED TO MY MOTHER..."
-L88  dta d"NO... A BUD LIGHT!"
+L88  dta d"I WALK THROUGH THE VALLEY OF THE SHADOW..."
 L89  dta d"WHAT WAS THAT NOISE?"
 L90  dta d"MAMA SAID THERE'D BE DAYS LIKE THIS."
 L91  dta d"ITS JUST ONE OF THOSE DAYS..."
@@ -127,7 +127,7 @@ OffensiveTextTableH
 NumberOfOffensiveTexts=54
 NumberOfDeffensiveTexts=60
 .endp
-hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!", $ff
+hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"
 hoverFullEnd
-hoverEmpty dta d"RUNNING OUT OF EELS", $ff
+hoverEmpty dta d"RUNNING OUT OF EELS"
 hoverEmptyEnd

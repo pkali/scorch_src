@@ -32,16 +32,20 @@ NameScreen3
  dta d" Human/Atari (difficulty level) "
 NameScreen5
  .IF TARGET = 800
- dta d"  "
- dta   d"TAB"*
- dta      d" - Player/Difficulty level "
+ dta d" "
+ dta  d"TAB"*
+ dta     d" - Port nr "
+ dta                d"Joy"*
+ dta                   d" - Difficulty "
  dta d"       "
  dta        d"Return"*
  dta              d" - Proceed         "
 .ELIF TARGET = 5200
- dta d"  "
- dta   d"Joy"*
- dta      d" - Player/Difficulty level "
+ dta d" "
+ dta  d"(5)"*
+ dta     d" - Port nr "
+ dta                d"Joy"*
+ dta                   d" - Difficulty "
  dta d"        "
  dta        d"FIRE"*
  dta             d" - Proceed          "

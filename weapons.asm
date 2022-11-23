@@ -49,15 +49,29 @@ ExplosionRoutines
     .word tonofdirt-1                ;Ton_of_Dirt____;_27
     .word liquiddirt-1               ;Liquid_Dirt____;_28
     .word dirtcharge-1               ;Dirt_Charge____;_29
-    .word VOID-1                     ;Buy_me_________;_30
+    .word BFG-1                      ;Buy_me_________;_30
     .word laser-1                    ;Laser__________;_31
 
 VOID
 tracer
     rts
 .endp
-; ------------------------
-
+.proc BFG
+    mva #sfx_plasma_2_2 sfx_effect 
+	jsr BFGblink
+	; Kill all :)
+    ldx NumberOfPlayers
+    dex
+	lda #$00
+CheckNextTankBFG
+	cpx TankNr	; not me!
+	beq @+
+    sta Energy,x
+@   dex
+    bpl CheckNextTankBFG
+	stx AfterBFGflag ; $ff
+	rts
+.endp
 ; ------------------------
 .proc babymissile
     mva #sfx_baby_missile sfx_effect 
@@ -1357,8 +1371,8 @@ pressedLeft
     INC AngleTable,x
     lda AngleTable,x
     cmp #180
-    jne BeforeFire
-    lda #1
+    jcc BeforeFire
+    lda #0
     sta AngleTable,x
     jmp BeforeFire
 
@@ -1373,7 +1387,7 @@ CTRLPressedLeft
     sta AngleTable,x
     cmp #180-4
     jcc BeforeFire
-    lda #1
+    lda #0
     sta AngleTable,x
     jmp BeforeFire
 
@@ -1396,6 +1410,7 @@ pressedTAB
     jmp BeforeFire
 
 CTRLpressedTAB
+    mva #sfx_purchase sfx_effect
     ldx TankNr
 	lda ActiveWeapon,x
 	cmp #first_offensive____	; #0
@@ -1506,7 +1521,7 @@ AfterStrongShoot
 	tay	; A=0 !
 	adw xtraj+1 #mountaintable temp
     lda ytraj+1
-    cmp (temp),y	; check collision witch mountains
+    cmp (temp),y	; check collision with mountains
     bcs ShotUnderGround
     jsr Flight
     mva #1 color
@@ -1761,6 +1776,8 @@ LaserNoWalls
 
 	bit TestFlightFlag
 	bmi nowait
+	bit LaserFlag	; faster laser prepare
+	bmi nowait
     lda color
     beq nonowait	; smoke tracer erases slowly
     lda tracerflag	
@@ -1777,7 +1794,7 @@ nowait
 	; If laser fires, edges of the screen finish "flying" and laser hits.
 	lda ytraj+2
 	bmi LaserHitEdge
-	cpw xtraj+1 #screenwidth+1
+	cpw xtraj+1 #screenwidth ;+1
 	bcc LaserNoHitEdge
 LaserHitEdge
     mwa xdraw XHit
@@ -1858,6 +1875,8 @@ EndOfFlight2
 	cmp #ind_Tracer_________	; defence not fire by tracers
 	beq JNoDefence
 	cmp #ind_Smoke_Tracer___
+	beq JNoDefence
+	cmp #ind_Laser__________	; Bouncy and Mag not fire by Laser
 	beq JNoDefence
 	lda ActiveDefenceWeapon,x
 	cmp #ind_Bouncy_Castle__		; Auto Defence
@@ -2216,7 +2235,7 @@ MIRVcheckCollision
 
     ldy #0
     lda ytraj+1
-    cmp (temp),y	; check collision witch mountains
+    cmp (temp),y	; check collision with mountains
     bcs mrHit
 
 mrSkipCollisionCheck
@@ -2328,6 +2347,11 @@ MakeBump
         sbc vx+#
         sta vx+#
     .endr
+	; and bouce feapfrog :)
+	sec
+	lda #180
+	sbc LeapFrogAngle
+	sta LeapFrogAngle	; swap angle (LeapFrogAngle)	
 	inc FunkyWallFlag
 	rts
 WrapAndNone
@@ -2514,11 +2538,13 @@ StoreMaxAlt
     
     mwa #hoverFull LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+    mva #hoverFullEnd-hoverFull-1 fx ; length
 	sec
 	lda FloatingAlt
 	sbc #12
     sta LineYdraw
-    jsr TypeLine4x4
+    jsr TypeLine4x4.variableLength
+
 	ldx TankNr
 	
 	; TankNr in X reg.
@@ -2561,6 +2587,7 @@ ReachSky
 	; display text 4x4 - fuel full (clear text)
     mwa #hoverFull LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+    mva #(hoverFullEnd-hoverFull-1) fx ; length
 	sec
 	lda FloatingAlt
 	sbc #12
@@ -2605,15 +2632,15 @@ KeyboardAndJoyCheck
 	; display text 4x4 - low fuel
     mwa #hoverEmpty LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+    mva #hoverEmptyEnd-hoverEmpty-1 fx ; length
 	sec
 	lda FloatingAlt
 	sbc #12
     sta LineYdraw
-    ;lda #0
-    jsr TypeLine4x4 ;.staplot4x4color
+    jsr TypeLine4x4.variableLength
+
 	ldx TankNr
 
-	
 notpressed
 	; let's animate "engine"
 	jsr DrawTankEngine
@@ -2724,6 +2751,7 @@ pressedSpace
 	; display text 4x4 - low fuel (clear text)
     mwa #hoverEmpty LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+	mva #hoverEmptyEnd-hoverEmpty-1 fx  ; length
 	sec
 	lda FloatingAlt
 	sbc #12
@@ -2905,9 +2933,17 @@ CheckCollisionWithTankLoop
     cmp ydraw
     bcs OverTheTank
 	; with or without shield ?
-	lda ShieldEnergy,x
-	bne CheckCollisionWithShieldedTank	; tank with shield is bigger :)
 
+	lda ActiveDefenceWeapon,x
+	cmp #ind_Mag_Deflector__	; first shielded weapon
+	bcc CheckCollisionWithNotShieldedTank
+	cmp #ind_Bouncy_Castle__+1	; last shielded weapon
+	bcc CheckCollisionWithShieldedTank	; tank with shield is bigger :) 
+	
+	;lda ShieldEnergy,x		; there is wrong method to check shield :)
+	;bne CheckCollisionWithShieldedTank	; tank with shield is bigger :)
+	
+CheckCollisionWithNotShieldedTank
     lda xtankstableH,x
     cmp xdraw+1
     bne @+
@@ -2987,14 +3023,34 @@ CalculateExplosionRange0
 ;calculates total horizontal range of explosion by
 ;"summing up" ranges of all separate explosions
 
-    adw xdraw ExplosionRadius WeaponRangeRight
-    cpw WeaponRangeRight #screenwidth-1
-    bcc NotOutOfTheScreenRight
+	; WeaponRangeRight = xdraw + ExplosionRadius
+	clc
+	lda xdraw
+	adc ExplosionRadius
+	sta WeaponRangeRight
+	lda xdraw+1
+	adc #$00
+	sta WeaponRangeRight+1
+    ; adw xdraw ExplosionRadius WeaponRangeRight  ; Pozor! ExplosionRadius is one byte now
+    ; cpw WeaponRangeRight #screenwidth-1
+	cmp #>(screenwidth-1)
+	bne @+
+	lda WeaponRangeRight
+	cmp #<(screenwidth-1)
+@	bcc NotOutOfTheScreenRight
     mwa #screenwidth-1 WeaponRangeRight
 
 NotOutOfTheScreenRight
-    sbw xdraw ExplosionRadius WeaponRangeLeft
-    lda WeaponRangeLeft+1
+	; WeaponRangeLeft = xdraw - ExplosionRadius
+	sec
+	lda xdraw
+	sbc ExplosionRadius
+	sta WeaponRangeLeft
+	lda xdraw+1
+	sbc #$00
+	sta WeaponRangeLeft+1
+    ; sbw xdraw ExplosionRadius WeaponRangeLeft  ; Pozor! ExplosionRadius is one byte now
+    ; lda WeaponRangeLeft+1
     bpl NotOutOfTheScreenLeft
     lda #0
     sta WeaponRangeLeft

@@ -28,7 +28,7 @@ The [RETURN] key or a joystick button moves to the next screen.
 
 ## 2. Entering the name of players and selecting the level of computer-controlled players
 
-The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options). At the same time, you can enter the name of the selected player from the keyboard.
+The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options). The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key allow you to choose which joystick port the player will use. At the same time, you can enter the name of the selected player from the keyboard.
 When the [RETURN] key is pressed or the Joystick button is pressed briefly, the screen switches to the next player until the difficulty levels for each player are selected.
 The player's name can also be entered with the joystick. After pressing and holding the button for more than 1s. you can use up/down movements to change the letter being entered, and left/right movements to change its position in the name. Releasing the button ends the name entry and returns to the level selection.
 
@@ -53,6 +53,7 @@ The status line shows which player is currently allowed to take a shot and a set
 * the shot strength set by the player (the maximum shot strength is limited by the player's energy - it can not exceed the energy * 10 . This means that you can fire weaker shots only when having a small amount of energy,
 * the current round number,
 * wind speed and direction,
+* "computer" symbol if **Auto Defense** is active,
 * in parentheses is the name of the active defensive weapon - if there is any activated by the player.
 
 The keyboard controls here are simple, cursor keys or joystick: left/right - change the angle of the barrel, up/down - change the the force of the shot.
@@ -171,7 +172,7 @@ Only these points determine the order in the summary
 * **Long Schlong** - a special weapon :) - Costs a lot, doesn't really help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated).
 * **Lazy Boy** - it is not actually a defensive weapon. It is an aiming aid. When it is activated, the tank tries to aim at the nearest enemy and automatically adjusts the power of the shot and angle. If it has too little energy, it can sometimes aim wrong (it uses a method like **Cyborg** to aim). Like **Battery**, it does not deactivate other defensive weapons when used. Note: There is no point in activating this weapon before the round, targeting will not take place because there is nothing to target yet.
 * **Lazy Darwin** - works exactly like **Lazy Boy** but targets the weakest opponent.
-* **Auto Defense** - activates the mode of automatic activation of defensive weapons. After its activation, the tank automatically activates the strongest shield it has (consuming it, of course) at any time when there is no shield (also between shots of other players). At the same time, if the tank's energy level drops below 30 units, it automatically activates **Battery** if it has it. This weapon remains active until the end of the round and is indicated by the letter "A" before the name of the active defensive weapon in the status line. It is the second defensive weapon that does not deactivate other defensive weapons when used.
+* **Auto Defense** - activates the mode of automatic activation of defensive weapons. After its activation, the tank automatically activates the strongest shield it has (consuming it, of course) at any time when there is no shield (also between shots of other players). At the same time, if the tank's energy level drops below 30 units, it automatically activates **Battery** if it has it. This weapon remains active until the end of the round and is indicated by the "computer" symbol before the name of the active defensive weapon in the status line. It is the second defensive weapon that does not deactivate other defensive weapons when used.
 * **Spy Hard** - Help for the forgetful :) . When activated, it shows a preview of information about the next opponents one by one. Left/Right - changes the "spied" tank. Fire/Space/Return/Esc - ends the "spying". This is the last defensive weapon, which does not deactivate other defensive weapons when used.
 
 None of the shields protect against **Napalm**. **Bouncy Castle** or **Mag Deflector** on a direct hit will deflect it or carry it past, but just hit very close to a tank and its shield will not save it.
@@ -184,7 +185,7 @@ And of course, activating a weapon when you already have some other weapon activ
 
 ## 7. "Other" weapons:
 
-* **Buy me!** - this is a 'loot box', not a weapon per se. Buying it draws one of the offensive or (rarely) defensive weapons and adds it to the player's arsenal. It is a lottery in which you can lose (if you draw a weapon cheaper than the **Buy Me!** price) but also gain. You can get a weapon otherwise not affordable at all! 
+* **Best F...g Gifts** - this is a 'loot box', not a weapon per se. Buying it draws one of the offensive or (rarely) defensive weapons and adds it to the player's arsenal. It is a lottery in which you can lose (if you draw a weapon cheaper than the **Best F...g Gifts** price) but also gain. You can get a weapon otherwise not affordable at all! There is a small probability of drawing by **Best F...g Gifts** itself :). You can then try to use it in battle.
 
 ## 8. difficulty levels of computer-controlled opponents:
 

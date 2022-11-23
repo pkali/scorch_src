@@ -18,27 +18,7 @@ initialvaluesCount = *-initialvaluesstart  ; MAX 128 bytes !
 ;===================================================================================
 ;==========================CONSTANT TABLES, do not erase!===========================
 ;===================================================================================
-TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
-;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4	; standard order
-;TanksPMOrder	.BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
-TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94	; Adam's order
-TanksPMOrder	.BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
-TankShapesTable			.BYTE char_tank1___________,char_tank2___________,char_tank3___________
-						.BYTE char_tank1___________,char_tank2___________,char_tank3___________
-dliColorsBack
-    :10 .by $02,$00
-dliColorsFore
-    .by $0a
-CashOptionL ;(one zero less than on the screen)
-    .by 0,<200,<800,<1200,<2000
-CashOptionH   
-    .by 0,>200,>800,>1200,>2000
-GravityTable   .by 10,20,25,30,40
-MaxWindTable   .by 5,20,40,70,99
-RoundsTable    .by 10,20,30,40,50
-AIForceTable	.wo 375,470,630,720,820	; starting shoot forces for different gravity
-flyDelayTable  .by 255,150,75,35,1
-seppukuTable   .by 255, 45,25,15,9
+
 mountainsDeltaTableH .by 0,1,3,5,7
 mountainsDeltaTableL .by $1f, $7f, $ff, $7f, $ff
 ;------------------------------------------------
@@ -62,22 +42,22 @@ XtankOffsetGO_H
 	.by 0,0,0,0,0,1
 ;-----4x4 texts-----
 LineTop
-    dta d"(%%%%%%%%%%%%)", $ff
+    dta d"(%%%%%%%%%%%%)"
 ;# - vertical, () * +, % - horizontal
 LineBottom
-    dta d"*%%%%%%%%%%%%+", $ff
+    dta d"*%%%%%%%%%%%%+"
 LineEmpty
-    dta d"#            #", $ff
+    dta d"#            #"
 LineHeader2
-    dta d"#  RESULTS   #", $ff
+    dta d"#  RESULTS   #"
 LineGameOver
-    dta d"# GAME  OVER #", $ff
+    dta d"# GAME  OVER #"
 seppukuText
-    dta d"#  SEPPUKU!  #", $ff
+    dta d"#  SEPPUKU!  #"
 areYouSureText
-    dta d"# SURE?  Y/N #", $ff
+    dta d"# SURE?  Y/N #"
 lineClear
-    dta d"              ", $ff
+    dta d"              "
 
 ;-----------
 pmtableL ; addressess of the P/M memory for 6 tanks
@@ -96,7 +76,7 @@ pmtableH
     .by >(pmgraph+$300)
 ;-----------
 sintable
-    .by 0
+    .by 1
     .by 4
     .by 8
     .by 13
@@ -228,7 +208,7 @@ TanksNamesDefault
     dta d"4th.Tank"
     dta d"5th.Tank"
     dta d"6th.Tank"
-
+	
 WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Baby_Missile___
   .by >price_Missile________
@@ -510,7 +490,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Ton of Dirt     " ; 27
     dta d"Liquid Dirt     " ; 28
     dta d"Dirt Charge     " ; 29
-    dta d"Buy me!         " ; 30
+    dta d"Best F...g Gifts" ; 30
     dta d"Laser           " ; 31
 ;------defensives
     dta d"White Flag      " ; 32                                        
@@ -573,24 +553,28 @@ keycodes ;tables for converting KeyCode to Screen Code (38 -1  characters)
     .by $3f,$15,$12,$3a,$2a,$38,$3d,$39
     .by $0d,$01,$05,$00,$25,$23,$08,$0a
     .by $2f,$28,$3e,$2d,$0b,$10,$2e,$16
-    .by $2b,$17,$1f,$1e,$1a,$18,$1d,$1b
-    .by $33,$35,$30,$32,$22,$21 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
+    .by $2b,$17
+	.by $32,$1f,$1e,$1a,$18,$1d,$1b
+    .by $33,$35,$30,$22,$21 ;,$0e <-- hyphen removed from the table, sorry hyphen lovers
 keycodesEnd
 scrcodes
     dta d"abcdefgh"
     dta d"ijklmnop"
     dta d"qrstuvwx"
-    dta d"yz123456"
-    dta d"7890. " ; "-"
+    dta d"yz"
+zero
+digits	; decimal constans
+	dta d"0123456"
+    dta d"789. " ; "-"
+;-------decimal constans
+;zero
+;digits   dta d"0123456789"
+
 ;-----------------------------------
 gameOverSpritesTop
     ; end of the Gover sprites by number of players
     ;    1   2   3   4   5   6
     .by 130+7,130+7,136+7,142+7,148+7,154+7
-;-------decimal constans
-zero
-digits   dta d"0123456789"
-
 ;------credits
 CreditsStart
 	dta d"         "*

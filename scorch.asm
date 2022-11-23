@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.19" ; number of this build (4 bytes)
+	dta d"1.20" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -28,6 +28,7 @@
 ;---------------------------------------------------
 FirstZpageVariable = $61
     .zpvar DliColorBack		.byte = FirstZpageVariable
+	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -86,7 +87,7 @@ FirstZpageVariable = $61
     .zpvar decimal .word
     .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
     .zpvar Counter .byte ;temporary Counter for outside loops
-    .zpvar ExplosionRadius .word ;because when adding in xdraw it is double byte
+    .zpvar ExplosionRadius .byte
     .zpvar ResultY .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
@@ -128,7 +129,7 @@ FirstZpageVariable = $61
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
 
     displayposition = modify
-    LineAddress4x4 = temp
+    LineAddress4x4 = xcircle
 
 ;-----------------------------------------------
 ; libraries
@@ -269,12 +270,15 @@ FirstSTART
 	; 5 values in RMT file
 	; not elegant :(
 	mva #$06 MODUL-6+$967	; $07 > $06
+	;mva #$06 MODUL-6+$bc3	; $07 > $06
+	;mva #$06 MODUL-6+$e69	; $08 > $06
+	;mva #$06 MODUL-6+$ebc	; $08 > $06
+	sta MODUL-6+$bc3	; $07 > $06
+	sta MODUL-6+$e69	; $08 > $06
+	sta MODUL-6+$ebc	; $08 > $06
 	mva #$10 MODUL-6+$a69	; $12 > $10
-	mva #$06 MODUL-6+$bc3	; $07 > $06
 	mva #$04 MODUL-6+$bf8	; $05 > $04
 	mva #$08 MODUL-6+$e3d	; $0a > $08
-	mva #$06 MODUL-6+$e69	; $08 > $06
-	mva #$06 MODUL-6+$ebc	; $08 > $06
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
@@ -350,8 +354,9 @@ MainGameLoop
     jsr SortSequence
     
     ; Hide all (easier than hide last ;) ) tanks
-    jsr cleartanks
+    jsr cleartanks	; A=0
 	sta COLBAKS		; set background color to black
+	sta JoystickNumber	; set joystick port for player
 
     ; here gains and losses should be displayed (dollars)
     ; finally we have changed our minds and money of players
@@ -465,7 +470,6 @@ NoGameOverYet
     jsr MakeDarkScreen   ; issue #72
     ; jsr RmtSongSelect  ; ?????
     mva #sfx_silencer sfx_effect
-    jsr PMoutofscreen
 
     jmp MainGameLoop
  
@@ -484,6 +488,7 @@ NoGameOverYet
 
 	jsr SetPMWidth
 	lda #0
+	sta AfterBFGflag	; reset BFG flag
 	sta COLOR2	; status line "off"
 	sta COLOR1
 	
@@ -626,7 +631,7 @@ CheckNextTankAD
 	jsr AutoDefense
 @   dex
     bpl CheckNextTankAD
-	jsr DrawTanks	; redraw tanks witch new defences
+	jsr DrawTanks	; redraw tanks with new defences
 ;
     ldx TankSequencePointer
     lda TankSequence,x
@@ -670,7 +675,8 @@ RoboTanks
     jmp AfterManualShooting
 
 ManualShooting
-
+	lda JoyNumber,x
+	sta JoystickNumber	; set joystick port for player
     jsr WaitForKeyRelease
     jsr BeforeFire
     lda escFlag
@@ -823,22 +829,29 @@ NoPlayerNoDeath
     ;clear NoDeathCounter here
     sta noDeathCounter
 
+    mva #sfx_death_begin sfx_effect
+
     ; display defensive text here (well, defensive
     ; is not the real meaning, it should be pre-death,
     ; but I am too lazy to change names of variables)
 
     ; in X there is a number of tank that died
 
+	lda #77	; mumber of defensive text after BFG!
+	bit AfterBFGflag	; check BFG flag
+	bmi TextAfterBFG
+	; if BFG then no points for dead tanks ...
     lda CurrentResult
     clc
     adc ResultsTable,x
     sta ResultsTable,x
-    inc CurrentResult
-
-    mva #sfx_death_begin sfx_effect
+    ;inc CurrentResult
+	
     ; RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
+TextAfterBFG
     sta TextNumberOff
+    inc CurrentResult	; ... but increase result of winner (BFG)
     ldy TankTempY
     mva #$ff plot4x4color
     jsr DisplayOffensiveTextNr
@@ -1087,6 +1100,7 @@ deletePtr = temp
     ; clean variables
     lda #0
     sta escFlag
+	sta JoystickNumber
     tay
     mwa #variablesStart deletePtr
 @     tya
@@ -1337,22 +1351,29 @@ nextlinedisplay
 ;	cpw DLCreditsAddr #CreditsLastLine
 ;	bne EndOfCreditsVBI
 	mwa #Credits DLCreditsAddr
-EndOfCreditsVBI	
+EndOfCreditsVBI
 	.IF TARGET = 5200
 		lda SkStatSimulator
 		bmi @+
 		inc SkStatSimulator
 @
+		lda JoystickNumber		; select port
+		ora #%00000100          ; Speaker off, Pots enabled
+        sta CONSOL5200
+
         center = 114            ;Read analog stick and make it look like a digital stick
         threshold = 60
-    
-        lda paddl0            ;Read POT0 value (horizontal position)
+		
+		lda JoystickNumber
+		asl
+		tax
+        lda paddl0,x            ;Read POT0 value (horizontal position)
         cmp #center+threshold       ;Compare with right threshold
         rol stick0          ;Feed carry into digital stick value
         cmp #center-threshold       ;Compare with left threshold
         rol stick0          ;Feed carry into digital stick value
     
-        lda paddl1            ;Read POT1 value (vertical position)
+        lda paddl1,x            ;Read POT1 value (vertical position)
         cmp #center+threshold       ;Compare with down threshold
         rol stick0          ;Feed carry into digital stick value
         cmp #center-threshold       ;Compare with down threshold
@@ -1362,8 +1383,10 @@ EndOfCreditsVBI
         eor #2+8
         and #$0f
         sta stick0
-    
-        mva trig0 strig0        ;Move hardware to shadow
+		
+		ldx JoystickNumber
+		lda trig0,x
+		sta strig0        ;Move hardware to shadow
         
         mva chbas chbase
     
@@ -1379,9 +1402,15 @@ EndOfCreditsVBI
         pla
         tax
         pla
-        rti
+		rti
     .ELSE	
-	   jmp XITVBV
+		; support for joysticks :)
+		ldx JoystickNumber
+		lda STICK0,x
+		sta STICK0
+		lda STRIG0,x
+		sta STRIG0
+		jmp XITVBV
 	.ENDIF
 .endp
     .IF TARGET = 5200
@@ -1698,11 +1727,21 @@ checkJoyGetKey
       bne getkeyend
 
 notpressedJoyGetKey
-      ;fire
-      lda STRIG0
+	;fire
+	lda STRIG0
+ 	beq JoyButton
+	.IF TARGET = 800	; Select key only on A800
+	bne checkSelectKey
+checkSelectKey
+	lda CONSOL
+	and #%00000010
+	.ENDIF
     bne @-
-    lda #@kbcode._ret ;Return key
-    
+OptionPressed
+	lda #@kbcode._tab	; Select key
+	bne getkeyend
+JoyButton
+    lda #@kbcode._ret ;Return key    
 getkeyend
 	ldy #0
     sty ATRACT	; reset atract mode	
@@ -1780,6 +1819,7 @@ peopleAreHere
 .endp
 
 MakeDarkScreen
+	jsr PMoutofScreen
 	mva #0 dmactls		; dark screen
     sta dmactl
 	; and wait one frame :)
@@ -1841,8 +1881,22 @@ noingame
     bne @-
     rts
 .endp
-
-
+;--------------------------------------------------
+.macro SetDLI
+;	SetDLI #WORD
+;	Initialises Display List Interrupts
+         LDY # <:1
+         LDX # >:1
+		 jsr _SetDLIproc
+.endm
+.proc _SetDLIproc
+	LDA #$C0
+	STY VDSLST
+	STX VDSLST+1
+	STA NMIEN
+	rts
+.endp
+;--------------------------------------------------
 /* ;--------------------------------------------------
 .macro randomize floor ceiling
 ;--------------------------------------------------
@@ -1907,9 +1961,72 @@ TankFont
 font4x4
     ins 'artwork/font4x4s.bmp',+62
 ;----------------------------------------------
-;RMT PLAYER and song loading shenaningans
+;RMT PLAYER loading shenaningans
     icl 'artwork/sfx/rmtplayr_modified.asm'
+;-------------------------------------------------
+.proc CheckTankCheat
+    ldy #$07
+    lda TankNr
+    asl
+    asl
+    asl ; 8 chars per name
+    tax
+@
+    lda CheatName,y
+	sec
+    sbc tanksnames,x
+	cmp #$27
+	bne NoCheat
+    inx
+    dey
+    bpl @-
+YesCheat
+	ldx TankNr
+	lda TanksWeaponsTableL,x
+	sta temp
+	lda TanksWeaponsTableH,x
+	sta temp+1
+	lda #99
+@	iny
+	sta (temp),y
+	cpy #(last_defensive_____ - first_offensive____)
+	bne @-
+NoCheat
+    rts
+.endp
+CheatName
+	dta d"   008.T"+$27
+;----------------------------------------------
+.proc DLIinterruptBFG
+	pha
+	lda dliCounter
+	bne EndofBFGDLI
+	lda dliColorsFore
+	bit random
+	bmi @+
+	lda DliColorBack
+@	sta COLPF2
+	lda dliColorsFore
+	bit random
+	bmi @+
+	lda DliColorBack
+@	sta COLPF1
+EndofBFGDLI
+	inc dliCounter
+    pla
+    rti
+.endp
+; ------------------------
+.proc BFGblink
+	SetDLI DLIinterruptBFG	; blinking on
+	ldy #50
+	jsr PauseYFrames
+	SetDLI DLIinterruptGraph	; blinking off
+	rts
+.endp
+;--------------------------------------------------
     .IF * > MODUL-1
+	  .ECHO *
       .ERROR 'Code and data too long'
     .ENDIF
     .ECHO "Bytes left: ",$b000-*
@@ -1921,6 +2038,10 @@ MODUL
       ins "artwork/sfx/scorch_str9-NTSC.rmt",+6  ;include music RMT module
 MODULEND
 ;----------------------------------------------
+    icl 'constants_top.asm'
+;----------------------------------------------
+  
+  .ECHO "Bytes on top left: ",$bfe8-* ;ROM_SETTINGS-*
   .IF target = 5200
     .IF * > ROM_SETTINGS-1
       .ERROR 'Code and RMT song too long to fit in 5200'

@@ -33,7 +33,7 @@
 	mva #$ca COLOR1
 	mva #$00 COLBAKS	; set color of background
    
-    VDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
+    SetDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
 
 ; -------- setup bottom (tanks) line	
 	lda NumberOfPlayers
@@ -242,6 +242,8 @@ invertme
 	jsr PurchaseAI	; remember to make ActivateAI :) !!!
 	jmp AfterManualPurchase
 ManualPurchase
+	lda JoyNumber,x
+	sta JoystickNumber	; set joystick port for player
 	mva #0 isInventory
 	jsr Purchase	; purchase weapons
 	bit escFlag
@@ -293,7 +295,7 @@ AfterManualPurchase
 GoToActivation
     mva #$ff LastWeapon
 
-    VDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
+    SetDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
     jsr PMoutofScreen
     mwa #PurchaseDL dlptrs
     lda #@dmactl(narrow|dma) ; narrow screen width, DL on, P/M off
@@ -364,7 +366,7 @@ AfterPurchase
       cmp IndexesOfWeaponsL1,y
       beq ?weaponfound
       iny
-      cpy #(last_offensive_____ - first_offensive____)  ; maxOffensiveWeapons
+      cpy #(last_offensive_____ - first_offensive____)+1  ; maxOffensiveWeapons
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -377,6 +379,7 @@ PositionDefensive
 ?weaponFound
     ; weapon index in Y
     sty positionOnTheList
+	jsr _MakeOffsetDown		; set list screen offset
 
 ; Here we have all we need
 ; So choose the weapon for purchase ......
@@ -449,18 +452,23 @@ GoDownOffensive
     sty PositionOnTheList
 	beq MakeOffsetUp
 MakeOffsetDown
+	jsr _MakeOffsetDown
+EndGoDownX
+    jmp ChoosingItemForPurchase
+
+_MakeOffsetDown
     lda OffsetDL1
     clc
     adc #15
     ;if offset+16 is lower than the position then it must =16
     cmp PositionOnTheList
-    bcs EndGoDownX
+    bcs _EndGoDownX
     sec
     lda PositionOnTheList
     sbc #15
     sta OffsetDL1
-EndGoDownX
-    jmp ChoosingItemForPurchase
+_EndGoDownX
+	rts
 
 ; swapping the displayed list and setting pointer to position 0
 ListChange
@@ -476,6 +484,7 @@ ListChange
     beq @+
     ; inventory
     jsr calcPosOffensive
+	jsr _MakeOffsetDown		; set list screen offset
     jmp ChoosingItemForPurchase
 @
     mva #0 PositionOnTheList
@@ -795,11 +804,9 @@ Suprise	; get a random weapon
 	bcc GetRandomDefensive
 GetRandomOffensive
 	randomize ind_Missile________ last_offensive_____
-	cmp #ind_Buy_me_________
-	beq GetRandomOffensive
+	;cmp #ind_Buy_me_________ ; buy me do not buy buy me :)
+	;beq GetRandomOffensive
 	tay
-;    lda WeaponUnits,y	; check if weapon exist
-;	beq GetRandomOffensive	
 	bne NoSuprise	; Y always <> 0
 GetRandomDefensive
 	randomize ind_Battery________ last_defensive_____
@@ -950,7 +957,7 @@ DefActivationEnd
       cmp IndexesOfWeaponsL2,y
       beq ?weaponfound
       iny
-      cpy #(last_defensive_____ - first_defensive____)  ; maxDefensiveWeapon
+      cpy #(last_defensive_____ - first_defensive____)+1  ; maxDefensiveWeapon
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -1078,7 +1085,7 @@ NoArrowDown
     mwa #NameDL dlptrs
     lda #%00110001 ; narrow screen width, DL on, P/M off
     sta dmactls
-    VDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
+    SetDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
 
     mva #0 TankNr
 	sta COLBAKS	; set color of background
@@ -1088,6 +1095,7 @@ NoArrowDown
       jsr EnterPlayerName
       bit escFlag
       spl:rts
+	  jsr CheckTankCheat
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -1110,10 +1118,8 @@ NoArrowDown
     ldx tanknr
     lda skillTable,x
     sta difficultyLevel
-    inx
-    stx decimal
-    mwa #(NameScreen2+9) displayposition
-    jsr displaybyte
+	lda digits+1,x
+    sta NameScreen2+7
     jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 
     ; clear tank name editor field - not necessary
@@ -1154,6 +1160,11 @@ LastNameChar
 
 
 CheckKeys
+	ldx TankNr
+	lda JoyNumber,x
+    tax
+	lda digits+1,x
+    sta NameScreen2+12	
 	jsr CursorDisplay
     jsr getkey
     bit escFlag
@@ -1184,7 +1195,7 @@ CheckFurtherX01 ; here we check Tab, Return and Del
     cmp #@kbcode._ret  ; $0c ; Return
     jeq EndOfNick
     cmp #@kbcode._tab  ; $2c ; Tab
-    beq ChangeOfLevelUp
+    beq ChangeOfJoyUp
     cmp #@kbcode._right  ; $7 ;cursor right
     beq ChangeOfLevelUp
     cmp #@kbcode._left  ; $6 ;cursor left
@@ -1211,6 +1222,13 @@ FirstChar
     stx PositionInName
     lda #0
     sta NameAdr,x
+    jmp CheckKeys
+ChangeOfJoyUp
+	ldx TankNr
+	inc JoyNumber,x
+	lda JoyNumber,x
+	and #%00000011	; max 4 joysticks
+	sta JoyNumber,x
     jmp CheckKeys
 ChangeOfLevelUp ; change difficulty level of computer opponent
     inc:lda DifficultyLevel
@@ -1489,7 +1507,7 @@ displayloop
 	cpx #0
 	bne noleading0
 	cpy #4
-	beq noleading0	; if 00000 - last 0 must be
+	beq noleading0	; if 00000 - last 0 must stay
 	cmp zero
 	bne noleading0
 	lda #space
@@ -1561,7 +1579,7 @@ displayloop1
     ;parameters are:
     ;Y - number of tank above which text is displayed
     ;fx - length of text
-    ;textAddress - address of the text
+    ;LineAddress4x4 - address of the text
 
     ;lets calculate position of the text first!
     ;that's easy because we have number of tank
@@ -1633,7 +1651,7 @@ DOTNnotLessThanZero
 DOTNnoOverflow
     ;here in temp we have really good x position of text
 
-    mwa temp TextPositionX
+    mwa temp LineXdraw
 
     ;now let's get y position
     ;we will try to put text as low as possible
@@ -1663,58 +1681,29 @@ DOTOldLowestValue
     cpy #$ff
     bne DOTLowestMountainValueLoop
 
-
-
     sec
     lda temp2
     sbc #(4+9) ;9 pixels above ground (and tanks...)
-    sta TextPositionY
+    sta LineYdraw
 
-    mva #0 TextCounter
-    mwa TextAddress temp
-DOTNcharloop
-    ldy TextCounter
+    jmp TypeLine4x4.noLengthNoColor  ; rts
 
-    lda (temp),y
-    and #$3f ;always CAPITAL letters
-
-    sta CharCode4x4
-    lda TextCounter
-    asl
-    asl
-    clc
-    adc TextPositionX
-    sta dx
-    lda #0
-    adc TextPositionX+1
-    sta dx+1
-    lda TextPositionY
-    sta dy
-	mva #0 dy+1	; dy is 2 bytes value
-    jsr PutChar4x4
-
-    inc TextCounter
-    lda fx
-    cmp TextCounter
-    bne DOTNcharloop
-
-    rts
 .endp
 
 ;--------------------------------------------------------
 .proc DisplayOffensiveTextNr ;
     ldx TextNumberOff
     lda talk.OffensiveTextTableL,x
-    sta TextAddress
+    sta LineAddress4x4
     lda talk.OffensiveTextTableH,x
-    sta TextAddress+1
+    sta LineAddress4x4+1
     inx ; the next text
     lda talk.OffensiveTextTableH,x
     sta temp+1
     lda talk.OffensiveTextTableL,x
     sta temp  ; opty possible
     ; substract address of the next text from previous to get text length
-    sbw temp TextAddress temp2
+    sbw temp LineAddress4x4 temp2
     mva temp2 fx 
 
     jsr Display4x4AboveTank
@@ -1731,7 +1720,7 @@ DOTNcharloop
     lda #0
     adc #>Tanksnames
     sta temp+1  ; TextAddress+1
-    mwa temp TextAddress
+    mwa temp LineAddress4x4
 
     ;find length of the tank's name
     ldy #7
@@ -1752,15 +1741,19 @@ end_found
 ;-------------------------------
 .proc TypeLine4x4 ;
 ;-------------------------------
-    ;this routine prints line ending with $ff
-    ;address in LineAddress4x4 (it is the same as `temp`)
+    ;this routine prints line of length `fx`
+    ;address in LineAddress4x4
     ;starting from LineXdraw, LineYdraw
 
-    lda #$ff
+    lda #14 ; default length of 4x4 texts
+    sta fx
+
+variableLength
+    lda #$ff  ; $ff - visible characters, $00 - clearing
 
 staplot4x4color
     sta plot4x4color
-
+noLengthNoColor
 
     ldy #0
     sty LineCharNr
@@ -1768,19 +1761,17 @@ staplot4x4color
 TypeLine4x4Loop
     ldy LineCharNr
 
-    ;mwa LineAddress4x4 temp  ; LineAddress4x4 === temp
-    lda (temp),y
-    cmp #$ff
-    beq EndOfTypeLine4x4
-
+    lda (LineAddress4x4),y
+    and #$3f ;always CAPITAL letters
     sta CharCode4x4
     mwa LineXdraw dx
     mva LineYdraw dy
 	mva #0 dy+1  ;	dy is 2 bytes value
     jsr PutChar4x4 ;type empty pixels as well!
     adw LineXdraw #4
-    inc LineCharNr
-    jmp TypeLine4x4Loop
+    inc:lda LineCharNr
+    cmp fx
+    bne TypeLine4x4Loop
 
 EndOfTypeLine4x4
     rts
@@ -2005,10 +1996,6 @@ TankNameCopyLoop
     ;it means |
     mva #$3 ResultLineBuffer+13
 
-
-    ;it means end of line
-    mva #$ff ResultLineBuffer+14
-
     ;result line display
     mwa #ResultLineBuffer LineAddress4x4
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
@@ -2074,8 +2061,9 @@ FinishResultDisplay
     mva #0 COLOR1
 	sta COLBAKS	; set color of background
 	sta CreditsVScrol
+	sta JoystickNumber	; set joystick port for player
     mva #TextForegroundColor COLOR2
-    VDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
+    SetDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
 	; make text and color lines for each tank
     ldx NumberOfPlayers  ;we start from the highest (best) tank
     dex   ;and it is the last one
@@ -2357,6 +2345,9 @@ EndOfCredits
     ;displaying name of the defence weapon (if active)
     ;---------------------
 	lda AutoDefenseFlag,x	; Auto Defense symbol (space or "A" in inverse)
+	bpl @+
+	lda #$5e	; Auto Defense symbol
+@
 	sta statusBuffer+80+21
     lda #$08 ; (
     sta statusBuffer+80+22
@@ -2518,7 +2509,7 @@ AngleDisplay
 .proc PutTankNameOnScreen
 ; puts name of the tank on the screen
     ldy #$00
-    lda tanknr
+    lda TankNr
     asl
     asl
     asl ; 8 chars per name

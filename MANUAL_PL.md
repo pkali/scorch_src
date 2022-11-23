@@ -26,7 +26,7 @@ Wybór opcji klawiszami kursora lub joystickiem.
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
 ## 2. Wprowadzanie nazwy graczy i wybór poziomu graczy sterowanych przez komputer
-Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje). Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
+Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje). Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz. Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
 Po naciśnięciu klawisza [RETURN] lub krótkim naciśnięciu przycisku Joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla wszystkich.
 Nazwę gracza można wprowadzać także przy pomocy joysticka. Po wciśnięciu i przytrzymaniu przycisku ponad 1s. za pomocą ruchów góra/dół można zmienić wprowadzaną literę, a lewo/prawo jej pozycję w nazwie. Puszczenie przycisku kończy wprowadzanie nazwy i wraca do wyboru poziomu.
 
@@ -52,7 +52,7 @@ W linii statusowej widoczna jest informacja o tym który z graczy aktualnie moż
 * ustawiona przez gracza siła strzału (maksymalna siła strzału jest ograniczana przez energię gracza - nie może przekroczyć energii * 10 . Oznacza to, że mając małą ilość energii możemy oddać słabsze strzały
 * numer aktualnej rundy rozgrywki
 * prędkość i kierunek wiatru
-* symbol "A" jeśli aktywna jest **Auto Defense**
+* symbol "komputera" jeśli aktywna jest **Auto Defense**
 * w nawiasie nazwę aktywnej broni defensywnej - jeśli jest jakaś aktywowana przez gracza
 
 Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana kąta nachylenia lufy, góra/dół - zmiana ustawienia siły strzału.
@@ -172,7 +172,7 @@ Tylko te punkty decydują o kolejności w podsumowaniu
 * **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się ale tylko przy niewielkim przysypaniu ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej dezaktywować).
 * **Lazy Boy** - nie jest to właściwie broń defensywna. Jest to wspomaganie celowania. Po jej aktywacji czołg stara się wycelować w najbliższego przeciwnika i automatycznie ustawia siłę strzału oraz kąt. W przypadku posiadania zbyt małej ilości energii może czasem wycelować źle (do celowania stosuje metodę taką jak **Cyborg**). Tak jak **Battery** nie dezaktywuje innych broni defensywnych w przypadku jej użycia. Uwaga! Nie ma sensu aktywacja tej broni przed rundą, celowanie nie odbędzie się bo nie ma jeszcze do czego celować.
 * **Lazy Darwin** - działa dokładnie jak **Lazy Boy** ale celuje w najsłabszego przeciwnika.
-* **Auto Defense** - włącza tryb automatycznej aktywacji broni defensywnych. Po jej aktywowaniu czołg automatycznie aktywuje najmocniejszą posiadaną osłonę (zużywając ją oczywiście) w każdej chwili, kiedy nie ma żadnej osłony (także pomiędzy strzałami innych graczy). Jednocześnie jeżeli poziom energii czołgu spadnie poniżej 30 jednostek, automatycznie aktywuje **Battery** jeżeli ją posiada. Ta broń pozostaje aktywna do końca rundy i jest sygnalizowana literą "A" przed nazwą aktywnej broni defensywnej w linii statusowej. Jest to druga broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
+* **Auto Defense** - włącza tryb automatycznej aktywacji broni defensywnych. Po jej aktywowaniu czołg automatycznie aktywuje najmocniejszą posiadaną osłonę (zużywając ją oczywiście) w każdej chwili, kiedy nie ma żadnej osłony (także pomiędzy strzałami innych graczy). Jednocześnie jeżeli poziom energii czołgu spadnie poniżej 30 jednostek, automatycznie aktywuje **Battery** jeżeli ją posiada. Ta broń pozostaje aktywna do końca rundy i jest sygnalizowana symbolem "komputera" przed nazwą aktywnej broni defensywnej w linii statusowej. Jest to druga broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 * **Spy Hard** - Pomoc dla zapominalskich :) . Po aktywacji pokazuje kolejno podgląd informacji o kolejnych przeciwnikach. Lewo/Prawo - zmienia "szpiegowany" czołg. Fire/Space/Return/Esc - kończy "szpiegowanie". Jest to ostatnia broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 
 W związku z odmiennym działaniem broni **MIRV**, bronie defensywne **Bouncy Castle** i **Mag Deflector** wykorzystują tylko funkcję osłony przy trafieniu tą bronią. Dodatkowo głowice **MIRV** w czasie opadania nie odbijają się i nie przelatują przez ściany boczne!
@@ -187,8 +187,7 @@ Oczywiście aktywacja broni w momencie kiedy mamy już aktywowaną jakąś inną
 
 ## 7. Bronie 'inne' :) :
 
-* **Buy me!** - tej 'broni' nie można używać w rozgrywce. Jej zakup powoduje wylosowanie jednej z broni ofensywnych lub (rzadziej) defensywnych i dodanie jej do arsenału gracza. Jest to loteria w której można stracić (jeśli wylosuje się broń tańsza niż cena **Buy Me!** ale też zyskać. Jeśli wylosuje się broń dużo droższa możemy otrzymać do dyspozycji broń, na którą nie było nas stać!
-
+* **Best F...g Gifts** - tej 'broni' nie używa śię w rozgrywce. Jej zakup powoduje wylosowanie jednej z broni ofensywnych lub (rzadziej) defensywnych i dodanie jej do arsenału gracza. Jest to loteria w której można stracić (jeśli wylosuje się broń tańsza niż cena **Best F...g Gifts** ale też zyskać. Jeśli wylosuje się broń dużo droższa możemy otrzymać do dyspozycji broń, na którą nie było nas stać! Istnieje niewielkie prawdopodobieństwo wylosowania przez **Best F...g Gifts** samej siebie :). Można wtedy spróbować użyć jej w walce.
 
 ## 8. Poziomy trudności przeciwników sterowanych przez komputer:
 
