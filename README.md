@@ -51,6 +51,28 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.20
+2022-11-23
+
+It's the final cut. Director's Cut.
+We squeezed the code and saved some bytes to add the joystick/controller selection. No more fights for the stick, up to 4 players can have fun with their own manipulators. And the fifth one can still use the keyboard :).
+Our most prolific testers Arek and Alex called for a number of fixes. Thank you, guys!
+* Players can select their controllers.
+* Better Auto Defense symbol in the status line.
+* Battery performance in AI and Auto Defense fixed.
+* More accurate and faster Laser.
+* Boost For Gifts includes a secret, quite powerful weapon.
+* Points counting fix-up (edge cases eliminated).
+* Long lists in inventory and shop were pointing to a weapon outside the screen. Fixed.
+* Lazy Boys now remember the last weapon used.
+* Especially for XEGS - SELECT key changes the joystick similarly to TAB.
+* Rare P/M glitches fixed.
+* ExplosionRange variable glitched (rarely) due to byte/word mix-up. Fixed.
+* Bouncy Castle was bouncing the laser from inside. Fixed.
+* Shielded tanks were autodestructing when shooting with angle 0. Fixed.
+* Physics of bouncing off the walls was incorrect for some weapons. Fixed.
+
+
 ###### Version 1.19
 2022-11-04
 
