@@ -70,6 +70,7 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 | [O] | [3] | end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the [ESC] key with the difference that the summary and credits are displayed. |
 | [START] + [OPTION] | N/A | immediately force the end of the game (Game Over), just like [O] but without confirmation.
 | [ESC] | [*] | during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the [ESC] key, which allows you to abort the game and return to the beginning (of course, there is protection against accidental pressing). |
+| [Y] | [1] | when asked to abort or terminate the game - confirmation |
 
 ## 5. Game mechanics - offensive weapons
 
