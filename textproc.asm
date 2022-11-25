@@ -1162,9 +1162,13 @@ LastNameChar
 CheckKeys
 	ldx TankNr
 	lda JoyNumber,x
-    tax
-	lda digits+1,x
-    sta NameScreen2+12	
+    tay
+	lda digits+1,y
+    sta NameScreen2+12	; display joystick port number
+	lda TankShape,x
+    tay
+	lda digits+1,y
+    sta NameScreen2+14	; display tank shape number	
 	jsr CursorDisplay
     jsr getkey
     bit escFlag
@@ -1223,13 +1227,16 @@ FirstChar
     lda #0
     sta NameAdr,x
     jmp CheckKeys
+;----
 ChangeOfJoyUp
 	ldx TankNr
 	inc JoyNumber,x
 	lda JoyNumber,x
 	and #%00000011	; max 4 joysticks
 	sta JoyNumber,x
+	beq ChangeOfShapeUp	; change tank shape
     jmp CheckKeys
+;----
 ChangeOfLevelUp ; change difficulty level of computer opponent
     inc:lda DifficultyLevel
     cmp #9  ; 9 levels are possible
@@ -1266,6 +1273,16 @@ ChangeOfLevel3Down
 @
     jsr HighlightLevel
     jmp CheckKeys
+;----
+ChangeOfShapeUp
+	ldx TankNr
+	inc TankShape,x
+	lda TankShape,x
+	cmp #$03
+	bne @+
+	lda #$00
+	sta TankShape,x
+@	jmp CheckKeys
 ;----
 EndOfNick
 	; now check long press joy button (or Return...)

@@ -638,8 +638,10 @@ No6thTankHide
     jmp DoNotDrawTankNr
 SkipHidingPM
 
-
+	lda TankShape,x
+	tax
 	ldy TankShapesTable,x
+	ldx TankNr
     lda AngleTable,x
 	cmp #91		; left or right tank shape
 	bcs LeftTank

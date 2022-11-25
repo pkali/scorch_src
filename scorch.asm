@@ -1109,6 +1109,15 @@ deletePtr = temp
       cpw deletePtr #variablesEnd
     bne @-
 
+		; ser initial shapes for each tank (tanks 0-5 has shape 0 now)
+	ldy #1
+	sty TankShape+1
+	sty TankShape+4
+	iny
+	sty TankShape+2
+	sty TankShape+5
+	
+
     mwa #1024 RandBoundaryHigh
     mva #$ff LastWeapon
     sta HowMuchToFall
