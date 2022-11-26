@@ -902,9 +902,7 @@ ExplodeNow
 .proc checkRollDirection
 ; check rolling direction (for roller and other rolling weapons)
     ldy #0
-    mwa #mountaintable tempXROLLER
-
-    adw tempXROLLER xdraw
+    adw xdraw #mountaintable tempXROLLER
     lda (tempXROLLER),y
     sta ydraw
 	sty ydraw+1
@@ -935,8 +933,7 @@ HowMuchToFallLeft
     bcs GoRightNow
     mva #1 HowMuchToFall
 GoRightNow
-    mwa #mountaintable tempXROLLER
-    adw tempXROLLER xdraw
+    adw xdraw #mountaintable tempXROLLER
 SeekRight
 	cpw tempXROLLER #(mountaintable+screenwidth)
     beq HowMuchToFallKnown	; "stop" if we have on left end

@@ -171,6 +171,7 @@ FirstZpageVariable = $61
         _del   = $fc  ;$0c ;not used in 5200
         _M     = $0d
         _S     = $0e
+		_atari = $fd  ; not used in 5200
         _none = $0f
 
       .ende */
@@ -1739,14 +1740,20 @@ notpressedJoyGetKey
 	;fire
 	lda STRIG0
  	beq JoyButton
-	.IF TARGET = 800	; Select key only on A800
+	.IF TARGET = 800	; Select and Option key only on A800
 	bne checkSelectKey
 checkSelectKey
 	lda CONSOL
-	and #%00000010
+	and #%00000010	; Select
+	beq SelectPressed
+	lda CONSOL
+	and #%00000100	; Option	
 	.ENDIF
     bne @-
 OptionPressed
+	lda #@kbcode._atari	; Option key
+	bne getkeyend	
+SelectPressed
 	lda #@kbcode._tab	; Select key
 	bne getkeyend
 JoyButton

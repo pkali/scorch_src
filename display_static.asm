@@ -178,7 +178,7 @@ OptionsDL
         :maxOptions-1 .by $02,$10
 		:(9-maxOptions) .by $70,$10
 		.byte $80
-		.byte $70  ; to match moved sprites
+		.byte $60  ; to match moved sprites
         .byte $4f
         .word (display+140*40)
         :21 .by $0f                     ;76

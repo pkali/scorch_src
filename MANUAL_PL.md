@@ -26,7 +26,10 @@ Wybór opcji klawiszami kursora lub joystickiem.
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
 ## 2. Wprowadzanie nazwy graczy i wybór poziomu graczy sterowanych przez komputer
-Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje). Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz. Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
+Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje).
+Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz.
+Klawisz [INVERSE] lub [OPTION] umożliwiają wybór jednego z 3 dostępnych kształtów czołgów. Na konsoli Atari 5200 uzyskuje się to poprzez cykliczne wybieranie kolejnych portów joysticka klawiszem [5].
+Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
 Po naciśnięciu klawisza [RETURN] lub krótkim naciśnięciu przycisku Joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla wszystkich.
 Nazwę gracza można wprowadzać także przy pomocy joysticka. Po wciśnięciu i przytrzymaniu przycisku ponad 1s. za pomocą ruchów góra/dół można zmienić wprowadzaną literę, a lewo/prawo jej pozycję w nazwie. Puszczenie przycisku kończy wprowadzanie nazwy i wraca do wyboru poziomu.
 

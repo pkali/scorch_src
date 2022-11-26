@@ -1164,7 +1164,7 @@ CheckKeys
 	lda JoyNumber,x
     tay
 	lda digits+1,y
-    sta NameScreen2+12	; display joystick port number
+    sta NameScreen2+11	; display joystick port number
 	lda TankShape,x
     tay
 	lda digits+1,y
@@ -1208,6 +1208,8 @@ CheckFurtherX01 ; here we check Tab, Return and Del
     beq ChangeOfLevel3Up
     cmp #@kbcode._up  ; $e ;cursor up
     beq ChangeOfLevel3Down
+	cmp #@kbcode._atari	; atari (inverse) key
+	jeq ChangeOfShapeUp
 
     cmp #@kbcode._del  ; $34 ; Backspace (del)
     bne CheckKeys
@@ -1234,7 +1236,9 @@ ChangeOfJoyUp
 	lda JoyNumber,x
 	and #%00000011	; max 4 joysticks
 	sta JoyNumber,x
-	beq ChangeOfShapeUp	; change tank shape
+	.IF TARGET = 5200
+		beq ChangeOfShapeUp	; change tank shape
+	.ENDIF
     jmp CheckKeys
 ;----
 ChangeOfLevelUp ; change difficulty level of computer opponent
