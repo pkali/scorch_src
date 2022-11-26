@@ -928,10 +928,10 @@ SeekLeft
 .nowarn    dew tempXROLLER
     lda (tempXROLLER),y    ;fukk! beware of Y value
     cmp HeightRol
-    bne HowMuchToFallLeft
+    ;bne HowMuchToFallLeft
 HowMuchToFallLeft
     bcs GoRightNow
-    mva #1 HowMuchToFall
+	mva #1 HowMuchToFall
 GoRightNow
     adw xdraw #mountaintable tempXROLLER
 SeekRight
@@ -940,7 +940,7 @@ SeekRight
     inw tempXROLLER
     lda (tempXROLLER),y
     cmp HeightRol
-    bne HowMuchToFallRight
+    ;bne HowMuchToFallRight
 HowMuchToFallRight
     ; check if up or down
     bcs HowMuchToFallKnown
@@ -1051,6 +1051,7 @@ UpNotYet2
 	lda xdraw
 	and xdraw+1
 	cmp #$ff ; like cpw xdraw #$ffff
+	;ora xdraw+1 ; like cpw xdraw #$0000
     jne RollinContinuesLiquid
     beq FillNow
 HowMuchToFallRight3
@@ -1062,7 +1063,7 @@ FillNow
     ldy #0
 	lda HowMuchToFall
 	bmi FillHole
-	cmp#1
+	cmp #1
 	beq FillLeft
 	inw xdraw
 	inw xdraw	; tricky but we must rollback xdraw in proper direction
