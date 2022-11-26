@@ -1972,7 +1972,7 @@ noingame
     icl 'artwork/talk.asm'
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
+    ins 'artwork/tanksv3.fnt',+0,384	; 48 characters only
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62

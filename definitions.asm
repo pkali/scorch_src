@@ -37,7 +37,8 @@ char_sandhog_________ = $0c
 char_sandhog_offset = char_sandhog_________ - char_digger__________
 char_tank1___________ = $20
 char_tank2___________ = $24
-char_tank3___________ = $28
+char_tank3___________ = $2c
+char_tank4___________ = $28	; robotank shape
 
 ;Weapon prices (*10 on screen)
 price_Baby_Missile___ =    0  ;_00

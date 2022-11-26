@@ -1120,7 +1120,6 @@ NoArrowDown
     sta difficultyLevel
 	lda digits+1,x
     sta NameScreen2+7
-    jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 
     ; clear tank name editor field - not necessary
 ;    ldx #8
@@ -1154,12 +1153,9 @@ LastNameChar
 	beq @+
 	iny
 @	sty PositionInName
-;	lda NameAdr,y
-;    ora #$80 ; place cursor on the end
-;    sta NameAdr,y
-
 
 CheckKeys
+    jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 	ldx TankNr
 	lda JoyNumber,x
     tay
@@ -1247,7 +1243,6 @@ ChangeOfLevelUp ; change difficulty level of computer opponent
     bne DoNotLoopLevelUp
     mva #$0 DifficultyLevel
 DoNotLoopLevelUp
-    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevelDown
@@ -1255,7 +1250,6 @@ ChangeOfLevelDown
     bpl DoNotLoopLevelDown
     mva #$8 DifficultyLevel
 DoNotLoopLevelDown
-    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevel3Up
@@ -1267,7 +1261,6 @@ ChangeOfLevel3Up
     sbb DifficultyLevel #9
 
 DoNotLoopLevel3Up
-    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevel3Down
@@ -1275,7 +1268,6 @@ ChangeOfLevel3Down
     bpl @+
       adb DifficultyLevel #9
 @
-    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfShapeUp
@@ -1307,6 +1299,10 @@ ShortJoyPress
     ldx tanknr
     lda DifficultyLevel
     sta skilltable,x
+	beq NotRobot
+	lda #$03	; shape for robotanks
+	sta TankShape,x
+NotRobot
     ; storing name of the tank in the right space
     ; (without cursor!)
     ldy #$00
