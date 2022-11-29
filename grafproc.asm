@@ -1362,6 +1362,9 @@ NoClearTanks
     adw RangeLeft #mountaintable temp
     adw RangeLeft #mountaintable2 tempor2
 
+    cpw xdraw RangeRight
+	jcs NothingToFall
+
 NextColumn1
     mwa #0 ydraw
 NextPoint1
@@ -1450,6 +1453,7 @@ ColumnIsReady
     jeq MainFallout2
 ; now correct heights are in the mountaintable
     sta color	; Pozor! :)  we know - now A=1
+NothingToFall
     mva #sfx_silencer sfx_effect
 	jsr DrawTanks
     rts
