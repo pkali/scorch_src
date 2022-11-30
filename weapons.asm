@@ -102,11 +102,13 @@ CheckNextTankBFG
     mva #17 ExplosionRadius
     jsr xmissile
 
-    ; soil must fall down now! there is no other way...
+	jsr SecondRepeat
+	
+/*    ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
     jsr SoilDown2
 
-    ; it looks like force is divided by 4 here BUT"
+     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
     ; so, we have Force divided by 2 here (not accurately)
     lsr Force+1
@@ -123,8 +125,9 @@ CheckNextTankBFG
     mva #15 ExplosionRadius
     jsr CalculateExplosionRange0
     mva #sfx_baby_missile sfx_effect
-    jsr xmissile.NoRangeCalc
+    jsr xmissile.NoRangeCalc */
 
+SecondRepeat
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
     jsr SoilDown2
@@ -142,7 +145,7 @@ CheckNextTankBFG
     jsr Flight
     lda HitFlag
     beq EndOfLeapping
-    mva #13 ExplosionRadius
+    mva #14 ExplosionRadius
     jsr CalculateExplosionRange0
     mva #sfx_baby_missile sfx_effect
     jmp xmissile.NoRangeCalc

@@ -110,7 +110,14 @@ OptionsNoRight
     cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
     jmp OptionsFinished
+	
 OptionsNoReturn
+	cmp #@kbcode._tab	; Tab key
+	bne OptionsNoTab
+	lda Gradient
+	eor #$80
+	sta Gradient
+OptionsNoTab
     jmp OptionsMainLoop
 
 OptionsFinished

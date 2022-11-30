@@ -26,8 +26,9 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $61
+FirstZpageVariable = $60
     .zpvar DliColorBack		.byte = FirstZpageVariable
+	.zpvar Gradient			.byte
 	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -1180,16 +1181,18 @@ MakeTanksVisible
 	phy
 	ldy dliCounter
 	lda dliColorsBack,y
-	nop
-	nop
-	nop
-    .IF TARGET = 800
-	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
-		nop
-    .ENDIF
+	bit Gradient
+	bmi GoGradient
+	ldy #$ff
+GoGradient
+	iny
+;    .IF TARGET = 800
+;	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+;		nop
+;    .ENDIF
     sta COLPF1
-;	lda dliColorsFore,y		; mountains colors array
-	lda dliColorsFore		; one mauntain color
+	lda dliColorsFore,y		; mountains colors array
+;	lda dliColorsFore		; one mauntain color
 	sta COLPF2
 	inc dliCounter
 	;ldy dliY
@@ -1226,8 +1229,11 @@ MakeTanksVisible
 ;	lda dliColorsBack
 	lda #0
     sta COLPF1
+	lda dliColorsFore+1
+	bit Gradient
+	bmi @+
 	lda dliColorsFore
-	sta COLPF2
+@	sta COLPF2
     pla
     rti
 .endp

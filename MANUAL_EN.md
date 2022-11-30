@@ -24,6 +24,8 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
+The [TAB] key, and on the Atari 5200 console the [5] controller key change the color of the mountains.
+
 The [RETURN] key or a joystick button moves to the next screen.
 
 ## 2. Entering the name of players and selecting the level of computer-controlled players
