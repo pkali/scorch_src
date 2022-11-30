@@ -1186,10 +1186,10 @@ MakeTanksVisible
 	ldy #$ff
 GoGradient
 	iny
-;    .IF TARGET = 800
-;	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
+    .IF TARGET = 800
+	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
 ;		nop
-;    .ENDIF
+    .ENDIF
     sta COLPF1
 	lda dliColorsFore,y		; mountains colors array
 ;	lda dliColorsFore		; one mauntain color

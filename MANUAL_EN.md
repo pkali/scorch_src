@@ -135,7 +135,7 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Missile | 136 |
 | Baby Nuke | 200 |
 | Nuke | 240 |
-| LeapFrog| 136 120 104 |
+| LeapFrog| 136 112 112 |
 | Funky Bomb | 168 88 (* 5) |
 | MIRV | 136 (* 5) |
 | Death's Head | 240 (* 5) |

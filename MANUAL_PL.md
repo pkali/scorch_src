@@ -134,7 +134,7 @@ A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli br
 | Missile | 136 |
 | Baby Nuke | 200 |
 | Nuke | 240 |
-| LeapFrog| 136 120 104 |
+| LeapFrog| 136 112 112 |
 | Funky Bomb | 168 88 (* 5) |
 | MIRV | 136 (* 5) |
 | Death's Head | 240 (* 5) |
