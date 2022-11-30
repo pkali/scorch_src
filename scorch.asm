@@ -1178,29 +1178,33 @@ MakeTanksVisible
 	rts
 .endp
 ;--------------------------------------------------
-/* .proc DLIinterruptGraph
+.proc DLIinterruptGraph
     ;sta dliA
 	;sty dliY
 	pha
 	phy
 	ldy dliCounter
 	lda dliColorsBack,y
-	ldy dliColorsFore
+	nop
+	nop
+	nop
     .IF TARGET = 800
 	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
-        nop
+		;nop
     .ENDIF
     sta COLPF1
-	sty COLPF2
+;	lda dliColorsFore,y		; mountains colors array
+	lda dliColorsFore		; one mauntain color
+	sta COLPF2
 	inc dliCounter
 	;ldy dliY
     ;lda dliA
     ply
     pla
     rti
-.endp */
+.endp
 
-.proc DLIinterruptGraph
+/* .proc DLIinterruptGraph
 	pha
 	lda dliColorsFore
 	nop
@@ -1218,7 +1222,7 @@ MakeTanksVisible
 	sta DliColorBack
     pla
     rti
-.endp
+.endp */
 ;--------------------------------------------------
 .proc DLIinterruptOptions
     ;sta dliA

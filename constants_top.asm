@@ -14,7 +14,9 @@ TankShapesTable         .BYTE char_tank1___________
 dliColorsBack
     :10 .by $02,$00
 dliColorsFore
-    .by $0a
+    .by $0a											; one mountains color
+;	.by $0e,$0c,$0c,$0b,$0b,$0a,$0a,$09,$09,$08		; mountains colors array
+;	.by $08,$08,$07,$07,$07,$06,$06,$06,$06,$05
 CashOptionL ;(one zero less than on the screen)
     .by 0,<200,<800,<1200,<2000
 CashOptionH   
