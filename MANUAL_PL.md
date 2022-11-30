@@ -23,7 +23,7 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz [TAB], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór.
+Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór.
 
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
