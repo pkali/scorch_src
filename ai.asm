@@ -22,8 +22,9 @@
     pha
     lda AIRoutines,y
     pha
-	jsr PrepareAIShoot
-	rts
+; 	it's no necessary - PrepareAIShoot is next proc :)
+;	jsr PrepareAIShoot
+;	rts
 .endp	
 ;----------------------------------------------
 .proc PrepareAIShoot 

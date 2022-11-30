@@ -208,7 +208,12 @@ TanksNamesDefault
     dta d"4th.Tank"
     dta d"5th.Tank"
     dta d"6th.Tank"
-	
+;-------------------------------------------------
+TankShapesTable         .BYTE char_tank1___________
+                        .BYTE char_tank2___________
+                        .BYTE char_tank3___________
+                        .BYTE char_tank4___________
+;-------------------------------------------------	
 WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Baby_Missile___
   .by >price_Missile________

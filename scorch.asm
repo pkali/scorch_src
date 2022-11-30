@@ -334,10 +334,7 @@ MainGameLoop
 
 	jsr CallPurchaseForEveryTank
 	mva #0 SpyHardFlag
-
-    ; issue #72 (glitches when switches)
 	jsr MakeDarkScreen
-
     bit escFlag
     bmi START
 
@@ -350,14 +347,14 @@ MainGameLoop
     bmi START
 	jvs GoGameOver
     
-    mva #0 TankNr  ; 
-    
     jsr SortSequence
+    
+    mva #0 TankNr  ; 
+	sta COLBAKS		; set background color to black
+	sta JoystickNumber	; set joystick port for player
     
     ; Hide all (easier than hide last ;) ) tanks
     jsr cleartanks	; A=0
-	sta COLBAKS		; set background color to black
-	sta JoystickNumber	; set joystick port for player
 
     ; here gains and losses should be displayed (dollars)
     ; finally we have changed our minds and money of players
@@ -370,6 +367,7 @@ MainGameLoop
     jsr DisplayResults
 
 	jsr DemoModeOrKey
+	jsr MakeDarkScreen
 
     ldx NumberOfPlayers
     dex
@@ -463,13 +461,10 @@ eskipzeroing
     lda GameIsOver
 	beq NoGameOverYet
 GoGameOver
-	jsr MakeDarkScreen
 	jsr GameOverScreen
     jmp START
 NoGameOverYet
     inc CurrentRoundNr
-    jsr MakeDarkScreen   ; issue #72
-    ; jsr RmtSongSelect  ; ?????
     mva #sfx_silencer sfx_effect
 
     jmp MainGameLoop
@@ -487,8 +482,8 @@ NoGameOverYet
 
     RmtSong song_ingame
 
-	jsr SetPMWidth
-	lda #0
+	jsr SetPMWidth	; A=0 !!!
+	;lda #0
 	sta AfterBFGflag	; reset BFG flag
 	sta COLOR2	; status line "off"
 	sta COLOR1
@@ -1190,7 +1185,7 @@ MakeTanksVisible
 	nop
     .IF TARGET = 800
 	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
-		;nop
+		nop
     .ENDIF
     sta COLPF1
 ;	lda dliColorsFore,y		; mountains colors array

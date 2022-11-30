@@ -7,10 +7,6 @@ TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
 ;TanksPMOrder   .BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
 TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94   ; Adam's order
 TanksPMOrder    .BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
-TankShapesTable         .BYTE char_tank1___________
-                        .BYTE char_tank2___________
-                        .BYTE char_tank3___________
-                        .BYTE char_tank4___________
 dliColorsBack
     :10 .by $02,$00
 dliColorsFore

@@ -2209,13 +2209,13 @@ ybarrel
 .endp
 ;--------------------------------------------------
 .proc SetPMWidth
+    lda #%01010101
+    sta sizem ; all missiles, double width
     lda #$00
     sta sizep0 ; P0-P3 widths
     sta sizep0+1
     sta sizep0+2
     sta sizep0+3
-    lda #%01010101
-    sta sizem ; all missiles, double width
     rts
 .endp
 
