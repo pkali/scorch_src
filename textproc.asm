@@ -329,11 +329,16 @@ GoToActivation
     tax
 NextChar03
     lda tanksnames,x
-    sta purchaseTextBuffer+8,y
+    sta purchaseTextBuffer+7,y
     inx
     iny
     cpy #$08
     bne NextChar03
+	; displaying number of active controller port
+	ldy JoystickNumber
+	lda digits+1,y
+	sta purchaseTextBuffer+17
+
     ; and we display cash of the given player
 
 ; here we must jump in after each purchase
@@ -1730,8 +1735,9 @@ DOTOldLowestValue
     sbw temp LineAddress4x4 temp2
     mva temp2 fx 
 
-    jsr Display4x4AboveTank
-    rts
+    ;jsr Display4x4AboveTank
+    ;rts
+	; POZOR !!!
 .endp
 
 ;--------------------------------------------------------
@@ -2322,6 +2328,10 @@ EndOfCredits
 .proc DisplayStatus
 ;-------------------------------------------------
 
+	; displaying number of active controller port
+	ldy JoystickNumber
+	lda digits+1,y
+	sta statusBuffer+17
     ;---------------------
     ;displaying symbol of the weapon
     ;---------------------
@@ -2332,7 +2342,7 @@ EndOfCredits
     ldx TankNr
     ldy ActiveWeapon,x
     lda WeaponSymbols,y
-    sta statusBuffer+18
+    sta statusBuffer+19
 
     ;---------------------
     ;displaying quantity of the given weapon
@@ -2340,7 +2350,7 @@ EndOfCredits
     lda ActiveWeapon,x
     jsr HowManyBullets
     sta decimal
-    mwa #statusBuffer+20 displayposition
+    mwa #statusBuffer+21 displayposition
     jsr displaybyte
 
     ;---------------------
@@ -2361,7 +2371,7 @@ EndOfCredits
     ldy #15
 @
       lda (temp),y
-      sta statusBuffer+23,y
+      sta statusBuffer+24,y
       dey
     bpl @-
 

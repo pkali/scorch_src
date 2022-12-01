@@ -52,6 +52,7 @@ Another [RETURN] key or joystick button press switches to the next player's shop
 
 The status line shows which player is currently allowed to take a shot and a set of other information:
 * player's tank name,
+* active joystick number
 * currently selected offensive weapon,
 * the player's remaining energy points and if he has an active defensive weapon that has its energy - in parentheses the energy level,
 * the angle and the direction of the barrel set by the player,

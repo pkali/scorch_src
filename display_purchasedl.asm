@@ -3,7 +3,7 @@
 .IF *>0 ;this is a trick that prevents compiling this file alone
 ;---------------------------------------------------
 purchaseTextBuffer
- dta d"Player:             Cash:      0"  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
+ dta d"Player:         *   Cash:      0"  ; ZERO TO MAKE YOU RICHER ON THE SCREEN
 
 ; DLs fragments (modified by game code)
 ; all Purchase DL :)
