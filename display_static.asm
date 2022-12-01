@@ -102,7 +102,15 @@ EmptyLine
  dta d"                                        "
 ;---------------------------------------------------
 OptionsTitle
+.IF TARGET = 800
  dta d"       scorch       "*
+.ELIF TARGET = 5200
+ dta d"     scorch "*
+ dta             d"5"
+ dta              d"k"*
+ dta               d"2"
+ dta                d"     "*
+.ENDIF
 DifficultyTitle
  dta d"   difficulty   "*
 PurchaseTitle

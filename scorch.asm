@@ -483,8 +483,8 @@ NoGameOverYet
 
     RmtSong song_ingame
 
-	jsr SetPMWidth	; A=0 !!!
-	;lda #0
+	jsr SetPMWidth	; A=0
+	lda #0
 	sta AfterBFGflag	; reset BFG flag
 	sta COLOR2	; status line "off"
 	sta COLOR1
