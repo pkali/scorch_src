@@ -2069,9 +2069,7 @@ MODULEND
     .ENDIF
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
-    .byte " scorch 5200  v"    ;20 characters title
-    build ;              "    "
-    .byte                    " "
+    .byte " scorch supersystem "    ;20 characters title
     .byte "7A"          ;2 characters year .. 1900 + $7A = 2020
     .word FirstSTART
   .ELSE

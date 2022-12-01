@@ -1176,7 +1176,7 @@ CheckKeys
 	lda TankShape,x
     tay
 	lda digits+1,y
-    sta NameScreen2+14	; display tank shape number	
+    sta NameScreen2+15	; display tank shape number	
 	jsr CursorDisplay
     jsr getkey
     bit escFlag
