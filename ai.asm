@@ -1027,7 +1027,7 @@ SorryNoPurchase
 ; choose the best weapon
 ; X - TankNr
 ;----------------------------------------------
-	ldy #last_offensive_____+1 ;the last weapon to choose +1	
+	ldy #last_offensive_____-1 ;the last weapon to choose +1	(ind_Dirt_Charge____ - not Laser :) )
 NotFromAll	
 ; Y - the last offensive weapon to use + 1
 	lda TanksWeaponsTableL,x
