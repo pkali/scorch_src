@@ -67,7 +67,7 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 | A800 | 5200 | function |
 | --- | --- | --- |
 | [SPACE] | [0] | or joystick button pressed briefly - firing a shot. |
-| [TAB] or [SELECT] | [5] | selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory) |
+| [TAB] or [SELECT] | [5] | selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory). In the main menu it changes the mountain shading, indicated by the hill color change at the bottom of the screen. |
 | [I] | [9] | or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon. |
 | [A] or [OPTION] | [7] | go directly to the defensive weapons activation.
 | [M] | [PAUSE] | disable/enable background music. |

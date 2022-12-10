@@ -51,6 +51,18 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.21
+2022-12-10
+
+We couldn't resist! This is the Senior Executive Director's Cut.
+By virtue of byte misering we squeezed in a few new features:
+* new selectable tank shapes - change the controller enough times to get a different tank model
+* lonely bad pixel after Liquid Dirt fixed
+* mountain colors (or shades) possible, switch with [Tab] in the main menu
+* active controller number display in the game, store, and inventory screens
+* a very special terminator mode for Moron
+
+
 ###### Version 1.20
 2022-11-23
 

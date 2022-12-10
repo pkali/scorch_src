@@ -66,7 +66,7 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 | A800 | 5200 | funkcja |
 | --- | --- | --- |
 | [SPACJA] | [0] | lub przycisk joysticka naciśnięte krótko - oddanie strzału |
-| [TAB] lub [SELECT] | [5] | wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory) |
+| [TAB] lub [SELECT] | [5] | wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory). W głównym menu zmienia cieniowanie gór, widoczne w kolorze górek na dole ekranu. |
 | [I] | [9] | lub dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną. |
 | [A] lub [OPTION] | [7] | bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych. |
 | [M] | [PAUSE] | wyłączenie/włączenie muzyki w tle |
