@@ -23,10 +23,15 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
+Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór.
+
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
 ## 2. Wprowadzanie nazwy graczy i wybór poziomu graczy sterowanych przez komputer
-Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje). Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz. Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
+Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje).
+Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz.
+Klawisz [INVERSE] lub [OPTION] umożliwiają wybór jednego z 3 dostępnych kształtów czołgów. Na konsoli Atari 5200 uzyskuje się to poprzez cykliczne wybieranie kolejnych portów joysticka klawiszem [5].
+Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
 Po naciśnięciu klawisza [RETURN] lub krótkim naciśnięciu przycisku Joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla wszystkich.
 Nazwę gracza można wprowadzać także przy pomocy joysticka. Po wciśnięciu i przytrzymaniu przycisku ponad 1s. za pomocą ruchów góra/dół można zmienić wprowadzaną literę, a lewo/prawo jej pozycję w nazwie. Puszczenie przycisku kończy wprowadzanie nazwy i wraca do wyboru poziomu.
 
@@ -46,6 +51,7 @@ Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu zakupów następneg
 
 W linii statusowej widoczna jest informacja o tym który z graczy aktualnie może oddać strzał oraz zestaw innych informacji:
 * nazwa czołgu gracza
+* numer aktywnego joysticka
 * wybrana aktualnie broń ofensywna
 * pozostała ilość punktów energii gracza i jeśli ma on aktywną broń defensywną posiadającą swój zasób energii - w nawiasie ten zasób
 * ustawiony przez gracza kąt nachylenia lufy i kierunek jej nachylenia
@@ -60,7 +66,7 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 | A800 | 5200 | funkcja |
 | --- | --- | --- |
 | [SPACJA] | [0] | lub przycisk joysticka naciśnięte krótko - oddanie strzału |
-| [TAB] lub [SELECT] | [5] | wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory) |
+| [TAB] lub [SELECT] | [5] | wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory). W głównym menu zmienia cieniowanie gór, widoczne w kolorze górek na dole ekranu. |
 | [I] | [9] | lub dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną. |
 | [A] lub [OPTION] | [7] | bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych. |
 | [M] | [PAUSE] | wyłączenie/włączenie muzyki w tle |
@@ -129,7 +135,7 @@ A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli br
 | Missile | 136 |
 | Baby Nuke | 200 |
 | Nuke | 240 |
-| LeapFrog| 136 120 104 |
+| LeapFrog| 136 112 112 |
 | Funky Bomb | 168 88 (* 5) |
 | MIRV | 136 (* 5) |
 | Death's Head | 240 (* 5) |

@@ -110,7 +110,14 @@ OptionsNoRight
     cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
     jmp OptionsFinished
+	
 OptionsNoReturn
+	cmp #@kbcode._tab	; Tab key
+	bne OptionsNoTab
+	lda Gradient
+	eor #$80
+	sta Gradient
+OptionsNoTab
     jmp OptionsMainLoop
 
 OptionsFinished
@@ -322,11 +329,16 @@ GoToActivation
     tax
 NextChar03
     lda tanksnames,x
-    sta purchaseTextBuffer+8,y
+    sta purchaseTextBuffer+7,y
     inx
     iny
     cpy #$08
     bne NextChar03
+	; displaying number of active controller port
+	ldy JoystickNumber
+	lda digits+1,y
+	sta purchaseTextBuffer+17
+
     ; and we display cash of the given player
 
 ; here we must jump in after each purchase
@@ -1120,7 +1132,6 @@ NoArrowDown
     sta difficultyLevel
 	lda digits+1,x
     sta NameScreen2+7
-    jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 
     ; clear tank name editor field - not necessary
 ;    ldx #8
@@ -1154,17 +1165,18 @@ LastNameChar
 	beq @+
 	iny
 @	sty PositionInName
-;	lda NameAdr,y
-;    ora #$80 ; place cursor on the end
-;    sta NameAdr,y
-
 
 CheckKeys
+    jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
 	ldx TankNr
 	lda JoyNumber,x
-    tax
-	lda digits+1,x
-    sta NameScreen2+12	
+    tay
+	lda digits+1,y
+    sta NameScreen2+11	; display joystick port number
+	lda TankShape,x
+    tay
+	lda digits+1,y
+    sta NameScreen2+15	; display tank shape number	
 	jsr CursorDisplay
     jsr getkey
     bit escFlag
@@ -1204,6 +1216,8 @@ CheckFurtherX01 ; here we check Tab, Return and Del
     beq ChangeOfLevel3Up
     cmp #@kbcode._up  ; $e ;cursor up
     beq ChangeOfLevel3Down
+	cmp #@kbcode._atari	; atari (inverse) key
+	jeq ChangeOfShapeUp
 
     cmp #@kbcode._del  ; $34 ; Backspace (del)
     bne CheckKeys
@@ -1223,20 +1237,24 @@ FirstChar
     lda #0
     sta NameAdr,x
     jmp CheckKeys
+;----
 ChangeOfJoyUp
 	ldx TankNr
 	inc JoyNumber,x
 	lda JoyNumber,x
 	and #%00000011	; max 4 joysticks
 	sta JoyNumber,x
+	.IF TARGET = 5200
+		beq ChangeOfShapeUp	; change tank shape
+	.ENDIF
     jmp CheckKeys
+;----
 ChangeOfLevelUp ; change difficulty level of computer opponent
     inc:lda DifficultyLevel
     cmp #9  ; 9 levels are possible
     bne DoNotLoopLevelUp
     mva #$0 DifficultyLevel
 DoNotLoopLevelUp
-    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevelDown
@@ -1244,7 +1262,6 @@ ChangeOfLevelDown
     bpl DoNotLoopLevelDown
     mva #$8 DifficultyLevel
 DoNotLoopLevelDown
-    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevel3Up
@@ -1256,7 +1273,6 @@ ChangeOfLevel3Up
     sbb DifficultyLevel #9
 
 DoNotLoopLevel3Up
-    jsr HighlightLevel
     jmp CheckKeys
 ;----
 ChangeOfLevel3Down
@@ -1264,8 +1280,17 @@ ChangeOfLevel3Down
     bpl @+
       adb DifficultyLevel #9
 @
-    jsr HighlightLevel
     jmp CheckKeys
+;----
+ChangeOfShapeUp
+	ldx TankNr
+	inc TankShape,x
+	lda TankShape,x
+	cmp #$03
+	bne @+
+	lda #$00
+	sta TankShape,x
+@	jmp CheckKeys
 ;----
 EndOfNick
 	; now check long press joy button (or Return...)
@@ -1286,6 +1311,10 @@ ShortJoyPress
     ldx tanknr
     lda DifficultyLevel
     sta skilltable,x
+	beq NotRobot
+	lda #$03	; shape for robotanks
+	sta TankShape,x
+NotRobot
     ; storing name of the tank in the right space
     ; (without cursor!)
     ldy #$00
@@ -1706,8 +1735,9 @@ DOTOldLowestValue
     sbw temp LineAddress4x4 temp2
     mva temp2 fx 
 
-    jsr Display4x4AboveTank
-    rts
+    ;jsr Display4x4AboveTank
+    ;rts
+	; POZOR !!!
 .endp
 
 ;--------------------------------------------------------
@@ -2298,6 +2328,10 @@ EndOfCredits
 .proc DisplayStatus
 ;-------------------------------------------------
 
+	; displaying number of active controller port
+	ldy JoystickNumber
+	lda digits+1,y
+	sta statusBuffer+17
     ;---------------------
     ;displaying symbol of the weapon
     ;---------------------
@@ -2308,7 +2342,7 @@ EndOfCredits
     ldx TankNr
     ldy ActiveWeapon,x
     lda WeaponSymbols,y
-    sta statusBuffer+18
+    sta statusBuffer+19
 
     ;---------------------
     ;displaying quantity of the given weapon
@@ -2316,7 +2350,7 @@ EndOfCredits
     lda ActiveWeapon,x
     jsr HowManyBullets
     sta decimal
-    mwa #statusBuffer+20 displayposition
+    mwa #statusBuffer+21 displayposition
     jsr displaybyte
 
     ;---------------------
@@ -2337,7 +2371,7 @@ EndOfCredits
     ldy #15
 @
       lda (temp),y
-      sta statusBuffer+23,y
+      sta statusBuffer+24,y
       dey
     bpl @-
 

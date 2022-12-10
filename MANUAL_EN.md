@@ -24,11 +24,16 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
+The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key change the color of the mountains.
+
 The [RETURN] key or a joystick button moves to the next screen.
 
 ## 2. Entering the name of players and selecting the level of computer-controlled players
 
-The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options). The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key allow you to choose which joystick port the player will use. At the same time, you can enter the name of the selected player from the keyboard.
+The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options).
+The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key allow you to choose which joystick port the player will use.
+The [INVERSE] or [OPTION] key allows you to select one of the 3 available tank shapes. On the Atari 5200 console, this is achieved by cycling through joystick ports with the [5] key.
+At the same time, you can enter the name of the selected player from the keyboard.
 When the [RETURN] key is pressed or the Joystick button is pressed briefly, the screen switches to the next player until the difficulty levels for each player are selected.
 The player's name can also be entered with the joystick. After pressing and holding the button for more than 1s. you can use up/down movements to change the letter being entered, and left/right movements to change its position in the name. Releasing the button ends the name entry and returns to the level selection.
 
@@ -47,6 +52,7 @@ Another [RETURN] key or joystick button press switches to the next player's shop
 
 The status line shows which player is currently allowed to take a shot and a set of other information:
 * player's tank name,
+* active joystick number
 * currently selected offensive weapon,
 * the player's remaining energy points and if he has an active defensive weapon that has its energy - in parentheses the energy level,
 * the angle and the direction of the barrel set by the player,
@@ -61,7 +67,7 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 | A800 | 5200 | function |
 | --- | --- | --- |
 | [SPACE] | [0] | or joystick button pressed briefly - firing a shot. |
-| [TAB] or [SELECT] | [5] | selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory) |
+| [TAB] or [SELECT] | [5] | selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory). In the main menu it changes the mountain shading, indicated by the hill color change at the bottom of the screen. |
 | [I] | [9] | or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon. |
 | [A] or [OPTION] | [7] | go directly to the defensive weapons activation.
 | [M] | [PAUSE] | disable/enable background music. |
@@ -130,7 +136,7 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Missile | 136 |
 | Baby Nuke | 200 |
 | Nuke | 240 |
-| LeapFrog| 136 120 104 |
+| LeapFrog| 136 112 112 |
 | Funky Bomb | 168 88 (* 5) |
 | MIRV | 136 (* 5) |
 | Death's Head | 240 (* 5) |

@@ -22,8 +22,9 @@
     pha
     lda AIRoutines,y
     pha
-	jsr PrepareAIShoot
-	rts
+; 	it's no necessary - PrepareAIShoot is next proc :)
+;	jsr PrepareAIShoot
+;	rts
 .endp	
 ;----------------------------------------------
 .proc PrepareAIShoot 
@@ -81,7 +82,10 @@ AIRoutines
     mwa #80 RandBoundaryLow
     mwa #800 RandBoundaryHigh 
     jsr RandomizeForce
-    rts
+	; choose the best weapon
+	ldy #ind_Buy_me_________+1	; if the cheat is active it will fire the BFG :)
+	jmp ChooseBestOffensive.NotFromAll
+    ;rts
 .endp
 ;----------------------------------------------
 .proc Shooter 
@@ -155,8 +159,8 @@ endo
 	
 	; choose the best weapon
 	
-	jsr ChooseBestOffensive
-    rts
+	jmp ChooseBestOffensive
+    ;rts
     .endp
 ;----------------------------------------------
 .proc Poolshark
@@ -196,9 +200,7 @@ forceNow
     ldx TankNr
     jsr RandomizeForce
 
-endo
-	;ldx TankNr ;this is possibly not necessary
-	
+endo	
 	; choose the best weapon
 	
 	jsr ChooseBestOffensive
@@ -1026,7 +1028,7 @@ SorryNoPurchase
 ; choose the best weapon
 ; X - TankNr
 ;----------------------------------------------
-	ldy #last_offensive_____+1 ;the last weapon to choose +1	
+	ldy #ind_Dirt_Charge____+1 ;the last weapon to choose +1	(not BFG or Laser :) )
 NotFromAll	
 ; Y - the last offensive weapon to use + 1
 	lda TanksWeaponsTableL,x

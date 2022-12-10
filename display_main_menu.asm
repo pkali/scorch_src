@@ -29,9 +29,9 @@ OptionsScreenEnd
 
 ;-----------------------------------------------
 NameScreen2
- dta d"  Tank 1  * 1   Name:"
+ dta d"  Tank 1  *1  +1  Name:"
 NameAdr
- dta                      d"           "
+ dta                      d"         "
 NameScreen4
  dta d" "
 NamesOfLevels

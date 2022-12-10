@@ -4,7 +4,7 @@
 
 statusBuffer
      ; 0123456789012345678901234567890123456789
- dta d"Player:                                 "
+ dta d"Player:         *                       "
  dta d"Energy:        Angle:        Force:     "
  dta d"Round:     Wind:                        "
 

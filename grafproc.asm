@@ -638,8 +638,10 @@ No6thTankHide
     jmp DoNotDrawTankNr
 SkipHidingPM
 
-
+	lda TankShape,x
+	tax
 	ldy TankShapesTable,x
+	ldx TankNr
     lda AngleTable,x
 	cmp #91		; left or right tank shape
 	bcs LeftTank
@@ -1360,6 +1362,9 @@ NoClearTanks
     adw RangeLeft #mountaintable temp
     adw RangeLeft #mountaintable2 tempor2
 
+    cpw xdraw RangeRight
+	jcs NothingToFall
+
 NextColumn1
     mwa #0 ydraw
 NextPoint1
@@ -1448,6 +1453,7 @@ ColumnIsReady
     jeq MainFallout2
 ; now correct heights are in the mountaintable
     sta color	; Pozor! :)  we know - now A=1
+NothingToFall
     mva #sfx_silencer sfx_effect
 	jsr DrawTanks
     rts
@@ -2203,13 +2209,13 @@ ybarrel
 .endp
 ;--------------------------------------------------
 .proc SetPMWidth
+    lda #%01010101
+    sta sizem ; all missiles, double width
     lda #$00
     sta sizep0 ; P0-P3 widths
     sta sizep0+1
     sta sizep0+2
     sta sizep0+3
-    lda #%01010101
-    sta sizem ; all missiles, double width
     rts
 .endp
 

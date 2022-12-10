@@ -2,17 +2,16 @@
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 
-TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
-;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4  ; standard order
 ;TanksPMOrder   .BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
-TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94   ; Adam's order
 TanksPMOrder    .BYTE 4,3,1,5,0,2 ; 0-3 = P0-P3 , 4 = M0+M1 , 5 = M2+M3
-TankShapesTable         .BYTE char_tank1___________,char_tank2___________,char_tank3___________
-                        .BYTE char_tank1___________,char_tank2___________,char_tank3___________
 dliColorsBack
     :10 .by $02,$00
 dliColorsFore
-    .by $0a
+    .by $0a											; one mountains color
+;	.by $0e,$0c,$0c,$0b,$0b,$0a,$0a,$09,$09,$08		; mountains colors array
+;	.by $08,$08,$07,$07,$07,$06,$06,$06,$06,$05
+	.by $0e,$0c,$0c,$0c,$0c,$0a,$0a,$0a,$0a,$08		; mountains colors array new
+	.by $08,$08,$08,$06,$06,$06,$06,$06,$06,$04
 CashOptionL ;(one zero less than on the screen)
     .by 0,<200,<800,<1200,<2000
 CashOptionH   

@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.20" ; number of this build (4 bytes)
+	dta d"1.21" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -26,8 +26,9 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $61
+FirstZpageVariable = $60
     .zpvar DliColorBack		.byte = FirstZpageVariable
+	.zpvar Gradient			.byte
 	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -171,6 +172,7 @@ FirstZpageVariable = $61
         _del   = $fc  ;$0c ;not used in 5200
         _M     = $0d
         _S     = $0e
+		_atari = $fd  ; not used in 5200
         _none = $0f
 
       .ende */
@@ -333,10 +335,7 @@ MainGameLoop
 
 	jsr CallPurchaseForEveryTank
 	mva #0 SpyHardFlag
-
-    ; issue #72 (glitches when switches)
 	jsr MakeDarkScreen
-
     bit escFlag
     bmi START
 
@@ -349,14 +348,14 @@ MainGameLoop
     bmi START
 	jvs GoGameOver
     
-    mva #0 TankNr  ; 
-    
     jsr SortSequence
+    
+    mva #0 TankNr  ; 
+	sta COLBAKS		; set background color to black
+	sta JoystickNumber	; set joystick port for player
     
     ; Hide all (easier than hide last ;) ) tanks
     jsr cleartanks	; A=0
-	sta COLBAKS		; set background color to black
-	sta JoystickNumber	; set joystick port for player
 
     ; here gains and losses should be displayed (dollars)
     ; finally we have changed our minds and money of players
@@ -369,6 +368,7 @@ MainGameLoop
     jsr DisplayResults
 
 	jsr DemoModeOrKey
+	jsr MakeDarkScreen
 
     ldx NumberOfPlayers
     dex
@@ -462,13 +462,10 @@ eskipzeroing
     lda GameIsOver
 	beq NoGameOverYet
 GoGameOver
-	jsr MakeDarkScreen
 	jsr GameOverScreen
     jmp START
 NoGameOverYet
     inc CurrentRoundNr
-    jsr MakeDarkScreen   ; issue #72
-    ; jsr RmtSongSelect  ; ?????
     mva #sfx_silencer sfx_effect
 
     jmp MainGameLoop
@@ -486,7 +483,7 @@ NoGameOverYet
 
     RmtSong song_ingame
 
-	jsr SetPMWidth
+	jsr SetPMWidth	; A=0
 	lda #0
 	sta AfterBFGflag	; reset BFG flag
 	sta COLOR2	; status line "off"
@@ -1109,6 +1106,15 @@ deletePtr = temp
       cpw deletePtr #variablesEnd
     bne @-
 
+		; ser initial shapes for each tank (tanks 0-5 has shape 0 now)
+	ldy #1
+	sty TankShape+1
+	sty TankShape+4
+	iny
+	sty TankShape+2
+	sty TankShape+5
+	
+
     mwa #1024 RandBoundaryHigh
     mva #$ff LastWeapon
     sta HowMuchToFall
@@ -1168,29 +1174,35 @@ MakeTanksVisible
 	rts
 .endp
 ;--------------------------------------------------
-/* .proc DLIinterruptGraph
+.proc DLIinterruptGraph
     ;sta dliA
 	;sty dliY
 	pha
 	phy
 	ldy dliCounter
 	lda dliColorsBack,y
-	ldy dliColorsFore
+	bit Gradient
+	bmi GoGradient
+	ldy #$ff
+GoGradient
+	iny
     .IF TARGET = 800
 	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
-        nop
+;		nop
     .ENDIF
     sta COLPF1
-	sty COLPF2
+	lda dliColorsFore,y		; mountains colors array
+;	lda dliColorsFore		; one mauntain color
+	sta COLPF2
 	inc dliCounter
 	;ldy dliY
     ;lda dliA
     ply
     pla
     rti
-.endp */
+.endp
 
-.proc DLIinterruptGraph
+/* .proc DLIinterruptGraph
 	pha
 	lda dliColorsFore
 	nop
@@ -1208,7 +1220,7 @@ MakeTanksVisible
 	sta DliColorBack
     pla
     rti
-.endp
+.endp */
 ;--------------------------------------------------
 .proc DLIinterruptOptions
     ;sta dliA
@@ -1217,8 +1229,11 @@ MakeTanksVisible
 ;	lda dliColorsBack
 	lda #0
     sta COLPF1
+	lda dliColorsFore+1
+	bit Gradient
+	bmi @+
 	lda dliColorsFore
-	sta COLPF2
+@	sta COLPF2
     pla
     rti
 .endp
@@ -1730,14 +1745,20 @@ notpressedJoyGetKey
 	;fire
 	lda STRIG0
  	beq JoyButton
-	.IF TARGET = 800	; Select key only on A800
+	.IF TARGET = 800	; Select and Option key only on A800
 	bne checkSelectKey
 checkSelectKey
 	lda CONSOL
-	and #%00000010
+	and #%00000010	; Select
+	beq SelectPressed
+	lda CONSOL
+	and #%00000100	; Option	
 	.ENDIF
     bne @-
 OptionPressed
+	lda #@kbcode._atari	; Option key
+	bne getkeyend	
+SelectPressed
 	lda #@kbcode._tab	; Select key
 	bne getkeyend
 JoyButton
@@ -1956,7 +1977,7 @@ noingame
     icl 'artwork/talk.asm'
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv3.fnt',+0,352	; 44 characters only
+    ins 'artwork/tanksv3.fnt',+0,384	; 48 characters only
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
@@ -2048,9 +2069,7 @@ MODULEND
     .ENDIF
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
-    .byte " scorch 5200  v"    ;20 characters title
-    build ;              "    "
-    .byte                    " "
+    .byte " scorch supersystem "    ;20 characters title
     .byte "7A"          ;2 characters year .. 1900 + $7A = 2020
     .word FirstSTART
   .ELSE

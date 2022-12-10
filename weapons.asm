@@ -102,11 +102,13 @@ CheckNextTankBFG
     mva #17 ExplosionRadius
     jsr xmissile
 
-    ; soil must fall down now! there is no other way...
+	jsr SecondRepeat
+	
+/*    ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
     jsr SoilDown2
 
-    ; it looks like force is divided by 4 here BUT"
+     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
     ; so, we have Force divided by 2 here (not accurately)
     lsr Force+1
@@ -123,8 +125,9 @@ CheckNextTankBFG
     mva #15 ExplosionRadius
     jsr CalculateExplosionRange0
     mva #sfx_baby_missile sfx_effect
-    jsr xmissile.NoRangeCalc
+    jsr xmissile.NoRangeCalc */
 
+SecondRepeat
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
     jsr SoilDown2
@@ -142,7 +145,7 @@ CheckNextTankBFG
     jsr Flight
     lda HitFlag
     beq EndOfLeapping
-    mva #13 ExplosionRadius
+    mva #14 ExplosionRadius
     jsr CalculateExplosionRange0
     mva #sfx_baby_missile sfx_effect
     jmp xmissile.NoRangeCalc
@@ -902,9 +905,7 @@ ExplodeNow
 .proc checkRollDirection
 ; check rolling direction (for roller and other rolling weapons)
     ldy #0
-    mwa #mountaintable tempXROLLER
-
-    adw tempXROLLER xdraw
+    adw xdraw #mountaintable tempXROLLER
     lda (tempXROLLER),y
     sta ydraw
 	sty ydraw+1
@@ -930,20 +931,19 @@ SeekLeft
 .nowarn    dew tempXROLLER
     lda (tempXROLLER),y    ;fukk! beware of Y value
     cmp HeightRol
-    bne HowMuchToFallLeft
+    ;bne HowMuchToFallLeft
 HowMuchToFallLeft
     bcs GoRightNow
-    mva #1 HowMuchToFall
+	mva #1 HowMuchToFall
 GoRightNow
-    mwa #mountaintable tempXROLLER
-    adw tempXROLLER xdraw
+    adw xdraw #mountaintable tempXROLLER
 SeekRight
 	cpw tempXROLLER #(mountaintable+screenwidth)
     beq HowMuchToFallKnown	; "stop" if we have on left end
     inw tempXROLLER
     lda (tempXROLLER),y
     cmp HeightRol
-    bne HowMuchToFallRight
+    ;bne HowMuchToFallRight
 HowMuchToFallRight
     ; check if up or down
     bcs HowMuchToFallKnown
@@ -1054,6 +1054,7 @@ UpNotYet2
 	lda xdraw
 	and xdraw+1
 	cmp #$ff ; like cpw xdraw #$ffff
+	;ora xdraw+1 ; like cpw xdraw #$0000
     jne RollinContinuesLiquid
     beq FillNow
 HowMuchToFallRight3
@@ -1065,7 +1066,7 @@ FillNow
     ldy #0
 	lda HowMuchToFall
 	bmi FillHole
-	cmp#1
+	cmp #1
 	beq FillLeft
 	inw xdraw
 	inw xdraw	; tricky but we must rollback xdraw in proper direction
@@ -1077,13 +1078,14 @@ FillHole
 	sta ydraw
 	beq ToHighFill	; if we filled all playfield (very rare but possible)
 	dec ydraw	; one pixel up
-ToHighFill
 	lda ydraw
     sta (tempXROLLER),y	;mountaintable update
 	mva #1 color
 	jsr plot.MakePlot
+ToHighFill
 .nowarn dew FillCounter
-	cpw FillCounter #0
+	lda FillCounter
+	ora FillCounter+1
 	jne RepeatFill
     rts
 .endp

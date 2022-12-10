@@ -102,7 +102,16 @@ EmptyLine
  dta d"                                        "
 ;---------------------------------------------------
 OptionsTitle
+.IF TARGET = 800
  dta d"       scorch       "*
+.ELIF TARGET = 5200
+ dta d" scorch supersystem "*
+; dta d"     scorch "*
+; dta             d"5"
+; dta              d"k"*
+; dta               d"2"
+; dta                d"     "*
+.ENDIF
 DifficultyTitle
  dta d"   difficulty   "*
 PurchaseTitle
@@ -127,36 +136,36 @@ dl ; MAIN game display list
         .byte $4f
         .word display                   ; 1 line
         :76 .by $0f                     ;76
-        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
         .by $0f+$80 ; DLI
-        :13 .by $0f                     ;13
-        .by $0f+$80 ; DLI (black bar)   ;2
+        :12 .by $0f                     ;12
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
         .by $0f+$80 ; DLI
-        :8 .by $0f                      ;8
+        :7 .by $0f                      ;7
         .by $4f                         ;1
         .wo display+$0ff0
         :2 .by $0f                      ;2
-        .by $0f+$80 ; DLI (black bar)   ;2
-        .by $0f+$80 ; DLI
-        :9 .by $0f                      ;9
-        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
         .by $0f+$80 ; DLI
         :8 .by $0f                      ;8
-        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
         .by $0f+$80 ; DLI
         :7 .by $0f                      ;7
-        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
         .by $0f+$80 ; DLI
         :6 .by $0f                      ;6
-        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
         .by $0f+$80 ; DLI
         :5 .by $0f                      ;5
-        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
         .by $0f+$80 ; DLI
         :4 .by $0f                      ;4
-        .by $0f+$80 ; DLI (black bar)   ;2
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
         .by $0f+$80 ; DLI
         :3 .by $0f                      ;3
+        .by $0f+$80,$0f ; DLI (black bar)   ;3
+        .by $0f+$80 ; DLI
+        :2 .by $0f                      ;2
         .by $0f+$80 ; DLI (black to end);1
        :38 .byte $0f                    ;35 ..... = 200
         .by $4f
@@ -178,7 +187,7 @@ OptionsDL
         :maxOptions-1 .by $02,$10
 		:(9-maxOptions) .by $70,$10
 		.byte $80
-		.byte $70  ; to match moved sprites
+		.byte $60  ; to match moved sprites
         .byte $4f
         .word (display+140*40)
         :21 .by $0f                     ;76

@@ -59,6 +59,9 @@ areYouSureText
 lineClear
     dta d"              "
 
+TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
+;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4  ; standard order
+TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94   ; Adam's order
 ;-----------
 pmtableL ; addressess of the P/M memory for 6 tanks
     .by <(pmgraph+$400)
@@ -208,7 +211,12 @@ TanksNamesDefault
     dta d"4th.Tank"
     dta d"5th.Tank"
     dta d"6th.Tank"
-	
+;-------------------------------------------------
+TankShapesTable         .BYTE char_tank1___________
+                        .BYTE char_tank2___________
+                        .BYTE char_tank3___________
+                        .BYTE char_tank4___________
+;-------------------------------------------------	
 WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Baby_Missile___
   .by >price_Missile________
