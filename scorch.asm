@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.21" ; number of this build (4 bytes)
+	dta d"1.22" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -1977,7 +1977,7 @@ noingame
     icl 'artwork/talk.asm'
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv3.fnt',+0,384	; 48 characters only
+    ins 'artwork/tanksv4.fnt',+0,384	; 48 characters only
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
