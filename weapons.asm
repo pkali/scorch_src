@@ -2615,6 +2615,7 @@ ReachSky
 	sta RangeRight+1
 	; hide tanks and ...
 	jsr SoilDown2
+	jsr ClearScreenSoilRange
 	ldx TankNr
 
 	; check keyboard/joy and move tank left/right - code copied from BeforeFire
@@ -2713,11 +2714,7 @@ RightScreenEdge
     mva #sfx_dunno sfx_effect
 NoREdge
 	mva #18 AngleTable,x
-	; then draw tank on new position
-    jsr DrawTankNr
-	jsr DisplayStatus
-	jsr WaitOneFrame
-    jmp KeyboardAndJoyCheck
+	bne DrawFloatingTank	; then draw tank on new position
 
 pressedLeft
 	lda ShieldEnergy,x
@@ -2744,9 +2741,11 @@ LeftScreenEdge
 NoLEdge
 	mva #162 AngleTable,x
 	; then draw tank on new position
+DrawFloatingTank
     jsr DrawTankNr
 	jsr DisplayStatus
 	jsr WaitOneFrame
+	jsr CalculateSoildown
     jmp KeyboardAndJoyCheck
 
 pressedSpace
@@ -2892,23 +2891,23 @@ OnGround
     jsr WaitForKeyRelease
 	; and Soildown at the end (for correct mountaintable)
 	; calculate range
-	sec
-	lda XtankstableL,x
-	sbc #2
-	sta RangeLeft
-	lda XtankstableH,x
-	sbc #0
-	sta RangeLeft+1
-	clc
-	lda XtankstableL,x
-	adc #10
-	sta RangeRight
-	lda XtankstableH,x
-	adc #0
-	sta RangeRight+1
+	jsr CalculateSoildown
 	; hide tanks and ...
 	jsr SoilDown2
 	ldx TankNr
+	rts
+	
+CalculateSoildown
+	ldx TankNr
+	clc
+	lda XtankstableL,x
+	adc #4
+	sta xdraw
+	lda XtankstableH,x
+	adc #0
+	sta xdraw+1
+	mva #$04 ExplosionRadius
+	jsr CalculateExplosionRange
 	rts
 .endp
 
