@@ -2088,7 +2088,7 @@ X    lda XtanksTableL,x
     sbc #90
     tax
     ; barrel start offset over 90deg
-    adw xdraw #5 xdraw
+    adw xdraw #4 xdraw
     mva #1 goleft
     bpl @+  ; jmp @+
 
