@@ -26,7 +26,7 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $60
+FirstZpageVariable = $5E
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar Gradient			.byte
 	.zpvar JoystickNumber	.byte
@@ -71,10 +71,12 @@ FirstZpageVariable = $60
 	.zpvar pressTimer       .byte
 	.zpvar NTSCcounter      .byte
 	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
-	.zpvar sfx_effect .byte
-	.zpvar RMT_blocked	.byte
-	.zpvar ScrollFlag .byte
+	.zpvar sfx_effect		.byte
+	.zpvar RMT_blocked		.byte
+	.zpvar ScrollFlag		.byte
 	.zpvar SkStatSimulator	.byte
+	.zpvar FloatingAlt		.byte	; floating tank altitude
+	.zpvar OverTankDir		.byte	; (0 go right, $ff go left) direction of bypassing tanks on screen
 
     ; --------------OPTIMIZATION VARIABLES--------------
     .zpvar Force .word

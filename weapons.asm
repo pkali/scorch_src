@@ -2772,7 +2772,7 @@ pressedSpace
 TankOnRightSide
 	dey
 TankOnLeftSide
-	sty FloatingAlt ; I know, not elegant byt this variable it's free now (0 go right, $ff go left)
+	sty OverTankDir ;  (0 go right, $ff go left)
 	; now we have direction of bypassing tanks on screen
 
 	; clear "engine pixels" under tank
@@ -2823,7 +2823,7 @@ TankBelow
 	mva #1 Erase
     jsr DrawTankNr
 	mva #0 Erase
-	bit FloatingAlt
+	bit OverTankDir
 	bmi PassLeft
 PassRight
 	inc XtankstableL,x
@@ -2867,10 +2867,10 @@ GoDown
 	adw temp #4 	;	center of the tank
 	ldy #0
 	lda (temp),y
-	sta FloatingAlt
+	sta OverTankDir	; not elegant!!! Reuse as height of tank flight
 FloatDown
 	lda ytankstable,x
-	cmp FloatingAlt
+	cmp OverTankDir
 	bcs OnGround
 	; first erase old tank position
 	mva #1 Erase
@@ -2890,6 +2890,12 @@ OnGround
 	mva #0 Erase
     jsr WaitForKeyRelease
 	; and Soildown at the end (for correct mountaintable)
+	; If tank did not fly at maximum altitude there is no need to soildown to much
+	lda FloatingAlt
+	cmp #18
+	beq NotHighest
+	jsr ClearScreenSoilRange
+NotHighest
 	; calculate range
 	jsr CalculateSoildown
 	; hide tanks and ...
