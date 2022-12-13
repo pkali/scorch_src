@@ -2936,7 +2936,7 @@ CheckCollisionWithTankLoop
     lda ytankstable,x
     cmp ydraw  ; check range
     bcc BelowTheTank ;(ytankstable,ytankstable+3)
-    sbc #4 ; we must rewrite EndOfTheBarrelY table or remove Y correction completely to "bold" tank !!!
+    sbc #3 ; hitbox height
     cmp ydraw
     bcs OverTheTank
 	; with or without shield ?
