@@ -316,6 +316,7 @@ START
     RMTSong song_main_menu
 
     jsr Options  ;startup screen
+	jsr SetVariablesFromOptions
 	jsr MakeDarkScreen
     bit escFlag
     bmi START

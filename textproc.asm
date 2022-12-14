@@ -109,7 +109,7 @@ OptionsNoLeft
 OptionsNoRight
     cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
-    jmp OptionsFinished
+    rts		; options selected
 	
 OptionsNoReturn
 	cmp #@kbcode._tab	; Tab key
@@ -119,63 +119,7 @@ OptionsNoReturn
 	sta Gradient
 OptionsNoTab
     jmp OptionsMainLoop
-
-OptionsFinished
-    ;first option
-    ldy OptionsTable
-    iny
-    iny
-    sty NumberOfPlayers ;1=1 player (but minimum is 2)
-
-    ;second option (cash)
-
-
-    ldy OptionsTable+1
-    ldx #0
-@
-      lda CashOptionL,y
-      sta moneyL,x
-      lda CashOptionH,y
-      sta moneyH,x
-      inx
-      cpx NumberOfPlayers
-    bne @-
-
-    ;third option (gravity)
-    ldy OptionsTable+2
-    lda GravityTable,y
-    sta gravity
-
-    ;fourth option (wind)
-    ldy OptionsTable+3
-    lda MaxWindTable,y
-    sta MaxWind
-    
-    ;fifth option (no of rounds)
-    ldy OptionsTable+4
-    lda RoundsTable,y
-    sta RoundsInTheGame
-    
-    ;6th option (shell speed)
-    ldy OptionsTable+5
-    lda flyDelayTable,y
-    sta flyDelay
-    
-    ;7th option (Airstrike after how many missess)
-    ldy OptionsTable+6
-    lda seppukuTable,y
-    sta seppukuVal
-    
-    ;8th option (how aggressive are mountains)
-    ldy OptionsTable+7
-    lda mountainsDeltaTableH,y
-    sta mountainDeltaH
-    lda mountainsDeltaTableL,y
-    sta mountainDeltaL
-    
-    
-    rts
-    .endp
+.endp
 ;--------
 ; inversing selected option (cursor)
 ;--------
@@ -233,6 +177,66 @@ invertme
 @
     ; next character in an option
     iny
+    rts
+.endp
+
+; --------------------------------------
+; Sets the appropriate variables based on the options table
+; 
+.proc SetVariablesFromOptions
+    ;first option
+    ldy OptionsTable
+    iny
+    iny
+    sty NumberOfPlayers ;1=1 player (but minimum is 2)
+
+    ;second option (cash)
+
+
+    ldy OptionsTable+1
+    ldx #0
+@
+      lda CashOptionL,y
+      sta moneyL,x
+      lda CashOptionH,y
+      sta moneyH,x
+      inx
+      cpx NumberOfPlayers
+    bne @-
+
+    ;third option (gravity)
+    ldy OptionsTable+2
+    lda GravityTable,y
+    sta gravity
+
+    ;fourth option (wind)
+    ldy OptionsTable+3
+    lda MaxWindTable,y
+    sta MaxWind
+    
+    ;fifth option (no of rounds)
+    ldy OptionsTable+4
+    lda RoundsTable,y
+    sta RoundsInTheGame
+    
+    ;6th option (shell speed)
+    ldy OptionsTable+5
+    lda flyDelayTable,y
+    sta flyDelay
+    
+    ;7th option (Airstrike after how many missess)
+    ldy OptionsTable+6
+    lda seppukuTable,y
+    sta seppukuVal
+    
+    ;8th option (how aggressive are mountains)
+    ldy OptionsTable+7
+    lda mountainsDeltaTableH,y
+    sta mountainDeltaH
+    lda mountainsDeltaTableL,y
+    sta mountainDeltaL
+    
+    
     rts
 .endp
 
