@@ -1124,8 +1124,10 @@ ContinueToCheckMaxForce2
 
     jsr WaitOneFrame ; best after drawing a tank
 
-    
-
+	bit TestFlightFlag
+	bpl @+
+	jsr Shoot.AfterOffensiveText
+@
 ;keyboard reading
 ; KBCODE keeps code of last keybi
 ; SKSTAT  $ff - nothing pressed
@@ -1204,6 +1206,7 @@ NoSpyHard
     jsr WaitForKeyRelease
     jmp BeforeFire   
 @
+	ldx TankNr	; for optimize
     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
     cmp #$80|@kbcode._down
@@ -1229,6 +1232,10 @@ jumpFromStick
     jeq pressedM
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
+	.IF TARGET = 800
+	cmp #34			; dot key :) 
+	jeq pressedDot
+	.ENDIF
     jmp notpressed
 checkJoy
     ;------------JOY-------------
@@ -1258,7 +1265,7 @@ pressedUp
     
     
     ;force increaseeee!
-    ldx TankNr
+    ;ldx TankNr		; optimized
     inc ForceTableL,x
     bne CheckingMaxForce
     inc ForceTableH,x
@@ -1282,7 +1289,7 @@ FurtherCheckMaxForce
     jmp BeforeFire
 
 CTRLPressedUp
-    ldx TankNr
+    ;ldx TankNr		; optimized
     lda ForceTableL,x
     clc
     adc #10
@@ -1300,7 +1307,7 @@ pressedDown
 
     mva #sfx_set_power_1 sfx_effect
 
-    ldx TankNr
+    ;ldx TankNr		; optimized
     dec ForceTableL,x
     lda ForceTableL,x
     cmp #$ff
@@ -1317,7 +1324,7 @@ ForceGoesZero
 CTRLPressedDown
     mva #sfx_set_power_1 sfx_effect
 
-    ldx TankNr
+    ;ldx TankNr		; optimized
     sec
     lda ForceTableL,x
     sbc #10
@@ -1328,7 +1335,7 @@ CTRLPressedDown
     jmp BeforeFire
 
 pressedRight
-    ldx TankNr
+    ;ldx TankNr		; optimized
     lda pressTimer
     spl:mva #0 pressTimer  ; if >128 then reset to 0
     cmp #25  ; 1/2s
@@ -1345,7 +1352,7 @@ pressedRight
     jmp BeforeFire
 
 CTRLPressedRight
-    ldx TankNr
+    ;ldx TankNr		; optimized
     mva #sfx_set_power_2 sfx_effect
 	mva #1 Erase
 	jsr DrawTankNr.BarrelChange
@@ -1361,7 +1368,7 @@ CTRLPressedRight
         
 
 pressedLeft
-    ldx TankNr
+    ;ldx TankNr		; optimized
     lda pressTimer
     spl:mva #0 pressTimer  ; if >128 then reset to 0
     cmp #25  ; 1/2s
@@ -1379,7 +1386,7 @@ pressedLeft
     jmp BeforeFire
 
 CTRLPressedLeft
-    ldx TankNr
+    ;ldx TankNr		; optimized
     mva #sfx_set_power_2 sfx_effect
 	mva #1 Erase
 	jsr DrawTankNr.BarrelChange
@@ -1395,7 +1402,7 @@ CTRLPressedLeft
 
 pressedTAB
     mva #sfx_purchase sfx_effect
-    ldx TankNr
+    ;ldx TankNr		; optimized
 	lda ActiveWeapon,x
 	cmp #last_offensive_____ ; the last possible offensive weapon
 	bne ?notlasttofirst
@@ -1413,7 +1420,7 @@ pressedTAB
 
 CTRLpressedTAB
     mva #sfx_purchase sfx_effect
-    ldx TankNr
+    ;ldx TankNr		; optimized
 	lda ActiveWeapon,x
 	cmp #first_offensive____	; #0
 	bne ?notfirsttolast
@@ -1444,6 +1451,12 @@ pressedS
     jsr WaitForKeyRelease
     jmp BeforeFire
 
+pressedDot
+	lda TestFlightFlag
+	eor #%10000000
+	sta TestFlightFlag
+    jsr WaitForKeyRelease
+    jmp BeforeFire	
 
 pressedSpace
     ;=================================
@@ -1469,6 +1482,8 @@ fire
 ;with much more separate blocks, but you know -
 ;- do not touch it if it works...
 
+	mva #0 TestFlightFlag
+
 ;the latest addition to this routine is
 ;displaying offensive texts!
 
@@ -1481,7 +1496,8 @@ RandomizeOffensiveText
     ldy TankNr
     mva #$ff plot4x4color
     jsr DisplayOffensiveTextNr
-
+	
+AfterOffensiveText
 	mva #0 LaserFlag	; $ff - Laser
 	ldx TankNr
 	lda ActiveWeapon,x
@@ -1499,6 +1515,8 @@ NotStrongShoot
     sta Force
     lda ForceTableH,x
     sta Force+1
+	bit TestFlightFlag
+	bmi AfterStrongShoot
     mva #sfx_shoot sfx_effect
 AfterStrongShoot
     lda AngleTable,x
@@ -1517,7 +1535,6 @@ AfterStrongShoot
 	sta ytraj+2
     sta xtraj
     sta ytraj
-	sta TestFlightFlag
 
 	; checking if the shot is underground (no Flight but Hit :) )
 	tay	; A=0 !
@@ -1538,7 +1555,9 @@ ShotUnderGround
 ;--------------------------------------------------
 .proc Flight  ; Force(byte.byte), Wind(0.word)
 ; Angle(byte) 128=0, 255=maxright, 0=maxleft
-; if TestFlightFlag is set ($ff) ne real flight - hit test only (for AI)
+; if 7bit and 6bit of TestFlightFlag is set no real flight - hit test only (for AI)
+; 7bit - fast, test flight
+; 6bit - invisible bullet
 ;--------------------------------------------------
 ;g=-0.1
 ;vx=Force*cos(Angle)
@@ -1551,8 +1570,6 @@ ShotUnderGround
 ;vx=vx+Wind (Wind is a small fraction)
 ;plot xtraj,ytraj - there is clearing in plot
 ;goto begin-
-
-
 
 
 ; smoke tracer :)
@@ -1820,7 +1837,7 @@ SkipCollisionCheck
     mwa ytraj+1 ydraw
 	
 	bit TestFlightFlag
-	bmi NoUnPlot
+	bvs NoUnPlot
     lda tracerflag
     bne NoUnPlot
 
@@ -1834,7 +1851,7 @@ Hit
     mwa XHit xdraw
     mwa YHit ydraw
 	bit TestFlightFlag
-	bmi EndOfFlight
+	bvs EndOfFlight
     jsr unPlot
 EndOfFlight
     mwa xdraw xcircle  ; we must store for a little while

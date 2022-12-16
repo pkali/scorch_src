@@ -617,7 +617,7 @@ RepeatAim
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 	; now we have initial valuses
-	mva #$ff TestFlightFlag
+	mva #%11000000 TestFlightFlag
 	; check targeting direction
 	lda tempor2
 	jne AimingLeft
