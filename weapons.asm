@@ -1136,6 +1136,7 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
+	ldx TankNr	; for optimize
 	; Select and Option
 	lda CONSOL
 	tay
@@ -1206,7 +1207,6 @@ NoSpyHard
     jsr WaitForKeyRelease
     jmp BeforeFire   
 @
-	ldx TankNr	; for optimize
     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
     cmp #$80|@kbcode._down
