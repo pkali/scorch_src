@@ -1232,10 +1232,6 @@ jumpFromStick
     jeq pressedM
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
-	.IF TARGET = 800
-	cmp #34			; dot key :) 
-	jeq pressedDot
-	.ENDIF
     jmp notpressed
 checkJoy
     ;------------JOY-------------
@@ -1450,13 +1446,6 @@ pressedS
     eor:sta noSfx
     jsr WaitForKeyRelease
     jmp BeforeFire
-
-pressedDot
-	lda TestFlightFlag
-	eor #%10000000
-	sta TestFlightFlag
-    jsr WaitForKeyRelease
-    jmp BeforeFire	
 
 pressedSpace
     ;=================================

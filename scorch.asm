@@ -678,6 +678,8 @@ ManualShooting
 	lda JoyNumber,x
 	sta JoystickNumber	; set joystick port for player
     jsr WaitForKeyRelease
+	lda #%00000000
+	sta TestFlightFlag	; set "Test Fight" off
     jsr BeforeFire
     lda escFlag
     seq:rts		; keys Esc or O

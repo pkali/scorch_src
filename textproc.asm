@@ -890,6 +890,8 @@ NoAutoDefense
 	jsr FindBestTarget2 ; find nearest tank neighbour
 	jsr LazyAim
 	ply
+	lda #%00000000
+	sta TestFlightFlag	; set "visual aiming" off
     jmp DecreaseDefensive ; bypass activation
 NoLazyBoy
 	cmp #ind_Lazy_Darwin____
@@ -901,6 +903,8 @@ NoLazyBoy
 	jsr FindBestTarget3 ; find target with lowest energy
 	jsr LazyAim
 	ply
+	lda #%10000000
+	sta TestFlightFlag	; set "visual aiming" on
     jmp DecreaseDefensive ; bypass activation
 NoLazyDarwin
 	cmp #ind_Spy_Hard_______
