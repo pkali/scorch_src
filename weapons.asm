@@ -1751,10 +1751,13 @@ Loopi
     bpl StillUp
     ; where we know that the bullet starts to fall down
     ; we check if it is MIRV and if so, jump to MIRV routine
+	bit TestFlightFlag
+	bmi NoTestForMIRV
     ldx TankNr
     lda ActiveWeapon,x
     cmp #ind_MIRV___________ ; MIRV
     jeq MIRVdownLoop
+NoTestForMIRV
 NoGravity
 StillUp
 
@@ -2102,11 +2105,13 @@ MIRVcopyParameters
     ldx #$FF ; it will turn 0 in a moment anyway
     stx MirvMissileCounter
 mrLoopi
-    inc:lda MirvMissileCounter
-    cmp #5
-    sne:mva #0 MirvMissileCounter
-
-    ldx MirvMissileCounter
+	ldx MirvMissileCounter
+	inx
+	cpx #5
+	bne @+
+	ldx #0
+@	stx MirvMissileCounter
+	
     ; Y changes only for bullet number 0
     ; because rest of the bullets have the same Y (height)
 
