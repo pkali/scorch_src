@@ -1126,7 +1126,7 @@ ContinueToCheckMaxForce2
 
 	bit TestFlightFlag
 	bpl @+
-	jsr Shoot.AfterOffensiveText
+	jsr Shoot.AfterOffensiveText	; Lazy Darwin - aiming visualisation
 @
 ;keyboard reading
 ; KBCODE keeps code of last keybi
@@ -1265,6 +1265,7 @@ pressedUp
     inc ForceTableL,x
     bne CheckingMaxForce
     inc ForceTableH,x
+	
 CheckingMaxForce
 
     mva #sfx_set_power_1 sfx_effect
@@ -1563,6 +1564,8 @@ ShotUnderGround
 
 ; smoke tracer :)
     ldy #0
+	bit TestFlightFlag	; if test flight for AI or Lazy Darwin
+	bmi noSmokeTracer	; no Smoke Tracer display
     ldx TankNr
     lda ActiveWeapon,x
     cmp #ind_Smoke_Tracer___ ; Smoke tracer
