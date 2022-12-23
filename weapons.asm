@@ -76,25 +76,29 @@ CheckNextTankBFG
 .proc babymissile
     mva #sfx_baby_missile sfx_effect 
     mva #11 ExplosionRadius
+GoXmissile
     jmp xmissile
 .endp
 ; ------------------------
 .proc missile ;
     mva #sfx_baby_missile sfx_effect
     mva #17 ExplosionRadius
-    jmp xmissile
+	bne babymissile.GoXmissile
+;    jmp xmissile
 .endp
 ; ------------------------
 .proc babynuke
     mva #sfx_nuke sfx_effect 
     mva #25 ExplosionRadius
-    jmp xmissile
+	bne babymissile.GoXmissile
+;    jmp xmissile
 .endp
 ; ------------------------
 .proc nuke
     mva #sfx_nuke sfx_effect 
     mva #30 ExplosionRadius
-    jmp xmissile
+	bne babymissile.GoXmissile
+;    jmp xmissile
 .endp
 ; ------------------------
 .proc leapfrog
@@ -221,19 +225,13 @@ NoWallsInFunky
 .proc deathshead
     mva #30 ExplosionRadius
     mva #sfx_nuke sfx_effect
-    SaveDrawXY 
-    jsr xmissile
-    UnSaveDrawXY
+    jsr GoXmissileWithSaveXYdraw
     sbw xdraw #34
     mva #sfx_nuke sfx_effect 
-    SaveDrawXY 
-    jsr xmissile
-    UnSaveDrawXY
+    jsr GoXmissileWithSaveXYdraw
     adw xdraw #68
     mva #sfx_nuke sfx_effect 
-    SaveDrawXY 
-    jsr xmissile
-    UnSaveDrawXY
+    jsr GoXmissileWithSaveXYdraw
     sbw xdraw #34
     ;
     sbw ydraw #34
@@ -241,28 +239,22 @@ NoWallsInFunky
     cpw ydraw #screenHeight
     bcs NoUpperCircle
     mva #sfx_nuke sfx_effect 
-    SaveDrawXY 
-    jsr xmissile
-    UnSaveDrawXY
+    jsr GoXmissileWithSaveXYdraw
 NoUpperCircle
     adw ydraw #68
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
     mva #sfx_nuke sfx_effect 
-    SaveDrawXY 
-    jsr xmissile
-    UnSaveDrawXY
+    jsr GoXmissileWithSaveXYdraw
 NoLowerCircle
     mva #sfx_silencer sfx_effect
     rts
-.endp
-.proc SaveDrawXY
+
+GoXmissileWithSaveXYdraw
     mwa xdraw tempXROLLER
     mwa ydraw modify
-    rts
-.endp
-.proc UnSaveDrawXY
+    jsr xmissile
     mwa tempXROLLER xdraw
     mwa modify ydraw
     rts
@@ -273,7 +265,7 @@ NoLowerCircle
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #0 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
-	jmp xnapalm
+	beq xnapalm
 .endp
 ; ------------------------
 .proc hotnapalm
@@ -281,7 +273,7 @@ NoLowerCircle
     mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
 	mva #1 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
-	jmp xnapalm
+;	jmp xnapalm
 .endp
 ; ------------------------
 .proc xnapalm
@@ -420,7 +412,7 @@ EndNurnedCheckLoop
     mva #0 sandhogflag
     mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
-    jmp xdigger
+    bne xdigger
 .endp
 ; ------------------------
 .proc digger ;
@@ -428,7 +420,7 @@ EndNurnedCheckLoop
     mva #0 sandhogflag
     mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
-    jmp xdigger
+    bne xdigger
 .endp
 ; ------------------------
 .proc heavydigger
@@ -436,7 +428,7 @@ EndNurnedCheckLoop
     mva #0 sandhogflag
     mva #13 DigLong
     mva #7 diggery  ; how many branches  (-1)
-    jmp xdigger
+;    jmp xdigger
 .endp
 ; ------------------------
 .proc xdigger

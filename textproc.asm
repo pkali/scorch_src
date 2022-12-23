@@ -114,9 +114,24 @@ OptionsNoRight
 OptionsNoReturn
 	cmp #@kbcode._tab	; Tab key
 	bne OptionsNoTab
+	bit Gradient
+	bmi NextGradientNr
 	lda Gradient
-	eor #$80
+@	eor #$80
 	sta Gradient
+NextGradientNr
+	ldy GradientNr
+	iny
+	cpy #$03
+	bne NoGradientLoop
+	mva #$ff GradientNr
+	bne @-
+NoGradientLoop
+	sty GradientNr
+	lda GradientAddrL,y
+	sta GradientColors
+	lda GradientAddrH,y
+	sta GradientColors+1	
 OptionsNoTab
     jmp OptionsMainLoop
 .endp

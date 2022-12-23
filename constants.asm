@@ -63,6 +63,11 @@ TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
 ;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4  ; standard order
 TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94   ; Adam's order
 ;-----------
+GradientAddrL
+	.by <dliColorsFore, <dliColorsFore, <(Sintable+40)
+GradientAddrH
+	.by >dliColorsFore, >dliColorsFore, >(Sintable+40)
+
 pmtableL ; addressess of the P/M memory for 6 tanks
     .by <(pmgraph+$400)
     .by <(pmgraph+$500)

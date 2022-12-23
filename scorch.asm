@@ -26,9 +26,11 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $5E
+FirstZpageVariable = $5B
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar Gradient			.byte
+	.zpvar GradientNr		.byte
+	.zpvar GradientColors	.word
 	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -250,6 +252,11 @@ FirstSTART
 	  dey
 	bpl @-
 
+	; initialize one Variable in zero page :)
+	lda #<dliColorsFore
+	sta GradientColors
+	lda #>dliColorsFore
+	sta GradientColors+1
 
     ; generate linetables
     mwa #display temp
@@ -1196,7 +1203,7 @@ GoGradient
 ;		nop
     .ENDIF
     sta COLPF1
-	lda dliColorsFore,y		; mountains colors array
+	lda (GradientColors),y		; mountains colors array
 ;	lda dliColorsFore		; one mauntain color
 	sta COLPF2
 	inc dliCounter
