@@ -108,29 +108,6 @@ GoXmissile
 
 	jsr SecondRepeat
 	
-/*    ; soil must fall down now! there is no other way...
-    ; hide tanks or they fall down with soil
-    jsr SoilDown2
-
-     ; it looks like force is divided by 4 here BUT"
-    ; in Flight routine force is multiplied by 2 and left
-    ; so, we have Force divided by 2 here (not accurately)
-    lsr Force+1
-    ror Force
-    ;lsr Force+1
-    ;ror Force
-    mva LeapFrogAngle Angle
-    
-    mva #sfx_funky_hit sfx_effect
-    sbw ytraj+1 #$05	; next missiles start point goes 5 pixel UP to prevent multiple explosion at one point if tank is hit (4 pixels tank height + 1)
-    jsr Flight
-    lda HitFlag
-    beq EndOfLeapping
-    mva #15 ExplosionRadius
-    jsr CalculateExplosionRange0
-    mva #sfx_baby_missile sfx_effect
-    jsr xmissile.NoRangeCalc */
-
 SecondRepeat
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
@@ -428,6 +405,30 @@ EndNurnedCheckLoop
     mva #0 sandhogflag
     mva #13 DigLong
     mva #7 diggery  ; how many branches  (-1)
+    bne xdigger
+.endp
+; ------------------------
+.proc babysandhog
+    mva #sfx_sandhog sfx_effect
+    mva #char_sandhog_offset sandhogflag
+    mva #13 DigLong
+    mva #1 diggery  ; how many branches (-1)
+    bne xdigger
+.endp
+; ------------------------
+.proc sandhog
+    mva #sfx_sandhog sfx_effect
+    mva #char_sandhog_offset sandhogflag
+    mva #13 DigLong
+    mva #3 diggery  ; how many branches (-1)
+    bne xdigger
+.endp
+; ------------------------
+.proc heavysandhog
+    mva #sfx_sandhog sfx_effect
+    mva #char_sandhog_offset sandhogflag
+    mva #13 DigLong
+    mva #5 diggery  ; how many branches (-1)
 ;    jmp xdigger
 .endp
 ; ------------------------
@@ -546,46 +547,39 @@ DiggerCharacter
     jmp TypeChar
 .endp
 ; ------------------------
-.proc babysandhog
-    mva #sfx_sandhog sfx_effect
-    mva #char_sandhog_offset sandhogflag
-    mva #13 DigLong
-    mva #1 diggery  ; how many branches (-1)
-    jmp xdigger
-.endp
-; ------------------------
-.proc sandhog
-    mva #sfx_sandhog sfx_effect
-    mva #char_sandhog_offset sandhogflag
-    mva #13 DigLong
-    mva #3 diggery  ; how many branches (-1)
-    jmp xdigger
-.endp
-; ------------------------
-.proc heavysandhog
-    mva #sfx_sandhog sfx_effect
-    mva #char_sandhog_offset sandhogflag
-    mva #13 DigLong
-    mva #5 diggery  ; how many branches (-1)
-    jmp xdigger
-.endp
-; ------------------------
 .proc dirtclod
     mva #12 ExplosionRadius
-    jsr CalculateExplosionRange
-    jmp xdirt
+    bne xdirt
 .endp
 ; ------------------------
 .proc dirtball
     mva #22 ExplosionRadius
-    jsr CalculateExplosionRange
-    jmp xdirt
+    bne xdirt
 .endp
 ; ------------------------
 .proc tonofdirt
     mva #31 ExplosionRadius
+;    jmp xdirt
+.endp
+; -----------------
+.proc xdirt ;
+; -----------------
     jsr CalculateExplosionRange
-    jmp xdirt
+    mva #sfx_dirt_charge sfx_effect
+    lda #1
+    sta radius
+    sta color
+dirtLoop
+    jsr circle
+    inw ydraw
+    jsr circle
+.nowarn    dew ydraw
+    inc radius
+    lda radius
+    cmp ExplosionRadius
+    bne dirtLoop
+    mva #sfx_silencer sfx_effect
+    rts
 .endp
 ; ------------------------
 .proc dirtcharge
@@ -597,21 +591,93 @@ DiggerCharacter
 .proc riotcharge
     mva #sfx_riot_blast sfx_effect
     mva #31 ExplosionRadius
-    jsr CalculateExplosionRange
-    jmp cleanDirt
+    bne cleanDirt
 .endp
 ; ------------------------
 .proc riotblast
     mva #sfx_riot_blast sfx_effect
     mva #61 ExplosionRadius
+;    jmp cleanDirt
+.endp
+; -----------------
+.proc cleanDirt
+; -----------------
     jsr CalculateExplosionRange
-    jmp cleanDirt
+    mva #0 color
+    jmp ofdirt.NoColor
 .endp
 ; ------------------------
 .proc liquiddirt
     mva #sfx_liquid_dirt sfx_effect
 	mwa #510 FillCounter
-	jmp xliquiddirt
+; -----
+	mwa xdraw TempXfill
+RepeatFill
+	mwa TempXfill xdraw
+	jsr checkRollDirection
+	; HowMuchToFall - direction
+    ; $FF - we are in a hole (flying in missile direction)
+    ; 1 - right, 2 - left
+    adw xdraw #mountaintable tempXROLLER
+    ldy #0
+    lda (tempXROLLER),y
+    sta HeightRol ; relative point
+ 
+RollinContinuesLiquid
+    ; new point is set
+    adw xdraw #mountaintable tempXROLLER
+    ldy #0
+    lda (tempXROLLER),y
+    sta ydraw
+    cmp HeightRol
+    beq UpNotYet2
+    bcc FillNow
+UpNotYet2
+    sec ;clc
+    sta HeightRol
+    sbc #1
+    sta ydraw
+    lda HowMuchToFall
+    cmp #1
+    beq HowMuchToFallRight3
+.NOWARN    dew xdraw
+	lda xdraw
+	and xdraw+1
+	cmp #$ff ; like cpw xdraw #$ffff
+	;ora xdraw+1 ; like cpw xdraw #$0000
+    jne RollinContinuesLiquid
+    beq FillNow
+HowMuchToFallRight3
+    inw xdraw
+    cpw xdraw #screenwidth
+    jne RollinContinuesLiquid
+FillNow
+     ; finally one pixel more
+    ldy #0
+	lda HowMuchToFall
+	bmi FillHole
+	cmp #1
+	beq FillLeft
+	inw xdraw
+	inw xdraw	; tricky but we must rollback xdraw in proper direction
+FillLeft
+.nowarn	dew xdraw
+FillHole
+    adw xdraw #mountaintable tempXROLLER
+	lda (tempXROLLER),y
+	sta ydraw
+	beq ToHighFill	; if we filled all playfield (very rare but possible)
+	dec ydraw	; one pixel up
+	lda ydraw
+    sta (tempXROLLER),y	;mountaintable update
+	mva #1 color
+	jsr plot.MakePlot
+ToHighFill
+.nowarn dew FillCounter
+	lda FillCounter
+	ora FillCounter+1
+	jne RepeatFill
+    rts
 .endp
 ; ------------------------
 .proc laser
@@ -791,25 +857,6 @@ EndOfDistanceCheckLoop
     rts
 .endp
 ; -----------------
-.proc xdirt ;
-; -----------------
-    mva #sfx_dirt_charge sfx_effect
-    lda #1
-    sta radius
-    sta color
-dirtLoop
-    jsr circle
-    inw ydraw
-    jsr circle
-.nowarn    dew ydraw
-    inc radius
-    lda radius
-    cmp ExplosionRadius
-    bne dirtLoop
-    mva #sfx_silencer sfx_effect
-    rts
-.endp
-; -----------------
 .proc xriotbomb ;
 ; -----------------
     mva #sfx_riot_blast sfx_effect
@@ -957,11 +1004,6 @@ DirectionChecked
 .endp
 
 ; --------------------------------------------------
-.proc cleanDirt
-    mva #0 color
-    jmp ofdirt.NoColor
-.endp
-; --------------------------------------------------
 .proc ofdirt ;
 ; --------------------------------------------------
 ; makes dirt on xdraw,ydraw position and of ExplosionRadius height
@@ -1009,76 +1051,6 @@ DoNotPlot
 EndOfTheDirt
     mwa xcircle xdraw
     mwa ycircle ydraw
-    rts
-.endp
-; ----------------
-.proc xliquiddirt ;
-	mwa xdraw TempXfill
-RepeatFill
-	mwa TempXfill xdraw
-	jsr checkRollDirection
-	; HowMuchToFall - direction
-    ; $FF - we are in a hole (flying in missile direction)
-    ; 1 - right, 2 - left
-    adw xdraw #mountaintable tempXROLLER
-    ldy #0
-    lda (tempXROLLER),y
-    sta HeightRol ; relative point
- 
-RollinContinuesLiquid
-    ; new point is set
-    adw xdraw #mountaintable tempXROLLER
-    ldy #0
-    lda (tempXROLLER),y
-    sta ydraw
-    cmp HeightRol
-    beq UpNotYet2
-    bcc FillNow
-UpNotYet2
-    sec ;clc
-    sta HeightRol
-    sbc #1
-    sta ydraw
-    lda HowMuchToFall
-    cmp #1
-    beq HowMuchToFallRight3
-.NOWARN    dew xdraw
-	lda xdraw
-	and xdraw+1
-	cmp #$ff ; like cpw xdraw #$ffff
-	;ora xdraw+1 ; like cpw xdraw #$0000
-    jne RollinContinuesLiquid
-    beq FillNow
-HowMuchToFallRight3
-    inw xdraw
-    cpw xdraw #screenwidth
-    jne RollinContinuesLiquid
-FillNow
-     ; finally one pixel more
-    ldy #0
-	lda HowMuchToFall
-	bmi FillHole
-	cmp #1
-	beq FillLeft
-	inw xdraw
-	inw xdraw	; tricky but we must rollback xdraw in proper direction
-FillLeft
-.nowarn	dew xdraw
-FillHole
-    adw xdraw #mountaintable tempXROLLER
-	lda (tempXROLLER),y
-	sta ydraw
-	beq ToHighFill	; if we filled all playfield (very rare but possible)
-	dec ydraw	; one pixel up
-	lda ydraw
-    sta (tempXROLLER),y	;mountaintable update
-	mva #1 color
-	jsr plot.MakePlot
-ToHighFill
-.nowarn dew FillCounter
-	lda FillCounter
-	ora FillCounter+1
-	jne RepeatFill
     rts
 .endp
 ;--------------------------------------------------
