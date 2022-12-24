@@ -55,6 +55,7 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 2022-12-24
 
 Christmas colors edition! Can you carve a quarter of a page of memory from two decades old code? Sure @Pecusx can! So finally we have the most requested feature - C0L0RS on the game screen, adjusted with Adam's help.
+Press [TAB] twice in the main menu to switch to a screen with colors.
 Other (dubious) improvements:
 - New Lazy Darwin, it is spectacular, check it out!!!
 - Smoke Tracer does not smoke when targeting with Lazy Darwin
