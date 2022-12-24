@@ -51,6 +51,21 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.22
+2022-12-24
+
+Christmas colors edition! Can you carve a quarter of a page of memory from two decades old code? Sure @Pecusx can! So finally we have the most requested feature - C0L0RS on the game screen, adjusted with Adam's help.
+Other (dubious) improvements:
+- New Lazy Darwin, it is spectacular, check it out!!!
+- Smoke Tracer does not smoke when targeting with Lazy Darwin
+- Lazy Boy works well with joystick
+- Another fix for self-destructing tanks shooting low angles (0-4 degrees)
+- New, better tank shapes by Adam
+- Barrel start point correction fixes very rare aiming issues
+- Soil slide after Hovercraft usage optimized
+
+
+
 ###### Version 1.21
 2022-12-10
 
