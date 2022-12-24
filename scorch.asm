@@ -290,6 +290,12 @@ FirstSTART
 	mva #$10 MODUL-6+$a69	; $12 > $10
 	mva #$04 MODUL-6+$bf8	; $05 > $04
 	mva #$08 MODUL-6+$e3d	; $0a > $08
+	; and colors - sorry no memory!
+;	mva #$c4 dliColorsFore2+16
+;	mva #$c6 dliColorsFore2+17
+;	mva #$a4 dliColorsFore2+18
+;	mva #$a6 dliColorsFore2+19
+;	sta dliColorsFore2+20
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
