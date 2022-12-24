@@ -69,8 +69,8 @@ GradientAddrH
 	.by >dliColorsFore, >dliColorsFore, >dliColorsFore2
 dliColorsFore2
     .by $0a											; one mountains color
-	.by $8e,$7c,$7c,$7a,$7a,$6a,$6a,$68,$68,$58
-	.by $58,$56,$56,$46,$46,$36,$36,$26,$26,$16
+	.by $7e,$7a,$7c,$6a,$6c,$58,$5a,$48,$4a,$38
+	.by $3a,$26,$18,$f6,$e8,$d4,$c6,$b4,$a6,$a6
 ;-----------
 pmtableL ; addressess of the P/M memory for 6 tanks
     .by <(pmgraph+$400)
