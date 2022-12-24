@@ -63,6 +63,16 @@ TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
 ;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4  ; standard order
 TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94   ; Adam's order
 ;-----------
+GradientAddrL
+	.by <dliColorsFore, <dliColorsFore, <dliColorsFore2
+GradientAddrH
+	.by >dliColorsFore, >dliColorsFore, >dliColorsFore2
+dliColorsFore2
+    .by $0a											; one mountains color
+	.by $7e,$7a,$7c,$6a,$6c,$58,$5a,$48,$4a,$38
+	.by $3a,$16,$18,$e6,$e8,$d4,$d6,$b4,$b6,$b6
+
+;-----------
 pmtableL ; addressess of the P/M memory for 6 tanks
     .by <(pmgraph+$400)
     .by <(pmgraph+$500)

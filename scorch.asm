@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.21" ; number of this build (4 bytes)
+	dta d"1.22" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -26,9 +26,11 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $60
+FirstZpageVariable = $5B
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar Gradient			.byte
+	.zpvar GradientNr		.byte
+	.zpvar GradientColors	.word
 	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -71,10 +73,12 @@ FirstZpageVariable = $60
 	.zpvar pressTimer       .byte
 	.zpvar NTSCcounter      .byte
 	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
-	.zpvar sfx_effect .byte
-	.zpvar RMT_blocked	.byte
-	.zpvar ScrollFlag .byte
+	.zpvar sfx_effect		.byte
+	.zpvar RMT_blocked		.byte
+	.zpvar ScrollFlag		.byte
 	.zpvar SkStatSimulator	.byte
+	.zpvar FloatingAlt		.byte	; floating tank altitude
+	.zpvar OverTankDir		.byte	; (0 go right, $ff go left) direction of bypassing tanks on screen
 
     ; --------------OPTIMIZATION VARIABLES--------------
     .zpvar Force .word
@@ -248,6 +252,11 @@ FirstSTART
 	  dey
 	bpl @-
 
+	; initialize one Variable in zero page :)
+	lda #<dliColorsFore
+	sta GradientColors
+	lda #>dliColorsFore
+	sta GradientColors+1
 
     ; generate linetables
     mwa #display temp
@@ -281,6 +290,12 @@ FirstSTART
 	mva #$10 MODUL-6+$a69	; $12 > $10
 	mva #$04 MODUL-6+$bf8	; $05 > $04
 	mva #$08 MODUL-6+$e3d	; $0a > $08
+	; and colors - sorry no memory!
+;	mva #$c4 dliColorsFore2+16
+;	mva #$c6 dliColorsFore2+17
+;	mva #$a4 dliColorsFore2+18
+;	mva #$a6 dliColorsFore2+19
+;	sta dliColorsFore2+20
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
@@ -314,6 +329,7 @@ START
     RMTSong song_main_menu
 
     jsr Options  ;startup screen
+	jsr SetVariablesFromOptions
 	jsr MakeDarkScreen
     bit escFlag
     bmi START
@@ -675,6 +691,8 @@ ManualShooting
 	lda JoyNumber,x
 	sta JoystickNumber	; set joystick port for player
     jsr WaitForKeyRelease
+	lda #%00000000
+	sta TestFlightFlag	; set "Test Fight" off
     jsr BeforeFire
     lda escFlag
     seq:rts		; keys Esc or O
@@ -1191,7 +1209,7 @@ GoGradient
 ;		nop
     .ENDIF
     sta COLPF1
-	lda dliColorsFore,y		; mountains colors array
+	lda (GradientColors),y		; mountains colors array
 ;	lda dliColorsFore		; one mauntain color
 	sta COLPF2
 	inc dliCounter
@@ -1977,7 +1995,7 @@ noingame
     icl 'artwork/talk.asm'
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv3.fnt',+0,384	; 48 characters only
+    ins 'artwork/tanksv4.fnt',+0,384	; 48 characters only
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62

@@ -23,7 +23,7 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór.
+Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru).
 
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
@@ -178,7 +178,7 @@ Tylko te punkty decydują o kolejności w podsumowaniu
 * **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broń nie tyle defensywna co obosieczna. Zasypuje teren opadem "radioaktywnym", który jest zwyczajną glebą. Jeśli nie mamy pod ręką żadnej broni odkopującej teren i do tego osłony (najlepiej jednorazowej), to po takim "opadzie" będzie trzeba strzelić do siebie - bo będąc pod ziemią inaczej się nie da. Ewentualnie pozostaje zawsze White Flag.
 * **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się ale tylko przy niewielkim przysypaniu ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej dezaktywować).
 * **Lazy Boy** - nie jest to właściwie broń defensywna. Jest to wspomaganie celowania. Po jej aktywacji czołg stara się wycelować w najbliższego przeciwnika i automatycznie ustawia siłę strzału oraz kąt. W przypadku posiadania zbyt małej ilości energii może czasem wycelować źle (do celowania stosuje metodę taką jak **Cyborg**). Tak jak **Battery** nie dezaktywuje innych broni defensywnych w przypadku jej użycia. Uwaga! Nie ma sensu aktywacja tej broni przed rundą, celowanie nie odbędzie się bo nie ma jeszcze do czego celować.
-* **Lazy Darwin** - działa dokładnie jak **Lazy Boy** ale celuje w najsłabszego przeciwnika.
+* **Lazy Darwin** - działa tak jak **Lazy Boy** ale celuje w najsłabszego przeciwnika. W tej broni po automatycznym celowaniu pozostaje aktywne "celowanie wizualne" można więc łątwo zmienić cel i samodzielnie wybrać innego przeciwnika widząc czy w niego trafimy.
 * **Auto Defense** - włącza tryb automatycznej aktywacji broni defensywnych. Po jej aktywowaniu czołg automatycznie aktywuje najmocniejszą posiadaną osłonę (zużywając ją oczywiście) w każdej chwili, kiedy nie ma żadnej osłony (także pomiędzy strzałami innych graczy). Jednocześnie jeżeli poziom energii czołgu spadnie poniżej 30 jednostek, automatycznie aktywuje **Battery** jeżeli ją posiada. Ta broń pozostaje aktywna do końca rundy i jest sygnalizowana symbolem "komputera" przed nazwą aktywnej broni defensywnej w linii statusowej. Jest to druga broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 * **Spy Hard** - Pomoc dla zapominalskich :) . Po aktywacji pokazuje kolejno podgląd informacji o kolejnych przeciwnikach. Lewo/Prawo - zmienia "szpiegowany" czołg. Fire/Space/Return/Esc - kończy "szpiegowanie". Jest to ostatnia broń defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 

@@ -514,64 +514,7 @@ skipThisPlayer
 	lda tempor2
 	rts
 .endp
-/*
-;----------------------------------------------
-.proc FindBestTarget1
-; find farthest tank neighbour
-; X - shooting tank number
-; returns target tank number in Y and
-; direcion of shoot in A (0 - left, >0 - right)
-;----------------------------------------------
-	jsr MakeLowResDistances
-	lda #$00
-	sta temp2 ; max possible distance
-	sta tempor2	; direction of shoot
-	;ldx TankNr
-	ldy NumberOfPlayers
-	dey
-	
-loop01
-	cpy TankNr
-	beq skipThisPlayer
-	lda eXistenZ,y
-	beq skipThisPlayer
-	
-	lda LowResDistances,x
-	cmp LowResDistances,y
-	bcs EnemyOnTheLeft
-	;enemy on the right
-	sec
-	lda LowResDistances,y
-	sbc LowResDistances,x
-	cmp temp2 ; bigest
-	bcc bigestIsBigger
-	sta temp2
-	sty temp2+1 ; number of the farthest tank
-	inc tempor2	; set direction to right
-	bne bigestIsBigger
 
-EnemyOnTheLeft
-	sec
-	lda LowResDistances,x
-	sbc LowResDistances,y
-	cmp temp2 ; lowest
-	bcc bigestIsBigger
-	sta temp2
-	sty temp2+1 ; number of the farthest tank
-	
-bigestIsBigger
-skipThisPlayer
-	dey
-	bpl loop01
-	; now we have number of the farthest tank in temp2+1
-	; and direction (0 - left, >0 - right) in tempor2
-	; let's move them to registers
-	; in temp2 we have x distance divided by 8 
-	ldy temp2+1
-	lda tempor2
-	rts
-.endp
-*/
 ;----------------------------------------------
 .proc TakeAim
 ; targeting the tank number TargetTankNr (and Y)
@@ -617,7 +560,7 @@ RepeatAim
 	lda #ind_Baby_Missile___
 	sta ActiveWeapon,x
 	; now we have initial valuses
-	mva #$ff TestFlightFlag
+	mva #%11000000 TestFlightFlag
 	; check targeting direction
 	lda tempor2
 	jne AimingLeft

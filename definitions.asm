@@ -86,7 +86,7 @@ price_Bouncy_Castle__ =  512  ;_41
 price_Long_Barrel____ = 2100  ;_42            
 price_Nuclear_Winter_ = 1000  ;_43
 price_Lazy_Boy_______ =  500  ;_44
-price_Lazy_Darwin____ =  500  ;_45
+price_Lazy_Darwin____ =  730  ;_45
 price_Auto_Defense___ =  250  ;_46
 price_Spy_Hard_______ =   83  ;_47
 ;Weapon indexes (numbers)

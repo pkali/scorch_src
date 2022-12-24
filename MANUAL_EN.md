@@ -24,7 +24,7 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
-The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key change the color of the mountains.
+The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key change the color of the mountains (3 versions to choose).
 
 The [RETURN] key or a joystick button moves to the next screen.
 
@@ -178,7 +178,7 @@ Only these points determine the order in the summary
 * **Nuclear Winter** - adds nothing, takes nothing away :) - in fact, it is not so much a defensive weapon as a double-edged one. It floods the area with "radioactive" fallout, which is ordinary soil. If you do not have at hand any weapon that digs up the terrain, and for that a shield (preferably disposable), then after such "fallout" you will have to shoot yourself - because being underground is otherwise impossible. Alternatively, **White Flag** always remains.
 * **Long Schlong** - a special weapon :) - Costs a lot, doesn't really help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated).
 * **Lazy Boy** - it is not actually a defensive weapon. It is an aiming aid. When it is activated, the tank tries to aim at the nearest enemy and automatically adjusts the power of the shot and angle. If it has too little energy, it can sometimes aim wrong (it uses a method like **Cyborg** to aim). Like **Battery**, it does not deactivate other defensive weapons when used. Note: There is no point in activating this weapon before the round, targeting will not take place because there is nothing to target yet.
-* **Lazy Darwin** - works exactly like **Lazy Boy** but targets the weakest opponent.
+* **Lazy Darwin** - works just like **Lazy Boy** but targets the weakest opponent. In this weapon, after automatic targeting, "visual targeting" remains active, so you can easily change the target and independently select another opponent by seeing if you hit him.
 * **Auto Defense** - activates the mode of automatic activation of defensive weapons. After its activation, the tank automatically activates the strongest shield it has (consuming it, of course) at any time when there is no shield (also between shots of other players). At the same time, if the tank's energy level drops below 30 units, it automatically activates **Battery** if it has it. This weapon remains active until the end of the round and is indicated by the "computer" symbol before the name of the active defensive weapon in the status line. It is the second defensive weapon that does not deactivate other defensive weapons when used.
 * **Spy Hard** - Help for the forgetful :) . When activated, it shows a preview of information about the next opponents one by one. Left/Right - changes the "spied" tank. Fire/Space/Return/Esc - ends the "spying". This is the last defensive weapon, which does not deactivate other defensive weapons when used.
 
