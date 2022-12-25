@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.22" ; number of this build (4 bytes)
+	dta d"1.23" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -1244,14 +1244,17 @@ GoGradient
     ;sta dliA
 	;sty dliY
 	pha
+	phy
 ;	lda dliColorsBack
 	lda #0
     sta COLPF1
-	lda dliColorsFore+1
+	ldy #1
+	lda (GradientColors),y		; mountains colors array
 	bit Gradient
 	bmi @+
 	lda dliColorsFore
 @	sta COLPF2
+	ply
     pla
     rti
 .endp
