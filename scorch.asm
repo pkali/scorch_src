@@ -26,9 +26,8 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $5B
+FirstZpageVariable = $5C
     .zpvar DliColorBack		.byte = FirstZpageVariable
-	.zpvar Gradient			.byte
 	.zpvar GradientNr		.byte
 	.zpvar GradientColors	.word
 	.zpvar JoystickNumber	.byte
@@ -1193,75 +1192,47 @@ MakeTanksVisible
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGraph
-    ;sta dliA
-	;sty dliY
 	pha
 	phy
 	ldy dliCounter
 	lda dliColorsBack,y
-	bit Gradient
-	bmi GoGradient
-	ldy #$ff
-GoGradient
-	iny
     .IF TARGET = 800
 	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
-;		nop
+		nop
+		nop
     .ENDIF
+	nop
+	nop
     sta COLPF1
+	lda GradientNr
+	bne GoGradient
+	ldy #$ff	; one mauntain color
+GoGradient
+	iny
 	lda (GradientColors),y		; mountains colors array
-;	lda dliColorsFore		; one mauntain color
 	sta COLPF2
 	inc dliCounter
-	;ldy dliY
-    ;lda dliA
     ply
     pla
     rti
 .endp
-
-/* .proc DLIinterruptGraph
-	pha
-	lda dliColorsFore
-	nop
-	nop
-    nop
-    .IF TARGET = 800
-	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
-        nop
-
-    .ENDIF
-	sta COLPF2
-	lda DliColorBack
-    sta COLPF1
-	eor #$02
-	sta DliColorBack
-    pla
-    rti
-.endp */
 ;--------------------------------------------------
 .proc DLIinterruptOptions
-    ;sta dliA
-	;sty dliY
 	pha
 	phy
-;	lda dliColorsBack
-	lda #0
+	lda #0	; background color
     sta COLPF1
+	ldy GradientNr
+	beq @+
 	ldy #1
-	lda (GradientColors),y		; mountains colors array
-	bit Gradient
-	bmi @+
-	lda dliColorsFore
-@	sta COLPF2
+@	lda (GradientColors),y		; mountains colors array
+	sta COLPF2
 	ply
     pla
     rti
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGameOver
-    ;sta dliA
-	;sty dliY
 	pha
 	phy
 	lda dliCounter
@@ -1298,7 +1269,6 @@ EndOfDLI_GO
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptText
-	;sta dliA
     pha
 	lda dliCounter
 	bne MoreBarsColorChange
