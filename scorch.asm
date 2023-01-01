@@ -2061,7 +2061,7 @@ MODULEND
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
     .byte " scorch supersystem "    ;20 characters title
-    .byte "7A"          ;2 characters year .. 1900 + $7A = 2020
+    .byte "7B"          ;2 characters year .. 1900 + $7B = 2023
     .word FirstSTART
   .ELSE
      run FirstSTART
