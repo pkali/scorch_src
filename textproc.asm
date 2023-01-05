@@ -114,7 +114,11 @@ OptionsNoRight
 OptionsNoReturn
 	cmp #@kbcode._tab	; Tab key
 	bne OptionsNoTab
-NextGradientNr
+	jsr SelectNextGradient
+OptionsNoTab
+    jmp OptionsMainLoop
+.endp
+.proc SelectNextGradient
 	ldy GradientNr
 	iny
 	cpy #$03
@@ -126,8 +130,7 @@ NoGradientLoop
 	sta GradientColors
 	lda GradientAddrH,y
 	sta GradientColors+1	
-OptionsNoTab
-    jmp OptionsMainLoop
+	rts
 .endp
 ;--------
 ; inversing selected option (cursor)

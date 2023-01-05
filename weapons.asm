@@ -1196,7 +1196,14 @@ jumpFromStick
     jeq pressedM
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
-    jmp notpressed
+	.IF TARGET = 800
+	cmp #61	; G
+	bne EndKeys
+	jsr SelectNextGradient
+	jmp ReleaseAndLoop
+	.ENDIF
+EndKeys
+	jmp notpressed
 checkJoy
     ;------------JOY-------------
     ;happy happy joy joy
@@ -1409,6 +1416,7 @@ pressedS
     ; have you tried turning sfx off and on again?
     lda #$ff
     eor:sta noSfx
+ReleaseAndLoop
     jsr WaitForKeyRelease
     jmp BeforeFire
 
