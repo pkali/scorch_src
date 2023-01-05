@@ -74,6 +74,7 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 | [START] | brak | przyspiesza/pomija niektóre animacje w grze |
 | [O] | [3] | wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza [ESC] z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy. |
 | [START] + [OPTION] | brak | natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak [O] ale bez potwierdzenia. |
+| [G] | brak | zmienia cieniowanie gór |
 | [ESC] | [*] | w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem). |
 | [Y] | [1] | w przypadku pytania o przerwanie lub zakończenie gry - potwierdzenie decyzji |
 

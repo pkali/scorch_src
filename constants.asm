@@ -599,7 +599,7 @@ CreditsStart
 	dta d"You were playin",d"g"*
 	dta d"Scorc",d"h"*
 	dta d"Warsaw, Miam",d"i"*
-	dta d"2000-202",d"2"*
+	dta d"2000-202",d"3"*
 	dta d" "*
 	dta d"Programmin",d"g"*
 	dta d"Tomasz 'Pecus' Peck",d"o"*
