@@ -1168,8 +1168,7 @@ afterInventory
 NoSpyHard
     RmtSong song_ingame
     mva #0 escFlag
-    jsr WaitForKeyRelease
-    jmp BeforeFire   
+    jmp ReleaseAndLoop   
 @
     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
@@ -1383,8 +1382,7 @@ pressedTAB
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....
     beq pressedTAB
-    jsr WaitForKeyRelease
-    jmp BeforeFire
+    bne ReleaseAndLoop
 
 CTRLpressedTAB
     mva #sfx_purchase sfx_effect
@@ -1401,16 +1399,14 @@ CTRLpressedTAB
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....
     beq CTRLpressedTAB
-    jsr WaitForKeyRelease
-    jmp BeforeFire
+    bne ReleaseAndLoop
 
 pressedM
     ; have you tried turning the music off and on again?
     lda #$ff
     eor:sta noMusic
     RmtSong song_ingame
-    jsr WaitForKeyRelease
-    jmp BeforeFire
+    jmp ReleaseAndLoop
 
 pressedS
     ; have you tried turning sfx off and on again?
