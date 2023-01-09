@@ -74,37 +74,38 @@ CheckNextTankBFG
 .endp
 ; ------------------------
 .proc babymissile
-    mva #sfx_baby_missile sfx_effect 
     mva #11 ExplosionRadius
+GoBabyMissileSFX
+    mva #sfx_baby_missile sfx_effect 
 GoXmissile
     jmp xmissile
 .endp
 ; ------------------------
 .proc missile ;
-    mva #sfx_baby_missile sfx_effect
     mva #17 ExplosionRadius
-	bne babymissile.GoXmissile
+	bne babymissile.GoBabyMissileSFX
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc babynuke
-    mva #sfx_nuke sfx_effect 
     mva #25 ExplosionRadius
+GoBabyNukeSFX
+    mva #sfx_nuke sfx_effect 	; allways <>0
 	bne babymissile.GoXmissile
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc nuke
-    mva #sfx_nuke sfx_effect 
     mva #30 ExplosionRadius
-	bne babymissile.GoXmissile
+	bne babynuke.GoBabyNukeSFX
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc leapfrog
-    mva #sfx_baby_missile sfx_effect
     mva #17 ExplosionRadius
-    jsr xmissile
+;    mva #sfx_baby_missile sfx_effect 
+;    jsr xmissile
+    jsr babymissile.GoBabyMissileSFX
 
 	jsr SecondRepeat
 	
