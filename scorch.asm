@@ -26,7 +26,7 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $5C
+FirstZpageVariable = $5B
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar GradientNr		.byte
 	.zpvar GradientColors	.word
@@ -92,6 +92,7 @@ FirstZpageVariable = $5C
     .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
     .zpvar Counter .byte ;temporary Counter for outside loops
     .zpvar ExplosionRadius .byte
+	.zpvar FunkyBombCounter .byte
     .zpvar ResultY .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
@@ -129,7 +130,7 @@ FirstZpageVariable = $5C
     .zpvar goleft .byte
     .zpvar OffsetDL1 .byte
     .zpvar L1 .byte
-	
+	HotNapalmFlag = FunkyBombCounter ; reuse variable!
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
 
     displayposition = modify
