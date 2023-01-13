@@ -235,10 +235,10 @@ FirstSTART
     ; move original startup procedure to RAM
     Atari5200Splash = $2100  ; apparently there is some free space here
     ; 6502 initialization
-    SEI
-    CLD
-    LDX #$FF
-    TXS
+    ; SEI
+    ; CLD
+    ; LDX #$FF
+    ; TXS
     
     
     mwa $fffc temp  ; startup proc address
