@@ -246,7 +246,7 @@ FirstSTART
     mwa #Atari5200Splash+$16b modify
     jsr CopyFromROM    
     ; modify the end of the splash screen
-    lda #$60  ; JMP
+    lda #$60  ; rts
     sta (temp2),y
     
     jsr Atari5200Splash+$0f  ; after the diag cart detection
