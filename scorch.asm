@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 800 ;5200  ; or 800
+.def TARGET = 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -230,6 +230,36 @@ StatusBufferCopyEnd
 ; Game Code
 ;--------------------------------------------------
 FirstSTART
+    .IF TARGET = 5200
+    ; start in 5200 diagnostic mode
+    ; move original startup procedure to RAM
+Atari5200Splash = $2100  ; apparently there is some free space here
+    ; 6502 initialization
+    SEI
+    CLD
+    LDX #$FF
+    TXS
+    
+    
+    mwa $fffc temp  ; startup proc address
+    mwa #Atari5200Splash temp2
+    mwa #Atari5200Splash+$16f modify
+    jsr CopyFromROM    
+    ; modify the end of the splash screen
+    lda #$4c  ; JMP
+    sta (temp2),y
+    iny
+    lda #<Atari5200AfterSplash
+    sta (temp2),y
+    iny
+    lda #>Atari5200AfterSplash
+    sta (temp2),y
+    
+    jmp Atari5200Splash+$0f  ; after the diag cart detection
+    
+
+Atari5200AfterSplash
+    .ENDIF
 	jsr MakeDarkScreen
 
 	; one time zero variables in RAM (non zero page)
@@ -2062,7 +2092,7 @@ MODULEND
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
     .byte " scorch supersystem "    ;20 characters title
-    .byte "7B"          ;2 characters year .. 1900 + $7B = 2023
+    .byte " ", $ff          ;$BFFD == $ff means diagnostic cart, no splash screen
     .word FirstSTART
   .ELSE
      run FirstSTART
