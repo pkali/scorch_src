@@ -249,11 +249,14 @@ FirstSTART
     lda Atari5200KernelByte
     beq rom2joy
     cmp #$32
-    bne no5200splash
+    beq rom4joy
+altirra_kernel
+    mwa #Modified5200Splash+$8a modify
+    bne @+  ; JMP
 
 rom4joy
     mwa #Modified5200Splash+$16b modify
-    bne @+
+    bne @+  ; JMP
 
 rom2joy
     mwa #Modified5200Splash+$181 modify
@@ -282,10 +285,6 @@ rom2joy
 @    cpx RTCLOK+1
     bne @-
 no5200splash  
-       LDA #$C0
-       STA NMIEN
-       LDA #$02
-       STA SKCTL
     .ENDIF
 	jsr MakeDarkScreen
 
