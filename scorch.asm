@@ -233,23 +233,39 @@ FirstSTART
     .IF TARGET = 5200
     ; start in 5200 diagnostic mode
     ; move original startup procedure to RAM
-    Atari5200Splash = $2100  ; apparently there is some free space here
+    Modified5200Splash = $2100  ; apparently there is some free space here
     ; 6502 initialization
     ; SEI
     ; CLD
     ; LDX #$FF
     ; TXS
     
-    
+    ; check kernel version
+    Atari5200KernelByte = $fff8
+    ; $32 - 4 joy 
+    ; $00 - 2 joy
+    ; $ff - Altirra kernel
+
+    lda Atari5200KernelByte
+    beq rom2joy
+    cmp #$32
+    bne no5200splash
+
+rom4joy
+    mwa #Modified5200Splash+$16b modify
+    bne @+
+
+rom2joy
+    mwa #Modified5200Splash+$181 modify
+@
     mwa $fffc temp  ; startup proc address
-    mwa #Atari5200Splash temp2
-    mwa #Atari5200Splash+$16b modify
+    mwa #Modified5200Splash temp2
     jsr CopyFromROM    
     ; modify the end of the splash screen
     lda #$60  ; rts
     sta (temp2),y
     
-    jsr Atari5200Splash+$0f  ; after the diag cart detection
+    jsr Modified5200Splash+$0f  ; after the diag cart detection
     ; modify the text
     splash_text = $3c80 ; '.scorch.supersystem.copyright.19xx.atari'
     splash_year = splash_text + $1e
@@ -265,7 +281,11 @@ FirstSTART
     ; splash screen delay. maybe add fire to speed up?
 @    cpx RTCLOK+1
     bne @-
-  
+no5200splash  
+       LDA #$C0
+       STA NMIEN
+       LDA #$02
+       STA SKCTL
     .ENDIF
 	jsr MakeDarkScreen
 
