@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022
 
 ;---------------------------------------------------
-.def TARGET = 5200  ; or 800
+.def TARGET = 800 ;5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.24" ; number of this build (4 bytes)
+	dta d"1.25" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -264,7 +264,7 @@ rom2joy
     mwa $fffc temp  ; startup proc address
     mwa #Modified5200Splash temp2
     jsr CopyFromROM    
-    ; modify the end of the splash screen
+    ; modify the end of the splash procedure
     lda #$60  ; rts
     sta (temp2),y
     
