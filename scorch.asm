@@ -1897,7 +1897,7 @@ MakeDarkScreen
 	and #%00000101	; Start + Option
 	sne:mva #$40 escFlag	
 	and #%00000001 ; START KEY
-	seq:wait
+	seq:wait	; or waitRTC ?
     rts
 .endp
 

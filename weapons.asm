@@ -1149,7 +1149,7 @@ afterInventory
 	jsr MakeDarkScreen	
     jsr DisplayStatus
     jsr SetMainScreen   
-    jsr WaitOneFrame
+    ;jsr WaitOneFrame    ; not necessary
     jsr DrawTanks
 	bit SpyHardFlag
 	bpl NoSpyHard
