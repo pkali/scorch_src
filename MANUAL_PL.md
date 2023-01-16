@@ -7,7 +7,7 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 * ilość graczy (2 - 6) obejmuje tak ludzi jak graczy sterowanych przez komputer
 * początkową ilość gotówki każdego z graczy (8k to wybrana przez nas wartość optymalna, lecz przy krótkich rozgrywkach warto wybrać większą wartość)
 * grawitacja
-* maksymalna siła wiatru (wiatr jest losowany na początku każdej z rund, tu możemy wybrać jak silny może być)
+* maksymalna siła wiatru (wiatr jest losowany na początku każdej z rund lub w czasie rundy pomiędzy turami, tu możemy wybrać jak silny może być)
 * liczba rozgrywanych rund
 * szybkość lotu pocisków (nie ma wpływu na tor lotu - zmienia jedynie widoczną prędkość rysowania - nie zmienia nic w samej rozgrywce)
 * częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą “strzelać w próżnię” :) - jeśli grają tylko ludzie optymalne ustawienie to “norm”, w przypadku graczy sterowanych przez komputer… wedle uznania.
@@ -23,7 +23,7 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru).
+Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru) lub (leśli kursor wskazuje opcję wyboru siły wiatru "Wind") zmieniają sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie "Wind".
 
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 

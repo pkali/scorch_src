@@ -8,7 +8,7 @@ On the first screen, you can configure gameplay options:
 * number of players (2 - 6) includes both human and computer-controlled players
 * the initial amount of cash of each player (2K is the optimal value we chose, but for short games, it is worth choosing a higher value)
 * gravity
-* maximum wind strength (wind is drawn at the beginning of each round, here you can choose how strong it can be)
+* maximum wind strength (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be)
 * number of rounds in a game
 * missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
@@ -24,7 +24,7 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
-The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key change the color of the mountains (3 versions to choose).
+The [TAB] or [SELECT] key, and on the Atari 5200 console, the [5] controller key change the color of the mountains (3 versions to choose from) or (if the cursor indicates the wind strength selection option "Wind") change the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the "?" sign next to the word "Wind".
 
 The [RETURN] key or a joystick button moves to the next screen.
 
