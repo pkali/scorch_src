@@ -26,10 +26,12 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $5B
+
+FirstZpageVariable = $5A
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar GradientNr		.byte
 	.zpvar GradientColors	.word
+	.zpvar WindChangeInRound	.byte	; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
 	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -883,8 +885,14 @@ NoPlayerNoDeath
 
     inc:lda TankSequencePointer
     cmp NumberOfPlayers
-    sne:mva #0 TankSequencePointer
-
+	bne NotLastPlayerInRound
+    mva #0 TankSequencePointer
+	
+	lda WindChangeInRound
+	beq NoWindChangeNow
+	jsr GetRandomWind	; wind change after each turn (not round only)
+NoWindChangeNow
+NotLastPlayerInRound
     jmp MainRoundLoop
 .endp
 	

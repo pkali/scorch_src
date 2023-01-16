@@ -63,6 +63,10 @@
     mva #0 OptionsY
 
 OptionsMainLoop
+
+	lda WindChangeInRound
+	sta OptionsHere+126
+
     jsr OptionsInversion
     jsr getkey
     bit escFlag
@@ -119,6 +123,14 @@ OptionsNoTab
     jmp OptionsMainLoop
 .endp
 .proc SelectNextGradient
+	lda OptionsY	; if "Wind" option selected
+	cmp #$03
+	bne NotWind
+	lda WindChangeInRound	; wind change after each turn (not round only) flag
+	eor #$1f	; '?' character
+	sta WindChangeInRound
+	rts
+NotWind
 	ldy GradientNr
 	iny
 	cpy #$03
