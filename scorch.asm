@@ -379,6 +379,7 @@ NoRMT_PALchange
 	mva #2 chactl  ; necessary for 5200
 	
 START
+	jsr MakeDarkScreen
     ; Startup sequence
     jsr Initialize
 

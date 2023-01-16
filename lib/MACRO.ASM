@@ -77,10 +77,10 @@
 ;	WAIT
 ;	waits one frame (1/50 s(PAL) or 1/60s(NTSC))
 ?zero	 LDA VCOUNT
-		cmp #$05
+		cmp #$05	; if line<5 then wait for line>4
 		 bcc ?zero
 		 cmp #$70
-		 bcc ?WA
+		 bcc ?WA	; if line>=112 then
 		 sbc #10	; last lines correction
 ?WA		 cmp VCOUNT
 		 beq ?WA

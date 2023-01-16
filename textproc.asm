@@ -2106,6 +2106,7 @@ FinishResultDisplay
 ;--------------------------------------------------
 .proc GameOverScreen
 ;--------------------------------------------------
+	jsr MakeDarkScreen
     jsr WaitForKeyRelease
     jsr ClearScreen
     jsr ClearPMmemory
