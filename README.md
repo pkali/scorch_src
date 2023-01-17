@@ -51,6 +51,14 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.23
+2023-01-01
+
+New year edition! Who could imagine?
+The new feature is that pressing [Tab] in the main menu now changes colors of the small tank area down the screen and makes it clear what color version you are going to run (classic/ Polish rainbow/ Christmas colors).
+Also a small gradient optimization. 
+
+
 ###### Version 1.22
 2022-12-24
 

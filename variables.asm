@@ -261,7 +261,6 @@ oldplotL .DS [5]
 oldora  .DS [5]
 oldply  .DS [5]
 OldOraTemp .DS 1
-FunkyBombCounter .DS 1
 xtrajfb  .DS 2
 ytrajfb  .DS 2
 ;

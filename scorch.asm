@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.22" ; number of this build (4 bytes)
+	dta d"1.25" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -26,11 +26,12 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
-FirstZpageVariable = $5B
+
+FirstZpageVariable = $5A
     .zpvar DliColorBack		.byte = FirstZpageVariable
-	.zpvar Gradient			.byte
 	.zpvar GradientNr		.byte
 	.zpvar GradientColors	.word
+	.zpvar WindChangeInRound	.byte	; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
 	.zpvar JoystickNumber	.byte
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
@@ -93,6 +94,7 @@ FirstZpageVariable = $5B
     .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
     .zpvar Counter .byte ;temporary Counter for outside loops
     .zpvar ExplosionRadius .byte
+	.zpvar FunkyBombCounter .byte
     .zpvar ResultY .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
@@ -130,7 +132,7 @@ FirstZpageVariable = $5B
     .zpvar goleft .byte
     .zpvar OffsetDL1 .byte
     .zpvar L1 .byte
-	
+	HotNapalmFlag = FunkyBombCounter ; reuse variable!
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
 
     displayposition = modify
@@ -230,6 +232,62 @@ StatusBufferCopyEnd
 ; Game Code
 ;--------------------------------------------------
 FirstSTART
+    .IF TARGET = 5200
+    ; start in 5200 diagnostic mode
+    ; move original startup procedure to RAM
+    Modified5200Splash = $2100  ; apparently there is some free space here
+    ; 6502 initialization
+    ; SEI
+    ; CLD
+    ; LDX #$FF
+    ; TXS
+    
+    ; check kernel version
+    Atari5200KernelByte = $fff8
+    ; $32 - 4 joy 
+    ; $00 - 2 joy
+    ; $ff - Altirra kernel
+
+    lda Atari5200KernelByte
+    beq rom2joy
+    cmp #$32
+    beq rom4joy
+altirra_kernel
+    mwa #Modified5200Splash+$8a modify
+    bne @+  ; JMP
+
+rom4joy
+    mwa #Modified5200Splash+$16b modify
+    bne @+  ; JMP
+
+rom2joy
+    mwa #Modified5200Splash+$181 modify
+@
+    mwa $fffc temp  ; startup proc address
+    mwa #Modified5200Splash temp2
+    jsr CopyFromROM    
+    ; modify the end of the splash procedure
+    lda #$60  ; rts
+    sta (temp2),y
+    
+    jsr Modified5200Splash+$0f  ; after the diag cart detection
+    ; modify the text
+    splash_text = $3c80 ; '.scorch.supersystem.copyright.19xx.atari'
+    splash_year = splash_text + $1e
+    lda #"2"
+    sta splash_year
+    sta splash_year+2
+    lda #"0"
+    sta splash_year+1
+    lda #"3"
+    sta splash_year+3
+    
+    
+    ; splash screen delay. maybe add fire to speed up?
+@    cpx RTCLOK+1
+    bne @-
+no5200splash  
+    .ENDIF
 	jsr MakeDarkScreen
 
 	; one time zero variables in RAM (non zero page)
@@ -290,12 +348,12 @@ FirstSTART
 	mva #$10 MODUL-6+$a69	; $12 > $10
 	mva #$04 MODUL-6+$bf8	; $05 > $04
 	mva #$08 MODUL-6+$e3d	; $0a > $08
-	; and colors - sorry no memory!
-;	mva #$c4 dliColorsFore2+16
-;	mva #$c6 dliColorsFore2+17
-;	mva #$a4 dliColorsFore2+18
-;	mva #$a6 dliColorsFore2+19
-;	sta dliColorsFore2+20
+	; and mountains colors
+	mva #$c4 dliColorsFore2+16
+	mva #$c6 dliColorsFore2+17
+	mva #$a4 dliColorsFore2+18
+	mva #$a6 dliColorsFore2+19
+	sta dliColorsFore2+20
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
@@ -321,6 +379,7 @@ NoRMT_PALchange
 	mva #2 chactl  ; necessary for 5200
 	
 START
+	jsr MakeDarkScreen
     ; Startup sequence
     jsr Initialize
 
@@ -827,8 +886,14 @@ NoPlayerNoDeath
 
     inc:lda TankSequencePointer
     cmp NumberOfPlayers
-    sne:mva #0 TankSequencePointer
-
+	bne NotLastPlayerInRound
+    mva #0 TankSequencePointer
+	
+	lda WindChangeInRound
+	beq NoWindChangeNow
+	jsr GetRandomWind	; wind change after each turn (not round only)
+NoWindChangeNow
+NotLastPlayerInRound
     jmp MainRoundLoop
 .endp
 	
@@ -1193,72 +1258,47 @@ MakeTanksVisible
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGraph
-    ;sta dliA
-	;sty dliY
 	pha
 	phy
 	ldy dliCounter
 	lda dliColorsBack,y
-	bit Gradient
-	bmi GoGradient
-	ldy #$ff
-GoGradient
-	iny
     .IF TARGET = 800
 	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
-;		nop
+		nop
+		nop
     .ENDIF
+	nop
+	nop
     sta COLPF1
+	lda GradientNr
+	bne GoGradient
+	ldy #$ff	; one mauntain color
+GoGradient
+	iny
 	lda (GradientColors),y		; mountains colors array
-;	lda dliColorsFore		; one mauntain color
 	sta COLPF2
 	inc dliCounter
-	;ldy dliY
-    ;lda dliA
     ply
     pla
     rti
 .endp
-
-/* .proc DLIinterruptGraph
-	pha
-	lda dliColorsFore
-	nop
-	nop
-    nop
-    .IF TARGET = 800
-	    nop  ; necessary on 800 because DLIs take less time, jitter visible without it
-        nop
-
-    .ENDIF
-	sta COLPF2
-	lda DliColorBack
-    sta COLPF1
-	eor #$02
-	sta DliColorBack
-    pla
-    rti
-.endp */
 ;--------------------------------------------------
 .proc DLIinterruptOptions
-    ;sta dliA
-	;sty dliY
 	pha
-;	lda dliColorsBack
-	lda #0
+	phy
+	lda #0	; background color
     sta COLPF1
-	lda dliColorsFore+1
-	bit Gradient
-	bmi @+
-	lda dliColorsFore
-@	sta COLPF2
+	ldy GradientNr
+	beq @+
+	ldy #1
+@	lda (GradientColors),y		; mountains colors array
+	sta COLPF2
+	ply
     pla
     rti
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGameOver
-    ;sta dliA
-	;sty dliY
 	pha
 	phy
 	lda dliCounter
@@ -1295,7 +1335,6 @@ EndOfDLI_GO
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptText
-	;sta dliA
     pha
 	lda dliCounter
 	bne MoreBarsColorChange
@@ -1867,7 +1906,7 @@ MakeDarkScreen
 	and #%00000101	; Start + Option
 	sne:mva #$40 escFlag	
 	and #%00000001 ; START KEY
-	seq:wait
+	seq:wait	; or waitRTC ?
     rts
 .endp
 
@@ -2088,7 +2127,7 @@ MODULEND
     org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
     .byte " scorch supersystem "    ;20 characters title
-    .byte "7A"          ;2 characters year .. 1900 + $7A = 2020
+    .byte " ", $ff          ;$BFFD == $ff means diagnostic cart, no splash screen
     .word FirstSTART
   .ELSE
      run FirstSTART

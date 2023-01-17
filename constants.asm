@@ -599,7 +599,7 @@ CreditsStart
 	dta d"You were playin",d"g"*
 	dta d"Scorc",d"h"*
 	dta d"Warsaw, Miam",d"i"*
-	dta d"2000-202",d"2"*
+	dta d"2000-202",d"3"*
 	dta d" "*
 	dta d"Programmin",d"g"*
 	dta d"Tomasz 'Pecus' Peck",d"o"*
@@ -629,6 +629,7 @@ CreditsStart
 	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
 	.IF target = 5200
     dta d"x-usr(1536), Aking, JAC!, phaero",d"n"*
+	dta d"RB520",d"0"*
 	.ENDIF
 	dta d" "*
 	dta d"Additional testin",d"g"*

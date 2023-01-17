@@ -92,6 +92,12 @@
 ?nowait
          .ENDM
 ;-------------------------------------
+	.macro waitRTC
+	lda RTCLOK+1
+?wa	cmp RTCLOK+1
+	beq ?wa
+	.endm
+;-------------------------------------
     .macro negw
     ; negate the given word (0-a)
 ;-------------------------------------

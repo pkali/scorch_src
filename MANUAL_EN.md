@@ -8,7 +8,7 @@ On the first screen, you can configure gameplay options:
 * number of players (2 - 6) includes both human and computer-controlled players
 * the initial amount of cash of each player (2K is the optimal value we chose, but for short games, it is worth choosing a higher value)
 * gravity
-* maximum wind strength (wind is drawn at the beginning of each round, here you can choose how strong it can be)
+* maximum wind strength (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be)
 * number of rounds in a game
 * missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
@@ -24,7 +24,7 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
-The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key change the color of the mountains (3 versions to choose).
+The [TAB] or [SELECT] key, and on the Atari 5200 console, the [5] controller key change the color of the mountains (3 versions to choose from) or (if the cursor indicates the wind strength selection option "Wind") change the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the "?" sign next to the word "Wind".
 
 The [RETURN] key or a joystick button moves to the next screen.
 
@@ -75,6 +75,7 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 | [START] | N/A | speed up some game animations. |
 | [O] | [3] | end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the [ESC] key with the difference that the summary and credits are displayed. |
 | [START] + [OPTION] | N/A | immediately force the end of the game (Game Over), just like [O] but without confirmation.
+| [G] | N/A | changes the mountain shading |
 | [ESC] | [*] | during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the [ESC] key, which allows you to abort the game and return to the beginning (of course, there is protection against accidental pressing). |
 | [Y] | [1] | when asked to abort or terminate the game - confirmation |
 
@@ -181,6 +182,8 @@ Only these points determine the order in the summary
 * **Lazy Darwin** - works just like **Lazy Boy** but targets the weakest opponent. In this weapon, after automatic targeting, "visual targeting" remains active, so you can easily change the target and independently select another opponent by seeing if you hit him.
 * **Auto Defense** - activates the mode of automatic activation of defensive weapons. After its activation, the tank automatically activates the strongest shield it has (consuming it, of course) at any time when there is no shield (also between shots of other players). At the same time, if the tank's energy level drops below 30 units, it automatically activates **Battery** if it has it. This weapon remains active until the end of the round and is indicated by the "computer" symbol before the name of the active defensive weapon in the status line. It is the second defensive weapon that does not deactivate other defensive weapons when used.
 * **Spy Hard** - Help for the forgetful :) . When activated, it shows a preview of information about the next opponents one by one. Left/Right - changes the "spied" tank. Fire/Space/Return/Esc - ends the "spying". This is the last defensive weapon, which does not deactivate other defensive weapons when used.
+
+Due to the different warhead tracking system of **MIRV** weapons, the **Bouncy Castle** and **Mag Deflector** defensive weapons only use the shielding function when hit by these weapons. In addition, **MIRV** warheads do not bounce or fly through sidewalls when falling!
 
 None of the shields protect against **Napalm**. **Bouncy Castle** or **Mag Deflector** on a direct hit will deflect it or carry it past, but just hit very close to a tank and its shield will not save it.
 

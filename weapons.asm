@@ -74,37 +74,38 @@ CheckNextTankBFG
 .endp
 ; ------------------------
 .proc babymissile
-    mva #sfx_baby_missile sfx_effect 
     mva #11 ExplosionRadius
+GoBabyMissileSFX
+    mva #sfx_baby_missile sfx_effect 
 GoXmissile
     jmp xmissile
 .endp
 ; ------------------------
 .proc missile ;
-    mva #sfx_baby_missile sfx_effect
     mva #17 ExplosionRadius
-	bne babymissile.GoXmissile
+	bne babymissile.GoBabyMissileSFX
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc babynuke
-    mva #sfx_nuke sfx_effect 
     mva #25 ExplosionRadius
+GoBabyNukeSFX
+    mva #sfx_nuke sfx_effect 	; allways <>0
 	bne babymissile.GoXmissile
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc nuke
-    mva #sfx_nuke sfx_effect 
     mva #30 ExplosionRadius
-	bne babymissile.GoXmissile
+	bne babynuke.GoBabyNukeSFX
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc leapfrog
-    mva #sfx_baby_missile sfx_effect
     mva #17 ExplosionRadius
-    jsr xmissile
+;    mva #sfx_baby_missile sfx_effect 
+;    jsr xmissile
+    jsr babymissile.GoBabyMissileSFX
 
 	jsr SecondRepeat
 	
@@ -238,22 +239,20 @@ GoXmissileWithSaveXYdraw
 .endp
 ; ------------------------
 .proc napalm
-    mva #sfx_napalm sfx_effect
-    mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
-    jsr CalculateExplosionRange
-	mva #0 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
+	mva #0 HotNapalmFlag	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
 	beq xnapalm
 .endp
 ; ------------------------
 .proc hotnapalm
-    mva #sfx_napalm sfx_effect
-    mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
-    jsr CalculateExplosionRange
-	mva #1 ExplosionRadius	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
+	mva #1 HotNapalmFlag	; in this weapon - flag: 0 - napalm, 1 - hotnapalm
 ;	jmp xnapalm
 .endp
 ; ------------------------
 .proc xnapalm
+    mva #sfx_napalm sfx_effect
+    mva #(napalmRadius+4) ExplosionRadius 	; real radius + 4 pixels (half characrer width)
+    jsr CalculateExplosionRange
+	;
 	mwa xdraw xcircle	; store hitpoint for future repeats
 	ldy #30		; repeat 30 times
 	sty magic	
@@ -271,7 +270,7 @@ RepeatFlame		; internal loop (draw flames)
 	sbc #1	; over ground
 	sta ydraw
 	lda xdraw
-	and ExplosionRadius	; if hotnapalm and x is odd:
+	and HotNapalmFlag	; if hotnapalm and x is odd:
 	:2 asl	; modify y position 4 pixels up
 	ldy ydraw
 	sta ydraw
@@ -343,7 +342,7 @@ BurnedCheckLoop
 	bcc TankOutOfFire
 
     ldy #40		; energy decrease (napalm) - but if hotnapalm:
-	lda ExplosionRadius
+	lda HotNapalmFlag
 	beq NotHot
 	ldy #80		; energy decrease (hotnapalm)
 NotHot
@@ -385,50 +384,40 @@ EndNurnedCheckLoop
 .endp
 ; ------------------------
 .proc babydigger
-    mva #sfx_digger sfx_effect
+    mva #1 diggery  ; how many branches (-1)
+GoBabydiggerSFX
+	mva #sfx_digger sfx_effect
     mva #0 sandhogflag
     mva #13 DigLong
-    mva #1 diggery  ; how many branches (-1)
     bne xdigger
 .endp
 ; ------------------------
 .proc digger ;
-    mva #sfx_digger sfx_effect
-    mva #0 sandhogflag
-    mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
-    bne xdigger
+    bne babydigger.GoBabydiggerSFX
 .endp
 ; ------------------------
 .proc heavydigger
-    mva #sfx_digger sfx_effect
-    mva #0 sandhogflag
-    mva #13 DigLong
     mva #7 diggery  ; how many branches  (-1)
-    bne xdigger
+    bne babydigger.GoBabydiggerSFX
 .endp
 ; ------------------------
 .proc babysandhog
-    mva #sfx_sandhog sfx_effect
-    mva #char_sandhog_offset sandhogflag
-    mva #13 DigLong
     mva #1 diggery  ; how many branches (-1)
-    bne xdigger
+    bne heavysandhog.GoHeavysandhogSFX
 .endp
 ; ------------------------
 .proc sandhog
-    mva #sfx_sandhog sfx_effect
-    mva #char_sandhog_offset sandhogflag
-    mva #13 DigLong
     mva #3 diggery  ; how many branches (-1)
-    bne xdigger
+    bne heavysandhog.GoHeavysandhogSFX
 .endp
 ; ------------------------
 .proc heavysandhog
+    mva #5 diggery  ; how many branches (-1)
+GoHeavysandhogSFX
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
     mva #13 DigLong
-    mva #5 diggery  ; how many branches (-1)
 ;    jmp xdigger
 .endp
 ; ------------------------
@@ -1160,7 +1149,7 @@ afterInventory
 	jsr MakeDarkScreen	
     jsr DisplayStatus
     jsr SetMainScreen   
-    jsr WaitOneFrame
+    ;jsr WaitOneFrame    ; not necessary
     jsr DrawTanks
 	bit SpyHardFlag
 	bpl NoSpyHard
@@ -1168,8 +1157,7 @@ afterInventory
 NoSpyHard
     RmtSong song_ingame
     mva #0 escFlag
-    jsr WaitForKeyRelease
-    jmp BeforeFire   
+    jmp ReleaseAndLoop   
 @
     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
@@ -1196,7 +1184,14 @@ jumpFromStick
     jeq pressedM
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
-    jmp notpressed
+	.IF TARGET = 800
+	cmp #61	; G
+	bne EndKeys
+	jsr SelectNextGradient
+	jmp ReleaseAndLoop
+	.ENDIF
+EndKeys
+	jmp notpressed
 checkJoy
     ;------------JOY-------------
     ;happy happy joy joy
@@ -1376,8 +1371,7 @@ pressedTAB
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....
     beq pressedTAB
-    jsr WaitForKeyRelease
-    jmp BeforeFire
+    bne ReleaseAndLoop
 
 CTRLpressedTAB
     mva #sfx_purchase sfx_effect
@@ -1394,21 +1388,20 @@ CTRLpressedTAB
     lda ActiveWeapon,x
     jsr HowManyBullets ; and we have qty of owned shells. Ufff....
     beq CTRLpressedTAB
-    jsr WaitForKeyRelease
-    jmp BeforeFire
+    bne ReleaseAndLoop
 
 pressedM
     ; have you tried turning the music off and on again?
     lda #$ff
     eor:sta noMusic
     RmtSong song_ingame
-    jsr WaitForKeyRelease
-    jmp BeforeFire
+    jmp ReleaseAndLoop
 
 pressedS
     ; have you tried turning sfx off and on again?
     lda #$ff
     eor:sta noSfx
+ReleaseAndLoop
     jsr WaitForKeyRelease
     jmp BeforeFire
 
