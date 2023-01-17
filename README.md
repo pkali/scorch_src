@@ -59,6 +59,7 @@ This version is 5200 SuperSystem focused.
 - the correct production year in the splash screens!!!
 - very rare hangups when accessing the inventory seemingly eliminated, thanks @RB5200 for testing!
 - a new feature - pressing [Tab] (atari800) or [5] (5200) when selecting the wind power switches wind mode to changing with each turn, which makes aiming arguably more challenging! It is indicated by "?" next to the "Wind" in the main menu.
+- pressing [G] during the game changes the color scheme (classic, Polish rainbow, Xmas).
 - all these changes were made possible thanks to the extensive code size optimization by @Pecus
 
 
