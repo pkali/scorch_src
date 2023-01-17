@@ -629,6 +629,7 @@ CreditsStart
 	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
 	.IF target = 5200
     dta d"x-usr(1536), Aking, JAC!, phaero",d"n"*
+	dta d"RB520",d"0"*
 	.ENDIF
 	dta d" "*
 	dta d"Additional testin",d"g"*
