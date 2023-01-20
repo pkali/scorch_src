@@ -626,10 +626,13 @@ CreditsStart
 	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
 	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
 	dta d"brad-colbert, archon800, nowy80",d","*
-	dta d"Shaggy the Atarian, RetroBorsuk, ZP",d"H"*
+	dta d"Shaggy the Atarian, RetroBorsuk, ZPH"
 	.IF target = 5200
-    dta d"x-usr(1536), Aking, JAC!, phaero",d"n"*
+	dta d","*
+    dta d"x-usr(1536), Aking, JAC!, phaeron",d","*
 	dta d"RB520",d"0"*
+	.ELSE
+	dta d" "*
 	.ENDIF
 	dta d" "*
 	dta d"Additional testin",d"g"*
