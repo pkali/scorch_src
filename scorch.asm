@@ -1457,7 +1457,11 @@ EndOfCreditsVBI
         sta stick0
 		
 		ldx JoystickNumber
-		lda trig0,x
+		; check shift key (5200 second fire button)
+		lda SKSTAT
+		:3 lsr		; third bit
+		and trig0,x	; and first button	
+		;lda trig0,x
 		sta strig0        ;Move hardware to shadow
         
         mva chbas chbase
