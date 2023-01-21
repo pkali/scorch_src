@@ -274,14 +274,12 @@ rom2joy
     ; modify the text
     splash_text = $3c80 ; '.scorch.supersystem.copyright.19xx.atari'
     splash_year = splash_text + $1e
-    lda #"2"
-    sta splash_year
-    sta splash_year+2
-    lda #"0"
-    sta splash_year+1
-    lda #"3"
-    sta splash_year+3
-    
+	splash_copyright = splash_text + $14
+	ldy #19	; 20 characters
+@	lda NewSplashText,y
+	sta splash_copyright,y
+	dey
+	bpl @-    
     
     ; splash screen delay. maybe add fire to speed up?
 @    cpx RTCLOK+1

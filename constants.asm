@@ -644,9 +644,13 @@ CreditsStart
 	dta d"         "*
 CreditsEnd
 .IF target = 5200
-  CreditsLines=37
+  CreditsLines=38
 .ELSE
   CreditsLines=42  ; 34 in reality. add 7?
 .ENDIF
-
+.IF target = 5200
+  ; Atari 5200 splash
+  NewSplashText=*
+	dta d"copyright 2023 atari"
+.ENDIF
 .endif
