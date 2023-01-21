@@ -1185,6 +1185,13 @@ jumpFromStick
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
 	.IF TARGET = 800
+	cmp #38	; /
+	bne NoVdebugSwitch
+	lda Vdebug
+	eor #$ff
+	sta Vdebug
+	jmp ReleaseAndLoop
+NoVdebugSwitch	
 	cmp #61	; G
 	bne EndKeys
 	jsr SelectNextGradient
@@ -1789,10 +1796,16 @@ SkipCollisionCheck
     mwa ytraj+1 ydraw
 	
 	bit TestFlightFlag
-	bvs NoUnPlot
-    lda tracerflag
+	bvc NoTestFlight
+	bit Vdebug
+	bpl NoTestFlight
+	jsr WaitOneFrame	; visualize AI targeting
+	jmp YesUnPlot
+NoTestFlight
+	lda tracerflag
     bne NoUnPlot
-
+	
+YesUnPlot
     jsr UnPlot
 
 NoUnPlot

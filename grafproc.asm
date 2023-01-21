@@ -224,6 +224,8 @@ PutPixelinDraw
     bit drawFunction
     bpl @+
     inw LineLength
+	bit Vdebug
+	bmi MeasureVisualisation
     jmp ContinueDraw  ; was `bne` - not good, because LineLength starts from $ffff
 @
     bvc @+
@@ -271,6 +273,7 @@ CheckCollisionDraw
 StopHitChecking
     jmp ContinueDraw
 @
+MeasureVisualisation
     jsr plot   
 
 ContinueDraw

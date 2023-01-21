@@ -27,12 +27,13 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $5A
+FirstZpageVariable = $59
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar GradientNr		.byte
 	.zpvar GradientColors	.word
 	.zpvar WindChangeInRound	.byte	; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
 	.zpvar JoystickNumber	.byte
+	.zpvar Vdebug			.byte ; "visual debug" flag ($00 - off, $ff - on)
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
