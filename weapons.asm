@@ -1166,8 +1166,17 @@ NoSpyHard
     cmp #$80|@kbcode._tab
     jeq CTRLPressedTAB
 
-    and #$3f ;CTRL and SHIFT ellimination
 jumpFromStick
+	.IF TARGET = 800
+	cmp #$80|17	; Ctrl+Help
+	bne NoVdebugSwitch
+	lda Vdebug
+	eor #$ff
+	sta Vdebug
+	jmp ReleaseAndLoop
+NoVdebugSwitch	
+	.ENDIF
+    and #$3f ;CTRL and SHIFT ellimination
     cmp #@kbcode._up  ; $e
     jeq pressedUp
     cmp #@kbcode._down  ; $f
@@ -1185,13 +1194,6 @@ jumpFromStick
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
 	.IF TARGET = 800
-	cmp #38	; /
-	bne NoVdebugSwitch
-	lda Vdebug
-	eor #$ff
-	sta Vdebug
-	jmp ReleaseAndLoop
-NoVdebugSwitch	
 	cmp #61	; G
 	bne EndKeys
 	jsr SelectNextGradient
