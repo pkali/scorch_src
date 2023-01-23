@@ -73,14 +73,7 @@
          PLA
          .ENDM
 ;-------------------------------------
-    .macro wait
-     bit VCOUNT
-     bmi *-3
-     bit VCOUNT
-     bpl *-3
-     .endm
-;-------------------------------------
-	.MACRO WAITer
+	.MACRO WAIT
 ;	WAIT
 ;	waits one frame (1/50 s(PAL) or 1/60s(NTSC))
 ?ze	LDA VCOUNT
