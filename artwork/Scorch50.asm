@@ -760,7 +760,7 @@ quit
 	ini main
 ; ---
 
-	;opt l-  ; this stops the listing
+	opt l-
 
 .MACRO	SPRITES
 missiles
