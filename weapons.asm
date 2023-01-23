@@ -1805,7 +1805,7 @@ SkipCollisionCheck
 	bit TestFlightFlag
 	bvc NoTestFlight
 	bit Vdebug
-	bpl NoTestFlight
+	bpl NoUnplot
 	jsr WaitOneFrame	; visualize AI targeting
 	jmp YesUnPlot
 NoTestFlight
