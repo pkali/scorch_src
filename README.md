@@ -55,12 +55,12 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 2023-01-23
 
 Early morning edition. It is 5:11 am and I am writing this instead of dreaming of electric sheep.
-For the last 6 weeks theversions we released had an awful bug - the conversations of tanks were completely invisible. Thanks for pointing this out, RB5200.
+For the last 6 weeks, the versions we released had an awful bug - the conversations of tanks were completely invisible. Thanks for pointing this out, RB5200.
 - tanks talk to each other again
-- better stochastic non blocking wait one frame
-- rare dstance measurement bug fixed (rarely a tank survived a direct hit)
-- 5200: second fire works (by RB5200)
-- "visual debug" mode in A800 version, triggered by pressing [CTRL]+[HELP]. It displays distances measured, laser aiming and aiming technique. It leaves a mess on screen, but it does not impair the game, just makes it a bit harder.
+- better stochastic non-blocking wait one frame
+- rare distance measurement bug fixed (rarely a tank survived a direct hit)
+- 5200: second fire (by RB5200)
+- "visual debug" mode in A800 version, triggered by pressing [CTRL]+[HELP]. It displays distances measured, laser aiming, and aiming technique. It leaves a mess on the screen, but it does not impair the game, just makes it a bit harder.
 
 
 ###### Version 1.25
@@ -672,3 +672,4 @@ Together with Pecus we were working on this piece of code for four years and it 
 Now it's your turn to help this idea happen!
 
 ...transmission error...former history missing...
+
