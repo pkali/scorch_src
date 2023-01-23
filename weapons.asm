@@ -1166,8 +1166,17 @@ NoSpyHard
     cmp #$80|@kbcode._tab
     jeq CTRLPressedTAB
 
-    and #$3f ;CTRL and SHIFT ellimination
 jumpFromStick
+	.IF TARGET = 800
+	cmp #$80|17	; Ctrl+Help
+	bne NoVdebugSwitch
+	lda Vdebug
+	eor #$ff
+	sta Vdebug
+	jmp ReleaseAndLoop
+NoVdebugSwitch	
+	.ENDIF
+    and #$3f ;CTRL and SHIFT ellimination
     cmp #@kbcode._up  ; $e
     jeq pressedUp
     cmp #@kbcode._down  ; $f
@@ -1451,8 +1460,10 @@ AfterOffensiveText
 	cmp #ind_Laser__________ ; laser
 	bne NotStrongShoot
 	; Laser: (not)very strong - invisible - shot for laser beam end coordinates
+	bit Vdebug
+	bmi @+
 	mva #0 color
-	lda #1
+@	lda #1
 	sta Force
 	sta Force+1
 	mva #$ff LaserFlag	; $ff - Laser
@@ -1748,7 +1759,10 @@ LaserNoWalls
 	bit TestFlightFlag
 	bmi nowait
 	bit LaserFlag	; faster laser prepare
-	bmi nowait
+	bpl nolaserwait
+	bit Vdebug
+	bpl nowait
+nolaserwait
     lda color
     beq nonowait	; smoke tracer erases slowly
     lda tracerflag	
@@ -1789,10 +1803,16 @@ SkipCollisionCheck
     mwa ytraj+1 ydraw
 	
 	bit TestFlightFlag
-	bvs NoUnPlot
-    lda tracerflag
+	bvc NoTestFlight
+	bit Vdebug
+	bpl NoTestFlight
+	jsr WaitOneFrame	; visualize AI targeting
+	jmp YesUnPlot
+NoTestFlight
+	lda tracerflag
     bne NoUnPlot
-
+	
+YesUnPlot
     jsr UnPlot
 
 NoUnPlot

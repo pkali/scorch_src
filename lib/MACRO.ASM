@@ -73,23 +73,18 @@
          PLA
          .ENDM
 ;-------------------------------------
-         .MACRO WAIT
+	.MACRO WAIT
 ;	WAIT
 ;	waits one frame (1/50 s(PAL) or 1/60s(NTSC))
-?zero	 LDA VCOUNT
-		cmp #$05	; if line<5 then wait for line>4
-		 bcc ?zero
-		 cmp #$70
-		 bcc ?WA	; if line>=112 then
-		 sbc #10	; last lines correction
-?WA		 cmp VCOUNT
-		 beq ?WA
-		 bcc ?WA
-?WFRAME	 cmp VCOUNT
-		 beq ?nowait
-		 bcs ?WFRAME
-?nowait
-         .ENDM
+?ze	LDA VCOUNT
+	cmp #16	; if line<16 then wait for line>15 (long VBI protection)
+	bcc ?ze
+	sbc #10	; last lines correction
+?wa	cmp VCOUNT
+	bcc ?wa
+?wf	cmp VCOUNT
+	bcs ?wf
+	.ENDM
 ;-------------------------------------
 	.macro waitRTC
 	lda RTCLOK+2

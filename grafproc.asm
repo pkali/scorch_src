@@ -140,8 +140,13 @@ LineParametersReady
     ora DX+1
     ora DY
     ora DY+1
-    jeq EndOfDraw
+	bne NotOnePoint
+	; length=0
+	sta LineLength
+	sta LineLength+1
+    jmp EndOfDraw
 
+NotOnePoint
     ; here we have DX,DY,XK and we know which operations
     ; are to be performed with these factors when doing PLOT
     ; (accordingly to given bits of 'HowToDraw')
@@ -219,6 +224,8 @@ PutPixelinDraw
     bit drawFunction
     bpl @+
     inw LineLength
+	bit Vdebug
+	bmi MeasureVisualisation
     jmp ContinueDraw  ; was `bne` - not good, because LineLength starts from $ffff
 @
     bvc @+
@@ -266,6 +273,7 @@ CheckCollisionDraw
 StopHitChecking
     jmp ContinueDraw
 @
+MeasureVisualisation
     jsr plot   
 
 ContinueDraw

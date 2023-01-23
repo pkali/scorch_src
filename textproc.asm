@@ -1634,6 +1634,27 @@ displayloop1
 .endp
 
 ;--------------------------------------------------------
+.proc DisplayOffensiveTextNr ;
+    ldx TextNumberOff
+    lda talk.OffensiveTextTableL,x
+    sta LineAddress4x4
+    lda talk.OffensiveTextTableH,x
+    sta LineAddress4x4+1
+    inx ; the next text
+    lda talk.OffensiveTextTableH,x
+    sta temp+1
+    lda talk.OffensiveTextTableL,x
+    sta temp  ; opty possible
+    ; substract address of the next text from previous to get text length
+    sbw temp LineAddress4x4 temp2
+    mva temp2 fx 
+
+    ;jsr Display4x4AboveTank
+    ;rts
+	; POZOR !!!
+.endp
+
+;--------------------------------------------------------
 .proc Display4x4AboveTank ;
     ; Displays texts using PutChar4x4 above tank and mountains.
     ; Pretty cool, eh!
@@ -1749,27 +1770,6 @@ DOTOldLowestValue
 
     jmp TypeLine4x4.noLengthNoColor  ; rts
 
-.endp
-
-;--------------------------------------------------------
-.proc DisplayOffensiveTextNr ;
-    ldx TextNumberOff
-    lda talk.OffensiveTextTableL,x
-    sta LineAddress4x4
-    lda talk.OffensiveTextTableH,x
-    sta LineAddress4x4+1
-    inx ; the next text
-    lda talk.OffensiveTextTableH,x
-    sta temp+1
-    lda talk.OffensiveTextTableL,x
-    sta temp  ; opty possible
-    ; substract address of the next text from previous to get text length
-    sbw temp LineAddress4x4 temp2
-    mva temp2 fx 
-
-    ;jsr Display4x4AboveTank
-    ;rts
-	; POZOR !!!
 .endp
 
 ;--------------------------------------------------------

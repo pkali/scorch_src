@@ -15,7 +15,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.25" ; number of this build (4 bytes)
+	dta d"1.26" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -27,12 +27,13 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $5A
+FirstZpageVariable = $59
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar GradientNr		.byte
 	.zpvar GradientColors	.word
 	.zpvar WindChangeInRound	.byte	; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
 	.zpvar JoystickNumber	.byte
+	.zpvar Vdebug			.byte ; "visual debug" flag ($00 - off, $ff - on)
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -274,14 +275,12 @@ rom2joy
     ; modify the text
     splash_text = $3c80 ; '.scorch.supersystem.copyright.19xx.atari'
     splash_year = splash_text + $1e
-    lda #"2"
-    sta splash_year
-    sta splash_year+2
-    lda #"0"
-    sta splash_year+1
-    lda #"3"
-    sta splash_year+3
-    
+	splash_copyright = splash_text + $14
+	ldy #19	; 20 characters
+@	lda NewSplashText,y
+	sta splash_copyright,y
+	dey
+	bpl @-    
     
     ; splash screen delay. maybe add fire to speed up?
 @    cpx RTCLOK+1
@@ -1457,7 +1456,11 @@ EndOfCreditsVBI
         sta stick0
 		
 		ldx JoystickNumber
-		lda trig0,x
+		; check shift key (5200 second fire button)
+		lda SKSTAT
+		:3 lsr		; third bit
+		and trig0,x	; and first button	
+		;lda trig0,x
 		sta strig0        ;Move hardware to shadow
         
         mva chbas chbase
