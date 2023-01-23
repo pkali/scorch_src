@@ -51,6 +51,18 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.26
+2023-01-23
+
+Early morning edition. It is 5:11 am and I am writing this instead of dreaming of electric sheep.
+For the last 6 weeks theversions we released had an awful bug - the conversations of tanks were completely invisible. Thanks for pointing this out, RB5200.
+- tanks talk to each other again
+- better stochastic non blocking wait one frame
+- rare dstance measurement bug fixed (rarely a tank survived a direct hit)
+- 5200: second fire works (by RB5200)
+- "visual debug" mode in A800 version, triggered by pressing [CTRL]+[HELP]. It displays distances measured, laser aiming and aiming technique. It leaves a mess on screen, but it does not impair the game, just makes it a bit harder.
+
+
 ###### Version 1.25
 2023-01-17
 
