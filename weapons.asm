@@ -1149,8 +1149,12 @@ afterInventory
 	jsr MakeDarkScreen	
     jsr DisplayStatus
     jsr SetMainScreen   
-    ;jsr WaitOneFrame    ; not necessary
     jsr DrawTanks
+    ;jsr WaitOneFrame    ; not necessary
+	bit LazyFlag
+	bvc NoLazy
+	jsr LazyBoys
+NoLazy
 	bit SpyHardFlag
 	bpl NoSpyHard
 	jsr SpyHard
@@ -2505,6 +2509,41 @@ SpyHardEnd
     sta COLOR2  ; set color of status line
     jsr PutTankNameOnScreen
     jsr DisplayStatus
+	rts
+.endp
+; -------------------------------------------------
+.proc LazyBoys
+; -------------------------------------------------
+    mva #sfx_lazy_boys sfx_effect
+	jsr PrepareAIShoot
+	ldx TankNr
+	bit LazyFlag
+	bmi GoDarwin
+	jsr FindBestTarget2 ; find nearest tank neighbour
+	jsr LazyAim
+	lda #%00000000	; set "visual aiming" off
+	beq EndLazy
+GoDarwin
+	jsr FindBestTarget3 ; find target with lowest energy
+	jsr LazyAim
+	lda #%10000000
+EndLazy
+	sta TestFlightFlag	; set "visual aiming" on
+	rts
+.endp
+.proc LazyAim
+	; aiming proc for Lazy ... weapons
+	; as proc for memory optimisation
+	; Y - target tan nr
+	; A - target direction
+	sty TargetTankNr
+	; aiming
+	jsr TakeAim		; direction still in A (0 - left, >0 - right)
+	lda Force
+	sta ForceTableL,x
+	lda Force+1
+	sta ForceTableH,x
+	jsr MoveBarrelToNewPosition
 	rts
 .endp
 ; -------------------------------------------------

@@ -908,27 +908,13 @@ NoAutoDefense
 	cmp #ind_Lazy_Boy_______
 	bne NoLazyBoy
 	; Lazy Boy - do it like battery
-    mva #sfx_lazy_boys sfx_effect
-	phy
-	jsr PrepareAIShoot
-	jsr FindBestTarget2 ; find nearest tank neighbour
-	jsr LazyAim
-	ply
-	lda #%00000000
-	sta TestFlightFlag	; set "visual aiming" off
+	mva #%01000000 LazyFlag
     jmp DecreaseDefensive ; bypass activation
 NoLazyBoy
 	cmp #ind_Lazy_Darwin____
 	bne NoLazyDarwin
 	; Lazy Darwin - do it like battery
-    mva #sfx_lazy_boys sfx_effect
-	phy
-	jsr PrepareAIShoot
-	jsr FindBestTarget3 ; find target with lowest energy
-	jsr LazyAim
-	ply
-	lda #%10000000
-	sta TestFlightFlag	; set "visual aiming" on
+	mva #%11000000 LazyFlag
     jmp DecreaseDefensive ; bypass activation
 NoLazyDarwin
 	cmp #ind_Spy_Hard_______
@@ -973,22 +959,6 @@ DecreaseDefensive
 DefActivationEnd
     jmp WaitForKeyRelease ; rts
 
-.endp
-.proc LazyAim
-	; aiming proc for Lazy ... weapons
-	; as proc for memory optimisation
-	; Y - target tan nr
-	; A - target direction
-	sty TargetTankNr
-	; aiming
-	jsr TakeAim		; direction still in A (0 - left, >0 - right)
-	lda Force
-	sta ForceTableL,x
-	lda Force+1
-	sta ForceTableH,x
-	lda NewAngle
-	sta AngleTable,x
-	rts
 .endp
 ; -----------------------------------------------------
 .proc calcPosDefensive
