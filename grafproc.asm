@@ -2205,15 +2205,12 @@ ybarrel
     rts
 .endp
 ;--------------------------------------------------
-.proc ColorsOfSprites     
-    lda TankColoursTable ; colours of sprites under tanks
-    sta PCOLR0
-    lda TankColoursTable+1
-    sta PCOLR1
-    lda TankColoursTable+2
-    sta PCOLR2
-    lda TankColoursTable+3
-    sta PCOLR3
+.proc ColorsOfSprites
+	ldy #3
+@	lda TankColoursTable,y ; colours of sprites under tanks
+	sta PCOLR0,y
+	dey
+	bpl @-
     LDA TankColoursTable+4
     STA COLOR3     ; joined missiles (5th tank)
     rts
