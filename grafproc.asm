@@ -2197,7 +2197,11 @@ ybarrel
 .proc PMoutofScreen
 ;--------------------------------------------------
     lda #$00 ; let all P/M disappear
-    :8 sta hposp0+#
+	ldy #7
+@	sta hposp0,y
+	dey
+	bpl @-
+    ;:8 sta hposp0+#	; optimized... but Y!
     rts
 .endp
 ;--------------------------------------------------
