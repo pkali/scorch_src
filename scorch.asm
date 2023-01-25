@@ -1631,6 +1631,14 @@ LimitForce
 
 .endp
 ;----------------------------------------------
+.proc Table2Force
+	lda ForceTableL,x
+	sta Force
+	lda ForceTableH,x
+	sta Force+1
+	rts
+.endp
+;----------------------------------------------
 .proc MoveBarrelToNewPosition
 	mva #1 Erase
 	jsr DrawTankNr.BarrelChange

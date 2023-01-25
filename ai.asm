@@ -545,10 +545,7 @@ skipThisPlayer
 	sta RandBoundaryHigh+1
     jsr RandomizeForce
 RepeatAim
-	lda ForceTableL,x
-	sta Force
-	lda ForceTableH,x
-	sta Force+1
+	jsr Table2Force
 	; wind correction 90+(wind/8)
 	mwa Wind temp2
 	:7 lsrw temp2

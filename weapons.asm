@@ -1473,10 +1473,7 @@ AfterOffensiveText
 	mva #$ff LaserFlag	; $ff - Laser
 	bne AfterStrongShoot
 NotStrongShoot
-    lda ForceTableL,x
-    sta Force
-    lda ForceTableH,x
-    sta Force+1
+	jsr Table2Force
 	bit TestFlightFlag
 	bmi AfterStrongShoot
     mva #sfx_shoot sfx_effect
@@ -1968,11 +1965,7 @@ BouncyCastle
 ; ---------------- get fire parameters again
 
 	ldx TankNr
-	lda ActiveWeapon,x
-    lda ForceTableL,x
-    sta Force
-    lda ForceTableH,x
-    sta Force+1
+	jsr Table2Force
     lda AngleTable,x
     sta Angle
 
