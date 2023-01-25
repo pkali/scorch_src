@@ -551,16 +551,15 @@ NotHigherByte02
     sec
     lda xtankstableL,x
     sbc #$0f
+	; and clear lowest bit to be sure that the X coordinate is even
+	; (this is to have P/M background look nice)
+	; "AND" does not change "Carry" bit.
+	and #$fe
     sta xtankstableL,x
     bcs NotHigherByte01
     dec xtankstableH,x
 NotHigherByte01
 
-; and clear lowest bit to be sure that the X coordinate is even
-; (this is to have P/M background look nice)
-    lda xtankstableL,x
-    and #$fe
-    sta xtankstableL,x
     inx
     Cpx NumberOfPlayers
     bne StillRandomize02
