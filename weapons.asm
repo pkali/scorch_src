@@ -1200,7 +1200,7 @@ NoVdebugSwitch
 	.IF TARGET = 800
 	cmp #61	; G
 	bne EndKeys
-	jsr SelectNextGradient
+	jsr SelectNextGradient.NotWind
 	jmp ReleaseAndLoop
 	.ENDIF
 EndKeys
