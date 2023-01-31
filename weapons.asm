@@ -2522,6 +2522,7 @@ GoDarwin
 	lda #%10000000
 EndLazy
 	sta TestFlightFlag	; set "visual aiming" on
+	mva #0 LazyFlag
 	rts
 .endp
 .proc LazyAim
