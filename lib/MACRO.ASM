@@ -52,6 +52,28 @@
          STA NMIEN
          .ENDM
 ;-------------------------------------
+        .MACRO VDL
+;   VDL #WORD
+;   Changes Display List addres
+; and sets width of the screen
+;    vdl dl,$01 - narrow screen (32 bytes)
+;    vdl dl,$02 - normal screen (40 bytes)
+;    vdl dl,$03 - wide screen   (48 bytes)
+;       (works only with system interrupts ON)
+
+         .if %0=2
+           lda dmactls
+           and #$fc
+           ora #%2
+           sta dmactls
+         .endif
+
+         LDA # <%1
+         STA DLPTRS
+         LDA # >%1
+         STA DLPTRS+1
+         .ENDM
+;-------------------------------------
       .MACRO halt
 ?stop  
       lda RANDOM 
