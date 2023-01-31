@@ -2464,6 +2464,7 @@ InverseScreenByte
 	mvx TankNr TargetTankNr	; save
 RepeatSpy
 	mvx #0 TankNr
+	stx SpyHardFlag	; 0 - optimization
 CheckNextTankSH
 	cpx TargetTankNr
 	beq ThisTankItsMe
@@ -2494,7 +2495,6 @@ SelectNextTank
 SpyHardEnd
 	mvx TargetTankNr TankNr ; restore
 	jsr DisplaySpyInfo	
-	mva #0 SpyHardFlag
 	rts
 .endp
 .proc DisplaySpyInfo

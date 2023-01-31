@@ -67,10 +67,14 @@ GradientAddrL
 	.by <dliColorsFore, <dliColorsFore, <dliColorsFore2
 GradientAddrH
 	.by >dliColorsFore, >dliColorsFore, >dliColorsFore2
-dliColorsFore2
+dliColorsFore2		; colors for NTSC
     .by $0a											; one mountains color
 	.by $7e,$7a,$7c,$6a,$6c,$58,$5a,$48,$4a,$38
 	.by $3a,$16,$18,$e6,$e8,$d4,$d6,$b4,$b6,$b6
+dliColorsFore2PAL	; colors for PAL
+    .by $0a											; one mountains color
+	.by $7e,$7a,$7c,$6a,$6c,$58,$5a,$48,$4a,$38
+	.by $3a,$16,$18,$e6,$e8,$c4,$c6,$a4,$a6,$a6
 
 ;-----------
 pmtableL ; addressess of the P/M memory for 6 tanks

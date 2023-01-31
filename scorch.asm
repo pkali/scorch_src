@@ -349,12 +349,15 @@ no5200splash
 	mva #$10 MODUL-6+$a69	; $12 > $10
 	mva #$04 MODUL-6+$bf8	; $05 > $04
 	mva #$08 MODUL-6+$e3d	; $0a > $08
-	; and mountains colors
-	mva #$c4 dliColorsFore2+16
-	mva #$c6 dliColorsFore2+17
-	mva #$a4 dliColorsFore2+18
-	mva #$a6 dliColorsFore2+19
-	sta dliColorsFore2+20
+	
+	; and mountains colors table address
+	mva #<dliColorsFore2PAL GradientAddrL+2
+	mva #>dliColorsFore2PAL GradientAddrH+2
+;	mva #$c4 dliColorsFore2+16
+;	mva #$c6 dliColorsFore2+17
+;	mva #$a4 dliColorsFore2+18
+;	mva #$a6 dliColorsFore2+19
+;	sta dliColorsFore2+20
 NoRMT_PALchange
 	.ELSE
 	mva #$7f SkStatSimulator
@@ -410,7 +413,6 @@ MainGameLoop
     jsr SetStandardBarrels
 
 	jsr CallPurchaseForEveryTank
-	mva #0 SpyHardFlag
 	jsr MakeDarkScreen
     bit escFlag
     bmi START
@@ -1667,7 +1669,7 @@ peopleAreHere
 MakeDarkScreen
 	jsr PMoutofScreen
 	mva #0 dmactls		; dark screen
-    sta dmactl
+    ; sta dmactl ; probably not necessary (3 bytes!!! :) )
 	; and wait one frame :)
 .proc WaitOneFrame
 	lda CONSOL
