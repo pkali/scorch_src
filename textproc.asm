@@ -1944,7 +1944,12 @@ RandomizeTankPos
     randomize 0 180
     sta AngleTable,x
     randomize 0 (49-8)
-    and #%11111110  ; correction for PMG
+	; x correction for P/M
+	; --
+	.IF XCORRECTION_FOR_PM = 1
+    and #%11111110
+	.ENDIF
+	; --
     clc
     adc XtankOffsetGO_L,x
     sta XtankstableL,x

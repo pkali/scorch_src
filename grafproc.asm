@@ -554,7 +554,12 @@ NotHigherByte02
 	; and clear lowest bit to be sure that the X coordinate is even
 	; (this is to have P/M background look nice)
 	; "AND" does not change "Carry" bit.
+	; x correction for P/M
+	; --
+	.IF XCORRECTION_FOR_PM = 1
 	and #$fe
+	.ENDIF
+	; --
     sta xtankstableL,x
     bcs NotHigherByte01
     dec xtankstableH,x
@@ -1207,7 +1212,10 @@ DoNotDrawParachute
     ; If it is odd then it must be corrected because otherwise
     ; P/M graphics background would not look OK
 ;    ldx TankNr
-    lda XtanksTableL,x
+	; x correction for P/M
+	; --
+	.IF XCORRECTION_FOR_PM = 1
+     lda XtanksTableL,x
     and #$01
     beq EndOfFall ; if it is even then it is the end
     ; and if not, we push it one pixel the way it was falling before
@@ -1221,6 +1229,8 @@ ForceFallLeft
 	sta UnderTank1
 	sty UnderTank2
 	jmp TankFallsX
+	.ENDIF
+	; --
 EndOfFall
     mva #1 Erase
 ;    ldx TankNr

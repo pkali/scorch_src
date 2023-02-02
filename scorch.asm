@@ -10,6 +10,9 @@
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
+.def XCORRECTION_FOR_PM = 0
+; if 1 - active x position of tanks correction fo PMG
+;---------------------------------------------------
 
    ;OPT r+  ; saves 12 bytes :O
 

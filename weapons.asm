@@ -2653,8 +2653,7 @@ KeyboardAndJoyCheck
     mva #sfx_tank_move sfx_effect
 	lda ShieldEnergy,x
 	cmp #20
-	bne notpressed
-	nop
+	bne LotOfFuel
 	
 	; display text 4x4 - low fuel
     mwa #hoverEmpty LineAddress4x4
@@ -2665,9 +2664,9 @@ KeyboardAndJoyCheck
 	sbc #12
     sta LineYdraw
     jsr TypeLine4x4.variableLength
-
 	ldx TankNr
 
+LotOfFuel
 notpressed
 	; let's animate "engine"
 	jsr DrawTankEngine
@@ -2819,7 +2818,7 @@ CheckCollisionWithTankLoop
 	; it is tricky but fast and much shorter
     lda xtankstableL,x
 	sec
-	sbc #9		; 2 pixels more on left side + tan width
+	sbc #9		; 2 pixels more on left side + tank width
 	tay
 	lda xtankstableH,x
 	sbc #0
@@ -2875,9 +2874,14 @@ ItIsMe
 	mva #1 Erase
     jsr DrawTankNr
 	mva #0 Erase
+	; x correction for P/M
+	; --
+	.IF XCORRECTION_FOR_PM = 1
 	lda XtankstableL,x
 	and #%11111110		; correction for PM
 	sta XtankstableL,x
+	.ENDIF
+	; --
 GoDown
 
 	mwa #mountaintable temp
