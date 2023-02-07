@@ -18,7 +18,7 @@
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.27" ; number of this build (4 bytes)
+	dta d"1.28" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -314,14 +314,9 @@ no5200splash
 	  dey
 	bpl @-
 
-	; initialize one Variable in zero page :)
-	;lda #<dliColorsFore
-	;sta GradientColors
-	;lda #>dliColorsFore
-	;sta GradientColors+1
     ; set gradient to the full LGBTIQQAAPP+ flag on start
-	mva #1 GradientNr
-	jsr SelectNextGradient 
+	mva #1 GradientNr	; #1 to set gradient number 2 :) (next one)
+	jsr SelectNextGradient.NotWind
 
     ; generate linetables
     mwa #display temp
