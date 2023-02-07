@@ -51,6 +51,21 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.27
+2023-02-07
+
+Late evening edition. It is 2:11 am and I am writing this instead of dreaming of electric sheep.
+Our Senior Executive Art Director @+Adam+ ordered us to stop procrastinating and finally release the version with colorized mountains. So here it is. Enjoy :)
+Please note you can still press [Tab] or [5] in the main menu and revert to the classic or classy look of the "Polish rainbow" (it's a reference to a strangely accurate Wulffmorgenthaler comic strip: https://i.imgur.com/HMctP.jpg)
+Other changes:
+- nicer Lazy targeting and "visual Debug" for Lazy Boys
+- extreme memory optimizations to fit 2 new texts from @RB5200 based on "Sandford and Son"
+- fix for [G] key bug when turn wind changes were selected
+- fix for Lazy Boys deactivation bug
+- PAL mode now has got the full-color table, so it is possible to adjust colors better
+- the x-position of tanks was always adjusted to even X values, this is no more, which saves some hassle and unnecessary tank shakes left and right. As tanks are painted with sprites of a lower resolution, a rare artifact might appear here and there.
+- improved tank shapes
+
 ###### Version 1.26
 2023-01-23
 

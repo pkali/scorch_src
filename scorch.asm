@@ -187,7 +187,7 @@ FirstZpageVariable = $57
 		_atari = $fd  ; not used in 5200
         _none = $0f
 
-      .ende */
+      .ende
     .ELSE
       icl 'lib/ATARISYS.ASM'
       icl 'lib/MACRO.ASM'
