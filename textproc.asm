@@ -908,27 +908,13 @@ NoAutoDefense
 	cmp #ind_Lazy_Boy_______
 	bne NoLazyBoy
 	; Lazy Boy - do it like battery
-    mva #sfx_lazy_boys sfx_effect
-	phy
-	jsr PrepareAIShoot
-	jsr FindBestTarget2 ; find nearest tank neighbour
-	jsr LazyAim
-	ply
-	lda #%00000000
-	sta TestFlightFlag	; set "visual aiming" off
+	mva #%01000000 LazyFlag
     jmp DecreaseDefensive ; bypass activation
 NoLazyBoy
 	cmp #ind_Lazy_Darwin____
 	bne NoLazyDarwin
 	; Lazy Darwin - do it like battery
-    mva #sfx_lazy_boys sfx_effect
-	phy
-	jsr PrepareAIShoot
-	jsr FindBestTarget3 ; find target with lowest energy
-	jsr LazyAim
-	ply
-	lda #%10000000
-	sta TestFlightFlag	; set "visual aiming" on
+	mva #%11000000 LazyFlag
     jmp DecreaseDefensive ; bypass activation
 NoLazyDarwin
 	cmp #ind_Spy_Hard_______
@@ -973,22 +959,6 @@ DecreaseDefensive
 DefActivationEnd
     jmp WaitForKeyRelease ; rts
 
-.endp
-.proc LazyAim
-	; aiming proc for Lazy ... weapons
-	; as proc for memory optimisation
-	; Y - target tan nr
-	; A - target direction
-	sty TargetTankNr
-	; aiming
-	jsr TakeAim		; direction still in A (0 - left, >0 - right)
-	lda Force
-	sta ForceTableL,x
-	lda Force+1
-	sta ForceTableH,x
-	lda NewAngle
-	sta AngleTable,x
-	rts
 .endp
 ; -----------------------------------------------------
 .proc calcPosDefensive
@@ -1633,309 +1603,6 @@ displayloop1
     rts
 .endp
 
-;--------------------------------------------------------
-.proc DisplayOffensiveTextNr ;
-    ldx TextNumberOff
-    lda talk.OffensiveTextTableL,x
-    sta LineAddress4x4
-    lda talk.OffensiveTextTableH,x
-    sta LineAddress4x4+1
-    inx ; the next text
-    lda talk.OffensiveTextTableH,x
-    sta temp+1
-    lda talk.OffensiveTextTableL,x
-    sta temp  ; opty possible
-    ; substract address of the next text from previous to get text length
-    sbw temp LineAddress4x4 temp2
-    mva temp2 fx 
-
-    ;jsr Display4x4AboveTank
-    ;rts
-	; POZOR !!!
-.endp
-
-;--------------------------------------------------------
-.proc Display4x4AboveTank ;
-    ; Displays texts using PutChar4x4 above tank and mountains.
-    ; Pretty cool, eh!
-    ;parameters are:
-    ;Y - number of tank above which text is displayed
-    ;fx - length of text
-    ;LineAddress4x4 - address of the text
-
-    ;lets calculate position of the text first!
-    ;that's easy because we have number of tank
-    ;and xtankstableL and H keep X position of a given tank
-
-    lda xtankstableL,y
-    sta temp
-    lda xtankstableH,y
-    sta temp+1
-    ;now we should substract length of the text-1
-    ;temp2 = (fx-1)*2
-    ldy fx
-    dey
-    tya
-    asl
-    sta temp2
-    mva #0 temp2+1
-    ;now we have HALF length in pixels
-    ;stored in temp2
-
-    ;here we assume max length of text
-    ;to display is 127 chars, but later it turns out it must be max 63!
-
-    sbw temp temp2 ; here begin of the text is in TEMP !!!!
-    ;now we should check overflows
-    ;lda temp+1  ; opty
-    bpl DOTNnotLessThanZero
-      ;less than zero, so should be zero
-      mwa #0 temp
-    beq DOTNnoOverflow
-
-DOTNnotLessThanZero
-    ;so check if end larger than screenwidth
-
-
-    lda fx
-    asl
-    asl
-    ;length in pixels -
-    ;text length max 63 chars !!!!!!!!
-
-
-    clc
-    adc temp
-    sta temp2
-    lda #0
-    adc temp+1
-    sta temp2+1
-    ;now in temp2 is end of the text in pixels
-    ;so check if not greater than screenwitdth
-    cpw temp2 #screenwidth
-    bcc DOTNnoOverflow
-
-    ;if end is greater than screenwidth
-    ;then screenwidth - length is fine
-    lda fx
-    asl
-    asl
-    sta temp
-    mva #0 temp+1
-
-    sec
-    lda #<(screenwidth-1)
-    sbc temp
-    sta temp
-    lda #>(screenwidth-1)
-    sbc temp+1
-    sta temp+1
-DOTNnoOverflow
-    ;here in temp we have really good x position of text
-
-    mwa temp LineXdraw
-
-    ;now let's get y position
-    ;we will try to put text as low as possible
-    ;just above mountains (so mountaintable will be checked)
-    lda fx
-    asl
-    asl
-    tay
-    ;in temp there still is X position of text
-    ;if we add temp and Y we will get end of the text
-    ;so, lets go through mountaintable and look for
-    ;the lowest value within
-    ;Mountaitable+temp and Mountaitable+temp+Y
-
-    adw temp #MountainTable
-
-    mva #screenheight temp2 ;initialisation of the lowest value
-
-DOTLowestMountainValueLoop
-    lda (temp),y
-    cmp temp2
-    bcs DOTOldLowestValue  ;old lowest value
-    ;new lowest value
-    sta temp2
-DOTOldLowestValue
-    dey
-    cpy #$ff
-    bne DOTLowestMountainValueLoop
-
-    sec
-    lda temp2
-    sbc #(4+9) ;9 pixels above ground (and tanks...)
-    sta LineYdraw
-
-    jmp TypeLine4x4.noLengthNoColor  ; rts
-
-.endp
-
-;--------------------------------------------------------
-.proc DisplayTankNameAbove ;
-    lda tankNr
-    :3 asl  ; *8
-    clc
-    adc #<TanksNames
-    sta temp  ; TextAddress
-    lda #0
-    adc #>Tanksnames
-    sta temp+1  ; TextAddress+1
-    mwa temp LineAddress4x4
-
-    ;find length of the tank's name
-    ldy #7
-@
-      lda (temp),y
-      bne end_found
-      dey
-    bne @-
-   
-end_found
-    iny
-    sty fx
-    ldy tankNr
-    jsr Display4x4AboveTank
-    rts
-.endp
-
-;-------------------------------
-.proc TypeLine4x4 ;
-;-------------------------------
-    ;this routine prints line of length `fx`
-    ;address in LineAddress4x4
-    ;starting from LineXdraw, LineYdraw
-
-    lda #14 ; default length of 4x4 texts
-    sta fx
-
-variableLength
-    lda #$ff  ; $ff - visible characters, $00 - clearing
-
-staplot4x4color
-    sta plot4x4color
-noLengthNoColor
-
-    ldy #0
-    sty LineCharNr
-
-TypeLine4x4Loop
-    ldy LineCharNr
-
-    lda (LineAddress4x4),y
-    and #$3f ;always CAPITAL letters
-    sta CharCode4x4
-    mwa LineXdraw dx
-    mva LineYdraw dy
-	mva #0 dy+1  ;	dy is 2 bytes value
-    jsr PutChar4x4 ;type empty pixels as well!
-    adw LineXdraw #4
-    inc:lda LineCharNr
-    cmp fx
-    bne TypeLine4x4Loop
-
-EndOfTypeLine4x4
-    rts
-.endp
-
-
-;--------------------------------
-.proc AreYouSure
-;using 4x4 font
-    
-    mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
-    
-    ;top frame
-    mva ResultY LineYdraw
-    jsr TL4x4_top
-    adb ResultY  #4 ;next line
-    
-    ;sure?
-    mwa #areYouSureText LineAddress4x4
-    jsr _sep_opty    
-    ;bottom frame
-    mva ResultY LineYdraw
-    jsr TL4x4_bottom
-    
-
-    jsr GetKey
-    cmp #@kbcode._Y  ; $2b  ; "Y"
-    bne @+
-    mva #$80 escFlag
-    bne skip01
-@    mva #0 escFlag
-skip01
-    jsr WaitForKeyRelease
-    
-    ;clean
-    mva #3 di
-    mva #4 ResultY
-@
-      mva #$ff plot4x4color
-      mwa #lineClear LineAddress4x4
-      jsr _sep_opty  
-      dec di
-      bne @-
-
-quit_areyousure
-    rts
-.endp
-
-.proc _sep_opty
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
-      mva ResultY LineYdraw
-      jsr TypeLine4x4
-      adb ResultY  #4 ;next line
-    rts
-.endp
-
-;--------------------------------
-.proc DisplaySeppuku
-;using 4x4 font
-    
-
-    mva #20 fs  ; temp, how many times blink the billboard
-seppuku_loop
-      lda CONSOL  ; turbo mode
-	  and #%00000001 ; START KEY
-      sne:mva #1 fs  ; finish it     
-
-      mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
-      
-      ;top frame
-      mva ResultY LineYdraw
-      jsr TL4x4_top
-      adb ResultY  #4 ;next line
-      
-      ;seppuku
-      mwa #seppukuText LineAddress4x4
-      jsr _sep_opty
-            
-      ;bottom frame
-      mva ResultY LineYdraw
-      jsr TL4x4_bottom  ; just go
-
-    ;clean seppuku
-    
-    mva #3 di
-    ;mva #4 ResultY
-    lda #4
-    sta ResultY
-loplop ;@
-      mwa #lineClear LineAddress4x4
-      jsr _sep_opty
-  
-      dec di
-      bne loplop ;@-
-
-     dec fs
-    jne seppuku_loop
-
-quit_seppuku
-    rts
-   
-.endp
 ;--------------------------------
 .proc DisplayResults ;
 ;displays results of the round
@@ -2277,7 +1944,12 @@ RandomizeTankPos
     randomize 0 180
     sta AngleTable,x
     randomize 0 (49-8)
-    and #%11111110  ; correction for PMG
+	; x correction for P/M
+	; --
+	.IF XCORRECTION_FOR_PM = 1
+    and #%11111110
+	.ENDIF
+	; --
     clc
     adc XtankOffsetGO_L,x
     sta XtankstableL,x

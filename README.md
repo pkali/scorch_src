@@ -51,16 +51,31 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.27
+2023-02-07
+
+Late evening edition. It is 2:11 am and I am writing this instead of dreaming of electric sheep.
+Our Senior Executive Art Director @+Adam+ ordered us to stop procrastinating and finally release the version with colorized mountains. So here it is. Enjoy :)
+Please note you can still press [Tab] or [5] in the main menu and revert to the classic or classy look of the "Polish rainbow" (it's a reference to a strangely accurate Wulffmorgenthaler comic strip: https://i.imgur.com/HMctP.jpg)
+Other changes:
+- nicer Lazy targeting and "visual Debug" for Lazy Boys
+- extreme memory optimizations to fit 2 new texts from @RB5200 based on "Sandford and Son"
+- fix for [G] key bug when turn wind changes were selected
+- fix for Lazy Boys deactivation bug
+- PAL mode now has got the full-color table, so it is possible to adjust colors better
+- the x-position of tanks was always adjusted to even X values, this is no more, which saves some hassle and unnecessary tank shakes left and right. As tanks are painted with sprites of a lower resolution, a rare artifact might appear here and there.
+- improved tank shapes
+
 ###### Version 1.26
 2023-01-23
 
 Early morning edition. It is 5:11 am and I am writing this instead of dreaming of electric sheep.
-For the last 6 weeks theversions we released had an awful bug - the conversations of tanks were completely invisible. Thanks for pointing this out, RB5200.
+For the last 6 weeks, the versions we released had an awful bug - the conversations of tanks were completely invisible. Thanks for pointing this out, RB5200.
 - tanks talk to each other again
-- better stochastic non blocking wait one frame
-- rare dstance measurement bug fixed (rarely a tank survived a direct hit)
-- 5200: second fire works (by RB5200)
-- "visual debug" mode in A800 version, triggered by pressing [CTRL]+[HELP]. It displays distances measured, laser aiming and aiming technique. It leaves a mess on screen, but it does not impair the game, just makes it a bit harder.
+- better stochastic non-blocking wait one frame
+- rare distance measurement bug fixed (rarely a tank survived a direct hit)
+- 5200: second fire (by RB5200)
+- "visual debug" mode in A800 version, triggered by pressing [CTRL]+[HELP]. It displays distances measured, laser aiming, and aiming technique. It leaves a mess on the screen, but it does not impair the game, just makes it a bit harder.
 
 
 ###### Version 1.25
@@ -672,3 +687,4 @@ Together with Pecus we were working on this piece of code for four years and it 
 Now it's your turn to help this idea happen!
 
 ...transmission error...former history missing...
+

@@ -1149,8 +1149,12 @@ afterInventory
 	jsr MakeDarkScreen	
     jsr DisplayStatus
     jsr SetMainScreen   
-    ;jsr WaitOneFrame    ; not necessary
     jsr DrawTanks
+    ;jsr WaitOneFrame    ; not necessary
+	bit LazyFlag
+	bvc NoLazy
+	jsr LazyBoys
+NoLazy
 	bit SpyHardFlag
 	bpl NoSpyHard
 	jsr SpyHard
@@ -1196,7 +1200,7 @@ NoVdebugSwitch
 	.IF TARGET = 800
 	cmp #61	; G
 	bne EndKeys
-	jsr SelectNextGradient
+	jsr SelectNextGradient.NotWind
 	jmp ReleaseAndLoop
 	.ENDIF
 EndKeys
@@ -1469,10 +1473,7 @@ AfterOffensiveText
 	mva #$ff LaserFlag	; $ff - Laser
 	bne AfterStrongShoot
 NotStrongShoot
-    lda ForceTableL,x
-    sta Force
-    lda ForceTableH,x
-    sta Force+1
+	jsr Table2Force
 	bit TestFlightFlag
 	bmi AfterStrongShoot
     mva #sfx_shoot sfx_effect
@@ -1805,7 +1806,7 @@ SkipCollisionCheck
 	bit TestFlightFlag
 	bvc NoTestFlight
 	bit Vdebug
-	bpl NoTestFlight
+	bpl NoUnplot
 	jsr WaitOneFrame	; visualize AI targeting
 	jmp YesUnPlot
 NoTestFlight
@@ -1964,11 +1965,7 @@ BouncyCastle
 ; ---------------- get fire parameters again
 
 	ldx TankNr
-	lda ActiveWeapon,x
-    lda ForceTableL,x
-    sta Force
-    lda ForceTableH,x
-    sta Force+1
+	jsr Table2Force
     lda AngleTable,x
     sta Angle
 
@@ -2467,6 +2464,7 @@ InverseScreenByte
 	mvx TankNr TargetTankNr	; save
 RepeatSpy
 	mvx #0 TankNr
+	stx SpyHardFlag	; 0 - optimization
 CheckNextTankSH
 	cpx TargetTankNr
 	beq ThisTankItsMe
@@ -2497,7 +2495,6 @@ SelectNextTank
 SpyHardEnd
 	mvx TargetTankNr TankNr ; restore
 	jsr DisplaySpyInfo	
-	mva #0 SpyHardFlag
 	rts
 .endp
 .proc DisplaySpyInfo
@@ -2505,6 +2502,42 @@ SpyHardEnd
     sta COLOR2  ; set color of status line
     jsr PutTankNameOnScreen
     jsr DisplayStatus
+	rts
+.endp
+; -------------------------------------------------
+.proc LazyBoys
+; -------------------------------------------------
+    mva #sfx_lazy_boys sfx_effect
+	jsr PrepareAIShoot
+	ldx TankNr
+	bit LazyFlag
+	bmi GoDarwin
+	jsr FindBestTarget2 ; find nearest tank neighbour
+	jsr LazyAim
+	lda #%00000000	; set "visual aiming" off
+	beq EndLazy
+GoDarwin
+	jsr FindBestTarget3 ; find target with lowest energy
+	jsr LazyAim
+	lda #%10000000
+EndLazy
+	sta TestFlightFlag	; set "visual aiming" on
+	mva #0 LazyFlag
+	rts
+.endp
+.proc LazyAim
+	; aiming proc for Lazy ... weapons
+	; as proc for memory optimisation
+	; Y - target tan nr
+	; A - target direction
+	sty TargetTankNr
+	; aiming
+	jsr TakeAim		; direction still in A (0 - left, >0 - right)
+	lda Force
+	sta ForceTableL,x
+	lda Force+1
+	sta ForceTableH,x
+	jsr MoveBarrelToNewPosition
 	rts
 .endp
 ; -------------------------------------------------
@@ -2620,8 +2653,7 @@ KeyboardAndJoyCheck
     mva #sfx_tank_move sfx_effect
 	lda ShieldEnergy,x
 	cmp #20
-	bne notpressed
-	nop
+	bne LotOfFuel
 	
 	; display text 4x4 - low fuel
     mwa #hoverEmpty LineAddress4x4
@@ -2632,9 +2664,9 @@ KeyboardAndJoyCheck
 	sbc #12
     sta LineYdraw
     jsr TypeLine4x4.variableLength
-
 	ldx TankNr
 
+LotOfFuel
 notpressed
 	; let's animate "engine"
 	jsr DrawTankEngine
@@ -2786,7 +2818,7 @@ CheckCollisionWithTankLoop
 	; it is tricky but fast and much shorter
     lda xtankstableL,x
 	sec
-	sbc #9		; 2 pixels more on left side + tan width
+	sbc #9		; 2 pixels more on left side + tank width
 	tay
 	lda xtankstableH,x
 	sbc #0
@@ -2842,9 +2874,14 @@ ItIsMe
 	mva #1 Erase
     jsr DrawTankNr
 	mva #0 Erase
+	; x correction for P/M
+	; --
+	.IF XCORRECTION_FOR_PM = 1
 	lda XtankstableL,x
 	and #%11111110		; correction for PM
 	sta XtankstableL,x
+	.ENDIF
+	; --
 GoDown
 
 	mwa #mountaintable temp
