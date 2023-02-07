@@ -3,7 +3,7 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
-;Miami & Warsaw 2022
+;Miami & Warsaw 2022, 2023
 
 ;---------------------------------------------------
 .def TARGET = 800 ;5200  ; or 800
@@ -315,10 +315,13 @@ no5200splash
 	bpl @-
 
 	; initialize one Variable in zero page :)
-	lda #<dliColorsFore
-	sta GradientColors
-	lda #>dliColorsFore
-	sta GradientColors+1
+	;lda #<dliColorsFore
+	;sta GradientColors
+	;lda #>dliColorsFore
+	;sta GradientColors+1
+    ; set gradient to the full LGBTIQQAAPP+ flag on start
+	mva #1 GradientNr
+	jsr SelectNextGradient 
 
     ; generate linetables
     mwa #display temp
