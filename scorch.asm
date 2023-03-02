@@ -921,7 +921,7 @@ NotLastPlayerInRound
 
     ; in X there is a number of tank that died
 
-	lda #77	; mumber of defensive text after BFG!
+	lda #78	; mumber of defensive text after BFG! ("VERY FUNNY.")
 	bit AfterBFGflag	; check BFG flag
 	bmi TextAfterBFG
 	; if BFG then no points for dead tanks ...
