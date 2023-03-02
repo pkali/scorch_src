@@ -1136,7 +1136,7 @@ OneTimeParachute
 	jmp EndOfFCycle
 NoFallingDown
 	; check direction (left or right)
-	ldy #7		; SlideLeftTable length -1 (from 0 to 7)
+	ldy #SlideLeftTableLen-1		; SlideLeftTable length -1 (from 0 to 7)
 @	lda SlideLeftTable,y
 	cmp UnderTank1
 	beq FallingLeft

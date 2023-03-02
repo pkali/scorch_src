@@ -215,8 +215,8 @@ SlideLeftTable
     .BY %00000101
     .BY %00000110
     .BY %00000111
-    .BY %00001100
-
+;    .BY %00001100
+SlideLeftTableLen = *-SlideLeftTable
 ;-------------------------------------------------
 TanksNamesDefault
     dta d"1st.Tank"
