@@ -550,7 +550,22 @@ DefensiveEnergy = *-(last_offensive_____ - first_offensive____ +1)  ; to fake th
 	.by 00  ; Auto Defense
 	.by 00  ; Spy Hard
 weaponsOfDeath  ; weapons used in tank death animations
-	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
+	dta ind_Missile________
+	dta ind_Baby_Nuke______
+	dta ind_Nuke___________
+	dta ind_Death_s_Head___
+	dta ind_Hot_Napalm_____ ; why not?
+	dta ind_Riot_Bomb______
+	dta ind_Heavy_Riot_Bomb
+	dta ind_Baby_Digger____
+	dta ind_Digger_________
+	dta ind_Heavy_Digger___
+	dta ind_Baby_Sandhog___
+	dta ind_Sandhog________
+	dta ind_Heavy_Sandhog__
+	dta ind_Dirt_Clod______
+	dta ind_Dirt_Ball______
+	dta ind_Ton_of_Dirt____	
 weaponsOfDeathEnd
 joyToKeyTable
     .by $ff  ;00
