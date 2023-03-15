@@ -2033,34 +2033,33 @@ EndOfCredits
 .proc DisplayStatus
 ;-------------------------------------------------
 
+    ;=========================
 	; displaying number of active controller port
+    ;=========================
 	ldy JoystickNumber
 	lda digits+1,y
 	sta statusBuffer+17
-    ;---------------------
+	
+    ;=========================
     ;displaying symbol of the weapon
-    ;---------------------
-    ;display name and symbol of the weapon
-    ;statusBuffer+18  - symbol (1 char)
-    ;statusBuffer+20  - quantity left
-    ;statusBuffer+23  - name
+    ;=========================
     ldx TankNr
     ldy ActiveWeapon,x
     lda WeaponSymbols,y
     sta statusBuffer+19
 
-    ;---------------------
+    ;=========================
     ;displaying quantity of the given weapon
-    ;---------------------
+    ;=========================
     lda ActiveWeapon,x
     jsr HowManyBullets
     sta decimal
     mwa #statusBuffer+21 displayposition
     jsr displaybyte
 
-    ;---------------------
+    ;=========================
     ;displaying name of the weapon
-    ;---------------------
+    ;=========================
     ldx TankNr
     lda ActiveWeapon,x
     sta temp ;get back number of the weapon
@@ -2080,9 +2079,9 @@ EndOfCredits
       dey
     bpl @-
 
-    ;---------------------
+    ;=========================
     ;displaying name of the defence weapon (if active)
-    ;---------------------
+    ;=========================
 	lda AutoDefenseFlag,x	; Auto Defense symbol (space or "A" in inverse)
 	bpl @+
 	lda #$5e	; Auto Defense symbol
@@ -2119,19 +2118,17 @@ ClearingOnly
       dey
     bpl @-
 
-    ;---------------------
+    ;=========================
     ;displaying the energy of a tank
-    ;---------------------
-
+    ;=========================
     lda Energy,x
-
     sta decimal
     mwa #statusBuffer+48 displayposition
     jsr displaybyte
 
-    ;---------------------
+    ;=========================
     ;displaying the energy of a tank shield (if exist)
-    ;---------------------
+    ;=========================
     ; clear (if no shield)
     lda #space
     sta statusBuffer+40+10
@@ -2155,17 +2152,20 @@ NoDefenceWeapon
 NoShieldEnergy
 
     ;=========================
-    ;display Wind
+    ; display Wind
     ;=========================
     mwa Wind temp
-    lda Wind+3 ; highest byte of 4 byte wind
+	lda #space
+    bit Wind+3 ; highest byte of 4 byte wind
     bmi DisplayLeftWind
+    sta statusBuffer+80+17	; (space) char
     lda #$7f  ; (tab) char
     sta statusBuffer+80+20
-    lda #space
-    sta statusBuffer+80+17
-    beq DisplayWindValue
+    bne DisplayWindValue
 DisplayLeftWind
+    sta statusBuffer+80+20	; (space) char
+    lda #$7e  ;(del) char
+    sta statusBuffer+80+17
       sec  ; Wind = -Wind
       lda #$00
       sbc temp
@@ -2173,10 +2173,6 @@ DisplayLeftWind
       lda #$00
       sbc temp+1
       sta temp+1
-    lda #$7e  ;(del) char
-    sta statusBuffer+80+17
-    lda #space
-    sta statusBuffer+80+20
 DisplayWindValue
     :4 lsrw temp ;divide by 16 to have a nice value on a screen
     lda temp
@@ -2207,6 +2203,7 @@ DisplayWindValue
     ;display Angle
     ;=========================
 displayAngle
+	ldy #space
     ldx TankNr
     lda AngleTable,x
     cmp #90
@@ -2215,28 +2212,25 @@ displayAngle
 AngleToRight
     ; now we have values from 0 to 89 and right angle
     sta decimal
+    sty statusBuffer+40+22  ; (space) character
     lda #$7f  ; (tab) character
     sta statusBuffer+40+25
-    lda #space
-    sta statusBuffer+40+22
-    beq AngleDisplay
+    bne AngleDisplay
 AngleToLeft
     sec
     lda #180
     sbc AngleTable,x
     ; angles 180 - 91 converted to 0 - 89
     sta decimal
+    sty statusBuffer+40+25  ; (space) character
     lda #$7e  ;(del) char
     sta statusBuffer+40+22
-    lda #space
-    sta statusBuffer+40+25
-    beq AngleDisplay    
+    bne AngleDisplay    
 VerticallyUp
     ; now we have value 90
     sta decimal
-    lda #space
-    sta statusBuffer+40+25
-    sta statusBuffer+40+22
+    sty statusBuffer+40+25  ; (space) character
+    sty statusBuffer+40+22  ; (space) character
 
 AngleDisplay
     mwa #statusBuffer+40+23 displayposition
