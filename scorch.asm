@@ -1152,13 +1152,13 @@ B0  DEY
 ;--------------------------------------------------
 .proc WeaponCleanup;
 ; cleaning of the weapon possesion tables
-; 99 of Baby Missles(index==0), all other weapons=0)
+; 99 of Baby Missles and White Flags, all other weapons=0)
 ;--------------------------------------------------
-    ldx #$3f  ; TODO: maxweapons
+    ldx #(number_of_weapons - 1)
 @    lda #$0
       cpx #ind_White_Flag_____  ; White Flag
       bne @+
-       lda #99     
+      lda #99     
 @     sta TanksWeapon1,x
       sta TanksWeapon2,x
       sta TanksWeapon3,x
@@ -1166,7 +1166,7 @@ B0  DEY
       sta TanksWeapon5,x
       sta TanksWeapon6,x
       dex
-      beq setBmissile
+      beq setBmissile	; Baby Missile (index=0)
     bpl @-1
     rts
 setBmissile
@@ -1261,7 +1261,7 @@ MakeTanksVisible
 	rts
 .endp
 ;----------------------------------------------
-.proc RandomizeSequence0
+/* .proc RandomizeSequence0
     ldx #0
 @     txa
       sta TankSequence,x
@@ -1269,7 +1269,7 @@ MakeTanksVisible
       cpx #MaxPlayers
     bne @-
     rts
-.endp
+.endp */
 ;--------------------------------------------------
 .proc RandomizeSequence
 ; in: NumberOfPlayers
@@ -1326,20 +1326,10 @@ UsageLoop
 ; X is not changed
 ;----------------------------------------------
 
-    ;valid angle values are ((256-90)..255) and (0..90)
-    ;it means that values 91..165 must be elliminated...
-    ;so, lets randomize someting between 0 and 180
-    ;and substract this value from 90
+    ; lets randomize someting between 0 and 180
     lda RANDOM
-
     cmp #180
     bcs RandomizeAngle
-
-
-    ;sta temp
-    ;lda #90 ; CARRY=0 here
-    ;sbc temp
-
     rts
 .endp
 ;----------------------------------------------
@@ -1437,10 +1427,10 @@ BarrelPositionIsFine
 ; I think I will go for a stupid bubble sort...
 ; it is easy to test :)
 ;
-; Results are in ResultsTable, in SortedTable we want to
+; Results are in ResultsTable, in TankSequence (Sorted Table) we want to
 ; have numbers of tanks from the worst to the best.
 ; in other words, if ResultsTable=(5,4,65,23,3,6)
-; the SortedTable=(4,1,0,5,3,2)
+; the TankSequence=(4,1,0,5,3,2)
 ; let's assume initially the TankSequence=(0,1,2,3,4,5)
 
     ldx #0
@@ -1533,7 +1523,7 @@ SetRandomWalls
 .endp
 ;--------------------------------------------------
 .proc GetKey  ; waits for pressing a key and returns pressed value in A
-; when [ESC] is pressed, escFlag is set to 1
+; when [ESC] is pressed, escFlag is set
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @

@@ -342,17 +342,17 @@ LaserCoordinate .DS 8 ; 2,2,2,2
 ; from $30 the defensive weapons begin
 TanksWeapons
 TanksWeapon1
-    .DS [last_defensive_____ - first_offensive____ +1]
+    .DS number_of_weapons
 TanksWeapon2
-    .DS [last_defensive_____ - first_offensive____ +1]
+    .DS number_of_weapons
 TanksWeapon3
-    .DS [last_defensive_____ - first_offensive____ +1]
+    .DS number_of_weapons
 TanksWeapon4
-    .DS [last_defensive_____ - first_offensive____ +1]
+    .DS number_of_weapons
 TanksWeapon5
-    .DS [last_defensive_____ - first_offensive____ +1]
+    .DS number_of_weapons
 TanksWeapon6
-    .DS [last_defensive_____ - first_offensive____ +1]
+    .DS number_of_weapons
 
 mountaintable ;table of mountains (size=screenwidth)
     .DS [screenwidth]

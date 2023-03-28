@@ -145,6 +145,7 @@ last_defensive_____ = ind_Spy_Hard_______
 last_real_defensive = ind_Bouncy_Castle__
 number_of_offensives = last_offensive_____ - first_offensive____+1
 number_of_defensives = (last_defensive_____ - first_defensive____+1)
+number_of_weapons = number_of_offensives + number_of_defensives
 ;--------------------------------
 ; names of RMT instruments (sfx)
 ;--------------------------------
