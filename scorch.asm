@@ -1130,20 +1130,19 @@ NotNegativeShieldEnergy
     ;this algiorithm is a little longer than one in Ruszczyc 6502 book
     ;but it is faster
 
-    LDy #8
-    LDA #0
-    CLC
-LP0
+    ldy #8
+    lda #0
+    clc
+LP0 ror
+    ror L1
+    bcc B0
+    clc
+    adc #10 ; (L2) multiplication by 10
+B0  dey
+    bne LP0
     ror
-    ROR L1
-    BCC B0
-    CLC
-    ADC #10 ; (L2) multiplication by 10
-B0  DEY
-    BNE LP0
-    ror
-    ROR L1
-    STA MaxForceTableH,x
+    ror L1
+    sta MaxForceTableH,x
     lda L1
     sta MaxForceTableL,x
 	rts
@@ -1157,21 +1156,18 @@ B0  DEY
     ldx #(number_of_weapons - 1)
 @    lda #$0
       cpx #ind_White_Flag_____  ; White Flag
-      bne @+
-      lda #99     
-@     sta TanksWeapon1,x
+      bne no99
+set99 lda #99     
+no99  sta TanksWeapon1,x
       sta TanksWeapon2,x
       sta TanksWeapon3,x
       sta TanksWeapon4,x
       sta TanksWeapon5,x
       sta TanksWeapon6,x
       dex
-      beq setBmissile	; Baby Missile (index=0)
-    bpl @-1
+      beq set99	; Baby Missile (index=0)
+    bpl @-
     rts
-setBmissile
-    lda #99
-    bne @-
 .endp
 
 ;--------------------------------------------------
@@ -1403,11 +1399,11 @@ MoveBarrel
 	lda NewAngle
 	cmp AngleTable,x
 	beq BarrelPositionIsFine
-	bcc rotateLeft ; older is bigger
-rotateRight;older is lower
+	bcc rotateLeft
+rotateRight			; older is lower
 	inc angleTable,x
 	jmp MoveBarrel
-rotateLeft
+rotateLeft			; older is bigger
 	dec angleTable,x
 	jmp MoveBarrel
 BarrelPositionIsFine
@@ -1769,7 +1765,7 @@ YesCheat
 	lda #99
 @	iny
 	sta (temp),y
-	cpy #(last_defensive_____ - first_offensive____)
+	cpy #(number_of_weapons - 1)
 	bne @-
 NoCheat
     rts
