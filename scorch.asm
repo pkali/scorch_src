@@ -636,8 +636,9 @@ SettingEnergies
 
 ;--------------------------------------------------
 .proc MainRoundLoop
-    ; here we must check if by a chance there is only one
-    ; tank with energy greater than 0 left
+; here we must check if by a chance there is only one
+; tank with energy greater than 0 left
+;--------------------------------------------------
 
     ldy #0  ; in Y - number of tanks with energy greater than zero
 	sty ATRACT	; reset atract mode
@@ -903,9 +904,10 @@ NotLastPlayerInRound
 	
 ;---------------------------------
 .proc PlayerXdeath
+; this tank should not explode anymore:
+; there is 0 in A, and Tank Number in X, so...
+;---------------------------------
 
-    ; this tank should not explode anymore:
-    ; there is 0 in A, and Tank Number in X, so...
     sta LASTeXistenZ,x
     ; save x somewhere
     stx TankTempY
@@ -1034,7 +1036,6 @@ ldahashzero
 NotNegativeEnergy
     sta Energy,x
     ;now increase the gain of the shooting tank
- ;   phx
     ldy TankNr
     clc
     lda gainL,y
@@ -1043,7 +1044,6 @@ NotNegativeEnergy
     lda gainH,y
     adc #$00
     sta gainH,y
- ;   plx
     rts
 .endp
 
@@ -1076,6 +1076,7 @@ NotNegativeShieldEnergy
 
 ;---------------------------------
 .proc Seppuku
+;---------------------------------
     lda #0
     sta ydraw+1
     ; get position of the tank
@@ -1149,7 +1150,7 @@ B0  dey
 .endp
 
 ;--------------------------------------------------
-.proc WeaponCleanup;
+.proc WeaponCleanup
 ; cleaning of the weapon possesion tables
 ; 99 of Baby Missles and White Flags, all other weapons=0)
 ;--------------------------------------------------
@@ -1247,6 +1248,9 @@ MakeTanksVisible
 .endp
 ;--------------------------------------------------
 .proc SetStandardBarrels
+; set standart barrel length and deactivate Auto Defense
+; for all tanks
+;--------------------------------------------------
     ldx #maxPlayers-1
 @	lda #StandardBarrel	; standard barrel length
 	sta BarrelLength,x
@@ -1376,6 +1380,7 @@ LimitForce
 .endp
 ;----------------------------------------------
 .proc Table2Force
+;----------------------------------------------
 	lda ForceTableL,x
 	sta Force
 	lda ForceTableH,x
@@ -1384,6 +1389,7 @@ LimitForce
 .endp
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
+;----------------------------------------------
 	mva #1 Erase
 	jsr DrawTankNr.BarrelChange
 	mva #0 Erase
@@ -1518,8 +1524,10 @@ SetRandomWalls
 	rts
 .endp
 ;--------------------------------------------------
-.proc GetKey  ; waits for pressing a key and returns pressed value in A
+.proc GetKey
+; waits for pressing a key and returns pressed value in A
 ; when [ESC] is pressed, escFlag is set
+; result: A=keycode
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @
@@ -1623,7 +1631,8 @@ KeyReleased
       rts
 .endp
 ;--------------------------------------------------
-.proc IsKeyPressed	; A=0 - yes , A>0 - no
+.proc IsKeyPressed
+; result: A=0 - yes , A>0 - no
 ;--------------------------------------------------
 	lda SKSTAT
 	and #%00000100
@@ -1634,6 +1643,8 @@ KeyReleased
 .endp
 ;--------------------------------------------------
 .proc DemoModeOrKey
+; Waits for the key pressed if at least one human is playing.
+; Otherwise, waits 3 seconds (demo mode).
 ;--------------------------------------------------
     ;check demo mode
     ldx numberOfPlayers
@@ -1648,17 +1659,19 @@ checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
     ldy #75
     jsr PauseYFrames
     rts
-
 peopleAreHere
     jmp getkey  ; jsr:rts
 .endp
 
+;--------------------------------------------------
 MakeDarkScreen
-	jsr PMoutofScreen
+;--------------------------------------------------
+	jsr PMoutofScreen	; hide P/M
 	mva #0 dmactls		; dark screen
-    ; sta dmactl ; probably not necessary (3 bytes!!! :) )
 	; and wait one frame :)
+;--------------------------------------------------
 .proc WaitOneFrame
+;--------------------------------------------------
 	lda CONSOL
 	and #%00000101	; Start + Option
 	sne:mva #$40 escFlag	
@@ -1667,9 +1680,11 @@ MakeDarkScreen
     rts
 .endp
 
+;--------------------------------------------------
 .proc PauseYFrames
 ; Y - number of frames to wait (divided by 2)
 ; pauses for maximally 510 frames (255 * 2)
+;--------------------------------------------------
 @     jsr WaitOneFrame
       jsr WaitOneFrame
       dey
@@ -1679,8 +1694,8 @@ MakeDarkScreen
 
 ;--------------------------------------------------
 .proc RmtSongSelect
-;--------------------------------------------------
 ;  starting song line 0-255 to A reg
+;--------------------------------------------------
 	cmp #song_ingame
 	bne noingame	; noMusic blocks only ingame song
     bit noMusic
