@@ -191,7 +191,8 @@ FirstZpageVariable = $57
     .ELSE
       icl 'lib/ATARISYS.ASM'
       icl 'lib/MACRO.ASM'
-      icl 'artwork/Scorch50.asm'  ; splash screen and musix
+      ;icl 'artwork/Scorch50.asm'  ; splash screen and musix
+      icl 'splash_v2/splash.asm'  ; splash screen and musix
     .ENDIF
     
 ;-----------------------------------------------
@@ -315,7 +316,7 @@ no5200splash
 	bpl @-
 
     ; set gradient to the full LGBTIQQAAPP+ flag on start
-	mva #1 GradientNr	; #1 to set gradient number 2 :) (next one)
+	mva #0 GradientNr	; #1 to set gradient number 2 :) (next one)
 	jsr SelectNextGradient.NotWind
 
     ; generate linetables
