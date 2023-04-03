@@ -638,7 +638,7 @@ CreditsStart
 	dta d"Ar",d"t"*
 	dta d"Adam Wachowsk",d"i"*
 	.IF target != 5200
-	  dta d"Krzysztof 'Kaz' Ziembi",d"k"*
+	  dta d"Roman 'xorcerer' Fierfa",d"s"*
 	.ENDIF
 	dta d" "*
 	dta d"Ideas, help and Q",d"A"*
