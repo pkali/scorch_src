@@ -13,7 +13,7 @@ OptionsScreen
 
 .IF TARGET = 800
  dta d" Please select option with cursor keys  "
- dta d"     and press (Return) to proceed      "
+ dta d"    and (Tab).    (Return) - proceed    "
 .ELIF TARGET = 5200
  dta d" Please select option with joystick one "
  dta d"       and press FIRE to proceed        "
@@ -37,9 +37,11 @@ NameScreen5
  dta     d" - Port nr "
  dta                d"Joy"*
  dta                   d" - Difficulty "
- dta d"       "
- dta        d"Return"*
- dta              d" - Proceed         "
+ dta d"  "
+ dta   d"INV"*
+ dta      d" - Shape "
+ dta               d"Return"*
+ dta                     d" - Proceed  "
 .ELIF TARGET = 5200
  dta d" "
  dta  d"(5)"*
