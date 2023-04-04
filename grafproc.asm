@@ -5,6 +5,8 @@
 
 ;--------------------------------------------------
 .proc draw ;;fuxxing good draw :) 
+; xdraw,ydraw (word) - coordinates of first point
+; xbyte,ybyte (word) - coordinates of last point
 ;--------------------------------------------------
 ;creditz to Dr Jankowski / MIM U.W.
 ; (xi,yi)-----(xk,yk)
@@ -291,6 +293,8 @@ EndOfDraw
 
 ;--------------------------------------------------
 .proc circle ;fxxxing good circle drawing :) 
+; xdraw,ydraw (word) - coordinates of circle center
+; radius (byte) - radius of circle 
 ;--------------------------------------------------
 ;Turbo Basic source
 ; R=30

@@ -3,6 +3,9 @@
     .IF *>0 ;this is a trick that prevents compiling this file alone
 ;--------------------------------------------------
 .proc Explosion
+; xdraw,ydraw (word) - coordinates of explosion center
+; TankNr - number of shooting tank
+; ActiveWeapon(TankNr) - weapon that tank fires
 ;--------------------------------------------------
     ;cleanup of the soil fall down ranges (left and right)
 	jsr ClearScreenSoilRange
@@ -358,29 +361,34 @@ EndNurnedCheckLoop
 ; ------------------------
 .proc babyroller
     mva #11 ExplosionRadius
+GoRoller
     jmp xroller
 .endp
 ; ------------------------
 .proc roller ;
     mva #21 ExplosionRadius
-    jmp xroller
+	bne babyroller.GoRoller	; 1 byte saved
+;    jmp xroller
 .endp
 ; ------------------------
 .proc heavyroller
     mva #30 ExplosionRadius
-    jmp xroller
+	bne babyroller.GoRoller	; 1 byte saved
+;    jmp xroller
 .endp
 ; ------------------------
 .proc riotbomb
     mva #17 ExplosionRadius
+GoRiotBomb
     jsr CalculateExplosionRange
     jmp xriotbomb
 .endp
 ; ------------------------
 .proc heavyriotbomb
     mva #29 ExplosionRadius
-    jsr CalculateExplosionRange
-    jmp xriotbomb
+	bne riotbomb.GoRiotBomb ; 4 bytes saved - optimization :)
+;    jsr CalculateExplosionRange
+;    jmp xriotbomb
 .endp
 ; ------------------------
 .proc babydigger
@@ -932,6 +940,14 @@ ExplodeNow
 ; --------------------------------------------------
 .proc checkRollDirection
 ; check rolling direction (for roller and other rolling weapons)
+; xdraw (word) - X coordinate
+; Y coordinate is taken from mountaintable and go to ydraw (word)
+; shoot direction is taken from VX+3
+; result:
+; HowMuchToFall - direction
+; $FF - we are in a hole (flying in missile direction)
+; 1 - right, 2 - left
+; --------------------------------------------------
     ldy #0
     adw xdraw #mountaintable tempXROLLER
     lda (tempXROLLER),y
@@ -951,15 +967,12 @@ PositiveVelocity
     ; 1 - right, 2 - left
     mva #$ff HowMuchToFall
     mva ydraw HeightRol
-    ;mwa #mountaintable tempXROLLER - It's already done  !!!
-    ;adw tempXROLLER xdraw
 SeekLeft
 	cpw tempXROLLER #mountaintable
     beq GoRightNow		; "bounce" if we have on left end
 .nowarn    dew tempXROLLER
     lda (tempXROLLER),y    ;fukk! beware of Y value
     cmp HeightRol
-    ;bne HowMuchToFallLeft
 HowMuchToFallLeft
     bcs GoRightNow
 	mva #1 HowMuchToFall
@@ -971,9 +984,7 @@ SeekRight
     inw tempXROLLER
     lda (tempXROLLER),y
     cmp HeightRol
-    ;bne HowMuchToFallRight
 HowMuchToFallRight
-    ; check if up or down
     bcs HowMuchToFallKnown
     lda HowMuchToFall
     bpl ItIsLeftAlready
