@@ -12,8 +12,14 @@ OptionsScreen
  dta                          d"  (un)2000-2023"
 
 .IF TARGET = 800
- dta d" Please select option with cursor keys  "
- dta d"    and (Tab).    (Return) - proceed    "
+ dta d" Please select option with "
+ dta $fe,$dc,$dd,$ff	; cursors in inverse
+ dta                                d" and "
+ dta                                     d"Tab"*
+ dta                                        d" "
+ dta d"        Press "
+ dta               d"Return"*
+ dta                     d" to proceed         "
 .ELIF TARGET = 5200
  dta d" Please select option with joystick one "
  dta d"       and press FIRE to proceed        "
