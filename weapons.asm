@@ -2404,6 +2404,7 @@ NoWall
 ; X and TankNr - index of shooting tank
 ; -------------------------------------------------
     mva #sfx_sandhog sfx_effect
+.IF FASTER_GRAF_PROCS = 1
 	ldy #0 		 	; byte counter (from 0 to 39)
 NextColumn
 	; big loop - we repat internal loops for each column of bytes
@@ -2438,6 +2439,26 @@ NextLine2
 	iny
 	cpy #40
 	bne NextColumn
+.ELSE
+	mva #1 color
+	mwa #120 ydraw
+NextLineSlow
+	lda #0
+	sta xdraw
+	sta xdraw+1
+NextPixelSlow
+	bit random
+	bpl NoPlot
+	bvc NoPlot
+	jsr plot.MakePlot
+NoPlot
+	inw xdraw
+	cpw xdraw #screenwidth
+	bne NextPixelSlow
+	dec ydraw
+	dec ydraw
+	bpl NextLineSlow
+.ENDIF
 	; and we have "snow" :)
 	lda #0
 	ldx TankNr
