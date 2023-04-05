@@ -1295,22 +1295,15 @@ drawmountainsloop
 	sty ydraw+1
 ;    jsr DrawLine
 ;	there was Drawline proc 
-    lda #screenheight
-    sec
-    sbc ydraw
-    sta tempbyte01
+drawline
     jsr plot.MakePlot
 	; after plot we have: (xbyte),y - addres of screen byte; X - index in bittable (number of bit)
 ;    jmp IntoDraw    ; jumps inside Draw routine
                     ; because one pixel is already plotted (and who cares? :) )
-@
-	lda (xbyte),y
-	and bittable2,x
-	sta (xbyte),y
-;IntoDraw
-	adw xbyte #screenBytes
-	dec tempbyte01
-	bne @-
+	inc ydraw
+	lda ydraw
+	cmp #screenheight
+	bne drawline
 ;	end of Drawline proc
 NoMountain
     inw modify
