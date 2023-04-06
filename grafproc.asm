@@ -1938,9 +1938,9 @@ CharLoopi
     cpx #8
     bne CharLoopi
 .ELSE
-	mvx #7 char2	; line counter (Y)
+	mvx #7 temp	; line counter (Y)
 CharLoop1
-	mva #7 mask2	; pixel counter (X)
+	mva #7 temp+1	; pixel counter (X)
 CharLoop2
 	mva #0 color
 	rol mask1,x
@@ -1953,18 +1953,18 @@ MakeCharPlot
 	inc color
 ErasingChar
 NoPlot
-	jsr plot
+	jsr plot.MakePlot
 AfterCharPlot
 	inw xdraw
-	ldx char2
-	dec mask2
+	ldx temp
+	dec temp+1
 	bpl CharLoop2
 	sec
 	sbw xdraw #8
 	dec ydraw
-	ldx char2
+	ldx temp
 	dex
-	stx char2
+	stx temp
 	bpl CharLoop1
 	clc
 	lda ydraw
@@ -2093,14 +2093,14 @@ PutInColor0_2
 	cpx #4
     bne CharLoopi4x4
 .ELSE
-	mwa xdraw char2+1
-	mwa ydraw mask2+1
-	mva color mask2+3
+	mwa xdraw char2
+	mwa ydraw mask2
+	mva color mask2+2
 	mwa dx xdraw
 	mwa dy ydraw
-	mvx #3 char2	; line counter (Y)
+	mvx #3 temp	; line counter (Y)
 CharLoop1
-	mva #3 mask2	; pixel counter (X)
+	mva #3 temp+1	; pixel counter (X)
 CharLoop2
 	mva #0 color
 	rol mask1,x
@@ -2113,22 +2113,22 @@ MakeCharPlot
 	inc color
 ErasingChar
 NoPlot
-	jsr plot
+	jsr plot.MakePlot
 AfterCharPlot
 	inw xdraw
-	ldx char2
-	dec mask2
+	ldx temp
+	dec temp+1
 	bpl CharLoop2
 	sec
 	sbw xdraw #4
 	dec ydraw
-	ldx char2
+	ldx temp
 	dex
-	stx char2
+	stx temp
 	bpl CharLoop1
-	mwa char2+1 xdraw
-	mwa mask2+1 ydraw
-	mva mask2+3 color
+	mwa char2 xdraw
+	mwa mask2 ydraw
+	mva mask2+2 color
 	bpl EndPut4x4
 NoMaskNoPlot
 	rol char1,x
