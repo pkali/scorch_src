@@ -1872,6 +1872,7 @@ CopyMask
     dey
     bpl CopyMask
 
+.IF FASTER_GRAF_PROCS = 1
     ; calculating coordinates from xdraw and ydraw
     mwa xdraw xbyte
 
@@ -1936,6 +1937,44 @@ CharLoopi
     inx
     cpx #8
     bne CharLoopi
+.ELSE
+	mvx #7 char2	; line counter (Y)
+CharLoop1
+	mva #7 mask2	; pixel counter (X)
+CharLoop2
+	mva #0 color
+	rol mask1,x
+	bcc NoMaskNoPlot
+	rol char1,x
+	bcs NoPlot
+MakeCharPlot
+	lda Erase
+	bne ErasingChar
+	inc color
+ErasingChar
+NoPlot
+	jsr plot
+AfterCharPlot
+	inw xdraw
+	ldx char2
+	dec mask2
+	bpl CharLoop2
+	sec
+	sbw xdraw #8
+	dec ydraw
+	ldx char2
+	dex
+	stx char2
+	bpl CharLoop1
+	clc
+	lda ydraw
+	adc #8
+	sta ydraw
+	bne EndPutChar
+NoMaskNoPlot
+	rol char1,x
+	jmp AfterCharPlot
+.ENDIF
 EndPutChar
     rts
 .endp
