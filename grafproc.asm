@@ -2032,6 +2032,7 @@ GetUpper4bits
     dex
     bpl CopyChar
 
+.IF FASTER_GRAF_PROCS = 1
     ; calculating coordinates from xdraw and ydraw
     mwa dx xbyte
 
@@ -2091,6 +2092,48 @@ PutInColor0_2
     inx
 	cpx #4
     bne CharLoopi4x4
+.ELSE
+	mwa xdraw char2+1
+	mwa ydraw mask2+1
+	mva color mask2+3
+	mwa dx xdraw
+	mwa dy ydraw
+	mvx #3 char2	; line counter (Y)
+CharLoop1
+	mva #3 mask2	; pixel counter (X)
+CharLoop2
+	mva #0 color
+	rol mask1,x
+	bcc NoMaskNoPlot
+	rol char1,x
+	bcs NoPlot
+MakeCharPlot
+	lda plot4x4color
+	beq ErasingChar
+	inc color
+ErasingChar
+NoPlot
+	jsr plot
+AfterCharPlot
+	inw xdraw
+	ldx char2
+	dec mask2
+	bpl CharLoop2
+	sec
+	sbw xdraw #4
+	dec ydraw
+	ldx char2
+	dex
+	stx char2
+	bpl CharLoop1
+	mwa char2+1 xdraw
+	mwa mask2+1 ydraw
+	mva mask2+3 color
+	bpl EndPut4x4
+NoMaskNoPlot
+	rol char1,x
+	jmp AfterCharPlot
+.ENDIF
 EndPut4x4
     rts
 .endp
