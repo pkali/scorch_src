@@ -642,8 +642,9 @@ CreditsStart
 	.ENDIF
 	dta d" "*
 	dta d"Ideas, help and Q",d"A"*
-	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
-	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
+	dta d"Krzysztof 'Kaz' Ziembik, Bocianu",d","*
+	dta d"Probabilitydragon, EnderDude, Dracon",d","*
+	dta d"Beeblebrox, KrzysRog, lopezpb",d","*
 	dta d"brad-colbert, archon800, nowy80",d","*
 	dta d"Shaggy the Atarian, RetroBorsuk, ZPH"
 	.IF target = 5200
