@@ -57,7 +57,12 @@ fnt
 	.ds $0300
 pmg	SPRITES
 	eif
+	
+FontSplash
+    ins '../artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 
+mother
+	dta d"        The Mother of All Games         "
 	icl "lzss_player.asm"	; player (and data) for splash music
 
 main
@@ -114,15 +119,15 @@ LOOP	lda vcount		;synchronization for the first screen line
 
 raster_program_end
 
-	lda >fnt+$400*$00
+	lda >FontSplash
 	sta chbase
 c0	lda #$00
 	sta colbak
 c1	lda #$00
 	sta colpf0
-c2	lda #$00
+c2	lda #$02
 	sta colpf1
-c3	lda #$00
+c3	lda #$06
 	sta colpf2
 c4	lda #$00
 	sta colpf3
@@ -236,10 +241,12 @@ byt3	brk
 	:+8 dta $4e,a(:1+$1E00+#*40)
 	:+4 dta $4e,a(:1+$1F40+#*40)
 	:+4 dta $4e,a(:1+$1FF0+#*40)
-	:+8 dta $4e,a(:1+$2090+#*40)
-	:+8 dta $4e,a(:1+$21D0+#*40)
-	:+8 dta $4e,a(:1+$2310+#*40)
-	:+8 dta $4e,a(:1+$2450+#*40)
+;	:+8 dta $4e,a(:1+$2090+#*40)
+;	:+8 dta $4e,a(:1+$21D0+#*40)
+;	:+8 dta $4e,a(:1+$2310+#*40)
+;	:+8 dta $4e,a(:1+$2450+#*40)
+	dta $20
+	dta $42,a(mother)
 	dta $41,a(:2)
 .ENDM
 
