@@ -62,7 +62,8 @@ FontSplash
     ins '../artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 
 mother
-	dta d"        The Mother of All Games         "
+;	dta d"        The Mother of All Games         "
+	dta d"      Unknown Father of All Games       "
 	icl "lzss_player.asm"	; player (and data) for splash music
 
 main
