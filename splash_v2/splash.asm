@@ -63,7 +63,7 @@ FontSplash
 
 mother
 ;	dta d"        The Mother of All Games         "
-	dta d"      Unknown Father of All Games       "
+	dta d"      Father Unknown of All Games       "
 	icl "lzss_player.asm"	; player (and data) for splash music
 
 main
