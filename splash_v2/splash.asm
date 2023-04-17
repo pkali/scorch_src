@@ -136,7 +136,7 @@ c1	lda #$00
 	sta colpf0
 c2	lda #$02
 	sta colpf1
-c3	lda #$06
+c3	lda #$08
 	sta colpf2
 c4	lda #$00
 	sta colpf3

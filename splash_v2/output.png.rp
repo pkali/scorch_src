@@ -1,9 +1,9 @@
 ; ---------------------------------- 
 ; RastaConverter by Ilmenit v.Beta7
 ; InputName: test.png
-; CmdLine: test.png /threads=2 /s=1000 /dither=line2 /dither_rand=0.5 /distance=cie94
-; Evaluations: 195592485
-; Score: 14.6742
+; CmdLine: test.png /threads=10 /s=1000 /dither=line2 /dither_rand=0.5 /distance=cie94
+; Evaluations: 1003668373
+; Score: 14.056
 ; ---------------------------------- 
 ; Proper offset 
 	nop
@@ -12,4735 +12,4669 @@
 	nop
 	cmp byt2;
 line0
-	ldx #$06 ; 6 (spr=-42)
-	ldx #$8F ; 143 (spr=95)
-	ldy #$1D ; 29 (spr=-19)
-	sty COLBAK
-	stx COLPM2
-	lda #$2B ; 43 (spr=-5)
-	ldy #$3C ; 60 (spr=12)
-	lda #$0E ; 14 (spr=-34)
-	sta colpf0
+	nop 
+	lda #$2E ; 46 (spr=-2)
+	ldy #$07 ; 7 (spr=-41)
+	sty COLPM0
+	ldx #$86 ; 134 (spr=86)
+	sta COLBAK
+	stx colpf1
+	lda #$76 ; 118 (spr=70)
+	ldx #$1D ; 29 (spr=-19)
+	lda #$3A ; 58 (spr=10)
+	stx colpf1
+	ldy #$1F ; 31 (spr=-17)
+	sty colpf1
 	nop 
 	lda #$1E ; 30 (spr=-18)
-	ldx #$07 ; 7 (spr=-41)
-	sta colpf1
-	stx HPOSP3
-	ldy #$98 ; 152 (spr=104)
-	sty COLPM0
-	lda #$30 ; 48 (spr=0)
-	sta HPOSP3
-	nop ; filler
+	lda #$EE ; 238 (spr=190)
+	ldy #$8F ; 143 (spr=95)
+	nop 
+	lda #$25 ; 37 (spr=-11)
+	ldx #$ED ; 237 (spr=189)
+	lda #$98 ; 152 (spr=104)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line1
-	ldy #$1E ; 30 (spr=-18)
-	sta HPOSP3
-	sta HPOSP3
-	nop 
-	nop 
-	nop 
-	nop 
-	ldy #$05 ; 5 (spr=-43)
-	sty COLPM0
-	sta HPOSP2
-	lda #$1C ; 28 (spr=-20)
-	lda #$94 ; 148 (spr=100)
-	lda #$88 ; 136 (spr=88)
-	sty COLPM3
-	sta COLPM0
-	nop 
-	ldy #$4F ; 79 (spr=31)
+	ldx #$94 ; 148 (spr=100)
+	ldx #$86 ; 134 (spr=86)
+	ldx #$86 ; 134 (spr=86)
 	lda #$A4 ; 164 (spr=116)
-	lda #$EE ; 238 (spr=190)
-	lda #$04 ; 4 (spr=-44)
+	lda #$1F ; 31 (spr=-17)
+	stx colpf1
+	ldx #$F6 ; 246 (spr=198)
+	ldx #$0E ; 14 (spr=-34)
+	ldx #$1D ; 29 (spr=-19)
+	sty colpf2
+	stx colpf2
+	ldx #$2F ; 47 (spr=-1)
+	ldx #$1C ; 28 (spr=-20)
+	sta colpf2
+	ldy #$1B ; 27 (spr=-21)
+	ldx #$ED ; 237 (spr=189)
+	lda #$98 ; 152 (spr=104)
+	lda #$76 ; 118 (spr=70)
+	lda #$2B ; 43 (spr=-5)
+	sta colpf2
+	ldy #$EE ; 238 (spr=190)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line2
-	lda #$04 ; 4 (spr=-44)
-	lda #$95 ; 149 (spr=101)
-	sta COLPM2
-	lda #$85 ; 133 (spr=85)
+	lda #$1F ; 31 (spr=-17)
+	lda #$05 ; 5 (spr=-43)
+	sta colpf2
+	lda #$89 ; 137 (spr=89)
+	nop 
+	ldy #$1E ; 30 (spr=-18)
+	ldx #$0F ; 15 (spr=-33)
+	ldx #$8E ; 142 (spr=94)
+	nop 
+	lda #$1D ; 29 (spr=-19)
+	stx COLPM0
 	sta colpf1
-	sty HPOSP3
-	ldy #$0E ; 14 (spr=-34)
-	ldy #$2F ; 47 (spr=-1)
-	sty colpf2
-	ldy #$1F ; 31 (spr=-17)
-	lda #$EE ; 238 (spr=190)
-	sty colpf1
-	ldy #$84 ; 132 (spr=84)
-	stx colpf2
-	ldx #$96 ; 150 (spr=102)
-	ldy #$94 ; 148 (spr=100)
-	ldy #$84 ; 132 (spr=84)
-	sty colpf1
-	ldy #$84 ; 132 (spr=84)
+	ldx #$1F ; 31 (spr=-17)
+	stx colpf1
+	ldx #$1E ; 30 (spr=-18)
+	nop 
+	nop 
+	ldx #$FA ; 250 (spr=202)
+	lda #$96 ; 150 (spr=102)
+	stx colpf1
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line3
-	lda #$EE ; 238 (spr=190)
+	sta colpf1
+	ldx #$2E ; 46 (spr=-2)
+	ldx #$FE ; 254 (spr=206)
 	nop 
-	stx colpf1
+	lda #$93 ; 147 (spr=99)
+	lda #$7A ; 122 (spr=74)
+	lda #$37 ; 55 (spr=7)
+	ldy #$1E ; 30 (spr=-18)
+	ldy #$1D ; 29 (spr=-19)
+	ldx #$84 ; 132 (spr=84)
+	sty colpf1
+	ldy #$1E ; 30 (spr=-18)
 	nop 
-	lda #$21 ; 33 (spr=-15)
-	lda #$EF ; 239 (spr=191)
-	stx colpf1
-	ldx #$2F ; 47 (spr=-1)
+	sty COLBAK
+	ldx #$3A ; 58 (spr=10)
 	sty colpf1
+	sta COLPM0
 	stx colpf1
-	ldy #$1F ; 31 (spr=-17)
-	sty colpf1
+	ldx #$F4 ; 244 (spr=196)
 	ldy #$84 ; 132 (spr=84)
-	lda #$56 ; 86 (spr=38)
-	lda #$EF ; 239 (spr=191)
-	ldx #$2A ; 42 (spr=-6)
-	lda #$0F ; 15 (spr=-33)
-	nop 
-	stx colpf1
-	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line4
-	ldx #$30 ; 48 (spr=0)
-	ldx #$86 ; 134 (spr=86)
-	stx COLPM0
-	lda #$ED ; 237 (spr=189)
-	stx colpf1
-	lda #$84 ; 132 (spr=84)
-	sty COLPM0
+	ldx #$2F ; 47 (spr=-1)
+	lda #$87 ; 135 (spr=87)
+	sta colpf1
 	nop 
-	ldx #$2E ; 46 (spr=-2)
+	lda #$1C ; 28 (spr=-20)
+	ldx #$76 ; 118 (spr=70)
+	ldx #$07 ; 7 (spr=-41)
+	ldy #$2E ; 46 (spr=-2)
+	nop 
 	stx colpf1
+	sty colpf1
+	sta colpf1
+	ldx #$2B ; 43 (spr=-5)
+	nop 
 	ldy #$1E ; 30 (spr=-18)
 	sty colpf1
-	nop 
-	ldy #$EE ; 238 (spr=190)
-	ldy #$94 ; 148 (spr=100)
-	nop 
-	ldx #$97 ; 151 (spr=103)
-	nop 
-	nop 
-	lda #$0B ; 11 (spr=-37)
-	nop ; filler
+	stx colpf1
+	ldx #$94 ; 148 (spr=100)
+	lda #$96 ; 150 (spr=102)
+	ldy #$1B ; 27 (spr=-21)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line5
-	stx colpf1
-	sty COLPM2
+	sta colpf1
 	nop 
-	lda #$2E ; 46 (spr=-2)
-	ldx #$EE ; 238 (spr=190)
-	ldx #$EE ; 238 (spr=190)
-	ldx #$2E ; 46 (spr=-2)
-	sty colpf1
-	stx colpf1
-	ldx #$07 ; 7 (spr=-41)
-	ldy #$1E ; 30 (spr=-18)
-	sty colpf1
-	ldy #$1C ; 28 (spr=-20)
-	ldx #$1D ; 29 (spr=-19)
-	lda #$0C ; 12 (spr=-36)
+	ldy #$1A ; 26 (spr=-22)
+	ldy #$1F ; 31 (spr=-17)
+	ldy #$85 ; 133 (spr=85)
 	nop 
-	lda #$1E ; 30 (spr=-18)
-	ldy #$2A ; 42 (spr=-6)
+	ldy #$06 ; 6 (spr=-42)
+	stx colpf1
 	sty colpf1
-	ldy #$87 ; 135 (spr=87)
+	ldx #$1C ; 28 (spr=-20)
+	stx colpf1
+	ldx #$2B ; 43 (spr=-5)
+	stx colpf1
+	ldx #$1E ; 30 (spr=-18)
+	ldy #$2F ; 47 (spr=-1)
+	stx COLPM1
+	nop 
+	ldx #$86 ; 134 (spr=86)
+	nop 
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line6
-	lda #$EE ; 238 (spr=190)
 	nop 
-	nop 
-	nop 
-	nop 
-	nop 
-	sty colpf1
-	ldy #$EE ; 238 (spr=190)
-	ldx #$1F ; 31 (spr=-17)
-	ldy #$1F ; 31 (spr=-17)
-	sty colpf1
-	ldx #$0E ; 14 (spr=-34)
-	ldx #$0F ; 15 (spr=-33)
-	lda #$0E ; 14 (spr=-34)
-	ldx #$06 ; 6 (spr=-42)
-	ldy #$2B ; 43 (spr=-5)
-	sty COLBAK
-	ldx #$1F ; 31 (spr=-17)
-	ldx #$0E ; 14 (spr=-34)
-	nop 
+	sta colpf1
+	lda #$94 ; 148 (spr=100)
+	lda #$97 ; 151 (spr=103)
 	stx colpf1
-	ldy #$EE ; 238 (spr=190)
+	nop 
+	ldx #$07 ; 7 (spr=-41)
+	stx colpf1
+	sty colpf1
+	nop 
+	ldx #$EE ; 238 (spr=190)
+	stx colpf1
+	stx colpf1
+	nop 
+	ldx #$2B ; 43 (spr=-5)
+	stx colpf1
+	ldx #$1E ; 30 (spr=-18)
+	nop 
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line7
-	ldy #$05 ; 5 (spr=-43)
+	nop 
+	nop 
+	ldx #$0E ; 14 (spr=-34)
+	sta colpf1
+	ldx #$0E ; 14 (spr=-34)
 	lda #$0E ; 14 (spr=-34)
-	lda #$EF ; 239 (spr=191)
-	ldy #$86 ; 134 (spr=86)
-	sty colpf0
+	ldx #$07 ; 7 (spr=-41)
 	nop 
-	lda #$1E ; 30 (spr=-18)
-	ldy #$F4 ; 244 (spr=196)
-	sty colpf0
-	ldy #$1E ; 30 (spr=-18)
-	sty colpf0
-	ldx #$1E ; 30 (spr=-18)
-	ldx #$1E ; 30 (spr=-18)
+	stx colpf1
+	lda #$94 ; 148 (spr=100)
+	sty colpf1
+	ldx #$EE ; 238 (spr=190)
+	stx colpf1
+	ldx #$2B ; 43 (spr=-5)
 	ldy #$EE ; 238 (spr=190)
+	lda #$86 ; 134 (spr=86)
+	stx colpf1
 	nop 
-	ldx #$06 ; 6 (spr=-42)
-	ldy #$EE ; 238 (spr=190)
+	ldx #$07 ; 7 (spr=-41)
 	nop 
-	ldy #$2B ; 43 (spr=-5)
-	lda #$3A ; 58 (spr=10)
-	nop 
-	lda #$EE ; 238 (spr=190)
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line8
-	nop 
-	nop 
-	nop 
-	ldy #$96 ; 150 (spr=102)
-	sty colpf0
-	ldy #$95 ; 149 (spr=101)
+	sta colpf1
 	nop 
 	lda #$0E ; 14 (spr=-34)
-	sty colpf0
-	ldy #$1E ; 30 (spr=-18)
-	sty colpf0
-	ldy #$27 ; 39 (spr=-9)
-	lda #$44 ; 68 (spr=20)
-	ldx #$0F ; 15 (spr=-33)
-	lda #$EE ; 238 (spr=190)
+	lda #$0C ; 12 (spr=-36)
+	sty COLPM1
 	nop 
-	ldy #$EE ; 238 (spr=190)
-	ldx #$FE ; 254 (spr=206)
 	nop 
-	sta colpf0
+	stx colpf1
+	sta colpf1
+	ldx #$EF ; 239 (spr=191)
+	ldy #$FD ; 253 (spr=205)
+	stx colpf1
+	ldx #$2B ; 43 (spr=-5)
+	stx colpf1
+	ldx #$07 ; 7 (spr=-41)
+	lda #$DE ; 222 (spr=174)
 	nop 
-	lda #$1E ; 30 (spr=-18)
+	nop 
+	sty colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line9
-	ldx #$86 ; 134 (spr=86)
-	lda #$1E ; 30 (spr=-18)
-	ldx #$FE ; 254 (spr=206)
+	ldy #$0E ; 14 (spr=-34)
 	nop 
-	ldy #$87 ; 135 (spr=87)
-	sty colpf0
+	stx colpf1
 	lda #$1E ; 30 (spr=-18)
-	ldy #$27 ; 39 (spr=-9)
+	ldy #$0E ; 14 (spr=-34)
 	ldx #$0E ; 14 (spr=-34)
-	sty colpf0
-	sta colpf0
+	sta COLBAK
 	nop 
-	nop 
-	ldy #$2D ; 45 (spr=-3)
-	ldx #$EE ; 238 (spr=190)
-	sta colpf0
-	nop 
-	nop 
-	sty colpf0
-	lda #$EE ; 238 (spr=190)
-	ldy #$04 ; 4 (spr=-44)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line10
-	ldy #$87 ; 135 (spr=87)
-	lda #$1E ; 30 (spr=-18)
-	nop 
-	sty colpf0
-	nop 
-	ldx #$29 ; 41 (spr=-7)
-	nop 
-	ldy #$36 ; 54 (spr=6)
-	ldx #$ED ; 237 (spr=189)
-	sty colpf0
-	sta colpf0
-	ldx #$FF ; 255 (spr=207)
-	lda #$EF ; 239 (spr=191)
-	lda #$EE ; 238 (spr=190)
-	ldy #$2D ; 45 (spr=-3)
-	nop 
-	sta colpf0
-	lda #$1F ; 31 (spr=-17)
-	sty colpf0
-	nop 
-	ldx #$F4 ; 244 (spr=196)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line11
 	nop 
 	nop 
 	ldy #$0E ; 14 (spr=-34)
-	ldy #$86 ; 134 (spr=86)
-	nop 
-	ldx #$A4 ; 164 (spr=116)
-	sty colpf0
-	ldx #$04 ; 4 (spr=-44)
-	ldx #$F4 ; 244 (spr=196)
 	ldy #$29 ; 41 (spr=-7)
-	sty colpf0
-	sta colpf0
-	ldx #$86 ; 134 (spr=86)
+	ldy #$EE ; 238 (spr=190)
+	sty colpf1
+	lda #$1E ; 30 (spr=-18)
+	ldy #$2D ; 45 (spr=-3)
+	ldx #$EE ; 238 (spr=190)
+	ldx #$95 ; 149 (spr=101)
+	lda #$1E ; 30 (spr=-18)
+	sty colpf1
+	lda #$87 ; 135 (spr=87)
+	lda #$0E ; 14 (spr=-34)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line10
+	lda #$86 ; 134 (spr=86)
+	sta colpf1
+	ldy #$A9 ; 169 (spr=121)
+	stx COLPM2
+	ldx #$06 ; 6 (spr=-42)
+	lda #$0E ; 14 (spr=-34)
+	ldy #$0A ; 10 (spr=-38)
+	stx colpf1
+	ldx #$EE ; 238 (spr=190)
+	sty colpf1
+	nop 
+	stx colpf1
+	lda #$2F ; 47 (spr=-1)
+	ldx #$0E ; 14 (spr=-34)
+	ldx #$2B ; 43 (spr=-5)
+	lda #$86 ; 134 (spr=86)
+	nop 
+	stx colpf1
+	sta colpf1
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line11
+	lda #$06 ; 6 (spr=-42)
 	nop 
 	nop 
-	lda #$1D ; 29 (spr=-19)
-	lda #$20 ; 32 (spr=-16)
-	nop 
-	lda #$2E ; 46 (spr=-2)
-	sta colpf0
-	ldx #$ED ; 237 (spr=189)
-	lda #$1F ; 31 (spr=-17)
+	ldx #$28 ; 40 (spr=-8)
+	stx COLPM0
+	lda #$DE ; 222 (spr=174)
+	ldx #$A4 ; 164 (spr=116)
+	ldx #$F6 ; 246 (spr=198)
+	ldx #$06 ; 6 (spr=-42)
+	stx colpf1
+	sty colpf1
+	ldy #$84 ; 132 (spr=84)
+	sta colpf1
+	ldx #$2C ; 44 (spr=-4)
+	ldy #$EE ; 238 (spr=190)
+	lda #$EE ; 238 (spr=190)
+	stx colpf1
+	ldx #$2A ; 42 (spr=-6)
+	stx colpf1
+	lda #$86 ; 134 (spr=86)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line12
-	ldx #$94 ; 148 (spr=100)
-	ldy #$EE ; 238 (spr=190)
-	ldy #$86 ; 134 (spr=86)
+	sta colpf1
+	ldx #$05 ; 5 (spr=-43)
+	lda #$0E ; 14 (spr=-34)
+	lda #$09 ; 9 (spr=-39)
+	ldx #$34 ; 52 (spr=4)
+	ldx #$14 ; 20 (spr=-28)
 	nop 
-	ldx #$04 ; 4 (spr=-44)
-	sty colpf0
-	nop 
+	ldx #$06 ; 6 (spr=-42)
+	stx colpf1
 	ldx #$EE ; 238 (spr=190)
-	ldy #$29 ; 41 (spr=-7)
-	sty colpf0
-	sta colpf0
-	ldx #$86 ; 134 (spr=86)
-	ldy #$86 ; 134 (spr=86)
-	lda #$FE ; 254 (spr=206)
 	nop 
-	lda #$2E ; 46 (spr=-2)
-	lda #$2F ; 47 (spr=-1)
 	nop 
-	lda #$1D ; 29 (spr=-19)
-	sta colpf0
-	ldx #$ED ; 237 (spr=189)
-	ldx #$EE ; 238 (spr=190)
+	ldy #$0F ; 15 (spr=-33)
+	stx colpf1
+	ldx #$2A ; 42 (spr=-6)
+	ldy #$0E ; 14 (spr=-34)
+	ldy #$0E ; 14 (spr=-34)
+	ldy #$1E ; 30 (spr=-18)
+	ldy #$2D ; 45 (spr=-3)
+	stx colpf1
+	ldy #$23 ; 35 (spr=-13)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line13
-	ldy #$09 ; 9 (spr=-39)
-	sta colpf0
-	sty colpf0
+	nop 
+	ldy #$23 ; 35 (spr=-13)
+	ldy #$9A ; 154 (spr=106)
+	stx COLPM1
+	ldx #$2A ; 42 (spr=-6)
+	sta colpf1
+	ldy #$F5 ; 245 (spr=197)
+	lda #$1F ; 31 (spr=-17)
+	sta COLPM1
+	stx COLPM0
+	ldy #$EF ; 239 (spr=191)
+	sty colpf1
+	stx COLPM0
+	lda #$EE ; 238 (spr=190)
+	nop 
 	lda #$1E ; 30 (spr=-18)
+	stx colpf1
+	lda #$09 ; 9 (spr=-39)
 	nop 
-	ldy #$2E ; 46 (spr=-2)
-	ldx #$E0 ; 224 (spr=176)
-	ldx #$1E ; 30 (spr=-18)
-	ldy #$38 ; 56 (spr=8)
-	sty colpf0
-	sta colpf0
-	ldx #$DF ; 223 (spr=175)
-	ldy #$86 ; 134 (spr=86)
-	ldx #$16 ; 22 (spr=-26)
-	lda #$08 ; 8 (spr=-40)
-	lda #$0E ; 14 (spr=-34)
-	nop 
-	ldx #$0E ; 14 (spr=-34)
-	lda #$EE ; 238 (spr=190)
-	lda #$EE ; 238 (spr=190)
-	ldx #$1E ; 30 (spr=-18)
-	lda #$0F ; 15 (spr=-33)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line14
-	nop 
-	nop 
-	sty colpf0
-	ldy #$1A ; 26 (spr=-22)
-	ldy #$09 ; 9 (spr=-39)
-	lda #$08 ; 8 (spr=-40)
-	lda #$42 ; 66 (spr=18)
-	lda #$1F ; 31 (spr=-17)
-	ldx #$FE ; 254 (spr=206)
-	sty colpf0
-	sta colpf0
-	lda #$0E ; 14 (spr=-34)
-	ldy #$1E ; 30 (spr=-18)
-	ldx #$0E ; 14 (spr=-34)
-	ldy #$EE ; 238 (spr=190)
-	ldx #$EE ; 238 (spr=190)
+	sta COLPM0
+	ldy #$06 ; 6 (spr=-42)
 	sty colpf1
-	sta colpf0
+	lda #$84 ; 132 (spr=84)
+	nop 
+	ldy #$85 ; 133 (spr=85)
+	stx COLPM1
+	nop 
+	stx colpf1
 	ldx #$EE ; 238 (spr=190)
-	sty colpf1
+	stx COLPM1
+	stx COLBAK
+	sty COLPM2
+	ldx #$2A ; 42 (spr=-6)
+	stx colpf1
+	lda #$2E ; 46 (spr=-2)
+	nop 
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line15
-	ldx #$0D ; 13 (spr=-35)
-	stx colpf1
-	lda #$1D ; 29 (spr=-19)
-	ldx #$FE ; 254 (spr=206)
 	nop 
 	nop 
-	sty COLPM1
-	lda #$0A ; 10 (spr=-38)
+	stx COLPM0
+	ldy #$08 ; 8 (spr=-40)
+	sty colpf1
+	nop 
+	lda #$0B ; 11 (spr=-37)
+	ldy #$1F ; 31 (spr=-17)
 	sta colpf1
-	sty colpf1
-	ldx #$0E ; 14 (spr=-34)
-	ldy #$DF ; 223 (spr=175)
-	sty COLPM1
-	lda #$06 ; 6 (spr=-42)
-	ldy #$0A ; 10 (spr=-38)
 	nop 
-	ldx #$EE ; 238 (spr=190)
-	ldx #$0E ; 14 (spr=-34)
 	sty colpf1
+	ldx #$0E ; 14 (spr=-34)
+	ldx #$2B ; 43 (spr=-5)
+	stx colpf1
+	ldy #$0F ; 15 (spr=-33)
+	ldy #$FE ; 254 (spr=206)
+	ldx #$28 ; 40 (spr=-8)
+	ldx #$EE ; 238 (spr=190)
+	ldx #$07 ; 7 (spr=-41)
+	nop ; filler
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line16
-	ldx #$1E ; 30 (spr=-18)
-	ldx #$10 ; 16 (spr=-32)
-	ldx #$FC ; 252 (spr=204)
-	lda #$FD ; 253 (spr=205)
-	ldx #$0F ; 15 (spr=-33)
-	nop 
-	lda #$2A ; 42 (spr=-6)
-	ldy #$1A ; 26 (spr=-22)
-	ldx #$0D ; 13 (spr=-35)
-	lda #$2E ; 46 (spr=-2)
-	nop 
-	nop 
-	sta colpf1
 	ldy #$EE ; 238 (spr=190)
-	sty colpf1
-	lda #$2C ; 44 (spr=-4)
+	ldx #$0E ; 14 (spr=-34)
 	nop 
-	ldy #$0E ; 14 (spr=-34)
-	ldx #$2E ; 46 (spr=-2)
+	ldy #$E2 ; 226 (spr=178)
 	sta colpf1
-	ldx #$0E ; 14 (spr=-34)
-	ldx #$EE ; 238 (spr=190)
-	ldx #$0E ; 14 (spr=-34)
+	nop 
+	nop 
+	ldx #$2A ; 42 (spr=-6)
+	lda #$1F ; 31 (spr=-17)
+	ldy #$0F ; 15 (spr=-33)
+	ldy #$1E ; 30 (spr=-18)
+	sty colpf1
+	nop 
+	lda #$3D ; 61 (spr=13)
+	lda #$0B ; 11 (spr=-37)
+	stx colpf1
+	nop 
+	ldy #$85 ; 133 (spr=85)
+	stx COLPM0
+	ldx #$07 ; 7 (spr=-41)
+	stx colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line17
-	ldx #$16 ; 22 (spr=-26)
+	ldy #$76 ; 118 (spr=70)
 	nop 
-	lda #$0B ; 11 (spr=-37)
+	ldy #$F1 ; 241 (spr=193)
 	ldx #$0E ; 14 (spr=-34)
-	ldy #$A5 ; 165 (spr=117)
+	ldx #$1F ; 31 (spr=-17)
+	ldy #$08 ; 8 (spr=-40)
+	ldx #$0D ; 13 (spr=-35)
 	nop 
-	ldx #$EE ; 238 (spr=190)
-	ldy #$FE ; 254 (spr=206)
 	sta colpf1
 	nop 
-	sty colpf2
+	nop 
+	ldx #$2E ; 46 (spr=-2)
+	lda #$0D ; 13 (spr=-35)
+	stx colpf1
+	ldx #$75 ; 117 (spr=69)
+	nop 
 	ldy #$0E ; 14 (spr=-34)
+	lda #$0B ; 11 (spr=-37)
+	ldx #$2B ; 43 (spr=-5)
+	stx COLBAK
+	ldx #$06 ; 6 (spr=-42)
 	stx colpf1
-	sta COLPM3
-	ldx #$05 ; 5 (spr=-43)
-	lda #$0E ; 14 (spr=-34)
-	nop 
-	nop 
-	stx colpf1
-	ldx #$FA ; 250 (spr=202)
-	ldx #$0F ; 15 (spr=-33)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line18
-	ldx #$29 ; 41 (spr=-7)
-	ldy #$04 ; 4 (spr=-44)
-	ldy #$06 ; 6 (spr=-42)
-	sta colpf2
-	sty colpf0
-	ldy #$0E ; 14 (spr=-34)
-	lda #$75 ; 117 (spr=69)
-	sta HPOSP3
-	ldy #$EF ; 239 (spr=191)
-	ldx #$0E ; 14 (spr=-34)
-	sty colpf0
-	ldy #$FE ; 254 (spr=206)
-	ldx #$0C ; 12 (spr=-36)
-	ldx #$3B ; 59 (spr=11)
+	ldy #$84 ; 132 (spr=84)
 	nop 
-	ldy #$0E ; 14 (spr=-34)
-	sty colpf2
+	ldx #$1F ; 31 (spr=-17)
+	ldx #$13 ; 19 (spr=-29)
+	nop 
+	nop 
+	ldy #$FE ; 254 (spr=206)
+	ldy #$F7 ; 247 (spr=199)
+	ldx #$EF ; 239 (spr=191)
+	ldy #$1E ; 30 (spr=-18)
+	sta colpf1
+	nop 
+	sty COLBAK
+	stx COLPM0
+	lda #$3A ; 58 (spr=10)
+	ldy #$04 ; 4 (spr=-44)
+	ldx #$2A ; 42 (spr=-6)
+	stx colpf1
+	ldx #$05 ; 5 (spr=-43)
 	ldx #$06 ; 6 (spr=-42)
-	lda #$48 ; 72 (spr=24)
-	stx colpf0
+	stx colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line19
-	sty colpf0
-	ldx #$2A ; 42 (spr=-6)
-	ldx #$06 ; 6 (spr=-42)
-	ldy #$06 ; 6 (spr=-42)
-	sty colpf0
+	sta COLBAK
+	ldy #$2A ; 42 (spr=-6)
+	lda #$F4 ; 244 (spr=196)
+	ldx #$85 ; 133 (spr=85)
+	stx HPOSP0
+	lda #$3A ; 58 (spr=10)
 	nop 
+	ldy #$FF ; 255 (spr=207)
+	lda #$2D ; 45 (spr=-3)
+	ldx #$0C ; 12 (spr=-36)
+	stx COLBAK
+	ldx #$08 ; 8 (spr=-40)
+	sty COLBAK
+	ldx #$FD ; 253 (spr=205)
+	sta colpf2
+	lda #$2A ; 42 (spr=-6)
+	sta COLBAK
+	ldx #$08 ; 8 (spr=-40)
+	ldy #$FE ; 254 (spr=206)
 	nop 
-	sty COLPM1
-	ldy #$04 ; 4 (spr=-44)
-	ldx #$EE ; 238 (spr=190)
-	stx colpf0
-	sta HPOSP3
-	ldy #$DE ; 222 (spr=174)
-	ldy #$86 ; 134 (spr=86)
-	lda #$0F ; 15 (spr=-33)
-	lda #$0E ; 14 (spr=-34)
-	sty colpf0
-	sty colpf0
-	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line20
-	sty colpf0
-	sta COLPM1
-	ldy #$0E ; 14 (spr=-34)
-	ldy #$0D ; 13 (spr=-35)
-	sty colpf2
-	sta colpf2
-	ldy #$08 ; 8 (spr=-40)
-	sty colpf0
-	stx colpf0
-	ldy #$0E ; 14 (spr=-34)
-	lda #$1D ; 29 (spr=-19)
-	sta colpf2
-	lda #$0E ; 14 (spr=-34)
-	ldy #$06 ; 6 (spr=-42)
-	sty colpf0
-	sta colpf2
 	nop 
+	lda #$05 ; 5 (spr=-43)
+	nop 
+	nop 
+	sta colpf2
+	lda #$F4 ; 244 (spr=196)
+	ldy #$2A ; 42 (spr=-6)
+	stx colpf1
+	nop 
+	lda #$1B ; 27 (spr=-21)
+	ldy #$0E ; 14 (spr=-34)
+	nop 
+	nop 
+	sta colpf2
+	lda #$EE ; 238 (spr=190)
+	lda #$FC ; 252 (spr=204)
+	sta colpf0
+	ldx #$04 ; 4 (spr=-44)
+	lda #$2A ; 42 (spr=-6)
+	nop 
+	ldy #$1A ; 26 (spr=-22)
+	ldy #$1A ; 26 (spr=-22)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line21
-	nop 
-	ldy #$0E ; 14 (spr=-34)
-	lda #$29 ; 41 (spr=-7)
-	nop 
-	ldx #$EE ; 238 (spr=190)
+	lda #$06 ; 6 (spr=-42)
+	stx colpf2
+	sta colpf0
+	stx colpf2
+	lda #$0F ; 15 (spr=-33)
+	sta colpf0
+	lda #$03 ; 3 (spr=-45)
+	ldx #$0D ; 13 (spr=-35)
 	lda #$2C ; 44 (spr=-4)
+	ldy #$1A ; 26 (spr=-22)
 	nop 
-	ldy #$0A ; 10 (spr=-38)
-	stx COLPM1
-	ldy #$09 ; 9 (spr=-39)
-	sty colpf0
-	stx colpf0
-	sty colpf0
-	stx colpf0
+	stx colpf2
+	ldx #$EE ; 238 (spr=190)
 	sta colpf2
 	sty colpf0
-	lda #$2A ; 42 (spr=-6)
-	ldy #$2A ; 42 (spr=-6)
-	ldy #$2A ; 42 (spr=-6)
+	lda #$06 ; 6 (spr=-42)
+	ldx #$05 ; 5 (spr=-43)
+	sta colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line22
-	lda #$0E ; 14 (spr=-34)
-	ldy #$2C ; 44 (spr=-4)
-	ldy #$2A ; 42 (spr=-6)
-	lda #$0E ; 14 (spr=-34)
-	sta colpf2
-	ldy #$E4 ; 228 (spr=180)
-	lda #$38 ; 56 (spr=8)
-	ldy #$06 ; 6 (spr=-42)
-	sty colpf0
-	sta colpf0
-	stx colpf0
-	ldy #$EE ; 238 (spr=190)
-	ldx #$0E ; 14 (spr=-34)
-	lda #$EE ; 238 (spr=190)
-	lda #$2C ; 44 (spr=-4)
-	sta colpf2
-	nop 
-	ldy #$2A ; 42 (spr=-6)
-	lda #$0E ; 14 (spr=-34)
 	stx colpf2
+	stx colpf0
+	sta colpf0
+	lda #$0C ; 12 (spr=-36)
+	lda #$0E ; 14 (spr=-34)
+	sta colpf0
+	ldx #$04 ; 4 (spr=-44)
+	lda #$87 ; 135 (spr=87)
+	lda #$FE ; 254 (spr=206)
+	lda #$2D ; 45 (spr=-3)
+	ldx #$E7 ; 231 (spr=183)
+	stx colpf2
+	sty colpf2
+	sta colpf2
+	ldy #$FE ; 254 (spr=206)
+	ldy #$2A ; 42 (spr=-6)
+	ldx #$0E ; 14 (spr=-34)
+	ldx #$04 ; 4 (spr=-44)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line23
-	sta colpf0
-	ldy #$1A ; 26 (spr=-22)
-	lda #$0E ; 14 (spr=-34)
-	ldy #$F9 ; 249 (spr=201)
-	ldx #$06 ; 6 (spr=-42)
-	stx colpf0
-	ldy #$08 ; 8 (spr=-40)
-	ldx #$EF ; 239 (spr=191)
-	lda #$06 ; 6 (spr=-42)
-	sty colpf0
-	stx colpf0
-	ldx #$08 ; 8 (spr=-40)
+	lda #$24 ; 36 (spr=-12)
+	ldy #$86 ; 134 (spr=86)
+	sty colpf2
+	ldy #$2C ; 44 (spr=-4)
 	nop 
-	ldy #$09 ; 9 (spr=-39)
-	lda #$2D ; 45 (spr=-3)
+	lda #$0E ; 14 (spr=-34)
+	stx colpf2
+	stx colpf2
+	lda #$94 ; 148 (spr=100)
+	lda #$2C ; 44 (spr=-4)
 	sta colpf2
-	lda #$0E ; 14 (spr=-34)
-	stx colpf0
-	nop 
-	nop ; filler
+	lda #$2C ; 44 (spr=-4)
+	lda #$0D ; 13 (spr=-35)
+	lda #$94 ; 148 (spr=100)
+	sta COLPM2
+	lda #$EE ; 238 (spr=190)
+	stx colpf2
+	ldy #$EE ; 238 (spr=190)
+	ldx #$1E ; 30 (spr=-18)
+	lda #$0C ; 12 (spr=-36)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line24
+	lda #$94 ; 148 (spr=100)
 	nop 
-	sta colpf2
-	ldx #$0E ; 14 (spr=-34)
-	ldy #$94 ; 148 (spr=100)
-	lda #$2C ; 44 (spr=-4)
-	ldx #$EE ; 238 (spr=190)
+	ldx #$34 ; 52 (spr=4)
+	ldy #$2A ; 42 (spr=-6)
+	lda #$08 ; 8 (spr=-40)
 	nop 
-	nop 
-	ldy #$F4 ; 244 (spr=196)
-	sty colpf0
-	sta colpf0
-	stx colpf0
-	ldy #$06 ; 6 (spr=-42)
-	ldx #$18 ; 24 (spr=-24)
-	lda #$2C ; 44 (spr=-4)
-	sta colpf2
-	stx colpf0
 	nop 
 	lda #$EE ; 238 (spr=190)
-	nop ; filler
+	nop 
+	lda #$25 ; 37 (spr=-11)
+	lda #$2D ; 45 (spr=-3)
+	stx colpf2
+	sta colpf2
+	lda #$05 ; 5 (spr=-43)
+	ldx #$EE ; 238 (spr=190)
+	ldx #$04 ; 4 (spr=-44)
+	nop 
+	lda #$0E ; 14 (spr=-34)
+	lda #$29 ; 41 (spr=-7)
+	sta colpf2
+	lda #$2A ; 42 (spr=-6)
+	stx colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line25
 	nop 
-	nop 
-	lda #$0E ; 14 (spr=-34)
-	lda #$0E ; 14 (spr=-34)
-	ldx #$EF ; 239 (spr=191)
-	sta colpf2
-	sty colpf0
-	sta colpf2
+	ldy #$84 ; 132 (spr=84)
+	lda #$39 ; 57 (spr=9)
+	ldy #$0E ; 14 (spr=-34)
+	ldy #$FF ; 255 (spr=207)
+	ldx #$35 ; 53 (spr=5)
+	ldy #$2D ; 45 (spr=-3)
 	lda #$2D ; 45 (spr=-3)
-	sta colpf0
-	stx colpf0
-	ldx #$F6 ; 246 (spr=198)
-	ldx #$28 ; 40 (spr=-8)
 	nop 
+	ldy #$0C ; 12 (spr=-36)
+	ldy #$04 ; 4 (spr=-44)
+	stx colpf2
 	sta colpf2
-	stx colpf0
+	ldy #$5A ; 90 (spr=42)
+	lda #$0C ; 12 (spr=-36)
+	ldx #$05 ; 5 (spr=-43)
+	lda #$0F ; 15 (spr=-33)
+	lda #$29 ; 41 (spr=-7)
+	ldy #$2C ; 44 (spr=-4)
+	sta colpf2
 	nop 
-	ldx #$94 ; 148 (spr=100)
-	nop ; filler
+	lda #$2A ; 42 (spr=-6)
+	lda #$2D ; 45 (spr=-3)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line26
-	lda #$0E ; 14 (spr=-34)
-	ldy #$14 ; 20 (spr=-28)
 	nop 
-	lda #$0E ; 14 (spr=-34)
-	sta colpf2
+	sty COLPM0
+	nop 
 	lda #$2D ; 45 (spr=-3)
-	ldx #$EF ; 239 (spr=191)
+	stx COLPM0
+	stx colpf2
+	ldx #$04 ; 4 (spr=-44)
+	sty COLPM0
+	ldy #$EE ; 238 (spr=190)
+	ldx #$29 ; 41 (spr=-7)
+	sty COLPM0
 	nop 
-	sty colpf0
-	ldy #$84 ; 132 (spr=84)
+	nop 
+	nop 
 	sta colpf0
 	stx colpf0
-	ldy #$35 ; 53 (spr=5)
 	ldy #$94 ; 148 (spr=100)
-	ldx #$29 ; 41 (spr=-7)
-	sta colpf2
-	stx colpf0
-	ldy #$06 ; 6 (spr=-42)
-	ldx #$28 ; 40 (spr=-8)
-	nop 
+	ldx #$25 ; 37 (spr=-11)
+	lda #$0E ; 14 (spr=-34)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line27
-	ldx #$94 ; 148 (spr=100)
-	nop 
-	nop 
-	lda #$0E ; 14 (spr=-34)
-	ldx #$FE ; 254 (spr=206)
-	sta colpf2
-	sty colpf0
-	sta colpf2
-	lda #$2D ; 45 (spr=-3)
 	sta colpf0
-	stx colpf0
-	nop 
-	ldx #$28 ; 40 (spr=-8)
-	nop 
+	lda #$26 ; 38 (spr=-10)
+	lda #$F8 ; 248 (spr=200)
+	sty COLBAK
+	stx COLBAK
+	ldy #$03 ; 3 (spr=-45)
+	lda #$2A ; 42 (spr=-6)
+	ldx #$29 ; 41 (spr=-7)
+	ldy #$A4 ; 164 (spr=116)
 	sta colpf2
-	stx colpf0
-	ldx #$FF ; 255 (spr=207)
-	lda #$94 ; 148 (spr=100)
-	nop ; filler
+	stx COLBAK
+	ldx #$0E ; 14 (spr=-34)
+	nop 
+	lda #$1C ; 28 (spr=-20)
+	sta colpf0
+	ldx #$05 ; 5 (spr=-43)
+	lda #$2C ; 44 (spr=-4)
+	lda #$18 ; 24 (spr=-24)
+	stx colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line28
 	nop 
-	sta COLPM0
+	stx colpf2
+	lda #$2C ; 44 (spr=-4)
+	ldy #$28 ; 40 (spr=-8)
 	lda #$0E ; 14 (spr=-34)
-	sta colpf2
-	lda #$1F ; 31 (spr=-17)
-	sty colpf0
-	nop 
-	lda #$2D ; 45 (spr=-3)
-	nop 
 	sta colpf0
-	stx colpf0
-	ldx #$28 ; 40 (spr=-8)
+	lda #$2A ; 42 (spr=-6)
 	nop 
-	nop 
+	ldx #$E8 ; 232 (spr=184)
+	ldy #$F8 ; 248 (spr=200)
 	sta colpf2
-	stx colpf0
-	lda #$0E ; 14 (spr=-34)
-	nop 
-	nop 
+	lda #$1D ; 29 (spr=-19)
+	stx colpf2
+	ldx #$1F ; 31 (spr=-17)
+	sta colpf2
+	lda #$F8 ; 248 (spr=200)
+	sta colpf2
+	lda #$A6 ; 166 (spr=118)
+	lda #$A4 ; 164 (spr=116)
+	lda #$04 ; 4 (spr=-44)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line29
+	lda #$04 ; 4 (spr=-44)
+	ldy #$04 ; 4 (spr=-44)
+	lda #$0E ; 14 (spr=-34)
 	nop 
-	ldx #$A6 ; 166 (spr=118)
-	sty colpf0
-	ldx #$1C ; 28 (spr=-20)
+	lda #$2D ; 45 (spr=-3)
+	sty colpf2
+	ldy #$1E ; 30 (spr=-18)
+	ldy #$34 ; 52 (spr=4)
+	stx COLPM0
+	nop 
 	sta colpf2
-	sty colpf0
-	ldy #$0B ; 11 (spr=-37)
-	lda #$2C ; 44 (spr=-4)
-	sty colpf0
-	sta colpf0
-	stx colpf0
-	ldy #$94 ; 148 (spr=100)
-	ldx #$29 ; 41 (spr=-7)
-	ldy #$09 ; 9 (spr=-39)
-	stx colpf2
-	ldx #$0E ; 14 (spr=-34)
+	lda #$1D ; 29 (spr=-19)
 	nop 
 	nop 
-	nop ; filler
+	nop 
+	sta colpf2
+	lda #$05 ; 5 (spr=-43)
+	sta colpf2
+	ldx #$90 ; 144 (spr=96)
+	ldy #$08 ; 8 (spr=-40)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line30
-	ldx #$0A ; 10 (spr=-38)
-	lda #$0E ; 14 (spr=-34)
-	ldx #$EE ; 238 (spr=190)
+	lda #$04 ; 4 (spr=-44)
 	nop 
-	sty colpf0
-	ldx #$1C ; 28 (spr=-20)
-	sta colpf2
-	lda #$2D ; 45 (spr=-3)
-	ldy #$26 ; 38 (spr=-10)
-	sty colpf0
-	sta colpf0
-	stx colpf0
-	ldx #$16 ; 22 (spr=-26)
-	lda #$29 ; 41 (spr=-7)
-	ldy #$83 ; 131 (spr=83)
-	sta colpf2
-	stx COLBAK
+	ldy #$92 ; 146 (spr=98)
+	lda #$2A ; 42 (spr=-6)
+	nop 
+	ldy #$86 ; 134 (spr=86)
+	lda #$F5 ; 245 (spr=197)
+	lda #$0C ; 12 (spr=-36)
+	ldy #$94 ; 148 (spr=100)
+	nop 
+	lda #$ED ; 237 (spr=189)
+	lda #$2C ; 44 (spr=-4)
+	sta colpf1
+	lda #$0A ; 10 (spr=-38)
+	stx HPOSP0
+	ldy #$0E ; 14 (spr=-34)
 	ldx #$06 ; 6 (spr=-42)
+	ldy #$0E ; 14 (spr=-34)
+	ldy #$94 ; 148 (spr=100)
+	sta colpf1
+	lda #$92 ; 146 (spr=98)
+	nop 
 	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line31
-	stx colpf0
-	ldx #$91 ; 145 (spr=97)
 	nop 
-	ldx #$0E ; 14 (spr=-34)
 	nop 
+	ldy #$FE ; 254 (spr=206)
+	sta COLPM3
+	ldy #$6C ; 108 (spr=60)
+	nop 
+	lda #$EE ; 238 (spr=190)
 	lda #$2B ; 43 (spr=-5)
-	stx colpf2
-	sty HPOSP3
-	sta colpf0
-	lda #$82 ; 130 (spr=82)
-	ldx #$29 ; 41 (spr=-7)
-	ldy #$95 ; 149 (spr=101)
-	stx COLBAK
-	lda #$08 ; 8 (spr=-40)
-	ldx #$17 ; 23 (spr=-25)
 	nop 
-	stx colpf0
+	stx colpf1
+	sta colpf1
 	nop 
-	ldx #$48 ; 72 (spr=24)
-	nop 
+	ldy #$06 ; 6 (spr=-42)
+	ldx #$06 ; 6 (spr=-42)
+	lda #$0E ; 14 (spr=-34)
+	ldy #$36 ; 54 (spr=6)
+	ldy #$18 ; 24 (spr=-24)
+	lda #$17 ; 23 (spr=-25)
+	sta colpf1
+	lda #$84 ; 132 (spr=84)
+	ldy #$F5 ; 245 (spr=197)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line32
-	sty COLPM0
-	ldy #$0E ; 14 (spr=-34)
-	sty colpf0
-	sta colpf0
-	nop 
-	lda #$2B ; 43 (spr=-5)
-	nop 
-	ldx #$0E ; 14 (spr=-34)
-	ldx #$0A ; 10 (spr=-38)
 	sta COLPM3
 	stx colpf1
-	ldx #$1B ; 27 (spr=-21)
-	stx colpf1
-	ldy #$16 ; 22 (spr=-26)
 	lda #$EE ; 238 (spr=190)
-	sty colpf1
-	nop 
+	ldy #$96 ; 150 (spr=102)
+	ldy #$0E ; 14 (spr=-34)
+	ldx #$0B ; 11 (spr=-37)
+	stx COLPM3
+	stx colpf1
+	ldy #$04 ; 4 (spr=-44)
 	ldx #$18 ; 24 (spr=-24)
-	lda #$78 ; 120 (spr=72)
+	lda #$2A ; 42 (spr=-6)
+	ldy #$2E ; 46 (spr=-2)
+	sta colpf1
+	lda #$50 ; 80 (spr=32)
+	lda #$EE ; 238 (spr=190)
+	lda #$08 ; 8 (spr=-40)
+	stx colpf1
+	ldy #$99 ; 153 (spr=105)
+	sta colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line33
-	sty colpf1
-	ldx #$04 ; 4 (spr=-44)
-	ldy #$14 ; 20 (spr=-28)
-	lda #$78 ; 120 (spr=72)
-	lda #$EE ; 238 (spr=190)
-	stx colpf1
-	lda #$92 ; 146 (spr=98)
-	ldy #$DC ; 220 (spr=172)
-	sta COLPM2
+	sty HPOSP0
+	lda #$0E ; 14 (spr=-34)
+	lda #$84 ; 132 (spr=84)
+	lda #$93 ; 147 (spr=99)
+	nop 
+	sta COLPM3
+	sty HPOSP1
 	ldy #$04 ; 4 (spr=-44)
-	ldx #$1E ; 30 (spr=-18)
-	lda #$2A ; 42 (spr=-6)
-	ldx #$56 ; 86 (spr=38)
-	stx HPOSP1
-	ldx #$06 ; 6 (spr=-42)
+	ldx #$04 ; 4 (spr=-44)
+	lda #$2B ; 43 (spr=-5)
+	sta colpf1
+	ldx #$16 ; 22 (spr=-26)
+	lda #$FB ; 251 (spr=203)
 	sta colpf2
-	stx COLPM1
-	ldy #$FD ; 253 (spr=205)
-	ldx #$84 ; 132 (spr=84)
-	ldx #$0E ; 14 (spr=-34)
+	nop 
+	nop 
+	stx colpf2
+	ldx #$18 ; 24 (spr=-24)
+	ldx #$2D ; 45 (spr=-3)
+	ldy #$94 ; 148 (spr=100)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line34
-	sty HPOSP3
+	lda #$F5 ; 245 (spr=197)
+	ldy #$0E ; 14 (spr=-34)
+	ldy #$94 ; 148 (spr=100)
+	ldy #$94 ; 148 (spr=100)
+	lda #$14 ; 20 (spr=-28)
+	lda #$1E ; 30 (spr=-18)
+	ldx #$04 ; 4 (spr=-44)
+	stx colpf2
+	ldy #$06 ; 6 (spr=-42)
+	nop 
+	ldy #$18 ; 24 (spr=-24)
+	ldy #$04 ; 4 (spr=-44)
 	ldx #$A4 ; 164 (spr=116)
-	ldx #$03 ; 3 (spr=-45)
-	sty COLPM3
-	ldx #$0D ; 13 (spr=-35)
+	ldx #$18 ; 24 (spr=-24)
+	nop 
+	sta colpf2
+	stx colpf2
 	lda #$27 ; 39 (spr=-9)
-	stx colpf0
-	ldy #$D3 ; 211 (spr=163)
-	sta colpf0
-	stx COLBAK
-	ldy #$EF ; 239 (spr=191)
-	sty colpf1
-	ldx #$2A ; 42 (spr=-6)
-	lda #$18 ; 24 (spr=-24)
-	sta COLBAK
-	lda #$17 ; 23 (spr=-25)
-	ldx #$1E ; 30 (spr=-18)
-	lda #$28 ; 40 (spr=-8)
-	ldy #$5F ; 95 (spr=47)
+	sta colpf1
+	lda #$2A ; 42 (spr=-6)
+	ldy #$1E ; 30 (spr=-18)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line35
-	stx COLBAK
-	nop 
-	sta COLBAK
-	lda #$1E ; 30 (spr=-18)
-	lda #$04 ; 4 (spr=-44)
-	sta colpf1
-	nop 
-	ldy #$5F ; 95 (spr=47)
-	ldy #$25 ; 37 (spr=-11)
-	ldy #$EE ; 238 (spr=190)
-	ldy #$14 ; 20 (spr=-28)
-	nop 
-	stx COLBAK
-	ldy #$04 ; 4 (spr=-44)
-	lda #$29 ; 41 (spr=-7)
-	nop 
-	sta COLBAK
-	lda #$97 ; 151 (spr=103)
-	sta HPOSP3
-	lda #$84 ; 132 (spr=84)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line36
-	ldy #$93 ; 147 (spr=99)
+	sta colpf2
+	ldy #$84 ; 132 (spr=84)
 	ldx #$04 ; 4 (spr=-44)
 	nop 
 	sty COLPM2
-	sty COLPM0
+	stx colpf2
+	ldy #$1C ; 28 (spr=-20)
+	ldy #$04 ; 4 (spr=-44)
+	ldx #$1A ; 26 (spr=-22)
+	ldy #$07 ; 7 (spr=-41)
+	sta colpf1
+	lda #$1C ; 28 (spr=-20)
 	sta colpf2
-	ldy #$34 ; 52 (spr=4)
-	sty colpf2
-	ldy #$2A ; 42 (spr=-6)
-	sty colpf1
-	ldy #$1E ; 30 (spr=-18)
-	sty colpf2
+	ldy #$94 ; 148 (spr=100)
+	ldx #$05 ; 5 (spr=-43)
+	sty colpf0
+	stx colpf2
 	nop 
-	ldy #$F8 ; 248 (spr=200)
-	sty colpf2
+	ldx #$2C ; 44 (spr=-4)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line36
+	ldy #$64 ; 100 (spr=52)
 	nop 
-	ldy #$03 ; 3 (spr=-45)
-	ldy #$2F ; 47 (spr=-1)
+	ldx #$16 ; 22 (spr=-26)
+	sta COLPM1
+	ldy #$28 ; 40 (spr=-8)
+	ldx #$2C ; 44 (spr=-4)
+	ldy #$27 ; 39 (spr=-9)
+	lda #$84 ; 132 (spr=84)
+	lda #$84 ; 132 (spr=84)
+	sty colpf0
+	stx colpf2
+	lda #$04 ; 4 (spr=-44)
+	ldx #$0E ; 14 (spr=-34)
+	ldy #$18 ; 24 (spr=-24)
+	stx colpf2
+	sty colpf2
+	ldy #$05 ; 5 (spr=-43)
+	lda #$4C ; 76 (spr=28)
+	sty colpf2
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line37
-	ldy #$E4 ; 228 (spr=180)
-	ldy #$03 ; 3 (spr=-45)
+	ldx #$06 ; 6 (spr=-42)
 	nop 
-	nop 
-	sty colpf2
-	stx colpf1
-	sta colpf2
-	ldy #$C0 ; 192 (spr=144)
-	ldy #$2A ; 42 (spr=-6)
-	sty colpf1
-	ldy #$1F ; 31 (spr=-17)
-	sty colpf2
-	ldy #$1A ; 26 (spr=-22)
-	ldx #$E2 ; 226 (spr=178)
-	sty colpf2
-	ldy #$95 ; 149 (spr=101)
-	sty COLPM0
-	nop 
-	ldy #$24 ; 36 (spr=-12)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line38
-	ldy #$05 ; 5 (spr=-43)
-	ldx #$E4 ; 228 (spr=180)
-	sty colpf1
-	sta colpf2
-	sty colpf1
-	ldy #$0C ; 12 (spr=-36)
-	ldy #$F4 ; 244 (spr=196)
-	sty colpf2
-	ldy #$2A ; 42 (spr=-6)
-	sty colpf2
-	ldy #$1F ; 31 (spr=-17)
-	sty colpf2
-	ldy #$1B ; 27 (spr=-21)
-	sty colpf2
-	ldy #$02 ; 2 (spr=-46)
-	lda #$74 ; 116 (spr=68)
-	sty colpf2
-	nop 
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line39
-	nop 
-	sty colpf2
-	sty colpf2
-	lda #$B4 ; 180 (spr=132)
-	nop 
-	lda #$37 ; 55 (spr=7)
-	nop 
-	ldy #$2B ; 43 (spr=-5)
-	sty colpf2
-	ldy #$1E ; 30 (spr=-18)
-	sty colpf1
-	ldy #$29 ; 41 (spr=-7)
-	sty COLPM1
-	ldy #$1A ; 26 (spr=-22)
-	sty colpf1
-	ldy #$1C ; 28 (spr=-20)
-	nop 
-	lda #$85 ; 133 (spr=85)
-	ldy #$04 ; 4 (spr=-44)
-	ldy #$95 ; 149 (spr=101)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line40
-	ldy #$06 ; 6 (spr=-42)
-	lda #$26 ; 38 (spr=-10)
-	ldy #$2A ; 42 (spr=-6)
-	stx COLPM1
-	ldy #$04 ; 4 (spr=-44)
-	ldy #$04 ; 4 (spr=-44)
-	sty colpf1
-	ldx #$04 ; 4 (spr=-44)
-	lda #$94 ; 148 (spr=100)
-	nop 
-	ldy #$1E ; 30 (spr=-18)
-	nop 
-	lda #$85 ; 133 (spr=85)
-	lda #$1E ; 30 (spr=-18)
-	sty colpf2
-	ldy #$1A ; 26 (spr=-22)
-	sty colpf2
-	lda #$84 ; 132 (spr=84)
-	ldy #$F9 ; 249 (spr=201)
-	sty colpf2
-	ldx #$29 ; 41 (spr=-7)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line41
-	nop 
-	sty COLBAK
-	ldy #$92 ; 146 (spr=98)
-	ldx #$1C ; 28 (spr=-20)
-	sta colpf2
-	ldx #$29 ; 41 (spr=-7)
-	ldy #$2A ; 42 (spr=-6)
-	nop 
-	sty colpf2
-	stx colpf1
-	ldy #$90 ; 144 (spr=96)
-	ldy #$1E ; 30 (spr=-18)
-	sty colpf2
-	ldy #$1B ; 27 (spr=-21)
-	sty colpf2
-	ldx #$05 ; 5 (spr=-43)
-	ldy #$03 ; 3 (spr=-45)
-	sta COLPM0
-	lda #$26 ; 38 (spr=-10)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line42
-	sty colpf0
-	nop 
-	lda #$08 ; 8 (spr=-40)
-	stx colpf1
+	sta HPOSP2
+	ldy #$81 ; 129 (spr=81)
 	lda #$1B ; 27 (spr=-21)
-	ldx #$16 ; 22 (spr=-26)
-	lda #$1F ; 31 (spr=-17)
-	ldy #$29 ; 41 (spr=-7)
-	stx colpf0
-	sty colpf1
-	ldx #$E2 ; 226 (spr=178)
-	sta colpf1
-	stx COLPM1
-	ldy #$04 ; 4 (spr=-44)
-	ldx #$03 ; 3 (spr=-45)
-	ldy #$93 ; 147 (spr=99)
-	lda #$1A ; 26 (spr=-22)
-	ldy #$05 ; 5 (spr=-43)
-	nop 
-	nop ; filler
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line43
-	nop 
-	sty colpf1
-	stx colpf2
-	ldx #$1C ; 28 (spr=-20)
-	ldx #$1E ; 30 (spr=-18)
-	ldx #$16 ; 22 (spr=-26)
-	nop 
-	ldy #$1F ; 31 (spr=-17)
-	sta colpf2
-	lda #$E3 ; 227 (spr=179)
-	sty colpf1
-	ldy #$04 ; 4 (spr=-44)
-	ldx #$26 ; 38 (spr=-10)
-	ldy #$2A ; 42 (spr=-6)
-	lda #$1B ; 27 (spr=-21)
-	stx colpf1
-	ldx #$04 ; 4 (spr=-44)
-	ldy #$28 ; 40 (spr=-8)
-	sty colpf1
-	nop ; filler
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line44
-	sty colpf1
-	ldx #$05 ; 5 (spr=-43)
-	stx colpf1
-	ldx #$18 ; 24 (spr=-24)
-	ldy #$92 ; 146 (spr=98)
-	nop 
-	ldx #$14 ; 20 (spr=-28)
-	ldx #$92 ; 146 (spr=98)
-	lda #$1E ; 30 (spr=-18)
-	ldy #$02 ; 2 (spr=-46)
-	sty colpf1
-	lda #$27 ; 39 (spr=-9)
-	lda #$1B ; 27 (spr=-21)
-	ldy #$1E ; 30 (spr=-18)
-	sty colpf2
-	sta colpf2
-	ldx #$1C ; 28 (spr=-20)
-	lda #$94 ; 148 (spr=100)
-	ldx #$04 ; 4 (spr=-44)
-	lda #$EC ; 236 (spr=188)
-	ldy #$16 ; 22 (spr=-26)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line45
-	lda #$1A ; 26 (spr=-22)
-	nop 
-	sta colpf2
-	nop 
-	stx colpf2
-	ldx #$07 ; 7 (spr=-41)
-	nop 
-	ldy #$84 ; 132 (spr=84)
-	ldy #$16 ; 22 (spr=-26)
-	stx colpf2
-	ldx #$2B ; 43 (spr=-5)
-	stx colpf2
-	ldx #$1F ; 31 (spr=-17)
-	stx colpf2
-	sta colpf2
-	ldx #$05 ; 5 (spr=-43)
-	lda #$E4 ; 228 (spr=180)
-	ldy #$BC ; 188 (spr=140)
-	sta colpf2
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line46
-	stx colpf2
-	lda #$18 ; 24 (spr=-24)
-	ldy #$FA ; 250 (spr=202)
-	nop 
-	ldx #$1E ; 30 (spr=-18)
-	stx HPOSP3
-	lda #$2A ; 42 (spr=-6)
+	ldy #$94 ; 148 (spr=100)
+	sty HPOSP0
+	ldx #$94 ; 148 (spr=100)
 	ldx #$06 ; 6 (spr=-42)
 	stx colpf2
 	sta colpf2
-	lda #$9C ; 156 (spr=108)
-	sta HPOSP3
-	lda #$1E ; 30 (spr=-18)
-	lda #$1B ; 27 (spr=-21)
-	sta colpf2
-	lda #$18 ; 24 (spr=-24)
-	ldy #$2A ; 42 (spr=-6)
-	ldx #$26 ; 38 (spr=-10)
-	lda #$90 ; 144 (spr=96)
+	lda #$50 ; 80 (spr=32)
+	sta HPOSP0
+	lda #$F9 ; 249 (spr=201)
+	sta COLBAK
+	lda #$0C ; 12 (spr=-36)
+	stx COLPM0
+	lda #$26 ; 38 (spr=-10)
+	ldx #$1A ; 26 (spr=-22)
 	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line38
+	nop 
+	sty colpf0
+	ldy #$04 ; 4 (spr=-44)
+	sty colpf2
+	nop 
+	ldx #$36 ; 54 (spr=6)
+	ldx #$1A ; 26 (spr=-22)
+	ldy #$28 ; 40 (spr=-8)
+	sta colpf0
+	sty colpf2
+	lda #$FE ; 254 (spr=206)
+	sta colpf2
+	lda #$FB ; 251 (spr=203)
+	ldy #$16 ; 22 (spr=-26)
+	stx colpf2
+	sty colpf1
+	ldy #$04 ; 4 (spr=-44)
+	nop 
+	nop ; filler
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line39
+	sty colpf2
+	ldy #$02 ; 2 (spr=-46)
+	sty colpf1
+	ldy #$B2 ; 178 (spr=130)
+	ldy #$26 ; 38 (spr=-10)
+	nop 
+	nop 
+	ldy #$28 ; 40 (spr=-8)
+	sta colpf1
+	sty colpf2
+	lda #$1E ; 30 (spr=-18)
+	sta colpf0
+	ldy #$E3 ; 227 (spr=179)
+	sty COLPM0
+	lda #$26 ; 38 (spr=-10)
+	ldy #$1A ; 26 (spr=-22)
+	sta colpf0
+	ldy #$02 ; 2 (spr=-46)
+	nop 
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line40
+	nop 
+	sty colpf0
+	ldy #$04 ; 4 (spr=-44)
+	sty colpf2
+	ldx #$1E ; 30 (spr=-18)
+	ldy #$84 ; 132 (spr=84)
+	ldy #$28 ; 40 (spr=-8)
+	ldx #$38 ; 56 (spr=8)
+	sta colpf0
+	sty colpf2
+	ldy #$C1 ; 193 (spr=145)
+	lda #$1E ; 30 (spr=-18)
+	sta colpf2
+	nop 
+	lda #$17 ; 23 (spr=-25)
+	sta colpf2
+	ldx #$28 ; 40 (spr=-8)
+	lda #$26 ; 38 (spr=-10)
+	nop 
+	nop ; filler
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line41
+	sty colpf0
+	nop 
+	nop 
+	ldx #$2E ; 46 (spr=-2)
+	ldy #$04 ; 4 (spr=-44)
+	ldx #$29 ; 41 (spr=-7)
+	sty colpf2
+	ldy #$29 ; 41 (spr=-7)
+	sta colpf0
+	sty colpf2
+	lda #$1E ; 30 (spr=-18)
+	sta colpf2
+	nop 
+	lda #$16 ; 22 (spr=-26)
+	nop 
+	stx colpf2
+	sta colpf2
+	ldy #$03 ; 3 (spr=-45)
+	nop ; filler
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line42
+	ldx #$E2 ; 226 (spr=178)
+	nop 
+	ldx #$E4 ; 228 (spr=180)
+	sty colpf2
+	nop 
+	nop 
+	ldy #$04 ; 4 (spr=-44)
+	lda #$92 ; 146 (spr=98)
+	sty colpf2
+	ldy #$29 ; 41 (spr=-7)
+	sty colpf2
+	lda #$FE ; 254 (spr=206)
+	sta colpf2
+	ldy #$16 ; 22 (spr=-26)
+	lda #$27 ; 39 (spr=-9)
+	sty colpf2
+	sty colpf2
+	ldy #$B1 ; 177 (spr=129)
+	sta colpf2
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line43
+	ldx #$FC ; 252 (spr=204)
+	sty colpf0
+	ldx #$04 ; 4 (spr=-44)
+	ldx #$A3 ; 163 (spr=115)
+	ldy #$04 ; 4 (spr=-44)
+	ldx #$15 ; 21 (spr=-27)
+	sty colpf2
+	ldy #$2A ; 42 (spr=-6)
+	sta colpf0
+	ldx #$16 ; 22 (spr=-26)
+	sty colpf2
+	lda #$1E ; 30 (spr=-18)
+	sta colpf0
+	lda #$05 ; 5 (spr=-43)
+	sta colpf2
+	lda #$27 ; 39 (spr=-9)
+	stx colpf0
+	ldx #$06 ; 6 (spr=-42)
+	ldx #$15 ; 21 (spr=-27)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line44
+	nop 
+	sta colpf0
+	lda #$F5 ; 245 (spr=197)
+	ldx #$2A ; 42 (spr=-6)
+	ldx #$15 ; 21 (spr=-27)
+	ldx #$26 ; 38 (spr=-10)
+	lda #$E1 ; 225 (spr=177)
+	ldx #$18 ; 24 (spr=-24)
+	ldx #$FF ; 255 (spr=207)
+	nop 
+	nop 
+	sta COLPM0
+	sty colpf0
+	lda #$16 ; 22 (spr=-26)
+	stx colpf0
+	sta colpf0
+	ldx #$0C ; 12 (spr=-36)
+	ldy #$E3 ; 227 (spr=179)
+	ldx #$04 ; 4 (spr=-44)
+	ldx #$2A ; 42 (spr=-6)
+	ldx #$14 ; 20 (spr=-28)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line45
+	ldx #$6D ; 109 (spr=61)
+	sty colpf0
+	ldy #$04 ; 4 (spr=-44)
+	ldy #$47 ; 71 (spr=23)
+	ldy #$2F ; 47 (spr=-1)
+	ldy #$06 ; 6 (spr=-42)
+	ldx #$2A ; 42 (spr=-6)
+	ldx #$27 ; 39 (spr=-9)
+	ldx #$13 ; 19 (spr=-29)
+	sty colpf2
+	sta colpf0
+	lda #$1F ; 31 (spr=-17)
+	sta colpf2
+	ldx #$E2 ; 226 (spr=178)
+	lda #$29 ; 41 (spr=-7)
+	ldy #$1E ; 30 (spr=-18)
+	sta colpf2
+	lda #$05 ; 5 (spr=-43)
+	sta colpf2
+	lda #$00 ; 0 (spr=-48)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line46
+	nop 
+	ldy #$14 ; 20 (spr=-28)
+	ldx #$85 ; 133 (spr=85)
+	lda #$18 ; 24 (spr=-24)
+	ldy #$29 ; 41 (spr=-7)
+	lda #$2A ; 42 (spr=-6)
+	lda #$F0 ; 240 (spr=192)
+	ldx #$04 ; 4 (spr=-44)
+	lda #$06 ; 6 (spr=-42)
+	ldy #$29 ; 41 (spr=-7)
+	sta colpf2
+	lda #$E2 ; 226 (spr=178)
+	sty colpf2
+	lda #$4B ; 75 (spr=27)
+	lda #$1F ; 31 (spr=-17)
+	sta colpf2
+	lda #$04 ; 4 (spr=-44)
+	sta colpf2
+	ldy #$0B ; 11 (spr=-37)
+	nop 
+	lda #$27 ; 39 (spr=-9)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line47
+	lda #$E4 ; 228 (spr=180)
+	lda #$36 ; 54 (spr=6)
 	lda #$28 ; 40 (spr=-8)
-	lda #$04 ; 4 (spr=-44)
-	ldx #$1A ; 26 (spr=-22)
-	ldx #$F8 ; 248 (spr=200)
-	ldx #$1B ; 27 (spr=-21)
+	ldx #$1C ; 28 (spr=-20)
+	stx COLPM1
+	nop 
+	stx COLPM1
+	ldy #$F4 ; 244 (spr=196)
+	ldy #$E3 ; 227 (spr=179)
+	ldy #$29 ; 41 (spr=-7)
+	sty colpf2
+	ldy #$16 ; 22 (spr=-26)
+	lda #$1F ; 31 (spr=-17)
+	nop 
 	sta colpf2
-	lda #$15 ; 21 (spr=-27)
-	ldy #$1C ; 28 (spr=-20)
-	lda #$A0 ; 160 (spr=112)
-	ldy #$0A ; 10 (spr=-38)
-	lda #$1A ; 26 (spr=-22)
-	stx colpf2
-	sty COLPM1
-	nop 
-	lda #$1E ; 30 (spr=-18)
-	lda #$92 ; 146 (spr=98)
-	nop 
 	lda #$27 ; 39 (spr=-9)
 	sta colpf2
-	ldy #$18 ; 24 (spr=-24)
-	lda #$1C ; 28 (spr=-20)
-	nop ; filler
+	lda #$04 ; 4 (spr=-44)
+	ldx #$36 ; 54 (spr=6)
+	sta colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line48
-	nop 
-	ldx #$2D ; 45 (spr=-3)
+	ldy #$1D ; 29 (spr=-19)
+	stx COLPM1
+	lda #$18 ; 24 (spr=-24)
+	ldx #$1D ; 29 (spr=-19)
+	lda #$1E ; 30 (spr=-18)
+	stx COLPM1
+	lda #$F7 ; 247 (spr=199)
+	ldx #$D2 ; 210 (spr=162)
+	ldy #$29 ; 41 (spr=-7)
+	lda #$1E ; 30 (spr=-18)
+	sty colpf2
+	ldx #$E2 ; 226 (spr=178)
+	ldx #$90 ; 144 (spr=96)
+	sta colpf2
+	ldy #$1A ; 26 (spr=-22)
 	lda #$05 ; 5 (spr=-43)
-	nop 
 	sta colpf2
-	lda #$14 ; 20 (spr=-28)
-	ldy #$09 ; 9 (spr=-39)
-	ldy #$04 ; 4 (spr=-44)
-	ldx #$1A ; 26 (spr=-22)
-	sta colpf2
-	lda #$28 ; 40 (spr=-8)
-	sta colpf2
-	stx colpf2
-	ldx #$82 ; 130 (spr=82)
-	lda #$38 ; 56 (spr=8)
-	nop 
-	lda #$04 ; 4 (spr=-44)
-	nop 
-	sta colpf2
-	lda #$25 ; 37 (spr=-11)
-	ldy #$26 ; 38 (spr=-10)
+	lda #$08 ; 8 (spr=-40)
+	ldy #$F6 ; 246 (spr=198)
+	ldy #$16 ; 22 (spr=-26)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line49
-	lda #$07 ; 7 (spr=-41)
-	ldx #$2B ; 43 (spr=-5)
+	stx COLPM0
 	nop 
-	ldx #$92 ; 146 (spr=98)
-	ldy #$05 ; 5 (spr=-43)
-	ldy #$92 ; 146 (spr=98)
-	sty COLPM0
-	ldx #$1A ; 26 (spr=-22)
-	ldx #$FA ; 250 (spr=202)
+	ldx #$1C ; 28 (spr=-20)
 	nop 
-	sta colpf2
-	stx colpf2
 	nop 
-	stx colpf2
-	lda #$08 ; 8 (spr=-40)
-	lda #$26 ; 38 (spr=-10)
-	ldy #$CF ; 207 (spr=159)
-	sta colpf2
-	ldy #$18 ; 24 (spr=-24)
-	lda #$05 ; 5 (spr=-43)
+	ldx #$02 ; 2 (spr=-46)
+	ldx #$09 ; 9 (spr=-39)
 	nop 
+	ldx #$03 ; 3 (spr=-45)
+	sta COLPM0
+	stx COLPM0
+	ldx #$2E ; 46 (spr=-2)
+	nop 
+	nop 
+	lda #$18 ; 24 (spr=-24)
+	lda #$1C ; 28 (spr=-20)
+	ldy #$F6 ; 246 (spr=198)
+	nop 
+	lda #$1C ; 28 (spr=-20)
+	ldy #$79 ; 121 (spr=73)
+	nop ; filler
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line50
-	ldy #$01 ; 1 (spr=-47)
-	ldx #$16 ; 22 (spr=-26)
-	sta colpf2
-	ldx #$1A ; 26 (spr=-22)
-	lda #$C4 ; 196 (spr=148)
+	ldx #$37 ; 55 (spr=7)
 	ldy #$1A ; 26 (spr=-22)
-	nop 
-	ldy #$36 ; 54 (spr=6)
-	nop 
-	ldy #$2A ; 42 (spr=-6)
-	nop 
-	ldx #$FB ; 251 (spr=203)
-	stx colpf2
-	lda #$16 ; 22 (spr=-26)
-	nop 
-	ldy #$E2 ; 226 (spr=178)
+	ldy #$1C ; 28 (spr=-20)
+	ldy #$1B ; 27 (spr=-21)
+	ldx #$B2 ; 178 (spr=130)
+	lda #$19 ; 25 (spr=-23)
+	ldy #$92 ; 146 (spr=98)
+	ldx #$0A ; 10 (spr=-38)
 	ldy #$16 ; 22 (spr=-26)
-	nop 
-	ldx #$FB ; 251 (spr=203)
-	nop 
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
+	ldx #$2C ; 44 (spr=-4)
+	lda #$E0 ; 224 (spr=176)
+	ldy #$28 ; 40 (spr=-8)
+	sta colpf2
+	sty colpf2
+	stx colpf2
+	lda #$D0 ; 208 (spr=160)
+	lda #$02 ; 2 (spr=-46)
+	lda #$05 ; 5 (spr=-43)
+	sta colpf2
+	lda #$28 ; 40 (spr=-8)
+	ldx #$E6 ; 230 (spr=182)
+	ldy #$29 ; 41 (spr=-7)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line51
-	ldx #$2A ; 42 (spr=-6)
-	ldy #$84 ; 132 (spr=84)
-	ldx #$0C ; 12 (spr=-36)
-	ldy #$84 ; 132 (spr=84)
-	lda #$04 ; 4 (spr=-44)
+	ldx #$E8 ; 232 (spr=184)
+	lda #$16 ; 22 (spr=-26)
+	ldx #$D2 ; 210 (spr=162)
+	nop 
+	ldx #$15 ; 21 (spr=-27)
+	ldx #$E8 ; 232 (spr=184)
+	lda #$18 ; 24 (spr=-24)
+	lda #$D0 ; 208 (spr=160)
+	lda #$02 ; 2 (spr=-46)
+	ldy #$92 ; 146 (spr=98)
+	nop 
+	ldy #$29 ; 41 (spr=-7)
 	sta colpf2
+	sty colpf2
+	lda #$04 ; 4 (spr=-44)
 	nop 
-	ldy #$00 ; 0 (spr=-48)
-	nop 
-	ldx #$FB ; 251 (spr=203)
-	sta COLPM0
-	stx colpf2
-	ldx #$07 ; 7 (spr=-41)
-	stx COLPM1
-	nop 
-	ldx #$FE ; 254 (spr=206)
-	ldy #$EA ; 234 (spr=186)
-	lda #$F8 ; 248 (spr=200)
-	ldy #$12 ; 18 (spr=-30)
-	sta COLBAK
-	nop 
+	ldy #$2C ; 44 (spr=-4)
+	ldy #$0C ; 12 (spr=-36)
+	ldy #$1C ; 28 (spr=-20)
+	ldy #$02 ; 2 (spr=-46)
+	sta colpf2
+	ldy #$92 ; 146 (spr=98)
+	ldx #$16 ; 22 (spr=-26)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line52
-	sta COLBAK
-	sta COLBAK
+	ldy #$09 ; 9 (spr=-39)
 	nop 
-	nop 
-	nop 
-	nop 
-	nop 
-	nop 
-	nop 
-	nop 
+	ldx #$1A ; 26 (spr=-22)
 	ldy #$92 ; 146 (spr=98)
-	sta COLBAK
+	lda #$93 ; 147 (spr=99)
+	lda #$E0 ; 224 (spr=176)
 	nop 
+	ldy #$90 ; 144 (spr=96)
 	nop 
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
+	ldy #$1C ; 28 (spr=-20)
+	ldy #$28 ; 40 (spr=-8)
+	sta colpf2
+	sty colpf2
+	ldx #$16 ; 22 (spr=-26)
+	lda #$28 ; 40 (spr=-8)
+	lda #$04 ; 4 (spr=-44)
+	ldy #$26 ; 38 (spr=-10)
+	sta colpf2
+	sty colpf1
+	nop 
+	lda #$C1 ; 193 (spr=145)
+	ldx #$D2 ; 210 (spr=162)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line53
-	sta COLBAK
-	sta COLBAK
+	sta colpf1
 	nop 
 	nop 
+	lda #$85 ; 133 (spr=85)
+	ldy #$1B ; 27 (spr=-21)
 	nop 
+	lda #$08 ; 8 (spr=-40)
+	lda #$02 ; 2 (spr=-46)
+	sty colpf1
+	sta colpf2
+	ldx #$FF ; 255 (spr=207)
+	stx COLPM0
 	nop 
+	ldx #$04 ; 4 (spr=-44)
+	lda #$FC ; 252 (spr=204)
+	ldy #$F9 ; 249 (spr=201)
+	ldy #$19 ; 25 (spr=-23)
 	nop 
+	ldy #$18 ; 24 (spr=-24)
 	nop 
-	nop 
-	nop 
-	ldy #$92 ; 146 (spr=98)
-	sta COLBAK
-	nop 
-	nop 
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
 	nop ; filler
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line54
-	lda #$1C ; 28 (spr=-20)
+	lda #$92 ; 146 (spr=98)
 	nop 
-	lda #$EC ; 236 (spr=188)
-	sty COLPM2
-	stx COLPM1
+	ldy #$91 ; 145 (spr=97)
+	nop 
+	nop 
+	ldx #$5F ; 95 (spr=47)
 	lda #$16 ; 22 (spr=-26)
 	nop 
-	sty COLPM0
-	stx COLPM0
 	nop 
-	ldx #$48 ; 72 (spr=24)
-	ldx #$04 ; 4 (spr=-44)
-	lda #$29 ; 41 (spr=-7)
-	ldy #$92 ; 146 (spr=98)
-	ldx #$01 ; 1 (spr=-47)
+	lda #$08 ; 8 (spr=-40)
 	nop 
+	ldy #$1A ; 26 (spr=-22)
+	lda #$EF ; 239 (spr=191)
+	ldy #$04 ; 4 (spr=-44)
 	nop 
+	ldy #$36 ; 54 (spr=6)
+	stx HPOSP1
+	ldy #$09 ; 9 (spr=-39)
+	ldx #$26 ; 38 (spr=-10)
+	sta COLPM1
+	stx colpf1
+	lda #$16 ; 22 (spr=-26)
 	nop 
-	ldy #$2A ; 42 (spr=-6)
-	lda #$17 ; 23 (spr=-25)
-	nop 
-	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line55
+	ldx #$F9 ; 249 (spr=201)
+	ldx #$04 ; 4 (spr=-44)
+	stx colpf1
+	ldx #$26 ; 38 (spr=-10)
+	lda #$ED ; 237 (spr=189)
+	sta COLPM2
+	lda #$FB ; 251 (spr=203)
 	nop 
-	ldy #$26 ; 38 (spr=-10)
-	lda #$2C ; 44 (spr=-4)
-	sty colpf0
-	lda #$18 ; 24 (spr=-24)
-	ldy #$09 ; 9 (spr=-39)
-	sty COLPM1
-	ldy #$59 ; 89 (spr=41)
-	sty HPOSP0
-	lda #$29 ; 41 (spr=-7)
+	sty colpf1
+	stx colpf1
+	nop 
 	sta colpf1
-	ldy #$38 ; 56 (spr=8)
-	ldy #$04 ; 4 (spr=-44)
-	nop 
-	lda #$EC ; 236 (spr=188)
-	nop 
-	sta COLPM1
-	lda #$16 ; 22 (spr=-26)
-	sta colpf0
-	lda #$26 ; 38 (spr=-10)
+	ldx #$0F ; 15 (spr=-33)
+	stx COLPM0
+	ldx #$26 ; 38 (spr=-10)
+	stx colpf1
+	ldx #$E8 ; 232 (spr=184)
+	ldy #$26 ; 38 (spr=-10)
+	ldx #$20 ; 32 (spr=-16)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line56
-	nop 
-	lda #$2A ; 42 (spr=-6)
-	lda #$93 ; 147 (spr=99)
-	sty colpf0
-	lda #$29 ; 41 (spr=-7)
-	nop 
-	lda #$18 ; 24 (spr=-24)
+	ldx #$EA ; 234 (spr=186)
+	ldx #$94 ; 148 (spr=100)
 	stx colpf1
-	ldy #$17 ; 23 (spr=-25)
-	ldx #$EC ; 236 (spr=188)
-	sty colpf0
-	lda #$26 ; 38 (spr=-10)
-	ldy #$25 ; 37 (spr=-11)
-	lda #$EC ; 236 (spr=188)
-	ldx #$1A ; 26 (spr=-22)
-	ldy #$2A ; 42 (spr=-6)
-	sty COLPM1
+	ldy #$84 ; 132 (spr=84)
+	ldy #$27 ; 39 (spr=-9)
+	ldx #$1F ; 31 (spr=-17)
+	ldy #$92 ; 146 (spr=98)
+	ldx #$2C ; 44 (spr=-4)
+	nop 
+	stx colpf1
+	ldx #$04 ; 4 (spr=-44)
 	sta colpf2
-	lda #$9E ; 158 (spr=110)
-	ldy #$04 ; 4 (spr=-44)
-	ldx #$16 ; 22 (spr=-26)
+	lda #$EC ; 236 (spr=188)
+	sty COLPM2
+	ldy #$26 ; 38 (spr=-10)
+	stx colpf1
+	sta COLPM0
+	ldy #$26 ; 38 (spr=-10)
+	ldx #$26 ; 38 (spr=-10)
+	ldy #$1A ; 26 (spr=-22)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line57
-	ldx #$16 ; 22 (spr=-26)
-	nop 
-	ldx #$1A ; 26 (spr=-22)
-	ldx #$DC ; 220 (spr=172)
-	sta HPOSP1
-	sty colpf0
-	nop 
-	lda #$16 ; 22 (spr=-26)
-	ldx #$2A ; 42 (spr=-6)
-	ldx #$0E ; 14 (spr=-34)
-	sta colpf0
-	lda #$33 ; 51 (spr=3)
-	sta HPOSP3
-	sty colpf1
-	ldy #$27 ; 39 (spr=-9)
-	ldx #$08 ; 8 (spr=-40)
-	ldx #$1A ; 26 (spr=-22)
-	sty COLBAK
-	ldy #$2C ; 44 (spr=-4)
+	ldx #$1E ; 30 (spr=-18)
+	ldy #$1A ; 26 (spr=-22)
+	stx colpf2
+	lda #$71 ; 113 (spr=65)
 	ldy #$F8 ; 248 (spr=200)
+	nop 
+	nop 
+	ldx #$E1 ; 225 (spr=177)
+	ldy #$27 ; 39 (spr=-9)
+	nop 
+	stx colpf2
+	sty colpf2
+	ldy #$FB ; 251 (spr=203)
+	sty colpf2
+	ldx #$1E ; 30 (spr=-18)
+	ldy #$92 ; 146 (spr=98)
+	lda #$7A ; 122 (spr=74)
+	ldy #$F4 ; 244 (spr=196)
+	nop 
+	ldy #$26 ; 38 (spr=-10)
+	nop 
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line58
-	nop 
-	lda #$DB ; 219 (spr=171)
-	ldy #$93 ; 147 (spr=99)
-	stx COLPM3
-	sty COLPM3
-	nop 
-	nop 
-	ldx #$28 ; 40 (spr=-8)
-	ldx #$EC ; 236 (spr=188)
-	sta COLPM3
-	lda #$29 ; 41 (spr=-7)
+	lda #$EC ; 236 (spr=188)
+	ldx #$1E ; 30 (spr=-18)
 	ldy #$18 ; 24 (spr=-24)
-	sta COLBAK
-	ldy #$F8 ; 248 (spr=200)
-	ldx #$EA ; 234 (spr=186)
-	sta COLPM0
+	ldy #$EC ; 236 (spr=188)
+	lda #$29 ; 41 (spr=-7)
+	ldx #$E2 ; 226 (spr=178)
 	nop 
-	stx COLBAK
-	ldx #$8B ; 139 (spr=91)
-	lda #$92 ; 146 (spr=98)
+	nop 
+	ldx #$2A ; 42 (spr=-6)
+	ldy #$C4 ; 196 (spr=148)
+	sty HPOSP1
+	sta COLPM1
+	ldy #$EA ; 234 (spr=186)
+	lda #$FF ; 255 (spr=207)
+	sta COLPM2
+	nop 
+	lda #$26 ; 38 (spr=-10)
+	sty COLPM0
+	sta COLPM1
+	ldy #$F8 ; 248 (spr=200)
+	ldy #$ED ; 237 (spr=189)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line59
-	lda #$92 ; 146 (spr=98)
-	sta COLPM3
-	ldy #$92 ; 146 (spr=98)
 	ldy #$EC ; 236 (spr=188)
 	nop 
-	stx HPOSP0
-	ldx #$26 ; 38 (spr=-10)
-	lda #$1A ; 26 (spr=-22)
+	ldx #$29 ; 41 (spr=-7)
+	ldx #$2B ; 43 (spr=-5)
 	nop 
 	nop 
-	stx colpf1
-	ldx #$17 ; 23 (spr=-25)
+	lda #$EC ; 236 (spr=188)
 	nop 
-	ldx #$28 ; 40 (spr=-8)
 	sta colpf2
-	stx colpf2
-	lda #$1B ; 27 (spr=-21)
+	lda #$92 ; 146 (spr=98)
 	nop 
-	ldx #$05 ; 5 (spr=-43)
+	ldy #$92 ; 146 (spr=98)
+	lda #$0C ; 12 (spr=-36)
+	sta COLPM2
 	stx colpf1
+	ldx #$15 ; 21 (spr=-27)
+	lda #$28 ; 40 (spr=-8)
+	sta colpf1
+	ldy #$1A ; 26 (spr=-22)
+	stx colpf1
+	ldx #$04 ; 4 (spr=-44)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line60
-	stx colpf2
-	nop 
-	sta colpf2
-	lda #$ED ; 237 (spr=189)
+	lda #$E6 ; 230 (spr=182)
+	lda #$17 ; 23 (spr=-25)
+	stx colpf1
 	ldy #$E0 ; 224 (spr=176)
-	sta colpf2
-	ldx #$18 ; 24 (spr=-24)
-	ldx #$19 ; 25 (spr=-23)
-	sty colpf2
-	stx colpf2
-	ldy #$B1 ; 177 (spr=129)
-	ldx #$27 ; 39 (spr=-9)
-	sty HPOSP3
-	stx COLPM3
-	ldx #$26 ; 38 (spr=-10)
-	ldy #$06 ; 6 (spr=-42)
-	ldy #$36 ; 54 (spr=6)
-	ldy #$C8 ; 200 (spr=152)
-	ldy #$C8 ; 200 (spr=152)
+	lda #$DC ; 220 (spr=172)
+	lda #$28 ; 40 (spr=-8)
+	nop 
+	stx colpf1
+	nop 
+	sty colpf1
+	sta colpf1
+	ldy #$2A ; 42 (spr=-6)
+	sty colpf1
+	ldy #$15 ; 21 (spr=-27)
+	lda #$2C ; 44 (spr=-4)
+	lda #$28 ; 40 (spr=-8)
+	sta colpf1
+	sty colpf1
+	lda #$14 ; 20 (spr=-28)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line61
-	ldy #$68 ; 104 (spr=56)
-	ldy #$00 ; 0 (spr=-48)
-	sta COLPM3
-	sta colpf2
+	lda #$16 ; 22 (spr=-26)
+	lda #$17 ; 23 (spr=-25)
+	nop 
+	lda #$27 ; 39 (spr=-9)
+	nop 
+	nop 
+	stx colpf1
 	ldy #$01 ; 1 (spr=-47)
-	lda #$92 ; 146 (spr=98)
-	stx COLPM3
+	stx colpf1
+	sty colpf1
+	sta colpf1
+	ldy #$2B ; 43 (spr=-5)
+	sty colpf1
+	ldy #$15 ; 21 (spr=-27)
+	lda #$29 ; 41 (spr=-7)
+	sta colpf1
+	sty colpf1
 	lda #$18 ; 24 (spr=-24)
-	sty colpf2
-	stx colpf2
-	sta colpf2
-	lda #$28 ; 40 (spr=-8)
-	sta colpf2
-	lda #$ED ; 237 (spr=189)
-	ldy #$C8 ; 200 (spr=152)
-	ldy #$26 ; 38 (spr=-10)
-	ldy #$50 ; 80 (spr=32)
-	ldy #$37 ; 55 (spr=7)
-	ldy #$E0 ; 224 (spr=176)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line62
-	ldy #$18 ; 24 (spr=-24)
-	sta colpf2
-	lda #$B0 ; 176 (spr=128)
-	ldx #$09 ; 9 (spr=-39)
-	ldx #$2A ; 42 (spr=-6)
-	ldy #$F2 ; 242 (spr=194)
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$26 ; 38 (spr=-10)
-	ldy #$84 ; 132 (spr=84)
-	ldy #$91 ; 145 (spr=97)
-	sty colpf2
-	ldy #$18 ; 24 (spr=-24)
-	sty colpf2
-	ldy #$92 ; 146 (spr=98)
-	ldy #$18 ; 24 (spr=-24)
+	stx colpf1
+	ldy #$EA ; 234 (spr=186)
+	stx colpf1
 	nop 
-	lda #$18 ; 24 (spr=-24)
-	ldy #$17 ; 23 (spr=-25)
-	lda #$18 ; 24 (spr=-24)
-	lda #$16 ; 22 (spr=-26)
-	ldy #$D4 ; 212 (spr=164)
-	sta colpf2
+	lda #$26 ; 38 (spr=-10)
+	ldy #$2A ; 42 (spr=-6)
+	ldy #$02 ; 2 (spr=-46)
+	sty colpf1
+	ldy #$03 ; 3 (spr=-45)
+	sta colpf1
+	ldy #$2B ; 43 (spr=-5)
+	sty colpf1
+	lda #$28 ; 40 (spr=-8)
+	ldy #$15 ; 21 (spr=-27)
+	nop 
+	sta colpf1
+	sty colpf1
+	ldy #$F4 ; 244 (spr=196)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line63
-	lda #$ED ; 237 (spr=189)
-	ldx #$26 ; 38 (spr=-10)
-	sta colpf2
-	ldx #$92 ; 146 (spr=98)
-	ldy #$17 ; 23 (spr=-25)
+	ldy #$EC ; 236 (spr=188)
+	stx colpf1
+	stx colpf1
+	ldy #$04 ; 4 (spr=-44)
+	ldy #$2A ; 42 (spr=-6)
+	ldy #$02 ; 2 (spr=-46)
+	lda #$93 ; 147 (spr=99)
+	lda #$27 ; 39 (spr=-9)
+	sty colpf1
+	sta colpf1
+	ldy #$2B ; 43 (spr=-5)
+	ldx #$2A ; 42 (spr=-6)
+	sty colpf1
+	lda #$29 ; 41 (spr=-7)
+	sta colpf1
+	ldy #$14 ; 20 (spr=-28)
+	sty colpf1
 	nop 
-	ldx #$26 ; 38 (spr=-10)
-	lda #$92 ; 146 (spr=98)
-	lda #$07 ; 7 (spr=-41)
-	lda #$18 ; 24 (spr=-24)
-	sta colpf2
-	lda #$EC ; 236 (spr=188)
-	ldy #$13 ; 19 (spr=-29)
-	ldy #$A2 ; 162 (spr=114)
-	nop 
-	nop 
-	ldy #$26 ; 38 (spr=-10)
-	nop 
-	ldy #$16 ; 22 (spr=-26)
-	ldx #$C6 ; 198 (spr=150)
-	ldy #$26 ; 38 (spr=-10)
-	sta HPOSP1
-	ldx #$16 ; 22 (spr=-26)
+	ldy #$2B ; 43 (spr=-5)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line64
-	sta colpf2
+	ldy #$D6 ; 214 (spr=166)
 	ldx #$92 ; 146 (spr=98)
-	ldy #$26 ; 38 (spr=-10)
-	sta HPOSP1
-	ldy #$2A ; 42 (spr=-6)
-	lda #$9B ; 155 (spr=107)
-	sta HPOSP1
+	nop 
+	nop 
+	lda #$ED ; 237 (spr=189)
+	ldx #$04 ; 4 (spr=-44)
+	stx colpf1
 	nop 
 	ldx #$26 ; 38 (spr=-10)
-	nop 
-	ldx #$18 ; 24 (spr=-24)
 	ldy #$26 ; 38 (spr=-10)
-	ldy #$26 ; 38 (spr=-10)
-	stx colpf0
-	ldy #$26 ; 38 (spr=-10)
-	ldy #$26 ; 38 (spr=-10)
-	ldx #$16 ; 22 (spr=-26)
-	stx colpf0
-	ldx #$C5 ; 197 (spr=149)
-	stx HPOSP3
+	ldy #$91 ; 145 (spr=97)
+	ldy #$2B ; 43 (spr=-5)
+	stx colpf2
+	lda #$05 ; 5 (spr=-43)
+	sty colpf1
+	sta COLPM0
+	sta colpf1
+	lda #$EC ; 236 (spr=188)
+	ldx #$26 ; 38 (spr=-10)
+	sta colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line65
+	sta COLBAK
+	ldx #$18 ; 24 (spr=-24)
+	ldx #$EE ; 238 (spr=190)
+	stx COLBAK
+	lda #$18 ; 24 (spr=-24)
+	ldy #$EA ; 234 (spr=186)
 	nop 
-	sta HPOSP1
-	lda #$E4 ; 228 (spr=180)
-	nop 
-	ldx #$15 ; 21 (spr=-27)
-	nop 
-	ldy #$18 ; 24 (spr=-24)
-	ldy #$15 ; 21 (spr=-27)
-	stx colpf1
-	ldy #$EB ; 235 (spr=187)
-	ldy #$F3 ; 243 (spr=195)
-	ldx #$19 ; 25 (spr=-23)
-	lda #$06 ; 6 (spr=-42)
-	ldy #$25 ; 37 (spr=-11)
-	stx colpf0
-	lda #$29 ; 41 (spr=-7)
-	ldx #$EC ; 236 (spr=188)
-	ldy #$04 ; 4 (spr=-44)
-	lda #$65 ; 101 (spr=53)
-	nop 
-	lda #$27 ; 39 (spr=-9)
 	sty colpf1
+	sta colpf2
+	lda #$FB ; 251 (spr=203)
+	ldx #$2A ; 42 (spr=-6)
+	ldy #$14 ; 20 (spr=-28)
+	stx colpf0
+	nop 
+	lda #$EC ; 236 (spr=188)
+	sta colpf0
+	sty colpf0
+	sta COLPM0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line66
-	ldy #$18 ; 24 (spr=-24)
-	stx colpf0
-	lda #$EC ; 236 (spr=188)
+	ldx #$17 ; 23 (spr=-25)
+	ldx #$E5 ; 229 (spr=181)
+	nop 
 	lda #$16 ; 22 (spr=-26)
-	sta colpf0
 	nop 
-	lda #$EF ; 239 (spr=191)
-	nop 
-	ldx #$E6 ; 230 (spr=182)
-	sty colpf1
-	ldx #$24 ; 36 (spr=-12)
-	ldy #$06 ; 6 (spr=-42)
-	ldx #$28 ; 40 (spr=-8)
-	ldy #$04 ; 4 (spr=-44)
+	ldy #$27 ; 39 (spr=-9)
 	stx colpf0
-	sta colpf1
-	sty colpf1
+	lda #$14 ; 20 (spr=-28)
+	nop 
+	lda #$26 ; 38 (spr=-10)
+	sta colpf0
+	ldx #$05 ; 5 (spr=-43)
+	lda #$29 ; 41 (spr=-7)
+	ldy #$18 ; 24 (spr=-24)
+	sta colpf0
 	ldy #$26 ; 38 (spr=-10)
-	lda #$36 ; 54 (spr=6)
-	nop ; filler
+	lda #$EC ; 236 (spr=188)
+	sta colpf0
+	stx colpf0
+	ldy #$35 ; 53 (spr=5)
+	lda #$E2 ; 226 (spr=178)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line67
-	ldy #$C0 ; 192 (spr=144)
-	sta COLPM1
-	ldx #$E8 ; 232 (spr=184)
+	ldx #$92 ; 146 (spr=98)
+	ldx #$26 ; 38 (spr=-10)
+	ldy #$28 ; 40 (spr=-8)
 	nop 
-	lda #$16 ; 22 (spr=-26)
+	lda #$EC ; 236 (spr=188)
+	ldx #$EA ; 234 (spr=186)
+	ldx #$E5 ; 229 (spr=181)
+	lda #$26 ; 38 (spr=-10)
+	ldy #$18 ; 24 (spr=-24)
 	nop 
-	ldy #$E9 ; 233 (spr=185)
-	lda #$27 ; 39 (spr=-9)
-	sty colpf0
-	ldy #$1A ; 26 (spr=-22)
-	sta colpf0
-	nop 
-	sty COLPM1
-	ldx #$18 ; 24 (spr=-24)
 	stx colpf0
-	lda #$25 ; 37 (spr=-11)
-	ldx #$EF ; 239 (spr=191)
-	stx COLPM1
-	ldx #$81 ; 129 (spr=81)
-	nop 
+	sta colpf0
+	ldy #$EC ; 236 (spr=188)
+	sta COLPM0
+	lda #$E2 ; 226 (spr=178)
+	sty colpf0
+	stx colpf0
+	ldx #$DC ; 220 (spr=172)
+	ldy #$26 ; 38 (spr=-10)
+	sta colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line68
-	sty COLPM0
-	lda #$18 ; 24 (spr=-24)
-	nop 
-	lda #$1C ; 28 (spr=-20)
-	lda #$16 ; 22 (spr=-26)
-	nop 
-	lda #$04 ; 4 (spr=-44)
-	ldy #$F8 ; 248 (spr=200)
-	ldy #$EE ; 238 (spr=190)
-	nop 
-	sty colpf1
-	sta colpf1
-	nop 
-	lda #$E8 ; 232 (spr=184)
-	ldy #$EC ; 236 (spr=188)
-	sta colpf0
-	stx HPOSP1
-	lda #$EC ; 236 (spr=188)
-	lda #$EF ; 239 (spr=191)
-	nop ; filler
-	nop ; filler
+	ldy #$98 ; 152 (spr=104)
+	ldx #$18 ; 24 (spr=-24)
+	lda #$92 ; 146 (spr=98)
+	ldx #$E8 ; 232 (spr=184)
+	ldy #$EA ; 234 (spr=186)
+	ldy #$04 ; 4 (spr=-44)
+	stx COLPM0
+	ldy #$EB ; 235 (spr=187)
+	ldy #$E7 ; 231 (spr=183)
+	ldy #$E8 ; 232 (spr=184)
+	ldx #$1E ; 30 (spr=-18)
+	ldx #$E4 ; 228 (spr=180)
+	ldx #$1C ; 28 (spr=-20)
+	ldy #$E8 ; 232 (spr=184)
+	ldy #$92 ; 146 (spr=98)
+	stx colpf2
+	ldy #$E8 ; 232 (spr=184)
+	sty colpf2
+	ldx #$EC ; 236 (spr=188)
+	stx COLBAK
+	ldx #$E7 ; 231 (spr=183)
+	ldy #$0C ; 12 (spr=-36)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line69
-	ldx #$EF ; 239 (spr=191)
-	stx COLPM0
-	stx colpf2
-	ldx #$EA ; 234 (spr=186)
+	ldy #$DA ; 218 (spr=170)
+	lda #$F8 ; 248 (spr=200)
 	lda #$EE ; 238 (spr=190)
 	nop 
-	ldy #$EC ; 236 (spr=188)
+	lda #$82 ; 130 (spr=82)
+	stx colpf2
+	lda #$E6 ; 230 (spr=182)
+	ldx #$92 ; 146 (spr=98)
+	lda #$28 ; 40 (spr=-8)
+	ldy #$EF ; 239 (spr=191)
+	ldx #$E9 ; 233 (spr=185)
 	sty colpf2
+	ldx #$EE ; 238 (spr=190)
+	ldy #$EE ; 238 (spr=190)
+	ldx #$EA ; 234 (spr=186)
+	ldx #$15 ; 21 (spr=-27)
 	ldy #$E8 ; 232 (spr=184)
-	nop 
-	lda #$26 ; 38 (spr=-10)
-	sta COLPM1
-	lda #$92 ; 146 (spr=98)
-	ldx #$EC ; 236 (spr=188)
-	ldy #$E5 ; 229 (spr=181)
-	sty colpf2
-	lda #$B2 ; 178 (spr=130)
-	sta HPOSP1
-	nop 
-	ldy #$E6 ; 230 (spr=182)
+	sty COLBAK
+	stx colpf2
+	ldx #$F8 ; 248 (spr=200)
+	ldy #$EA ; 234 (spr=186)
+	lda #$05 ; 5 (spr=-43)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line70
-	ldy #$E6 ; 230 (spr=182)
-	ldy #$E7 ; 231 (spr=183)
-	lda #$1E ; 30 (spr=-18)
-	ldx #$18 ; 24 (spr=-24)
-	lda #$30 ; 48 (spr=0)
-	sta HPOSP3
-	stx COLPM0
-	lda #$D2 ; 210 (spr=162)
-	lda #$0D ; 13 (spr=-35)
 	nop 
-	ldx #$16 ; 22 (spr=-26)
-	ldx #$A3 ; 163 (spr=115)
-	stx HPOSP0
-	sty colpf0
-	ldy #$76 ; 118 (spr=70)
-	sty HPOSP2
-	sta colpf0
-	lda #$E7 ; 231 (spr=183)
-	ldy #$92 ; 146 (spr=98)
-	ldy #$91 ; 145 (spr=97)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line71
-	sta COLPM2
-	sta COLPM0
-	ldx #$92 ; 146 (spr=98)
-	lda #$E2 ; 226 (spr=178)
-	stx COLPM3
-	lda #$E2 ; 226 (spr=178)
-	sta colpf1
-	ldy #$12 ; 18 (spr=-30)
-	nop 
-	sty COLPM2
-	ldx #$E0 ; 224 (spr=176)
-	lda #$E2 ; 226 (spr=178)
-	nop 
-	ldy #$C4 ; 196 (spr=148)
-	lda #$92 ; 146 (spr=98)
-	nop 
-	ldy #$E2 ; 226 (spr=178)
-	ldy #$93 ; 147 (spr=99)
-	lda #$03 ; 3 (spr=-45)
-	ldy #$E4 ; 228 (spr=180)
-	nop ; filler
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line72
-	sty COLPM2
-	ldy #$E4 ; 228 (spr=180)
-	sta COLPM0
-	sta COLPM2
-	lda #$02 ; 2 (spr=-46)
-	lda #$92 ; 146 (spr=98)
-	ldy #$93 ; 147 (spr=99)
-	sty HPOSP0
-	lda #$E2 ; 226 (spr=178)
-	nop 
-	ldy #$01 ; 1 (spr=-47)
-	stx COLPM2
-	lda #$02 ; 2 (spr=-46)
-	lda #$02 ; 2 (spr=-46)
-	sta colpf1
-	ldx #$D0 ; 208 (spr=160)
-	ldx #$E8 ; 232 (spr=184)
-	lda #$02 ; 2 (spr=-46)
-	stx colpf2
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line73
-	ldx #$E0 ; 224 (spr=176)
-	lda #$EA ; 234 (spr=186)
-	ldy #$00 ; 0 (spr=-48)
-	stx COLPM0
-	ldy #$DE ; 222 (spr=174)
-	ldy #$F0 ; 240 (spr=192)
-	nop 
-	ldy #$00 ; 0 (spr=-48)
-	lda #$E3 ; 227 (spr=179)
-	sta colpf0
-	sty colpf2
-	lda #$01 ; 1 (spr=-47)
-	ldy #$14 ; 20 (spr=-28)
-	ldx #$15 ; 21 (spr=-27)
+	ldy #$EA ; 234 (spr=186)
 	sta colpf2
-	lda #$E9 ; 233 (spr=185)
-	stx colpf2
-	ldy #$E0 ; 224 (spr=176)
-	ldy #$12 ; 18 (spr=-30)
+	ldx #$FA ; 250 (spr=202)
+	nop 
+	nop 
+	ldy #$18 ; 24 (spr=-24)
+	lda #$E5 ; 229 (spr=181)
+	sta colpf2
+	ldx #$3A ; 58 (spr=10)
+	ldx #$04 ; 4 (spr=-44)
+	ldx #$19 ; 25 (spr=-23)
+	nop 
+	stx COLBAK
+	ldx #$E6 ; 230 (spr=182)
+	stx COLBAK
+	ldx #$1A ; 26 (spr=-22)
+	ldx #$E7 ; 231 (spr=183)
+	ldy #$B1 ; 177 (spr=129)
+	lda #$56 ; 86 (spr=38)
 	stx COLPM1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
-line74
-	sta COLPM0
-	stx COLPM0
-	ldx #$01 ; 1 (spr=-47)
-	stx COLPM2
-	sta colpf2
+line71
+	sty HPOSP1
+	ldy #$04 ; 4 (spr=-44)
+	lda #$3E ; 62 (spr=14)
+	nop 
+	lda #$27 ; 39 (spr=-9)
+	nop 
+	ldy #$FA ; 250 (spr=202)
 	ldx #$12 ; 18 (spr=-30)
-	ldy #$26 ; 38 (spr=-10)
-	sty colpf2
-	sta COLBAK
-	ldx #$08 ; 8 (spr=-40)
-	ldy #$16 ; 22 (spr=-26)
-	sty COLPM2
-	lda #$96 ; 150 (spr=102)
-	ldy #$92 ; 146 (spr=98)
-	ldy #$14 ; 20 (spr=-28)
+	ldy #$E8 ; 232 (spr=184)
+	ldy #$E8 ; 232 (spr=184)
+	ldy #$F3 ; 243 (spr=195)
+	ldx #$E1 ; 225 (spr=177)
+	sty COLBAK
 	nop 
-	ldy #$16 ; 22 (spr=-26)
+	ldy #$12 ; 18 (spr=-30)
+	ldy #$E5 ; 229 (spr=181)
+	stx COLBAK
 	nop 
+	sta COLPM1
+	lda #$EA ; 234 (spr=186)
+	lda #$E5 ; 229 (spr=181)
+	ldy #$04 ; 4 (spr=-44)
 	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line72
+	sty colpf2
+	ldy #$02 ; 2 (spr=-46)
+	ldy #$E6 ; 230 (spr=182)
+	ldx #$14 ; 20 (spr=-28)
+	sty COLPM1
+	nop 
+	nop 
+	nop 
+	sta colpf2
+	lda #$02 ; 2 (spr=-46)
+	sta colpf2
+	nop 
+	ldx #$E2 ; 226 (spr=178)
+	ldx #$8D ; 141 (spr=93)
+	ldy #$E8 ; 232 (spr=184)
+	ldy #$E0 ; 224 (spr=176)
+	ldy #$27 ; 39 (spr=-9)
+	sty COLPM1
+	ldy #$E5 ; 229 (spr=181)
+	nop 
+	ldx #$CF ; 207 (spr=159)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line73
+	sty COLBAK
+	nop 
+	ldy #$F4 ; 244 (spr=196)
+	nop 
+	ldy #$E1 ; 225 (spr=177)
+	ldy #$96 ; 150 (spr=102)
+	ldx #$01 ; 1 (spr=-47)
+	lda #$EA ; 234 (spr=186)
+	lda #$01 ; 1 (spr=-47)
+	ldx #$DB ; 219 (spr=171)
+	nop 
+	sta COLBAK
+	ldx #$F3 ; 243 (spr=195)
+	ldx #$00 ; 0 (spr=-48)
+	nop 
+	ldx #$D0 ; 208 (spr=160)
+	ldx #$EA ; 234 (spr=186)
+	sty COLBAK
+	ldy #$15 ; 21 (spr=-27)
+	sty colpf0
+	nop 
+	ldy #$14 ; 20 (spr=-28)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line74
+	ldy #$14 ; 20 (spr=-28)
+	sty COLPM1
+	ldx #$94 ; 148 (spr=100)
+	stx colpf0
+	ldy #$04 ; 4 (spr=-44)
+	ldy #$E4 ; 228 (spr=180)
+	ldx #$27 ; 39 (spr=-9)
+	sty colpf0
+	sta colpf0
+	stx colpf1
+	ldx #$E3 ; 227 (spr=179)
+	stx colpf0
+	ldy #$0B ; 11 (spr=-37)
+	sta colpf0
+	sty COLPM2
+	lda #$B6 ; 182 (spr=134)
+	lda #$06 ; 6 (spr=-42)
+	ldy #$96 ; 150 (spr=102)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line75
+	sta colpf0
+	ldy #$F8 ; 248 (spr=200)
+	lda #$16 ; 22 (spr=-26)
+	ldy #$EA ; 234 (spr=186)
+	sty colpf0
+	ldy #$95 ; 149 (spr=101)
+	lda #$06 ; 6 (spr=-42)
 	nop 
-	ldy #$04 ; 4 (spr=-44)
-	sty colpf2
+	stx colpf0
+	sty colpf0
+	sta colpf0
+	stx colpf0
+	lda #$93 ; 147 (spr=99)
+	ldy #$E4 ; 228 (spr=180)
 	nop 
-	ldy #$93 ; 147 (spr=99)
-	sty HPOSP2
-	ldy #$26 ; 38 (spr=-10)
-	stx colpf2
-	ldy #$E5 ; 229 (spr=181)
-	sta COLBAK
-	lda #$27 ; 39 (spr=-9)
-	ldx #$E6 ; 230 (spr=182)
-	sta colpf2
-	lda #$50 ; 80 (spr=32)
-	sty COLPM2
-	ldx #$06 ; 6 (spr=-42)
-	sta HPOSP2
-	ldy #$E2 ; 226 (spr=178)
-	lda #$26 ; 38 (spr=-10)
+	nop 
+	sty colpf0
+	ldy #$06 ; 6 (spr=-42)
+	ldx #$94 ; 148 (spr=100)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line76
-	sta colpf2
-	stx colpf0
-	ldx #$E9 ; 233 (spr=185)
-	stx colpf2
-	ldx #$E6 ; 230 (spr=182)
+	sta HPOSP2
+	lda #$E6 ; 230 (spr=182)
 	nop 
-	lda #$27 ; 39 (spr=-9)
-	sty colpf2
-	sta colpf2
-	ldx #$06 ; 6 (spr=-42)
-	lda #$16 ; 22 (spr=-26)
-	lda #$37 ; 55 (spr=7)
+	ldx #$14 ; 20 (spr=-28)
+	stx COLPM2
+	nop 
+	ldx #$12 ; 18 (spr=-30)
+	ldx #$09 ; 9 (spr=-39)
+	sta COLPM0
+	stx colpf0
+	sty colpf0
+	ldy #$06 ; 6 (spr=-42)
+	lda #$02 ; 2 (spr=-46)
+	ldx #$E9 ; 233 (spr=185)
+	ldy #$BC ; 188 (spr=140)
 	ldx #$04 ; 4 (spr=-44)
-	lda #$24 ; 36 (spr=-12)
-	lda #$24 ; 36 (spr=-12)
-	ldy #$E2 ; 226 (spr=178)
-	lda #$26 ; 38 (spr=-10)
-	lda #$26 ; 38 (spr=-10)
-	stx colpf2
-	nop ; filler
+	lda #$14 ; 20 (spr=-28)
+	ldy #$E6 ; 230 (spr=182)
+	ldy #$D4 ; 212 (spr=164)
+	ldx #$95 ; 149 (spr=101)
+	lda #$05 ; 5 (spr=-43)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line77
+	ldx #$33 ; 51 (spr=3)
+	ldy #$F5 ; 245 (spr=197)
+	ldx #$14 ; 20 (spr=-28)
+	nop 
+	ldy #$66 ; 102 (spr=54)
+	ldy #$E4 ; 228 (spr=180)
+	sta colpf1
+	lda #$E2 ; 226 (spr=178)
+	sty colpf1
+	sta colpf1
+	ldy #$27 ; 39 (spr=-9)
+	lda #$96 ; 150 (spr=102)
+	ldx #$85 ; 133 (spr=85)
+	sty colpf1
+	lda #$06 ; 6 (spr=-42)
+	ldy #$12 ; 18 (spr=-30)
+	lda #$04 ; 4 (spr=-44)
+	ldx #$14 ; 20 (spr=-28)
+	ldy #$E4 ; 228 (spr=180)
+	sta colpf1
 	lda #$14 ; 20 (spr=-28)
-	sta colpf2
-	stx colpf2
-	lda #$24 ; 36 (spr=-12)
-	ldx #$44 ; 68 (spr=20)
-	ldx #$E9 ; 233 (spr=185)
-	lda #$A4 ; 164 (spr=116)
-	stx colpf2
-	sty colpf2
-	lda #$27 ; 39 (spr=-9)
-	sta colpf2
-	lda #$86 ; 134 (spr=86)
-	ldx #$16 ; 22 (spr=-26)
-	ldx #$F7 ; 247 (spr=199)
-	lda #$CD ; 205 (spr=157)
-	lda #$E4 ; 228 (spr=180)
-	lda #$24 ; 36 (spr=-12)
-	ldy #$E2 ; 226 (spr=178)
-	sta colpf2
-	ldx #$00 ; 0 (spr=-48)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line78
-	ldx #$34 ; 52 (spr=4)
-	sty colpf2
-	ldx #$E6 ; 230 (spr=182)
-	lda #$E4 ; 228 (spr=180)
-	lda #$A4 ; 164 (spr=116)
 	nop 
-	stx colpf2
-	ldx #$36 ; 54 (spr=6)
-	sty colpf2
-	sta colpf2
-	stx colpf2
-	ldx #$00 ; 0 (spr=-48)
+	lda #$93 ; 147 (spr=99)
+	nop 
 	ldx #$26 ; 38 (spr=-10)
-	stx colpf2
+	sty COLPM0
 	ldy #$E2 ; 226 (spr=178)
+	lda #$E6 ; 230 (spr=182)
+	ldy #$36 ; 54 (spr=6)
+	sta colpf1
+	lda #$A4 ; 164 (spr=116)
+	sta colpf1
+	lda #$E3 ; 227 (spr=179)
+	sty colpf1
+	ldy #$E4 ; 228 (spr=180)
+	stx colpf0
+	ldx #$D3 ; 211 (spr=163)
+	ldx #$36 ; 54 (spr=6)
 	nop 
-	nop 
-	nop 
-	nop 
-	lda #$18 ; 24 (spr=-24)
+	sty colpf1
+	ldx #$34 ; 52 (spr=4)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line79
-	lda #$16 ; 22 (spr=-26)
-	lda #$E6 ; 230 (spr=182)
+	ldx #$02 ; 2 (spr=-46)
+	sta COLPM0
+	sty COLPM2
+	ldy #$07 ; 7 (spr=-41)
+	sty colpf0
 	nop 
-	lda #$F0 ; 240 (spr=192)
-	ldy #$04 ; 4 (spr=-44)
-	ldx #$E2 ; 226 (spr=178)
-	sty colpf2
-	lda #$18 ; 24 (spr=-24)
+	ldx #$36 ; 54 (spr=6)
+	ldy #$19 ; 25 (spr=-23)
 	nop 
-	stx colpf2
-	sta colpf2
-	lda #$37 ; 55 (spr=7)
-	sta colpf2
-	ldy #$04 ; 4 (spr=-44)
-	lda #$A2 ; 162 (spr=114)
-	ldx #$CA ; 202 (spr=154)
-	lda #$05 ; 5 (spr=-43)
-	lda #$1A ; 26 (spr=-22)
-	sty colpf2
-	ldy #$92 ; 146 (spr=98)
-	nop 
+	sty colpf1
+	ldy #$00 ; 0 (spr=-48)
+	lda #$04 ; 4 (spr=-44)
+	stx colpf1
+	ldx #$37 ; 55 (spr=7)
+	ldx #$04 ; 4 (spr=-44)
+	sta colpf0
+	lda #$1C ; 28 (spr=-20)
+	ldy #$94 ; 148 (spr=100)
+	sty colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line80
-	sta colpf2
-	ldy #$45 ; 69 (spr=21)
-	lda #$36 ; 54 (spr=6)
-	nop 
+	ldy #$81 ; 129 (spr=81)
+	ldy #$F1 ; 241 (spr=193)
 	ldy #$E2 ; 226 (spr=178)
-	lda #$E5 ; 229 (spr=181)
-	sta COLPM0
-	lda #$40 ; 64 (spr=16)
-	sty COLPM2
-	ldy #$36 ; 54 (spr=6)
-	sty colpf2
-	ldy #$A4 ; 164 (spr=116)
-	ldx #$92 ; 146 (spr=98)
-	ldx #$34 ; 52 (spr=4)
-	ldy #$86 ; 134 (spr=86)
-	lda #$06 ; 6 (spr=-42)
-	lda #$16 ; 22 (spr=-26)
-	lda #$92 ; 146 (spr=98)
+	ldy #$D2 ; 210 (spr=162)
+	stx COLPM1
+	ldy #$E4 ; 228 (spr=180)
+	ldx #$26 ; 38 (spr=-10)
+	ldx #$07 ; 7 (spr=-41)
+	sty colpf0
+	sta colpf0
+	stx colpf0
 	nop 
-	lda #$D6 ; 214 (spr=166)
+	lda #$05 ; 5 (spr=-43)
+	ldy #$E4 ; 228 (spr=180)
+	ldy #$25 ; 37 (spr=-11)
+	sty COLPM1
+	ldy #$F4 ; 244 (spr=196)
+	sty colpf1
 	nop 
-	nop 
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line81
+	sty COLPM1
+	nop 
+	sty COLPM1
+	ldy #$34 ; 52 (spr=4)
+	sta colpf1
+	ldx #$36 ; 54 (spr=6)
+	lda #$7C ; 124 (spr=76)
+	ldy #$01 ; 1 (spr=-47)
+	sty colpf1
+	stx colpf1
+	nop 
+	sty COLBAK
+	lda #$29 ; 41 (spr=-7)
+	sta HPOSP0
+	lda #$96 ; 150 (spr=102)
+	ldy #$35 ; 53 (spr=5)
 	nop 
 	nop 
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line82
 	nop 
-	lda #$24 ; 36 (spr=-12)
-	sty HPOSP2
-	ldy #$04 ; 4 (spr=-44)
-	lda #$13 ; 19 (spr=-29)
-	lda #$01 ; 1 (spr=-47)
-	sta COLBAK
-	lda #$92 ; 146 (spr=98)
-	sty COLPM2
-	ldy #$97 ; 151 (spr=103)
-	sty colpf1
-	stx colpf1
-	lda #$E3 ; 227 (spr=179)
-	nop 
+	ldy #$92 ; 146 (spr=98)
+	ldy #$93 ; 147 (spr=99)
 	ldx #$96 ; 150 (spr=102)
-	ldy #$02 ; 2 (spr=-46)
-	ldy #$E8 ; 232 (spr=184)
+	sty COLPM3
+	ldy #$44 ; 68 (spr=20)
 	nop 
-	lda #$2C ; 44 (spr=-4)
-	lda #$15 ; 21 (spr=-27)
+	sta COLPM0
+	ldx #$33 ; 51 (spr=3)
+	ldx #$00 ; 0 (spr=-48)
+	sta COLBAK
+	sty colpf2
+	ldy #$35 ; 53 (spr=5)
 	nop 
+	sty colpf2
+	stx COLPM0
+	lda #$95 ; 149 (spr=101)
+	ldx #$00 ; 0 (spr=-48)
+	sta colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line83
-	lda #$80 ; 128 (spr=80)
-	nop 
+	sta colpf2
+	lda #$10 ; 16 (spr=-32)
 	lda #$92 ; 146 (spr=98)
-	stx COLPM2
-	lda #$E4 ; 228 (spr=180)
+	lda #$93 ; 147 (spr=99)
+	sta COLPM0
+	sty COLPM1
+	stx colpf2
+	ldx #$96 ; 150 (spr=102)
+	ldx #$42 ; 66 (spr=18)
+	ldx #$A4 ; 164 (spr=116)
 	nop 
-	ldx #$14 ; 20 (spr=-28)
+	ldy #$E5 ; 229 (spr=181)
 	lda #$00 ; 0 (spr=-48)
-	stx COLPM1
-	ldx #$92 ; 146 (spr=98)
-	nop 
-	sty COLBAK
-	lda #$14 ; 20 (spr=-28)
-	nop 
-	ldy #$06 ; 6 (spr=-42)
-	ldx #$44 ; 68 (spr=20)
-	lda #$04 ; 4 (spr=-44)
-	sta colpf0
-	ldx #$92 ; 146 (spr=98)
-	ldy #$00 ; 0 (spr=-48)
-	nop ; filler
-	nop ; filler
+	lda #$45 ; 69 (spr=21)
+	ldx #$05 ; 5 (spr=-43)
+	sty colpf1
+	stx colpf0
+	ldx #$18 ; 24 (spr=-24)
+	ldy #$F5 ; 245 (spr=197)
+	ldy #$6C ; 108 (spr=60)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line84
-	lda #$11 ; 17 (spr=-31)
-	nop 
-	ldx #$92 ; 146 (spr=98)
-	lda #$E4 ; 228 (spr=180)
-	ldx #$E3 ; 227 (spr=179)
-	lda #$00 ; 0 (spr=-48)
-	nop 
-	sta colpf1
-	ldy #$06 ; 6 (spr=-42)
-	ldy #$15 ; 21 (spr=-27)
-	nop 
-	ldx #$92 ; 146 (spr=98)
-	ldy #$FF ; 255 (spr=207)
-	lda #$2C ; 44 (spr=-4)
-	sta HPOSP3
-	ldy #$34 ; 52 (spr=4)
+	lda #$16 ; 22 (spr=-26)
 	ldy #$14 ; 20 (spr=-28)
 	nop 
-	lda #$00 ; 0 (spr=-48)
-	ldx #$E2 ; 226 (spr=178)
-	stx colpf2
+	stx colpf1
+	lda #$1E ; 30 (spr=-18)
+	ldy #$F4 ; 244 (spr=196)
+	ldx #$92 ; 146 (spr=98)
+	stx HPOSP3
+	sty COLPM3
 	nop 
-	nop ; filler
+	ldy #$06 ; 6 (spr=-42)
+	sty colpf1
+	ldy #$F2 ; 242 (spr=194)
+	ldy #$F5 ; 245 (spr=197)
+	sta COLBAK
+	sty colpf1
+	ldx #$00 ; 0 (spr=-48)
+	lda #$E8 ; 232 (spr=184)
+	sty colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line85
-	lda #$EA ; 234 (spr=186)
-	ldy #$55 ; 85 (spr=37)
-	nop 
+	ldy #$00 ; 0 (spr=-48)
+	sta colpf1
+	ldx #$00 ; 0 (spr=-48)
 	ldx #$06 ; 6 (spr=-42)
-	ldy #$13 ; 19 (spr=-29)
-	sty colpf2
+	nop 
+	lda #$B1 ; 177 (spr=129)
+	sta HPOSP3
+	lda #$E4 ; 228 (spr=180)
+	sta colpf1
+	ldy #$96 ; 150 (spr=102)
+	sty colpf1
+	stx colpf1
+	ldx #$06 ; 6 (spr=-42)
 	sta colpf2
-	lda #$2C ; 44 (spr=-4)
-	stx colpf2
-	ldx #$26 ; 38 (spr=-10)
-	ldy #$E4 ; 228 (spr=180)
-	nop 
-	sty COLPM2
-	ldy #$EE ; 238 (spr=190)
-	sta HPOSP2
 	ldx #$06 ; 6 (spr=-42)
-	lda #$10 ; 16 (spr=-32)
-	sty colpf2
-	ldy #$92 ; 146 (spr=98)
-	ldx #$02 ; 2 (spr=-46)
+	lda #$1C ; 28 (spr=-20)
+	sty COLPM1
+	sta colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line86
-	ldy #$96 ; 150 (spr=102)
-	stx colpf0
+	ldy #$89 ; 137 (spr=89)
+	sty HPOSP1
+	lda #$00 ; 0 (spr=-48)
+	ldx #$03 ; 3 (spr=-45)
 	nop 
-	lda #$16 ; 22 (spr=-26)
-	nop 
-	ldy #$1C ; 28 (spr=-20)
-	nop 
+	ldx #$10 ; 16 (spr=-32)
 	ldx #$92 ; 146 (spr=98)
-	ldx #$35 ; 53 (spr=5)
-	ldy #$D6 ; 214 (spr=166)
-	ldy #$07 ; 7 (spr=-41)
-	nop 
-	sty colpf0
-	stx colpf1
-	ldx #$02 ; 2 (spr=-46)
-	stx COLPM2
-	ldy #$05 ; 5 (spr=-43)
-	lda #$24 ; 36 (spr=-12)
-	lda #$44 ; 68 (spr=20)
-	ldy #$33 ; 51 (spr=3)
-	ldy #$00 ; 0 (spr=-48)
-	ldy #$06 ; 6 (spr=-42)
+	sta HPOSP1
+	sta colpf2
+	lda #$35 ; 53 (spr=5)
+	sty HPOSP1
+	sta colpf2
+	ldy #$1C ; 28 (spr=-20)
+	lda #$02 ; 2 (spr=-46)
+	ldx #$E9 ; 233 (spr=185)
+	sta colpf1
+	lda #$26 ; 38 (spr=-10)
+	stx colpf2
+	ldy #$44 ; 68 (spr=20)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line87
+	ldx #$EC ; 236 (spr=188)
+	ldx #$EC ; 236 (spr=188)
+	ldy #$EE ; 238 (spr=190)
+	ldy #$44 ; 68 (spr=20)
+	stx COLBAK
+	ldx #$E2 ; 226 (spr=178)
+	sta HPOSP0
+	lda #$00 ; 0 (spr=-48)
+	ldx #$06 ; 6 (spr=-42)
+	sta COLBAK
+	stx colpf2
 	nop 
 	sty colpf1
-	stx colpf1
-	ldx #$ED ; 237 (spr=189)
-	nop 
-	ldy #$F0 ; 240 (spr=192)
-	stx COLPM2
-	ldx #$92 ; 146 (spr=98)
-	lda #$34 ; 52 (spr=4)
-	ldy #$72 ; 114 (spr=66)
-	nop 
-	nop 
-	ldx #$07 ; 7 (spr=-41)
-	ldy #$04 ; 4 (spr=-44)
-	ldx #$99 ; 153 (spr=105)
-	sta colpf0
-	lda #$08 ; 8 (spr=-40)
-	nop 
-	ldy #$04 ; 4 (spr=-44)
-	sty colpf0
-	ldy #$06 ; 6 (spr=-42)
+	ldy #$92 ; 146 (spr=98)
+	ldx #$34 ; 52 (spr=4)
+	stx colpf2
+	lda #$02 ; 2 (spr=-46)
+	ldx #$E9 ; 233 (spr=185)
+	ldy #$EC ; 236 (spr=188)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line88
-	sty colpf0
-	ldy #$02 ; 2 (spr=-46)
-	nop 
-	stx HPOSP0
-	ldx #$82 ; 130 (spr=82)
-	ldx #$08 ; 8 (spr=-40)
-	nop 
-	sta COLPM2
-	ldx #$96 ; 150 (spr=102)
-	ldy #$EE ; 238 (spr=190)
-	ldy #$45 ; 69 (spr=21)
 	stx colpf1
-	lda #$D4 ; 212 (spr=164)
-	sty colpf1
-	lda #$34 ; 52 (spr=4)
-	lda #$E3 ; 227 (spr=179)
-	sta colpf1
-	lda #$B6 ; 182 (spr=134)
-	ldy #$EC ; 236 (spr=188)
 	nop 
+	sty COLBAK
+	nop 
+	ldy #$EE ; 238 (spr=190)
+	ldx #$EC ; 236 (spr=188)
+	sta colpf2
+	sty COLBAK
+	ldx #$07 ; 7 (spr=-41)
+	ldy #$34 ; 52 (spr=4)
+	stx colpf2
+	lda #$06 ; 6 (spr=-42)
+	nop 
+	sty colpf2
+	lda #$0A ; 10 (spr=-38)
+	ldx #$14 ; 20 (spr=-28)
+	sta colpf2
+	ldx #$07 ; 7 (spr=-41)
+	lda #$00 ; 0 (spr=-48)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line89
+	ldx #$2A ; 42 (spr=-6)
+	lda #$E4 ; 228 (spr=180)
+	ldx #$14 ; 20 (spr=-28)
+	lda #$14 ; 20 (spr=-28)
+	ldx #$07 ; 7 (spr=-41)
+	ldy #$02 ; 2 (spr=-46)
 	lda #$00 ; 0 (spr=-48)
-	lda #$E0 ; 224 (spr=176)
-	ldy #$EE ; 238 (spr=190)
-	ldx #$6A ; 106 (spr=58)
-	ldy #$E5 ; 229 (spr=181)
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$03 ; 3 (spr=-45)
 	ldy #$06 ; 6 (spr=-42)
-	ldy #$1E ; 30 (spr=-18)
-	sta colpf1
-	lda #$E2 ; 226 (spr=178)
-	lda #$97 ; 151 (spr=103)
-	sta colpf1
-	lda #$04 ; 4 (spr=-44)
-	sta colpf1
-	ldx #$35 ; 53 (spr=5)
-	stx colpf1
-	ldy #$EC ; 236 (spr=188)
-	lda #$26 ; 38 (spr=-10)
+	ldy #$34 ; 52 (spr=4)
+	sta colpf2
+	lda #$0F ; 15 (spr=-33)
 	nop 
-	nop 
-	ldx #$06 ; 6 (spr=-42)
+	sta colpf2
+	stx colpf2
+	lda #$F0 ; 240 (spr=192)
+	lda #$D4 ; 212 (spr=164)
+	sty colpf2
+	ldx #$EE ; 238 (spr=190)
+	ldy #$04 ; 4 (spr=-44)
+	nop ; filler
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line90
-	lda #$F4 ; 244 (spr=196)
-	ldx #$06 ; 6 (spr=-42)
+	ldx #$03 ; 3 (spr=-45)
+	lda #$E4 ; 228 (spr=180)
+	ldy #$09 ; 9 (spr=-39)
+	stx colpf2
+	ldx #$EB ; 235 (spr=187)
 	nop 
-	lda #$02 ; 2 (spr=-46)
-	ldx #$FF ; 255 (spr=207)
-	sta colpf1
-	ldx #$E4 ; 228 (spr=180)
-	nop 
-	ldx #$45 ; 69 (spr=21)
-	sty colpf1
-	sta colpf1
 	lda #$00 ; 0 (spr=-48)
-	sta COLPM3
-	stx colpf1
-	ldy #$03 ; 3 (spr=-45)
-	sty colpf1
-	lda #$35 ; 53 (spr=5)
-	ldx #$E7 ; 231 (spr=183)
-	ldx #$6A ; 106 (spr=58)
-	ldy #$05 ; 5 (spr=-43)
+	sty COLPM0
+	ldy #$06 ; 6 (spr=-42)
+	nop 
+	ldy #$07 ; 7 (spr=-41)
+	stx colpf2
+	sty colpf2
+	ldy #$FF ; 255 (spr=207)
+	nop 
+	lda #$34 ; 52 (spr=4)
+	sta colpf2
+	lda #$E3 ; 227 (spr=179)
+	sta colpf2
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line91
-	ldy #$46 ; 70 (spr=22)
-	ldx #$04 ; 4 (spr=-44)
-	ldy #$EC ; 236 (spr=188)
-	lda #$D5 ; 213 (spr=165)
-	lda #$00 ; 0 (spr=-48)
-	ldx #$14 ; 20 (spr=-28)
 	lda #$03 ; 3 (spr=-45)
-	ldx #$E4 ; 228 (spr=180)
 	ldx #$EC ; 236 (spr=188)
-	sta COLPM3
-	stx colpf1
-	lda #$03 ; 3 (spr=-45)
-	ldy #$05 ; 5 (spr=-43)
-	sty colpf1
-	lda #$35 ; 53 (spr=5)
-	ldx #$00 ; 0 (spr=-48)
-	sta colpf0
-	ldy #$EE ; 238 (spr=190)
-	ldy #$04 ; 4 (spr=-44)
-	stx colpf0
-	ldy #$97 ; 151 (spr=103)
+	ldy #$91 ; 145 (spr=97)
+	sty colpf2
+	nop 
+	ldy #$58 ; 88 (spr=40)
+	stx COLPM1
+	sta COLPM0
+	stx colpf2
+	lda #$07 ; 7 (spr=-41)
+	sta colpf2
+	sty HPOSP1
+	ldy #$35 ; 53 (spr=5)
+	sty colpf2
+	ldy #$E3 ; 227 (spr=179)
+	sty colpf2
+	lda #$00 ; 0 (spr=-48)
+	ldy #$07 ; 7 (spr=-41)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line92
-	ldy #$07 ; 7 (spr=-41)
-	stx colpf1
-	lda #$05 ; 5 (spr=-43)
-	ldx #$E6 ; 230 (spr=182)
-	stx colpf1
-	ldx #$E2 ; 226 (spr=178)
-	sta colpf1
-	ldx #$EC ; 236 (spr=188)
-	stx colpf0
-	sty colpf1
-	sta colpf0
+	ldx #$0E ; 14 (spr=-34)
+	ldy #$10 ; 16 (spr=-32)
+	ldx #$0F ; 15 (spr=-33)
+	sta colpf2
+	nop 
+	ldy #$0C ; 12 (spr=-36)
+	lda #$F6 ; 246 (spr=198)
+	lda #$06 ; 6 (spr=-42)
+	ldx #$D8 ; 216 (spr=168)
 	ldx #$00 ; 0 (spr=-48)
-	ldy #$E2 ; 226 (spr=178)
-	lda #$91 ; 145 (spr=97)
-	ldy #$26 ; 38 (spr=-10)
-	stx colpf1
-	ldx #$97 ; 151 (spr=103)
-	ldy #$97 ; 151 (spr=103)
-	lda #$0E ; 14 (spr=-34)
+	sty colpf2
+	ldy #$06 ; 6 (spr=-42)
+	sta colpf2
+	ldx #$91 ; 145 (spr=97)
+	lda #$06 ; 6 (spr=-42)
+	sty HPOSP1
+	sty COLPM2
+	ldy #$00 ; 0 (spr=-48)
+	lda #$0D ; 13 (spr=-35)
+	sty colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line93
-	ldy #$F2 ; 242 (spr=194)
-	ldy #$16 ; 22 (spr=-26)
-	ldy #$E9 ; 233 (spr=185)
-	lda #$06 ; 6 (spr=-42)
 	nop 
+	sty HPOSP2
 	stx HPOSP2
-	ldy #$E2 ; 226 (spr=178)
-	lda #$D0 ; 208 (spr=160)
-	lda #$0E ; 14 (spr=-34)
-	ldy #$E4 ; 228 (spr=180)
-	sta colpf1
-	stx colpf1
-	ldx #$07 ; 7 (spr=-41)
-	stx colpf1
-	ldy #$35 ; 53 (spr=5)
-	sty colpf1
-	ldy #$97 ; 151 (spr=103)
-	nop 
-	nop 
-	ldx #$00 ; 0 (spr=-48)
-	lda #$41 ; 65 (spr=17)
+	stx HPOSP2
+	sty COLPM1
+	sty colpf2
+	sta colpf2
+	ldy #$EE ; 238 (spr=190)
+	lda #$E5 ; 229 (spr=181)
+	sta colpf2
+	ldy #$02 ; 2 (spr=-46)
+	sty COLPM2
+	ldy #$E3 ; 227 (spr=179)
+	lda #$00 ; 0 (spr=-48)
+	sty colpf2
+	sta colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line94
-	nop 
-	nop 
-	nop 
-	lda #$04 ; 4 (spr=-44)
-	lda #$03 ; 3 (spr=-45)
-	stx colpf1
-	ldx #$E2 ; 226 (spr=178)
-	sty HPOSP2
+	lda #$EE ; 238 (spr=190)
+	lda #$1E ; 30 (spr=-18)
+	sta HPOSP0
+	stx HPOSP0
 	lda #$07 ; 7 (spr=-41)
-	sta colpf1
-	ldy #$E0 ; 224 (spr=176)
-	lda #$41 ; 65 (spr=17)
-	ldy #$E2 ; 226 (spr=178)
-	sty colpf1
-	nop 
-	ldx #$00 ; 0 (spr=-48)
-	lda #$04 ; 4 (spr=-44)
+	ldx #$15 ; 21 (spr=-27)
 	ldy #$14 ; 20 (spr=-28)
-	ldy #$08 ; 8 (spr=-40)
-	nop 
-	sta colpf1
+	ldy #$06 ; 6 (spr=-42)
+	lda #$36 ; 54 (spr=6)
+	sty colpf2
+	ldx #$E5 ; 229 (spr=181)
+	sta HPOSP1
+	stx COLPM0
+	lda #$8A ; 138 (spr=90)
+	lda #$24 ; 36 (spr=-12)
+	ldy #$18 ; 24 (spr=-24)
+	ldx #$FD ; 253 (spr=205)
+	ldx #$E2 ; 226 (spr=178)
+	stx colpf2
+	ldy #$D1 ; 209 (spr=161)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line95
-	stx colpf1
-	ldy #$15 ; 21 (spr=-27)
-	lda #$08 ; 8 (spr=-40)
-	lda #$04 ; 4 (spr=-44)
-	ldy #$ED ; 237 (spr=189)
-	nop 
-	lda #$1D ; 29 (spr=-19)
-	lda #$EA ; 234 (spr=186)
-	sta colpf1
-	nop 
-	ldx #$1A ; 26 (spr=-22)
-	nop 
-	sty colpf1
-	lda #$01 ; 1 (spr=-47)
-	sta colpf1
-	lda #$41 ; 65 (spr=17)
-	ldy #$A7 ; 167 (spr=119)
-	ldx #$1B ; 27 (spr=-21)
-	sta HPOSP1
-	nop ; filler
+	sta HPOSP2
+	lda #$00 ; 0 (spr=-48)
+	ldx #$07 ; 7 (spr=-41)
+	sty colpf2
+	stx COLPM0
+	ldx #$EA ; 234 (spr=186)
+	stx colpf2
+	lda #$AD ; 173 (spr=125)
+	ldx #$E2 ; 226 (spr=178)
+	lda #$EE ; 238 (spr=190)
+	lda #$2E ; 46 (spr=-2)
+	sta HPOSP0
+	stx colpf2
+	ldx #$1D ; 29 (spr=-19)
+	lda #$E1 ; 225 (spr=177)
+	ldy #$EC ; 236 (spr=188)
+	ldy #$2A ; 42 (spr=-6)
+	lda #$E7 ; 231 (spr=183)
+	lda #$D8 ; 216 (spr=168)
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line96
-	sty HPOSP0
+	sty COLPM1
+	ldy #$0E ; 14 (spr=-34)
+	nop 
+	ldy #$DC ; 220 (spr=172)
+	ldy #$01 ; 1 (spr=-47)
+	sty colpf2
 	lda #$E4 ; 228 (spr=180)
-	ldy #$0A ; 10 (spr=-38)
-	stx COLPM1
-	ldy #$09 ; 9 (spr=-39)
-	lda #$74 ; 116 (spr=68)
-	sty HPOSP2
+	ldy #$EC ; 236 (spr=188)
+	ldy #$E4 ; 228 (spr=180)
 	nop 
-	lda #$E3 ; 227 (spr=179)
-	sty colpf1
-	sta COLPM1
-	ldy #$1A ; 26 (spr=-22)
-	ldx #$F0 ; 240 (spr=192)
-	ldy #$33 ; 51 (spr=3)
-	nop 
-	ldx #$DC ; 220 (spr=172)
-	sta colpf1
-	lda #$01 ; 1 (spr=-47)
-	nop 
-	nop 
+	sty colpf2
+	lda #$E6 ; 230 (spr=182)
+	lda #$89 ; 137 (spr=89)
+	lda #$E8 ; 232 (spr=184)
+	lda #$ED ; 237 (spr=189)
+	ldy #$E3 ; 227 (spr=179)
+	ldx #$DE ; 222 (spr=174)
+	sty colpf2
+	ldy #$FE ; 254 (spr=206)
+	ldy #$01 ; 1 (spr=-47)
+	sty colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line97
-	sta colpf1
+	ldx #$08 ; 8 (spr=-40)
+	stx COLPM1
+	lda #$E1 ; 225 (spr=177)
 	nop 
-	sty HPOSP2
-	lda #$ED ; 237 (spr=189)
-	nop 
+	ldx #$EC ; 236 (spr=188)
 	ldy #$EC ; 236 (spr=188)
-	ldy #$21 ; 33 (spr=-15)
 	nop 
-	sta colpf1
-	nop 
-	nop 
-	lda #$D9 ; 217 (spr=169)
-	lda #$06 ; 6 (spr=-42)
-	ldy #$17 ; 23 (spr=-25)
-	sta colpf1
+	ldy #$03 ; 3 (spr=-45)
+	sty colpf2
+	stx colpf2
+	ldy #$E5 ; 229 (spr=181)
 	ldy #$E2 ; 226 (spr=178)
-	lda #$00 ; 0 (spr=-48)
-	sty colpf1
-	ldy #$44 ; 68 (spr=20)
-	ldx #$E3 ; 227 (spr=179)
-	nop 
+	lda #$EE ; 238 (spr=190)
+	ldy #$07 ; 7 (spr=-41)
+	sty colpf2
+	ldy #$04 ; 4 (spr=-44)
+	ldy #$E3 ; 227 (spr=179)
+	sty colpf2
+	ldx #$03 ; 3 (spr=-45)
+	ldy #$01 ; 1 (spr=-47)
+	ldx #$FB ; 251 (spr=203)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line98
-	ldy #$F4 ; 244 (spr=196)
-	sta colpf1
-	stx COLPM1
-	ldy #$0E ; 14 (spr=-34)
+	lda #$04 ; 4 (spr=-44)
+	lda #$07 ; 7 (spr=-41)
+	sty colpf2
+	ldx #$FB ; 251 (spr=203)
+	sta COLPM3
+	lda #$EE ; 238 (spr=190)
+	ldy #$0F ; 15 (spr=-33)
+	lda #$E4 ; 228 (spr=180)
+	sty colpf2
+	stx colpf2
+	ldy #$E5 ; 229 (spr=181)
+	sty colpf2
+	nop 
+	ldy #$E3 ; 227 (spr=179)
+	ldx #$E4 ; 228 (spr=180)
+	sty COLPM3
+	ldy #$01 ; 1 (spr=-47)
 	nop 
 	nop 
-	lda #$01 ; 1 (spr=-47)
-	nop 
-	sty colpf1
-	lda #$EC ; 236 (spr=188)
-	sta colpf1
-	ldx #$E3 ; 227 (spr=179)
-	sta COLPM1
-	stx colpf1
-	nop 
-	lda #$00 ; 0 (spr=-48)
-	nop 
-	ldy #$E4 ; 228 (spr=180)
-	sta colpf1
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line99
 	nop 
-	lda #$ED ; 237 (spr=189)
-	sta COLPM1
-	sty COLPM0
-	ldx #$1E ; 30 (spr=-18)
-	ldy #$01 ; 1 (spr=-47)
-	ldx #$E2 ; 226 (spr=178)
-	sty COLPM1
-	nop 
-	sta colpf1
-	ldy #$0B ; 11 (spr=-37)
-	ldy #$35 ; 53 (spr=5)
-	lda #$06 ; 6 (spr=-42)
-	sta colpf1
-	stx colpf1
-	lda #$F0 ; 240 (spr=192)
-	lda #$14 ; 20 (spr=-28)
-	lda #$ED ; 237 (spr=189)
-	ldx #$F7 ; 247 (spr=199)
+	lda #$EC ; 236 (spr=188)
+	lda #$EC ; 236 (spr=188)
 	lda #$EE ; 238 (spr=190)
+	nop 
+	sty colpf2
+	ldx #$ED ; 237 (spr=189)
+	ldy #$5A ; 90 (spr=42)
+	ldy #$FE ; 254 (spr=206)
+	ldy #$04 ; 4 (spr=-44)
+	ldy #$F5 ; 245 (spr=197)
+	lda #$00 ; 0 (spr=-48)
+	stx colpf2
+	ldx #$1E ; 30 (spr=-18)
+	lda #$E4 ; 228 (spr=180)
+	sta colpf2
+	ldx #$EC ; 236 (spr=188)
+	sty colpf2
+	ldx #$EE ; 238 (spr=190)
+	ldy #$05 ; 5 (spr=-43)
+	ldx #$00 ; 0 (spr=-48)
+	lda #$00 ; 0 (spr=-48)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line100
-	ldx #$F0 ; 240 (spr=192)
+	ldy #$0B ; 11 (spr=-37)
+	nop 
+	sty COLPM0
+	lda #$EE ; 238 (spr=190)
+	stx colpf2
+	lda #$A2 ; 162 (spr=114)
+	lda #$DC ; 220 (spr=172)
+	lda #$F0 ; 240 (spr=192)
+	lda #$E4 ; 228 (spr=180)
+	nop 
+	sty colpf2
+	ldy #$06 ; 6 (spr=-42)
+	sta colpf2
+	ldx #$07 ; 7 (spr=-41)
 	lda #$00 ; 0 (spr=-48)
-	ldy #$E8 ; 232 (spr=184)
-	ldx #$F7 ; 247 (spr=199)
-	lda #$00 ; 0 (spr=-48)
-	nop 
-	lda #$0B ; 11 (spr=-37)
-	sta colpf1
-	nop 
-	ldx #$EC ; 236 (spr=188)
-	sty COLPM1
-	nop 
-	stx colpf1
-	ldy #$04 ; 4 (spr=-44)
-	ldy #$E2 ; 226 (spr=178)
-	sty colpf1
-	ldy #$E2 ; 226 (spr=178)
-	nop 
-	ldy #$01 ; 1 (spr=-47)
-	sta colpf1
-	lda #$03 ; 3 (spr=-45)
+	stx colpf2
+	ldy #$EE ; 238 (spr=190)
+	sta colpf2
+	ldy #$0E ; 14 (spr=-34)
+	lda #$EE ; 238 (spr=190)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line101
-	nop 
-	lda #$D2 ; 210 (spr=162)
-	nop 
-	lda #$E2 ; 226 (spr=178)
-	lda #$03 ; 3 (spr=-45)
-	nop 
-	lda #$E9 ; 233 (spr=185)
-	nop 
-	sty colpf1
-	lda #$DF ; 223 (spr=175)
-	nop 
-	ldy #$07 ; 7 (spr=-41)
-	lda #$E3 ; 227 (spr=179)
-	stx colpf1
-	nop 
+	lda #$E4 ; 228 (spr=180)
+	stx COLPM2
+	ldx #$D2 ; 210 (spr=162)
+	ldy #$E8 ; 232 (spr=184)
+	lda #$AA ; 170 (spr=122)
+	sta HPOSP2
+	ldy #$E4 ; 228 (spr=180)
+	lda #$EC ; 236 (spr=188)
+	stx COLPM0
 	sty colpf2
-	sta colpf1
-	nop 
-	lda #$D0 ; 208 (spr=160)
+	sta colpf2
+	lda #$EC ; 236 (spr=188)
+	ldx #$E9 ; 233 (spr=185)
+	sty colpf2
+	ldy #$05 ; 5 (spr=-43)
+	ldx #$00 ; 0 (spr=-48)
 	lda #$04 ; 4 (spr=-44)
-	ldx #$EE ; 238 (spr=190)
-	ldy #$00 ; 0 (spr=-48)
+	nop ; filler
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line102
-	lda #$04 ; 4 (spr=-44)
+	lda #$05 ; 5 (spr=-43)
 	nop 
-	nop 
-	sty colpf1
-	lda #$F4 ; 244 (spr=196)
-	lda #$00 ; 0 (spr=-48)
-	lda #$EE ; 238 (spr=190)
-	lda #$D2 ; 210 (spr=162)
+	ldy #$F0 ; 240 (spr=192)
 	stx colpf2
-	ldx #$ED ; 237 (spr=189)
-	stx colpf1
-	ldy #$DE ; 222 (spr=174)
-	sta COLPM3
-	ldy #$06 ; 6 (spr=-42)
-	sty colpf1
-	ldy #$00 ; 0 (spr=-48)
-	nop 
-	ldx #$EC ; 236 (spr=188)
+	lda #$00 ; 0 (spr=-48)
+	ldx #$00 ; 0 (spr=-48)
 	lda #$00 ; 0 (spr=-48)
 	nop 
-	nop 
+	ldy #$E4 ; 228 (spr=180)
+	lda #$EE ; 238 (spr=190)
+	ldx #$FD ; 253 (spr=205)
+	ldx #$EC ; 236 (spr=188)
+	sty colpf2
+	ldy #$E5 ; 229 (spr=181)
+	stx colpf2
+	sty colpf2
+	sty colpf2
+	ldy #$B6 ; 182 (spr=134)
+	ldx #$00 ; 0 (spr=-48)
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line103
+	ldx #$EE ; 238 (spr=190)
+	ldx #$01 ; 1 (spr=-47)
+	lda #$7E ; 126 (spr=78)
+	stx colpf2
 	nop 
+	ldy #$F2 ; 242 (spr=194)
+	lda #$14 ; 20 (spr=-28)
+	ldx #$FF ; 255 (spr=207)
 	nop 
-	sty colpf1
-	lda #$04 ; 4 (spr=-44)
-	lda #$F7 ; 247 (spr=199)
-	nop 
+	lda #$90 ; 144 (spr=96)
 	ldx #$EC ; 236 (spr=188)
-	ldy #$D2 ; 210 (spr=162)
-	ldy #$08 ; 8 (spr=-40)
-	lda #$F1 ; 241 (spr=193)
-	ldy #$E4 ; 228 (spr=180)
-	lda #$00 ; 0 (spr=-48)
-	sty colpf1
-	ldy #$06 ; 6 (spr=-42)
-	stx colpf1
-	sty colpf1
-	nop 
-	nop 
-	lda #$02 ; 2 (spr=-46)
-	ldy #$04 ; 4 (spr=-44)
-	lda #$E3 ; 227 (spr=179)
+	ldy #$E2 ; 226 (spr=178)
+	sty colpf2
+	ldy #$E5 ; 229 (spr=181)
+	stx colpf2
+	sty colpf2
 	ldy #$01 ; 1 (spr=-47)
+	sty colpf2
+	ldx #$F2 ; 242 (spr=194)
+	nop 
+	lda #$EC ; 236 (spr=188)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line104
-	ldy #$0E ; 14 (spr=-34)
-	ldy #$01 ; 1 (spr=-47)
+	ldy #$A8 ; 168 (spr=120)
+	sty HPOSP3
 	nop 
+	lda #$EC ; 236 (spr=188)
+	ldx #$EB ; 235 (spr=187)
 	nop 
-	nop 
-	lda #$01 ; 1 (spr=-47)
-	sty colpf1
-	lda #$02 ; 2 (spr=-46)
-	ldy #$04 ; 4 (spr=-44)
-	ldy #$5D ; 93 (spr=45)
-	ldy #$E8 ; 232 (spr=184)
-	ldy #$E2 ; 226 (spr=178)
-	sty colpf1
-	ldy #$07 ; 7 (spr=-41)
-	stx colpf1
-	sty colpf1
-	lda #$04 ; 4 (spr=-44)
-	ldx #$04 ; 4 (spr=-44)
 	ldy #$03 ; 3 (spr=-45)
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$F8 ; 248 (spr=200)
-	nop ; filler
+	ldx #$EC ; 236 (spr=188)
+	lda #$E2 ; 226 (spr=178)
+	sty colpf2
+	ldy #$EA ; 234 (spr=186)
+	ldy #$E5 ; 229 (spr=181)
+	sta colpf2
+	stx colpf2
+	sty colpf2
+	ldy #$00 ; 0 (spr=-48)
+	ldx #$03 ; 3 (spr=-45)
+	sty colpf2
+	nop 
+	ldy #$45 ; 69 (spr=21)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line105
-	ldy #$83 ; 131 (spr=83)
+	lda #$F2 ; 242 (spr=194)
+	stx COLPM3
+	ldx #$50 ; 80 (spr=32)
+	nop 
+	nop 
+	stx HPOSP3
+	lda #$E4 ; 228 (spr=180)
+	ldx #$EA ; 234 (spr=186)
+	nop 
+	stx COLPM3
+	sta colpf2
 	ldy #$00 ; 0 (spr=-48)
-	sta colpf1
+	sta COLPM3
+	lda #$D4 ; 212 (spr=164)
 	nop 
-	ldy #$04 ; 4 (spr=-44)
-	stx colpf1
+	sty colpf2
+	ldy #$45 ; 69 (spr=21)
+	sty HPOSP1
 	nop 
-	ldy #$06 ; 6 (spr=-42)
-	ldx #$E6 ; 230 (spr=182)
-	lda #$F0 ; 240 (spr=192)
-	ldx #$E4 ; 228 (spr=180)
-	stx colpf1
-	ldx #$00 ; 0 (spr=-48)
-	nop 
-	sty colpf1
-	ldy #$EE ; 238 (spr=190)
-	ldy #$F8 ; 248 (spr=200)
-	ldy #$EE ; 238 (spr=190)
-	lda #$DE ; 222 (spr=174)
-	ldy #$EE ; 238 (spr=190)
-	nop 
-	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line106
-	nop 
-	lda #$E6 ; 230 (spr=182)
-	ldy #$E3 ; 227 (spr=179)
-	nop 
-	nop 
-	stx colpf1
-	ldy #$E5 ; 229 (spr=181)
-	ldy #$07 ; 7 (spr=-41)
-	lda #$00 ; 0 (spr=-48)
+	stx HPOSP2
+	sty HPOSP2
+	lda #$1E ; 30 (spr=-18)
 	ldx #$00 ; 0 (spr=-48)
-	ldx #$EB ; 235 (spr=187)
-	lda #$DE ; 222 (spr=174)
-	lda #$00 ; 0 (spr=-48)
-	stx colpf1
-	ldx #$0A ; 10 (spr=-38)
-	lda #$D2 ; 210 (spr=162)
-	sty colpf1
-	lda #$E8 ; 232 (spr=184)
-	lda #$EE ; 238 (spr=190)
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$F6 ; 246 (spr=198)
-	ldx #$18 ; 24 (spr=-24)
-	ldx #$00 ; 0 (spr=-48)
+	nop 
+	ldy #$AC ; 172 (spr=124)
+	sty COLPM0
+	sty HPOSP2
+	nop 
+	ldy #$E4 ; 228 (spr=180)
+	ldx #$EA ; 234 (spr=186)
+	stx colpf2
+	lda #$01 ; 1 (spr=-47)
+	sty colpf2
+	ldy #$D2 ; 210 (spr=162)
+	sta colpf2
+	nop 
+	lda #$04 ; 4 (spr=-44)
+	lda #$E9 ; 233 (spr=185)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line107
-	ldx #$00 ; 0 (spr=-48)
-	sta colpf2
-	ldy #$EC ; 236 (spr=188)
-	ldy #$00 ; 0 (spr=-48)
-	stx colpf1
-	ldy #$F5 ; 245 (spr=197)
-	ldx #$07 ; 7 (spr=-41)
-	stx COLPM1
+	sty COLPM0
 	nop 
-	lda #$09 ; 9 (spr=-39)
-	sta COLPM1
-	ldy #$E5 ; 229 (spr=181)
+	ldy #$02 ; 2 (spr=-46)
+	ldy #$FD ; 253 (spr=205)
+	ldx #$04 ; 4 (spr=-44)
+	ldx #$04 ; 4 (spr=-44)
+	ldy #$D7 ; 215 (spr=167)
+	ldx #$06 ; 6 (spr=-42)
+	lda #$D0 ; 208 (spr=160)
+	ldy #$98 ; 152 (spr=104)
+	lda #$00 ; 0 (spr=-48)
+	sty HPOSP3
+	nop 
+	nop 
+	lda #$EA ; 234 (spr=186)
+	lda #$DA ; 218 (spr=170)
 	stx colpf2
-	ldx #$18 ; 24 (spr=-24)
-	ldy #$2E ; 46 (spr=-2)
-	lda #$57 ; 87 (spr=39)
-	lda #$00 ; 0 (spr=-48)
-	lda #$EF ; 239 (spr=191)
-	lda #$00 ; 0 (spr=-48)
-	ldy #$F6 ; 246 (spr=198)
-	ldy #$07 ; 7 (spr=-41)
+	ldx #$00 ; 0 (spr=-48)
+	sty colpf2
+	lda #$04 ; 4 (spr=-44)
+	nop 
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line108
-	ldy #$1E ; 30 (spr=-18)
-	lda #$21 ; 33 (spr=-15)
+	ldy #$0E ; 14 (spr=-34)
+	stx colpf2
+	stx colpf2
+	lda #$E4 ; 228 (spr=180)
 	nop 
-	stx COLPM2
-	sty HPOSP2
-	sta COLPM2
-	lda #$EF ; 239 (spr=191)
-	sta colpf2
-	stx COLPM3
+	ldy #$E4 ; 228 (spr=180)
+	sty COLPM0
+	ldx #$07 ; 7 (spr=-41)
 	lda #$D3 ; 211 (spr=163)
-	ldx #$06 ; 6 (spr=-42)
-	sta COLPM2
-	stx colpf2
-	lda #$EF ; 239 (spr=191)
-	stx colpf2
+	ldy #$3C ; 60 (spr=12)
+	ldx #$A7 ; 167 (spr=119)
+	sta COLPM0
+	lda #$04 ; 4 (spr=-44)
+	stx HPOSP3
 	nop 
-	lda #$EF ; 239 (spr=191)
+	ldx #$00 ; 0 (spr=-48)
+	ldx #$0A ; 10 (spr=-38)
 	nop 
+	nop 
+	nop 
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line109
-	ldy #$04 ; 4 (spr=-44)
+	ldy #$0E ; 14 (spr=-34)
+	ldx #$E4 ; 228 (spr=180)
+	stx COLPM3
+	ldy #$4F ; 79 (spr=31)
+	lda #$00 ; 0 (spr=-48)
+	stx COLPM3
 	nop 
 	nop 
-	ldx #$E2 ; 226 (spr=178)
-	ldx #$04 ; 4 (spr=-44)
-	ldy #$08 ; 8 (spr=-40)
-	ldy #$E4 ; 228 (spr=180)
-	ldy #$02 ; 2 (spr=-46)
-	sty colpf2
-	sta colpf2
-	ldy #$E9 ; 233 (spr=185)
-	ldx #$10 ; 16 (spr=-32)
-	lda #$EE ; 238 (spr=190)
-	ldx #$07 ; 7 (spr=-41)
+	sty HPOSP1
+	lda #$00 ; 0 (spr=-48)
+	ldy #$FE ; 254 (spr=206)
 	nop 
-	stx colpf2
-	stx COLPM0
-	ldx #$DE ; 222 (spr=174)
-	ldx #$04 ; 4 (spr=-44)
-	ldy #$04 ; 4 (spr=-44)
-	ldx #$04 ; 4 (spr=-44)
+	nop 
+	ldy #$01 ; 1 (spr=-47)
+	lda #$02 ; 2 (spr=-46)
+	ldy #$FF ; 255 (spr=207)
+	ldy #$FF ; 255 (spr=207)
+	nop ; filler
+	nop ; filler
+	nop ; filler
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line110
+	sta COLPM3
+	nop 
+	nop 
+	stx COLPM3
+	sta COLPM3
+	sta COLPM0
+	lda #$ED ; 237 (spr=189)
+	nop 
+	ldy #$FE ; 254 (spr=206)
 	ldy #$D3 ; 211 (spr=163)
-	ldx #$D2 ; 210 (spr=162)
-	ldy #$06 ; 6 (spr=-42)
-	ldx #$F4 ; 244 (spr=196)
-	ldx #$EE ; 238 (spr=190)
-	nop 
-	lda #$EF ; 239 (spr=191)
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$D5 ; 213 (spr=165)
-	ldx #$EC ; 236 (spr=188)
-	sta colpf2
-	lda #$21 ; 33 (spr=-15)
-	lda #$EF ; 239 (spr=191)
-	ldy #$04 ; 4 (spr=-44)
-	ldy #$E4 ; 228 (spr=180)
-	sty colpf2
-	ldy #$DF ; 223 (spr=175)
-	nop 
-	lda #$04 ; 4 (spr=-44)
+	lda #$EE ; 238 (spr=190)
+	lda #$EC ; 236 (spr=188)
+	sty COLPM3
 	stx colpf2
-	ldx #$05 ; 5 (spr=-43)
 	nop 
-	nop ; filler
+	ldx #$06 ; 6 (spr=-42)
+	sty colpf2
+	stx COLPM3
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line111
-	nop 
-	nop 
-	lda #$04 ; 4 (spr=-44)
-	lda #$EE ; 238 (spr=190)
-	ldx #$09 ; 9 (spr=-39)
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$02 ; 2 (spr=-46)
-	ldy #$05 ; 5 (spr=-43)
 	stx colpf2
 	sta colpf2
-	lda #$04 ; 4 (spr=-44)
+	lda #$84 ; 132 (spr=84)
 	nop 
-	stx COLPM2
-	ldx #$D5 ; 213 (spr=165)
-	ldy #$10 ; 16 (spr=-32)
-	stx colpf1
-	ldx #$E2 ; 226 (spr=178)
-	ldx #$04 ; 4 (spr=-44)
-	lda #$1E ; 30 (spr=-18)
-	ldx #$01 ; 1 (spr=-47)
-	ldy #$06 ; 6 (spr=-42)
-	nop 
+	ldy #$FE ; 254 (spr=206)
+	ldy #$01 ; 1 (spr=-47)
+	sty colpf2
+	sta COLPM1
+	lda #$EE ; 238 (spr=190)
+	stx COLPM3
+	ldy #$00 ; 0 (spr=-48)
+	ldy #$F3 ; 243 (spr=195)
+	lda #$E5 ; 229 (spr=181)
+	sta COLPM3
+	lda #$03 ; 3 (spr=-45)
+	ldx #$00 ; 0 (spr=-48)
+	ldy #$61 ; 97 (spr=49)
+	ldy #$14 ; 20 (spr=-28)
+	ldy #$90 ; 144 (spr=96)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line112
-	sty COLPM1
-	stx colpf1
-	ldy #$D4 ; 212 (spr=164)
-	ldx #$E1 ; 225 (spr=177)
-	ldx #$04 ; 4 (spr=-44)
-	lda #$02 ; 2 (spr=-46)
-	sta colpf0
-	stx colpf0
-	ldy #$EA ; 234 (spr=186)
-	sty COLBAK
-	ldx #$D2 ; 210 (spr=162)
-	ldx #$EB ; 235 (spr=187)
+	sta COLPM1
 	ldy #$00 ; 0 (spr=-48)
+	ldx #$00 ; 0 (spr=-48)
+	ldx #$84 ; 132 (spr=84)
+	lda #$0F ; 15 (spr=-33)
+	ldy #$90 ; 144 (spr=96)
+	ldx #$EC ; 236 (spr=188)
+	stx COLPM0
+	ldx #$05 ; 5 (spr=-43)
+	lda #$EB ; 235 (spr=187)
+	ldx #$EC ; 236 (spr=188)
+	sta colpf1
+	ldx #$EC ; 236 (spr=188)
+	lda #$20 ; 32 (spr=-16)
+	lda #$D2 ; 210 (spr=162)
+	sta colpf2
+	ldy #$04 ; 4 (spr=-44)
 	nop 
-	nop 
-	nop 
-	nop 
-	stx COLPM1
-	nop 
-	ldy #$EE ; 238 (spr=190)
+	ldy #$71 ; 113 (spr=65)
+	ldy #$91 ; 145 (spr=97)
+	ldy #$82 ; 130 (spr=82)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line113
+	ldx #$03 ; 3 (spr=-45)
 	nop 
-	lda #$04 ; 4 (spr=-44)
+	stx COLPM0
+	ldx #$E4 ; 228 (spr=180)
+	ldx #$84 ; 132 (spr=84)
+	lda #$00 ; 0 (spr=-48)
+	ldy #$91 ; 145 (spr=97)
+	sta colpf2
 	sty COLPM1
-	stx COLPM1
-	nop 
-	lda #$02 ; 2 (spr=-46)
-	nop 
-	sta COLPM1
-	ldy #$E8 ; 232 (spr=184)
-	nop 
+	ldy #$00 ; 0 (spr=-48)
+	stx colpf1
+	ldx #$00 ; 0 (spr=-48)
+	lda #$00 ; 0 (spr=-48)
+	ldx #$28 ; 40 (spr=-8)
 	ldy #$82 ; 130 (spr=82)
-	sty COLBAK
-	ldy #$EC ; 236 (spr=188)
-	lda #$04 ; 4 (spr=-44)
-	ldx #$04 ; 4 (spr=-44)
-	ldx #$E5 ; 229 (spr=181)
 	nop 
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
+	stx colpf1
+	lda #$DE ; 222 (spr=174)
+	nop 
+	nop 
+	ldx #$E8 ; 232 (spr=184)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line114
-	ldx #$EC ; 236 (spr=188)
-	nop 
-	lda #$02 ; 2 (spr=-46)
-	lda #$07 ; 7 (spr=-41)
-	ldx #$FA ; 250 (spr=202)
-	nop 
+	lda #$EE ; 238 (spr=190)
+	ldx #$ED ; 237 (spr=189)
+	lda #$04 ; 4 (spr=-44)
+	lda #$A1 ; 161 (spr=113)
 	sta HPOSP2
-	sta COLPM2
 	nop 
-	sty COLBAK
-	stx COLPM1
-	ldx #$EE ; 238 (spr=190)
-	ldx #$05 ; 5 (spr=-43)
-	lda #$00 ; 0 (spr=-48)
-	ldy #$29 ; 41 (spr=-7)
-	lda #$01 ; 1 (spr=-47)
-	ldx #$E5 ; 229 (spr=181)
-	lda #$A4 ; 164 (spr=116)
-	lda #$04 ; 4 (spr=-44)
-	lda #$FF ; 255 (spr=207)
-	lda #$04 ; 4 (spr=-44)
+	nop 
+	nop 
+	sty colpf1
+	stx colpf1
+	nop 
+	nop 
+	nop 
+	ldx #$18 ; 24 (spr=-24)
+	ldy #$D4 ; 212 (spr=164)
+	sty colpf1
+	stx colpf1
+	nop 
+	ldy #$E5 ; 229 (spr=181)
+	lda #$ED ; 237 (spr=189)
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line115
-	lda #$02 ; 2 (spr=-46)
-	stx HPOSP2
-	sty COLPM3
-	lda #$82 ; 130 (spr=82)
-	sty HPOSP2
-	ldy #$91 ; 145 (spr=97)
-	lda #$EE ; 238 (spr=190)
-	sty colpf1
+	lda #$00 ; 0 (spr=-48)
+	ldy #$D7 ; 215 (spr=167)
 	ldy #$00 ; 0 (spr=-48)
 	nop 
+	lda #$E8 ; 232 (spr=184)
+	ldy #$20 ; 32 (spr=-16)
 	nop 
-	ldy #$ED ; 237 (spr=189)
-	lda #$83 ; 131 (spr=83)
+	ldy #$04 ; 4 (spr=-44)
+	nop 
 	sta colpf1
+	lda #$41 ; 65 (spr=17)
+	ldy #$0F ; 15 (spr=-33)
+	sty colpf1
+	ldy #$82 ; 130 (spr=82)
+	sty colpf1
+	sta HPOSP0
 	stx colpf1
-	lda #$EE ; 238 (spr=190)
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$1E ; 30 (spr=-18)
-	ldx #$00 ; 0 (spr=-48)
-	lda #$F4 ; 244 (spr=196)
+	ldx #$8F ; 143 (spr=95)
+	stx HPOSP1
+	lda #$A0 ; 160 (spr=112)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line116
-	stx colpf1
+	stx HPOSP2
+	lda #$02 ; 2 (spr=-46)
+	ldy #$01 ; 1 (spr=-47)
 	nop 
-	lda #$A7 ; 167 (spr=119)
-	ldx #$00 ; 0 (spr=-48)
-	lda #$F6 ; 246 (spr=198)
-	ldx #$03 ; 3 (spr=-45)
-	lda #$E4 ; 228 (spr=180)
-	nop 
-	stx COLPM1
-	ldx #$EB ; 235 (spr=187)
-	stx colpf1
-	ldx #$01 ; 1 (spr=-47)
-	stx colpf2
+	lda #$02 ; 2 (spr=-46)
+	lda #$07 ; 7 (spr=-41)
+	stx COLPM2
+	ldy #$EB ; 235 (spr=187)
+	sty COLPM2
+	ldx #$62 ; 98 (spr=50)
+	ldy #$28 ; 40 (spr=-8)
 	sta colpf1
+	lda #$E3 ; 227 (spr=179)
 	sta COLBAK
-	ldx #$03 ; 3 (spr=-45)
-	stx colpf1
+	stx HPOSP3
+	sty COLPM1
+	lda #$E5 ; 229 (spr=181)
+	ldx #$2F ; 47 (spr=-1)
 	nop 
-	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line117
-	ldx #$84 ; 132 (spr=84)
-	ldx #$E2 ; 226 (spr=178)
-	ldy #$7A ; 122 (spr=74)
+	stx HPOSP2
+	stx HPOSP1
+	ldy #$93 ; 147 (spr=99)
+	stx HPOSP0
+	ldy #$E2 ; 226 (spr=178)
+	sty COLPM1
+	sta COLPM0
 	nop 
-	ldy #$E7 ; 231 (spr=183)
-	ldx #$A4 ; 164 (spr=116)
-	sta COLBAK
-	sty COLPM2
-	ldx #$E3 ; 227 (spr=179)
-	ldy #$EA ; 234 (spr=186)
-	nop 
+	ldy #$03 ; 3 (spr=-45)
+	lda #$00 ; 0 (spr=-48)
+	ldx #$97 ; 151 (spr=103)
+	sty COLBAK
 	stx COLBAK
-	ldx #$EB ; 235 (spr=187)
-	stx COLPM1
-	sta colpf2
-	ldy #$2D ; 45 (spr=-3)
-	ldy #$04 ; 4 (spr=-44)
-	lda #$3C ; 60 (spr=12)
-	ldx #$90 ; 144 (spr=96)
-	nop ; filler
+	lda #$7F ; 127 (spr=79)
+	ldy #$01 ; 1 (spr=-47)
+	ldx #$3E ; 62 (spr=14)
+	sty COLPM3
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line118
-	sta HPOSP2
-	ldy #$08 ; 8 (spr=-40)
-	sty COLPM3
-	stx COLBAK
-	ldy #$01 ; 1 (spr=-47)
-	sty colpf2
-	ldx #$96 ; 150 (spr=102)
-	ldx #$3E ; 62 (spr=14)
-	ldy #$E4 ; 228 (spr=180)
+	ldy #$02 ; 2 (spr=-46)
+	nop 
+	stx HPOSP2
 	stx HPOSP1
-	sty COLPM3
-	lda #$87 ; 135 (spr=87)
+	sta COLPM1
+	ldy #$03 ; 3 (spr=-45)
+	ldx #$90 ; 144 (spr=96)
+	stx colpf2
+	sta HPOSP3
+	stx HPOSP3
+	lda #$08 ; 8 (spr=-40)
+	lda #$09 ; 9 (spr=-39)
 	sta colpf2
-	stx HPOSP0
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$00 ; 0 (spr=-48)
-	ldx #$F8 ; 248 (spr=200)
-	lda #$02 ; 2 (spr=-46)
+	ldy #$92 ; 146 (spr=98)
+	sty colpf2
+	lda #$04 ; 4 (spr=-44)
+	ldy #$09 ; 9 (spr=-39)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line119
-	ldy #$E2 ; 226 (spr=178)
-	ldy #$09 ; 9 (spr=-39)
-	lda #$00 ; 0 (spr=-48)
-	sta colpf2
-	ldx #$24 ; 36 (spr=-12)
-	ldx #$D4 ; 212 (spr=164)
-	lda #$76 ; 118 (spr=70)
-	ldx #$0E ; 14 (spr=-34)
-	stx COLPM0
-	sty COLBAK
-	ldy #$FE ; 254 (spr=206)
-	ldx #$03 ; 3 (spr=-45)
-	ldy #$02 ; 2 (spr=-46)
-	ldx #$F8 ; 248 (spr=200)
-	ldy #$96 ; 150 (spr=102)
-	sty colpf2
-	ldx #$87 ; 135 (spr=87)
-	lda #$54 ; 84 (spr=36)
-	ldy #$06 ; 6 (spr=-42)
-	lda #$0F ; 15 (spr=-33)
+	stx COLPM3
+	lda #$02 ; 2 (spr=-46)
+	ldx #$02 ; 2 (spr=-46)
+	lda #$01 ; 1 (spr=-47)
+	nop 
+	stx colpf2
+	sta colpf0
+	ldy #$F2 ; 242 (spr=194)
+	nop 
+	ldx #$6D ; 109 (spr=61)
+	nop 
+	nop 
+	ldx #$90 ; 144 (spr=96)
+	ldy #$08 ; 8 (spr=-40)
+	nop 
 	sty colpf0
+	ldy #$04 ; 4 (spr=-44)
+	sty colpf0
+	ldx #$80 ; 128 (spr=80)
+	ldy #$D3 ; 211 (spr=163)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line120
-	ldy #$64 ; 100 (spr=52)
 	nop 
-	ldy #$82 ; 130 (spr=82)
-	sty COLBAK
-	ldy #$01 ; 1 (spr=-47)
+	sta COLPM3
+	ldx #$20 ; 32 (spr=-16)
+	stx HPOSP3
+	ldy #$86 ; 134 (spr=86)
 	nop 
-	nop 
-	sty colpf0
-	sta COLPM1
-	nop 
-	ldx #$E6 ; 230 (spr=182)
-	stx COLPM0
-	lda #$05 ; 5 (spr=-43)
-	lda #$05 ; 5 (spr=-43)
+	ldy #$D3 ; 211 (spr=163)
 	sta colpf0
-	ldx #$00 ; 0 (spr=-48)
-	lda #$86 ; 134 (spr=86)
+	ldx #$81 ; 129 (spr=81)
+	lda #$0B ; 11 (spr=-37)
+	sty COLPM2
+	stx HPOSP3
 	nop 
-	lda #$04 ; 4 (spr=-44)
-	lda #$04 ; 4 (spr=-44)
-	nop ; filler
+	sta colpf2
+	ldx #$05 ; 5 (spr=-43)
+	stx colpf2
+	nop 
+	nop 
+	lda #$06 ; 6 (spr=-42)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line121
+	nop 
+	sty COLPM2
 	lda #$02 ; 2 (spr=-46)
-	lda #$03 ; 3 (spr=-45)
-	sta COLPM2
+	ldy #$04 ; 4 (spr=-44)
+	ldx #$E7 ; 231 (spr=183)
+	nop 
+	ldy #$04 ; 4 (spr=-44)
+	stx colpf2
+	sta colpf2
+	lda #$ED ; 237 (spr=189)
+	nop 
 	stx COLPM2
-	lda #$8F ; 143 (spr=95)
-	lda #$E6 ; 230 (spr=182)
-	sta colpf0
-	sty colpf0
-	ldy #$E2 ; 226 (spr=178)
-	lda #$90 ; 144 (spr=96)
-	lda #$04 ; 4 (spr=-44)
-	stx COLBAK
-	ldx #$EA ; 234 (spr=186)
-	sta colpf0
-	lda #$96 ; 150 (spr=102)
+	ldx #$05 ; 5 (spr=-43)
+	ldy #$04 ; 4 (spr=-44)
+	stx colpf0
+	ldy #$D2 ; 210 (spr=162)
+	ldy #$96 ; 150 (spr=102)
+	ldx #$82 ; 130 (spr=82)
+	ldy #$90 ; 144 (spr=96)
 	nop 
-	ldy #$A5 ; 165 (spr=117)
-	lda #$D0 ; 208 (spr=160)
-	nop 
-	nop 
+	ldy #$04 ; 4 (spr=-44)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line122
-	lda #$11 ; 17 (spr=-31)
-	lda #$90 ; 144 (spr=96)
-	ldy #$96 ; 150 (spr=102)
-	ldy #$03 ; 3 (spr=-45)
-	lda #$96 ; 150 (spr=102)
-	lda #$82 ; 130 (spr=82)
-	ldy #$02 ; 2 (spr=-46)
-	lda #$82 ; 130 (spr=82)
-	stx colpf0
+	nop 
 	sta colpf0
+	ldy #$E2 ; 226 (spr=178)
+	lda #$00 ; 0 (spr=-48)
+	sta COLPM1
+	lda #$61 ; 97 (spr=49)
+	sta HPOSP1
+	stx colpf1
+	ldx #$82 ; 130 (spr=82)
+	lda #$08 ; 8 (spr=-40)
+	ldx #$96 ; 150 (spr=102)
+	ldy #$00 ; 0 (spr=-48)
 	nop 
-	ldx #$05 ; 5 (spr=-43)
+	ldy #$04 ; 4 (spr=-44)
+	sta colpf1
 	nop 
-	lda #$81 ; 129 (spr=81)
-	nop 
-	sty colpf1
-	ldy #$ED ; 237 (spr=189)
-	stx COLBAK
-	nop 
-	sty colpf2
-	ldy #$09 ; 9 (spr=-39)
+	ldx #$95 ; 149 (spr=101)
+	sty COLBAK
+	ldy #$02 ; 2 (spr=-46)
+	lda #$02 ; 2 (spr=-46)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line123
-	lda #$16 ; 22 (spr=-26)
-	sty colpf0
-	ldy #$00 ; 0 (spr=-48)
-	ldx #$96 ; 150 (spr=102)
-	ldx #$04 ; 4 (spr=-44)
-	nop 
-	sty COLBAK
-	sty COLBAK
-	nop 
-	nop 
-	nop 
-	stx colpf2
-	ldy #$96 ; 150 (spr=102)
-	sty COLBAK
-	ldx #$EB ; 235 (spr=187)
-	ldy #$E0 ; 224 (spr=176)
-	nop 
-	ldy #$03 ; 3 (spr=-45)
-	lda #$02 ; 2 (spr=-46)
+	ldx #$06 ; 6 (spr=-42)
 	ldy #$02 ; 2 (spr=-46)
-	nop ; filler
+	stx COLBAK
+	ldx #$00 ; 0 (spr=-48)
+	ldx #$02 ; 2 (spr=-46)
+	ldy #$01 ; 1 (spr=-47)
+	lda #$96 ; 150 (spr=102)
+	nop 
+	sty colpf1
+	sta colpf0
+	lda #$E2 ; 226 (spr=178)
+	ldy #$0B ; 11 (spr=-37)
+	sta COLBAK
+	lda #$05 ; 5 (spr=-43)
+	ldx #$94 ; 148 (spr=100)
+	sta colpf1
+	stx COLBAK
+	sty colpf0
+	ldy #$D5 ; 213 (spr=165)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line124
-	ldy #$00 ; 0 (spr=-48)
-	nop 
-	lda #$24 ; 36 (spr=-12)
 	sty COLBAK
+	lda #$92 ; 146 (spr=98)
+	lda #$96 ; 150 (spr=102)
+	ldy #$14 ; 20 (spr=-28)
+	ldx #$86 ; 134 (spr=86)
+	lda #$96 ; 150 (spr=102)
+	ldx #$96 ; 150 (spr=102)
+	ldx #$C1 ; 193 (spr=145)
+	ldy #$00 ; 0 (spr=-48)
+	sta colpf0
+	lda #$00 ; 0 (spr=-48)
 	nop 
+	ldx #$94 ; 148 (spr=100)
+	lda #$11 ; 17 (spr=-31)
+	sty COLBAK
+	lda #$00 ; 0 (spr=-48)
+	stx COLBAK
+	ldy #$0B ; 11 (spr=-37)
+	sty colpf0
+	ldy #$8F ; 143 (spr=95)
 	nop 
-	lda #$7A ; 122 (spr=74)
-	stx colpf2
-	ldy #$02 ; 2 (spr=-46)
-	stx COLPM2
-	ldy #$96 ; 150 (spr=102)
-	sty colpf2
-	lda #$26 ; 38 (spr=-10)
-	stx COLPM2
-	ldx #$D7 ; 215 (spr=167)
-	ldy #$12 ; 18 (spr=-30)
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$04 ; 4 (spr=-44)
-	stx colpf2
-	ldy #$06 ; 6 (spr=-42)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line125
-	ldx #$82 ; 130 (spr=82)
-	ldy #$EF ; 239 (spr=191)
-	ldx #$1B ; 27 (spr=-21)
+	ldy #$00 ; 0 (spr=-48)
+	ldx #$08 ; 8 (spr=-40)
 	nop 
 	nop 
-	stx COLPM2
-	ldy #$93 ; 147 (spr=99)
-	stx colpf2
-	sty colpf2
-	ldy #$06 ; 6 (spr=-42)
+	ldy #$00 ; 0 (spr=-48)
+	lda #$97 ; 151 (spr=103)
+	ldx #$00 ; 0 (spr=-48)
+	ldy #$EA ; 234 (spr=186)
+	sty colpf1
+	ldy #$00 ; 0 (spr=-48)
+	ldx #$11 ; 17 (spr=-31)
+	ldx #$EA ; 234 (spr=186)
+	sty colpf1
+	ldy #$02 ; 2 (spr=-46)
+	stx COLPM0
+	sta colpf1
+	ldy #$E5 ; 229 (spr=181)
+	ldx #$12 ; 18 (spr=-30)
 	nop 
-	sta COLPM3
-	ldy #$F2 ; 242 (spr=194)
-	lda #$96 ; 150 (spr=102)
-	sta COLBAK
-	lda #$2F ; 47 (spr=-1)
-	sta HPOSP2
-	ldx #$01 ; 1 (spr=-47)
-	ldx #$E4 ; 228 (spr=180)
+	ldx #$12 ; 18 (spr=-30)
 	nop 
+	ldx #$80 ; 128 (spr=80)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line126
-	sta colpf2
-	lda #$02 ; 2 (spr=-46)
-	ldy #$03 ; 3 (spr=-45)
-	ldy #$00 ; 0 (spr=-48)
-	sty COLPM1
-	lda #$1F ; 31 (spr=-17)
-	stx colpf2
-	sty colpf2
-	ldx #$06 ; 6 (spr=-42)
-	sta colpf0
 	nop 
-	ldy #$FE ; 254 (spr=206)
-	ldy #$97 ; 151 (spr=103)
-	lda #$00 ; 0 (spr=-48)
-	stx colpf2
+	sty colpf1
+	nop 
+	nop 
+	ldx #$7F ; 127 (spr=79)
+	ldy #$96 ; 150 (spr=102)
 	ldx #$00 ; 0 (spr=-48)
-	ldy #$AC ; 172 (spr=124)
-	lda #$96 ; 150 (spr=102)
-	lda #$A5 ; 165 (spr=117)
-	lda #$02 ; 2 (spr=-46)
+	ldx #$02 ; 2 (spr=-46)
+	ldx #$00 ; 0 (spr=-48)
+	sta colpf1
+	lda #$00 ; 0 (spr=-48)
+	ldy #$FC ; 252 (spr=204)
+	stx colpf0
+	nop 
+	nop 
+	nop 
+	ldx #$97 ; 151 (spr=103)
+	ldx #$05 ; 5 (spr=-43)
+	sty colpf0
+	stx colpf1
+	ldy #$27 ; 39 (spr=-9)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line127
-	sty HPOSP1
-	stx COLPM2
-	nop 
-	stx COLBAK
-	lda #$94 ; 148 (spr=100)
-	ldx #$96 ; 150 (spr=102)
-	sta COLPM1
-	lda #$EC ; 236 (spr=188)
-	lda #$94 ; 148 (spr=100)
-	sty COLPM2
-	stx colpf2
+	sty HPOSP0
+	sty COLPM0
 	ldy #$01 ; 1 (spr=-47)
-	sty COLPM2
-	ldx #$0D ; 13 (spr=-35)
-	ldy #$94 ; 148 (spr=100)
+	lda #$09 ; 9 (spr=-39)
+	ldx #$76 ; 118 (spr=70)
+	sta colpf1
+	stx colpf0
+	sty colpf0
+	ldx #$1E ; 30 (spr=-18)
+	lda #$DF ; 223 (spr=175)
+	lda #$96 ; 150 (spr=102)
+	sta colpf1
+	stx colpf0
+	lda #$86 ; 134 (spr=86)
+	ldx #$0F ; 15 (spr=-33)
 	nop 
-	lda #$00 ; 0 (spr=-48)
-	nop ; filler
+	nop 
+	ldy #$96 ; 150 (spr=102)
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line128
-	stx colpf2
-	ldx #$00 ; 0 (spr=-48)
-	lda #$0E ; 14 (spr=-34)
-	lda #$17 ; 23 (spr=-25)
+	ldy #$00 ; 0 (spr=-48)
+	ldy #$90 ; 144 (spr=96)
+	stx colpf1
+	ldy #$00 ; 0 (spr=-48)
+	stx colpf1
 	nop 
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$04 ; 4 (spr=-44)
+	sta colpf1
 	lda #$00 ; 0 (spr=-48)
-	stx colpf2
-	ldx #$97 ; 151 (spr=103)
-	stx colpf2
+	ldy #$74 ; 116 (spr=68)
+	lda #$97 ; 151 (spr=103)
+	ldy #$02 ; 2 (spr=-46)
+	sta colpf1
 	nop 
-	ldy #$94 ; 148 (spr=100)
-	ldx #$3B ; 59 (spr=11)
-	stx HPOSP2
-	nop 
-	ldy #$E4 ; 228 (spr=180)
-	nop 
-	ldy #$94 ; 148 (spr=100)
-	nop 
-	nop ; filler
-	nop ; filler
+	lda #$95 ; 149 (spr=101)
+	ldy #$90 ; 144 (spr=96)
+	ldy #$E6 ; 230 (spr=182)
+	ldy #$02 ; 2 (spr=-46)
+	stx COLBAK
+	sta colpf1
+	ldx #$FB ; 251 (spr=203)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line129
-	stx colpf2
-	ldx #$95 ; 149 (spr=101)
+	stx colpf1
+	ldy #$9F ; 159 (spr=111)
 	nop 
-	lda #$11 ; 17 (spr=-31)
-	lda #$A8 ; 168 (spr=120)
-	ldx #$06 ; 6 (spr=-42)
+	lda #$08 ; 8 (spr=-40)
 	nop 
-	stx colpf2
-	ldy #$A6 ; 166 (spr=118)
-	ldx #$18 ; 24 (spr=-24)
-	nop 
-	ldx #$0C ; 12 (spr=-36)
-	nop 
-	ldy #$96 ; 150 (spr=102)
-	stx colpf2
-	ldx #$96 ; 150 (spr=102)
-	stx colpf2
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$28 ; 40 (spr=-8)
-	lda #$1E ; 30 (spr=-18)
-	stx colpf2
+	ldy #$2C ; 44 (spr=-4)
+	ldx #$82 ; 130 (spr=82)
+	lda #$86 ; 134 (spr=86)
+	sta colpf1
+	stx colpf1
+	lda #$03 ; 3 (spr=-45)
+	ldx #$02 ; 2 (spr=-46)
+	ldx #$57 ; 87 (spr=39)
+	ldx #$02 ; 2 (spr=-46)
+	lda #$96 ; 150 (spr=102)
+	sta colpf1
+	lda #$04 ; 4 (spr=-44)
+	ldy #$09 ; 9 (spr=-39)
+	ldx #$97 ; 151 (spr=103)
+	ldx #$99 ; 153 (spr=105)
+	sty colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line130
+	ldx #$16 ; 22 (spr=-26)
+	ldy #$02 ; 2 (spr=-46)
+	nop 
+	nop 
+	ldy #$02 ; 2 (spr=-46)
+	lda #$A2 ; 162 (spr=114)
+	ldy #$01 ; 1 (spr=-47)
+	nop 
+	ldx #$F2 ; 242 (spr=194)
 	sty COLPM1
-	lda #$0E ; 14 (spr=-34)
-	sta COLPM1
-	lda #$04 ; 4 (spr=-44)
-	stx colpf2
-	sta colpf2
-	ldx #$E9 ; 233 (spr=185)
+	lda #$96 ; 150 (spr=102)
+	nop 
+	ldx #$29 ; 41 (spr=-7)
+	sty colpf1
+	ldy #$99 ; 153 (spr=105)
 	sty colpf2
-	ldy #$0A ; 10 (spr=-38)
-	lda #$1E ; 30 (spr=-18)
-	stx COLPM0
-	ldx #$1E ; 30 (spr=-18)
-	nop 
-	lda #$A8 ; 168 (spr=120)
-	nop 
-	ldx #$97 ; 151 (spr=103)
-	nop 
+	sta colpf1
+	ldy #$D4 ; 212 (spr=164)
 	lda #$98 ; 152 (spr=104)
-	nop 
-	nop ; filler
+	stx colpf2
+	ldy #$09 ; 9 (spr=-39)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line131
-	nop 
-	lda #$02 ; 2 (spr=-46)
-	lda #$02 ; 2 (spr=-46)
-	nop 
-	sty colpf2
-	lda #$00 ; 0 (spr=-48)
-	ldy #$00 ; 0 (spr=-48)
-	lda #$F6 ; 246 (spr=198)
+	ldx #$17 ; 23 (spr=-25)
+	lda #$01 ; 1 (spr=-47)
+	ldx #$02 ; 2 (spr=-46)
 	nop 
 	nop 
-	lda #$98 ; 152 (spr=104)
+	lda #$01 ; 1 (spr=-47)
+	sty colpf1
 	stx colpf2
-	ldx #$97 ; 151 (spr=103)
-	ldx #$18 ; 24 (spr=-24)
+	stx colpf2
+	sty COLPM2
+	ldy #$96 ; 150 (spr=102)
+	ldx #$F9 ; 249 (spr=201)
+	sta colpf2
+	sty colpf2
+	ldy #$1F ; 31 (spr=-17)
 	nop 
-	nop 
-	ldy #$28 ; 40 (spr=-8)
-	lda #$00 ; 0 (spr=-48)
-	lda #$0E ; 14 (spr=-34)
-	nop 
-	nop 
-	lda #$A8 ; 168 (spr=120)
-	nop 
-	lda #$06 ; 6 (spr=-42)
+	stx colpf1
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line132
 	nop 
-	stx colpf2
-	ldx #$3C ; 60 (spr=12)
+	ldy #$F5 ; 245 (spr=197)
+	ldx #$E3 ; 227 (spr=179)
 	nop 
-	lda #$08 ; 8 (spr=-40)
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$99 ; 153 (spr=105)
+	sty colpf2
+	nop 
+	lda #$02 ; 2 (spr=-46)
 	sta colpf2
-	stx colpf2
-	ldx #$98 ; 152 (spr=104)
-	nop 
-	nop 
-	ldx #$01 ; 1 (spr=-47)
-	lda #$1E ; 30 (spr=-18)
-	nop 
-	lda #$98 ; 152 (spr=104)
+	stx colpf1
+	ldy #$97 ; 151 (spr=103)
 	ldx #$00 ; 0 (spr=-48)
-	ldx #$0E ; 14 (spr=-34)
 	nop 
-	lda #$FE ; 254 (spr=206)
-	lda #$06 ; 6 (spr=-42)
-	nop ; filler
-	nop ; filler
+	nop 
+	stx colpf1
+	sty colpf1
+	lda #$00 ; 0 (spr=-48)
+	ldx #$FF ; 255 (spr=207)
+	ldy #$07 ; 7 (spr=-41)
+	ldx #$28 ; 40 (spr=-8)
+	stx colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line133
-	lda #$09 ; 9 (spr=-39)
-	ldx #$10 ; 16 (spr=-32)
-	sty colpf2
-	ldy #$11 ; 17 (spr=-31)
-	ldy #$36 ; 54 (spr=6)
-	ldx #$1E ; 30 (spr=-18)
-	ldy #$0F ; 15 (spr=-33)
-	sta colpf2
-	sty colpf0
-	stx colpf2
+	sta COLPM3
+	stx colpf1
+	lda #$E3 ; 227 (spr=179)
+	stx colpf1
+	ldx #$00 ; 0 (spr=-48)
+	sta colpf1
+	sty colpf1
+	lda #$00 ; 0 (spr=-48)
+	sta colpf1
 	nop 
-	ldx #$F2 ; 242 (spr=194)
+	lda #$99 ; 153 (spr=105)
+	ldx #$18 ; 24 (spr=-24)
+	sta colpf1
 	ldy #$E2 ; 226 (spr=178)
-	lda #$03 ; 3 (spr=-45)
-	ldy #$98 ; 152 (spr=104)
-	sty colpf0
-	lda #$0E ; 14 (spr=-34)
-	lda #$34 ; 52 (spr=4)
-	lda #$05 ; 5 (spr=-43)
-	stx colpf0
+	nop 
+	nop 
+	nop 
+	nop 
+	lda #$1E ; 30 (spr=-18)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line134
-	ldx #$0D ; 13 (spr=-35)
-	sta colpf2
-	nop 
-	lda #$1F ; 31 (spr=-17)
-	lda #$9A ; 154 (spr=106)
-	lda #$EF ; 239 (spr=191)
-	ldx #$0A ; 10 (spr=-38)
 	stx colpf0
-	lda #$9D ; 157 (spr=109)
-	ldy #$9B ; 155 (spr=107)
-	ldx #$1F ; 31 (spr=-17)
+	sty colpf1
 	nop 
+	ldy #$9A ; 154 (spr=106)
+	lda #$1E ; 30 (spr=-18)
 	nop 
-	stx colpf0
-	ldx #$98 ; 152 (spr=104)
+	ldy #$E5 ; 229 (spr=181)
+	sty COLPM2
+	ldx #$06 ; 6 (spr=-42)
+	sta colpf0
+	lda #$99 ; 153 (spr=105)
 	nop 
 	stx colpf1
-	sty colpf0
-	ldy #$02 ; 2 (spr=-46)
-	ldx #$1B ; 27 (spr=-21)
-	nop 
+	sta colpf1
+	ldx #$00 ; 0 (spr=-48)
+	ldx #$24 ; 36 (spr=-12)
+	ldy #$0E ; 14 (spr=-34)
+	lda #$12 ; 18 (spr=-30)
+	lda #$9D ; 157 (spr=109)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line135
-	ldy #$01 ; 1 (spr=-47)
+	stx colpf1
+	nop 
+	lda #$02 ; 2 (spr=-46)
+	ldy #$00 ; 0 (spr=-48)
+	nop 
+	ldx #$EB ; 235 (spr=187)
+	lda #$9D ; 157 (spr=109)
+	stx colpf1
 	nop 
 	ldy #$00 ; 0 (spr=-48)
-	stx colpf0
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$02 ; 2 (spr=-46)
 	sty colpf1
-	ldx #$1F ; 31 (spr=-17)
-	ldy #$9C ; 156 (spr=108)
-	nop 
-	stx colpf0
-	ldx #$1F ; 31 (spr=-17)
-	nop 
-	nop 
-	nop 
-	sta colpf2
-	ldy #$00 ; 0 (spr=-48)
-	ldx #$05 ; 5 (spr=-43)
-	lda #$EE ; 238 (spr=190)
-	nop 
-	ldy #$0C ; 12 (spr=-36)
-	nop ; filler
+	ldy #$EA ; 234 (spr=186)
+	sty COLPM2
+	ldx #$02 ; 2 (spr=-46)
+	ldy #$9A ; 154 (spr=106)
+	sta colpf1
+	lda #$02 ; 2 (spr=-46)
+	lda #$0C ; 12 (spr=-36)
+	sty colpf1
+	ldy #$3C ; 60 (spr=12)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line136
-	stx colpf0
-	ldx #$80 ; 128 (spr=80)
+	ldy #$50 ; 80 (spr=32)
+	ldx #$15 ; 21 (spr=-27)
 	nop 
+	stx colpf1
+	ldy #$0D ; 13 (spr=-35)
 	nop 
+	ldx #$05 ; 5 (spr=-43)
+	stx colpf1
 	nop 
-	lda #$1C ; 28 (spr=-20)
-	ldx #$1F ; 31 (spr=-17)
-	sta colpf2
-	sty colpf2
-	lda #$EA ; 234 (spr=186)
-	ldx #$1E ; 30 (spr=-18)
-	nop 
-	stx colpf0
+	sta colpf1
 	ldy #$00 ; 0 (spr=-48)
 	nop 
-	ldy #$9B ; 155 (spr=107)
-	sty COLBAK
-	ldy #$07 ; 7 (spr=-41)
+	lda #$00 ; 0 (spr=-48)
+	ldx #$00 ; 0 (spr=-48)
+	nop 
+	nop 
+	nop 
+	ldy #$9A ; 154 (spr=106)
+	ldx #$E8 ; 232 (spr=184)
 	sty colpf0
-	ldx #$1F ; 31 (spr=-17)
+	ldy #$1E ; 30 (spr=-18)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line137
-	stx COLBAK
-	ldx #$2D ; 45 (spr=-3)
+	nop 
+	lda #$08 ; 8 (spr=-40)
+	nop 
+	stx COLPM2
+	sta colpf0
+	nop 
+	ldx #$18 ; 24 (spr=-24)
+	sty colpf0
+	stx COLPM2
+	ldy #$0F ; 15 (spr=-33)
+	nop 
 	ldy #$00 ; 0 (spr=-48)
-	sta COLPM0
-	ldx #$F0 ; 240 (spr=192)
-	ldy #$28 ; 40 (spr=-8)
-	lda #$00 ; 0 (spr=-48)
+	nop 
+	ldx #$0E ; 14 (spr=-34)
+	nop 
+	nop 
+	ldx #$38 ; 56 (spr=8)
+	ldy #$02 ; 2 (spr=-46)
+	nop 
 	nop 
 	sta COLBAK
-	ldy #$D5 ; 213 (spr=165)
-	ldx #$31 ; 49 (spr=1)
-	lda #$12 ; 18 (spr=-30)
-	stx HPOSP3
-	ldx #$1E ; 30 (spr=-18)
-	stx colpf0
-	ldy #$EF ; 239 (spr=191)
-	lda #$28 ; 40 (spr=-8)
-	ldy #$E4 ; 228 (spr=180)
-	ldx #$1E ; 30 (spr=-18)
-	nop ; filler
-	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line138
-	stx colpf0
-	ldx #$02 ; 2 (spr=-46)
+	sta COLPM1
+	ldy #$D2 ; 210 (spr=162)
 	nop 
-	ldx #$02 ; 2 (spr=-46)
-	lda #$1E ; 30 (spr=-18)
-	sty colpf0
 	nop 
+	lda #$00 ; 0 (spr=-48)
 	ldx #$00 ; 0 (spr=-48)
-	nop 
-	nop 
-	sta colpf0
+	stx COLPM1
 	lda #$00 ; 0 (spr=-48)
 	sta COLBAK
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$02 ; 2 (spr=-46)
-	ldx #$1C ; 28 (spr=-20)
 	nop 
+	ldx #$29 ; 41 (spr=-7)
+	ldy #$1C ; 28 (spr=-20)
+	lda #$01 ; 1 (spr=-47)
+	lda #$0F ; 15 (spr=-33)
+	sta colpf2
+	lda #$0E ; 14 (spr=-34)
+	ldy #$1E ; 30 (spr=-18)
+	ldy #$E5 ; 229 (spr=181)
 	lda #$1E ; 30 (spr=-18)
 	nop 
-	nop ; filler
-	nop ; filler
-	nop ; filler
+	lda #$00 ; 0 (spr=-48)
+	lda #$00 ; 0 (spr=-48)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line139
-	lda #$00 ; 0 (spr=-48)
-	lda #$0E ; 14 (spr=-34)
+	ldy #$EA ; 234 (spr=186)
+	lda #$02 ; 2 (spr=-46)
 	nop 
 	nop 
-	lda #$18 ; 24 (spr=-24)
-	lda #$1E ; 30 (spr=-18)
-	stx colpf0
-	ldx #$07 ; 7 (spr=-41)
-	stx colpf0
+	stx colpf2
+	ldy #$00 ; 0 (spr=-48)
 	nop 
-	sta colpf0
+	sta colpf2
 	lda #$1A ; 26 (spr=-22)
-	ldx #$04 ; 4 (spr=-44)
+	lda #$46 ; 70 (spr=22)
+	ldx #$00 ; 0 (spr=-48)
 	nop 
-	stx HPOSP2
-	sty COLPM0
-	ldx #$1E ; 30 (spr=-18)
-	ldy #$06 ; 6 (spr=-42)
-	sta colpf0
-	ldy #$1E ; 30 (spr=-18)
+	lda #$00 ; 0 (spr=-48)
+	lda #$00 ; 0 (spr=-48)
+	ldy #$03 ; 3 (spr=-45)
+	lda #$0E ; 14 (spr=-34)
+	sta COLBAK
+	ldx #$F8 ; 248 (spr=200)
+	lda #$22 ; 34 (spr=-14)
+	lda #$00 ; 0 (spr=-48)
+	stx colpf2
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line140
-	ldx #$16 ; 22 (spr=-26)
-	ldx #$6B ; 107 (spr=59)
-	stx HPOSP2
-	ldy #$28 ; 40 (spr=-8)
-	nop 
+	stx COLPM2
 	lda #$00 ; 0 (spr=-48)
-	ldy #$18 ; 24 (spr=-24)
-	lda #$1C ; 28 (spr=-20)
-	sty colpf0
+	ldx #$18 ; 24 (spr=-24)
+	lda #$00 ; 0 (spr=-48)
+	lda #$26 ; 38 (spr=-10)
+	lda #$1E ; 30 (spr=-18)
+	lda #$E3 ; 227 (spr=179)
+	sta colpf2
+	sty colpf2
+	ldx #$2A ; 42 (spr=-6)
+	lda #$3C ; 60 (spr=12)
 	nop 
-	sty COLPM0
-	nop 
-	ldy #$1E ; 30 (spr=-18)
-	sta colpf0
-	sty colpf0
-	ldy #$1E ; 30 (spr=-18)
-	ldy #$0E ; 14 (spr=-34)
-	ldy #$28 ; 40 (spr=-8)
-	ldy #$0E ; 14 (spr=-34)
-	nop ; filler
+	ldy #$00 ; 0 (spr=-48)
+	sty colpf2
+	stx HPOSP0
+	ldy #$91 ; 145 (spr=97)
+	lda #$2C ; 44 (spr=-4)
+	sta colpf2
+	lda #$1E ; 30 (spr=-18)
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line141
 	nop 
-	ldy #$18 ; 24 (spr=-24)
-	sty colpf0
-	ldy #$28 ; 40 (spr=-8)
-	ldy #$1C ; 28 (spr=-20)
-	ldx #$00 ; 0 (spr=-48)
+	lda #$0E ; 14 (spr=-34)
+	ldx #$FF ; 255 (spr=207)
+	ldx #$59 ; 89 (spr=41)
 	nop 
-	sty colpf0
-	ldy #$1A ; 26 (spr=-22)
-	lda #$00 ; 0 (spr=-48)
-	lda #$00 ; 0 (spr=-48)
-	ldy #$1E ; 30 (spr=-18)
-	nop 
-	nop 
-	sty colpf0
-	ldx #$E7 ; 231 (spr=183)
-	ldy #$0E ; 14 (spr=-34)
 	nop 
 	lda #$00 ; 0 (spr=-48)
-	ldx #$1E ; 30 (spr=-18)
-	sty colpf0
+	lda #$03 ; 3 (spr=-45)
 	nop 
+	sta colpf2
+	stx HPOSP1
+	sta HPOSP0
+	sta COLPM1
+	sty COLPM3
+	ldx #$2E ; 46 (spr=-2)
+	lda #$1E ; 30 (spr=-18)
+	lda #$2A ; 42 (spr=-6)
+	nop 
+	sta colpf2
+	lda #$08 ; 8 (spr=-40)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line142
+	sta COLBAK
+	stx HPOSP0
 	ldx #$18 ; 24 (spr=-24)
-	ldy #$28 ; 40 (spr=-8)
-	nop 
-	sty colpf0
+	lda #$00 ; 0 (spr=-48)
 	ldy #$1E ; 30 (spr=-18)
+	lda #$25 ; 37 (spr=-11)
+	lda #$00 ; 0 (spr=-48)
+	sta colpf2
+	ldy #$02 ; 2 (spr=-46)
+	ldx #$06 ; 6 (spr=-42)
+	stx COLPM1
+	ldx #$79 ; 121 (spr=73)
+	ldy #$0F ; 15 (spr=-33)
+	sta COLPM2
+	sty COLBAK
+	ldy #$1E ; 30 (spr=-18)
+	lda #$06 ; 6 (spr=-42)
 	nop 
-	lda #$0B ; 11 (spr=-37)
-	sty colpf0
 	nop 
-	sty HPOSP0
-	nop 
-	sty HPOSP0
-	sta colpf0
-	sty colpf0
-	lda #$8A ; 138 (spr=90)
-	ldy #$16 ; 22 (spr=-26)
-	ldx #$0D ; 13 (spr=-35)
-	nop 
-	nop 
-	nop 
+	ldy #$00 ; 0 (spr=-48)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line143
+	sta COLPM2
+	stx HPOSP3
+	ldy #$00 ; 0 (spr=-48)
+	ldx #$28 ; 40 (spr=-8)
+	lda #$76 ; 118 (spr=70)
+	stx colpf2
 	sty colpf2
 	nop 
-	nop 
-	sta HPOSP0
 	lda #$00 ; 0 (spr=-48)
-	ldy #$0F ; 15 (spr=-33)
-	stx colpf2
-	sta COLPM0
-	sty COLBAK
 	nop 
-	ldx #$90 ; 144 (spr=96)
-	stx COLPM2
 	lda #$0E ; 14 (spr=-34)
-	lda #$80 ; 128 (spr=80)
-	ldy #$24 ; 36 (spr=-12)
-	stx colpf2
-	ldx #$1D ; 29 (spr=-19)
-	ldx #$1D ; 29 (spr=-19)
-	nop ; filler
+	ldy #$00 ; 0 (spr=-48)
+	ldy #$03 ; 3 (spr=-45)
+	nop 
+	lda #$FF ; 255 (spr=207)
+	stx COLPM2
+	ldx #$26 ; 38 (spr=-10)
+	lda #$1E ; 30 (spr=-18)
+	nop 
+	sty colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line144
-	lda #$1A ; 26 (spr=-22)
-	lda #$01 ; 1 (spr=-47)
-	ldx #$00 ; 0 (spr=-48)
-	sty colpf2
-	ldy #$08 ; 8 (spr=-40)
 	nop 
-	nop 
+	lda #$1E ; 30 (spr=-18)
 	sty colpf2
-	stx colpf2
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$0C ; 12 (spr=-36)
-	ldx #$F1 ; 241 (spr=193)
+	ldx #$F6 ; 246 (spr=198)
+	lda #$00 ; 0 (spr=-48)
+	ldx #$16 ; 22 (spr=-26)
 	ldx #$0F ; 15 (spr=-33)
+	ldy #$00 ; 0 (spr=-48)
 	sty colpf2
-	ldy #$15 ; 21 (spr=-27)
-	stx colpf2
-	ldx #$1D ; 29 (spr=-19)
-	sta COLBAK
-	ldx #$90 ; 144 (spr=96)
+	lda #$40 ; 64 (spr=16)
+	sty colpf2
+	ldx #$26 ; 38 (spr=-10)
+	ldx #$00 ; 0 (spr=-48)
+	ldy #$00 ; 0 (spr=-48)
+	sty colpf2
+	ldy #$E3 ; 227 (spr=179)
+	ldx #$EB ; 235 (spr=187)
+	nop 
+	nop 
+	nop 
+	nop 
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line145
-	sty colpf2
-	lda #$01 ; 1 (spr=-47)
-	ldx #$00 ; 0 (spr=-48)
-	lda #$1A ; 26 (spr=-22)
-	ldy #$09 ; 9 (spr=-39)
-	nop 
 	nop 
 	sty colpf2
+	sty colpf2
+	nop 
+	sty colpf2
+	ldy #$00 ; 0 (spr=-48)
+	sty colpf2
+	sta HPOSP2
+	lda #$8C ; 140 (spr=92)
+	lda #$00 ; 0 (spr=-48)
+	lda #$8F ; 143 (spr=95)
+	ldy #$E3 ; 227 (spr=179)
+	nop 
+	sty colpf2
+	nop 
 	stx colpf2
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$0C ; 12 (spr=-36)
-	ldx #$F1 ; 241 (spr=193)
-	ldx #$0F ; 15 (spr=-33)
-	sty colpf2
-	ldy #$15 ; 21 (spr=-27)
-	stx colpf2
-	ldx #$1D ; 29 (spr=-19)
-	sta COLBAK
 	nop 
-	ldx #$90 ; 144 (spr=96)
+	lda #$8E ; 142 (spr=94)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line146
 	sty colpf2
-	lda #$06 ; 6 (spr=-42)
-	ldy #$08 ; 8 (spr=-40)
+	ldy #$00 ; 0 (spr=-48)
+	nop 
+	nop 
+	ldy #$0F ; 15 (spr=-33)
+	ldy #$00 ; 0 (spr=-48)
+	nop 
 	lda #$E2 ; 226 (spr=178)
-	lda #$0A ; 10 (spr=-38)
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$00 ; 0 (spr=-48)
 	sty colpf2
-	stx colpf2
-	ldy #$0C ; 12 (spr=-36)
+	lda #$8D ; 141 (spr=93)
 	nop 
-	sty colpf2
-	lda #$D2 ; 210 (spr=162)
+	nop 
+	ldy #$03 ; 3 (spr=-45)
+	nop 
 	lda #$00 ; 0 (spr=-48)
-	ldy #$0E ; 14 (spr=-34)
-	lda #$28 ; 40 (spr=-8)
-	ldx #$90 ; 144 (spr=96)
+	lda #$0C ; 12 (spr=-36)
+	lda #$00 ; 0 (spr=-48)
+	stx colpf2
 	nop 
-	nop 
-	nop 
-	ldy #$3E ; 62 (spr=14)
-	nop ; filler
+	ldx #$00 ; 0 (spr=-48)
+	ldx #$F0 ; 240 (spr=192)
+	sty colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line147
-	ldy #$00 ; 0 (spr=-48)
-	ldy #$00 ; 0 (spr=-48)
 	nop 
+	lda #$FC ; 252 (spr=204)
+	lda #$00 ; 0 (spr=-48)
+	lda #$04 ; 4 (spr=-44)
+	ldy #$00 ; 0 (spr=-48)
+	ldx #$31 ; 49 (spr=1)
+	sty COLPM1
+	sta colpf2
 	sty colpf2
 	lda #$00 ; 0 (spr=-48)
-	lda #$0C ; 12 (spr=-36)
-	lda #$06 ; 6 (spr=-42)
-	sta colpf1
-	ldy #$00 ; 0 (spr=-48)
-	nop 
-	lda #$00 ; 0 (spr=-48)
-	lda #$0C ; 12 (spr=-36)
-	ldy #$3E ; 62 (spr=14)
-	sta colpf2
-	nop 
-	stx COLPM0
-	ldx #$0F ; 15 (spr=-33)
+	ldx #$07 ; 7 (spr=-41)
+	lda #$02 ; 2 (spr=-46)
+	sty COLPM3
 	stx colpf2
-	lda #$E2 ; 226 (spr=178)
-	ldy #$EC ; 236 (spr=188)
-	ldy #$E5 ; 229 (spr=181)
+	ldx #$E3 ; 227 (spr=179)
+	nop 
+	ldy #$0E ; 14 (spr=-34)
+	nop ; filler
+	nop ; filler
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line148
+	ldy #$56 ; 86 (spr=38)
+	nop 
+	stx colpf0
+	ldx #$0E ; 14 (spr=-34)
+	nop 
+	ldy #$1F ; 31 (spr=-17)
+	ldx #$1F ; 31 (spr=-17)
+	ldx #$90 ; 144 (spr=96)
+	nop 
+	stx colpf0
 	sta colpf2
-	lda #$E2 ; 226 (spr=178)
-	ldx #$00 ; 0 (spr=-48)
+	lda #$87 ; 135 (spr=87)
+	sta colpf0
+	sty colpf0
+	ldy #$ED ; 237 (spr=189)
+	ldx #$07 ; 7 (spr=-41)
+	sty colpf1
+	lda #$2B ; 43 (spr=-5)
 	nop 
-	ldy #$1C ; 28 (spr=-20)
-	ldx #$00 ; 0 (spr=-48)
-	lda #$1C ; 28 (spr=-20)
-	nop 
-	stx colpf2
-	stx colpf2
-	lda #$06 ; 6 (spr=-42)
-	ldy #$0C ; 12 (spr=-36)
-	sta colpf1
-	sty colpf2
-	ldy #$EC ; 236 (spr=188)
-	sty colpf2
-	lda #$E2 ; 226 (spr=178)
-	ldx #$1E ; 30 (spr=-18)
-	ldy #$2D ; 45 (spr=-3)
-	ldy #$1E ; 30 (spr=-18)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line149
-	nop 
-	ldy #$E4 ; 228 (spr=180)
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$01 ; 1 (spr=-47)
-	nop 
-	nop 
-	nop 
-	sta colpf2
-	stx colpf2
-	lda #$04 ; 4 (spr=-44)
+	lda #$2A ; 42 (spr=-6)
+	stx colpf1
 	sta colpf1
-	lda #$E2 ; 226 (spr=178)
-	ldy #$0C ; 12 (spr=-36)
+	ldy #$47 ; 71 (spr=23)
+	lda #$0D ; 13 (spr=-35)
+	nop 
+	stx colpf1
+	ldx #$90 ; 144 (spr=96)
+	stx colpf1
+	ldy #$04 ; 4 (spr=-44)
+	ldx #$A0 ; 160 (spr=112)
+	nop 
+	ldy #$1B ; 27 (spr=-21)
+	sta colpf1
+	ldx #$F3 ; 243 (spr=195)
 	sty colpf2
-	ldy #$90 ; 144 (spr=96)
-	ldy #$12 ; 18 (spr=-30)
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
-	nop ; filler
+	stx colpf1
+	lda #$04 ; 4 (spr=-44)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line150
-	nop 
+	ldy #$12 ; 18 (spr=-30)
 	sta colpf2
-	lda #$0E ; 14 (spr=-34)
+	lda #$0D ; 13 (spr=-35)
 	nop 
-	lda #$02 ; 2 (spr=-46)
-	ldy #$0C ; 12 (spr=-36)
-	ldy #$00 ; 0 (spr=-48)
-	ldx #$00 ; 0 (spr=-48)
-	sty colpf2
-	sta colpf1
 	nop 
+	ldx #$90 ; 144 (spr=96)
+	nop 
+	nop 
+	stx colpf1
+	sta colpf2
+	lda #$12 ; 18 (spr=-30)
+	ldx #$03 ; 3 (spr=-45)
+	ldy #$EB ; 235 (spr=187)
+	lda #$20 ; 32 (spr=-16)
+	nop 
+	nop 
+	lda #$0C ; 12 (spr=-36)
 	lda #$00 ; 0 (spr=-48)
-	ldy #$0C ; 12 (spr=-36)
-	nop 
+	stx colpf1
 	sty colpf2
-	nop 
-	ldy #$E4 ; 228 (spr=180)
-	lda #$02 ; 2 (spr=-46)
-	sty colpf2
-	ldx #$00 ; 0 (spr=-48)
-	nop ; filler
+	ldy #$07 ; 7 (spr=-41)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line151
+	nop 
+	nop 
+	lda #$14 ; 20 (spr=-28)
+	ldx #$10 ; 16 (spr=-32)
+	ldx #$8E ; 142 (spr=94)
+	ldx #$90 ; 144 (spr=96)
+	sta colpf2
 	sty colpf2
-	lda #$F7 ; 247 (spr=199)
-	ldx #$36 ; 54 (spr=6)
-	ldx #$14 ; 20 (spr=-28)
+	ldx #$0D ; 13 (spr=-35)
+	lda #$08 ; 8 (spr=-40)
 	ldy #$00 ; 0 (spr=-48)
 	nop 
-	lda #$E2 ; 226 (spr=178)
-	ldx #$0C ; 12 (spr=-36)
+	lda #$F0 ; 240 (spr=192)
+	ldy #$1B ; 27 (spr=-21)
+	lda #$FC ; 252 (spr=204)
+	lda #$F2 ; 242 (spr=194)
+	stx colpf1
 	sty colpf2
-	ldx #$06 ; 6 (spr=-42)
-	ldy #$13 ; 19 (spr=-29)
-	ldy #$00 ; 0 (spr=-48)
-	ldx #$29 ; 41 (spr=-7)
-	ldy #$0D ; 13 (spr=-35)
-	sty colpf2
-	ldy #$19 ; 25 (spr=-23)
-	nop 
-	sty colpf2
-	ldy #$24 ; 36 (spr=-12)
-	nop 
-	ldx #$80 ; 128 (spr=80)
-	ldx #$46 ; 70 (spr=22)
+	ldy #$15 ; 21 (spr=-27)
+	lda #$00 ; 0 (spr=-48)
+	lda #$02 ; 2 (spr=-46)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line152
 	sty colpf2
-	lda #$02 ; 2 (spr=-46)
-	lda #$0E ; 14 (spr=-34)
-	ldy #$28 ; 40 (spr=-8)
-	ldy #$00 ; 0 (spr=-48)
+	ldx #$01 ; 1 (spr=-47)
 	nop 
-	ldx #$90 ; 144 (spr=96)
-	sty colpf2
-	ldy #$0A ; 10 (spr=-38)
-	lda #$EB ; 235 (spr=187)
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$46 ; 70 (spr=22)
-	ldx #$2A ; 42 (spr=-6)
-	ldy #$0C ; 12 (spr=-36)
-	sty colpf2
+	ldy #$14 ; 20 (spr=-28)
+	ldx #$02 ; 2 (spr=-46)
+	ldy #$90 ; 144 (spr=96)
 	nop 
-	ldy #$19 ; 25 (spr=-23)
+	sta colpf2
+	sty colpf1
+	lda #$26 ; 38 (spr=-10)
+	nop 
+	ldy #$EA ; 234 (spr=186)
+	lda #$09 ; 9 (spr=-39)
+	ldx #$0C ; 12 (spr=-36)
+	stx colpf2
+	sty colpf1
+	ldx #$14 ; 20 (spr=-28)
+	ldy #$18 ; 24 (spr=-24)
 	sty colpf2
-	lda #$00 ; 0 (spr=-48)
-	lda #$0E ; 14 (spr=-34)
-	lda #$0A ; 10 (spr=-38)
-	nop ; filler
+	ldx #$91 ; 145 (spr=97)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line153
-	ldy #$1F ; 31 (spr=-17)
-	sty colpf0
-	lda #$D0 ; 208 (spr=160)
+	stx colpf1
+	lda #$1A ; 26 (spr=-22)
+	sty COLPM2
+	lda #$FF ; 255 (spr=207)
+	ldx #$03 ; 3 (spr=-45)
+	lda #$0D ; 13 (spr=-35)
+	stx colpf2
+	ldy #$02 ; 2 (spr=-46)
+	ldy #$90 ; 144 (spr=96)
+	ldx #$88 ; 136 (spr=88)
+	ldy #$FF ; 255 (spr=207)
 	nop 
-	stx COLBAK
-	ldy #$00 ; 0 (spr=-48)
-	sty colpf2
-	ldy #$E2 ; 226 (spr=178)
-	nop 
-	stx HPOSP3
 	ldy #$0C ; 12 (spr=-36)
+	stx colpf2
 	sty colpf2
-	ldx #$90 ; 144 (spr=96)
-	lda #$EC ; 236 (spr=188)
-	ldy #$0C ; 12 (spr=-36)
-	ldy #$92 ; 146 (spr=98)
-	nop 
-	sta colpf2
-	ldy #$18 ; 24 (spr=-24)
-	nop 
+	ldy #$ED ; 237 (spr=189)
+	sty colpf2
+	ldx #$05 ; 5 (spr=-43)
+	ldy #$28 ; 40 (spr=-8)
+	lda #$0C ; 12 (spr=-36)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line154
-	lda #$E2 ; 226 (spr=178)
-	nop 
-	ldx #$1F ; 31 (spr=-17)
+	stx COLPM2
+	stx colpf2
+	lda #$90 ; 144 (spr=96)
 	sty colpf2
-	lda #$00 ; 0 (spr=-48)
-	ldy #$EC ; 236 (spr=188)
-	sta colpf0
 	nop 
-	lda #$0D ; 13 (spr=-35)
-	sta colpf2
-	lda #$46 ; 70 (spr=22)
-	nop 
-	sta colpf0
-	lda #$5A ; 90 (spr=42)
-	stx colpf0
-	lda #$E4 ; 228 (spr=180)
+	ldy #$02 ; 2 (spr=-46)
+	lda #$E0 ; 224 (spr=176)
 	sty colpf2
-	ldy #$18 ; 24 (spr=-24)
+	ldy #$0C ; 12 (spr=-36)
+	lda #$EF ; 239 (spr=191)
 	nop 
-	lda #$00 ; 0 (spr=-48)
+	nop 
+	nop 
+	ldx #$28 ; 40 (spr=-8)
+	sty colpf1
+	ldy #$ED ; 237 (spr=189)
+	sty colpf1
+	ldy #$91 ; 145 (spr=97)
+	ldx #$27 ; 39 (spr=-9)
+	lda #$90 ; 144 (spr=96)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line155
-	lda #$01 ; 1 (spr=-47)
-	sty colpf2
-	sta colpf0
-	lda #$2A ; 42 (spr=-6)
-	lda #$0E ; 14 (spr=-34)
+	sty colpf1
 	nop 
-	lda #$1F ; 31 (spr=-17)
-	lda #$0D ; 13 (spr=-35)
+	ldy #$18 ; 24 (spr=-24)
 	nop 
+	sty COLPM2
+	ldy #$29 ; 41 (spr=-7)
+	sty COLPM0
+	stx HPOSP2
 	nop 
-	sta colpf2
-	ldy #$0C ; 12 (spr=-36)
-	stx colpf0
-	nop 
-	ldy #$ED ; 237 (spr=189)
-	lda #$90 ; 144 (spr=96)
-	lda #$00 ; 0 (spr=-48)
-	sty colpf2
-	ldy #$39 ; 57 (spr=9)
-	lda #$80 ; 128 (spr=80)
-	ldy #$38 ; 56 (spr=8)
+	stx COLPM2
+	ldx #$E1 ; 225 (spr=177)
+	ldy #$45 ; 69 (spr=21)
+	ldx #$0C ; 12 (spr=-36)
+	stx colpf1
+	sty HPOSP0
+	ldx #$15 ; 21 (spr=-27)
+	lda #$38 ; 56 (spr=8)
+	stx colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line156
+	lda #$90 ; 144 (spr=96)
+	ldx #$15 ; 21 (spr=-27)
+	ldy #$E2 ; 226 (spr=178)
 	nop 
-	sty colpf2
 	nop 
-	ldy #$0C ; 12 (spr=-36)
+	ldx #$FD ; 253 (spr=205)
 	nop 
-	ldy #$84 ; 132 (spr=84)
-	lda #$00 ; 0 (spr=-48)
-	sta colpf0
-	nop 
-	lda #$0C ; 12 (spr=-36)
-	sta colpf2
-	lda #$E0 ; 224 (spr=176)
-	ldy #$ED ; 237 (spr=189)
-	stx colpf0
+	ldx #$04 ; 4 (spr=-44)
+	stx colpf1
+	sta colpf1
+	ldx #$0C ; 12 (spr=-36)
 	lda #$00 ; 0 (spr=-48)
 	nop 
-	ldx #$00 ; 0 (spr=-48)
-	sty colpf2
-	ldy #$F8 ; 248 (spr=200)
-	sta colpf2
+	lda #$90 ; 144 (spr=96)
+	ldy #$70 ; 112 (spr=64)
+	lda #$F1 ; 241 (spr=193)
+	stx colpf1
+	ldx #$EC ; 236 (spr=188)
+	stx colpf1
+	lda #$A1 ; 161 (spr=113)
+	lda #$34 ; 52 (spr=4)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line157
-	sty HPOSP2
-	sty colpf0
+	ldx #$E2 ; 226 (spr=178)
+	lda #$34 ; 52 (spr=4)
+	ldy #$28 ; 40 (spr=-8)
 	nop 
-	ldx #$E1 ; 225 (spr=177)
-	ldx #$1E ; 30 (spr=-18)
-	ldy #$63 ; 99 (spr=51)
-	sty HPOSP2
+	stx colpf1
 	nop 
-	ldy #$02 ; 2 (spr=-46)
-	lda #$20 ; 32 (spr=-16)
+	lda #$E0 ; 224 (spr=176)
+	lda #$AE ; 174 (spr=126)
 	lda #$90 ; 144 (spr=96)
-	ldy #$0C ; 12 (spr=-36)
-	stx colpf0
-	ldx #$F2 ; 242 (spr=194)
-	sty colpf2
-	lda #$25 ; 37 (spr=-11)
-	ldy #$0A ; 10 (spr=-38)
-	ldx #$02 ; 2 (spr=-46)
-	ldy #$A0 ; 160 (spr=112)
-	sta colpf0
+	sta colpf1
+	lda #$02 ; 2 (spr=-46)
+	ldy #$0E ; 14 (spr=-34)
+	lda #$01 ; 1 (spr=-47)
+	ldx #$87 ; 135 (spr=87)
+	nop 
+	lda #$8F ; 143 (spr=95)
+	stx colpf1
+	ldx #$ED ; 237 (spr=189)
+	stx colpf1
+	nop 
+	nop 
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line158
-	lda #$01 ; 1 (spr=-47)
+	ldy #$EE ; 238 (spr=190)
+	nop 
+	ldy #$26 ; 38 (spr=-10)
+	ldy #$F4 ; 244 (spr=196)
 	ldx #$90 ; 144 (spr=96)
-	ldy #$06 ; 6 (spr=-42)
-	sty colpf2
-	ldy #$A2 ; 162 (spr=114)
-	sty HPOSP0
-	sta colpf2
-	stx colpf0
-	ldy #$0C ; 12 (spr=-36)
-	sty COLPM0
-	ldx #$EC ; 236 (spr=188)
-	ldy #$92 ; 146 (spr=98)
-	lda #$14 ; 20 (spr=-28)
-	ldy #$8F ; 143 (spr=95)
-	stx colpf0
+	sty colpf1
+	ldx #$10 ; 16 (spr=-32)
+	lda #$0C ; 12 (spr=-36)
 	ldx #$90 ; 144 (spr=96)
-	ldy #$14 ; 20 (spr=-28)
-	ldy #$ED ; 237 (spr=189)
-	sta colpf0
+	stx colpf1
+	nop 
+	ldy #$E0 ; 224 (spr=176)
+	ldy #$D5 ; 213 (spr=165)
+	nop 
+	ldy #$05 ; 5 (spr=-43)
+	ldx #$90 ; 144 (spr=96)
+	ldx #$ED ; 237 (spr=189)
+	sta colpf1
+	stx colpf1
+	nop 
+	sty colpf1
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line159
 	nop 
-	sta colpf0
+	ldy #$02 ; 2 (spr=-46)
+	ldx #$90 ; 144 (spr=96)
+	lda #$90 ; 144 (spr=96)
+	nop 
+	ldx #$90 ; 144 (spr=96)
+	ldy #$04 ; 4 (spr=-44)
 	nop 
 	nop 
-	nop 
-	lda #$A0 ; 160 (spr=112)
-	ldy #$9F ; 159 (spr=111)
-	lda #$17 ; 23 (spr=-25)
-	sta colpf0
-	stx colpf0
-	ldy #$00 ; 0 (spr=-48)
-	ldx #$1E ; 30 (spr=-18)
-	nop 
-	sty colpf2
-	stx colpf0
-	ldx #$ED ; 237 (spr=189)
+	lda #$90 ; 144 (spr=96)
+	stx colpf1
+	sta HPOSP3
 	stx COLPM1
-	sta COLPM0
-	lda #$0C ; 12 (spr=-36)
+	sta HPOSP3
+	ldx #$00 ; 0 (spr=-48)
+	sty COLPM3
+	ldx #$08 ; 8 (spr=-40)
+	nop 
+	ldy #$76 ; 118 (spr=70)
+	lda #$00 ; 0 (spr=-48)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line160
-	lda #$08 ; 8 (spr=-40)
-	nop 
-	stx COLPM0
-	nop 
-	ldy #$E2 ; 226 (spr=178)
-	nop 
-	lda #$07 ; 7 (spr=-41)
-	nop 
-	ldy #$0C ; 12 (spr=-36)
+	stx colpf1
+	sta colpf0
+	lda #$8B ; 139 (spr=91)
+	sta HPOSP3
 	ldx #$0E ; 14 (spr=-34)
-	sta COLPM0
 	nop 
+	ldx #$02 ; 2 (spr=-46)
+	sty HPOSP1
+	ldx #$67 ; 103 (spr=55)
 	nop 
-	sta COLBAK
-	sty colpf2
-	stx COLPM0
-	lda #$0C ; 12 (spr=-36)
-	ldx #$25 ; 37 (spr=-11)
+	lda #$01 ; 1 (spr=-47)
+	ldy #$EC ; 236 (spr=188)
+	sty colpf0
+	ldy #$1A ; 26 (spr=-22)
+	sty COLPM0
+	ldy #$15 ; 21 (spr=-27)
+	lda #$11 ; 17 (spr=-31)
 	nop 
-	lda #$1E ; 30 (spr=-18)
-	ldy #$F0 ; 240 (spr=192)
+	sty colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line161
-	lda #$90 ; 144 (spr=96)
-	stx HPOSP3
-	stx colpf0
+	lda #$00 ; 0 (spr=-48)
+	lda #$0C ; 12 (spr=-36)
 	nop 
-	ldy #$1E ; 30 (spr=-18)
-	ldx #$EC ; 236 (spr=188)
-	ldy #$00 ; 0 (spr=-48)
+	ldy #$90 ; 144 (spr=96)
+	sta COLPM3
+	nop 
+	nop 
+	lda #$01 ; 1 (spr=-47)
 	sty colpf0
-	sty colpf0
-	lda #$1E ; 30 (spr=-18)
-	nop 
-	nop 
 	sta colpf0
-	ldy #$0C ; 12 (spr=-36)
-	ldy #$1E ; 30 (spr=-18)
-	ldy #$28 ; 40 (spr=-8)
-	sty HPOSP3
 	nop 
-	nop ; filler
-	nop ; filler
+	ldy #$F3 ; 243 (spr=195)
+	ldy #$1F ; 31 (spr=-17)
+	sty colpf0
+	ldy #$15 ; 21 (spr=-27)
+	nop 
+	stx HPOSP1
+	ldx #$7D ; 125 (spr=77)
+	nop 
+	sty colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line162
-	lda #$0E ; 14 (spr=-34)
 	sty colpf0
+	ldx #$0E ; 14 (spr=-34)
+	nop 
 	ldx #$1E ; 30 (spr=-18)
 	nop 
-	ldx #$90 ; 144 (spr=96)
-	ldy #$01 ; 1 (spr=-47)
-	ldx #$1E ; 30 (spr=-18)
-	ldx #$FD ; 253 (spr=205)
-	lda #$0E ; 14 (spr=-34)
-	sty colpf0
-	lda #$44 ; 68 (spr=20)
-	ldy #$29 ; 41 (spr=-7)
-	lda #$1E ; 30 (spr=-18)
+	ldy #$02 ; 2 (spr=-46)
+	ldx #$5E ; 94 (spr=46)
 	sta colpf0
-	ldx #$1E ; 30 (spr=-18)
-	lda #$62 ; 98 (spr=50)
-	sty HPOSP3
+	ldy #$00 ; 0 (spr=-48)
+	ldx #$0E ; 14 (spr=-34)
+	ldy #$1F ; 31 (spr=-17)
+	lda #$F8 ; 248 (spr=200)
 	nop 
+	sty colpf0
+	stx colpf2
+	ldx #$EC ; 236 (spr=188)
+	stx colpf2
+	ldx #$03 ; 3 (spr=-45)
 	nop 
-	nop ; filler
-	nop ; filler
-	nop ; filler
+	stx colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line163
-	sty HPOSP3
-	sty colpf0
-	lda #$1B ; 27 (spr=-21)
-	lda #$0D ; 13 (spr=-35)
-	lda #$0C ; 12 (spr=-36)
 	ldy #$06 ; 6 (spr=-42)
-	ldy #$0C ; 12 (spr=-36)
-	ldy #$00 ; 0 (spr=-48)
-	nop 
+	sta colpf0
+	ldx #$0C ; 12 (spr=-36)
+	lda #$16 ; 22 (spr=-26)
+	ldy #$01 ; 1 (spr=-47)
+	sta COLPM2
+	sty COLPM0
 	sty colpf0
-	ldy #$E0 ; 224 (spr=176)
-	stx colpf0
-	ldy #$1C ; 28 (spr=-20)
+	ldy #$02 ; 2 (spr=-46)
+	ldy #$1F ; 31 (spr=-17)
+	sty colpf0
+	stx colpf2
+	ldx #$EC ; 236 (spr=188)
 	nop 
-	ldy #$0C ; 12 (spr=-36)
-	ldx #$01 ; 1 (spr=-47)
-	lda #$0E ; 14 (spr=-34)
-	lda #$EE ; 238 (spr=190)
+	stx colpf2
 	nop 
-	ldy #$DC ; 220 (spr=172)
-	stx colpf0
+	lda #$90 ; 144 (spr=96)
+	stx colpf2
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line164
-	ldy #$13 ; 19 (spr=-29)
-	ldx #$02 ; 2 (spr=-46)
-	nop 
-	nop 
-	stx colpf1
-	ldy #$90 ; 144 (spr=96)
-	nop 
-	nop 
-	ldy #$6D ; 109 (spr=61)
-	lda #$E6 ; 230 (spr=182)
-	ldx #$1F ; 31 (spr=-17)
-	stx colpf0
-	nop 
-	stx COLBAK
-	ldx #$14 ; 20 (spr=-28)
-	sty HPOSP2
-	sta COLPM2
+	ldx #$03 ; 3 (spr=-45)
 	lda #$0C ; 12 (spr=-36)
-	stx colpf0
-	ldx #$17 ; 23 (spr=-25)
+	ldy #$EE ; 238 (spr=190)
+	stx colpf2
+	lda #$00 ; 0 (spr=-48)
+	nop 
+	ldy #$0C ; 12 (spr=-36)
+	ldx #$ED ; 237 (spr=189)
+	ldx #$E7 ; 231 (spr=183)
+	lda #$15 ; 21 (spr=-27)
+	ldy #$90 ; 144 (spr=96)
+	ldy #$00 ; 0 (spr=-48)
+	stx colpf2
+	ldy #$ED ; 237 (spr=189)
+	ldx #$03 ; 3 (spr=-45)
+	stx colpf2
+	lda #$2C ; 44 (spr=-4)
+	sty colpf0
+	ldy #$FE ; 254 (spr=206)
+	ldy #$28 ; 40 (spr=-8)
+	sty colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line165
-	lda #$00 ; 0 (spr=-48)
-	stx COLPM1
-	sta COLPM2
-	ldy #$08 ; 8 (spr=-40)
+	ldy #$00 ; 0 (spr=-48)
 	nop 
+	ldx #$00 ; 0 (spr=-48)
+	ldy #$2A ; 42 (spr=-6)
 	nop 
+	sty HPOSP2
+	nop 
+	lda #$1F ; 31 (spr=-17)
 	sta colpf0
-	sty COLPM2
-	ldx #$1D ; 29 (spr=-19)
+	lda #$E8 ; 232 (spr=184)
+	stx COLPM1
+	ldx #$01 ; 1 (spr=-47)
+	ldx #$E4 ; 228 (spr=180)
+	ldx #$3B ; 59 (spr=11)
+	ldx #$04 ; 4 (spr=-44)
+	ldy #$1E ; 30 (spr=-18)
+	nop 
+	sty COLPM0
+	sta colpf0
 	stx colpf0
-	sta COLPM2
-	nop 
-	nop 
-	ldy #$1C ; 28 (spr=-20)
-	ldy #$0C ; 12 (spr=-36)
-	nop 
-	ldx #$7B ; 123 (spr=75)
-	sta COLPM1
-	ldx #$81 ; 129 (spr=81)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line166
-	ldx #$1C ; 28 (spr=-20)
-	ldy #$F4 ; 244 (spr=196)
-	lda #$90 ; 144 (spr=96)
-	lda #$07 ; 7 (spr=-41)
+	nop 
+	ldx #$04 ; 4 (spr=-44)
+	nop 
+	ldy #$FB ; 251 (spr=203)
 	ldx #$80 ; 128 (spr=80)
-	ldy #$04 ; 4 (spr=-44)
-	sta COLBAK
-	ldx #$EA ; 234 (spr=186)
-	sty COLBAK
-	ldy #$0A ; 10 (spr=-38)
-	sty COLPM2
-	stx COLBAK
-	sta COLPM2
+	ldy #$0C ; 12 (spr=-36)
 	nop 
+	lda #$14 ; 20 (spr=-28)
+	lda #$0F ; 15 (spr=-33)
+	ldy #$1E ; 30 (spr=-18)
+	ldx #$1C ; 28 (spr=-20)
+	stx COLPM2
+	stx colpf0
+	lda #$1B ; 27 (spr=-21)
+	sty colpf0
+	ldy #$00 ; 0 (spr=-48)
+	sty colpf0
 	nop 
-	ldy #$FA ; 250 (spr=202)
-	ldx #$1D ; 29 (spr=-19)
-	sta COLBAK
-	nop 
-	nop ; filler
+	ldy #$90 ; 144 (spr=96)
+	sta colpf0
+	ldx #$0B ; 11 (spr=-37)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line167
-	stx COLBAK
-	sty COLBAK
-	ldx #$1B ; 27 (spr=-21)
-	sta COLBAK
 	nop 
+	ldy #$02 ; 2 (spr=-46)
+	lda #$16 ; 22 (spr=-26)
+	stx COLPM1
+	sta COLPM2
+	ldy #$1E ; 30 (spr=-18)
+	ldy #$0C ; 12 (spr=-36)
+	ldx #$F5 ; 245 (spr=197)
+	ldy #$2D ; 45 (spr=-3)
+	ldy #$FF ; 255 (spr=207)
+	lda #$1E ; 30 (spr=-18)
+	stx COLPM2
+	nop 
+	sta colpf0
+	ldx #$00 ; 0 (spr=-48)
+	stx colpf0
+	lda #$05 ; 5 (spr=-43)
+	ldx #$04 ; 4 (spr=-44)
 	ldy #$0A ; 10 (spr=-38)
-	lda #$8C ; 140 (spr=92)
-	stx colpf0
-	ldx #$06 ; 6 (spr=-42)
-	sty COLPM2
-	ldx #$1D ; 29 (spr=-19)
-	stx colpf0
-	sta HPOSP0
-	lda #$0E ; 14 (spr=-34)
-	ldy #$2A ; 42 (spr=-6)
-	ldy #$00 ; 0 (spr=-48)
-	ldy #$14 ; 20 (spr=-28)
-	ldy #$00 ; 0 (spr=-48)
-	nop ; filler
+	ldy #$0C ; 12 (spr=-36)
+	ldy #$08 ; 8 (spr=-40)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line168
+	ldy #$0B ; 11 (spr=-37)
 	nop 
-	stx COLPM0
-	ldy #$04 ; 4 (spr=-44)
-	ldy #$0C ; 12 (spr=-36)
-	ldy #$02 ; 2 (spr=-46)
-	ldy #$0A ; 10 (spr=-38)
+	ldy #$E2 ; 226 (spr=178)
 	nop 
-	ldx #$06 ; 6 (spr=-42)
-	sta COLPM1
-	lda #$06 ; 6 (spr=-42)
-	nop 
-	ldx #$00 ; 0 (spr=-48)
-	lda #$0C ; 12 (spr=-36)
-	ldy #$1C ; 28 (spr=-20)
-	lda #$1F ; 31 (spr=-17)
 	sta colpf0
+	lda #$05 ; 5 (spr=-43)
+	ldx #$1C ; 28 (spr=-20)
+	ldy #$29 ; 41 (spr=-7)
+	sty colpf0
+	stx colpf0
+	ldx #$1E ; 30 (spr=-18)
+	ldy #$1A ; 26 (spr=-22)
+	lda #$01 ; 1 (spr=-47)
+	stx colpf0
+	ldy #$FC ; 252 (spr=204)
 	ldy #$0A ; 10 (spr=-38)
-	stx colpf0
-	ldx #$1D ; 29 (spr=-19)
-	ldy #$40 ; 64 (spr=16)
-	stx colpf0
+	sta colpf0
+	lda #$26 ; 38 (spr=-10)
+	ldx #$00 ; 0 (spr=-48)
+	ldy #$1F ; 31 (spr=-17)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line169
-	ldy #$EA ; 234 (spr=186)
-	lda #$00 ; 0 (spr=-48)
-	lda #$1C ; 28 (spr=-20)
-	ldx #$D0 ; 208 (spr=160)
-	nop 
-	ldx #$1E ; 30 (spr=-18)
-	nop 
-	nop 
-	ldx #$1A ; 26 (spr=-22)
-	lda #$06 ; 6 (spr=-42)
-	stx colpf0
-	nop 
-	ldx #$1D ; 29 (spr=-19)
 	ldx #$00 ; 0 (spr=-48)
-	sty colpf0
+	ldx #$1B ; 27 (spr=-21)
 	stx colpf0
-	ldy #$17 ; 23 (spr=-25)
-	ldx #$1F ; 31 (spr=-17)
-	sty colpf2
-	lda #$14 ; 20 (spr=-28)
+	ldy #$EA ; 234 (spr=186)
+	ldy #$1F ; 31 (spr=-17)
+	ldx #$1C ; 28 (spr=-20)
+	ldx #$1A ; 26 (spr=-22)
 	nop 
-	ldy #$02 ; 2 (spr=-46)
+	nop 
+	sta HPOSP2
+	lda #$EB ; 235 (spr=187)
+	ldx #$F7 ; 247 (spr=199)
+	sta colpf0
+	nop 
+	sty colpf0
+	lda #$01 ; 1 (spr=-47)
+	sta colpf0
+	nop 
+	ldy #$5A ; 90 (spr=42)
+	stx colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line170
+	lda #$00 ; 0 (spr=-48)
+	ldy #$1E ; 30 (spr=-18)
 	nop 
-	ldy #$02 ; 2 (spr=-46)
-	ldy #$B0 ; 176 (spr=128)
+	ldx #$0C ; 12 (spr=-36)
+	ldy #$1E ; 30 (spr=-18)
+	ldx #$16 ; 22 (spr=-26)
+	nop 
+	lda #$1E ; 30 (spr=-18)
+	ldy #$E0 ; 224 (spr=176)
+	lda #$FB ; 251 (spr=203)
+	ldx #$FD ; 253 (spr=205)
 	sta colpf0
-	nop 
-	ldy #$0C ; 12 (spr=-36)
-	lda #$1A ; 26 (spr=-22)
-	stx colpf0
-	sta colpf0
-	sty colpf2
-	stx colpf0
-	ldx #$0D ; 13 (spr=-35)
-	nop 
-	lda #$0F ; 15 (spr=-33)
-	ldx #$F8 ; 248 (spr=200)
-	lda #$0C ; 12 (spr=-36)
 	lda #$01 ; 1 (spr=-47)
-	lda #$E9 ; 233 (spr=185)
-	lda #$0E ; 14 (spr=-34)
-	nop ; filler
-	nop ; filler
+	stx colpf0
+	ldx #$C0 ; 192 (spr=144)
+	ldy #$19 ; 25 (spr=-23)
+	ldy #$FF ; 255 (spr=207)
+	ldx #$00 ; 0 (spr=-48)
+	ldx #$04 ; 4 (spr=-44)
+	sta colpf0
+	ldx #$F7 ; 247 (spr=199)
+	ldy #$06 ; 6 (spr=-42)
+	ldy #$EA ; 234 (spr=186)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line171
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$0E ; 14 (spr=-34)
-	ldy #$3D ; 61 (spr=13)
-	lda #$03 ; 3 (spr=-45)
-	ldx #$0E ; 14 (spr=-34)
-	ldx #$1B ; 27 (spr=-21)
+	lda #$1B ; 27 (spr=-21)
 	nop 
-	sty HPOSP3
-	lda #$0E ; 14 (spr=-34)
+	ldy #$3E ; 62 (spr=14)
 	stx colpf0
-	lda #$0E ; 14 (spr=-34)
-	ldx #$F4 ; 244 (spr=196)
-	ldy #$0A ; 10 (spr=-38)
-	ldy #$01 ; 1 (spr=-47)
+	ldx #$F3 ; 243 (spr=195)
+	sty HPOSP0
 	nop 
+	ldx #$FD ; 253 (spr=205)
+	sta colpf0
+	ldy #$2C ; 44 (spr=-4)
+	lda #$27 ; 39 (spr=-9)
+	ldx #$E8 ; 232 (spr=184)
+	ldx #$0A ; 10 (spr=-38)
+	ldy #$E2 ; 226 (spr=178)
+	lda #$0A ; 10 (spr=-38)
 	nop 
-	lda #$E9 ; 233 (spr=185)
-	lda #$2C ; 44 (spr=-4)
-	sty colpf2
-	ldy #$0C ; 12 (spr=-36)
-	lda #$2E ; 46 (spr=-2)
-	ldy #$00 ; 0 (spr=-48)
-	nop ; filler
+	ldy #$1A ; 26 (spr=-22)
+	lda #$00 ; 0 (spr=-48)
+	ldy #$06 ; 6 (spr=-42)
+	sta COLBAK
+	nop 
+	ldx #$1A ; 26 (spr=-22)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line172
-	sta colpf2
-	ldy #$0C ; 12 (spr=-36)
-	sta HPOSP3
-	stx COLPM3
-	lda #$0A ; 10 (spr=-38)
+	ldx #$0A ; 10 (spr=-38)
+	lda #$E2 ; 226 (spr=178)
+	sty COLBAK
+	ldy #$2E ; 46 (spr=-2)
+	lda #$00 ; 0 (spr=-48)
 	nop 
-	sty colpf2
-	nop 
-	lda #$0A ; 10 (spr=-38)
-	ldy #$0B ; 11 (spr=-37)
-	ldy #$1E ; 30 (spr=-18)
-	sta COLPM2
+	ldy #$1D ; 29 (spr=-19)
+	ldx #$E2 ; 226 (spr=178)
+	ldx #$0F ; 15 (spr=-33)
+	lda #$3E ; 62 (spr=14)
+	stx COLBAK
+	lda #$1A ; 26 (spr=-22)
 	sty colpf0
-	lda #$1D ; 29 (spr=-19)
-	lda #$0E ; 14 (spr=-34)
-	lda #$0C ; 12 (spr=-36)
-	lda #$0E ; 14 (spr=-34)
-	ldx #$1B ; 27 (spr=-21)
-	lda #$EA ; 234 (spr=186)
-	ldx #$0B ; 11 (spr=-37)
+	lda #$FE ; 254 (spr=206)
+	sta colpf0
+	ldx #$3A ; 58 (spr=10)
+	ldy #$1E ; 30 (spr=-18)
+	ldx #$1A ; 26 (spr=-22)
+	ldy #$1D ; 29 (spr=-19)
+	ldy #$0C ; 12 (spr=-36)
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line173
-	ldx #$A0 ; 160 (spr=112)
-	ldx #$0B ; 11 (spr=-37)
-	lda #$0C ; 12 (spr=-36)
-	lda #$16 ; 22 (spr=-26)
 	nop 
-	lda #$2C ; 44 (spr=-4)
-	lda #$EA ; 234 (spr=186)
-	ldx #$1B ; 27 (spr=-21)
-	lda #$3E ; 62 (spr=14)
+	nop 
+	sty HPOSP0
+	ldy #$2E ; 46 (spr=-2)
+	lda #$1A ; 26 (spr=-22)
+	nop 
+	sty HPOSP0
+	sta colpf0
+	nop 
+	ldx #$0A ; 10 (spr=-38)
+	ldy #$EC ; 236 (spr=188)
+	sty colpf0
+	ldx #$1E ; 30 (spr=-18)
+	lda #$01 ; 1 (spr=-47)
 	stx colpf0
-	ldx #$C4 ; 196 (spr=148)
-	stx HPOSP3
-	ldx #$0C ; 12 (spr=-36)
-	ldx #$01 ; 1 (spr=-47)
-	sty colpf0
-	stx COLPM3
-	lda #$0F ; 15 (spr=-33)
-	ldy #$F5 ; 245 (spr=197)
-	ldx #$1C ; 28 (spr=-20)
-	sty colpf0
-	nop ; filler
+	sta colpf0
+	ldy #$0C ; 12 (spr=-36)
+	ldx #$1D ; 29 (spr=-19)
+	ldy #$EC ; 236 (spr=188)
+	ldy #$0C ; 12 (spr=-36)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line174
-	ldy #$5A ; 90 (spr=42)
-	ldy #$1A ; 26 (spr=-22)
+	stx COLBAK
+	ldx #$F6 ; 246 (spr=198)
+	ldy #$2C ; 44 (spr=-4)
+	ldy #$06 ; 6 (spr=-42)
+	lda #$19 ; 25 (spr=-23)
+	ldx #$0E ; 14 (spr=-34)
+	lda #$1A ; 26 (spr=-22)
+	sta colpf0
+	sty COLBAK
+	stx COLBAK
 	nop 
-	nop 
-	lda #$0E ; 14 (spr=-34)
-	sta COLPM1
-	lda #$E0 ; 224 (spr=176)
+	lda #$FF ; 255 (spr=207)
+	ldx #$91 ; 145 (spr=97)
+	sta colpf0
+	ldy #$1E ; 30 (spr=-18)
 	stx colpf0
-	sty colpf0
-	lda #$1F ; 31 (spr=-17)
-	sta colpf1
-	ldy #$1A ; 26 (spr=-22)
-	ldx #$90 ; 144 (spr=96)
+	lda #$00 ; 0 (spr=-48)
 	ldy #$0C ; 12 (spr=-36)
-	nop 
-	lda #$0A ; 10 (spr=-38)
-	nop 
-	stx colpf1
-	ldy #$E2 ; 226 (spr=178)
-	ldx #$0F ; 15 (spr=-33)
-	lda #$82 ; 130 (spr=82)
+	sta colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line175
-	lda #$0C ; 12 (spr=-36)
 	sty colpf1
-	ldy #$1F ; 31 (spr=-17)
-	lda #$1C ; 28 (spr=-20)
-	ldx #$0E ; 14 (spr=-34)
-	ldy #$06 ; 6 (spr=-42)
-	ldy #$16 ; 22 (spr=-26)
-	ldx #$90 ; 144 (spr=96)
-	sta colpf1
-	lda #$82 ; 130 (spr=82)
-	sta HPOSP2
+	lda #$4A ; 74 (spr=26)
 	nop 
-	ldx #$FF ; 255 (spr=207)
+	ldx #$09 ; 9 (spr=-39)
+	lda #$1D ; 29 (spr=-19)
+	nop 
+	lda #$1A ; 26 (spr=-22)
+	sta colpf0
 	stx colpf1
-	ldy #$3E ; 62 (spr=14)
+	lda #$FC ; 252 (spr=204)
 	nop 
-	sta colpf1
-	ldy #$E3 ; 227 (spr=179)
+	sta colpf0
+	lda #$0E ; 14 (spr=-34)
+	ldx #$82 ; 130 (spr=82)
 	nop 
-	ldx #$1C ; 28 (spr=-20)
+	lda #$18 ; 24 (spr=-24)
+	stx colpf0
+	ldx #$28 ; 40 (spr=-8)
+	ldx #$1B ; 27 (spr=-21)
+	nop 
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line176
-	sty colpf1
-	lda #$26 ; 38 (spr=-10)
-	ldx #$28 ; 40 (spr=-8)
-	ldy #$1A ; 26 (spr=-22)
-	ldy #$0C ; 12 (spr=-36)
-	lda #$1F ; 31 (spr=-17)
 	nop 
-	sta colpf1
-	stx colpf1
-	ldy #$58 ; 88 (spr=40)
-	ldy #$ED ; 237 (spr=189)
-	nop 
-	sty COLPM0
-	sta colpf1
-	ldy #$E3 ; 227 (spr=179)
-	sty colpf1
-	ldx #$1F ; 31 (spr=-17)
-	lda #$00 ; 0 (spr=-48)
-	lda #$00 ; 0 (spr=-48)
-	lda #$0A ; 10 (spr=-38)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line177
-	lda #$10 ; 16 (spr=-32)
-	stx COLPM0
-	lda #$0A ; 10 (spr=-38)
-	ldy #$0E ; 14 (spr=-34)
-	ldy #$F2 ; 242 (spr=194)
-	lda #$05 ; 5 (spr=-43)
-	lda #$09 ; 9 (spr=-39)
-	stx colpf1
-	sta colpf1
-	lda #$16 ; 22 (spr=-26)
-	ldx #$1C ; 28 (spr=-20)
 	stx colpf0
-	ldy #$E2 ; 226 (spr=178)
-	ldx #$0E ; 14 (spr=-34)
-	nop 
-	lda #$F8 ; 248 (spr=200)
-	ldx #$0E ; 14 (spr=-34)
-	ldx #$1A ; 26 (spr=-22)
-	ldx #$A2 ; 162 (spr=114)
-	sty colpf1
-	ldy #$16 ; 22 (spr=-26)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line178
-	stx HPOSP0
-	nop 
-	ldy #$0C ; 12 (spr=-36)
-	ldy #$2C ; 44 (spr=-4)
-	ldx #$F9 ; 249 (spr=201)
-	ldy #$0C ; 12 (spr=-36)
-	ldy #$1A ; 26 (spr=-22)
-	sty colpf1
-	sta colpf0
-	sty colpf1
-	nop 
-	ldx #$0E ; 14 (spr=-34)
-	lda #$08 ; 8 (spr=-40)
-	stx colpf1
-	nop 
-	lda #$0E ; 14 (spr=-34)
-	sty colpf1
-	ldy #$7C ; 124 (spr=76)
-	ldy #$1F ; 31 (spr=-17)
-	ldy #$1F ; 31 (spr=-17)
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line179
-	ldy #$E3 ; 227 (spr=179)
-	sty colpf1
-	ldy #$0A ; 10 (spr=-38)
-	ldx #$00 ; 0 (spr=-48)
-	nop 
-	ldy #$FA ; 250 (spr=202)
-	lda #$1C ; 28 (spr=-20)
-	sty colpf1
-	ldy #$0A ; 10 (spr=-38)
-	ldy #$E4 ; 228 (spr=180)
-	nop 
-	nop 
-	ldx #$1A ; 26 (spr=-22)
-	ldy #$0F ; 15 (spr=-33)
-	ldx #$0A ; 10 (spr=-38)
-	sty colpf1
-	ldy #$04 ; 4 (spr=-44)
-	sty colpf1
-	ldy #$12 ; 18 (spr=-30)
-	ldy #$1C ; 28 (spr=-20)
-	ldx #$1C ; 28 (spr=-20)
-	nop ; filler
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line180
-	lda #$10 ; 16 (spr=-32)
-	nop 
-	ldx #$0D ; 13 (spr=-35)
-	ldy #$D4 ; 212 (spr=164)
-	sty colpf1
-	ldy #$E8 ; 232 (spr=184)
-	ldy #$1A ; 26 (spr=-22)
-	sty colpf1
-	ldx #$08 ; 8 (spr=-40)
-	stx colpf1
-	sty colpf1
+	sty COLPM3
 	ldx #$0C ; 12 (spr=-36)
-	ldy #$05 ; 5 (spr=-43)
-	ldx #$2B ; 43 (spr=-5)
-	sty colpf1
+	sta COLPM1
+	ldy #$1A ; 26 (spr=-22)
+	ldx #$19 ; 25 (spr=-23)
+	ldx #$0A ; 10 (spr=-38)
+	nop 
+	stx COLPM1
 	nop 
 	nop 
 	nop 
 	ldy #$06 ; 6 (spr=-42)
+	stx COLPM3
+	ldx #$0C ; 12 (spr=-36)
 	nop 
+	stx COLBAK
+	ldy #$0A ; 10 (spr=-38)
+	nop 
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line177
+	nop 
+	sta COLPM1
+	ldx #$09 ; 9 (spr=-39)
+	ldy #$70 ; 112 (spr=64)
+	lda #$39 ; 57 (spr=9)
+	sta HPOSP3
+	lda #$08 ; 8 (spr=-40)
+	sty HPOSP3
+	lda #$F6 ; 246 (spr=198)
+	ldx #$27 ; 39 (spr=-9)
+	ldy #$FD ; 253 (spr=205)
+	lda #$0E ; 14 (spr=-34)
+	sty colpf1
+	ldy #$1C ; 28 (spr=-20)
+	sta COLBAK
+	ldy #$01 ; 1 (spr=-47)
+	sty colpf1
+	lda #$0C ; 12 (spr=-36)
+	nop 
+	nop 
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line178
+	ldy #$F6 ; 246 (spr=198)
+	ldy #$0D ; 13 (spr=-35)
+	nop 
+	nop 
+	sty colpf1
+	lda #$FA ; 250 (spr=202)
+	lda #$08 ; 8 (spr=-40)
+	sta COLPM2
+	sta colpf1
+	sty colpf1
+	lda #$E4 ; 228 (spr=180)
+	sty COLPM0
+	ldy #$1F ; 31 (spr=-17)
+	sty colpf1
+	sta COLPM2
+	ldy #$0D ; 13 (spr=-35)
 	ldx #$10 ; 16 (spr=-32)
+	ldy #$3C ; 60 (spr=12)
+	lda #$09 ; 9 (spr=-39)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line179
+	ldx #$04 ; 4 (spr=-44)
+	nop 
+	nop 
+	sty HPOSP3
+	ldy #$80 ; 128 (spr=80)
+	nop 
+	nop 
+	sty HPOSP3
+	sta colpf1
+	ldy #$0C ; 12 (spr=-36)
+	sty colpf1
+	sty COLPM0
+	ldy #$1F ; 31 (spr=-17)
+	sty colpf1
+	ldy #$0C ; 12 (spr=-36)
+	stx colpf1
+	sta colpf1
+	ldy #$39 ; 57 (spr=9)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line180
+	lda #$EE ; 238 (spr=190)
+	sty HPOSP3
+	lda #$1C ; 28 (spr=-20)
+	lda #$28 ; 40 (spr=-8)
+	nop 
+	ldy #$7E ; 126 (spr=78)
+	nop 
+	sty HPOSP3
+	lda #$3A ; 58 (spr=10)
+	lda #$48 ; 72 (spr=24)
+	ldy #$6D ; 109 (spr=61)
+	sty colpf1
+	ldy #$0D ; 13 (spr=-35)
+	sty colpf1
+	ldy #$19 ; 25 (spr=-23)
+	nop 
+	lda #$01 ; 1 (spr=-47)
+	stx colpf1
+	sta colpf1
+	ldy #$EA ; 234 (spr=186)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line181
-	ldy #$F6 ; 246 (spr=198)
-	ldy #$E4 ; 228 (spr=180)
-	sty colpf1
-	ldx #$5E ; 94 (spr=46)
-	ldy #$1A ; 26 (spr=-22)
-	ldy #$1B ; 27 (spr=-21)
-	ldx #$82 ; 130 (spr=82)
-	sty colpf1
-	ldx #$1A ; 26 (spr=-22)
+	lda #$08 ; 8 (spr=-40)
+	ldx #$1F ; 31 (spr=-17)
+	nop 
+	nop 
+	ldy #$3A ; 58 (spr=10)
+	sta colpf1
+	ldx #$76 ; 118 (spr=70)
+	sty COLPM2
+	sta COLPM2
+	lda #$0C ; 12 (spr=-36)
+	sta colpf1
+	stx HPOSP2
+	nop 
+	nop 
+	ldy #$0A ; 10 (spr=-38)
+	ldx #$06 ; 6 (spr=-42)
 	stx colpf1
-	ldx #$18 ; 24 (spr=-24)
-	lda #$0A ; 10 (spr=-38)
-	ldy #$04 ; 4 (spr=-44)
-	lda #$1C ; 28 (spr=-20)
-	nop 
-	sty colpf1
-	nop 
-	nop 
-	nop 
-	ldy #$04 ; 4 (spr=-44)
-	nop 
-	ldy #$32 ; 50 (spr=2)
+	sta COLBAK
+	lda #$E3 ; 227 (spr=179)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line182
-	ldy #$0E ; 14 (spr=-34)
-	ldx #$E4 ; 228 (spr=180)
-	ldy #$1A ; 26 (spr=-22)
+	ldy #$28 ; 40 (spr=-8)
+	ldy #$1E ; 30 (spr=-18)
 	nop 
-	lda #$1C ; 28 (spr=-20)
-	ldx #$1E ; 30 (spr=-18)
-	ldx #$1A ; 26 (spr=-22)
-	lda #$FC ; 252 (spr=204)
-	sty colpf1
+	ldx #$09 ; 9 (spr=-39)
 	nop 
-	sty colpf1
-	ldy #$F4 ; 244 (spr=196)
-	ldx #$EA ; 234 (spr=186)
-	ldy #$04 ; 4 (spr=-44)
-	lda #$0A ; 10 (spr=-38)
-	sty colpf1
+	ldx #$08 ; 8 (spr=-40)
 	nop 
-	lda #$0C ; 12 (spr=-36)
-	ldx #$1E ; 30 (spr=-18)
-	stx COLPM1
-	ldy #$0C ; 12 (spr=-36)
+	nop 
+	sty colpf2
+	ldx #$0F ; 15 (spr=-33)
+	ldy #$17 ; 23 (spr=-25)
+	sta COLPM0
+	sty COLPM1
+	ldy #$F8 ; 248 (spr=200)
+	lda #$04 ; 4 (spr=-44)
+	stx colpf0
+	sty colpf2
+	sta colpf0
+	ldx #$0C ; 12 (spr=-36)
 	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line183
-	ldy #$E6 ; 230 (spr=182)
-	ldy #$E2 ; 226 (spr=178)
-	ldx #$0E ; 14 (spr=-34)
-	ldx #$07 ; 7 (spr=-41)
+	lda #$2A ; 42 (spr=-6)
 	nop 
-	sty colpf1
-	lda #$E6 ; 230 (spr=182)
-	ldy #$1A ; 26 (spr=-22)
-	ldx #$FA ; 250 (spr=202)
-	lda #$1C ; 28 (spr=-20)
+	stx colpf0
 	nop 
-	ldx #$1C ; 28 (spr=-20)
-	sty colpf1
-	lda #$16 ; 22 (spr=-26)
-	ldx #$1C ; 28 (spr=-20)
-	ldx #$EB ; 235 (spr=187)
+	ldx #$2A ; 42 (spr=-6)
+	nop 
+	ldy #$38 ; 56 (spr=8)
+	ldy #$E4 ; 228 (spr=180)
+	stx colpf0
+	ldx #$0C ; 12 (spr=-36)
+	ldy #$28 ; 40 (spr=-8)
 	ldy #$0F ; 15 (spr=-33)
-	sty colpf1
-	ldy #$0E ; 14 (spr=-34)
-	ldx #$09 ; 9 (spr=-39)
-	sta colpf2
-	ldy #$E0 ; 224 (spr=176)
+	stx colpf0
+	ldx #$1D ; 29 (spr=-19)
+	stx colpf0
+	sty colpf0
+	lda #$EA ; 234 (spr=186)
+	lda #$A5 ; 165 (spr=117)
+	ldy #$E8 ; 232 (spr=184)
+	nop 
+	ldx #$E4 ; 228 (spr=180)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line184
-	sty colpf1
-	ldy #$0F ; 15 (spr=-33)
-	sty COLPM1
-	nop 
-	nop 
-	ldy #$46 ; 70 (spr=22)
-	ldy #$1B ; 27 (spr=-21)
-	sty colpf1
-	ldy #$0C ; 12 (spr=-36)
-	stx colpf2
-	ldx #$E8 ; 232 (spr=184)
-	lda #$E5 ; 229 (spr=181)
-	sty colpf2
-	sta colpf1
-	nop 
-	ldx #$16 ; 22 (spr=-26)
-	ldx #$18 ; 24 (spr=-24)
-	ldy #$A7 ; 167 (spr=119)
-	ldy #$E9 ; 233 (spr=185)
+	ldy #$C0 ; 192 (spr=144)
+	stx colpf0
+	lda #$06 ; 6 (spr=-42)
 	ldy #$08 ; 8 (spr=-40)
+	nop 
+	ldx #$02 ; 2 (spr=-46)
+	lda #$02 ; 2 (spr=-46)
+	nop 
+	ldy #$16 ; 22 (spr=-26)
+	nop 
+	ldx #$1B ; 27 (spr=-21)
+	stx colpf0
+	lda #$F6 ; 246 (spr=198)
+	lda #$08 ; 8 (spr=-40)
+	ldx #$D0 ; 208 (spr=160)
+	ldy #$FE ; 254 (spr=206)
+	sty colpf0
+	stx colpf0
+	ldx #$04 ; 4 (spr=-44)
+	stx colpf0
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line185
-	lda #$17 ; 23 (spr=-25)
 	nop 
-	lda #$1E ; 30 (spr=-18)
-	ldx #$29 ; 41 (spr=-7)
-	ldy #$ED ; 237 (spr=189)
-	ldx #$0C ; 12 (spr=-36)
-	ldx #$48 ; 72 (spr=24)
-	ldy #$E9 ; 233 (spr=185)
-	ldx #$E5 ; 229 (spr=181)
-	ldx #$1C ; 28 (spr=-20)
-	lda #$1E ; 30 (spr=-18)
+	nop 
+	ldx #$18 ; 24 (spr=-24)
 	ldy #$1A ; 26 (spr=-22)
-	sty colpf1
-	ldy #$16 ; 22 (spr=-26)
-	ldy #$08 ; 8 (spr=-40)
-	ldy #$A7 ; 167 (spr=119)
-	stx colpf1
-	ldx #$2D ; 45 (spr=-3)
-	lda #$E2 ; 226 (spr=178)
-	sta colpf1
+	ldy #$9E ; 158 (spr=110)
 	nop 
-	nop ; filler
-	nop ; filler
+	ldy #$18 ; 24 (spr=-24)
+	ldx #$2A ; 42 (spr=-6)
+	ldy #$3B ; 59 (spr=11)
+	nop 
+	ldy #$02 ; 2 (spr=-46)
+	ldx #$1B ; 27 (spr=-21)
+	stx colpf0
+	lda #$06 ; 6 (spr=-42)
+	ldx #$00 ; 0 (spr=-48)
+	ldy #$0F ; 15 (spr=-33)
+	nop 
+	lda #$6B ; 107 (spr=59)
+	sty colpf0
+	stx colpf0
+	ldy #$0A ; 10 (spr=-38)
+	sty colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line186
-	sty HPOSP0
-	ldy #$03 ; 3 (spr=-45)
-	sty COLPM3
-	lda #$0E ; 14 (spr=-34)
-	ldy #$0E ; 14 (spr=-34)
+	ldy #$04 ; 4 (spr=-44)
 	nop 
-	stx HPOSP1
 	nop 
+	ldy #$0A ; 10 (spr=-38)
+	ldx #$19 ; 25 (spr=-23)
+	ldx #$08 ; 8 (spr=-40)
+	ldx #$1E ; 30 (spr=-18)
+	ldx #$E3 ; 227 (spr=179)
+	ldy #$FE ; 254 (spr=206)
+	lda #$1C ; 28 (spr=-20)
+	stx colpf0
 	ldx #$1A ; 26 (spr=-22)
-	stx colpf1
-	lda #$00 ; 0 (spr=-48)
+	stx colpf0
 	nop 
-	ldy #$14 ; 20 (spr=-28)
-	ldy #$16 ; 22 (spr=-26)
-	ldy #$0F ; 15 (spr=-33)
-	sty colpf1
-	sta colpf1
-	ldx #$E0 ; 224 (spr=176)
-	ldy #$0B ; 11 (spr=-37)
-	ldy #$FA ; 250 (spr=202)
+	ldy #$1E ; 30 (spr=-18)
+	ldx #$02 ; 2 (spr=-46)
+	sty colpf0
+	ldy #$00 ; 0 (spr=-48)
+	stx colpf0
+	sty colpf0
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line187
+	ldx #$1A ; 26 (spr=-22)
+	lda #$2D ; 45 (spr=-3)
+	sta colpf0
+	ldy #$00 ; 0 (spr=-48)
+	ldx #$E2 ; 226 (spr=178)
+	lda #$28 ; 40 (spr=-8)
+	ldy #$2E ; 46 (spr=-2)
 	nop 
-	stx COLPM1
-	lda #$1A ; 26 (spr=-22)
-	ldx #$01 ; 1 (spr=-47)
-	ldy #$E2 ; 226 (spr=178)
-	sty colpf1
-	ldy #$93 ; 147 (spr=99)
-	stx COLPM3
-	ldx #$0E ; 14 (spr=-34)
-	sta colpf1
-	sty HPOSP2
-	ldy #$02 ; 2 (spr=-46)
 	nop 
-	lda #$05 ; 5 (spr=-43)
-	stx colpf1
-	sta colpf1
-	sty colpf1
+	stx colpf0
+	ldx #$1A ; 26 (spr=-22)
+	stx colpf0
+	ldy #$0F ; 15 (spr=-33)
 	nop 
+	ldx #$D1 ; 209 (spr=161)
+	nop 
+	sty colpf0
+	stx colpf0
+	ldx #$04 ; 4 (spr=-44)
+	lda #$E1 ; 225 (spr=177)
+	ldy #$2B ; 43 (spr=-5)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line188
-	ldy #$06 ; 6 (spr=-42)
-	sty colpf1
+	ldy #$D6 ; 214 (spr=166)
+	lda #$0C ; 12 (spr=-36)
+	lda #$13 ; 19 (spr=-29)
 	nop 
-	nop 
-	ldy #$E2 ; 226 (spr=178)
-	nop 
-	ldx #$09 ; 9 (spr=-39)
-	sty colpf1
-	nop 
-	ldy #$0D ; 13 (spr=-35)
-	stx colpf1
-	ldy #$EA ; 234 (spr=186)
-	ldx #$0C ; 12 (spr=-36)
-	sty colpf1
-	ldy #$0E ; 14 (spr=-34)
-	sty colpf1
-	sta colpf1
-	ldy #$E3 ; 227 (spr=179)
-	lda #$48 ; 72 (spr=24)
-	nop 
+	ldx #$36 ; 54 (spr=6)
+	ldx #$14 ; 20 (spr=-28)
+	ldx #$E3 ; 227 (spr=179)
+	ldy #$26 ; 38 (spr=-10)
+	lda #$E1 ; 225 (spr=177)
+	stx colpf0
+	ldx #$04 ; 4 (spr=-44)
+	ldx #$1A ; 26 (spr=-22)
+	stx colpf0
+	ldx #$16 ; 22 (spr=-26)
+	ldx #$02 ; 2 (spr=-46)
+	lda #$1A ; 26 (spr=-22)
+	ldy #$1E ; 30 (spr=-18)
+	sty colpf0
+	stx colpf0
+	ldy #$13 ; 19 (spr=-29)
+	ldx #$0D ; 13 (spr=-35)
+	lda #$28 ; 40 (spr=-8)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line189
-	lda #$00 ; 0 (spr=-48)
-	nop 
-	nop 
-	lda #$0A ; 10 (spr=-38)
-	ldx #$04 ; 4 (spr=-44)
-	nop 
-	sty colpf1
-	nop 
-	nop 
-	ldy #$17 ; 23 (spr=-25)
-	lda #$07 ; 7 (spr=-41)
-	sty colpf1
-	ldx #$1A ; 26 (spr=-22)
-	stx colpf1
-	nop 
-	sta colpf1
-	ldy #$EA ; 234 (spr=186)
-	ldx #$E3 ; 227 (spr=179)
-	stx colpf1
-	ldx #$06 ; 6 (spr=-42)
+	lda #$F3 ; 243 (spr=195)
+	lda #$28 ; 40 (spr=-8)
+	ldx #$2B ; 43 (spr=-5)
+	ldy #$06 ; 6 (spr=-42)
+	lda #$49 ; 73 (spr=25)
+	ldy #$12 ; 18 (spr=-30)
+	ldx #$E2 ; 226 (spr=178)
+	ldx #$27 ; 39 (spr=-9)
+	ldy #$18 ; 24 (spr=-24)
+	stx colpf0
+	ldy #$0F ; 15 (spr=-33)
+	ldx #$1D ; 29 (spr=-19)
+	sta colpf0
+	stx colpf0
+	ldx #$E0 ; 224 (spr=176)
+	lda #$19 ; 25 (spr=-23)
+	sty colpf0
+	stx colpf0
+	ldx #$0E ; 14 (spr=-34)
+	ldx #$E2 ; 226 (spr=178)
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line190
-	ldx #$0E ; 14 (spr=-34)
+	nop 
+	nop 
+	ldy #$18 ; 24 (spr=-24)
+	ldy #$16 ; 22 (spr=-26)
+	ldx #$E5 ; 229 (spr=181)
 	ldy #$14 ; 20 (spr=-28)
-	nop 
-	ldy #$0B ; 11 (spr=-37)
-	sty COLPM2
-	lda #$04 ; 4 (spr=-44)
-	nop 
-	lda #$17 ; 23 (spr=-25)
-	sta colpf1
-	lda #$EB ; 235 (spr=187)
-	nop 
-	nop 
-	sta colpf1
-	lda #$00 ; 0 (spr=-48)
-	lda #$04 ; 4 (spr=-44)
-	nop 
-	stx colpf1
-	nop 
-	sta colpf2
-	lda #$07 ; 7 (spr=-41)
-	nop 
-	nop ; filler
-	cmp byt2; on zero page so 3 cycles
-line191
-	sta COLPM3
-	nop 
-	lda #$E2 ; 226 (spr=178)
-	ldy #$0E ; 14 (spr=-34)
-	sta colpf1
-	lda #$04 ; 4 (spr=-44)
-	nop 
-	lda #$0C ; 12 (spr=-36)
-	ldx #$16 ; 22 (spr=-26)
-	stx colpf1
-	nop 
-	sta colpf1
 	ldy #$1E ; 30 (spr=-18)
 	nop 
 	nop 
-	lda #$E3 ; 227 (spr=179)
+	stx colpf0
+	lda #$03 ; 3 (spr=-45)
+	ldx #$1A ; 26 (spr=-22)
+	stx colpf0
+	ldx #$03 ; 3 (spr=-45)
+	lda #$D7 ; 215 (spr=167)
+	lda #$16 ; 22 (spr=-26)
+	sty colpf0
+	nop 
+	stx colpf0
+	lda #$1A ; 26 (spr=-22)
+	ldx #$32 ; 50 (spr=2)
+	lda #$E5 ; 229 (spr=181)
+	nop ; filler
+	cmp byt2; on zero page so 3 cycles
+line191
+	nop 
+	stx HPOSP3
 	nop 
 	nop 
-	sta colpf1
-	sty COLPM3
+	stx HPOSP0
+	ldx #$D2 ; 210 (spr=162)
+	ldx #$0A ; 10 (spr=-38)
+	sta colpf0
+	lda #$17 ; 23 (spr=-25)
+	stx colpf0
+	sty colpf1
+	nop 
+	ldy #$07 ; 7 (spr=-41)
+	sty colpf0
+	ldy #$04 ; 4 (spr=-44)
+	sty colpf1
+	nop 
+	ldy #$E6 ; 230 (spr=182)
+	ldx #$88 ; 136 (spr=88)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line192
+	sta COLPM2
+	stx HPOSP3
+	sty COLPM2
+	lda #$1B ; 27 (spr=-21)
 	nop 
-	ldy #$D6 ; 214 (spr=166)
+	ldx #$03 ; 3 (spr=-45)
+	ldy #$F6 ; 246 (spr=198)
+	nop 
+	ldy #$56 ; 86 (spr=38)
 	sta colpf1
-	lda #$00 ; 0 (spr=-48)
-	ldy #$13 ; 19 (spr=-29)
-	ldy #$FA ; 250 (spr=202)
-	lda #$06 ; 6 (spr=-42)
-	lda #$0C ; 12 (spr=-36)
-	ldy #$02 ; 2 (spr=-46)
-	ldy #$26 ; 38 (spr=-10)
-	stx colpf1
-	stx colpf1
-	sta colpf1
-	lda #$0E ; 14 (spr=-34)
-	ldy #$02 ; 2 (spr=-46)
-	ldx #$F3 ; 243 (spr=195)
-	sta colpf1
-	ldx #$17 ; 23 (spr=-25)
-	lda #$E3 ; 227 (spr=179)
-	sta colpf1
+	lda #$0F ; 15 (spr=-33)
+	ldy #$1F ; 31 (spr=-17)
+	sta colpf0
+	sty colpf1
+	ldy #$E4 ; 228 (spr=180)
+	sty colpf0
+	nop 
+	nop ; filler
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line193
-	lda #$D2 ; 210 (spr=162)
-	lda #$E3 ; 227 (spr=179)
-	sta colpf1
-	sty COLPM3
-	nop 
-	lda #$0E ; 14 (spr=-34)
-	nop 
-	ldy #$D8 ; 216 (spr=168)
 	stx colpf1
 	lda #$0C ; 12 (spr=-36)
-	ldy #$16 ; 22 (spr=-26)
-	sta colpf1
-	ldx #$35 ; 53 (spr=5)
-	ldx #$0A ; 10 (spr=-38)
-	nop 
-	lda #$E2 ; 226 (spr=178)
-	ldy #$2E ; 46 (spr=-2)
-	sta colpf1
+	ldx #$49 ; 73 (spr=25)
+	lda #$02 ; 2 (spr=-46)
+	ldy #$07 ; 7 (spr=-41)
+	lda #$0A ; 10 (spr=-38)
 	nop 
 	nop 
+	sty colpf1
+	stx colpf0
+	ldy #$07 ; 7 (spr=-41)
+	lda #$78 ; 120 (spr=72)
+	ldy #$07 ; 7 (spr=-41)
+	ldy #$1F ; 31 (spr=-17)
+	sty colpf0
+	ldx #$03 ; 3 (spr=-45)
+	nop 
+	stx colpf0
+	ldx #$02 ; 2 (spr=-46)
+	ldy #$FE ; 254 (spr=206)
 	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line194
-	ldx #$E8 ; 232 (spr=184)
-	nop 
-	lda #$01 ; 1 (spr=-47)
-	ldy #$19 ; 25 (spr=-23)
-	sta COLPM3
-	nop 
 	lda #$1B ; 27 (spr=-21)
-	ldx #$16 ; 22 (spr=-26)
-	lda #$28 ; 40 (spr=-8)
-	lda #$0D ; 13 (spr=-35)
-	stx colpf1
-	ldx #$46 ; 70 (spr=22)
+	ldx #$E2 ; 226 (spr=178)
+	ldy #$F3 ; 243 (spr=195)
+	ldy #$00 ; 0 (spr=-48)
+	ldy #$0E ; 14 (spr=-34)
+	ldy #$00 ; 0 (spr=-48)
+	ldy #$2C ; 44 (spr=-4)
+	ldy #$0A ; 10 (spr=-38)
+	ldy #$E5 ; 229 (spr=181)
+	sty colpf0
+	ldx #$38 ; 56 (spr=8)
+	ldx #$00 ; 0 (spr=-48)
+	ldy #$FE ; 254 (spr=206)
+	nop 
+	sta colpf0
+	lda #$0A ; 10 (spr=-38)
+	lda #$09 ; 9 (spr=-39)
+	sty colpf0
+	stx colpf0
 	ldx #$E1 ; 225 (spr=177)
-	sta colpf1
-	ldy #$A6 ; 166 (spr=118)
-	lda #$F7 ; 247 (spr=199)
-	ldy #$EA ; 234 (spr=186)
-	lda #$0C ; 12 (spr=-36)
-	stx colpf1
-	lda #$E3 ; 227 (spr=179)
-	ldy #$F4 ; 244 (spr=196)
-	nop ; filler
+	stx colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line195
-	ldx #$13 ; 19 (spr=-29)
-	ldy #$F4 ; 244 (spr=196)
-	ldx #$16 ; 22 (spr=-26)
-	nop 
-	ldx #$18 ; 24 (spr=-24)
-	nop 
-	ldx #$1E ; 30 (spr=-18)
-	sta COLPM1
+	ldy #$08 ; 8 (spr=-40)
 	ldx #$E5 ; 229 (spr=181)
-	stx colpf1
-	lda #$0C ; 12 (spr=-36)
 	nop 
-	sta colpf1
-	lda #$EA ; 234 (spr=186)
-	ldx #$F1 ; 241 (spr=193)
-	nop 
+	ldy #$5C ; 92 (spr=44)
+	lda #$FA ; 250 (spr=202)
+	sty HPOSP3
+	stx COLPM3
+	ldx #$1D ; 29 (spr=-19)
+	ldy #$1C ; 28 (spr=-20)
+	ldy #$46 ; 70 (spr=22)
+	sty colpf0
+	ldx #$0A ; 10 (spr=-38)
+	stx colpf0
+	ldy #$1F ; 31 (spr=-17)
+	sty colpf0
 	ldx #$03 ; 3 (spr=-45)
-	ldy #$E4 ; 228 (spr=180)
-	stx colpf1
-	ldx #$E1 ; 225 (spr=177)
-	ldy #$0A ; 10 (spr=-38)
-	lda #$0D ; 13 (spr=-35)
+	stx colpf0
+	ldy #$08 ; 8 (spr=-40)
+	ldx #$0A ; 10 (spr=-38)
+	nop 
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line196
-	ldx #$39 ; 57 (spr=9)
+	lda #$1A ; 26 (spr=-22)
 	nop 
-	ldx #$00 ; 0 (spr=-48)
-	ldy #$E2 ; 226 (spr=178)
-	ldx #$3F ; 63 (spr=15)
+	ldy #$05 ; 5 (spr=-43)
+	ldx #$26 ; 38 (spr=-10)
+	sty COLPM3
 	nop 
-	ldy #$44 ; 68 (spr=20)
-	ldx #$18 ; 24 (spr=-24)
-	ldx #$E4 ; 228 (spr=180)
-	ldy #$59 ; 89 (spr=41)
-	stx colpf1
-	ldy #$00 ; 0 (spr=-48)
-	ldx #$1E ; 30 (spr=-18)
-	ldx #$EA ; 234 (spr=186)
-	stx colpf1
-	lda #$0D ; 13 (spr=-35)
-	lda #$0C ; 12 (spr=-36)
-	sta colpf1
-	ldx #$E1 ; 225 (spr=177)
-	stx colpf1
-	ldx #$00 ; 0 (spr=-48)
-	ldx #$27 ; 39 (spr=-9)
+	lda #$0A ; 10 (spr=-38)
+	ldx #$E5 ; 229 (spr=181)
+	ldy #$1F ; 31 (spr=-17)
+	nop 
+	stx colpf0
+	ldx #$09 ; 9 (spr=-39)
+	ldx #$06 ; 6 (spr=-42)
+	sta colpf0
+	nop 
+	ldx #$E0 ; 224 (spr=176)
+	sty colpf0
+	stx colpf0
+	ldy #$46 ; 70 (spr=22)
+	nop 
+	lda #$46 ; 70 (spr=22)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line197
+	ldx #$E2 ; 226 (spr=178)
 	nop 
 	nop 
-	lda #$05 ; 5 (spr=-43)
-	ldy #$FF ; 255 (spr=207)
-	ldx #$14 ; 20 (spr=-28)
-	ldx #$09 ; 9 (spr=-39)
+	ldy #$0A ; 10 (spr=-38)
+	ldx #$07 ; 7 (spr=-41)
+	ldx #$06 ; 6 (spr=-42)
+	ldx #$08 ; 8 (spr=-40)
+	ldy #$58 ; 88 (spr=40)
 	nop 
-	ldx #$E4 ; 228 (spr=180)
-	lda #$0D ; 13 (spr=-35)
-	stx colpf1
-	ldy #$00 ; 0 (spr=-48)
-	ldx #$09 ; 9 (spr=-39)
-	ldy #$02 ; 2 (spr=-46)
-	stx colpf1
-	nop 
-	ldx #$03 ; 3 (spr=-45)
-	sta colpf1
-	lda #$1E ; 30 (spr=-18)
-	nop 
-	sta colpf1
-	nop 
-	lda #$E1 ; 225 (spr=177)
+	sty HPOSP1
+	sta colpf0
+	lda #$03 ; 3 (spr=-45)
+	ldy #$F0 ; 240 (spr=192)
+	stx colpf0
+	ldy #$0E ; 14 (spr=-34)
+	sty colpf0
+	ldx #$01 ; 1 (spr=-47)
+	stx colpf0
+	ldy #$E4 ; 228 (spr=180)
+	sta colpf0
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line198
-	stx colpf1
-	lda #$E1 ; 225 (spr=177)
-	sta colpf1
-	nop 
-	ldy #$28 ; 40 (spr=-8)
-	lda #$F5 ; 245 (spr=197)
-	stx COLPM1
-	ldx #$D4 ; 212 (spr=164)
-	stx colpf1
+	ldy #$26 ; 38 (spr=-10)
+	lda #$07 ; 7 (spr=-41)
 	lda #$0C ; 12 (spr=-36)
-	sty HPOSP1
-	sta colpf1
+	ldx #$1B ; 27 (spr=-21)
+	lda #$E0 ; 224 (spr=176)
+	lda #$0B ; 11 (spr=-37)
+	ldy #$D7 ; 215 (spr=167)
+	nop 
+	ldx #$01 ; 1 (spr=-47)
+	nop 
+	sty COLPM2
+	sta colpf0
 	lda #$E2 ; 226 (spr=178)
-	ldx #$D4 ; 212 (spr=164)
-	ldx #$DA ; 218 (spr=170)
-	ldx #$7E ; 126 (spr=78)
 	nop 
 	nop 
-	nop 
-	nop 
+	ldy #$1E ; 30 (spr=-18)
+	sty colpf0
+	lda #$02 ; 2 (spr=-46)
+	stx colpf2
+	sta colpf0
+	ldx #$28 ; 40 (spr=-8)
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 line199
+	stx colpf2
+	ldx #$08 ; 8 (spr=-40)
+	ldy #$0B ; 11 (spr=-37)
+	ldx #$08 ; 8 (spr=-40)
+	lda #$01 ; 1 (spr=-47)
 	nop 
-	nop 
-	sta colpf1
-	nop 
-	ldy #$EA ; 234 (spr=186)
-	ldx #$0C ; 12 (spr=-36)
-	nop 
-	nop 
-	ldx #$D9 ; 217 (spr=169)
-	lda #$08 ; 8 (spr=-40)
-	stx colpf1
-	sta colpf1
-	lda #$0C ; 12 (spr=-36)
-	sty colpf0
-	sta colpf1
-	nop 
-	sty HPOSP3
-	nop 
-	nop 
-	lda #$0C ; 12 (spr=-36)
+	lda #$D6 ; 214 (spr=166)
+	sta HPOSP0
+	lda #$EA ; 234 (spr=186)
+	stx colpf0
+	sta colpf2
+	sty colpf1
+	lda #$FC ; 252 (spr=204)
+	sta colpf0
+	ldy #$04 ; 4 (spr=-44)
+	sty COLBAK
+	ldx #$E6 ; 230 (spr=182)
+	lda #$0B ; 11 (spr=-37)
+	nop ; filler
 	nop ; filler
 	cmp byt2; on zero page so 3 cycles
 ; ---------------------------------- 
