@@ -91,7 +91,7 @@ main
 ;	jmp line239
 	jmp raster_program_end
 
-LOOP	lda vcount		;synchronization for the first screen line
+LOOP	lda vcount		;synchronization for the first screen (picture) line
 	cmp #$02
 	;sta	colpf0
 	;sta	colpm0
@@ -215,6 +215,7 @@ byt3	brk
 ;---
 
 .MACRO	ANTIC_PROGRAM
+;	dta $70,$70
 	:+8 dta $4e,a(:1+$0000+#*40)
 	:+8 dta $4e,a(:1+$0140+#*40)
 	:+8 dta $4e,a(:1+$0280+#*40)
@@ -240,13 +241,13 @@ byt3	brk
 	:+8 dta $4e,a(:1+$1B80+#*40)
 	:+8 dta $4e,a(:1+$1CC0+#*40)
 	:+8 dta $4e,a(:1+$1E00+#*40)
-	:+4 dta $4e,a(:1+$1F40+#*40)
-	:+4 dta $4e,a(:1+$1FF0+#*40)
+;	:+4 dta $4e,a(:1+$1F40+#*40)
+;	:+4 dta $4e,a(:1+$1FF0+#*40)
 ;	:+8 dta $4e,a(:1+$2090+#*40)
 ;	:+8 dta $4e,a(:1+$21D0+#*40)
 ;	:+8 dta $4e,a(:1+$2310+#*40)
 ;	:+8 dta $4e,a(:1+$2450+#*40)
-	dta $20
+	dta $10
 	dta $42,a(mother)
 	dta $41,a(:2)
 .ENDM
