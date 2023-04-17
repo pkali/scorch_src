@@ -104,6 +104,8 @@ LOOP	lda vcount		;synchronization for the first screen (picture) line
 
   icl "output.png.rp.ini"
 
+;	:8 sta wsync
+
 ;--- wait 18 cycles
 	jsr _rts
 	inc byt3
@@ -215,7 +217,7 @@ byt3	brk
 ;---
 
 .MACRO	ANTIC_PROGRAM
-;	dta $70,$70
+;	dta $70
 	:+8 dta $4e,a(:1+$0000+#*40)
 	:+8 dta $4e,a(:1+$0140+#*40)
 	:+8 dta $4e,a(:1+$0280+#*40)
@@ -247,7 +249,7 @@ byt3	brk
 ;	:+8 dta $4e,a(:1+$21D0+#*40)
 ;	:+8 dta $4e,a(:1+$2310+#*40)
 ;	:+8 dta $4e,a(:1+$2450+#*40)
-	dta $10
+	dta $00
 	dta $42,a(mother)
 	dta $41,a(:2)
 .ENDM
