@@ -666,7 +666,7 @@ CreditsEnd
 .IF target = 5200
   CreditsLines=38
 .ELSE
-  CreditsLines=42  ; 34 in reality. add 7?
+  CreditsLines=43  ; 34 in reality. add 7?
 .ENDIF
 .IF target = 5200
   ; Atari 5200 splash
