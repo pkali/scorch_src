@@ -182,6 +182,7 @@ stop	mva #$00 pmcntl		;PMG disabled
 	lda #0
     ldx #8
 @   sta POKEY,x
+	sta POKEY2,x	; stereo
     dex
     bpl @-
             
