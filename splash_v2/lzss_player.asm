@@ -6,11 +6,18 @@ song_end
 
 buffers
     .ds 256 * 9
+	
+POKEY2 = POKEY+$10	; stereo
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Song Initialization - this runs in the first tick:
 ;
 .proc init_song
+
+; pokeys init
+	lda #3	; stereo
+	sta POKEY+$0f ; stereo
+	sta POKEY2+$0f ; stereo
 
     mva #1 bit_data
 
@@ -25,6 +32,8 @@ clear
     ; Read just init value and store into buffer and POKEY
     jsr get_byte
     sta POKEY, x
+	sta POKEY2,x	; stereo
+	sta stereo_buff,x ; stereo
     sty chn_copy, x
 cbuf
     sta buffers + 255
@@ -53,6 +62,12 @@ delay
 ; Play one frame of the song
 ;
 .proc play_frame
+	ldx #8	; stereo
+@	lda stereo_buff,x	; stereo
+	sta POKEY2,x	; stereo
+	dex	;stereo
+	bpl @-	; stereo
+	
     lda #>buffers
     sta bptr+1
 
@@ -94,7 +109,8 @@ do_copy_byte:
 
 store:
     ldy cur_pos
-    sta POKEY, x        ; Store to output and buffer
+    sta POKEY,x        ; Store to output and buffer
+	sta stereo_buff,x	; stereo
     sta (bptr), y
 
 skip_chn:
@@ -132,3 +148,6 @@ skip
     rts
 .endp
 
+stereo_buff	; stereo
+	.ds 9	; stereo
+	
