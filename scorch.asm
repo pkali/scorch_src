@@ -1486,10 +1486,20 @@ Bubble
 BubbleBobble
     lda TempResults,x
     cmp TempResults+1,x
-    beq nextishigher ; this is to block hangs when 2 equal values meet
+    bcc nextishigher
+	bne swapvalues
+nextisequal
+	; if results are equal, check Direct Hits (only lower byte - sorry memory)
+	ldy TankSequence,x
+	lda DirectHitsL,y
+	ldy TankSequence+1,x
+	cmp DirectHitsL,y
+	;
+	beq nextishigher ; this is to block hangs when 2 equal values meet
     bcc nextishigher
     ;here we must swap values
     ;because next is smaller than previous
+swapvalues
     sta temp
     lda TempResults+1,x
     sta TempResults,x
