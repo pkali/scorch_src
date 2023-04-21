@@ -38,11 +38,10 @@ NameScreen3
  dta d" Human/Atari (difficulty level) "
 NameScreen5
  .IF TARGET = 800
- dta d" "
- dta  d"TAB"*
- dta     d" - Port nr "
- dta                d"Joy"*
- dta                   d" - Difficulty "
+ dta d"TAB"*
+ dta    d" - Port nr  "
+ dta $fe,$dc,$dd,$ff	; cursors in inverse
+ dta                    d" - Difficulty"
  dta d"  "
  dta   d"INV"*
  dta      d" - Shape "
