@@ -194,7 +194,6 @@ FirstZpageVariable = $57
     .ELSE
       icl 'lib/ATARISYS.ASM'
       icl 'lib/MACRO.ASM'
-      ;icl 'artwork/Scorch50.asm'  ; splash screen and musix
       icl 'splash_v2/splash.asm'  ; splash screen and musix
     .ENDIF
     
@@ -337,6 +336,12 @@ no5200splash
     bne @-
 
     .IF TARGET = 800
+
+; pokeys init
+	lda #3	; stereo
+	sta POKEY+$0f ; stereo
+	sta POKEY+$1f ; stereo
+
 	lda PAL
 	and #%00001110
 	bne NoRMT_PALchange
