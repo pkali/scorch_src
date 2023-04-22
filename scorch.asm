@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022, 2023
 
 ;---------------------------------------------------
-.def TARGET = 800 ;5200  ; or 800
+.def TARGET = 800 ; 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -194,7 +194,7 @@ FirstZpageVariable = $57
     .ELSE
       icl 'lib/ATARISYS.ASM'
       icl 'lib/MACRO.ASM'
-      icl 'splash_v2/splash.asm'  ; splash screen and musix
+      icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
     .ENDIF
     
 ;-----------------------------------------------

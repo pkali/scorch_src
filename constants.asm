@@ -642,8 +642,8 @@ CreditsStart
 	.ENDIF
 	dta d" "*
 	dta d"Ideas, help and Q",d"A"*
-	dta d"Krzysztof 'Kaz' Ziembik, Bocianu",d","*
-	dta d"Probabilitydragon, EnderDude, Dracon",d","*
+	dta d"Bocianu, Probabilitydragon",d","*
+	dta d"EnderDude, Dracon",d","*
 	dta d"Beeblebrox, KrzysRog, lopezpb",d","*
 	dta d"brad-colbert, archon800, nowy80",d","*
 	dta d"Shaggy the Atarian, RetroBorsuk, ZPH"
@@ -657,6 +657,9 @@ CreditsStart
 	dta d" "*
 	dta d"Additional testin",d"g"*
 	dta d"Arek and Alex Peck",d"o"*
+    dta d" "*
+    dta d"Special thank",d"s"*
+    dta d"Krzysztof 'Kaz' Ziembi",d"k"*
 	.IF target != 5200
 	  dta d"  "*
 	  dta d"Stay tuned for the FujiNet version",d"!"*
@@ -664,9 +667,9 @@ CreditsStart
 	dta d"         "*
 CreditsEnd
 .IF target = 5200
-  CreditsLines=38
+  CreditsLines=34 + 7; add 7 for scrollout
 .ELSE
-  CreditsLines=43  ; 34 in reality. add 7?
+  CreditsLines=40 + 7  ; add 7 for scrollout
 .ENDIF
 .IF target = 5200
   ; Atari 5200 splash
