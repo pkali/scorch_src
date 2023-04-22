@@ -6,19 +6,22 @@
 ;Miami & Warsaw 2022, 2023
 
 ;---------------------------------------------------
-.def TARGET = 800 ;5200  ; or 800
+.def TARGET = 800 ; 5200  ; or 800
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
 .def XCORRECTION_FOR_PM = 0
 ; if 1 - active x position of tanks correction fo PMG
+.def FASTER_GRAF_PROCS = 1
+; if 1 - activates faster graphics routines
+;        (direct writes to screen memory - atari only :) )
 ;---------------------------------------------------
 
    ;OPT r+  ; saves 12 bytes :O
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.27" ; number of this build (4 bytes)
+	dta d"1.28" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -191,7 +194,7 @@ FirstZpageVariable = $57
     .ELSE
       icl 'lib/ATARISYS.ASM'
       icl 'lib/MACRO.ASM'
-      icl 'artwork/Scorch50.asm'  ; splash screen and musix
+      icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
     .ENDIF
     
 ;-----------------------------------------------
@@ -314,14 +317,9 @@ no5200splash
 	  dey
 	bpl @-
 
-	; initialize one Variable in zero page :)
-	;lda #<dliColorsFore
-	;sta GradientColors
-	;lda #>dliColorsFore
-	;sta GradientColors+1
     ; set gradient to the full LGBTIQQAAPP+ flag on start
-	mva #1 GradientNr
-	jsr SelectNextGradient 
+	mva #0 GradientNr	; #1 to set gradient number 2 :) (next one)
+	jsr SelectNextGradient.NotWind
 
     ; generate linetables
     mwa #display temp
@@ -338,6 +336,12 @@ no5200splash
     bne @-
 
     .IF TARGET = 800
+
+; pokeys init
+	lda #3	; stereo
+	sta POKEY+$0f ; stereo
+	sta POKEY+$1f ; stereo
+
 	lda PAL
 	and #%00001110
 	bne NoRMT_PALchange
@@ -641,8 +645,9 @@ SettingEnergies
 
 ;--------------------------------------------------
 .proc MainRoundLoop
-    ; here we must check if by a chance there is only one
-    ; tank with energy greater than 0 left
+; here we must check if by a chance there is only one
+; tank with energy greater than 0 left
+;--------------------------------------------------
 
     ldy #0  ; in Y - number of tanks with energy greater than zero
 	sty ATRACT	; reset atract mode
@@ -908,9 +913,10 @@ NotLastPlayerInRound
 	
 ;---------------------------------
 .proc PlayerXdeath
+; this tank should not explode anymore:
+; there is 0 in A, and Tank Number in X, so...
+;---------------------------------
 
-    ; this tank should not explode anymore:
-    ; there is 0 in A, and Tank Number in X, so...
     sta LASTeXistenZ,x
     ; save x somewhere
     stx TankTempY
@@ -926,7 +932,7 @@ NotLastPlayerInRound
 
     ; in X there is a number of tank that died
 
-	lda #77	; mumber of defensive text after BFG!
+	lda #78	; mumber of defensive text after BFG! ("VERY FUNNY.")
 	bit AfterBFGflag	; check BFG flag
 	bmi TextAfterBFG
 	; if BFG then no points for dead tanks ...
@@ -1039,7 +1045,6 @@ ldahashzero
 NotNegativeEnergy
     sta Energy,x
     ;now increase the gain of the shooting tank
- ;   phx
     ldy TankNr
     clc
     lda gainL,y
@@ -1048,7 +1053,6 @@ NotNegativeEnergy
     lda gainH,y
     adc #$00
     sta gainH,y
- ;   plx
     rts
 .endp
 
@@ -1081,6 +1085,7 @@ NotNegativeShieldEnergy
 
 ;---------------------------------
 .proc Seppuku
+;---------------------------------
     lda #0
     sta ydraw+1
     ; get position of the tank
@@ -1135,48 +1140,44 @@ NotNegativeShieldEnergy
     ;this algiorithm is a little longer than one in Ruszczyc 6502 book
     ;but it is faster
 
-    LDy #8
-    LDA #0
-    CLC
-LP0
+    ldy #8
+    lda #0
+    clc
+LP0 ror
+    ror L1
+    bcc B0
+    clc
+    adc #10 ; (L2) multiplication by 10
+B0  dey
+    bne LP0
     ror
-    ROR L1
-    BCC B0
-    CLC
-    ADC #10 ; (L2) multiplication by 10
-B0  DEY
-    BNE LP0
-    ror
-    ROR L1
-    STA MaxForceTableH,x
+    ror L1
+    sta MaxForceTableH,x
     lda L1
     sta MaxForceTableL,x
 	rts
 .endp
 
 ;--------------------------------------------------
-.proc WeaponCleanup;
+.proc WeaponCleanup
 ; cleaning of the weapon possesion tables
-; 99 of Baby Missles(index==0), all other weapons=0)
+; 99 of Baby Missles and White Flags, all other weapons=0)
 ;--------------------------------------------------
-    ldx #$3f  ; TODO: maxweapons
+    ldx #(number_of_weapons - 1)
 @    lda #$0
       cpx #ind_White_Flag_____  ; White Flag
-      bne @+
-       lda #99     
-@     sta TanksWeapon1,x
+      bne no99
+set99 lda #99     
+no99  sta TanksWeapon1,x
       sta TanksWeapon2,x
       sta TanksWeapon3,x
       sta TanksWeapon4,x
       sta TanksWeapon5,x
       sta TanksWeapon6,x
       dex
-      beq setBmissile
-    bpl @-1
+      beq set99	; Baby Missile (index=0)
+    bpl @-
     rts
-setBmissile
-    lda #99
-    bne @-
 .endp
 
 ;--------------------------------------------------
@@ -1256,6 +1257,9 @@ MakeTanksVisible
 .endp
 ;--------------------------------------------------
 .proc SetStandardBarrels
+; set standart barrel length and deactivate Auto Defense
+; for all tanks
+;--------------------------------------------------
     ldx #maxPlayers-1
 @	lda #StandardBarrel	; standard barrel length
 	sta BarrelLength,x
@@ -1266,7 +1270,7 @@ MakeTanksVisible
 	rts
 .endp
 ;----------------------------------------------
-.proc RandomizeSequence0
+/* .proc RandomizeSequence0
     ldx #0
 @     txa
       sta TankSequence,x
@@ -1274,7 +1278,7 @@ MakeTanksVisible
       cpx #MaxPlayers
     bne @-
     rts
-.endp
+.endp */
 ;--------------------------------------------------
 .proc RandomizeSequence
 ; in: NumberOfPlayers
@@ -1331,20 +1335,10 @@ UsageLoop
 ; X is not changed
 ;----------------------------------------------
 
-    ;valid angle values are ((256-90)..255) and (0..90)
-    ;it means that values 91..165 must be elliminated...
-    ;so, lets randomize someting between 0 and 180
-    ;and substract this value from 90
+    ; lets randomize someting between 0 and 180
     lda RANDOM
-
     cmp #180
     bcs RandomizeAngle
-
-
-    ;sta temp
-    ;lda #90 ; CARRY=0 here
-    ;sbc temp
-
     rts
 .endp
 ;----------------------------------------------
@@ -1395,6 +1389,7 @@ LimitForce
 .endp
 ;----------------------------------------------
 .proc Table2Force
+;----------------------------------------------
 	lda ForceTableL,x
 	sta Force
 	lda ForceTableH,x
@@ -1403,6 +1398,7 @@ LimitForce
 .endp
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
+;----------------------------------------------
 	mva #1 Erase
 	jsr DrawTankNr.BarrelChange
 	mva #0 Erase
@@ -1418,11 +1414,11 @@ MoveBarrel
 	lda NewAngle
 	cmp AngleTable,x
 	beq BarrelPositionIsFine
-	bcc rotateLeft ; older is bigger
-rotateRight;older is lower
+	bcc rotateLeft
+rotateRight			; older is lower
 	inc angleTable,x
 	jmp MoveBarrel
-rotateLeft
+rotateLeft			; older is bigger
 	dec angleTable,x
 	jmp MoveBarrel
 BarrelPositionIsFine
@@ -1442,10 +1438,10 @@ BarrelPositionIsFine
 ; I think I will go for a stupid bubble sort...
 ; it is easy to test :)
 ;
-; Results are in ResultsTable, in SortedTable we want to
+; Results are in ResultsTable, in TankSequence (Sorted Table) we want to
 ; have numbers of tanks from the worst to the best.
 ; in other words, if ResultsTable=(5,4,65,23,3,6)
-; the SortedTable=(4,1,0,5,3,2)
+; the TankSequence=(4,1,0,5,3,2)
 ; let's assume initially the TankSequence=(0,1,2,3,4,5)
 
     ldx #0
@@ -1490,10 +1486,20 @@ Bubble
 BubbleBobble
     lda TempResults,x
     cmp TempResults+1,x
-    beq nextishigher ; this is to block hangs when 2 equal values meet
+    bcc nextishigher
+	bne swapvalues
+nextisequal
+	; if results are equal, check Direct Hits (only lower byte - sorry memory)
+	ldy TankSequence,x
+	lda DirectHitsL,y
+	ldy TankSequence+1,x
+	cmp DirectHitsL,y
+	;
+	beq nextishigher ; this is to block hangs when 2 equal values meet
     bcc nextishigher
     ;here we must swap values
     ;because next is smaller than previous
+swapvalues
     sta temp
     lda TempResults+1,x
     sta TempResults,x
@@ -1537,8 +1543,10 @@ SetRandomWalls
 	rts
 .endp
 ;--------------------------------------------------
-.proc GetKey  ; waits for pressing a key and returns pressed value in A
-; when [ESC] is pressed, escFlag is set to 1
+.proc GetKey
+; waits for pressing a key and returns pressed value in A
+; when [ESC] is pressed, escFlag is set
+; result: A=keycode
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 @
@@ -1642,7 +1650,8 @@ KeyReleased
       rts
 .endp
 ;--------------------------------------------------
-.proc IsKeyPressed	; A=0 - yes , A>0 - no
+.proc IsKeyPressed
+; result: A=0 - yes , A>0 - no
 ;--------------------------------------------------
 	lda SKSTAT
 	and #%00000100
@@ -1653,6 +1662,8 @@ KeyReleased
 .endp
 ;--------------------------------------------------
 .proc DemoModeOrKey
+; Waits for the key pressed if at least one human is playing.
+; Otherwise, waits 3 seconds (demo mode).
 ;--------------------------------------------------
     ;check demo mode
     ldx numberOfPlayers
@@ -1667,17 +1678,19 @@ checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
     ldy #75
     jsr PauseYFrames
     rts
-
 peopleAreHere
     jmp getkey  ; jsr:rts
 .endp
 
+;--------------------------------------------------
 MakeDarkScreen
-	jsr PMoutofScreen
+;--------------------------------------------------
+	jsr PMoutofScreen	; hide P/M
 	mva #0 dmactls		; dark screen
-    ; sta dmactl ; probably not necessary (3 bytes!!! :) )
 	; and wait one frame :)
+;--------------------------------------------------
 .proc WaitOneFrame
+;--------------------------------------------------
 	lda CONSOL
 	and #%00000101	; Start + Option
 	sne:mva #$40 escFlag	
@@ -1686,9 +1699,11 @@ MakeDarkScreen
     rts
 .endp
 
+;--------------------------------------------------
 .proc PauseYFrames
 ; Y - number of frames to wait (divided by 2)
 ; pauses for maximally 510 frames (255 * 2)
+;--------------------------------------------------
 @     jsr WaitOneFrame
       jsr WaitOneFrame
       dey
@@ -1698,8 +1713,8 @@ MakeDarkScreen
 
 ;--------------------------------------------------
 .proc RmtSongSelect
-;--------------------------------------------------
 ;  starting song line 0-255 to A reg
+;--------------------------------------------------
 	cmp #song_ingame
 	bne noingame	; noMusic blocks only ingame song
     bit noMusic
@@ -1784,7 +1799,7 @@ YesCheat
 	lda #99
 @	iny
 	sta (temp),y
-	cpy #(last_defensive_____ - first_offensive____)
+	cpy #(number_of_weapons - 1)
 	bne @-
 NoCheat
     rts

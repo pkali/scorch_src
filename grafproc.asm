@@ -5,6 +5,8 @@
 
 ;--------------------------------------------------
 .proc draw ;;fuxxing good draw :) 
+; xdraw,ydraw (word) - coordinates of first point
+; xbyte,ybyte (word) - coordinates of last point
 ;--------------------------------------------------
 ;creditz to Dr Jankowski / MIM U.W.
 ; (xi,yi)-----(xk,yk)
@@ -291,6 +293,8 @@ EndOfDraw
 
 ;--------------------------------------------------
 .proc circle ;fxxxing good circle drawing :) 
+; xdraw,ydraw (word) - coordinates of circle center
+; radius (byte) - radius of circle 
 ;--------------------------------------------------
 ;Turbo Basic source
 ; R=30
@@ -1136,7 +1140,7 @@ OneTimeParachute
 	jmp EndOfFCycle
 NoFallingDown
 	; check direction (left or right)
-	ldy #7		; SlideLeftTable length -1 (from 0 to 7)
+	ldy #SlideLeftTableLen-1		; SlideLeftTable length -1 (from 0 to 7)
 @	lda SlideLeftTable,y
 	cmp UnderTank1
 	beq FallingLeft
@@ -1289,7 +1293,7 @@ drawmountainsloop
 	beq NoMountain
     sta ydraw
 	sty ydraw+1
-;    jsr DrawLine
+.IF FASTER_GRAF_PROCS = 1
 ;	there was Drawline proc 
     lda #screenheight
     sec
@@ -1308,6 +1312,16 @@ drawmountainsloop
 	dec tempbyte01
 	bne @-
 ;	end of Drawline proc
+.ELSE
+;	there was Drawline proc 
+drawline
+    jsr plot.MakePlot
+	inc ydraw
+	lda ydraw
+	cmp #screenheight
+	bne drawline
+;	end of Drawline proc
+.ENDIF
 NoMountain
     inw modify
     inw xdraw
@@ -1858,6 +1872,7 @@ CopyMask
     dey
     bpl CopyMask
 
+.IF FASTER_GRAF_PROCS = 1
     ; calculating coordinates from xdraw and ydraw
     mwa xdraw xbyte
 
@@ -1922,6 +1937,44 @@ CharLoopi
     inx
     cpx #8
     bne CharLoopi
+.ELSE
+	mvx #7 temp	; line counter (Y)
+CharLoop1
+	mva #7 temp+1	; pixel counter (X)
+CharLoop2
+	mva #0 color
+	rol mask1,x
+	bcc NoMaskNoPlot
+	rol char1,x
+	bcs NoPlot
+MakeCharPlot
+	lda Erase
+	bne ErasingChar
+	inc color
+ErasingChar
+NoPlot
+	jsr plot.MakePlot
+AfterCharPlot
+	inw xdraw
+	ldx temp
+	dec temp+1
+	bpl CharLoop2
+	sec
+	sbw xdraw #8
+	dec ydraw
+	ldx temp
+	dex
+	stx temp
+	bpl CharLoop1
+	clc
+	lda ydraw
+	adc #8
+	sta ydraw
+	bne EndPutChar
+NoMaskNoPlot
+	rol char1,x
+	jmp AfterCharPlot
+.ENDIF
 EndPutChar
     rts
 .endp
@@ -1979,6 +2032,7 @@ GetUpper4bits
     dex
     bpl CopyChar
 
+.IF FASTER_GRAF_PROCS = 1
     ; calculating coordinates from xdraw and ydraw
     mwa dx xbyte
 
@@ -2038,6 +2092,48 @@ PutInColor0_2
     inx
 	cpx #4
     bne CharLoopi4x4
+.ELSE
+	mwa xdraw char2
+	mwa ydraw mask2
+	mva color mask2+2
+	mwa dx xdraw
+	mwa dy ydraw
+	mvx #3 temp	; line counter (Y)
+CharLoop1
+	mva #3 temp+1	; pixel counter (X)
+CharLoop2
+	mva #0 color
+	rol mask1,x
+	bcc NoMaskNoPlot
+	rol char1,x
+	bcs NoPlot
+MakeCharPlot
+	lda plot4x4color
+	beq ErasingChar
+	inc color
+ErasingChar
+NoPlot
+	jsr plot.MakePlot
+AfterCharPlot
+	inw xdraw
+	ldx temp
+	dec temp+1
+	bpl CharLoop2
+	sec
+	sbw xdraw #4
+	dec ydraw
+	ldx temp
+	dex
+	stx temp
+	bpl CharLoop1
+	mwa char2 xdraw
+	mwa mask2 ydraw
+	mva mask2+2 color
+	bpl EndPut4x4
+NoMaskNoPlot
+	rol char1,x
+	jmp AfterCharPlot
+.ENDIF
 EndPut4x4
     rts
 .endp

@@ -616,28 +616,33 @@ qq3
 qq5
 	stx v_audctl
 rmt_p5
-	lda v_ainstrspeed
-
+;	lda v_ainstrspeed
+.IF TARGET = 800
+	ldx #$10				; pseudo stereo
+	bne SetPokey_OffsetX	; pseudo stereo
+.ELSE
 	rts
+.ENDIF
 SetPokey
-	ldy v_audctl
-
+	ldx #0	; POKEY registers offset (for stereo)
+SetPokey_OffsetX
 	lda trackn_audf+0
-	ldx trackn_audc+0
-	sta AUDF1
-	stx AUDC1
+	sta AUDF1,x
+	lda trackn_audc+0
+	sta AUDC1,x
 	lda trackn_audf+1
-	ldx trackn_audc+1
-	sta AUDF2
-	stx AUDC2
+	sta AUDF2,x
+	lda trackn_audc+1
+	sta AUDC2,x
 	lda trackn_audf+2
-	ldx trackn_audc+2
-	sta AUDF3
-	stx AUDC3
+	sta AUDF3,x
+	lda trackn_audc+2
+	sta AUDC3,x
 	lda trackn_audf+3
-	ldx trackn_audc+3
-	sta AUDF4
-	stx AUDC4
-	sty AUDCTL
+	sta AUDF4,x
+	lda trackn_audc+3
+	sta AUDC4,x
+	lda v_audctl
+	sta AUDCTL,x
 	rts
 RMTPLAYEREND

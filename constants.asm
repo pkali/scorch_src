@@ -215,8 +215,8 @@ SlideLeftTable
     .BY %00000101
     .BY %00000110
     .BY %00000111
-    .BY %00001100
-
+;    .BY %00001100
+SlideLeftTableLen = *-SlideLeftTable
 ;-------------------------------------------------
 TanksNamesDefault
     dta d"1st.Tank"
@@ -550,7 +550,22 @@ DefensiveEnergy = *-(last_offensive_____ - first_offensive____ +1)  ; to fake th
 	.by 00  ; Auto Defense
 	.by 00  ; Spy Hard
 weaponsOfDeath  ; weapons used in tank death animations
-	dta 1,2,3,7,17,18,19,20,21,22,23,24,25,26,27
+	dta ind_Missile________
+	dta ind_Baby_Nuke______
+	dta ind_Nuke___________
+	dta ind_Death_s_Head___
+	dta ind_Hot_Napalm_____ ; why not?
+	dta ind_Riot_Bomb______
+	dta ind_Heavy_Riot_Bomb
+	dta ind_Baby_Digger____
+	dta ind_Digger_________
+	dta ind_Heavy_Digger___
+	dta ind_Baby_Sandhog___
+	dta ind_Sandhog________
+	dta ind_Heavy_Sandhog__
+	dta ind_Dirt_Clod______
+	dta ind_Dirt_Ball______
+	dta ind_Ton_of_Dirt____	
 weaponsOfDeathEnd
 joyToKeyTable
     .by $ff  ;00
@@ -623,12 +638,13 @@ CreditsStart
 	dta d"Ar",d"t"*
 	dta d"Adam Wachowsk",d"i"*
 	.IF target != 5200
-	  dta d"Krzysztof 'Kaz' Ziembi",d"k"*
+	  dta d"Roman 'xorcerer' Fierfa",d"s"*
 	.ENDIF
 	dta d" "*
 	dta d"Ideas, help and Q",d"A"*
-	dta d"Bocianu, Probabilitydragon, EnderDude",d","*
-	dta d"Beeblebrox, KrzysRog, lopezpb, Dracon",d","*
+	dta d"Bocianu, Probabilitydragon",d","*
+	dta d"EnderDude, Dracon",d","*
+	dta d"Beeblebrox, KrzysRog, lopezpb",d","*
 	dta d"brad-colbert, archon800, nowy80",d","*
 	dta d"Shaggy the Atarian, RetroBorsuk, ZPH"
 	.IF target = 5200
@@ -641,6 +657,9 @@ CreditsStart
 	dta d" "*
 	dta d"Additional testin",d"g"*
 	dta d"Arek and Alex Peck",d"o"*
+    dta d" "*
+    dta d"Special thank",d"s"*
+    dta d"Krzysztof 'Kaz' Ziembi",d"k"*
 	.IF target != 5200
 	  dta d"  "*
 	  dta d"Stay tuned for the FujiNet version",d"!"*
@@ -648,9 +667,9 @@ CreditsStart
 	dta d"         "*
 CreditsEnd
 .IF target = 5200
-  CreditsLines=38
+  CreditsLines=34 + 7; add 7 for scrollout
 .ELSE
-  CreditsLines=42  ; 34 in reality. add 7?
+  CreditsLines=40 + 7  ; add 7 for scrollout
 .ENDIF
 .IF target = 5200
   ; Atari 5200 splash

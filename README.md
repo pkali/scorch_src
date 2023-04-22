@@ -51,6 +51,29 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.28
+2023-04-22
+
+Greetings and salutations,
+
+Allow me to present the release notes for Version 1.28 of our esteemed hobby game for 8-bit computers.
+
+First and foremost, let it be known that we have reached the end of an era. We bid adieu to the solitary player versions, as we are determined to preserve the sanctity of this auspicious round version number.
+
+Moving on to the technical enhancements and embellishments, we are proud to introduce a simulated stereo feature for those fortunate enough to possess the dual pokey hardware. This auditory wonder was brought to fruition by the esteemed Arthur "Two Pokeys" Jackson, whose mastery in the field of sound engineering knows no bounds.
+
+Furthermore, we have bestowed upon our beloved creation a splash screen of unrivaled brilliance, crafted by the masterful xorcerer. This work of art, by the Artificial Unintelligence and Machine Forgetting, shall leave an indelible mark on all who behold it.
+
+Our developers have also painstakingly refined the game's performance with a plethora of improvements, including a refined round and final results sorting mechanism, additional keyboard usage assistance in the main menu, and a significant acceleration of the 8x8 and 4x4 put char routines. Additionally, we have incorporated configurable hardware and screen memory layout agnostic put char routines to accommodate future ports and ensure seamless compatibility.
+
+Last but certainly not least, our mountain drawing optimization shall elevate the visual experience to new heights, ensuring an immersive and enjoyable experience for all.
+
+We hope that these improvements shall enhance your gaming experience, and we eagerly anticipate your feedback.
+
+Yours sincerely,
+
+The Developers
+
 ###### Version 1.27
 2023-02-07
 

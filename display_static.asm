@@ -12,8 +12,14 @@ OptionsScreen
  dta                          d"  (un)2000-2023"
 
 .IF TARGET = 800
- dta d" Please select option with cursor keys  "
- dta d"     and press (Return) to proceed      "
+ dta d" Please select option with "
+ dta $fe,$dc,$dd,$ff	; cursors in inverse
+ dta                                d" and "
+ dta                                     d"Tab"*
+ dta                                        d" "
+ dta d"        Press "
+ dta               d"Return"*
+ dta                     d" to proceed         "
 .ELIF TARGET = 5200
  dta d" Please select option with joystick one "
  dta d"       and press FIRE to proceed        "
@@ -32,14 +38,15 @@ NameScreen3
  dta d" Human/Atari (difficulty level) "
 NameScreen5
  .IF TARGET = 800
- dta d" "
- dta  d"TAB"*
- dta     d" - Port nr "
- dta                d"Joy"*
- dta                   d" - Difficulty "
- dta d"       "
- dta        d"Return"*
- dta              d" - Proceed         "
+ dta d"TAB"*
+ dta    d" - Port nr  "
+ dta $fe,$dc,$dd,$ff	; cursors in inverse
+ dta                    d" - Difficulty"
+ dta d"  "
+ dta   d"INV"*
+ dta      d" - Shape "
+ dta               d"Return"*
+ dta                     d" - Proceed  "
 .ELIF TARGET = 5200
  dta d" "
  dta  d"(5)"*
