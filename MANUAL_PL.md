@@ -23,7 +23,7 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru) lub (leśli kursor wskazuje opcję wyboru siły wiatru "Wind") zmieniają sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie "Wind".
+Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru) lub (jeśli kursor wskazuje opcję wyboru siły wiatru "Wind") zmieniają sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie "Wind".
 
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
@@ -66,7 +66,7 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 | A800 | 5200 | funkcja |
 | --- | --- | --- |
 | [SPACJA] | [0] | lub przycisk joysticka naciśnięte krótko - oddanie strzału |
-| [TAB] lub [SELECT] | [5] | wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory). W głównym menu zmienia cieniowanie gór, widoczne w kolorze górek na dole ekranu. |
+| [TAB] lub [SELECT] | [5] | wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory). |
 | [I] | [9] | lub dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną. |
 | [A] lub [OPTION] | [7] | bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych. |
 | [M] | [PAUSE] | wyłączenie/włączenie muzyki w tle |
@@ -77,6 +77,7 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 | [G] | brak | zmienia cieniowanie gór |
 | [ESC] | [*] | w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem). |
 | [Y] | [1] | w przypadku pytania o przerwanie lub zakończenie gry - potwierdzenie decyzji |
+| [CTRL] + [HELP] | brak | Przełącza tryb "visual debug". Wizualizuje mierzone odległości, celowanie lasera oraz technikę celowania komputera. Pozostawia bałagan na ekranie, co nie zmienia rozgrywki, tylko ją nieco utrudnia. |
 
 ## 5. Zasady gry - bronie ofensywne
 
