@@ -688,6 +688,7 @@ ToHighFill
     mwa EndOfTheBarrelX xbyte
     mva EndOfTheBarrelY ybyte
     mva #0 ybyte+1
+	sta LaserFlag	; turn on gravity and wind after shot :)
     
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
