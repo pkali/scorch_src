@@ -50,9 +50,9 @@ NameScreen5
 .ELIF TARGET = 5200
  dta d" "
  dta  d"(5)"*
- dta     d" - Port nr "
- dta                d"Joy"*
- dta                   d" - Difficulty "
+ dta     d" - Port/Shape "
+ dta                   d"Joy"*
+ dta                      d" - Diffic. "
  dta d"        "
  dta        d"FIRE"*
  dta             d" - Proceed          "
