@@ -8,17 +8,19 @@ by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
 
 Contributors:
-- Miker (@mikerro) - in-game music and sfx, ideas, QA
-- Kaz - splash screen, ideas
-- Adam (@6502adam) - font, design, QA
-- Bocianu (@bocianu) - important ideas, FujiNet implementation, QA
+- Miker ([mikerro](https://github.com/mikerro)) - in-game music and sfx, ideas, QA
+- Kaz - original splash screen, SV Atari 50 splash screen, ideas
+- Adam ([6502adam](https://github.com/6502adam)) - font, design, QA
+- Bocianu ([bocianu](https://github.com/bocianu)) - important ideas, FujiNet implementation, QA
 - Emkay - splash screen music
-- Fox (@pfusik) - plot and point optimization
+- Fox ([pfusik](https://github.com/pfusik)) - plot and point optimization
+- xorcerer ([xauberer](https://github.com/xauberer)) - prompt for AI generated splash and sticker
+
 
 QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert, archon800,
 Shaggy the Atarian, x=usr(1536), Aking, Kenshi
 
-Special thanks to tebe (@tebe6502), JAC! (@peterdell) and phaeron for their fantastic tools and support.
+Special thanks to tebe ([tebe6502](https://github.com/tebe6502)), JAC! ([peterdell](https://github.com/peterdell)) and phaeron ([Altirra](https://www.virtualdub.org/altirra.html)) for their fantastic tools and support.
 
 You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https://atarionline.pl) forums.
 
