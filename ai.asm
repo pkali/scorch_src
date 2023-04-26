@@ -601,6 +601,7 @@ NoHitInFirstLoopR
 	sbc #5
 	sta NewAngle	
 HitOnRightSideOfTargetR
+	dec NewAngle
 EndOfFirstLoopR
 	mva #5 modify	; set counter (5 turns)
 SecondLoopR
@@ -695,6 +696,7 @@ NoHitInFirstLoopL
 	adc #5
 	sta NewAngle	
 HitOnLeftSideOfTargetL
+	inc NewAngle
 EndOfFirstLoopL
 	mva #5 modify	; set counter (5 turns)
 SecondLoopL
