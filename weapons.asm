@@ -1867,9 +1867,9 @@ EndOfFlight2
 	cpx HitFlag	; we don't count suicides :)
 	beq @+
 	dex
-	inc DirectHitsL,x
-	bne @+
-	inc DirectHitsH,x
+	inc DirectHits,x
+;	bne @+		; one byte enough
+;	inc DirectHitsH,x
 @
 	; tank hit - check defensive weapon of this tank
 	tax
