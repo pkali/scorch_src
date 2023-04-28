@@ -14,12 +14,12 @@ Contributors:
 - Bocianu ([bocianu](https://github.com/bocianu)) - important ideas, FujiNet implementation, QA
 - Emkay - splash screen music
 - Fox ([pfusik](https://github.com/pfusik)) - plot and point optimization
-- xorcerer ([xauberer](https://github.com/xauberer)) - prompt for AI generated splash and sticker
+- xorcerer ([xauberer](https://github.com/xauberer)) - AI generated splash and sticker
 
 
 QA: Probabilitydragon, EnderDude, Dracon, Beeblebrox, KrzysRog, lopezpb,
-brad-colbert, archon800, nowy80, Sabreman, Shaggy the Atarian, RetroBorsuk, ZPH,
-x=usr(1536), Aking, RB520
+brad-colbert, archon800, nowy80, Saberman, Shaggy the Atarian, RetroBorsuk, ZPH,
+x=usr(1536), Aking, RB5200
 
 Special thanks to tebe ([tebe6502](https://github.com/tebe6502)), JAC! ([peterdell](https://github.com/peterdell)) and phaeron ([Altirra](https://www.virtualdub.org/altirra.html)) for their fantastic tools and support.
 
