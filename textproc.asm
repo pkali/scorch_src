@@ -1845,11 +1845,11 @@ NextChar
     jsr displaydec5
 	mva #0 displayposition	; overwrite first digit
 	; put hits points on the screen
+	sta decimal+1	; pozor!!! A=0
     ldx TankNr
-    lda DirectHitsL,x
+    lda DirectHits,x
     sta decimal
-	lda DirectHitsH,x
-    sta decimal+1
+;	lda DirectHitsH,x		; one byte enough
     adw temp #19 displayposition
     jsr displaydec5
 	mva #0 displayposition	; overwrite first digit

@@ -1489,11 +1489,11 @@ BubbleBobble
     bcc nextishigher
 	bne swapvalues
 nextisequal
-	; if results are equal, check Direct Hits (only lower byte - sorry memory)
+	; if results are equal, check Direct Hits
 	ldy TankSequence,x
-	lda DirectHitsL,y
+	lda DirectHits,y
 	ldy TankSequence+1,x
-	cmp DirectHitsL,y
+	cmp DirectHits,y
 	;
 	beq nextishigher ; this is to block hangs when 2 equal values meet
     bcc nextishigher

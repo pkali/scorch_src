@@ -102,9 +102,9 @@ ResultsTable ;the results in the gameeeeee
     .DS MaxPlayers
 TempResults
     .DS MaxPlayers
-DirectHitsH
-    .DS MaxPlayers
-DirectHitsL
+;DirectHitsH		; one byte enough
+;    .DS MaxPlayers
+DirectHits
     .DS MaxPlayers
 EarnedMoneyH
     .DS MaxPlayers
