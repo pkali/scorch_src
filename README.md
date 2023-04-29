@@ -5,7 +5,7 @@ Scorch is a multi-player, turn-based, artillery video game. Tanks do turn-based 
 
 by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 
-Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022
+Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022, 2023
 
 Contributors:
 - Miker ([mikerro](https://github.com/mikerro)) - in-game music and sfx, ideas, QA
@@ -14,11 +14,12 @@ Contributors:
 - Bocianu ([bocianu](https://github.com/bocianu)) - important ideas, FujiNet implementation, QA
 - Emkay - splash screen music
 - Fox ([pfusik](https://github.com/pfusik)) - plot and point optimization
-- xorcerer ([xauberer](https://github.com/xauberer)) - prompt for AI generated splash and sticker
+- xorcerer ([xauberer](https://github.com/xauberer)) - AI generated splash and sticker
 
 
-QA: Probabilitydragon, KrzysRog, Beeblebrox, EnderDude, lopezpb, Dracon, brad-colbert, archon800,
-Shaggy the Atarian, x=usr(1536), Aking, Kenshi
+QA: Probabilitydragon, EnderDude, Dracon, Beeblebrox, KrzysRog, lopezpb,
+brad-colbert, archon800, nowy80, Saberman, Shaggy the Atarian, RetroBorsuk, ZPH,
+x=usr(1536), Aking, RB5200
 
 Special thanks to tebe ([tebe6502](https://github.com/tebe6502)), JAC! ([peterdell](https://github.com/peterdell)) and phaeron ([Altirra](https://www.virtualdub.org/altirra.html)) for their fantastic tools and support.
 
@@ -29,7 +30,7 @@ This source code was originally compiled with [OMC65 crossassembler](https://git
 Compilation: `mads scorch.asm -o:scorch.xex`
 
 
-Game source code is split into 5+4 parts:
+Game source code is split into several parts:
 - scorch.asm is the main game code (with many assorted routines)
 - grafproc.asm - graphics routines like line or circle
 - textproc.asm - text routines like list of weapons and shop
