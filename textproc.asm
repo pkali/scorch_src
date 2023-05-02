@@ -2033,17 +2033,20 @@ EndOfCredits
 .proc DisplayStatus
 ;-------------------------------------------------
 
+    ldx TankNr
     ;=========================
 	; displaying number of active controller port
     ;=========================
+	ldy SkillTable,x
+	bne LevelOfAI
 	ldy JoystickNumber
+LevelOfAI
 	lda digits+1,y
 	sta statusBuffer+17
 	
     ;=========================
     ;displaying symbol of the weapon
     ;=========================
-    ldx TankNr
     ldy ActiveWeapon,x
     lda WeaponSymbols,y
     sta statusBuffer+19
@@ -2254,6 +2257,14 @@ NextChar02
     iny
     cpy #$08
     bne NextChar02
+	; memory !!!!
+;	ldx TankNr
+;	ldy #$5e	; Computer symbol
+;	lda SkillTable,x
+;	bne ThisIsAI
+;	ldy #$0a	; Joystick symbol
+;ThisIsAI
+;	sty statusBuffer+16
     rts
 .endp
 ;-------------------------------------------------
