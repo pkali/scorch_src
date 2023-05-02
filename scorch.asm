@@ -737,7 +737,7 @@ CheckNextTankAD
     lda TankStatusColoursTable,x
     sta COLOR2  ; set color of status line
     jsr PutTankNameOnScreen
-    jsr DisplayStatus
+;    jsr DisplayStatus	; There is no need anymore, it is always after PutTankNameOnScreen
 
     lda SkillTable,x
     beq ManualShooting

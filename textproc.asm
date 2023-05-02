@@ -2030,6 +2030,34 @@ EndOfCredits
 	rts
 .endp
 ;-------------------------------------------------
+.proc PutTankNameOnScreen
+;-------------------------------------------------
+; puts name of the tank on the screen
+    ldy #$00
+;    lda TankNr
+	txa		; TankNr in X !
+    asl
+    asl
+    asl ; 8 chars per name
+    tax
+NextChar02
+    lda tanksnames,x
+    sta statusBuffer+7,y
+    inx
+    iny
+    cpy #$08
+    bne NextChar02
+	; memory !!!!
+	ldx TankNr
+	ldy #$5e	; Computer symbol
+	lda SkillTable,x
+	bne ThisIsAI
+	ldy #$0a	; Joystick symbol
+ThisIsAI
+	sty statusBuffer+16
+;    rts
+.endp
+;-------------------------------------------------
 .proc DisplayStatus
 ;-------------------------------------------------
 
@@ -2239,32 +2267,6 @@ AngleDisplay
     mwa #statusBuffer+40+23 displayposition
     jsr displaybyte
     ldx TankNr   
-    rts
-.endp
-;-------------------------------------------------
-.proc PutTankNameOnScreen
-; puts name of the tank on the screen
-    ldy #$00
-    lda TankNr
-    asl
-    asl
-    asl ; 8 chars per name
-    tax
-NextChar02
-    lda tanksnames,x
-    sta statusBuffer+7,y
-    inx
-    iny
-    cpy #$08
-    bne NextChar02
-	; memory !!!!
-;	ldx TankNr
-;	ldy #$5e	; Computer symbol
-;	lda SkillTable,x
-;	bne ThisIsAI
-;	ldy #$0a	; Joystick symbol
-;ThisIsAI
-;	sty statusBuffer+16
     rts
 .endp
 ;-------------------------------------------------

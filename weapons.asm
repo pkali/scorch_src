@@ -1082,8 +1082,8 @@ ContinueToCheckMaxForce2
       sta ForceTableL,x
 @
 	mva #0 Erase
-    jsr DisplayStatus ;all digital values like force, angle, wind, etc.
     jsr PutTankNameOnScreen
+;    jsr DisplayStatus	; There is no need anymore, it is always after PutTankNameOnScreen
 
     jsr DrawTankNr
 
@@ -2534,7 +2534,7 @@ SpyHardEnd
     lda TankStatusColoursTable,x
     sta COLOR2  ; set color of status line
     jsr PutTankNameOnScreen
-    jsr DisplayStatus
+;    jsr DisplayStatus	; There is no need anymore, it is always after PutTankNameOnScreen
 	rts
 .endp
 ; -------------------------------------------------
