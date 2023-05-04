@@ -2047,14 +2047,21 @@ NextChar02
     iny
     cpy #$08
     bne NextChar02
-	; memory !!!!
+    ;=========================
+	; displaying number of active controller port or AI level
+    ;=========================
 	ldx TankNr
 	ldy #$5e	; Computer symbol
 	lda SkillTable,x
+	tax
 	bne ThisIsAI
 	ldy #$0a	; Joystick symbol
+	ldx JoystickNumber
+	inx 	; tricky
 ThisIsAI
 	sty statusBuffer+16
+	lda digits,x
+	sta statusBuffer+17
 ;    rts
 .endp
 ;-------------------------------------------------
@@ -2062,15 +2069,6 @@ ThisIsAI
 ;-------------------------------------------------
 
     ldx TankNr
-    ;=========================
-	; displaying number of active controller port
-    ;=========================
-	ldy SkillTable,x
-	bne LevelOfAI
-	ldy JoystickNumber
-LevelOfAI
-	lda digits+1,y
-	sta statusBuffer+17
 	
     ;=========================
     ;displaying symbol of the weapon
