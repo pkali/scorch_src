@@ -322,18 +322,7 @@ no5200splash
 	jsr SelectNextGradient.NotWind
 
     ; generate linetables
-    mwa #display temp
-    mwa #linetableL temp2
-    mwa #linetableH modify
-    ldy #0
-@     lda temp
-      sta (temp2),y
-      lda temp+1
-      sta (modify),y
-      adw temp #40
-      iny
-      cpy #screenheight+1
-    bne @-
+	jsr GenerateLineTable
 
     .IF TARGET = 800
 
