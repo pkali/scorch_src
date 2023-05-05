@@ -19,7 +19,7 @@
     opt h-f+
     org $801
     org [a($801)],$801
-    basic_start(START)
+    basic_start(FirstSTART)
 	
 	
 ;---------------------------------------------------
@@ -153,6 +153,7 @@ FirstZpageVariable = $57
 ;-----------------------------------------------
 ; libraries
 ;-----------------------------------------------
+      icl 'C64/lib/C64_ATARISYS.ASM'
       icl 'C64/lib/C64SYS.ASM'
       icl 'C64/lib/MACRO.ASM'
     
