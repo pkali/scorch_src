@@ -204,18 +204,8 @@ FirstSTART
 	jsr GenerateLineTable
 
 
-    ; RMT INIT
-    lda #$f0                    ;initial value
-    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
-
-    lda #$ff                    ;initial value
-    sta sfx_effect
-
-    RMTSong 0
-
-    VMAIN VBLinterrupt,7  		;jsr SetVBL
-	
-	mva #2 chactl  ; necessary for 5200
+    ; Random INIT
+	InitializeSIDrnd
 
 ;--------------------------------------------------
 ; Main program of the game
@@ -408,29 +398,6 @@ noingame
 	mva #0 RMT_blocked
 	rts
 .endp
-;-------------------------------------------------
-.proc CopyFromROM
-;-------------------------------------------------
-;copy from CART to RAM
-; trashes: Y
-; temp: source
-; temp2: destination
-; modify: destination-end
-;usage:
-;    mwa #DisplayCopyRom temp
-;    mwa #display temp2
-;    mwa #DisplayCopyEnd+1 modify
-;    jsr CopyFromROM
-
-    ldy #0
-@     lda (temp),y
-      sta (temp2),y
-      inw temp
-      inw temp2
-      cpw temp2 modify
-    bne @-
-    rts
-.endp
 ;--------------------------------------------------
 	icl 'C64/interrupts.asm'
 ;----------------------------------------------
@@ -451,9 +418,6 @@ TankFont
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
-;----------------------------------------------
-;RMT PLAYER loading shenaningans
-    icl 'artwork/sfx/rmtplayr_modified.asm'
 ;-------------------------------------------------
 .proc CheckTankCheat
     ldy #$07
@@ -515,33 +479,7 @@ EndofBFGDLI
 	SetDLI DLIinterruptGraph	; blinking off
 	rts
 .endp
-;--------------------------------------------------
-    .IF * > MODUL-1
-	  .ECHO *
-      .ERROR 'Code and data too long'
-    .ENDIF
-    .ECHO "Bytes left: ",$b000-*
-    
-    
-    org $b000                                    ;address of RMT module
-MODUL                                            
-                                                 ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6  ;include music RMT module
-MODULEND
 ;----------------------------------------------
     icl 'constants_top.asm'
 ;----------------------------------------------
   
-  .ECHO "Bytes on top left: ",$bfe8-* ;ROM_SETTINGS-*
-  .IF target = 5200
-    .IF * > ROM_SETTINGS-1
-      .ERROR 'Code and RMT song too long to fit in 5200'
-    .ENDIF
-    org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
-    ;     "01234567890123456789"
-    .byte " scorch supersystem "    ;20 characters title
-    .byte " ", $ff          ;$BFFD == $ff means diagnostic cart, no splash screen
-    .word FirstSTART
-  .ELSE
-     run FirstSTART
-  .ENDIF

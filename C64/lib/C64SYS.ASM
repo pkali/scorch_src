@@ -45,3 +45,5 @@ vic_spr4_color		= $D02B
 vic_spr5_color		= $D02C
 vic_spr6_color		= $D02D
 vic_spr7_color		= $D02E
+
+RANDOM = $D41B
