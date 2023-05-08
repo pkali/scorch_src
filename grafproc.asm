@@ -2244,19 +2244,6 @@ quit_seppuku
    
 .endp
 
-;--------------------------------------------------
-.proc SetMainScreen
-;    mva #0 dmactls 
-    SetDLI DLIinterruptGraph  ; jsr SetDLI for graphics (game) screen
-    mwa #dl dlptrs  ; issue #72 (glitches when switches)
-    lda #%00111110
-;    and #$fc
-;    ora #$02     ; 2=normal, 3 = wide screen width
-    sta dmactls
-	mva WallsType COLBAKS	; set color of background 
-    jsr WaitOneFrame
-    rts
-.endp
 ; -------------------------------------
 .proc SetupXYdraw
     lda ytankstable,x

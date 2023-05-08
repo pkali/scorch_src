@@ -220,5 +220,12 @@ ClearPlot
     bne @-
 	rts
 .endp
+;--------------------------------------------------
+.proc SetMainScreen
+	SwitchVICBank(0)
+	SetScreenMemory(displayC64)
+	SetHiresBitmapMode	; Hires mode on
+    rts
+.endp
 
 .ENDIF

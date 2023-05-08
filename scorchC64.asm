@@ -182,9 +182,6 @@ FirstSTART
 	DisplayCopyPurchaseEnd = 0
 	DisplayCopyPurchaseStart = 0
 	displayC64 = $2000	;	graphics screen memory start
-	SwitchVICBank(0)
-	SetScreenMemory(displayC64)
-	SetHiresBitmapMode	; Hires mode on
 	
 	jsr MakeDarkScreen
 
@@ -218,6 +215,8 @@ FirstSTART
 
     ; Random INIT
 	InitializeSIDrnd
+
+
 
 ;--------------------------------------------------
 ; Main program of the game
@@ -306,30 +305,7 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-	mva #128-KeyRepeatSpeed pressTimer	; tricky
-StillWait	
-	bit pressTimer
-	bmi KeyReleased
-      lda STICK0
-      and #$0f
-      cmp #$0f
-      bne StillWait
-      lda STRIG0
-      beq StillWait
-    .IF TARGET = 800
-      lda SKSTAT
-      cmp #$ff
-      bne StillWait
-      lda CONSOL
-      and #%00000110	; Select and Option only
-      cmp #%00000110
-      bne StillWait
-	.ELSE
-	lda SkStatSimulator
-	and #%11111110
-	beq StillWait
-    .ENDIF
-KeyReleased
+StillWait
       rts
 .endp
 ;--------------------------------------------------
