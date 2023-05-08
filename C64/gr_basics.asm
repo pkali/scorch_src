@@ -16,8 +16,7 @@ unPlotAfterX
     lda oldplotH,x
     sta oldplot+1
 
-    lda oldply,x
-    tay
+	ldy #0
     lda oldora,x
     sta (oldplot),y
 
@@ -31,30 +30,24 @@ CheckX
     jcs EndOfUnPlot
 MakeUnPlot
     ; let's count coordinates taken from xdraw and ydraw
-    ;xbyte = xbyte/8
-    lda xdraw+1
-    lsr
     lda xdraw
-    ror ;just one bit over 256. Max screenwidth = 512!!!
-    lsr
-    lsr
-;---
-    tay
-    ldx WhichUnPlot
-	tya
-    sta oldply,x
-
+	and #%11111000
+	;sta xbyte
+    ;---
     ldx ydraw
-    lda linetableL,x
-    sta xbyte
-    sta oldplot
+	clc
+    adc linetableL,x
+	sta xbyte
+	sta oldplot
     lda linetableH,x
+    adc xdraw+1
     sta xbyte+1
-    sta oldplot+1
+	sta oldplot+1
 
     lda xdraw
     and #$7
     tax
+	ldy #0
 
     lda color
     bne ClearUnPlot
@@ -90,9 +83,6 @@ LetsCheckOverlapping
     bne NotTheSamePlot
     lda oldplotH,x
     cmp oldplotH,y
-    bne NotTheSamePlot
-    lda oldply,x
-    cmp oldply,y
     bne NotTheSamePlot
     ; the pixel is in the same byte so let's take correct contents
     lda oldora,x

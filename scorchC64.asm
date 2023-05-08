@@ -35,7 +35,7 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $30 ; $57
+FirstZpageVariable = $58 ; $57
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar GradientNr		.byte
 	.zpvar GradientColors	.word
