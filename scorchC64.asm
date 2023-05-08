@@ -174,6 +174,12 @@ WeaponFont
 ; Game Code
 ;--------------------------------------------------
 FirstSTART
+
+	displayC64 = $2000	;	graphics screen memory start
+	SwitchVICBank(0)
+	SetScreenMemory(displayC64)
+	SetHiresBitmapMode	; Hires mode on
+	
 	jsr MakeDarkScreen
 
 	; one time zero variables in RAM (non zero page)

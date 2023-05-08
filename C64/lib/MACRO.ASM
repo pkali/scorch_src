@@ -85,7 +85,7 @@ upstartEnd
     // Set Data Direction for CIA #2, Port A to output
     //
     lda $dd02
-    and #%11111100  // Mask the bits we're interested in.
+    and #%11111100  // Mask the bits were interested in.
     ora #$03        // Set bits 0 and 1.
     sta $dd02
 
