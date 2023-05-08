@@ -2,7 +2,7 @@
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 
-
+DLIinterruptGraph = 0
 ;--------------------------------------------------
 .macro SetDLI
 ;	SetDLI #WORD

@@ -6,7 +6,7 @@
 ;Miami & Warsaw 2022, 2023
 
 ;---------------------------------------------------
-.def TARGET = C64 ; :)
+.def TARGET = 64 ; :)
 ;---------------------------------------------------
 .def XCORRECTION_FOR_PM = 0
 ; if 1 - active x position of tanks correction fo PMG
@@ -174,7 +174,13 @@ WeaponFont
 ; Game Code
 ;--------------------------------------------------
 FirstSTART
-
+	DL = 0
+	StatusBufferROM = 0
+	;StatusBufferCopy = 0
+	StatusBufferCopyEnd = 0
+	TRACKS = 4
+	DisplayCopyPurchaseEnd = 0
+	DisplayCopyPurchaseStart = 0
 	displayC64 = $2000	;	graphics screen memory start
 	SwitchVICBank(0)
 	SetScreenMemory(displayC64)
@@ -392,16 +398,9 @@ MakeDarkScreen
 .proc RmtSongSelect
 ;  starting song line 0-255 to A reg
 ;--------------------------------------------------
-	cmp #song_ingame
-	bne noingame	; noMusic blocks only ingame song
-    bit noMusic
-    spl:lda #song_silencio
-noingame
-	mvx #$ff RMT_blocked
-    ldx #<MODUL                 ;low byte of RMT module to X reg
-    ldy #>MODUL                 ;hi byte of RMT module to Y reg
-    jsr RASTERMUSICTRACKER      ;Init
-	mva #0 RMT_blocked
+	rts
+.endp
+.proc CopyFromRom
 	rts
 .endp
 ;--------------------------------------------------
@@ -479,10 +478,10 @@ EndofBFGDLI
 .endp
 ; ------------------------
 .proc BFGblink
-	SetDLI DLIinterruptBFG	; blinking on
+;	SetDLI DLIinterruptBFG	; blinking on
 	ldy #50
 	jsr PauseYFrames
-	SetDLI DLIinterruptGraph	; blinking off
+;	SetDLI DLIinterruptGraph	; blinking off
 	rts
 .endp
 ;----------------------------------------------

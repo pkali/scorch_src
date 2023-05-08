@@ -210,7 +210,7 @@ upstartEnd
     eif
 
     sta $d018
-.end
+.endm
 
 //
 // Once this is done, random values appear in location $D41B (RANDOM)
@@ -221,4 +221,63 @@ upstartEnd
 	STA $D40F ; voice 3 frequency high byte
 	LDA #$80  ; noise waveform, gate bit off
 	STA $D412 ; voice 3 control register
+.endm
+
+;-------------------------------------
+  .MACRO rolw
+     ROL :1
+    ROL :1+1
+  .ENDM
+;-------------------------------------
+  .MACRO aslw
+    ASL :1
+    ROL :1+1
+  .ENDM
+;-------------------------------------
+  .MACRO rorw
+    ROR :1+1
+    ROR :1
+  .ENDM
+;-------------------------------------
+  .MACRO lsrw
+    LSR :1+1
+    ROR :1
+  .ENDM
+;-------------------------------------
+    .macro randomize
+    ;usage: randomize floor ceiling
+    ;returns (in A) a random .byte between "floor" and "ceiling"
+    .if :2 < :1
+      .error "floor higher than ceiling"
+    .endif
+?rand
+      lda random
+      cmp #:1 ;floor
+      bcc ?rand
+      cmp #:2+1 ;ceiling
+      bcs ?rand
+    .endm
+;-------------------------------------
+    .macro phx
+      txa
+      pha
+    .endm
+;-------------------------------------
+    .macro phy
+      tya
+      pha
+    .endm
+;-------------------------------------
+    .macro plx
+      pla
+      tax
+    .endm
+;-------------------------------------
+    .macro ply
+      pla
+      tay
+    .endm
+;-------------------------------------
+.macro wait
+	nop
 .endm
