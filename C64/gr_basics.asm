@@ -222,9 +222,37 @@ ClearPlot
 .endp
 ;--------------------------------------------------
 .proc SetMainScreen
-	SwitchVICBank(0)
-	SetScreenMemory($2000)
+	lda #0          ; Black background and border
+	sta $d020
+	sta $d021
+;	lda #$3b        ; Bitmap mode on
+;	sta $d011
+;	lda #$18        ; Multicolor on
+;	sta $d016
+	
+	lda $dd00       ; Set video bank to start at 0
+	and #252
+	ora #3
+	sta $dd00
+	lda #$18
+	sta $d018
+
+;	SwitchVICBank(0)
+;	SetScreenMemory($2000)
 	SetHiresBitmapMode	; Hires mode on
+	lda #$00
+	sta 53281
+	; clear color RAM
+	lda #0
+	tax
+@	sta $d800,x
+	sta $d900,x
+	sta $da00,x
+	sta $db00,x
+	inx
+	bne @-
+	
+	
     rts
 .endp
 
