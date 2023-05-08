@@ -35,7 +35,7 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $57
+FirstZpageVariable = $30 ; $57
     .zpvar DliColorBack		.byte = FirstZpageVariable
 	.zpvar GradientNr		.byte
 	.zpvar GradientColors	.word
@@ -161,7 +161,7 @@ FirstZpageVariable = $57
 ;-----------------------------------------------
         
     ; Game loading address
-    ORG $4000
+    ORG $4100
     icl 'variables.asm'
     
 WeaponFont
@@ -184,7 +184,7 @@ FirstSTART
 ;        SEI             ; disable IRQ
  		LDA #$36
 		STA $0001      ; Turn Off BASIC ROM
-/*         LDA #<NMI    ;
+        LDA #<NMI    ;
         STA $0318       ; change NMI vector
         LDA #>NMI    ; to our routine
         STA $0319       ;
@@ -196,7 +196,7 @@ FirstSTART
         STA $DD0D       ; set Timer A as source for NMI
         LDA #$01        ;
         STA $DD0E       ; start Timer A -> NMI
- */ 
+
                         ; from here on NMI is disabled
 
 	

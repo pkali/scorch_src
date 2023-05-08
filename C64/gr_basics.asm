@@ -126,23 +126,22 @@ CheckX02
 MakePlot
     ; let's calculate coordinates from xdraw and ydraw
 
-    ;xbyte = xbyte/8
-    lda xdraw+1
-    lsr
     lda xdraw
-    ror ;just one bit over 256. Max screenwidth = 512!!!
-    lsr
-    lsr
-    sta xbyte
+	and #%11111000
+	;sta xbyte
     ;---
     ldx ydraw
-    ldy linetableL,x
+	clc
+    adc linetableL,x
+	sta xbyte
     lda linetableH,x
+    adc xdraw+1
     sta xbyte+1
 
     lda xdraw
     and #$7
     tax
+	ldy #0
     lda color
     bne ClearPlot
 
@@ -166,24 +165,22 @@ ClearPlot
 
     ; let's calculate coordinates from xdraw and ydraw
 
-    ;xbyte = xbyte/8
-    lda xdraw+1
-    lsr
     lda xdraw
-    ror ;just one bit over 256. Max screenwidht = 512!!!
-    lsr
-    lsr
-    sta xbyte
+	and #%11111000
+	;sta xbyte
     ;---
     ldx ydraw
-    ldy linetableL,x
+	clc
+    adc linetableL,x
+	sta xbyte
     lda linetableH,x
+    adc xdraw+1
     sta xbyte+1
 
     lda xdraw
     and #$7
     tax
-
+	ldy #0
     lda (xbyte),y
     eor #$ff
     and bittable,x
@@ -210,11 +207,20 @@ ClearPlot
     mwa #linetableL temp2
     mwa #linetableH modify
     ldy #0
+	ldx #0
 @     lda temp
       sta (temp2),y
       lda temp+1
       sta (modify),y
-      adw temp #40
+	  cpx #7
+	  bne NotChar
+	  ldx #0
+      adw temp #(320-7)
+	  jmp next8lines
+NotChar
+	  inw temp
+	  inx
+next8lines
       iny
       cpy #screenheight+1
     bne @-
@@ -222,13 +228,9 @@ ClearPlot
 .endp
 ;--------------------------------------------------
 .proc SetMainScreen
-	lda #0          ; Black background and border
+	lda #1          ; White background and border
 	sta $d020
 	sta $d021
-;	lda #$3b        ; Bitmap mode on
-;	sta $d011
-;	lda #$18        ; Multicolor on
-;	sta $d016
 	
 	lda $dd00       ; Set video bank to start at 0
 	and #252
@@ -243,12 +245,17 @@ ClearPlot
 	lda #$00
 	sta 53281
 	; clear color RAM
-	lda #0
-	tax
-@	sta $d800,x
+	ldx #0
+@	lda #1
+	sta $d800,x
 	sta $d900,x
 	sta $da00,x
 	sta $db00,x
+	lda #$21
+	sta $0400,x
+	sta $0500,x
+	sta $0600,x
+	sta $0700,x
 	inx
 	bne @-
 	
