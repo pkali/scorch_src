@@ -28,8 +28,7 @@
 .endm
 
 .macro RMTSong
-      lda #:1
-      rts	; do nothing in C64
+      lda #:1 	; do nothing in C64
 .endm
 
 ;---------------------------------------------------
@@ -160,11 +159,10 @@ FirstZpageVariable = $57
 ;-----------------------------------------------
 ; variable declarations in RAM (no code)
 ;-----------------------------------------------
-    ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables + 1)
-    icl 'variables.asm'
         
     ; Game loading address
     ORG $4000
+    icl 'variables.asm'
     
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
@@ -182,9 +180,28 @@ FirstSTART
 	DisplayCopyPurchaseEnd = 0
 	DisplayCopyPurchaseStart = 0
 	displayC64 = $2000	;	graphics screen memory start
+
+;        SEI             ; disable IRQ
+ 		LDA #$36
+		STA $0001      ; Turn Off BASIC ROM
+/*         LDA #<NMI    ;
+        STA $0318       ; change NMI vector
+        LDA #>NMI    ; to our routine
+        STA $0319       ;
+        LDA #$00        ; stop Timer A
+        STA $DD0E       ;
+        STA $DD04       ; set Timer A to 0, after starting
+        STA $DD05       ; NMI will occur immediately
+        LDA #$81        ;
+        STA $DD0D       ; set Timer A as source for NMI
+        LDA #$01        ;
+        STA $DD0E       ; start Timer A -> NMI
+ */ 
+                        ; from here on NMI is disabled
+
 	
 	jsr MakeDarkScreen
-
+	
 	; one time zero variables in RAM (non zero page)
 	lda #0
 	ldy #OneTimeZeroVariablesCount-1
@@ -216,8 +233,6 @@ FirstSTART
     ; Random INIT
 	InitializeSIDrnd
 
-
-
 ;--------------------------------------------------
 ; Main program of the game
     icl 'game.asm'
@@ -231,65 +246,9 @@ FirstSTART
 ; result: A=keycode
 ;--------------------------------------------------
     jsr WaitForKeyRelease
-@
-      .IF TARGET = 800
-          lda SKSTAT
-          cmp #$ff
-          beq checkJoyGetKey ; key not pressed, check Joy
-          cmp #$f7  ; SHIFT
-          beq checkJoyGetKey
-	  .ELSE
-		  lda SkStatSimulator
-		  and #%11111110
-		  bne checkJoyGetKey ; key not pressed, check Joy
-      .ENDIF            
-          lda kbcode
-          cmp #@kbcode._none
-          beq checkJoyGetKey
-          and #$3f ;CTRL and SHIFT ellimination
-          cmp #@kbcode._esc  ; 28  ; ESC
-          bne getkeyend
-            mvy #$80 escFlag
-          bne getkeyend
-
-checkJoyGetKey
-      ;------------JOY-------------
-      ;happy happy joy joy
-      ;check for joystick now
-      lda STICK0
-      and #$0f
-      cmp #$0f
-      beq notpressedJoyGetKey
-      tay 
-      lda joyToKeyTable,y
-      bne getkeyend
-
-notpressedJoyGetKey
-	;fire
-	lda STRIG0
- 	beq JoyButton
-	.IF TARGET = 800	; Select and Option key only on A800
-	bne checkSelectKey
-checkSelectKey
-	lda CONSOL
-	and #%00000010	; Select
-	beq SelectPressed
-	lda CONSOL
-	and #%00000100	; Option	
-	.ENDIF
-    bne @-
-OptionPressed
-	lda #@kbcode._atari	; Option key
-	bne getkeyend	
-SelectPressed
-	lda #@kbcode._tab	; Select key
-	bne getkeyend
-JoyButton
-    lda #@kbcode._ret ;Return key    
-getkeyend
-	ldy #0
-    sty ATRACT	; reset atract mode	
-    mvy #sfx_keyclick sfx_effect
+	lda #0
+	sta escFlag
+	lda #$ff
     rts
 .endp
 
@@ -344,16 +303,11 @@ peopleAreHere
 ;--------------------------------------------------
 MakeDarkScreen
 ;--------------------------------------------------
-	jsr PMoutofScreen	; hide P/M
-	mva #0 dmactls		; dark screen
+;	mva #0 dmactls		; dark screen
 	; and wait one frame :)
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-	lda CONSOL
-	and #%00000101	; Start + Option
-	sne:mva #$40 escFlag	
-	and #%00000001 ; START KEY
 	seq:wait	; or waitRTC ?
     rts
 .endp
@@ -387,6 +341,7 @@ MakeDarkScreen
     icl 'C64/textproc.asm'
 ;----------------------------------------------
     icl 'grafproc.asm'
+    icl 'C64/gr_basics.asm'	
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------
@@ -463,4 +418,8 @@ EndofBFGDLI
 ;----------------------------------------------
     icl 'constants_top.asm'
 ;----------------------------------------------
+NMI
+         INC $D020      ; change border colour, indication for a NMI
+        RTI             ; exit interrupt
+                        ; (not acknowledged!)
   

@@ -193,12 +193,12 @@ ClearPlot
 ;--------------------------------------------------
 .proc ClearScreen
 ;--------------------------------------------------
-    mwa #display temp
+    mwa #displayC64 temp
     ldy #0
 @     lda #$ff
       sta (temp),y
       inw temp
-      cpw temp #display+screenheight*screenBytes+1
+      cpw temp #displayC64+screenheight*screenBytes+1
     bne @-
    rts 
 .endp
@@ -223,7 +223,7 @@ ClearPlot
 ;--------------------------------------------------
 .proc SetMainScreen
 	SwitchVICBank(0)
-	SetScreenMemory(displayC64)
+	SetScreenMemory($2000)
 	SetHiresBitmapMode	; Hires mode on
     rts
 .endp

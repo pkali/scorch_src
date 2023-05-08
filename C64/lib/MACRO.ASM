@@ -281,3 +281,7 @@ upstartEnd
 .macro wait
 	nop
 .endm
+;-------------------------------------
+.macro halt
+?s	jmp ?s
+.endm
