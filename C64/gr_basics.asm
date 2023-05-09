@@ -218,7 +218,7 @@ next8lines
 .endp
 ;--------------------------------------------------
 .proc SetMainScreen
-	lda #1          ; White background and border
+	lda #$b          ; Grey background and border
 	sta $d020
 	sta $d021
 	
@@ -241,7 +241,7 @@ next8lines
 	sta $d900,x
 	sta $da00,x
 	sta $db00,x
-	lda #$21
+	lda #$0f
 	sta $0400,x
 	sta $0500,x
 	sta $0600,x
