@@ -318,6 +318,18 @@ MakeDarkScreen
 .endp
 
 ;--------------------------------------------------
+.proc ShellDelay
+    ldx flyDelay
+DelayLoop
+      lda $d012
+@     cmp $d012
+      beq @-
+      dex
+    bne DelayLoop
+noShellDelay
+    rts
+.endp
+;--------------------------------------------------
 .proc RmtSongSelect
 ;  starting song line 0-255 to A reg
 ;--------------------------------------------------
