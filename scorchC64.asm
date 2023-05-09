@@ -181,7 +181,7 @@ FirstSTART
 	DisplayCopyPurchaseStart = 0
 	displayC64 = $2000	;	graphics screen memory start
 
-;        SEI             ; disable IRQ
+        SEI             ; disable IRQ
  		LDA #$36
 		STA $0001      ; Turn Off BASIC ROM
         LDA #<NMI    ;
@@ -222,9 +222,6 @@ FirstSTART
 	  dey
 	bpl @-
 
-    ; set gradient to the full LGBTIQQAAPP+ flag on start
-	mva #0 GradientNr	; #1 to set gradient number 2 :) (next one)
-	jsr SelectNextGradient.NotWind
 
     ; generate linetables
 	jsr GenerateLineTable
@@ -271,11 +268,7 @@ StillWait
 .proc IsKeyPressed
 ; result: A=0 - yes , A>0 - no
 ;--------------------------------------------------
-	lda SKSTAT
-	and #%00000100
-	beq @+
 	lda #1
-@	and STRIG0
 	rts
 .endp
 ;--------------------------------------------------
@@ -308,7 +301,7 @@ MakeDarkScreen
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-	seq:wait	; or waitRTC ?
+	wait	; or waitRTC ?
     rts
 .endp
 
