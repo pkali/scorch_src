@@ -278,9 +278,18 @@ upstartEnd
       tay
     .endm
 ;-------------------------------------
-.macro wait
-	nop
-.endm
+	.MACRO WAIT
+;	WAIT
+;	waits one frame (1/50 s(PAL) or 1/60s(NTSC))
+?ze	LDA $D012
+	cmp #16	; if line<16 then wait for line>15 (long VBI protection)
+	bcc ?ze
+	sbc #10	; last lines correction
+?wa	cmp $D012
+	bcc ?wa
+?wf	cmp $D012
+	bcs ?wf
+	.ENDM
 ;-------------------------------------
 .macro halt
 ?s	jmp ?s
