@@ -219,6 +219,8 @@ next8lines
 ;--------------------------------------------------
 .proc SetMainScreen
 	lda #$b          ; Grey background and border
+	lda WallsType
+	:4 rol
 	sta $d020
 	sta $d021
 	
