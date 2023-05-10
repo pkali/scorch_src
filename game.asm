@@ -1062,15 +1062,6 @@ SequenceStart
     cpx #MaxPlayers
     bne SequenceStart
 
-; we will need a TempResults (TR) table to fiddle with
-    ldx #0
-movetotemp
-    lda ResultsTable,x
-    sta TempResults,x
-    inx
-    cpx NumberOfPlayers
-    bne movetotemp
-
 ; i=0:sortflag=0
 ;loop:
 ; if TR(i) < TX(i+1) then i=i+1: here quit if i=numberofplayers
@@ -1094,8 +1085,10 @@ Bubble
     stx temp2 ; sortflag=temp2
 
 BubbleBobble
-    lda TempResults,x
-    cmp TempResults+1,x
+	ldy TankSequence,x
+	lda ResultsTable,y
+	ldy TankSequence+1,x
+	cmp ResultsTable,y
     bcc nextishigher
 	bne swapvalues
 nextisequal
@@ -1110,12 +1103,6 @@ nextisequal
     ;here we must swap values
     ;because next is smaller than previous
 swapvalues
-    sta temp
-    lda TempResults+1,x
-    sta TempResults,x
-    lda temp
-    sta TempResults+1,x
-    ;
     lda TankSequence,x
     sta temp
     lda TankSequence+1,x
