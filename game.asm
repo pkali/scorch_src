@@ -1102,17 +1102,17 @@ nextisequal
 nextisequal2
 	; if results are equal, check money (H)
 	ldy TankSequence,x
-	lda moneyH,y
+	lda EarnedMoneyH,y
 	ldy TankSequence+1,x
-	cmp moneyH,y
+	cmp EarnedMoneyH,y
     bcc nextishigher
 	bne swapvalues
 nextisequal2b
 	; if results are equal, check money (L)
 	ldy TankSequence,x
-	lda moneyL,y
+	lda EarnedMoneyL,y
 	ldy TankSequence+1,x
-	cmp moneyL,y
+	cmp EarnedMoneyL,y
 	;
 	beq nextishigher ; this is to block hangs when 2 equal values meet
     bcc nextishigher
