@@ -1853,8 +1853,19 @@ NextChar
     adw temp #19 displayposition
     jsr displaydec5
 	mva #0 displayposition	; overwrite first digit
+	; put AI symbol
+	ldx TankNr
+	lda SkillTable,x
+	beq NotAItank
+	tay
+	lda digits,y
+	ldy #39
+	sta (temp),y ; and last zero
+	dey
+	lda #$5e	; Computer symbol
+	sta (temp),y ; and last zero
+NotAItank
 	; put earned money on the screen
-    ldx TankNr
     lda EarnedMoneyL,x
     sta decimal
 	lda EarnedMoneyH,x

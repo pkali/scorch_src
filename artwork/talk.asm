@@ -89,7 +89,7 @@ L84  dta d"POW!"
 L85  dta d"BIF!"
 L86  dta d"BAM!"
 L87  dta d"ZONK!"
-L88  dta d"I SHOULD'VE LISTENED TO MY MOTHER..."
+L88  dta d"I SHOULD'VE LISTENED TO MY MOTHER."
 L89  dta d"I WALK THROUGH THE VALLEY OF THE SHADOW..."
 L90  dta d"WHAT WAS THAT NOISE?"
 L91  dta d"MAMA SAID THERE'D BE DAYS LIKE THIS."
@@ -115,7 +115,7 @@ L110 dta d"911?"
 L111 dta d"OH NO! HERE I BLOW AGAIN!"
 L112 dta d"I'LL BE BACK..."
 L113 dta d"HEY - I'VE GOT LAWYERS."
-L114 dta d"TIME TO CALL 1-900-SUE-TANK."
+L114 dta d"CALL 1-900-SUE-TANK."
 L115 dta d"YOU BIG DUMMY!"                                    ;(sanford and son)
 LEND
 OffensiveTextTableL
