@@ -1076,42 +1076,40 @@ SequenceStart
 ; if sortflag=0 then finished, else repeat...
 ;
 ; or something like this :)
-    ldx NumberOfPlayers
-    dex
-    stx temp+1 ; for checking end of the loop only
 
 Bubble
     ldx #0 ;i=x
     stx temp2 ; sortflag=temp2
+	inx ; because NumberOfPlayers start from 1 (not 0)
 
 BubbleBobble
-	ldy TankSequence,x
+	ldy TankSequence-1,x	; x count from 1 to NumberOfPlayers (we need cout from 0 to NumberOfPlayers-1)
 	lda ResultsTable,y
-	ldy TankSequence+1,x
+	ldy TankSequence,x
 	cmp ResultsTable,y
     bcc nextishigher
 	bne swapvalues
 nextisequal
 	; if results are equal, check Direct Hits
-	ldy TankSequence,x
+	ldy TankSequence-1,x
 	lda DirectHits,y
-	ldy TankSequence+1,x
+	ldy TankSequence,x
 	cmp DirectHits,y
     bcc nextishigher
 	bne swapvalues
 nextisequal2
 	; if results are equal, check money (H)
-	ldy TankSequence,x
+	ldy TankSequence-1,x
 	lda EarnedMoneyH,y
-	ldy TankSequence+1,x
+	ldy TankSequence,x
 	cmp EarnedMoneyH,y
     bcc nextishigher
 	bne swapvalues
 nextisequal2b
 	; if results are equal, check money (L)
-	ldy TankSequence,x
+	ldy TankSequence-1,x
 	lda EarnedMoneyL,y
-	ldy TankSequence+1,x
+	ldy TankSequence,x
 	cmp EarnedMoneyL,y
 	;
 	beq nextishigher ; this is to block hangs when 2 equal values meet
@@ -1119,16 +1117,16 @@ nextisequal2b
     ;here we must swap values
     ;because next is smaller than previous
 swapvalues
-    lda TankSequence,x
+    lda TankSequence-1,x
     sta temp
-    lda TankSequence+1,x
-    sta TankSequence,x
+    lda TankSequence,x
+    sta TankSequence-1,x
     lda temp
-    sta TankSequence+1,x
+    sta TankSequence,x
     inc temp2
 nextishigher
     inx
-    cpx temp+1 ;cpx ^NumberOfPlayers-1
+    cpx NumberOfPlayers
     bne BubbleBobble
 
     lda temp2
