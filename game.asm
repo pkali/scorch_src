@@ -45,6 +45,8 @@ MainGameLoop
     bit escFlag
     bmi START
 	jvs GoGameOver
+
+	jsr CalculateGains
     
     jsr SortSequence
     
@@ -67,10 +69,21 @@ MainGameLoop
 
 	jsr DemoModeOrKey
 	jsr MakeDarkScreen
+	
+    lda GameIsOver
+	beq NoGameOverYet
+GoGameOver
+	jsr GameOverScreen
+    jmp START
+NoGameOverYet
+    inc CurrentRoundNr
+    mva #sfx_silencer sfx_effect
 
-    ldx NumberOfPlayers
-    dex
-CalculateGains
+    jmp MainGameLoop
+ 
+;--------------------------------------------------
+.proc CalculateGains
+;--------------------------------------------------
     ; add gains and substract losses
     ; gain is what player gets for lost energy of opponents
     ; energy lost by opponents is added during Round and
@@ -80,6 +93,9 @@ CalculateGains
     ; Important! If player has 10 energy and gets a central hit
     ; from nuke that would take 90 energy points, his loss
     ; is 90, not 10
+    ldx NumberOfPlayers
+    dex
+CalculateGainsLoop
 	
 	; adding the remaining energy of the tank to gain
 	; winner gets more ! :)
@@ -155,20 +171,9 @@ ezeromoney
 eskipzeroing
 
     dex
-    jpl CalculateGains
-
-    lda GameIsOver
-	beq NoGameOverYet
-GoGameOver
-	jsr GameOverScreen
-    jmp START
-NoGameOverYet
-    inc CurrentRoundNr
-    mva #sfx_silencer sfx_effect
-
-    jmp MainGameLoop
- 
-
+    jpl CalculateGainsLoop
+	rts
+.endp
 ;--------------------------------------------------
 .proc RoundInit 
 ;--------------------------------------------------
