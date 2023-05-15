@@ -404,6 +404,7 @@ ShootAtomicWinter
 ShootWhiteFlag
 	; --- white flag ---
 	jsr WhiteFlag
+	jsr TankFlying.SoilDownAfterLanding  ; Soildown like after Hovercraf landing :)
 	jmp NextPlayerShoots ; and we skip shoot
 GoFloat
 	jsr TankFlying

@@ -206,9 +206,7 @@ disktance ;tanks distance
     .by screenwidth/5
     .by screenwidth/6
     .by screenwidth/7
-    .by screenwidth/8
-    .by screenwidth/9
-    ;max number of players=8 :)
+    ;max number of players=6 :)
 
 ; this table is for deciding where a tank should slide
 ; accordingly to what is below the tank

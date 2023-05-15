@@ -2955,6 +2955,7 @@ OnGround
 	lda FloatingAlt
 	cmp #18
 	beq NotHighest
+SoilDownAfterLanding
 	jsr ClearScreenSoilRange
 NotHighest
 	; calculate range
