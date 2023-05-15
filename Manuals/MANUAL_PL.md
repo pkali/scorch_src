@@ -61,7 +61,7 @@ Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu zakupów następneg
 
 W linii statusowej widoczna jest informacja o tym który z graczy aktualnie może oddać strzał oraz zestaw innych informacji:
 * nazwa czołgu gracza
-* numer aktywnego joysticka lub posiom gracza sterowanego przez komputer (1-**Moron** - 8-**Unknown**),
+* numer aktywnego joysticka lub poziom gracza sterowanego przez komputer (1-**Moron** - 8-**Unknown**),
 * wybrana aktualnie broń ofensywna (symbol ilość nazwa),
 * pozostała ilość punktów energii gracza i jeśli ma on aktywną broń defensywną posiadającą swój zasób energii - w nawiasie ten zasób
 * ustawiony przez gracza kąt nachylenia lufy i kierunek jej nachylenia
