@@ -783,12 +783,10 @@ B0  dey
       cpx #ind_White_Flag_____  ; White Flag
       bne no99
 set99 lda #99     
-no99  sta TanksWeapon1,x
-      sta TanksWeapon2,x
-      sta TanksWeapon3,x
-      sta TanksWeapon4,x
-      sta TanksWeapon5,x
-      sta TanksWeapon6,x
+no99
+	.REPT MaxPlayers, #+1
+	  sta TanksWeapon:1,x
+	.ENDR
       dex
       beq set99	; Baby Missile (index=0)
     bpl @-

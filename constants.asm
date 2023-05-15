@@ -32,9 +32,13 @@ LevelNameBeginH
     .by >(NamesOfLevels+64),>(NamesOfLevels+74),>(NamesOfLevels+84)
 ;--------------
 TanksWeaponsTableL
-    .by <TanksWeapon1,<TanksWeapon2,<TanksWeapon3,<TanksWeapon4,<TanksWeapon5,<TanksWeapon6
+	.REPT MaxPlayers, #+1
+	.by <TanksWeapon:1
+	.ENDR
 TanksWeaponsTableH
-    .by >TanksWeapon1,>TanksWeapon2,>TanksWeapon3,>TanksWeapon4,>TanksWeapon5,>TanksWeapon6
+	.REPT MaxPlayers, #+1
+	.by >TanksWeapon:1
+	.ENDR
 ;--------------
 XtankOffsetGO_L
 	.by 6,56,106,156,206,0
@@ -202,7 +206,9 @@ disktance ;tanks distance
     .by screenwidth/5
     .by screenwidth/6
     .by screenwidth/7
-    ;max number of players=6
+    .by screenwidth/8
+    .by screenwidth/9
+    ;max number of players=8 :)
 
 ; this table is for deciding where a tank should slide
 ; accordingly to what is below the tank
@@ -221,10 +227,9 @@ SlideLeftTableLen = *-SlideLeftTable
 TanksNamesDefault
     dta d"1st.Tank"
     dta d"2nd.Tank"
-    dta d"3rd.Tank"
-    dta d"4th.Tank"
-    dta d"5th.Tank"
-    dta d"6th.Tank"
+.REPT MaxPlayers-2, #+3
+    dta d":1rd.Tank"
+.ENDR
 ;-------------------------------------------------
 TankShapesTable         .BYTE char_tank1___________
                         .BYTE char_tank2___________

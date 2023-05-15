@@ -23,7 +23,7 @@ GameOverColoursTable  .ds MaxPlayers; .BYTE $80,$40,$c4,$20,$c0,$e4
 ;----------------------------------------------------
 TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
     ;:6 dta d"        "
-    .ds 6*8
+    .ds MaxPlayers*8
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS MaxPlayers
@@ -341,19 +341,10 @@ LaserCoordinate .DS 8 ; 2,2,2,2
 ; Let 0 be "baby missile"
 ; from $30 the defensive weapons begin
 TanksWeapons
-TanksWeapon1
+.REPT MaxPlayers, #+1
+TanksWeapon:1
     .DS number_of_weapons
-TanksWeapon2
-    .DS number_of_weapons
-TanksWeapon3
-    .DS number_of_weapons
-TanksWeapon4
-    .DS number_of_weapons
-TanksWeapon5
-    .DS number_of_weapons
-TanksWeapon6
-    .DS number_of_weapons
-
+.ENDR
 mountaintable ;table of mountains (size=screenwidth)
     .DS [screenwidth]
     .DS 1 ; additional byte for fallout (sometimes 1 pixel)
