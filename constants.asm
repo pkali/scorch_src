@@ -201,12 +201,9 @@ bittable2
 ;----------------------------
 disktance ;tanks distance
     .by 0,0
-    .by screenwidth/3
-    .by screenwidth/4
-    .by screenwidth/5
-    .by screenwidth/6
-    .by screenwidth/7
-    ;max number of players=6 :)
+.REPT MaxPlayers-1, #+3
+    .by screenwidth/:1
+.ENDR
 
 ; this table is for deciding where a tank should slide
 ; accordingly to what is below the tank
