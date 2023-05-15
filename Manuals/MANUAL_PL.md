@@ -4,6 +4,7 @@ Grać można przy użyciu klawiatury (wszystkie funkcjonalności) lub joysticka 
 
 ## 1. Wybór opcji gry.
 ![Ekran wyboru opcji gry.](images/MainMenu.png)
+
 Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 * ilość graczy (2 - 6) obejmuje tak ludzi jak graczy sterowanych przez komputer
 * początkową ilość gotówki każdego z graczy (8k to wybrana przez nas wartość optymalna, lecz przy krótkich rozgrywkach warto wybrać większą wartość)
@@ -30,6 +31,7 @@ Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
 ## 2. Wprowadzanie nazwy graczy i wybór poziomu graczy sterowanych przez komputer
 ![Ekran wyboru graczy i poziomu trudności.](images/DiffMenu.png)
+
 Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje).
 Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz.
 Klawisz [INVERSE] lub [OPTION] umożliwiają wybór jednego z 3 dostępnych kształtów czołgów. Na konsoli Atari 5200 uzyskuje się to poprzez cykliczne wybieranie kolejnych portów joysticka klawiszem [5].
@@ -42,6 +44,7 @@ Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 ## 3. Ekran zakupów (przed każdą rundą)
 ![Ekran zakupów broni ofensywnych.](images/PurOffensive.png)
 ![Ekran zakupów broni defensywnych.](images/PurDefensive.png)
+
 Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za ten cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz [TAB] lub strzałka w lewo czy też ruch joystickiem w lewo zmieniają ekran na bronie defensywne lub ofensywne, klawisz [SPACJA] lub strzałka w prawo a także joystick w prawo realizują zakup wskazanej broni.
 
 Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu aktywacji broni defensywnych.
