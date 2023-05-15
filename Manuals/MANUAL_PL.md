@@ -48,7 +48,9 @@ Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za ten cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz [TAB] lub strzałka w lewo czy też ruch joystickiem w lewo zmieniają ekran na bronie defensywne lub ofensywne, klawisz [SPACJA] lub strzałka w prawo a także joystick w prawo realizują zakup wskazanej broni.
 
 Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu aktywacji broni defensywnych.
+
 ![Ekran aktywacji broni defensywnych.](images/ActDefensive.png)
+
 Na ekranie tym można aktywować zakupione wcześniej bronie defensywne czy też ofensywne. Obsługiwany jest identycznie jak ekran zakupów, jednak [SPACJA] lub strzałka w prawo a także joystick w prawo realizują aktywacje wskazanej broni. Umożliwia to aktywowanie osłon jeszcze przed rozpoczęciem rundy.
 
 Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu zakupów następnego gracza.
@@ -56,6 +58,7 @@ Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu zakupów następneg
 
 ## 4. Główny ekran gry
 ![Główny ekran gry.](images/StatusLine.png)
+
 W linii statusowej widoczna jest informacja o tym który z graczy aktualnie może oddać strzał oraz zestaw innych informacji:
 * nazwa czołgu gracza
 * numer aktywnego joysticka

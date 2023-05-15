@@ -3,6 +3,7 @@
 You can play using the keyboard (all functionality) or the joystick in the first port (all functionality necessary for gameplay).
 
 ## 1. Game Option Selection.
+![Game options screen.](images/MainMenu.png)
 
 On the first screen, you can configure gameplay options:
 * number of players (2 - 6) includes both human and computer-controlled players
@@ -29,6 +30,7 @@ The [TAB] or [SELECT] key, and on the Atari 5200 console, the [5] controller key
 The [RETURN] key or a joystick button moves to the next screen.
 
 ## 2. Entering the name of players and selecting the level of computer-controlled players
+![Name of players and game level screen.](images/DiffMenu.png)
 
 The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options).
 The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key allow you to choose which joystick port the player will use.
@@ -40,15 +42,22 @@ The player's name can also be entered with the joystick. After pressing and hold
 If the name is not entered, it will be supplemented with the default name.
 
 ## 3. Shopping screen (before each round)
+![Shopping offensives screen.](images/PurOffensive.png)
+![Shopping defensives screen.](images/PurDefensive.png)
 
 On this screen, you can make purchases of offensive and defensive weapons. Only those weapons that the player can afford are visible, along with information about the price and the number of units of a given weapon that will be obtained for that price. The information on the screen probably needs no more description. You move through the lists with the cursor keys (up and down) or with the joystick, the [TAB] key or the left arrow or the left joystick tilt change the screen to defensive or offensive weapons, the [SPACE] key or the right arrow and also the joystick to the right does the purchase of the indicated weapon.
 
-The [RETURN] key or the joystick button press switches to the defensive weapon activation screen. Here you can activate previously bought defensive (or offensive after switching with [TAB], etc) weapons. This makes it possible to activate shields and others before the round starts.
+The [RETURN] key or the joystick button press switches to the defensive weapon activation screen. Here you can activate previously bought defensive (or offensive after switching with [TAB], etc) weapons. 
+
+![Defensives activation screen.](images/ActDefensive.png)
+
+This makes it possible to activate shields and others before the round starts.
 
 Another [RETURN] key or joystick button press switches to the next player's shopping screen.
 (For computer players this screen is not shown.)
 
 ## 4. The main screen of the game
+![Main game screen.](images/StatusLine.png)
 
 The status line shows which player is currently allowed to take a shot and a set of other information:
 * player's tank name,
