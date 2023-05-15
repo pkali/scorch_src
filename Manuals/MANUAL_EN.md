@@ -9,7 +9,12 @@ On the first screen, you can configure gameplay options:
 * number of players (2 - 6) includes both human and computer-controlled players
 * the initial amount of cash of each player (2K is the optimal value we chose, but for short games, it is worth choosing a higher value)
 * gravity
-* maximum wind strength (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be)
+* maximum wind strength (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be):
+	* 1B - maximum wind strength: 5
+	* 3B - maximum wind strength: 20
+	* 5B - maximum wind strength: 40
+	* 7B - maximum wind strength: 70
+	* 9B - maximum wind strength: 99
 * number of rounds in a game
 * missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.

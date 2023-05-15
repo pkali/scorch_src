@@ -1158,5 +1158,229 @@ SetRandomWalls
 	sta WallsType
 	rts
 .endp
+; --------------------------------------
+; Sets the appropriate variables based on the options table
+; 
+.proc SetVariablesFromOptions
+    ;first option
+    ldy OptionsTable
+    iny
+    iny
+    sty NumberOfPlayers ;1=1 player (but minimum is 2)
+
+    ;second option (cash)
+
+    ldy OptionsTable+1
+    ldx #0
+@
+      lda CashOptionL,y
+      sta moneyL,x
+      lda CashOptionH,y
+      sta moneyH,x
+      inx
+      cpx NumberOfPlayers
+    bne @-
+
+    ;third option (gravity)
+    ldy OptionsTable+2
+    lda GravityTable,y
+    sta gravity
+
+    ;fourth option (wind)
+    ldy OptionsTable+3
+    lda MaxWindTable,y
+    sta MaxWind
+    
+    ;fifth option (no of rounds)
+    ldy OptionsTable+4
+    lda RoundsTable,y
+    sta RoundsInTheGame
+    
+    ;6th option (shell speed)
+    ldy OptionsTable+5
+    lda flyDelayTable,y
+    sta flyDelay
+    
+    ;7th option (Airstrike after how many missess)
+    ldy OptionsTable+6
+    lda seppukuTable,y
+    sta seppukuVal
+    
+    ;8th option (how aggressive are mountains)
+    ldy OptionsTable+7
+    lda mountainsDeltaTableH,y
+    sta mountainDeltaH
+    lda mountainsDeltaTableL,y
+    sta mountainDeltaL
+    
+    rts
+.endp
+
+;--------------------------------
+.proc DisplayResults ;
+;displays results of the round
+;using 4x4 font
+    jsr RoundOverSprites
+
+    
+    mva #$ff plot4x4color
+        
+    ;centering the result screen
+    mva #((ScreenHeight/2)-(8*4)) ResultY
+
+
+    ;upper frame
+    mva ResultY LineYdraw
+    jsr TL4x4_top
+
+    adb ResultY  #4 ;next line
+
+    ;Header1
+    ;Displays round number
+    lda CurrentRoundNr
+    cmp RoundsInTheGame
+    beq GameOver4x4
+    
+    sta decimal
+    mwa #RoundNrDisplay displayposition
+    jsr displaybyte ;decimal (byte), displayposition  (word)
+
+    mwa #LineHeader1 LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    mva ResultY LineYdraw
+    jsr TypeLine4x4
+    beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
+
+GameOver4x4
+    RmtSong song_round_over
+    mwa #LineGameOver LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    mva ResultY LineYdraw
+    jsr TypeLine4x4
+    mva #1 GameIsOver
+    
+@
+    adb ResultY  #4 ;next line
+
+    ;Empty line
+    mva ResultY LineYdraw
+    jsr TL4x4_empty
+
+    adb ResultY  #2 ;next line
+
+
+    ;Header2
+    mwa #LineHeader2 LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    mva ResultY LineYdraw
+    jsr TypeLine4x4
+
+    adb ResultY  #4 ;next line
+
+    ;Empty line
+    mva ResultY LineYdraw
+    jsr TL4x4_empty
+
+    sbb ResultY  #2 ;next line (was empty)
+
+    ldx NumberOfPlayers  ;we start from the highest (best) tank
+    dex   ;and it is the last one
+    stx ResultOfTankNr  ;in TankSequence table
+
+    mwa #TanksNames tempXROLLER
+
+ResultOfTheNextPlayer
+    ldx ResultOfTankNr ;we are after a round, so we can use TankNr
+    lda TankSequence,x ;and we keep here real number if the tank
+    sta TankNr   ;for which we are displaying results
+
+
+
+
+    adb ResultY  #4 ;next line
+
+    ;there are at least 2 players, so we can safely
+    ;start displaying the result
+
+    lda #3 ;it means |
+    sta ResultLineBuffer
+
+    ldy TankNr
+    lda ResultsTable,y
+    sta decimal
+    mva #0 decimal+1
+    mwa #(ResultLineBuffer+8) displayposition
+    jsr displaydec5 ;decimal (byte), displayposition  (word)
+
+    ; overwrite the second digit of the points (max 255)
+    ;it means ":"
+    mva #26 ResultLineBuffer+9
+	
+    ldx #0
+    lda TankNr
+    asl
+    asl ; times 8, because it is lengtgh
+    asl ; of the names of the tanks
+    tay
+
+TankNameCopyLoop
+    lda (tempXROLLER),y  ;XROLLER is not working now
+    and #$3f ;always CAPITAL letters
+    inx
+    sta ResultLineBuffer,x
+    iny
+    cpx #8 ; end of name
+    bne TankNameCopyLoop
+	; last letter of tank name overwrites first digit of the points (max 255)
+
+
+    ;just after the digits
+    ;it means |
+    mva #$3 ResultLineBuffer+13
+
+    ;result line display
+    mwa #ResultLineBuffer LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    mva ResultY LineYdraw
+    jsr TypeLine4x4
+
+    adb ResultY  #4 ;next line
+
+    ;Empty line
+    mva ResultY LineYdraw
+    jsr TL4x4_empty
+
+    dec ResultOfTankNr
+    bmi FinishResultDisplay
+
+    sbb ResultY  #2 ;distance between lines is smaller
+
+    jmp ResultOfTheNextPlayer
+
+FinishResultDisplay
+    mva ResultY LineYdraw
+    ;jmp TL4x4_bottom  ; just go
+.endp
+
+.proc TL4x4_bottom
+    ;bottom of the frame
+    mwa #LineBottom LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
+.endp
+
+.proc TL4x4_top
+    ;bottom of the frame
+    mwa #LineTop LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
+.endp
+
+.proc TL4x4_empty
+    ;empty frame
+    mwa #LineEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+    jmp TypeLine4x4  ; jsr:rts
+.endp
 
 .ENDIF
