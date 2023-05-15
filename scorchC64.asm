@@ -10,7 +10,7 @@
 ;---------------------------------------------------
 .def XCORRECTION_FOR_PM = 0
 ; if 1 - active x position of tanks correction fo PMG
-.def FASTER_GRAF_PROCS = 0
+.def FASTER_GRAF_PROCS = 1
 ; if 1 - activates faster graphics routines
 ;        (direct writes to screen memory - atari only :) )
 ;---------------------------------------------------
