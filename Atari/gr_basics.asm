@@ -588,5 +588,92 @@ EndPut4x4
     jsr WaitOneFrame
     rts
 .endp
+;--------------------------------------------------
+
+
+; ******* This is weapon .... but ... *******
+; -------------------------------------------------
+.proc AtomicWinter
+; -------------------------------------------------
+; This routine is run from inside of the main loop
+; and replaces Shoot and Flight routines
+; X and TankNr - index of shooting tank
+; -------------------------------------------------
+    mva #sfx_sandhog sfx_effect
+.IF FASTER_GRAF_PROCS = 1
+	ldy #0 		 	; byte counter (from 0 to 39)
+NextColumn
+	; big loop - we repat internal loops for each column of bytes
+	sty magic
+	ldx #120			; line counter (from 0 to 60 )
+	; first loop - inverse column of bytes for a while
+	ldy magic
+NextLine1
+	jsr InverseScreenByte
+	dex
+	dex
+	bpl NextLine1
+	;
+	jsr WaitOneFrame	; wait uses A only
+	; second loop - inverse again and put random "snow" to column of bytes
+	ldx #120
+	ldy magic
+	mva #$55 magic+1
+NextLine2
+	jsr InverseScreenByte
+	lda random
+	ora magic+1
+	and (temp),y
+	sta (temp),y
+	lda magic+1
+	eor #$ff
+	sta magic+1
+	dex
+	dex
+	bpl NextLine2
+	; and go to next column
+	iny
+	cpy #40
+	bne NextColumn
+.ELSE
+	mva #1 color
+	mwa #120 ydraw
+NextLineSlow
+	lda #0
+	sta xdraw
+	sta xdraw+1
+NextPixelSlow
+	bit random
+	bpl NoPlot
+	bvc NoPlot
+	jsr plot.MakePlot
+NoPlot
+	inw xdraw
+	cpw xdraw #screenwidth
+	bne NextPixelSlow
+	dec ydraw
+	dec ydraw
+	bpl NextLineSlow
+.ENDIF
+	; and we have "snow" :)
+	lda #0
+	ldx TankNr
+	sta ActiveDefenceWeapon,x	; deactivate Nuclear Winter
+	jsr SetFullScreenSoilRange
+    jsr SoilDown2.NoClearTanks
+	rts
+
+	; in order to optimize the fragment repeated in both internal loops
+	; we save 15 bytes :)
+InverseScreenByte
+	lda LineTableL,x
+	sta temp
+	lda LineTableH,x
+	sta temp+1
+	lda (temp),y
+	eor #$ff
+	sta (temp),y
+	rts
+.endp
 
 .ENDIF
