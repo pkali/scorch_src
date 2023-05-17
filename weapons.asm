@@ -2685,7 +2685,6 @@ pressedLeft
 	jsr DecreaseShieldEnergyX
 	; first erase old tank position
     jsr ClearTankNr
-	mva #0 Erase
 	lda XtankstableH,x
 	cmp #0
 	bne @+
@@ -2703,7 +2702,7 @@ NoLEdge
 	mva #162 AngleTable,x
 	; then draw tank on new position
 DrawFloatingTank
-    jsr DrawTankNr
+    jsr PutTankNr
 	jsr DisplayStatus
 	jsr WaitOneFrame
 	jsr CalculateSoildown
@@ -2782,7 +2781,6 @@ TankBelow
 	ldx TankNr
 	; first erase old tank position
     jsr ClearTankNr
-	mva #0 Erase
 	bit OverTankDir
 	bmi PassLeft
 PassRight
@@ -2798,7 +2796,7 @@ PassLeft
 	mva #162 AngleTable,x
 Bypassing
 	; then draw tank on new position
-    jsr DrawTankNr
+    jsr PutTankNr
 	jmp CheckForTanksBelow
 RightFromTheTank
 LeftFromTheTank

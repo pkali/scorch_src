@@ -1693,9 +1693,7 @@ AllTanksFloatingDown
     lda Ytankstable,x
 	cmp #(72-7)		; tank under screen - no erase
 	bcs NoEraseTank
-	mva #1 Erase
-    jsr DrawTankNr
-	mva #0 Erase
+    jsr ClearTankNr
 	sta ATRACT	; reset atract mode
 NoEraseTank
 	ldx TankNr
@@ -1714,7 +1712,7 @@ NotFastTank
 TankUnderScreen
     jsr RandomizeTankPos
 TankOnScreen
-    jsr DrawTankNr
+    jsr PutTankNr
 DrawOnlyParachute
 	lda ActiveDefenceWeapon,x
 	bne FastTank
