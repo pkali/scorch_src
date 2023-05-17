@@ -613,6 +613,11 @@ DrawNextTank
     rts
 .endp
 ;---------
+ClearTankNr
+	mva #1 Erase
+	bne DrawTankNr
+PutTankNr
+	mva #0 Erase
 .proc DrawTankNr
     ldx tankNr
     ; let's check the energy
@@ -1041,7 +1046,7 @@ TankFallsX
 NoFallingSound
     ; clear previous position
     mva #1 Erase
-    jsr DrawTankNr
+    jsr ClearTankNr
     ; and the parachute (if present)
     lda Parachute
     and #01
@@ -1242,9 +1247,8 @@ NoParachuteWeapon
     beq ThereWasNoParachute
     jsr DrawTankParachute
 ThereWasNoParachute
-    mva #0 Erase
 ;    ldx TankNr	
-    jsr DrawTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
+    jsr PutTankNr	; redraw tank after erase parachute (exactly for redraw leaky schield :) )
     mva #sfx_silencer sfx_effect
     rts
 

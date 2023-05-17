@@ -219,8 +219,10 @@ AngleTable	; 16 bytes ;ba w $348b L$3350
 	cmp #5
 	bcs EnoughEnergy
 	; lower than 5 units - white flag
+	jsr ClearTankNr	; we must hide tank to erase shields (issue #138)
 	lda #ind_White_Flag_____
 	sta ActiveDefenceWeapon,x
+	jsr PutTankNr	; and draw tank witch Flag
 EnoughEnergy
 	rts
 .endp

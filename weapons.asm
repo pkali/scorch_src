@@ -835,15 +835,13 @@ ShieldCoveredTank
 	jne EndOfDistanceCheckLoop
 ShieldEnergy0	; deactivate if no energy. it's like use one hit shield :) 
 UseShield
-	mva #1 Erase
 	lda TankNr
 	pha			; store TankNr
 	stx TankNr	; store X in TankNr :)
-	jsr DrawTankNr	; now erase tank with shield (to erase shield)
+	jsr ClearTankNr	; now erase tank with shield (to erase shield)
 	lda #0
 	sta ActiveDefenceWeapon,x	; deactivate defense weapons
-	sta Erase
-	jsr DrawTankNr	; draw tank without shield
+	jsr PutTankNr	; draw tank without shield
 	ldx TankNr	; restore X value :)
 	pla
 	sta TankNr	; restore TankNr value :)
@@ -1081,11 +1079,10 @@ ContinueToCheckMaxForce2
       lda MaxForceTableL,x
       sta ForceTableL,x
 @
-	mva #0 Erase
     jsr PutTankNameOnScreen
 ;    jsr DisplayStatus	; There is no need anymore, it is always after PutTankNameOnScreen
 
-    jsr DrawTankNr
+    jsr PutTankNr
 
     jsr WaitOneFrame ; best after drawing a tank
 
@@ -1915,16 +1912,14 @@ RightDeflection
 	bcs EndOfMagDeflector	; hit of course but we need RTS
 	sbw XHit #36	; change to left
 EndOfMagDeflector
-	mva #1 Erase
 	lda TankNr
 	pha			; store TankNr
 	stx TankNr	; store X in TankNr :)
-	jsr DrawTankNr	; now erase tank with shield (to erase shield)
+	jsr ClearTankNr	; now erase tank with shield (to erase shield)
 	lda #0
 	sta ActiveDefenceWeapon,x	; deactivate used mag deflector weapon
 	sta ShieldEnergy,x
-	sta Erase
-	jsr DrawTankNr	; draw tank without shield
+	jsr PutTankNr	; draw tank without shield
 	ldx TankNr	; restore X value :)
 	pla
 	sta TankNr	; restore TankNr value :)
@@ -1944,11 +1939,10 @@ BouncyCastle
 @
     mva #sfx_shield_on sfx_effect
 	; now run defensive-aggressive weapon - Bouncy Castle (previously known as Auto Defence)!
-	mva #1 Erase
 	lda TankNr
 	pha			; store TankNr
 	stx TankNr	; store X in TankNr :)
-	jsr DrawTankNr	; now erase tank with shield (to erase shield)
+	jsr ClearTankNr	; now erase tank with shield (to erase shield)
 	lda #0
 	sta ActiveDefenceWeapon,x	; deactivate used auto defense weapon
 	sta ShieldEnergy,x
@@ -1956,8 +1950,7 @@ BouncyCastle
     sta ytraj
 ;	sta xtraj+2
 ;	sta ytraj+2
-	sta Erase
-	jsr DrawTankNr	; draw tank without shield
+	jsr PutTankNr	; draw tank without shield
 ;	ldx TankNr	; restore X value :) ... but we don't need X now ..
 	pla
 	sta TankNr	; restore TankNr value :)
@@ -2382,8 +2375,7 @@ NoWall
 ; -------------------------------------------------
 	mva #sfx_death_begin sfx_effect
 	jsr FlashTank	; first we flash tank
-	mva #1 Erase
-	jsr DrawTankNr	; and erase tank
+	jsr ClearTankNr	; and erase tank
 	lda #0
 	sta Erase
 	ldx TankNr
@@ -2531,19 +2523,17 @@ TankGoUp
 	cmp FloatingAlt		; Floating altitude
 	bcc ReachSky
 	; first erase old tank position
-	mva #1 Erase
-    jsr DrawTankNr
+    jsr ClearTankNr
 	lda modify
 	cmp #5
 	bcc NoEngineClear
 	mva #0 color
 	jsr DrawTankRocketEngine
 NoEngineClear
-	mva #0 Erase
 	dec ytankstable,x
 	inc modify
 	; then draw tank on new position
-    jsr DrawTankNr
+    jsr PutTankNr
 	lda modify
 	cmp #5
 	bcc NoEngine
@@ -2671,8 +2661,7 @@ pressedRight
 	ldy #1
 	jsr DecreaseShieldEnergyX
 	; first erase old tank position
-	mva #1 Erase
-    jsr DrawTankNr
+    jsr ClearTankNr
 	mva #0 Erase
 	lda XtankstableH,x
 	cmp #>(screenwidth-TankWidth-4)	; tank width correction +4 
@@ -2695,8 +2684,7 @@ pressedLeft
 	ldy #1
 	jsr DecreaseShieldEnergyX
 	; first erase old tank position
-	mva #1 Erase
-    jsr DrawTankNr
+    jsr ClearTankNr
 	mva #0 Erase
 	lda XtankstableH,x
 	cmp #0
@@ -2793,8 +2781,7 @@ TankBelow
 	; tank below - we must move our tank
 	ldx TankNr
 	; first erase old tank position
-	mva #1 Erase
-    jsr DrawTankNr
+    jsr ClearTankNr
 	mva #0 Erase
 	bit OverTankDir
 	bmi PassLeft
@@ -2821,8 +2808,7 @@ ItIsMe
     bpl CheckCollisionWithTankLoop
 	ldx TankNr
     mva #sfx_shield_off sfx_effect
-	mva #1 Erase
-    jsr DrawTankNr
+    jsr ClearTankNr
 	mva #0 Erase
 	; x correction for P/M
 	; --
@@ -2851,13 +2837,11 @@ FloatDown
 	cmp OverTankDir
 	bcs OnGround
 	; first erase old tank position
-	mva #1 Erase
-    jsr DrawTankNr
+    jsr ClearTankNr
     jsr DrawTankParachute
-	mva #0 Erase
 	inc ytankstable,x
 	; then draw tank on new position
-    jsr DrawTankNr
+    jsr PutTankNr
     jsr DrawTankParachute
 	jsr WaitOneFrame
 	jmp FloatDown
