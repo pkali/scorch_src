@@ -410,8 +410,8 @@ GoFloat
 	jsr TankFlying
 	lda #0
 	sta ActiveDefenceWeapon,x ; deactivate after use
-	bit escFlag
-	bpl ManualShooting ; after floating tank can shoot
+	lda escFlag
+	beq ManualShooting ; after floating tank can shoot
 	rts
 StandardShoot
     inc noDeathCounter
@@ -428,6 +428,9 @@ ShootNow
     ldy TankNr
     mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
+
+    lda escFlag
+    seq:rts		; keys Esc or O
     
     lda HitFlag ;0 if missed
     beq missed
