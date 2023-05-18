@@ -1098,13 +1098,17 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
-	ldx TankNr	; for optimize
+	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
+	bit escFlag
+	bmi EscPressed
+	bvc OnotPressed
+EscPressed
+	rts		; exit if pressed 'Exit keys'
+OnotPressed
+	ldx TankNr	; for optimize	
 	; Select and Option
 	lda CONSOL
 	tay
-	and #%00000101	; Start + Option
-	beq QuitToGameover
-	tya
 	and #%00000100
 	beq callActivation	; Option key
 	tya
@@ -1119,24 +1123,6 @@ notpressed
     lda kbcode
     and #%10111111 ; SHIFT elimination
 
-    cmp #@kbcode._O  ; $08  ; O
-    bne @+
-    jsr AreYouSure
-    bit escFlag
-    bpl notpressed
-    ;---O pressed-quit game to game over screen---
-QuitToGameover
-	mva #$40 escFlag
-    rts
-@
-    cmp #@kbcode._esc  ; 28  ; ESC
-    bne @+
-    jsr AreYouSure
-    bit escFlag
-    bpl notpressed
-    ;---esc pressed-quit game---
-    rts
-@
     cmp #@kbcode._A  ; $3f  ; A
     bne @+
 callActivation
@@ -1779,7 +1765,16 @@ nolaserwait
     bne nowait		; funky bomb explotes fast ( tracerflag in real is funkyflag :) )
 nonowait 
     jsr shellDelay
-    
+	;
+	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
+	bit escFlag
+	bmi EscPressed
+	bvc OnotPressed
+EscPressed
+	rts		; exit if pressed 'Exit keys'
+OnotPressed
+	ldx TankNr
+    ;
 nowait
     lda HitFlag
     bne Hit
@@ -2113,6 +2108,18 @@ mrLoopi
     sta vy+3
 
     jsr ShellDelay
+	;
+	phx
+	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
+	bit escFlag
+	bmi EscPressed
+	bvc OnotPressed
+EscPressed
+	plx
+	rts		; exit if pressed 'Exit keys'
+OnotPressed
+	plx
+    ;
     
 MIRVdoNotChangeY
 

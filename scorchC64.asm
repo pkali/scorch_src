@@ -318,6 +318,18 @@ MakeDarkScreen
 .endp
 
 ;--------------------------------------------------
+.proc CheckExitKeys
+;--------------------------------------------------
+; Checks keyboard and sets appropriate flags for exit procedures
+; If START+OPTION is pressed - exit to GameOver screen
+; If 'O' key is pressed - displays "Are you sure?" and - exit to GameOver screen
+; If 'Esc' key is pressed - displays "Are you sure?" and - exit to Menu screen
+; Just setting the right flags!!!
+
+    rts
+;
+.endp
+;--------------------------------------------------
 .proc ShellDelay
     ldx flyDelay
 DelayLoop

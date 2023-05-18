@@ -557,7 +557,49 @@ MakeDarkScreen
 .endp
 
 ;--------------------------------------------------
+.proc CheckExitKeys
+;--------------------------------------------------
+; Checks keyboard and sets appropriate flags for exit procedures
+; If START+OPTION is pressed - exit to GameOver screen
+; If 'O' key is pressed - displays "Are you sure?" and - exit to GameOver screen
+; If 'Esc' key is pressed - displays "Are you sure?" and - exit to Menu screen
+; Just setting the right flags!!!
+
+	; Select and Option
+	lda CONSOL
+	and #%00000101	; Start + Option
+	beq QuitToGameover
+    lda SKSTAT
+    cmp #$ff
+    jeq nokeys
+    cmp #$f7  ; SHIFT
+    jeq nokeys
+
+    lda kbcode
+    and #%10111111 ; SHIFT elimination
+
+    cmp #@kbcode._O  ; $08  ; O
+    bne CheckEsc
+	jsr AreYouSure
+	bit escFlag
+	bpl nokeys
+    ;---O pressed-quit game to game over screen---
+QuitToGameover
+	mva #$40 escFlag
+    rts
+CheckEsc
+    cmp #@kbcode._esc  ; 28  ; ESC
+    bne nokeys
+DisplayAreYouSure
+    jsr AreYouSure
+    ;---esc pressed-quit game---
+nokeys
+    rts
+;
+.endp
+;--------------------------------------------------
 .proc ShellDelay
+;--------------------------------------------------
     lda CONSOL
 	and #%00000101	; Start + Option
 	bne @+
