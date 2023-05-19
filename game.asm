@@ -1023,7 +1023,12 @@ MoveBarrel
     mva #sfx_set_power_2 sfx_effect
 	jsr DrawTankNr
 	jsr DisplayStatus.displayAngle
-;	ldx TankNr
+	;
+	jsr CheckExitKeys
+    bit escFlag
+    spl:rts ;---Exit key pressed-quit game---
+	ldx TankNr
+	;
 	mva #1 Erase
 	jsr WaitOneFrame
 	jsr DrawTankNr.BarrelChange
