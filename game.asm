@@ -43,8 +43,8 @@ MainGameLoop
     
     jsr MainRoundLoop
     bit escFlag
-    bmi START
 	jvs GoGameOver
+    bmi START
 
 	jsr CalculateGains
     
@@ -369,8 +369,8 @@ RoboTanks
     cmp #@kbcode._esc ; 28  ; ESC
     bne @+
     jsr AreYouSure
-@	lda escFlag
-    seq:rts		; keys Esc or O
+@	bit escFlag
+    spl:rts		; keys Esc or O
 
 
     jmp AfterManualShooting
@@ -382,8 +382,8 @@ ManualShooting
 	lda #%00000000
 	sta TestFlightFlag	; set "Test Fight" off
     jsr BeforeFire
-    lda escFlag
-    seq:rts		; keys Esc or O
+    bit escFlag
+    spl:rts		; keys Esc or O
 
 AfterManualShooting
     mva #$00 plot4x4color
@@ -410,8 +410,8 @@ GoFloat
 	jsr TankFlying
 	lda #0
 	sta ActiveDefenceWeapon,x ; deactivate after use
-	lda escFlag
-	beq ManualShooting ; after floating tank can shoot
+	bit escFlag
+	bpl ManualShooting ; after floating tank can shoot
 	rts
 StandardShoot
     inc noDeathCounter
@@ -429,8 +429,8 @@ ShootNow
     mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
-    lda escFlag
-    seq:rts		; keys Esc or O
+    bit escFlag
+    spl:rts		; keys Esc or O
     
     lda HitFlag ;0 if missed
     beq missed

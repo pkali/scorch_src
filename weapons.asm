@@ -1100,11 +1100,8 @@ ContinueToCheckMaxForce2
 notpressed
 	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
 	bit escFlag
-	bmi EscPressed
-	bvc OnotPressed
-EscPressed
-	rts		; exit if pressed 'Exit keys'
-OnotPressed
+	spl:rts ; exit if pressed 'Exit keys'
+
 	ldx TankNr	; for optimize	
 	; Select and Option
 	lda CONSOL
@@ -1768,11 +1765,7 @@ nonowait
 	;
 	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
 	bit escFlag
-	bmi EscPressed
-	bvc OnotPressed
-EscPressed
-	rts		; exit if pressed 'Exit keys'
-OnotPressed
+	spl:rts		; exit if pressed 'Exit keys'
 	ldx TankNr
     ;
 nowait
@@ -2112,12 +2105,10 @@ mrLoopi
 	phx
 	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
 	bit escFlag
-	bmi EscPressed
-	bvc OnotPressed
-EscPressed
+	bpl ExitnotPressed
 	plx
 	rts		; exit if pressed 'Exit keys'
-OnotPressed
+ExitnotPressed
 	plx
     ;
     
@@ -2611,10 +2602,14 @@ KeyboardAndJoyCheck
 	sbc #12
     sta LineYdraw
     jsr TypeLine4x4.variableLength
-	ldx TankNr
 
 LotOfFuel
 notpressed
+	jsr CheckExitKeys
+    bit escFlag
+    spl:rts ;---Exit key pressed-quit game---
+	ldx TankNr
+
 	; let's animate "engine"
 	jsr DrawTankEngine
 	; enimation ends
@@ -2628,14 +2623,6 @@ notpressed
     lda kbcode
     and #%00111111 ; CTRL and SHIFT elimination
 
-    cmp #@kbcode._esc  ; 28  ; ESC
-    bne @+
-    jsr AreYouSure
-    bit escFlag
-    bpl notpressed
-    ;---esc pressed-quit game---
-    rts
-@
 jumpFromStick
     cmp #@kbcode._left  ; $6
     jeq pressedLeft

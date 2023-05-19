@@ -126,7 +126,7 @@ FirstZpageVariable = $57
     .zpvar RangeLeft .word
     .zpvar RangeRight .word
     .zpvar NewAngle .byte
-    .zpvar escFlag .byte
+    .zpvar escFlag .byte	; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
     .zpvar LineYdraw .byte
     .zpvar LineXdraw .word
     .zpvar plot4x4color .byte	; $00 / $ff 
@@ -585,7 +585,7 @@ MakeDarkScreen
 	bpl nokeys
     ;---O pressed-quit game to game over screen---
 QuitToGameover
-	mva #$40 escFlag
+	mva #$C0 escFlag	; bits 7 and 6 set
     rts
 CheckEsc
     cmp #@kbcode._esc  ; 28  ; ESC
@@ -600,12 +600,6 @@ nokeys
 ;--------------------------------------------------
 .proc ShellDelay
 ;--------------------------------------------------
-    lda CONSOL
-	and #%00000101	; Start + Option
-	bne @+
-	mva #$40 escFlag	
-@	and #%00000001
-    beq noShellDelay
     ldx flyDelay
 DelayLoop
       lda VCOUNT

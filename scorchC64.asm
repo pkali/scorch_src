@@ -128,7 +128,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar RangeLeft .word
     .zpvar RangeRight .word
     .zpvar NewAngle .byte
-    .zpvar escFlag .byte
+    .zpvar escFlag .byte	; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
     .zpvar LineYdraw .byte
     .zpvar LineXdraw .word
     .zpvar plot4x4color .byte	; $00 / $ff 
@@ -333,6 +333,9 @@ MakeDarkScreen
 .proc ShellDelay
     ldx flyDelay
 DelayLoop
+      lda $d012
+@     cmp $d012
+      beq @-
       lda $d012
 @     cmp $d012
       beq @-
