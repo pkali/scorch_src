@@ -1419,6 +1419,10 @@ ColumnIsReady
     bcc FalloutOfLine
     beq FalloutOfLine
 
+	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
+	bit escFlag
+	spl:rts ; exit if pressed 'Exit keys'
+
     lda IsEndOfTheFallFlag
 ; we repeat untill at some point first table reaches
 ; level of the mountains
