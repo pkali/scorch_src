@@ -1099,7 +1099,6 @@ ContinueToCheckMaxForce2
 
 notpressed
 	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
-	bit escFlag
 	spl:rts ; exit if pressed 'Exit keys'
 
 	ldx TankNr	; for optimize	
@@ -1764,7 +1763,6 @@ nonowait
     jsr shellDelay
 	;
 	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
-	bit escFlag
 	spl:rts		; exit if pressed 'Exit keys'
 	ldx TankNr
     ;
@@ -2104,7 +2102,6 @@ mrLoopi
 	;
 	phx
 	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
-	bit escFlag
 	bpl ExitnotPressed
 	plx
 	rts		; exit if pressed 'Exit keys'
@@ -2606,7 +2603,6 @@ KeyboardAndJoyCheck
 LotOfFuel
 notpressed
 	jsr CheckExitKeys
-    bit escFlag
     spl:rts ;---Exit key pressed-quit game---
 	ldx TankNr
 

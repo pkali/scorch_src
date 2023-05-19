@@ -592,6 +592,7 @@ DisplayAreYouSure
     jsr AreYouSure
     ;---esc pressed-quit game---
 nokeys
+	bit escFlag
     rts
 ;
 .endp

@@ -1420,7 +1420,6 @@ ColumnIsReady
     beq FalloutOfLine
 
 	jsr CheckExitKeys	; Check for O, Esc or Start+Option keys 
-	bit escFlag
 	spl:rts ; exit if pressed 'Exit keys'
 
     lda IsEndOfTheFallFlag

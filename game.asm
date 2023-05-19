@@ -1025,7 +1025,6 @@ MoveBarrel
 	jsr DisplayStatus.displayAngle
 	;
 	jsr CheckExitKeys
-    bit escFlag
     spl:rts ;---Exit key pressed-quit game---
 	ldx TankNr
 	;
