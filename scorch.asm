@@ -196,7 +196,7 @@ FirstZpageVariable = $57
     .ELSE
       icl 'Atari/lib/ATARISYS.ASM'
       icl 'Atari/lib/MACRO.ASM'
-     ; icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
+      icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
     .ENDIF
     
 ;-----------------------------------------------
