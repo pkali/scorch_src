@@ -25,9 +25,9 @@
 ;     it's no necessary - PrepareAIShoot is next proc :)
 ;    jsr PrepareAIShoot
 ;    rts
-.endp    
+.endp
 ;----------------------------------------------
-.proc PrepareAIShoot 
+.proc PrepareAIShoot
     ; create low precision table of positions
     ; by dividing positions by 4
     ldy #MaxPlayers-1
@@ -76,11 +76,11 @@ AIRoutines
     rts
 .endp
 ;----------------------------------------------
-.proc Moron 
+.proc Moron
     jsr RandomizeAngle
     sta NewAngle
     mwa #80 RandBoundaryLow
-    mwa #800 RandBoundaryHigh 
+    mwa #800 RandBoundaryHigh
     jsr RandomizeForce
     ; choose the best weapon
     ldy #ind_Buy_me         +1    ; if the cheat is active it will fire the BFG :)
@@ -88,13 +88,13 @@ AIRoutines
     ;rts
 .endp
 ;----------------------------------------------
-.proc Shooter 
+.proc Shooter
 
     lda PreviousAngle,x
     ora PreviousEnergyL,x
     ora PreviousEnergyH,x
     beq firstShoot
-    
+
     lda PreviousAngle,x
     cmp #90
     bcs shootingLeftAtThisMomentOfTime
@@ -104,9 +104,9 @@ AIRoutines
     cmp #10
     bcs @+ ;not smaller than 10
     bcc firstShoot ; GET THE aim againg
-    
+
 shootingLeftAtThisMomentOfTime
-    
+
     clc
     adc #5
     cmp #170  ; maximum shooter angle
@@ -115,7 +115,7 @@ shootingLeftAtThisMomentOfTime
     sta NewAngle
 
     sec
-    lda PreviousEnergyL,x 
+    lda PreviousEnergyL,x
     sbc #5
     sta ForceTableL,x
     lda PreviousEnergyH,x
@@ -140,10 +140,10 @@ firstShoot
 tankIsOnTheRight
     randomize 55 85
     sta NewAngle
-    
+
 forceNow
     mwa #100 RandBoundaryLow
-    mwa #800 RandBoundaryHigh 
+    mwa #800 RandBoundaryHigh
     ;ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce
 
@@ -153,12 +153,12 @@ endo
     lda NewAngle
     sta PreviousAngle,x
     lda ForceTableL,x
-    sta PreviousEnergyL,x 
+    sta PreviousEnergyL,x
     lda ForceTableH,x
     sta PreviousEnergyH,x
-    
+
     ; choose the best weapon
-    
+
     jmp ChooseBestOffensive
     ;rts
     .endp
@@ -172,40 +172,40 @@ firstShoot
     jsr FindBestTarget2
     beq EnemyOnLeft
     ; calculate index to shotangle table
-    ; in temp2 we have x distance divided by 8 
+    ; in temp2 we have x distance divided by 8
     lda temp2
     :3 lsr @
     and #%00000111
     clc
     adc #8
     sta AngleTablePointer
-    bne AngleIsSet    
+    bne AngleIsSet
 EnemyOnLeft
     lda temp2
     :3 lsr @
     and #%00000111
     eor #%00000111
-    sta AngleTablePointer        
+    sta AngleTablePointer
 AngleIsSet
-    
+
     randomize 0 8
     ldy AngleTablePointer
     clc
     adc AngleTable,y
     sta NewAngle
-    
+
 forceNow
     mwa #300 RandBoundaryLow
-    mwa #700 RandBoundaryHigh 
+    mwa #700 RandBoundaryHigh
     ldx TankNr
     jsr RandomizeForce
 
-endo    
+endo
     ; choose the best weapon
-    
+
     jsr ChooseBestOffensive
     rts
-    
+
 ;----------------------------------------------
 AngleTable    ; 16 bytes ;ba w $348b L$3350
     .by 106,114,122,130,138,146,154,162
@@ -220,7 +220,7 @@ AngleTable    ; 16 bytes ;ba w $348b L$3350
     bcs EnoughEnergy
     ; lower than 5 units - white flag
     jsr ClearTankNr    ; we must hide tank to erase shields (issue #138)
-    lda #ind_White_Flag     
+    lda #ind_White_Flag
     sta ActiveDefenceWeapon,x
     jsr PutTankNr    ; and draw tank witch Flag
 EnoughEnergy
@@ -233,7 +233,7 @@ EnoughEnergy
     cmp #30
     bcs EnoughEnergy
     ; lower than 30 units - check battery
-    ldy #ind_Battery        
+    ldy #ind_Battery
     lda (temp),y  ; has address of TanksWeaponsTable
     beq NoBatteries
     ; we have batteries - use one
@@ -263,7 +263,7 @@ NoBatteries
     cpy #ind_Hovercraft      ;first defensive weapon    (White Flag, Battery and Hovercraft - never use)
     beq NoUseDefensive
     lda (temp),y  ; has address of TanksWeaponsTable
-    beq @- 
+    beq @-
     ; decrease in inventory
     sec
     sbc #1
@@ -292,13 +292,13 @@ DefensiveInUse
     ; first check check if any is in use
     lda ActiveDefenceWeapon,x
     bne DefensiveInUse
-    ldy #last_real_defensive+1 ;the last defensive weapon    
+    ldy #last_real_defensive+1 ;the last defensive weapon
 @
     dey
     cpy #ind_Hovercraft      ;first defensive weapon    (White Flag, Battery and Hovercraft - never use)
     beq NoUseDefensive
     lda (temp),y  ; has address of TanksWeaponsTable
-    beq @- 
+    beq @-
     ; decrease in inventory
     sec
     sbc #1
@@ -324,7 +324,7 @@ NoUseDefensive
     sty TargetTankNr
     ; aiming
     jsr TakeAim        ; direction still in A (0 - left, >0 - right)
-    
+
     ; choose the best weapon
     jsr ChooseBestOffensive
 
@@ -335,11 +335,11 @@ NoUseDefensive
 NotNegativeEnergy
     adw Force #100 RandBoundaryHigh
     jsr RandomizeForce
-    ; if target distance lower than 24 - set weapon to Baby Missile (for security :) 
+    ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
     jsr GetDistance
     cmp #6 ; 24/4
     bcs HighForce
-    lda #ind_Baby_Missile   
+    lda #ind_Baby_Missile
     sta ActiveWeapon,x
 HighForce
     rts
@@ -356,7 +356,7 @@ HighForce
     sty TargetTankNr
     ; aiming
     jsr TakeAim        ; direction still in A (0 - left, >0 - right)
-    
+
     ; choose the best weapon
     jsr ChooseBestOffensive
 
@@ -367,11 +367,11 @@ HighForce
 NotNegativeEnergy
     adw Force #50 RandBoundaryHigh
     jsr RandomizeForce
-    ; if target distance lower than 24 - set weapon to Baby Missile (for security :) 
+    ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
     jsr GetDistance
     cmp #6    ; 24/4
     bcs HighForce
-    lda #ind_Baby_Missile   
+    lda #ind_Baby_Missile
     sta ActiveWeapon,x
 HighForce
     rts
@@ -387,7 +387,7 @@ HighForce
     sty TargetTankNr
     ; aiming
     jsr TakeAim        ; direction still in A (0 - left, >0 - right)
-    
+
     ; choose the best weapon
     ldy #ind_Nuke           +1
     jsr ChooseBestOffensive.NotFromAll
@@ -396,11 +396,11 @@ HighForce
     sta ForceTableL,x
     lda Force+1
     sta ForceTableH,x
-    ; if target distance lower than 32 - set weapon to Baby Missile (for security :) 
+    ; if target distance lower than 32 - set weapon to Baby Missile (for security :)
     jsr GetDistance
     cmp #8    ;32/4
     bcs HighForce
-    lda #ind_Baby_Missile   
+    lda #ind_Baby_Missile
     sta ActiveWeapon,x
 HighForce
     rts
@@ -423,7 +423,7 @@ HighForce
     ;ldx TankNr
     ldy NumberOfPlayers
     dey
-    
+
 loop01
     cpy TankNr
     beq skipThisPlayer
@@ -446,8 +446,8 @@ ItIsHuman
     bcs EnemyOnTheLeft
     ; enemy on right
     inc tempor2    ; set direction to right
-    
-EnemyOnTheLeft    
+
+EnemyOnTheLeft
 lowestIsLower
 skipThisPlayer
     dey
@@ -455,7 +455,7 @@ skipThisPlayer
     ; now we have number of the farthest tank in temp2+1
     ; and direction (0 - left, >0 - right) in tempor2
     ; let's move them to registers
-    ; in temp2 we have energy of target 
+    ; in temp2 we have energy of target
     ldy temp2+1
     lda tempor2
     rts
@@ -474,13 +474,13 @@ skipThisPlayer
     ;ldx TankNr
     ldy NumberOfPlayers
     dey
-    
+
 loop01
     cpy TankNr
     beq skipThisPlayer
     lda eXistenZ,y
     beq skipThisPlayer
-    
+
     lda LowResDistances,x
     cmp LowResDistances,y
     bcs EnemyOnTheLeft
@@ -503,7 +503,7 @@ EnemyOnTheLeft
     bcs lowestIsLower
     sta temp2
     sty temp2+1 ; number of the closest tank
-    
+
 lowestIsLower
 skipThisPlayer
     dey
@@ -511,7 +511,7 @@ skipThisPlayer
     ; now we have number of the closest tank in temp2+1
     ; and direction (0 - left, >0 - right) in tempor2
     ; let's move them to registers
-    ; in temp2 we have x distance divided by 8 
+    ; in temp2 we have x distance divided by 8
     ldy temp2+1
     lda tempor2
     rts
@@ -529,7 +529,7 @@ skipThisPlayer
     mva #$ff SecondTryFlag
     ; set initial Angle and Force values
     lda OptionsTable+2    ; selected gravity
-    asl 
+    asl
     tay
     ; force correction - lower tank Y position - higher possible force
     sec
@@ -556,7 +556,7 @@ RepeatAim
     adc temp2
     sta NewAngle
     ; set virtual weapon :)
-    lda #ind_Baby_Missile   
+    lda #ind_Baby_Missile
     sta ActiveWeapon,x
     ; now we have initial valuses
     mva #%11000000 TestFlightFlag
@@ -597,11 +597,11 @@ GroundHitInFirstLoopR
     sta NewAngle
     jmp AimingRight
 NoHitInFirstLoopR
-    ; Angle 5 deg to left and end loop 
+    ; Angle 5 deg to left and end loop
     sec
     lda NewAngle
     sbc #5
-    sta NewAngle    
+    sta NewAngle
 HitOnRightSideOfTargetR
     dec NewAngle
 EndOfFirstLoopR
@@ -639,7 +639,7 @@ HitOnLeftSideOfTargetR
     ; decrease energy (a little)
     sbw Force #5
 NoHitInSecondLoopR
-    ; Angle 1 deg to right and end loop 
+    ; Angle 1 deg to right and end loop
     inc NewAngle
 EndOfSecondLoopR
 EndOfAim
@@ -657,7 +657,7 @@ AimSecondTry
     sta ForceTableH,x
     jsr RandomizeForce.LimitForce
     jmp RepeatAim
-    
+
 AimingLeft
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
@@ -692,11 +692,11 @@ GroundHitInFirstLoopL
     sta NewAngle
     jmp AimingLeft
 NoHitInFirstLoopL
-    ; Angle 5 deg to right and end loop 
+    ; Angle 5 deg to right and end loop
     clc
     lda NewAngle
     adc #5
-    sta NewAngle    
+    sta NewAngle
 HitOnLeftSideOfTargetL
     inc NewAngle
 EndOfFirstLoopL
@@ -734,11 +734,11 @@ HitOnRightSideOfTargetL
     ; decrease energy (a little)
     sbw Force #5
 NoHitInSecondLoopL
-    ; Angle 1 deg to left and end loop 
+    ; Angle 1 deg to left and end loop
     dec NewAngle
 EndOfSecondLoopL
     jmp EndOfAim
-    
+
 SetStartAndFlight    ; set start point (virtual barrel end :) ) and make test flight
     ; xtraj+1 and ytraj+1 set
     clc
@@ -759,7 +759,7 @@ SetStartAndFlight    ; set start point (virtual barrel end :) ) and make test fl
     rts
 .endp
 ;----------------------------------------------
-.proc PurchaseAI ; 
+.proc PurchaseAI ;
 ; A - skill of the TankNr
 ; makes purchase for AI opponents
 ; results of this routine are not visible on the screen
@@ -804,7 +804,7 @@ PurchaseAIRoutines
     tay
     lda bittable,y
     ldy temp
-    and PurchaseMeTable2,y    
+    and PurchaseMeTable2,y
     beq TryToPurchaseOnePiece.SorryNoPurchase
     jmp TryToPurchaseOnePiece.PurchaseIt
 .endp
@@ -846,7 +846,7 @@ PurchaseIt
     lda temp2+1
     sbc temp+1
     sta MoneyH,x
-    
+
     lda TanksWeaponsTableL,x
     sta temp
     lda TanksWeaponsTableH,x
@@ -860,12 +860,12 @@ PurchaseIt
     lda #99
 NotExceeded
     sta (temp),y
-    
-    
+
+
 SorryNoPurchase
-    rts 
+    rts
     .endp
-    
+
 
 ;----------------------------------------------
 .proc ShooterPurchase
@@ -877,17 +877,17 @@ SorryNoPurchase
     jsr TryToPurchaseOnePiece
 ;    dec tempXroller
 ;    bne @-
-    
+
     ; and now offensives
     mva #4 tempXroller; number of offensive purchases to perform
     ;ldx TankNr
 @
-    randomize ind_Missile         ind_Heavy_Roller   
+    randomize ind_Missile         ind_Heavy_Roller
     jsr TryToPurchaseOnePiece
     dec tempXroller
     bne @-
 
-    rts 
+    rts
 .endp
 ;----------------------------------------------
 .proc PoolsharkPurchase
@@ -895,21 +895,21 @@ SorryNoPurchase
 ;    mva #2 tempXroller; number of offensive purchases to perform
     ldx TankNr
 @
-    randomize ind_Battery         ind_Bouncy_Castle  
+    randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece
     dec tempXroller
 ;    bpl @-
-    
+
     ; and now offensives
     mva #6 tempXroller; number of purchases to perform
     ;ldx TankNr
 @
-    randomize ind_Missile         ind_Dirt_Charge    
+    randomize ind_Missile         ind_Dirt_Charge
     jsr TryToPurchaseOnePiece
     dec tempXroller
     bne @-
 
-    rts 
+    rts
 .endp
 ;----------------------------------------------
 .proc TosserPurchase
@@ -922,22 +922,22 @@ SorryNoPurchase
     ; first try to buy defensives
 ;    mva #1 tempXroller; number of defensive purchases to perform
 @
-    randomize ind_Battery         ind_Bouncy_Castle  
+    randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece
     dec tempXroller
     bpl @-
-    
+
     ; and now offensives
     lda MoneyH,x ; money / 256
     asl  ;*2
     sta tempXroller ; perform this many purchase attempts
 @
-    randomize ind_Missile         ind_Dirt_Charge    
+    randomize ind_Missile         ind_Dirt_Charge
     jsr TryToPurchaseOnePiece
     dec tempXroller
     bpl @-
 
-    rts 
+    rts
 .endp
 ;----------------------------------------------
 .proc CyborgPurchase
@@ -950,22 +950,22 @@ SorryNoPurchase
     ; first try to buy defensives
 ;    mva #1 tempXroller; number of defensive purchases to perform
 @
-    randomize ind_Battery         ind_Bouncy_Castle  
+    randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece2
     dec tempXroller
     bpl @-
-    
+
     ; and now offensives
     lda MoneyH,x ; money / 256
     :3 asl  ;*8
     sta tempXroller ; perform this many purchase attempts
 @
-    randomize first_offensive     last_offensive     
+    randomize first_offensive     last_offensive
     jsr TryToPurchaseOnePiece2
     dec tempXroller
     bpl @-
 
-    rts 
+    rts
 .endp
 ;----------------------------------------------
 .proc ChooseBestOffensive
@@ -973,7 +973,7 @@ SorryNoPurchase
 ; X - TankNr
 ;----------------------------------------------
     ldy #ind_Dirt_Charge    +1 ;the last weapon to choose +1    (not BFG or Laser :) )
-NotFromAll    
+NotFromAll
 ; Y - the last offensive weapon to use + 1
     lda TanksWeaponsTableL,x
     sta temp
@@ -982,7 +982,7 @@ NotFromAll
 loop
     dey
     lda (temp),y
-    beq loop 
+    beq loop
     tya
     sta ActiveWeapon,x
     rts

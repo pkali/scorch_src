@@ -22,7 +22,7 @@
     pha
     rts
 ExplosionRoutines
-    .word babymissile-1              ;Baby_Missile   ;_00    
+    .word babymissile-1              ;Baby_Missile   ;_00
     .word missile-1                  ;Missile        ;_01
     .word babynuke-1                 ;Baby_Nuke      ;_02
     .word nuke-1                     ;Nuke           ;_03
@@ -60,7 +60,7 @@ tracer
     rts
 .endp
 .proc BFG
-    mva #sfx_plasma_2_2 sfx_effect 
+    mva #sfx_plasma_2_2 sfx_effect
     jsr BFGblink
     ; Kill all :)
     ldx NumberOfPlayers
@@ -79,7 +79,7 @@ CheckNextTankBFG
 .proc babymissile
     mva #11 ExplosionRadius
 GoBabyMissileSFX
-    mva #sfx_baby_missile sfx_effect 
+    mva #sfx_baby_missile sfx_effect
 GoXmissile
     jmp xmissile
 .endp
@@ -106,12 +106,12 @@ GoBabyNukeSFX
 ; ------------------------
 .proc leapfrog
     mva #17 ExplosionRadius
-;    mva #sfx_baby_missile sfx_effect 
+;    mva #sfx_baby_missile sfx_effect
 ;    jsr xmissile
     jsr babymissile.GoBabyMissileSFX
 
     jsr SecondRepeat
-    
+
 SecondRepeat
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
@@ -150,7 +150,7 @@ EndOfLeapping
     mva #21 ExplosionRadius
     jsr CalculateExplosionRange0
     jsr xmissile.NoRangeCalc
-    
+
     jsr SoilDown2
     ;
     jsr cleartanks    ; maybe not?
@@ -208,10 +208,10 @@ NoWallsInFunky
     mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     sbw xdraw #34
-    mva #sfx_nuke sfx_effect 
+    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     adw xdraw #68
-    mva #sfx_nuke sfx_effect 
+    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     sbw xdraw #34
     ;
@@ -219,14 +219,14 @@ NoWallsInFunky
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoUpperCircle
-    mva #sfx_nuke sfx_effect 
+    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
 NoUpperCircle
     adw ydraw #68
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
-    mva #sfx_nuke sfx_effect 
+    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
 NoLowerCircle
     mva #sfx_silencer sfx_effect
@@ -258,7 +258,7 @@ GoXmissileWithSaveXYdraw
     ;
     mwa xdraw xcircle    ; store hitpoint for future repeats
     ldy #30        ; repeat 30 times
-    sty magic    
+    sty magic
 RepeatNapalm    ; external loop (for fire animation)
     mwa xcircle xdraw
     sbw xdraw #(napalmRadius)  ; 10 pixels on left side hit point
@@ -280,7 +280,7 @@ RepeatFlame        ; internal loop (draw flames)
     tya
     sec
     sbc ydraw
-    sta ydraw    
+    sta ydraw
     sbw xdraw #4    ; half character correction
     ; draw flame symbol
     lda magic    ; if last repeat - clear flames
@@ -288,7 +288,7 @@ RepeatFlame        ; internal loop (draw flames)
     lda random
     and #%00000110
     clc
-    adc #char_flame           
+    adc #char_flame
     bne PutFlameChar
 LastNapalmRepeat
     lda #char_clear_flame         ; clear flame symbol
@@ -312,7 +312,7 @@ CharOffTheScreen
     jne RepeatFlame
     dec magic
     jpl RepeatNapalm
-    ; after napalm 
+    ; after napalm
 ;now we must check tanks in range
     ldx NumberOfPlayers
     dex
@@ -536,7 +536,7 @@ DiggerCharacter
     lda random
     and #$06
     clc
-    adc #char_digger          
+    adc #char_digger
     adc sandhogflag
     sta CharCode
     cpw xdraw #(screenwidth-6)
@@ -619,7 +619,7 @@ RepeatFill
     ldy #0
     lda (tempXROLLER),y
     sta HeightRol ; relative point
- 
+
 RollinContinuesLiquid
     ; new point is set
     adw xdraw #mountaintable tempXROLLER
@@ -684,19 +684,19 @@ ToHighFill
     ldx TankNr
     lda AngleTable,x
     tay
-    
+
     mwa EndOfTheBarrelX xbyte
     mva EndOfTheBarrelY ybyte
     mva #0 ybyte+1
     sta LaserFlag    ; turn on gravity and wind after shot :)
-    
+
     mwa xdraw LaserCoordinate
     mwa ydraw LaserCoordinate+2
     mwa xbyte LaserCoordinate+4
     mwa ybyte LaserCoordinate+6
 
     mva #sfx_lightning sfx_effect
-    
+
     mva #%10000000 drawFunction
     ;the above switches Draw to measuring length
     jsr draw
@@ -723,7 +723,7 @@ ToHighFill
 
     dec yc
     bne @-
-        
+
     mva #1 color
     mwa LaserCoordinate xdraw
     mwa LaserCoordinate+2 ydraw
@@ -764,7 +764,7 @@ ExplosionLoop2
     bcc ExplosionLoop2
 
     mva #1 color
-        
+
 ;check tanks' distance from the centre of the explosion
 
     mva #%10000000 drawFunction
@@ -830,10 +830,10 @@ UseShieldWithEnergy
     cpy #0    ; is necessary to reduce tenk energy ?
     beq ShieldCoveredTank
     jsr DecreaseEnergyX
-ShieldCoveredTank    
+ShieldCoveredTank
     lda ShieldEnergy,x
     jne EndOfDistanceCheckLoop
-ShieldEnergy0    ; deactivate if no energy. it's like use one hit shield :) 
+ShieldEnergy0    ; deactivate if no energy. it's like use one hit shield :)
 UseShield
     lda TankNr
     pha            ; store TankNr
@@ -1007,7 +1007,7 @@ DirectionChecked
 ; --------------------------------------------------
 ; makes dirt on xdraw,ydraw position and of ExplosionRadius height
     mva #sfx_dirt_chrg_s sfx_effect
-    
+
     mva #1 color
 NoColor ; jump here with color=0 to clean dirt
     mwa xdraw xcircle
@@ -1098,10 +1098,10 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
-    jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys 
+    jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
 
-    ldx TankNr    ; for optimize    
+    ldx TankNr    ; for optimize
     ; Select and Option
     lda CONSOL
     tay
@@ -1127,7 +1127,7 @@ callActivation
     jsr DefensivesActivate
     jmp afterInventory
 
-@    
+@
     cmp #@kbcode._I  ; $0d  ; I
     bne @+
 callInventory
@@ -1137,9 +1137,9 @@ callInventory
     mva #$ff isInventory
     jsr Purchase
 afterInventory
-    jsr MakeDarkScreen    
+    jsr MakeDarkScreen
     jsr DisplayStatus
-    jsr SetMainScreen   
+    jsr SetMainScreen
     jsr DrawTanks
     ;jsr WaitOneFrame    ; not necessary
     bit LazyFlag
@@ -1152,7 +1152,7 @@ NoLazy
 NoSpyHard
     RmtSong song_ingame
     mva #0 escFlag
-    jmp ReleaseAndLoop   
+    jmp ReleaseAndLoop
 @
     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
@@ -1163,13 +1163,13 @@ NoSpyHard
 
 jumpFromStick
     .IF TARGET = 800
-    cmp #$80|17    ; Ctrl+Help
-    bne NoVdebugSwitch
-    lda Vdebug
-    eor #$ff
-    sta Vdebug
-    jmp ReleaseAndLoop
-NoVdebugSwitch    
+      cmp #$80|17    ; Ctrl+Help
+      bne NoVdebugSwitch
+      lda Vdebug
+      eor #$ff
+      sta Vdebug
+      jmp ReleaseAndLoop
+NoVdebugSwitch
     .ENDIF
     and #$3f ;CTRL and SHIFT ellimination
     cmp #@kbcode._up  ; $e
@@ -1189,10 +1189,10 @@ NoVdebugSwitch
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
     .IF TARGET = 800
-    cmp #61    ; G
-    bne EndKeys
-    jsr SelectNextGradient.NotWind
-    jmp ReleaseAndLoop
+      cmp #61    ; G
+      bne EndKeys
+      jsr SelectNextGradient.NotWind
+      jmp ReleaseAndLoop
     .ENDIF
 EndKeys
     jmp notpressed
@@ -1205,7 +1205,7 @@ checkJoy
     cmp #$0f
     beq notpressedJoy
     tay
-    mva #0 ATRACT    ; reset atract mode    
+    mva #0 ATRACT    ; reset atract mode
     lda joyToKeyTable,y
     jmp jumpFromStick
 notpressedJoy
@@ -1221,14 +1221,14 @@ pressedUp
     spl:mva #0 pressTimer  ; if >128 then reset to 0
     cmp #25  ; 1/2s
     bcs CTRLPressedUp
-    
-    
+
+
     ;force increaseeee!
     ;ldx TankNr        ; optimized
     inc ForceTableL,x
     bne CheckingMaxForce
     inc ForceTableH,x
-    
+
 CheckingMaxForce
 
     mva #sfx_set_power_1 sfx_effect
@@ -1305,7 +1305,7 @@ pressedRight
     mva #1 Erase
     jsr DrawTankNr.BarrelChange
     dec:lda AngleTable,x
-    cmp #255  ; -1 
+    cmp #255  ; -1
     jne BeforeFire
     lda #180
     sta AngleTable,x
@@ -1325,7 +1325,7 @@ CTRLPressedRight
     lda #180
     sta AngleTable,x
     jmp BeforeFire
-        
+
 
 pressedLeft
     ;ldx TankNr        ; optimized
@@ -1369,7 +1369,7 @@ pressedTAB
       lda #first_offensive        ; #0
       sta ActiveWeapon,x
       beq @+    ; allways = 0
-?notlasttofirst    
+?notlasttofirst
     inc ActiveWeapon,x
 @
     lda ActiveWeapon,x
@@ -1413,7 +1413,7 @@ pressedSpace
     ;=================================
     ;we shoot here!!!
     lda #0
-    sta ATRACT    ; reset atract mode    
+    sta ATRACT    ; reset atract mode
     sta pressTimer ; reset
     jsr WaitForKeyRelease.StillWait
     lda pressTimer
@@ -1447,7 +1447,7 @@ RandomizeOffensiveText
     ldy TankNr
     mva #$ff plot4x4color
     jsr DisplayOffensiveTextNr
-    
+
 AfterOffensiveText
     mva #0 LaserFlag    ; $ff - Laser
     ldx TankNr
@@ -1477,7 +1477,7 @@ AfterStrongShoot
     ; to start where the tank's barrel ends
     ; (without it bullet would go from the left lower corner of the tank)
     ;ldx TankNr
-    
+
     mwa EndOfTheBarrelX xtraj+1
     mva EndOfTheBarrely ytraj+1
     lda #0
@@ -1535,12 +1535,12 @@ noSmokeTracer
     sty SmokeTracerFlag
 
 RepeatIfSmokeTracer
-RepeatFlight    
+RepeatFlight
     mwa ytraj+1 Ytrajold+1
     mwa xtraj+1 Xtrajold+1
     mva #%01000000 drawFunction
 
-    lda #0  
+    lda #0
     sta vx
     sta vx+1
     sta vx+2
@@ -1552,7 +1552,7 @@ RepeatFlight
 
     ;vx calculation
     ;vx = sin(90-Angle) for Angle <=90
-    ;vx = -sin(Angle-90) for 90 < Angle <= 180 
+    ;vx = -sin(Angle-90) for 90 < Angle <= 180
     aslw Force ;Force = Force * 2
 
     ;cos(Angle) (but we use sin table only so some shenanigans happen)
@@ -1565,10 +1565,10 @@ RepeatFlight
     ;180 horizontally left
 
     ; (we have to set goleft used in rolling weapons)
-   
+
     cpx #91
     bcc angleUnder90
-    
+
     ;over 90
     mva #1 goleft
     sec
@@ -1583,7 +1583,7 @@ angleUnder90
     lda #90
     sbc Angle
     tax
-@    
+@
     lda sintable,x  ; cos(X)
     sta Multiplee   ; *Force
     mwa Force Multiplier
@@ -1610,9 +1610,9 @@ DoNotAdd
     rol Multiplier+2
     dex
     bne MultiplyLoop
-    
+
     mva #0 vx+3
-    ; here in vx there is a number 
+    ; here in vx there is a number
     ; xxxx.xx00 = sin(Angle)*Force
     ; negate it if going left
     lda goleft
@@ -1627,7 +1627,7 @@ DoNotAdd
     ;vy = sin(Angle) for Angle <=90
     ;vy = sin(180-Angle) for 90 < Angle <= 180
 
-    lda #0  
+    lda #0
     sta vy
     sta vy+1
     sta vy+2
@@ -1635,7 +1635,7 @@ DoNotAdd
     ldx Angle
     cpx #91
     bcc YangleUnder90
-    
+
     lda #180
     sec
     sbc Angle
@@ -1669,7 +1669,7 @@ DoNotAddY
     rol Multiplier+2
     dex
     bne MultiplyLoopY
-    ; here in vy there is a number 
+    ; here in vy there is a number
     ; yyyy.yy=cos(Angle)*Force
 
     mva #0 vy+3 ;vy=cos(Angle)*Force
@@ -1757,12 +1757,12 @@ LaserNoWalls
 nolaserwait
     lda color
     beq nonowait    ; smoke tracer erases slowly
-    lda tracerflag    
+    lda tracerflag
     bne nowait        ; funky bomb explotes fast ( tracerflag in real is funkyflag :) )
-nonowait 
+nonowait
     jsr shellDelay
     ;
-    jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys 
+    jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts        ; exit if pressed 'Exit keys'
     ldx TankNr
     ;
@@ -1797,7 +1797,7 @@ SkipCollisionCheck
 
     mwa xtraj+1 xdraw
     mwa ytraj+1 ydraw
-    
+
     bit TestFlightFlag
     bvc NoTestFlight
     bit Vdebug
@@ -1807,7 +1807,7 @@ SkipCollisionCheck
 NoTestFlight
     lda tracerflag
     bne NoUnPlot
-    
+
 YesUnPlot
     jsr UnPlot
 
@@ -1837,7 +1837,7 @@ EndOfFlight
     jmp SecondFlight
 EndOfFlight2
     mva #0 tracerflag ;  don't know why
-    
+
     bit TestFlightFlag
     jmi NoHitAtEndOfFight        ; RTS only !!! - no defendsives check
     ; and now check for defensive-aggressive weapon
@@ -1861,7 +1861,7 @@ EndOfFlight2
     lda ActiveWeapon,y
     cmp #ind_Tracer             ; defence not fire by tracers
     beq JNoDefence
-    cmp #ind_Smoke_Tracer   
+    cmp #ind_Smoke_Tracer
     beq JNoDefence
     cmp #ind_Laser              ; Bouncy and Mag not fire by Laser
     beq JNoDefence
@@ -1914,12 +1914,12 @@ NoTankHitAtEndOfFight
 NoHitAtEndOfFight
 NoDefence
     lsrw Force    ; Force = Force / 2 - because earlier we multiplied by 2
-    rts        ; END !!!    
+    rts        ; END !!!
 BouncyCastle
     ; now in Y we have number of of the attacking player (TankNr) !
     lda ActiveWeapon,y
     ; if Bouncy Castle bounced Funky Bomb - whole screen in range of soil down
-    cmp #ind_Funky_Bomb     
+    cmp #ind_Funky_Bomb
     bne @+
     jsr SetFullScreenSoilRange
 @
@@ -1965,7 +1965,7 @@ BouncyCastle
     ; to start where the tank's barrel ends
     ; (without it bullet would go from the left lower corner of the tank)
     ;ldx TankNr
-    
+
     mwa EndOfTheBarrelX xtraj+1
     mva EndOfTheBarrely ytraj+1
     lda #0
@@ -1975,7 +1975,7 @@ BouncyCastle
     sta ytraj
     sta color
 
-    
+
     ldy #100           ; ???
     mva #1 tracerflag  ; I do not know (I mean I think I know ;) )
                        ; 10 years later - I do not know!!!
@@ -2068,7 +2068,7 @@ mrLoopi
     bne @+
     ldx #0
 @    stx MirvMissileCounter
-    
+
     ; Y changes only for bullet number 0
     ; because rest of the bullets have the same Y (height)
 
@@ -2101,14 +2101,14 @@ mrLoopi
     jsr ShellDelay
     ;
     phx
-    jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys 
+    jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     bpl ExitnotPressed
     plx
     rts        ; exit if pressed 'Exit keys'
 ExitnotPressed
     plx
     ;
-    
+
 MIRVdoNotChangeY
 
     lda MirvDown,x ; if bullet is already down we go with the next one
@@ -2140,14 +2140,14 @@ MIRVdoNotChangeY
     ; if (Y>=0 and Y<=screenhight) and X<=screenwidth (bullet on the screen) - check collision
     ; if Y>screenhight and X>screenwidth (bullet under the screen on the left or right side) - stop flying without hit
     ; if Y>screenhight and X<=screenwidth (bullet under the screen) - check collision (allways hit)
-    
-    ; check bullet position and set flags: 
+
+    ; check bullet position and set flags:
     ; XposFlag - bullet positon X (0 - on screen , %1000000 - off-screen)
     ; YposFlag - bullet positon Y (0 - on screen , %1000000 - over the screen , %0100000 - under the screen)
     lda #$00
     sta XposFlag
     sta YposFlag
-    lda ytraj+2        ; Y high byte 
+    lda ytraj+2        ; Y high byte
     bpl @+
     mva #%10000000 YposFlag    ; bullet over the screen (Y)
     bmi MIRVsetXflag
@@ -2341,13 +2341,13 @@ MakeBump
     sec
     lda #180
     sbc LeapFrogAngle
-    sta LeapFrogAngle    ; swap angle (LeapFrogAngle)    
+    sta LeapFrogAngle    ; swap angle (LeapFrogAngle)
     inc FunkyWallFlag
     rts
 WrapAndNone
     bvc NoWall
     cpw xtraj+1 #screenwidth
-    bcc OnScreen     
+    bcc OnScreen
     ; (wrapping wall)
     inc FunkyWallFlag
     bit xtraj+2
@@ -2431,7 +2431,7 @@ SelectNextTank
     beq RepeatSpy
 SpyHardEnd
     mvx TargetTankNr TankNr ; restore
-    jsr DisplaySpyInfo    
+    jsr DisplaySpyInfo
     rts
 .endp
 .proc DisplaySpyInfo
@@ -2490,7 +2490,7 @@ EndLazy
     bcc IsToHigh
     sbc #12    ; tank with shield high correction
     bne StoreMaxAlt
-IsToHigh    
+IsToHigh
     lda #18
 StoreMaxAlt
     sta FloatingAlt
@@ -2502,10 +2502,10 @@ StoreMaxAlt
     jsr TypeLine4x4.variableLength
 
     ldx TankNr
-    
+
     ; TankNr in X reg.
     ; now animate Up
-    mva #0 modify    ;  it's a counter 
+    mva #0 modify    ;  it's a counter
 TankGoUp
     lda ytankstable,x
     cmp FloatingAlt        ; Floating altitude
@@ -2576,7 +2576,7 @@ KeyboardAndJoyCheck
     lda ShieldEnergy,x
     cmp #20
     bne LotOfFuel
-    
+
     ; display text 4x4 - low fuel
     jsr SetLowFuelText
     jsr TypeLine4x4.variableLength
@@ -2590,7 +2590,7 @@ notpressed
     ; let's animate "engine"
     jsr DrawTankEngine
     ; enimation ends
-    
+
     lda SKSTAT
     cmp #$ff
     jeq checkJoy
@@ -2616,7 +2616,7 @@ checkJoy
     and #$0f
     cmp #$0f
     beq notpressedJoy
-    tay 
+    tay
     lda joyToKeyTable,y
     jmp jumpFromStick
 notpressedJoy
@@ -2635,11 +2635,11 @@ pressedRight
     jsr ClearTankNr
     mva #0 Erase
     lda XtankstableH,x
-    cmp #>(screenwidth-TankWidth-4)    ; tank width correction +4 
+    cmp #>(screenwidth-TankWidth-4)    ; tank width correction +4
     bne @+
     lda XtankstableL,x
-    cmp #<(screenwidth-TankWidth-4)    ; tank width correction +4 pixels 
-@    bcs RightScreenEdge    
+    cmp #<(screenwidth-TankWidth-4)    ; tank width correction +4 pixels
+@    bcs RightScreenEdge
     inc XtankstableL,x
     sne:inc XtankstableH,x
     jmp NoREdge
@@ -2729,10 +2729,10 @@ CheckCollisionWithTankLoop
     bne @+
     cpy xdraw
 @
-    bcs LeftFromTheTank 
+    bcs LeftFromTheTank
     tya    ;add 20 (tank size*2 +2 and +2)
     clc
-    adc #20    
+    adc #20
     tay
     lda xtankstableH,x
     adc #0
@@ -2828,7 +2828,7 @@ NotHighest
     jsr SoilDown2
     ldx TankNr
     rts
-    
+
 CalculateSoildown
     ldx TankNr
     clc
@@ -2888,11 +2888,11 @@ CheckCollisionWithTankLoop
     cmp #ind_Mag_Deflector      ; first shielded weapon
     bcc CheckCollisionWithNotShieldedTank
     cmp #ind_Bouncy_Castle  +1    ; last shielded weapon
-    bcc CheckCollisionWithShieldedTank    ; tank with shield is bigger :) 
-    
+    bcc CheckCollisionWithShieldedTank    ; tank with shield is bigger :)
+
     ;lda ShieldEnergy,x        ; there is wrong method to check shield :)
     ;bne CheckCollisionWithShieldedTank    ; tank with shield is bigger :)
-    
+
 CheckCollisionWithNotShieldedTank
     lda xtankstableH,x
     cmp xdraw+1
@@ -2944,10 +2944,10 @@ CheckCollisionWithShieldedTank
     bne @+
     cpy xdraw
 @
-    bcs LeftFromTheTank 
+    bcs LeftFromTheTank
     tya    ;add 16 double byte
     clc
-    adc #TankWidth+4+4    
+    adc #TankWidth+4+4
     tay
     lda xtankstableH,x
     adc #0
@@ -3017,7 +3017,7 @@ CheckRangeRight
 RangesChecked
 
     rts
-.endp    
+.endp
 
 ;--------------------------------------------------
 .proc SetFullScreenSoilRange
@@ -3031,7 +3031,7 @@ RangesChecked
 .endp
 ;--------------------------------------------------
 .proc ClearScreenSoilRange
-; cleanup of the soil fall down ranges (left and right) 
+; cleanup of the soil fall down ranges (left and right)
 ;--------------------------------------------------
     mwa #screenwidth RangeLeft
     lda #0
@@ -3072,7 +3072,7 @@ noBullets
 .proc HowManyBullets
 ; in: A <-- Weapon number, TankNr
 ; out: A <-- How many bullets in the weapon, Y: weapon number
-; how many bullets weapon of tank(TankNr) has, Result in A 
+; how many bullets weapon of tank(TankNr) has, Result in A
 ;--------------------------------------------------
     tay
     ldx TankNr
@@ -3080,11 +3080,10 @@ noBullets
     sta weaponPointer
     lda TanksWeaponsTableH,x
     sta weaponPointer+1
-    
+
     lda (weaponPointer),y  ; and we have number of bullets in A
     rts
 .endp
 
-    
+
     .ENDIF
-    

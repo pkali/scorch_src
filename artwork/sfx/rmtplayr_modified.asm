@@ -620,7 +620,7 @@ rmt_p5
 .IF TARGET = 800
     ldx #$10                ; pseudo stereo
     bne SetPokey_OffsetX    ; pseudo stereo
-.ELSE
+.ELIF TARGET = 5200
     rts
 .ENDIF
 SetPokey

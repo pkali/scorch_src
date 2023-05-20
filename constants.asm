@@ -59,11 +59,11 @@ LineGameOver
 seppukuText
     dta d"#  SEPPUKU!  #"
 areYouSureText
-    .IF target != 5200
+    .IF TARGET = 800
         dta d"# SURE?  Y/N #"
-    .ELSE
+    .ELIF TARGET = 5200
         dta d"#END? Y-1/N-0#"
-    .ENDIF    
+    .ENDIF
 
 lineClear
     dta d"              "
@@ -232,109 +232,109 @@ TanksNamesDefault
     dta d":1th.Tank"
 .ENDR
 ;-------------------------------------------------
-TankShapesTable         .BYTE char_tank1           
-                        .BYTE char_tank2           
-                        .BYTE char_tank3           
-                        .BYTE char_tank4           
-;-------------------------------------------------    
+TankShapesTable         .BYTE char_tank1
+                        .BYTE char_tank2
+                        .BYTE char_tank3
+                        .BYTE char_tank4
+;-------------------------------------------------
 WeaponPriceH ; weapons prices (tables with prices of weapons)
-  .by >price_Baby_Missile   
-  .by >price_Missile        
-  .by >price_Baby_Nuke      
-  .by >price_Nuke           
-  .by >price_LeapFrog       
-  .by >price_Funky_Bomb     
-  .by >price_MIRV           
-  .by >price_Death_s_Head   
-  .by >price_Napalm         
-  .by >price_Hot_Napalm     
-  .by >price_Tracer         
-  .by >price_Smoke_Tracer   
-  .by >price_Baby_Roller    
-  .by >price_Roller         
-  .by >price_Heavy_Roller   
-  .by >price_Riot_Charge    
-  .by >price_Riot_Blast     
-  .by >price_Riot_Bomb      
+  .by >price_Baby_Missile
+  .by >price_Missile
+  .by >price_Baby_Nuke
+  .by >price_Nuke
+  .by >price_LeapFrog
+  .by >price_Funky_Bomb
+  .by >price_MIRV
+  .by >price_Death_s_Head
+  .by >price_Napalm
+  .by >price_Hot_Napalm
+  .by >price_Tracer
+  .by >price_Smoke_Tracer
+  .by >price_Baby_Roller
+  .by >price_Roller
+  .by >price_Heavy_Roller
+  .by >price_Riot_Charge
+  .by >price_Riot_Blast
+  .by >price_Riot_Bomb
   .by >price_Heavy_Riot_Bomb
-  .by >price_Baby_Digger    
-  .by >price_Digger         
-  .by >price_Heavy_Digger   
-  .by >price_Baby_Sandhog   
-  .by >price_Sandhog        
-  .by >price_Heavy_Sandhog  
-  .by >price_Dirt_Clod      
-  .by >price_Dirt_Ball      
-  .by >price_Ton_of_Dirt    
-  .by >price_Liquid_Dirt    
-  .by >price_Dirt_Charge    
-  .by >price_Buy_me         
-  .by >price_Laser          
-  .by >price_White_Flag     
-  .by >price_Battery        
-  .by >price_Hovercraft     
-  .by >price_Parachute      
+  .by >price_Baby_Digger
+  .by >price_Digger
+  .by >price_Heavy_Digger
+  .by >price_Baby_Sandhog
+  .by >price_Sandhog
+  .by >price_Heavy_Sandhog
+  .by >price_Dirt_Clod
+  .by >price_Dirt_Ball
+  .by >price_Ton_of_Dirt
+  .by >price_Liquid_Dirt
+  .by >price_Dirt_Charge
+  .by >price_Buy_me
+  .by >price_Laser
+  .by >price_White_Flag
+  .by >price_Battery
+  .by >price_Hovercraft
+  .by >price_Parachute
   .by >price_StrongParachute
-  .by >price_Mag_Deflector  
-  .by >price_Shield         
-  .by >price_Heavy_Shield   
-  .by >price_Force_Shield   
-  .by >price_Bouncy_Castle  
-  .by >price_Long_Barrel    
+  .by >price_Mag_Deflector
+  .by >price_Shield
+  .by >price_Heavy_Shield
+  .by >price_Force_Shield
+  .by >price_Bouncy_Castle
+  .by >price_Long_Barrel
   .by >price_Nuclear_Winter_
-  .by >price_Lazy_Boy       
-  .by >price_Lazy_Darwin    
-  .by >price_Auto_Defense   
-  .by >price_Spy_Hard       
+  .by >price_Lazy_Boy
+  .by >price_Lazy_Darwin
+  .by >price_Auto_Defense
+  .by >price_Spy_Hard
 WeaponPriceL
-  .by <price_Baby_Missile   
-  .by <price_Missile        
-  .by <price_Baby_Nuke      
-  .by <price_Nuke           
-  .by <price_LeapFrog       
-  .by <price_Funky_Bomb     
-  .by <price_MIRV           
-  .by <price_Death_s_Head   
-  .by <price_Napalm         
-  .by <price_Hot_Napalm     
-  .by <price_Tracer         
-  .by <price_Smoke_Tracer   
-  .by <price_Baby_Roller    
-  .by <price_Roller         
-  .by <price_Heavy_Roller   
-  .by <price_Riot_Charge    
-  .by <price_Riot_Blast     
-  .by <price_Riot_Bomb      
+  .by <price_Baby_Missile
+  .by <price_Missile
+  .by <price_Baby_Nuke
+  .by <price_Nuke
+  .by <price_LeapFrog
+  .by <price_Funky_Bomb
+  .by <price_MIRV
+  .by <price_Death_s_Head
+  .by <price_Napalm
+  .by <price_Hot_Napalm
+  .by <price_Tracer
+  .by <price_Smoke_Tracer
+  .by <price_Baby_Roller
+  .by <price_Roller
+  .by <price_Heavy_Roller
+  .by <price_Riot_Charge
+  .by <price_Riot_Blast
+  .by <price_Riot_Bomb
   .by <price_Heavy_Riot_Bomb
-  .by <price_Baby_Digger    
-  .by <price_Digger         
-  .by <price_Heavy_Digger   
-  .by <price_Baby_Sandhog   
-  .by <price_Sandhog        
-  .by <price_Heavy_Sandhog  
-  .by <price_Dirt_Clod      
-  .by <price_Dirt_Ball      
-  .by <price_Ton_of_Dirt    
-  .by <price_Liquid_Dirt    
-  .by <price_Dirt_Charge    
-  .by <price_Buy_me         
-  .by <price_Laser          
-  .by <price_White_Flag     
-  .by <price_Battery        
-  .by <price_Hovercraft     
-  .by <price_Parachute      
+  .by <price_Baby_Digger
+  .by <price_Digger
+  .by <price_Heavy_Digger
+  .by <price_Baby_Sandhog
+  .by <price_Sandhog
+  .by <price_Heavy_Sandhog
+  .by <price_Dirt_Clod
+  .by <price_Dirt_Ball
+  .by <price_Ton_of_Dirt
+  .by <price_Liquid_Dirt
+  .by <price_Dirt_Charge
+  .by <price_Buy_me
+  .by <price_Laser
+  .by <price_White_Flag
+  .by <price_Battery
+  .by <price_Hovercraft
+  .by <price_Parachute
   .by <price_StrongParachute
-  .by <price_Mag_Deflector  
-  .by <price_Shield         
-  .by <price_Heavy_Shield   
-  .by <price_Force_Shield   
-  .by <price_Bouncy_Castle  
-  .by <price_Long_Barrel    
+  .by <price_Mag_Deflector
+  .by <price_Shield
+  .by <price_Heavy_Shield
+  .by <price_Force_Shield
+  .by <price_Bouncy_Castle
+  .by <price_Long_Barrel
   .by <price_Nuclear_Winter_
-  .by <price_Lazy_Boy       
-  .by <price_Lazy_Darwin    
-  .by <price_Auto_Defense   
-  .by <price_Spy_Hard       
+  .by <price_Lazy_Boy
+  .by <price_Lazy_Darwin
+  .by <price_Auto_Defense
+  .by <price_Spy_Hard
 
 ;-------------------------------------------------
 ; how many units (bulletd) of a given weapon we get for a given price
@@ -392,7 +392,7 @@ WeaponUnits
   .by 2  ;Auto_Defense   ;_46
   .by 4  ;Spy_Hard       ;_47
 
-PurchaseMeTable ;weapons good to be purchased by the robot 
+PurchaseMeTable ;weapons good to be purchased by the robot
                 ;the comment is an index in the tables
     ; "Baby Missile    ","Missile         ","Baby Nuke       ","Nuke            "
     ; "LeapFrog        ","Funky Bomb      ","MIRV            ","Death's Head    "
@@ -530,7 +530,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Shield          " ; 38    - shield for one shot - no energy
     dta d"Heavy Shield    " ; 39    - shield with energy
     dta d"Force Shield    " ; 40    - shield with energy and parachute
-    dta d"Bouncy Castle   " ; 41    - with shield and energy 
+    dta d"Bouncy Castle   " ; 41    - with shield and energy
     dta d"Long Schlong    " ; 42
     dta d"Nuclear Winter  " ; 43
     dta d"Lazy Boy        " ; 44
@@ -556,22 +556,22 @@ DefensiveEnergy = *-(last_offensive - first_offensive +1)  ; to fake the table f
     .by 00  ; Auto Defense
     .by 00  ; Spy Hard
 weaponsOfDeath  ; weapons used in tank death animations
-    dta ind_Missile        
-    dta ind_Baby_Nuke      
-    dta ind_Nuke           
-    dta ind_Death_s_Head   
+    dta ind_Missile
+    dta ind_Baby_Nuke
+    dta ind_Nuke
+    dta ind_Death_s_Head
     dta ind_Hot_Napalm      ; why not?
-    dta ind_Riot_Bomb      
+    dta ind_Riot_Bomb
     dta ind_Heavy_Riot_Bomb
-    dta ind_Baby_Digger    
-    dta ind_Digger         
-    dta ind_Heavy_Digger   
-    dta ind_Baby_Sandhog   
-    dta ind_Sandhog        
-    dta ind_Heavy_Sandhog  
-    dta ind_Dirt_Clod      
-    dta ind_Dirt_Ball      
-    dta ind_Ton_of_Dirt    
+    dta ind_Baby_Digger
+    dta ind_Digger
+    dta ind_Heavy_Digger
+    dta ind_Baby_Sandhog
+    dta ind_Sandhog
+    dta ind_Heavy_Sandhog
+    dta ind_Dirt_Clod
+    dta ind_Dirt_Ball
+    dta ind_Ton_of_Dirt
 weaponsOfDeathEnd
 joyToKeyTable
     .by $ff             ;00
@@ -618,66 +618,68 @@ gameOverSpritesTop
     .by 130+7,130+7,136+7,142+7,148+7,154+7
 ;------credits
 CreditsStart
-    dta d"         "*
-    dta d"You were playin",d"g"*
-    dta d"Scorc",d"h"*
-    dta d"Warsaw, Miam",d"i"*
-    dta d"2000-202",d"3"*
-    dta d" "*
-    dta d"Programmin",d"g"*
-    dta d"Tomasz 'Pecus' Peck",d"o"*
-    dta d"Pawel 'pirx' Kalinowsk",d"i"*
-    dta d" "*
-    dta d"SFX, Music and Suppor",d"t"*
-    dta d"Michal 'Miker' Szpilowsk",d"i"*
-    dta d" "*
-    .IF target != 5200
+    dta   d"         "*
+    dta   d"You were playin",d"g"*
+    dta   d"Scorc",d"h"*
+    dta   d"Warsaw, Miam",d"i"*
+    dta   d"2000-202",d"3"*
+    dta   d" "*
+    dta   d"Programmin",d"g"*
+    dta   d"Tomasz 'Pecus' Peck",d"o"*
+    dta   d"Pawel 'pirx' Kalinowsk",d"i"*
+    dta   d" "*
+    dta   d"SFX, Music and Suppor",d"t"*
+    dta   d"Michal 'Miker' Szpilowsk",d"i"*
+    dta   d" "*
+    .IF TARGET = 800
       dta d"Additional Musi",d"c"*
       dta d"Mario 'Emkay' Kri",d"x"*
       dta d" "*
     .ENDIF
-    dta d"Code Optimizatio",d"n"*
-    dta d"Piotr '0xF' Fusi",d"k"*
-    dta d" "*
-    dta d"Ar",d"t"*
-    dta d"Adam Wachowsk",d"i"*
-    .IF target != 5200
+    dta   d"Code Optimizatio",d"n"*
+    dta   d"Piotr '0xF' Fusi",d"k"*
+    dta   d" "*
+    dta   d"Ar",d"t"*
+    dta   d"Adam Wachowsk",d"i"*
+    .IF TARGET = 800
       dta d"Roman 'xorcerer' Fierfa",d"s"*
     .ENDIF
-    dta d" "*
-    dta d"Ideas, help and Q",d"A"*
-    dta d"Bocianu, Probabilitydragon",d","*
-    dta d"EnderDude, Dracon",d","*
-    dta d"Beeblebrox, KrzysRog, lopezpb",d","*
-    dta d"brad-colbert, archon800, nowy80",d","*
-    dta d"Shaggy the Atarian, RetroBorsuk, ZPH"
-    .IF target = 5200
-    dta d","*
-    dta d"x-usr(1536), Aking, JAC!, phaeron",d","*
-    dta d"RB520",d"0"*
-    .ELSE
-    dta d" "*
+    dta   d" "*
+    dta   d"Ideas, help and Q",d"A"*
+    dta   d"Bocianu, Probabilitydragon",d","*
+    dta   d"EnderDude, Dracon",d","*
+    dta   d"Beeblebrox, KrzysRog, lopezpb",d","*
+    dta   d"brad-colbert, archon800, nowy80",d","*
+    dta   d"Shaggy the Atarian, RetroBorsuk, ZPH"
+    .IF TARGET = 800
+      dta d" "*
+    .ELIF TARGET = 5200
+      dta d","*
+      dta d"x-usr(1536), Aking, JAC!, phaeron",d","*
+      dta d"RB520",d"0"*
     .ENDIF
-    dta d" "*
-    dta d"Additional testin",d"g"*
-    dta d"Arek and Alex Peck",d"o"*
-    dta d" "*
-    dta d"Special thank",d"s"*
-    dta d"Krzysztof 'Kaz' Ziembi",d"k"*
-    .IF target != 5200
+    dta   d" "*
+    dta   d"Additional testin",d"g"*
+    dta   d"Arek and Alex Peck",d"o"*
+    dta   d" "*
+    dta   d"Special thank",d"s"*
+    dta   d"Krzysztof 'Kaz' Ziembi",d"k"*
+    .IF TARGET = 800
       dta d"  "*
       dta d"Stay tuned for the FujiNet version",d"!"*
     .ENDIF
     dta d"         "*
 CreditsEnd
-.IF target = 5200
-  CreditsLines=34 + 7; add 7 for scrollout
-.ELSE
+.IF TARGET = 800
   CreditsLines=40 + 7  ; add 7 for scrollout
+.ELIF TARGET = 5200
+  CreditsLines=34 + 7; add 7 for scrollout
 .ENDIF
-.IF target = 5200
+
+.IF TARGET = 5200
   ; Atari 5200 splash
   NewSplashText=*
     dta d" 2023  atariage", $4e, "com "  ; $4e - non blinking dot
 .ENDIF
-.endif
+
+.endif  ; .IF *>0

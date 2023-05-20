@@ -103,7 +103,7 @@ EndOfUnPlot
 ; game. If you are going to speed up the game, start with
 ; plot - it is used by every single effect starting from explosions
 ; through line drawing and small text output!!!
-; 
+;
 ; Optimized by 0xF (Fox) THXXXX!!!
 
 ; -----------------------------------------
@@ -112,7 +112,7 @@ EndOfUnPlot
     bcs unPlot.EndOfUnPlot ;nearest RTS
 CheckX02
     cpw xdraw #screenwidth
-    bcs EndOfPlot 
+    bcs EndOfPlot
 MakePlot
     ; let's calculate coordinates from xdraw and ydraw
 
@@ -177,7 +177,7 @@ ClearPlot
     rts
 .endp
 ;--------------------------------------------------
-.proc drawmountains 
+.proc drawmountains
 ;--------------------------------------------------
     mwa #0 xdraw
     mwa #mountaintable modify
@@ -191,7 +191,7 @@ drawmountainsloop
     sta ydraw
     sty ydraw+1
 .IF FASTER_GRAF_PROCS = 1
-;    there was Drawline proc 
+;    there was Drawline proc
     lda #screenheight
     sec
     sbc ydraw
@@ -217,12 +217,12 @@ drawmountainsloop
     lda linetableH,y
     adc xdraw+1
     sta xbyte+1
-    ldy #0    
+    ldy #0
     dec tempbyte01
     bne @-
 ;    end of Drawline proc
 .ELSE
-;    there was Drawline proc 
+;    there was Drawline proc
 drawline
     jsr plot.MakePlot
     inc ydraw
@@ -326,12 +326,12 @@ CharLoopi
 ;--
     ldy #0
     lda (xbyte),y
-    ora mask1,x    
+    ora mask1,x
     and char1,x
     sta (xbyte),y
     ldy #8
     lda (xbyte),y
-    ora mask2,x    
+    ora mask2,x
     and char2,x
     sta (xbyte),y
     inc ydraw
@@ -392,7 +392,7 @@ EndPutChar
     cpw dy #(screenheight-1)
     jcs TypeChar.EndPutChar ;nearest RTS
     cpw dy #(4)
-    jcc TypeChar.EndPutChar ;nearest RTS    
+    jcc TypeChar.EndPutChar ;nearest RTS
     cpw dx #(screenwidth-4)
     jcs TypeChar.EndPutChar ;nearest RTS
     ; checks ommited.
@@ -408,7 +408,7 @@ Upper4bits
     sta fontind
     lda #$00
     sta fontind+1
-    
+
     adw fontind #font4x4
 
     ; and 4 bytes to the table
@@ -471,7 +471,7 @@ CharLoopi4x4
 ;--
     ldy #0
     lda (xbyte),y
-    ora mask1,x    
+    ora mask1,x
     bit plot4x4color
     bpl PutInColor0_1    ; only mask - no char
     and char1,x
@@ -479,7 +479,7 @@ PutInColor0_1
     sta (xbyte),y
     ldy #8
     lda (xbyte),y
-    ora mask2,x    
+    ora mask2,x
      bit plot4x4color
     bpl PutInColor0_2    ; only mask - no char
     and char2,x
@@ -545,7 +545,7 @@ EndPut4x4
       inw temp
       cpw temp #displayC64+screenheight*screenBytes+1
     bne @-
-   rts 
+   rts
 .endp
 
 ;--------------------------------------------------
@@ -581,7 +581,7 @@ next8lines
     :4 rol
     sta $d020
     sta $d021
-    
+
     lda $dd00       ; Set video bank to start at 0
     and #252
     ora #3

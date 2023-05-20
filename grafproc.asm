@@ -4,7 +4,7 @@
 
 
 ;--------------------------------------------------
-.proc draw ;;fuxxing good draw :) 
+.proc draw ;;fuxxing good draw :)
 ; xdraw,ydraw (word) - coordinates of first point
 ; xbyte,ybyte (word) - coordinates of last point
 ;--------------------------------------------------
@@ -221,7 +221,7 @@ LineGoesLeft
     ; line goes left - we are reversing X
     sbw xtempDRAW temp xdraw ; XI
 PutPixelinDraw
-    
+
     ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
     bit drawFunction
     bpl @+
@@ -276,7 +276,7 @@ StopHitChecking
     jmp ContinueDraw
 @
 MeasureVisualisation
-    jsr plot   
+    jsr plot
 
 ContinueDraw
     ; XI=XI+1
@@ -292,9 +292,9 @@ EndOfDraw
 .endp
 
 ;--------------------------------------------------
-.proc circle ;fxxxing good circle drawing :) 
+.proc circle ;fxxxing good circle drawing :)
 ; xdraw,ydraw (word) - coordinates of circle center
-; radius (byte) - radius of circle 
+; radius (byte) - radius of circle
 ;--------------------------------------------------
 ;Turbo Basic source
 ; R=30
@@ -483,10 +483,10 @@ endcircleloop
       ; it is necessary, because randomizing checks
       ; if the given tank is already placed
       ; after check if its position is not (0,0)
-  
+
       ; I will be honest with you - I have no idea
       ; what the above comment was intending to mean :)
-  
+
       sta XtankstableL,x
       sta XtankstableH,x
       sta Ytankstable,x
@@ -708,7 +708,7 @@ NoMissile
     bcs PMForTank6
     ; clear sprite and put 3 lines on the tank at the same time
     ldx #3    ; three lines of PM
-ClearPM     
+ClearPM
     cpy temp
     bne ZeroesToGo
 @    lda (xbyte),y
@@ -728,7 +728,7 @@ ZeroesToGo
 PMForTank6
     ; clear sprite and put 3 lines on the tank at the same time
     ldx #3    ; three lines of PM
-ClearPM6     
+ClearPM6
     cpy temp
     bne ZeroesToGo6
 @    lda (xbyte),y
@@ -756,7 +756,7 @@ noTankNoPM
     ; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
     ldx TankNr
     lda ActiveDefenceWeapon,x
-    cmp #ind_Shield                 ; one shot shield 
+    cmp #ind_Shield                 ; one shot shield
     beq DrawTankSh
     cmp #ind_Force_Shield           ; shield with energy and parachute
     beq DrawTankShieldBold
@@ -809,7 +809,7 @@ DoNotDrawTankNr
 tankflash_loop
     lda CONSOL  ; turbo mode
     and #%00000001 ; START KEY
-    sne:mva #1 fs  ; finish it     
+    sne:mva #1 fs  ; finish it
     mva #1 Erase
     ldx TankNr
     jsr DrawTankNr.SkipHidingPM    ; it's necessary becouse DrawTankNr skips tanks with no energy !
@@ -833,7 +833,7 @@ tankflash_loop
 ; if use DrawInPosition entry point then:
 ; xdraw, ydraw - coordinates left LOWER corner of Tank char
 ; values remain there after a DrawTankNr proc.
-; 
+;
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
     sbw xdraw #$03        ; 3 pixels to left
@@ -934,7 +934,7 @@ ToHighToParachute
 ;--------------------------------------------------
 .proc DrawTankRocketEngine
 ; X - tank number
-; 
+;
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
     clc
@@ -942,7 +942,7 @@ ToHighToParachute
     adc #2    ; 1 pixel down
     sta ydraw
     mva #0 ydraw+1
-    
+
     clc
     lda XtanksTableL,x
     adc #2    ; 2 pixels to right
@@ -951,18 +951,18 @@ ToHighToParachute
     adc #0
     sta xdraw+1
 
-    ; draw first horizontal line 
+    ; draw first horizontal line
     mva #5 temp
 @
     jsr plot
     inw xdraw
     dec temp
     bne @-
-    
-    sbw xdraw #2    ; 2 pixels left    
+
+    sbw xdraw #2    ; 2 pixels left
     inw ydraw    ; 1 pixel down
-    
-    ; draw second horizontal line 
+
+    ; draw second horizontal line
     mva #3 temp
 @
     jsr plot
@@ -970,7 +970,7 @@ ToHighToParachute
     dec temp
     bne @-
 
-    adw xdraw #2    ; 2 pixels right    
+    adw xdraw #2    ; 2 pixels right
     inw ydraw    ; 1 pixel down
 
     ; and last pixel
@@ -982,7 +982,7 @@ ToHighToParachute
 ;--------------------------------------------------
 .proc DrawTankEngine
 ; X - tank number
-; 
+;
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
     ; one pixel under tank
@@ -1087,7 +1087,7 @@ ROLPoint2
     rol UnderTank1
     inw xdraw
     dec temp
-    bne ByteBelowTank    
+    bne ByteBelowTank
 NoGroundCheck
     ldx TankNr
     lda Ytankstable,x
@@ -1099,7 +1099,7 @@ NoGroundCheck
     lda Parachute
     and #1
     bne ParachutePresent
-    ; decreasing energy 
+    ; decreasing energy
     ldy #2 ; how much energy to substract if no parachute
     jsr DecreaseEnergyX
 ParachutePresent
@@ -1114,7 +1114,7 @@ ParachutePresent
     beq @+
     jsr DecreaseEnergyX
 @
-    ; check energy of parachute    
+    ; check energy of parachute
     lda ShieldEnergy,x
     bne OneTimeParachute
     lda #$00
@@ -1187,7 +1187,7 @@ NotLeftEdge
 EndLeftFall
 EndRightFall
 NoLeftOrRight
-    inc EndOfTheFallFlag ; after this is shouldn't fall 
+    inc EndOfTheFallFlag ; after this is shouldn't fall
 EndOfFCycle
     ; draw tank on new position
     jsr DrawTankNr    ; ew have TankNr in X (I hope :) )
@@ -1247,7 +1247,7 @@ NoParachuteWeapon
     beq ThereWasNoParachute
     jsr DrawTankParachute
 ThereWasNoParachute
-;    ldx TankNr    
+;    ldx TankNr
     jsr PutTankNr    ; redraw tank after erase parachute (exactly for redraw leaky schield :) )
     mva #sfx_silencer sfx_effect
     rts
@@ -1267,7 +1267,7 @@ ThereWasNoParachute
     sta pmgraph+$700,y
     iny
     bne @-
-    rts    
+    rts
 .endp
 
 /*
@@ -1419,7 +1419,7 @@ ColumnIsReady
     bcc FalloutOfLine
     beq FalloutOfLine
 
-    jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys 
+    jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
 
     lda IsEndOfTheFallFlag
@@ -1539,7 +1539,7 @@ EndDrawing
     rts
 .endp
 
-/* 
+/*
 ;--------------------------------------------------
 .proc calculatemountains0
 ; Only for testing - makes ground flat (0 pixels)
@@ -1601,7 +1601,7 @@ NotHigher
     sta temp  ; opty possible
     ; substract address of the next text from previous to get text length
     sbw temp LineAddress4x4 temp2
-    mva temp2 fx 
+    mva temp2 fx
 
     ;jsr Display4x4AboveTank
     ;rts
@@ -1745,7 +1745,7 @@ DOTOldLowestValue
       bne end_found
       dey
     bne @-
-   
+
 end_found
     iny
     sty fx
@@ -1797,21 +1797,21 @@ EndOfTypeLine4x4
 ;--------------------------------
 .proc AreYouSure
 ;using 4x4 font
-    
+
     mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
-    
+
     ;top frame
     mva ResultY LineYdraw
     jsr TL4x4_top
     adb ResultY  #4 ;next line
-    
+
     ;sure?
     mwa #areYouSureText LineAddress4x4
-    jsr _sep_opty    
+    jsr _sep_opty
     ;bottom frame
     mva ResultY LineYdraw
     jsr TL4x4_bottom
-    
+
 
     jsr GetKey
     cmp #@kbcode._Y  ; $2b  ; "Y"
@@ -1821,14 +1821,14 @@ EndOfTypeLine4x4
 @    mva #0 escFlag
 skip01
     jsr WaitForKeyRelease
-    
+
     ;clean
     mva #3 di
     mva #4 ResultY
 @
       mva #$ff plot4x4color
       mwa #lineClear LineAddress4x4
-      jsr _sep_opty  
+      jsr _sep_opty
       dec di
       bne @-
 
@@ -1847,31 +1847,31 @@ quit_areyousure
 ;--------------------------------
 .proc DisplaySeppuku
 ;using 4x4 font
-    
+
 
     mva #20 fs  ; temp, how many times blink the billboard
 seppuku_loop
       lda CONSOL  ; turbo mode
       and #%00000001 ; START KEY
-      sne:mva #1 fs  ; finish it     
+      sne:mva #1 fs  ; finish it
 
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
-      
+
       ;top frame
       mva ResultY LineYdraw
       jsr TL4x4_top
       adb ResultY  #4 ;next line
-      
+
       ;seppuku
       mwa #seppukuText LineAddress4x4
       jsr _sep_opty
-            
+
       ;bottom frame
       mva ResultY LineYdraw
       jsr TL4x4_bottom  ; just go
 
     ;clean seppuku
-    
+
     mva #3 di
     ;mva #4 ResultY
     lda #4
@@ -1879,7 +1879,7 @@ seppuku_loop
 loplop ;@
       mwa #lineClear LineAddress4x4
       jsr _sep_opty
-  
+
       dec di
       bne loplop ;@-
 
@@ -1888,7 +1888,7 @@ loplop ;@
 
 quit_seppuku
     rts
-   
+
 .endp
 
 ; -------------------------------------
@@ -1909,7 +1909,7 @@ X    lda XtanksTableL,x
 ;--------------------------------------------------
     ;vx calculation
     ;vx = sin(90-Angle) for Angle <=90
-    ;vx = -sin(Angle-90) for 90 < Angle <= 180 
+    ;vx = -sin(Angle-90) for 90 < Angle <= 180
 
     ; erase previous barrel
 
@@ -1918,7 +1918,7 @@ X    lda XtanksTableL,x
   ;  lda previousBarrelAngle,x
   ;  sta Angle
   ;  jsr DrawBarrelTech
-  ;  
+  ;
   ;  mva #1 color
     ldx TankNr
     jsr SetupXYdraw
@@ -1932,11 +1932,11 @@ X    lda XtanksTableL,x
 
 .proc DrawBarrelTech
     ; angle in Angle and A
- 
+
     mvx #0 goleft
     cmp #91
     bcc angleUnder90
-    
+
     ;over 90
     sec
     sbc #90
@@ -1953,8 +1953,8 @@ angleUnder90
     tax
     ; barrel start offset under 90deg
     adw xdraw #3 xdraw
-    
-@    
+
+@
     sbw ydraw #3 ydraw
     lda sintable,x  ; cos(X)
     sta vx
@@ -1967,7 +1967,7 @@ angleUnder90
     lda Angle
     cmp #91
     bcc YangleUnder90
-    
+
     lda #180
     sec
     sbc Angle
@@ -1984,14 +1984,14 @@ YangleUnder90
     sta fy
 
     ; draw by vx vy
-    ; in each step 
+    ; in each step
     ; 1. plot(xdraw, ydraw)
     ; 2. add vx and vy to 3 byte variables xdraw.fx, ydraw.fy
     ; 3 check length, if shorter, go to 1.
-    
+
  ;   mva #6 yc  ; barrel length
 barrelLoop
-    
+
     lda goleft
     bne goright
     clc
@@ -2029,15 +2029,15 @@ ybarrel
     sta ydraw
     bcs @+
     dec ydraw+1
-@    
+@
     jsr plot ;.MakePlot
 
     dec yc
     bne barrelLoop
-    
+
     mwa xdraw EndOfTheBarrelX
     mva ydraw EndOfTheBarrelY
-    
+
     rts
 .endp
 ;--------------------------------------------------

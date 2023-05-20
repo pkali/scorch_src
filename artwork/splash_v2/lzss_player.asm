@@ -6,7 +6,7 @@ song_end
 
 buffers
     .ds 256 * 9
-    
+
 POKEY2 = POKEY+$10    ; stereo
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,7 +22,7 @@ POKEY2 = POKEY+$10    ; stereo
     mva #1 bit_data
 
     ; Example: here initializes song pointer:
-    
+
     ;mwa #song_data song_ptr
 
     ; Init all channels:
@@ -67,7 +67,7 @@ delay
     sta POKEY2,x    ; stereo
     dex    ;stereo
     bpl @-    ; stereo
-    
+
     lda #>buffers
     sta bptr+1
 
@@ -150,4 +150,3 @@ skip
 
 stereo_buff    ; stereo
     .ds 9    ; stereo
-    

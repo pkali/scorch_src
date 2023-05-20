@@ -2,7 +2,7 @@
 
 
     .IF *>0
-    
+
 WeaponsListDL = 0
 NamesOfLevels = 0
 ;----------------------------------------
@@ -27,7 +27,7 @@ NamesOfLevels = 0
     bpl @-
 
     rts
- 
+
 Autoplay_OptionsTable .by 4,4,2,2,4,1,3,2,4
 
 .endp
@@ -51,7 +51,7 @@ NoGradientLoop
     lda GradientAddrL,y
     sta GradientColors
     lda GradientAddrH,y
-    sta GradientColors+1    
+    sta GradientColors+1
     rts
 .endp
 
@@ -76,7 +76,7 @@ ManualPurchase
     spl:rts
     jsr DefensivesActivate    ; activate weapons
     bit escFlag
-    spl:rts    
+    spl:rts
 AfterManualPurchase
     inc:lda TankNr
     cmp NumberOfPlayers
@@ -87,8 +87,8 @@ AfterManualPurchase
 .proc DefensivesActivate
 ;--------------------------------------------------
 ; This proc call Inventory and set Defensives activation first
-    
-    mwa #ListOfDefensiveWeapons WeaponsListDL ;switch to the list of offensive weapons    
+
+    mwa #ListOfDefensiveWeapons WeaponsListDL ;switch to the list of offensive weapons
     mva #$ff IsInventory
     mva #%10000000 WhichList
     ; offensive weapon - 0, defensive - %10000000
@@ -104,13 +104,13 @@ AfterManualPurchase
 ; Rest of the data is taken from appropriate tables
 ; and during the purchase these tables are modified.
 
-        
+
 ; we are clearing list of the weapons
     mva #$00 WhichList
     ; offensive weapon - 0, deffensive - %10000000
 GoToActivation
     rts
-    
+
 .endp
 
 ; -----------------------------------------------------
@@ -173,7 +173,7 @@ NotRobot
     ; check if all chars are empty (" ")
     ldy #7
     lda #0
-@     ora #0 ; NameAdr,y 
+@     ora #0 ; NameAdr,y
       and #$7F  ; remove inverse (Cursor)
       dey
     bpl @-
@@ -306,7 +306,7 @@ displayloop1
 .endp
 ;-------------------------------------------------
 .proc RoundOverSprites
-    ; fill sprites with bytes    
+    ; fill sprites with bytes
     rts
 .endp
 

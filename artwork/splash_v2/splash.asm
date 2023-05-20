@@ -4,7 +4,7 @@
 /***************************************/
 
     icl "splash.h"
-    
+
 ; --- dmsc LZSS player routine on zero page
     org $80
 
@@ -57,7 +57,7 @@ fnt
     .ds $0300
 pmg    SPRITES
     eif
-    
+
 FontSplash
     ins '../../artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 
@@ -103,14 +103,14 @@ LOOP    lda vcount        ;synchronization for the first screen (picture) line
     mva >ant dlptr+1
 
   icl "output.png.rp.ini"
-    
+
 ;--- 16 lines down ---- !!!
     :16 sta wsync
-    
+
     ; wait 13 cycles !!!
     :4 nop
     inc byt2
-    
+
 ;--- wait 18 cycles
 ;    jsr _rts
 ;    inc byt3
@@ -185,7 +185,7 @@ stop    mva #$00 pmcntl        ;PMG disabled
     sta POKEY2,x    ; stereo
     dex
     bpl @-
-            
+
     ;no glitching please (issue #67)
     lda #0
     sta $D400 ;dmactl

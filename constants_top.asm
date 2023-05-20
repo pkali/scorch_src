@@ -14,7 +14,7 @@ dliColorsFore
     .by $08,$08,$08,$06,$06,$06,$06,$06,$06,$04
 CashOptionL ;(one zero less than on the screen)
     .by 0,<200,<800,<1200,<2000
-CashOptionH   
+CashOptionH
     .by 0,>200,>800,>1200,>2000
 GravityTable   .by 10,20,25,30,40
 MaxWindTable   .by 5,20,40,70,99

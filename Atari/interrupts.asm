@@ -98,13 +98,13 @@ EndOfDLI_Text
     pla
 DLIinterruptNone
     rti
-    
+
 .endp
 ;--------------------------------------------------
 .proc VBLinterrupt
     mva #0 dliCounter
     mva #$02 DliColorBack
-    
+
     lda PAL
     and #%00001110
     beq itsPAL
@@ -118,7 +118,7 @@ DLIinterruptNone
 itsPAL
     ; pressTimer is trigger tick counter. always 50 ticks / s
     bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
-    
+
 SkippedIfNTSC
 
     bit RMT_blocked
@@ -138,7 +138,7 @@ SkippedIfNTSC
 lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
     ; ------- RMT -------
-SkipRMTVBL       
+SkipRMTVBL
     bit ScrollFlag
     bpl EndOfCreditsVBI
 CreditsVBI
@@ -170,7 +170,15 @@ nextlinedisplay
 ;    bne EndOfCreditsVBI
     mwa #Credits DLCreditsAddr
 EndOfCreditsVBI
-    .IF TARGET = 5200
+    .IF TARGET = 800
+        ; support for joysticks :)
+        ldx JoystickNumber
+        lda STICK0,x
+        sta STICK0
+        lda STRIG0,x
+        sta STRIG0
+        jmp XITVBV
+    .ELIF TARGET = 5200
         lda SkStatSimulator
         bmi @+
         inc SkStatSimulator
@@ -181,7 +189,7 @@ EndOfCreditsVBI
 
         center = 114            ;Read analog stick and make it look like a digital stick
         threshold = 60
-        
+
         lda JoystickNumber
         asl
         tax
@@ -190,28 +198,28 @@ EndOfCreditsVBI
         rol stick0          ;Feed carry into digital stick value
         cmp #center-threshold       ;Compare with left threshold
         rol stick0          ;Feed carry into digital stick value
-    
+
         lda paddl1,x            ;Read POT1 value (vertical position)
         cmp #center+threshold       ;Compare with down threshold
         rol stick0          ;Feed carry into digital stick value
         cmp #center-threshold       ;Compare with down threshold
         rol stick0          ;Feed carry into digital stick value
-    
+
         lda stick0          ;0 indicates a press so the right/down values need to be inverted
         eor #2+8
         and #$0f
         sta stick0
-        
+
         ldx JoystickNumber
         ; check shift key (5200 second fire button)
         lda SKSTAT
         :3 lsr        ; third bit
-        and trig0,x    ; and first button    
+        and trig0,x    ; and first button
         ;lda trig0,x
         sta strig0        ;Move hardware to shadow
-        
+
         mva chbas chbase
-    
+
         lda skstat          ;Reset consol key shadow is no key is pressed anymore
         and #4
         beq @+
@@ -225,14 +233,6 @@ EndOfCreditsVBI
         tax
         pla
         rti
-    .ELSE    
-        ; support for joysticks :)
-        ldx JoystickNumber
-        lda STICK0,x
-        sta STICK0
-        lda STRIG0,x
-        sta STRIG0
-        jmp XITVBV
     .ENDIF
 .endp
     .IF TARGET = 5200
@@ -245,7 +245,7 @@ exit    pla
     tax
     pla
     rti
-.endp    
+.endp
     .ENDIF
 
 ;--------------------------------------------------

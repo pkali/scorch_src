@@ -8,7 +8,7 @@ START
     jsr Initialize
 
     ;jsr GameOverScreen    ; only for test !!!
-    
+
     RMTSong song_main_menu
 
     jsr Options  ;startup screen
@@ -24,7 +24,7 @@ START
 
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
-    
+
 MainGameLoop
     jsr SetWallsType
     ; first set default barrel lengths (fix for Long Schlong activation :) )
@@ -40,20 +40,20 @@ MainGameLoop
     jsr GetRandomWind
 
     jsr RoundInit
-    
+
     jsr MainRoundLoop
     bit escFlag
     jvs GoGameOver
     bmi START
 
     jsr CalculateGains
-    
+
     jsr SortSequence
-    
-    mva #0 TankNr  ; 
+
+    mva #0 TankNr  ;
     sta COLBAKS        ; set background color to black
     sta JoystickNumber    ; set joystick port for player
-    
+
     ; Hide all (easier than hide last ;) ) tanks
     jsr cleartanks    ; A=0
 
@@ -69,7 +69,7 @@ MainGameLoop
 
     jsr DemoModeOrKey
     jsr MakeDarkScreen
-    
+
     lda GameIsOver
     beq NoGameOverYet
 GoGameOver
@@ -80,7 +80,7 @@ NoGameOverYet
     mva #sfx_silencer sfx_effect
 
     jmp MainGameLoop
- 
+
 ;--------------------------------------------------
 .proc CalculateGains
 ;--------------------------------------------------
@@ -96,7 +96,7 @@ NoGameOverYet
     ldx NumberOfPlayers
     dex
 CalculateGainsLoop
-    
+
     ; adding the remaining energy of the tank to gain
     ; winner gets more ! :)
     lda Energy,x
@@ -104,7 +104,7 @@ CalculateGainsLoop
     sta gainL,x
     bcc @+
     inc gainH,x
-@    
+@
     ; add gain * 2
     asl gainL,x
     rol gainH,x
@@ -175,7 +175,7 @@ eskipzeroing
     rts
 .endp
 ;--------------------------------------------------
-.proc RoundInit 
+.proc RoundInit
 ;--------------------------------------------------
 ; at the beginning of each Round we set energy
 ; of all players to 99
@@ -191,7 +191,7 @@ eskipzeroing
     sta AfterBFGflag    ; reset BFG flag
     sta COLOR2    ; status line "off"
     sta COLOR1
-    
+
     tax
 @      sta singleRoundVars,x
       inx
@@ -219,7 +219,7 @@ SettingEnergies
       sta ForceTableL,x
       lda #>350
       sta ForceTableH,x
-  
+
       ;lda #(255-45)
       ;it does not look good when all tanks have
       ;barrels pointing the same direction
@@ -227,7 +227,7 @@ SettingEnergies
       ;angles
       jsr RandomizeAngle
       sta AngleTable,x
-  
+
       dex
     bpl SettingEnergies
 
@@ -312,10 +312,10 @@ DoNotFinishTheRound
     lda noDeathCounter
     cmp seppukuVal
     bcc @+
-    
+
     mva #0 noDeathCounter
     mva #sfx_seppuku sfx_effect
-    
+
     jsr DisplaySeppuku
     jmp Seppuku
 
@@ -342,10 +342,10 @@ CheckNextTankAD
     jeq NextPlayerShoots
 
 
-    
+
     mva #$ff plot4x4color
     jsr DisplayTankNameAbove
-    
+
     mva #1 color ;to display flying point
 
     ldx tankNr
@@ -358,7 +358,7 @@ CheckNextTankAD
     beq ManualShooting
 
 RoboTanks
-    ; robotanks shoot here    
+    ; robotanks shoot here
     ; TankNr still in X
     jsr ArtificialIntelligence
     ;pause 30
@@ -391,7 +391,7 @@ AfterManualShooting
     ; defensive weapons without flight handling
     ldx TankNr
     lda ActiveDefenceWeapon,x
-    cmp #ind_Hovercraft     
+    cmp #ind_Hovercraft
     beq GoFloat
     cmp #ind_White_Flag      ; White Flag
     beq ShootWhiteFlag
@@ -431,10 +431,10 @@ ShootNow
 
     bit escFlag
     spl:rts        ; keys Esc or O
-    
+
     lda HitFlag ;0 if missed
     beq missed
-    
+
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku
@@ -461,7 +461,7 @@ missed
     bne @+
       ldx TankNr
       tya
-      sta ActiveWeapon,x 
+      sta ActiveWeapon,x
 @
 
     ;here we clear offensive text (after a shoot)
@@ -477,7 +477,7 @@ NextPlayerShoots
 SeteXistenZ
     lda Energy,x
     sta eXistenZ,x
-    
+
     jsr MaxForceCalculate
 
     dex
@@ -504,7 +504,7 @@ PlayersAgain
 ; Aaaah! - in the main loop we have to set eXistenZ and LASTeXistenZ
 
     mva #sfx_next_player sfx_effect
-    
+
     ldx NumberOfPlayers
     dex
 CheckingPlayersDeath
@@ -521,7 +521,7 @@ NoPlayerNoDeath
     cmp NumberOfPlayers
     bne NotLastPlayerInRound
     mva #0 TankSequencePointer
-    
+
     lda WindChangeInRound
     beq NoWindChangeNow
     jsr GetRandomWind    ; wind change after each turn (not round only)
@@ -529,7 +529,7 @@ NoWindChangeNow
 NotLastPlayerInRound
     jmp MainRoundLoop
 .endp
-    
+
 ;---------------------------------
 .proc PlayerXdeath
 ; this tank should not explode anymore:
@@ -560,9 +560,9 @@ NotLastPlayerInRound
     adc ResultsTable,x
     sta ResultsTable,x
     ;inc CurrentResult
-    
+
     ; RandomizeDeffensiveText
-    randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
+    randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1)
 TextAfterBFG
     sta TextNumberOff
     inc CurrentResult    ; ... but increase result of winner (BFG)
@@ -574,7 +574,7 @@ TextAfterBFG
     mva TankNr temp2 ; not elegant, and probably unnecessary
     sty TankNr
     jsr FlashTank ; blinking and pausing (like PAUSE 72 - 18x(2+2) )
-    mva temp2 TankNr 
+    mva temp2 TankNr
 
     ;Deffensive text cleanup
     ;here we clear Deffensive text (after a shoot)
@@ -752,7 +752,7 @@ NotNegativeShieldEnergy
 ; Energy of tank X in A
 ;--------------------------------------------------
     sta L1
-    
+
     ;DATA L1,L2
     ;Multiplication 8bit*8bit,
     ;result 16bit
@@ -786,7 +786,7 @@ B0  dey
 @    lda #$0
       cpx #ind_White_Flag       ; White Flag
       bne no99
-set99 lda #99     
+set99 lda #99
 no99
     .REPT MaxPlayers, #+1
       sta TanksWeapon:1,x
@@ -823,16 +823,16 @@ deletePtr = temp
     iny
     sty TankShape+2
     sty TankShape+5
-    
+
 
     mwa #1024 RandBoundaryHigh
     mva #$ff LastWeapon
     sta HowMuchToFall
     mva #1 color
-    
+
     jsr SetStandardBarrels
-    jsr WeaponCleanup        
-    
+    jsr WeaponCleanup
+
     mva #>WeaponFont chbas
 
     ;parameter for old plot (unPlot) max 5 points
@@ -869,7 +869,7 @@ MakeTanksVisible
 
     mva #1 CurrentRoundNr ;we start from round 1
     mva #6 NTSCcounter
-    
+
     rts
 .endp
 ;--------------------------------------------------
@@ -973,7 +973,7 @@ UsageLoop
     lda RANDOM
     and #%00000011 ;(0..1023)
     sta temp2+1
-    
+
     cpw RandBoundaryLow temp2
     seq:bcs RandomizeForce
 
@@ -984,9 +984,9 @@ UsageLoop
     sta ForceTableL,x
     lda temp2+1
     sta ForceTableH,x
-    
+
 ;---------
-LimitForce 
+LimitForce
 ; in X must be TankNr
 ; cuts force to MaxForceTable
     lda MaxForceTableH,x
@@ -995,7 +995,7 @@ LimitForce
     lda MaxForceTableL,x
     cmp ForceTableL,x
 @   bcs @+
-   
+
     lda MaxForceTableL,x
     sta ForceTableL,x
     lda MaxForceTableH,x
@@ -1045,7 +1045,7 @@ rotateLeft            ; older is bigger
 BarrelPositionIsFine
     jsr DrawTankNr
     rts
-    
+
 .endp
 
 ;----------------------------------------------
@@ -1166,7 +1166,7 @@ SetRandomWalls
 .endp
 ; --------------------------------------
 ; Sets the appropriate variables based on the options table
-; 
+;
 .proc SetVariablesFromOptions
     ;first option
     ldy OptionsTable
@@ -1196,29 +1196,29 @@ SetRandomWalls
     ldy OptionsTable+3
     lda MaxWindTable,y
     sta MaxWind
-    
+
     ;fifth option (no of rounds)
     ldy OptionsTable+4
     lda RoundsTable,y
     sta RoundsInTheGame
-    
+
     ;6th option (shell speed)
     ldy OptionsTable+5
     lda flyDelayTable,y
     sta flyDelay
-    
+
     ;7th option (Airstrike after how many missess)
     ldy OptionsTable+6
     lda seppukuTable,y
     sta seppukuVal
-    
+
     ;8th option (how aggressive are mountains)
     ldy OptionsTable+7
     lda mountainsDeltaTableH,y
     sta mountainDeltaH
     lda mountainsDeltaTableL,y
     sta mountainDeltaL
-    
+
     rts
 .endp
 
@@ -1228,9 +1228,9 @@ SetRandomWalls
 ;using 4x4 font
     jsr RoundOverSprites
 
-    
+
     mva #$ff plot4x4color
-        
+
     ;centering the result screen
     mva #((ScreenHeight/2)-(8*4)) ResultY
 
@@ -1246,7 +1246,7 @@ SetRandomWalls
     lda CurrentRoundNr
     cmp RoundsInTheGame
     beq GameOver4x4
-    
+
     sta decimal
     mwa #RoundNrDisplay displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
@@ -1264,7 +1264,7 @@ GameOver4x4
     mva ResultY LineYdraw
     jsr TypeLine4x4
     mva #1 GameIsOver
-    
+
 @
     adb ResultY  #4 ;next line
 
@@ -1321,7 +1321,7 @@ ResultOfTheNextPlayer
     ; overwrite the second digit of the points (max 255)
     ;it means ":"
     mva #26 ResultLineBuffer+9
-    
+
     ldx #0
     lda TankNr
     asl

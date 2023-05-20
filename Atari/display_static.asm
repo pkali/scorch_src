@@ -8,54 +8,54 @@
 ;-----------------------------------------------
 OptionsScreen
  dta d"Welcome to Scorch v. "
- build  ; 4 bytes from scorch.asm (fancy method) :) 
+ build  ; 4 bytes from scorch.asm (fancy method) :)
  dta                          d"  (un)2000-2023"
 
 .IF TARGET = 800
- dta d" Please select option with "
- dta $fe,$dc,$dd,$ff    ; cursors in inverse
- dta                                d" and "
- dta                                     d"Tab"*
- dta                                        d" "
- dta d"        Press "
- dta               d"Return"*
- dta                     d" to proceed         "
+   dta d" Please select option with "
+   dta $fe,$dc,$dd,$ff    ; cursors in inverse
+   dta                                d" and "
+   dta                                     d"Tab"*
+   dta                                        d" "
+   dta d"        Press "
+   dta               d"Return"*
+   dta                     d" to proceed         "
 .ELIF TARGET = 5200
- dta d" Please select option with joystick one "
- dta d"       and press FIRE to proceed        "
+   dta d" Please select option with joystick one "
+   dta d"       and press FIRE to proceed        "
 .ENDIF
      ; 0123456789012345678901234567890123456789
 ;-----------------------------------------------
 NameScreen
 .IF TARGET = 800
- dta d"     Enter names of players     "
+   dta d"     Enter names of players     "
 .ELIF TARGET = 5200
- dta d"Hold "
- dta d     "FIRE"*
- dta d         " to enter player names "
+   dta d"Hold "
+   dta d     "FIRE"*
+   dta d         " to enter player names "
 .ENDIF
 NameScreen3
  dta d" Human/Atari (difficulty level) "
 NameScreen5
  .IF TARGET = 800
- dta d"TAB"*
- dta    d" - Port nr  "
- dta $fe,$dc,$dd,$ff    ; cursors in inverse
- dta                    d" - Difficulty"
- dta d"  "
- dta   d"INV"*
- dta      d" - Shape "
- dta               d"Return"*
- dta                     d" - Proceed  "
+   dta d"TAB"*
+   dta    d" - Port nr  "
+   dta $fe,$dc,$dd,$ff    ; cursors in inverse
+   dta                    d" - Difficulty"
+   dta d"  "
+   dta   d"INV"*
+   dta      d" - Shape "
+   dta               d"Return"*
+   dta                     d" - Proceed  "
 .ELIF TARGET = 5200
- dta d" "
- dta  d"(5)"*
- dta     d" - Port/Shape "
- dta                   d"Joy"*
- dta                      d" - Diffic. "
- dta d"        "
- dta        d"FIRE"*
- dta             d" - Proceed          "
+   dta d" "
+   dta  d"(5)"*
+   dta     d" - Port/Shape "
+   dta                   d"Joy"*
+   dta                      d" - Diffic. "
+   dta d"        "
+   dta        d"FIRE"*
+   dta             d" - Proceed          "
 .ENDIF
 ;-----------------------------------------------
 MoreUp
@@ -73,51 +73,46 @@ MoreDown
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
- dta d"Tab"*
- dta d   ": Defensive/Offensive weapon "
+   dta d"Tab"*
+   dta d   ": Defensive/Offensive weapon "
 .ELIF TARGET = 5200
- dta d"Left"*
- dta d    ": Defensive/Offensive weapon"
+   dta d"Left"*
+   dta d    ": Defensive/Offensive weapon"
 .ENDIF
 PurchaseDescription
      ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
- dta d"Space"*
- dta      d": Purchase  "
- dta                  d"Return"*
- dta                        d": Finish "
+   dta d"Space"*
+   dta      d": Purchase  "
+   dta                  d"Return"*
+   dta                        d": Finish "
 .ELIF TARGET = 5200
- dta d"Right"*
- dta      d": Purchase    "
- dta                    d"FIRE"*
- dta                        d": Finish "
+   dta d"Right"*
+   dta      d": Purchase    "
+   dta                    d"FIRE"*
+   dta                        d": Finish "
 .ENDIF
 ActivateDescription
      ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
- dta d"Space"*
- dta      d": Activate  "
- dta                  d"Return"*
- dta                        d": Finish "
+   dta d"Space"*
+   dta      d": Activate  "
+   dta                  d"Return"*
+   dta                        d": Finish "
 .ELIF TARGET = 5200
- dta d"Right"*
- dta      d": Activate    "
- dta                    d"FIRE"*
- dta                        d": Finish "
+   dta d"Right"*
+   dta      d": Activate    "
+   dta                    d"FIRE"*
+   dta                        d": Finish "
 .ENDIF
 EmptyLine
  dta d"                                        "
 ;---------------------------------------------------
 OptionsTitle
 .IF TARGET = 800
- dta d"       scorch       "*
+   dta d"       scorch       "*
 .ELIF TARGET = 5200
- dta d" scorch supersystem "*
-; dta d"     scorch "*
-; dta             d"5"
-; dta              d"k"*
-; dta               d"2"
-; dta                d"     "*
+   dta d" scorch supersystem "*
 .ENDIF
 DifficultyTitle
  dta d"   difficulty   "*
@@ -135,7 +130,7 @@ GameOverTitle2
 
 dl ; MAIN game display list
         .byte $70
-        .byte $42 
+        .byte $42
         .word statusBuffer
         .byte $02, $02
         .byte $10+$80  ; 2 blank lines + DLI

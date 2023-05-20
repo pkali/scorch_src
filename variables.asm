@@ -55,9 +55,9 @@ StatusBufferCopy
 variablesStart  ; zeroing starts here
 ;=====================================================
 ;isInventory .ds 1  ; 0 - purchase, $ff - inventory
-;-------------- 
+;--------------
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
-;-------------- 
+;--------------
 noDeathCounter .ds 1
 ;--------------
 OptionsY  .ds 1 ;vertical position of cursor on Options screen
@@ -125,9 +125,9 @@ BarrelLength ;length of the tank barrel - dont forget to set it to 6 at round st
     .DS MaxPlayers
 ActiveWeapon ;number of the selected weapon
     .DS MaxPlayers
-ActiveDefenceWeapon ;number of the activated defence weapon - 0 
+ActiveDefenceWeapon ;number of the activated defence weapon - 0
     .DS MaxPlayers
-AutoDefenseFlag ; 0 - not activated, >$7f - activated 
+AutoDefenseFlag ; 0 - not activated, >$7f - activated
     .DS MaxPlayers
 WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;----------------------------------------------------
@@ -301,7 +301,7 @@ HowManyOnTheListDef
     .DS 1
 ;PositionOnTheList ; pointer position on the list being displayed
 ;    .DS 1
-LastWeapon 
+LastWeapon
     ; number of the last previously purchased weapon
     ; it is necessary when after purchase some weapon
     ; is removed from the list (because too expensive)
@@ -361,9 +361,9 @@ TankTempY
 ;-------------- single round variables --------------
 ;----------------------------------------------------
 singleRoundVars
-;-------------- 
+;--------------
 ;escFlag .ds 1   ; 0 - Esc or O not pressed, $80 - Esc pressed, $40 - O pressed
-;-------------- 
+;--------------
 CurrentResult
     .DS 1
 ;--------------

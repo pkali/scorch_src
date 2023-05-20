@@ -20,8 +20,8 @@
     org $801
     org [a($801)],$801
     basic_start(FirstSTART)
-    
-    
+
+
 ;---------------------------------------------------
 .macro build
     dta d"1.28" ; number of this build (4 bytes)
@@ -64,7 +64,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar CreditsVScrol    .byte
     ;--------------temps used in circle routine
     .zpvar xi               .word ;X (word) in draw routine
-    .zpvar fx               .byte 
+    .zpvar fx               .byte
     .zpvar yi               .word ;Y (word) in draw routine
     .zpvar fy               .byte
     .zpvar xk               .word
@@ -77,7 +77,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar dp               .word
     ;----------------------------
     .zpvar UnderTank1        .byte
-    .zpvar UnderTank2        .byte    
+    .zpvar UnderTank2        .byte
     ;----------------------------
     .zpvar TestFlightFlag    .byte ; For AI test flights ($ff - test, $00 - standard shoot flight)
     .zpvar weaponPointer    .word
@@ -131,7 +131,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar escFlag .byte    ; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
     .zpvar LineYdraw .byte
     .zpvar LineXdraw .word
-    .zpvar plot4x4color .byte    ; $00 / $ff 
+    .zpvar plot4x4color .byte    ; $00 / $ff
     .zpvar Multiplier .word
     .zpvar Multiplier_ .byte  ; 3 bytes
     .zpvar HowToDraw .byte
@@ -155,19 +155,19 @@ FirstZpageVariable = $58 ; $57
       icl 'C64/lib/C64_ATARISYS.ASM'
       icl 'C64/lib/C64SYS.ASM'
       icl 'C64/lib/MACRO.ASM'
-    
+
 ;-----------------------------------------------
 ; variable declarations in RAM (no code)
 ;-----------------------------------------------
-        
+
     ; Game loading address
     ORG $4100
     icl 'variables.asm'
-    
+
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 
-    
+
 ;--------------------------------------------------
 ; Game Code
 ;--------------------------------------------------
@@ -199,22 +199,22 @@ FirstSTART
 
                         ; from here on NMI is disabled
 
-    
+
     jsr MakeDarkScreen
-    
+
     ; one time zero variables in RAM (non zero page)
     lda #0
     ldy #OneTimeZeroVariablesCount-1
 @      sta OneTimeZeroVariables,y
       dey
     bpl @-
-    
+
     ; one time zero variables in RAM (zero page)
     ldy #FirstZpageVariable
 @    sta $0000,y
     iny
     bne @-
-    
+
     ; initialize variables in RAM (non zero page)
     ldy #initialvaluesCount-1
 @      lda initialvaluesStart,y
@@ -235,7 +235,7 @@ FirstSTART
     icl 'game.asm'
 ;--------------------------------------------------
 
-    
+
 ;--------------------------------------------------
 .proc GetKey
 ; waits for pressing a key and returns pressed value in A
@@ -252,7 +252,7 @@ FirstSTART
 ;--------------------------------------------------
 .proc getkeynowait
 ;--------------------------------------------------
-    jsr WaitForKeyRelease 
+    jsr WaitForKeyRelease
     lda kbcode
     and #$3f ;CTRL and SHIFT ellimination
     rts
@@ -361,7 +361,7 @@ noShellDelay
     icl 'C64/textproc.asm'
 ;----------------------------------------------
     icl 'grafproc.asm'
-    icl 'C64/gr_basics.asm'    
+    icl 'C64/gr_basics.asm'
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------
@@ -442,4 +442,3 @@ NMI
          INC $D020      ; change border colour, indication for a NMI
         RTI             ; exit interrupt
                         ; (not acknowledged!)
-  

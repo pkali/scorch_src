@@ -32,7 +32,7 @@
     jsr ColorsOfSprites
     mva #$ca COLOR1
     mva #$00 COLBAKS    ; set color of background
-   
+
     SetDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
 
 ; -------- setup bottom (tanks) line
@@ -70,7 +70,7 @@ OptionsMainLoop
     jsr getkey
     bit escFlag
     spl:rts
-       
+
     cmp #@kbcode._down  ; $f  ;cursor down
     bne OptionsNoDown
     inc:lda OptionsY
@@ -113,7 +113,7 @@ OptionsNoRight
     cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
     rts        ; options selected
-    
+
 OptionsNoReturn
     cmp #@kbcode._tab    ; Tab key
     bne OptionsNoTab
@@ -141,7 +141,7 @@ NoGradientLoop
     lda GradientAddrL,y
     sta GradientColors
     lda GradientAddrH,y
-    sta GradientColors+1    
+    sta GradientColors+1
     rts
 .endp
 
@@ -174,7 +174,7 @@ OptionsLoop
     cpy #optionWidth  ; width of the option highlight
     bne OptionsLoop
     ldy #0
-    ; next X position of the 
+    ; next X position of the
     adw temp #optionWidth  ; width of the option highlight
     inc:lda XPos
     cmp #5  ; number of options in a row
@@ -191,12 +191,12 @@ OptionsLoop
 _inverter
     beq invertme
     ; clean inversion otherwise
-    lda (temp),y 
+    lda (temp),y
     and #$7f  ; clear the top bit
     sta (temp),y
     bpl @+  ; JMP
 invertme
-    lda (temp),y 
+    lda (temp),y
     ora #$80  ; set the top bit
     sta (temp),y
 @
@@ -227,7 +227,7 @@ ManualPurchase
     spl:rts
     jsr DefensivesActivate    ; activate weapons
     bit escFlag
-    spl:rts    
+    spl:rts
 AfterManualPurchase
     inc:lda TankNr
     cmp NumberOfPlayers
@@ -238,8 +238,8 @@ AfterManualPurchase
 .proc DefensivesActivate
 ;--------------------------------------------------
 ; This proc call Inventory and set Defensives activation first
-    
-    mwa #ListOfDefensiveWeapons WeaponsListDL ;switch to the list of offensive weapons    
+
+    mwa #ListOfDefensiveWeapons WeaponsListDL ;switch to the list of offensive weapons
     mva #$ff IsInventory
     mva #%10000000 WhichList
     ; offensive weapon - 0, defensive - %10000000
@@ -265,7 +265,7 @@ AfterManualPurchase
     jsr CopyFromPurchaseAndGameOver
 
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
-        
+
 ; we are clearing list of the weapons
     mva #$00 WhichList
     ; offensive weapon - 0, deffensive - %10000000
@@ -283,7 +283,7 @@ GoToActivation
     bpl @+
     lda #song_inventory
 @    jsr RmtSongSelect
-    
+
     ldx tankNr
     lda TankStatusColoursTable,x
     sta COLOR2
@@ -331,15 +331,15 @@ AfterPurchase
     ldx #$00  ; index of the checked weapon
     stx HowManyOnTheListOff ; amounts of weapons (shells, bullets) in both lists
     stx HowManyOnTheListDef
-    
+
     jsr CreateList
 
-    bit isInventory  ; 
+    bit isInventory  ;
     bpl ChoosingItemForPurchase
-    
+
     lda whichList
     bne PositionDefensive
-     
+
 ; calculate positionOnTheList from the activeWeapon (offensives)
     ldx tankNr
     lda activeWeapon,x
@@ -356,7 +356,7 @@ AfterPurchase
     beq ?weaponFound  ; jmp
 PositionDefensive
     jsr calcPosDefensive
-    
+
 
 ?weaponFound
     ; weapon index in Y
@@ -368,7 +368,7 @@ PositionDefensive
 ;--------------------------------------------------
 ChoosingItemForPurchase
 ;--------------------------------------------------
-    
+
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
     bit escFlag
@@ -497,11 +497,11 @@ CreateList
     lda WeaponUnits,x
     jeq NoWeapon
 
-    ldy tanknr    
-    
+    ldy tanknr
+
     bit isInventory
     jmi itIsInventory
-    
+
     ; put "Purchase" on the screen
     mwa #PurchaseDescription PurActDescAddr
     ; and Title
@@ -516,7 +516,7 @@ CreateList
     cmp WeaponPriceL,x
 @
     jcc TooLittleCash
-    
+
     ; we have enough cash and the weapon can be
     ; added to the list
 
@@ -585,7 +585,7 @@ notInventory
     jsr HowManyBullets
     sta decimal
 
-    adw xbyte #1 displayposition 
+    adw xbyte #1 displayposition
     jsr displaybyte
 
     ldx temp ;weapon index
@@ -665,7 +665,7 @@ NoWeapon
     mwa #ListOfDefensiveWeapons xbyte
 NoDefense
     cpx #last_defensive     +1
-    
+
     jne CreateList
 
     ; offset may be only too big
@@ -686,14 +686,14 @@ WeHaveOffset
 
     lda HowManyOnTheListOff
     sta xbyte ; multiplier (temporarily here, it will be erased anyway)
-    lda #$00 ; 
+    lda #$00 ;
     sta xbyte+1 ; higher byte of the Result
     ldx #$05 ; 2^5
 @     asl xbyte
       rol xbyte+1
       dex
     bne @-
-    
+
     ; add to the address of the list
     adw xbyte #ListOfWeapons
     ldy #0
@@ -711,7 +711,7 @@ ListCleared1
     ; of the first erased char.
     lda HowManyOnTheListDef
     sta xbyte ; multiplier (temporarily here, it will be erased anyway)
-    lda #$00 ; 
+    lda #$00 ;
     sta xbyte+1 ; higher byte of the Result
     ldx #$05 ; 2^5
 @     asl xbyte
@@ -766,36 +766,36 @@ PurchaseAll
     lda moneyH,x
     sbc WeaponPriceH,y
     sta moneyH,x
-    
-positiveMoney    
+
+positiveMoney
     ; now we have to get address of
     ; the table of the weapon of the tank
     ; and add appropriate number of shells
 
     sty LastWeapon ; store last purchased weapon
     ; because we must put screen pointer next to it
-    
+
     ; but if we purchasing "Buy me!" then we must draw the winning weapon.
-    
-    cpy #ind_Buy_me         
+
+    cpy #ind_Buy_me
     bne NoSuprise
-    
+
 Suprise    ; get a random weapon
     lda random
     cmp #51        ; defensive weapons are less likely because they are more expensive - probability 255:51 (5:1)
     bcc GetRandomDefensive
 GetRandomOffensive
-    randomize ind_Missile         last_offensive     
+    randomize ind_Missile         last_offensive
     ;cmp #ind_Buy_me          ; buy me do not buy buy me :)
     ;beq GetRandomOffensive
     tay
     bne NoSuprise    ; Y always <> 0
 GetRandomDefensive
-    randomize ind_Battery         last_defensive     
+    randomize ind_Battery         last_defensive
     tay
 ;    lda WeaponUnits,y    ; check if weapon exist
 ;    beq GetRandomDefensive
-    
+
 NoSuprise
     lda TanksWeaponsTableL,x
     sta weaponPointer
@@ -824,13 +824,13 @@ inventorySelect
     ldx tankNr
     sta activeWeapon,x
     jmp WaitForKeyRelease ; rts
-    
+
 invSelectDef
     ldy PositionOnTheList
     lda IndexesOfWeaponsL2,y
     tay
     ldx tankNr
-    cmp #ind_Battery        
+    cmp #ind_Battery
     bne NotBattery
     ; if activate battery, we do it differently
     mva #sfx_battery sfx_effect
@@ -840,38 +840,38 @@ invSelectDef
     ply
     jmp DecreaseDefensive ; bypass activation
 NotBattery
-    cmp #ind_Auto_Defense   
+    cmp #ind_Auto_Defense
     bne NoAutoDefense
     ; Auto Defense - do it like battery
     mva #sfx_auto_defense sfx_effect
     mva #$A1 AutoDefenseFlag,x    ; this is "A" in inverse - for status line :)
     jmp DecreaseDefensive ; bypass activation
 NoAutoDefense
-    cmp #ind_Lazy_Boy       
+    cmp #ind_Lazy_Boy
     bne NoLazyBoy
     ; Lazy Boy - do it like battery
     mva #%01000000 LazyFlag
     jmp DecreaseDefensive ; bypass activation
 NoLazyBoy
-    cmp #ind_Lazy_Darwin    
+    cmp #ind_Lazy_Darwin
     bne NoLazyDarwin
     ; Lazy Darwin - do it like battery
     mva #%11000000 LazyFlag
     jmp DecreaseDefensive ; bypass activation
 NoLazyDarwin
-    cmp #ind_Spy_Hard       
+    cmp #ind_Spy_Hard
     bne NotSpy
     mva #$ff SpyHardFlag
-    jmp DecreaseDefensive ; bypass activation    
+    jmp DecreaseDefensive ; bypass activation
 NotSpy
-    cmp #ind_Long_Barrel    
+    cmp #ind_Long_Barrel
     bne NotBarrel
     ; if activate long barrel, we do it differently too
     mva #sfx_long_barrel sfx_effect
     mva #LongBarrel BarrelLength,x
-    bne DecreaseDefensive ; bypass activation    
+    bne DecreaseDefensive ; bypass activation
 NotBarrel
-    cmp #ind_White_Flag     
+    cmp #ind_White_Flag
     bne NotWhiteFlag
     cmp ActiveDefenceWeapon,x
     bne NoDeactivateWhiteFlag
@@ -897,7 +897,7 @@ DecreaseDefensive
     sec
     sbc #1
     sta (weaponPointer),y
-    
+
 DefActivationEnd
     jmp WaitForKeyRelease ; rts
 .endp
@@ -1084,7 +1084,7 @@ NoArrowDown
     lda TankNr
     :3 asl
     tax
-    
+
     ldy #0
 @     lda TanksNames,x
       sta NameAdr,y
@@ -1114,12 +1114,12 @@ CheckKeys
     lda TankShape,x
     tay
     lda digits+1,y
-    sta NameScreen2+15    ; display tank shape number    
+    sta NameScreen2+15    ; display tank shape number
     jsr CursorDisplay
     jsr getkey
     bit escFlag
     spl:rts
-    
+
   .IF TARGET = 800    ; only the A800 has a keyboard
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
@@ -1256,7 +1256,7 @@ NotRobot
     ; check if all chars are empty (" ")
     ldy #7
     lda #0
-@     ora NameAdr,y 
+@     ora NameAdr,y
       and #$7F  ; remove inverse (Cursor)
       dey
     bpl @-
@@ -1333,7 +1333,7 @@ CharacterFound
     beq checkjoy
     bit pressTimer    ; trick (no A change)
     bpl @-
-checkjoy    
+checkjoy
     lda STICK0
     and #$0f
     cmp #$0f
@@ -1543,7 +1543,7 @@ displayloop1
     sta dmactls
     lda #%00100100  ; playfield before P/M
     sta GPRIOR
-    jsr SetPMWidth    
+    jsr SetPMWidth
     jsr ColorsOfSprites
     mva #0 COLOR1
     sta COLBAKS    ; set color of background
@@ -1628,7 +1628,7 @@ ThisIsAI
 NotAItank
     tya
     ldy #38
-    sta (temp),y 
+    sta (temp),y
     ; put earned money on the screen
     lda EarnedMoneyL,x
     sta decimal
@@ -1669,10 +1669,10 @@ MakeAllTanksVisible
     jsr RandomizeTankPos
     dex
     bpl @-
-MainTanksFloatingLoop   
+MainTanksFloatingLoop
     ; main tanks floating loop
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
-AllTanksFloatingDown    
+AllTanksFloatingDown
     stx TankNr
     lda Ytankstable,x
     cmp #(72-7)        ; tank under screen - no erase
@@ -1842,7 +1842,7 @@ ThisIsAI
 ;-------------------------------------------------
 
     ldx TankNr
-    
+
     ;=========================
     ;displaying symbol of the weapon
     ;=========================
@@ -1872,7 +1872,7 @@ ThisIsAI
       aslw temp
       dey
     bpl @-
- 
+
     adw temp #NamesOfWeapons
     ldy #15
 @
@@ -1900,7 +1900,7 @@ ThisIsAI
     sta statusBuffer+80+22
     sta statusBuffer+80+39
     mwa #emptyLine temp
-    jmp ClearingOnly    
+    jmp ClearingOnly
 ActiveDefence
     sta temp ;get back number of the weapon
     mva #0 temp+1
@@ -1910,7 +1910,7 @@ ActiveDefence
       aslw temp
       dey
     bpl @-
- 
+
     adw temp #NamesOfWeapons
 ClearingOnly
     ldy #15
@@ -1950,7 +1950,7 @@ ClearingOnly
     jsr displaybyte
     lda #$09    ; )
     sta statusBuffer+40+13
-NoDefenceWeapon 
+NoDefenceWeapon
 NoShieldEnergy
 
     ;=========================
@@ -1981,7 +1981,7 @@ DisplayWindValue
     sta decimal
     mwa #statusBuffer+80+18 displayposition
     jsr displaybyte
-    
+
     ;=========================
     ;display round number
     ;=========================
@@ -2027,7 +2027,7 @@ AngleToLeft
     sty statusBuffer+40+25  ; (space) character
     lda #$7e  ;(del) char
     sta statusBuffer+40+22
-    bne AngleDisplay    
+    bne AngleDisplay
 VerticallyUp
     ; now we have value 90
     sta decimal
@@ -2037,7 +2037,7 @@ VerticallyUp
 AngleDisplay
     mwa #statusBuffer+40+23 displayposition
     jsr displaybyte
-    ldx TankNr   
+    ldx TankNr
     rts
 .endp
 ;-------------------------------------------------
@@ -2047,7 +2047,7 @@ AngleDisplay
     dey
     lda gameOverSpritesTop,y
     sta temp
-    
+
     ; clean the whole sprite
     lda #0
     tax
@@ -2055,11 +2055,11 @@ AngleDisplay
       sta PMGraph+$500,x
       dex
     bne @-
-    
+
     lda #$01
     sta sizep0 ; P0-P1 widths
     sta sizep0+1
-    
+
     ; set background
     lda #$ff
     ldx #100+7 ; top of the sprites
@@ -2071,10 +2071,10 @@ AngleDisplay
     GOSbeg = 112
     mva #GOSbeg hposp0
     mva #GOSbeg+12 hposp0+1
-    
+
     mva #15 PCOLR0
     sta PCOLR1
-    
+
     rts
 .endp
 
