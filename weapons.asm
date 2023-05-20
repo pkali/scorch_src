@@ -2498,14 +2498,7 @@ StoreMaxAlt
     mva #sfx_plasma_2_2 sfx_effect
 
     ; display text 4x4 - fuel full
-    
-    mwa #hoverFull LineAddress4x4
-    mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
-    mva #hoverFullEnd-hoverFull fx ; length
-    sec
-    lda FloatingAlt
-    sbc #12
-    sta LineYdraw
+    jsr SetFuelFullText
     jsr TypeLine4x4.variableLength
 
     ldx TankNr
@@ -2546,13 +2539,7 @@ ReachSky
     jsr DrawTankRocketEngine
 
     ; display text 4x4 - fuel full (clear text)
-    mwa #hoverFull LineAddress4x4
-    mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
-    mva #(hoverFullEnd-hoverFull) fx ; length
-    sec
-    lda FloatingAlt
-    sbc #12
-    sta LineYdraw
+    jsr SetFuelFullText
     lda #$00
     jsr TypeLine4x4.staplot4x4color
     ; and Soildown at the start (for correct mountaintable if tank was buried)
@@ -2591,13 +2578,7 @@ KeyboardAndJoyCheck
     bne LotOfFuel
     
     ; display text 4x4 - low fuel
-    mwa #hoverEmpty LineAddress4x4
-    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
-    mva #hoverEmptyEnd-hoverEmpty fx ; length
-    sec
-    lda FloatingAlt
-    sbc #12
-    sta LineYdraw
+    jsr SetLowFuelText
     jsr TypeLine4x4.variableLength
 
 LotOfFuel
@@ -2700,13 +2681,7 @@ DrawFloatingTank
 
 pressedSpace
     ; display text 4x4 - low fuel (clear text)
-    mwa #hoverEmpty LineAddress4x4
-    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
-    mva #hoverEmptyEnd-hoverEmpty fx  ; length
-    sec
-    lda FloatingAlt
-    sbc #12
-    sta LineYdraw
+    jsr SetLowFuelText
     lda #$00
     jsr TypeLine4x4.staplot4x4color
     ldx TankNr
@@ -2866,6 +2841,24 @@ CalculateSoildown
     mva #$04 ExplosionRadius
     jsr CalculateExplosionRange
     rts
+
+SetFuelFullText
+    mwa #hoverFull LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
+    mva #hoverFullEnd-hoverFull fx ; length
+    bne SetTextLevel    ; !! length<>0
+    sec
+SetLowFuelText
+    mwa #hoverEmpty LineAddress4x4
+    mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
+    mva #hoverEmptyEnd-hoverEmpty fx ; length
+SetTextLevel
+    sec
+    lda FloatingAlt
+    sbc #12
+    sta LineYdraw
+    rts
+
 .endp
 
 ; -------------------------------------------------
