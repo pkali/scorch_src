@@ -2847,7 +2847,6 @@ SetFuelFullText
     mwa #((ScreenWidth/2)-((hoverFullEnd-hoverFull)*2)) LineXdraw  ; centering
     mva #hoverFullEnd-hoverFull fx ; length
     bne SetTextLevel    ; !! length<>0
-    sec
 SetLowFuelText
     mwa #hoverEmpty LineAddress4x4
     mwa #((ScreenWidth/2)-((hoverEmptyEnd-hoverEmpty)*2)) LineXdraw  ; centering
