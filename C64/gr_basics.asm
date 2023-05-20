@@ -16,7 +16,7 @@ unPlotAfterX
     lda oldplotH,x
     sta oldplot+1
 
-	ldy #0
+    ldy #0
     lda oldora,x
     sta (oldplot),y
 
@@ -31,23 +31,23 @@ CheckX
 MakeUnPlot
     ; let's count coordinates taken from xdraw and ydraw
     lda xdraw
-	and #%11111000
-	;sta xbyte
+    and #%11111000
+    ;sta xbyte
     ;---
     ldx ydraw
-	clc
+    clc
     adc linetableL,x
-	sta xbyte
-	sta oldplot
+    sta xbyte
+    sta oldplot
     lda linetableH,x
     adc xdraw+1
     sta xbyte+1
-	sta oldplot+1
+    sta oldplot+1
 
     lda xdraw
     and #$7
     tax
-	ldy #0
+    ldy #0
 
     lda color
     bne ClearUnPlot
@@ -117,13 +117,13 @@ MakePlot
     ; let's calculate coordinates from xdraw and ydraw
 
     lda xdraw
-	and #%11111000
-	;sta xbyte
+    and #%11111000
+    ;sta xbyte
     ;---
     ldx ydraw
-	clc
+    clc
     adc linetableL,x
-	sta xbyte
+    sta xbyte
     lda linetableH,x
     adc xdraw+1
     sta xbyte+1
@@ -131,7 +131,7 @@ MakePlot
     lda xdraw
     and #$7
     tax
-	ldy #0
+    ldy #0
     lda color
     bne ClearPlot
 
@@ -156,13 +156,13 @@ ClearPlot
     ; let's calculate coordinates from xdraw and ydraw
 
     lda xdraw
-	and #%11111000
-	;sta xbyte
+    and #%11111000
+    ;sta xbyte
     ;---
     ldx ydraw
-	clc
+    clc
     adc linetableL,x
-	sta xbyte
+    sta xbyte
     lda linetableH,x
     adc xdraw+1
     sta xbyte+1
@@ -170,7 +170,7 @@ ClearPlot
     lda xdraw
     and #$7
     tax
-	ldy #0
+    ldy #0
     lda (xbyte),y
     eor #$ff
     and bittable,x
@@ -181,55 +181,55 @@ ClearPlot
 ;--------------------------------------------------
     mwa #0 xdraw
     mwa #mountaintable modify
-	mva #1 color
+    mva #1 color
 
 drawmountainsloop
     ldy #0
     lda (modify),y
-	cmp #screenheight
-	beq NoMountain
+    cmp #screenheight
+    beq NoMountain
     sta ydraw
-	sty ydraw+1
+    sty ydraw+1
 .IF FASTER_GRAF_PROCS = 1
-;	there was Drawline proc 
+;    there was Drawline proc 
     lda #screenheight
     sec
     sbc ydraw
     sta tempbyte01
     jsr plot.MakePlot
-	;  X - index in bittable (number of bit) and nothing more (for use) in C64 :)
+    ;  X - index in bittable (number of bit) and nothing more (for use) in C64 :)
 ;    jmp IntoDraw    ; jumps inside Draw routine
                     ; because one pixel is already plotted (and who cares? :) )
 @
-	lda (xbyte),y
-	and bittable2,x
-	sta (xbyte),y
+    lda (xbyte),y
+    and bittable2,x
+    sta (xbyte),y
 ;IntoDraw
-	inc ydraw
+    inc ydraw
     lda xdraw
-	and #%11111000
-	;sta xbyte
+    and #%11111000
+    ;sta xbyte
     ;---
     ldy ydraw
-	clc
+    clc
     adc linetableL,y
-	sta xbyte
+    sta xbyte
     lda linetableH,y
     adc xdraw+1
     sta xbyte+1
-	ldy #0	
-	dec tempbyte01
-	bne @-
-;	end of Drawline proc
+    ldy #0    
+    dec tempbyte01
+    bne @-
+;    end of Drawline proc
 .ELSE
-;	there was Drawline proc 
+;    there was Drawline proc 
 drawline
     jsr plot.MakePlot
-	inc ydraw
-	lda ydraw
-	cmp #screenheight
-	bne drawline
-;	end of Drawline proc
+    inc ydraw
+    lda ydraw
+    cmp #screenheight
+    bne drawline
+;    end of Drawline proc
 .ENDIF
 NoMountain
     inw modify
@@ -260,7 +260,7 @@ NoMountain
     ldy #7
 CopyChar
     lda (fontind),y
-	eor #$ff
+    eor #$ff
     sta char1,y
     lda #$ff
     sta char2,y
@@ -271,7 +271,7 @@ CopyChar
     ldy #7
 CopyMask
     lda (fontind),y
-	eor #$ff
+    eor #$ff
     sta mask1,y
     lda #$00
     sta mask2,y
@@ -291,16 +291,16 @@ MakeMask00
     .endr
       sec
     .rept 8
-      ror char1+#	; in second (and next) lines we have C=1 - one SEC enough
+      ror char1+#    ; in second (and next) lines we have C=1 - one SEC enough
       ror char2+#
     .endr
     dex
     bne MakeMask00
 MaskOK00
-	lda ydraw
-	sec
-	sbc #7
-	sta ydraw
+    lda ydraw
+    sec
+    sbc #7
+    sta ydraw
     ; X = 0 !
     lda Erase
     beq CharLoopi  ; it works, because x=0
@@ -314,67 +314,67 @@ EmptyChar
     ldx #0
 CharLoopi
     ; calculating coordinates from xdraw and ydraw
-	ldy ydraw
+    ldy ydraw
     lda xdraw
-	and #%11111000
-	clc
+    and #%11111000
+    clc
     adc linetableL,y
-	sta xbyte
+    sta xbyte
     lda linetableH,y
     adc xdraw+1
     sta xbyte+1
 ;--
-	ldy #0
+    ldy #0
     lda (xbyte),y
-    ora mask1,x	
+    ora mask1,x    
     and char1,x
     sta (xbyte),y
     ldy #8
     lda (xbyte),y
-    ora mask2,x	
+    ora mask2,x    
     and char2,x
     sta (xbyte),y
-	inc ydraw
+    inc ydraw
     inx
     cpx #8
     bne CharLoopi
 .ELSE
-	mvx #7 temp	; line counter (Y)
+    mvx #7 temp    ; line counter (Y)
 CharLoop1
-	mva #7 temp+1	; pixel counter (X)
+    mva #7 temp+1    ; pixel counter (X)
 CharLoop2
-	mva #0 color
-	rol mask1,x
-	bcc NoMaskNoPlot
-	rol char1,x
-	bcs NoPlot
+    mva #0 color
+    rol mask1,x
+    bcc NoMaskNoPlot
+    rol char1,x
+    bcs NoPlot
 MakeCharPlot
-	lda Erase
-	bne ErasingChar
-	inc color
+    lda Erase
+    bne ErasingChar
+    inc color
 ErasingChar
 NoPlot
-	jsr plot.MakePlot
+    jsr plot.MakePlot
 AfterCharPlot
-	inw xdraw
-	ldx temp
-	dec temp+1
-	bpl CharLoop2
-	sec
-	sbw xdraw #8
-	dec ydraw
-	ldx temp
-	dex
-	stx temp
-	bpl CharLoop1
-	clc
-	lda ydraw
-	adc #8
-	sta ydraw
-	bne EndPutChar
+    inw xdraw
+    ldx temp
+    dec temp+1
+    bpl CharLoop2
+    sec
+    sbw xdraw #8
+    dec ydraw
+    ldx temp
+    dex
+    stx temp
+    bpl CharLoop1
+    clc
+    lda ydraw
+    adc #8
+    sta ydraw
+    bne EndPutChar
 NoMaskNoPlot
-	rol char1,x
-	jmp AfterCharPlot
+    rol char1,x
+    jmp AfterCharPlot
 .ENDIF
 EndPutChar
     rts
@@ -391,16 +391,16 @@ EndPutChar
 ;--------------------------------------------------
     cpw dy #(screenheight-1)
     jcs TypeChar.EndPutChar ;nearest RTS
-	cpw dy #(4)
-    jcc TypeChar.EndPutChar ;nearest RTS	
+    cpw dy #(4)
+    jcc TypeChar.EndPutChar ;nearest RTS    
     cpw dx #(screenwidth-4)
     jcs TypeChar.EndPutChar ;nearest RTS
-	; checks ommited.
+    ; checks ommited.
     ; char to the table
     lda CharCode4x4
     and #%00000001
-	beq Upper4bits
-	lda #$ff 		; better option to check (nibbler4x4 = $00 or $ff)
+    beq Upper4bits
+    lda #$ff         ; better option to check (nibbler4x4 = $00 or $ff)
 Upper4bits
     sta nibbler4x4
     lda CharCode4x4
@@ -408,36 +408,36 @@ Upper4bits
     sta fontind
     lda #$00
     sta fontind+1
-	
+    
     adw fontind #font4x4
 
     ; and 4 bytes to the table
-	ldy #0
+    ldy #0
     ldx #3
 CopyChar
-    lda (fontind),y	; Y must be 0 !!!!
-	bit nibbler4x4
-	bpl GetUpper4bits
-	:4 rol
+    lda (fontind),y    ; Y must be 0 !!!!
+    bit nibbler4x4
+    bpl GetUpper4bits
+    :4 rol
 GetUpper4bits
-	ora #$0f
+    ora #$0f
     sta char1,x
     lda #$ff
     sta char2,x
     ; and 4  bytes as a mask
-	lda #$f0
+    lda #$f0
     sta mask1,x
     lda #$00
     sta mask2,x
-	adw fontind #32		; next byte of 4x4 font
+    adw fontind #32        ; next byte of 4x4 font
     dex
     bpl CopyChar
 
 .IF FASTER_GRAF_PROCS = 1
     ; mask preparation and character shifting
-	lda dx
-	and #$7
-	tax
+    lda dx
+    and #$7
+    tax
     beq MaskOK01
 MakeMask01
     .rept 4
@@ -446,90 +446,90 @@ MakeMask01
     .endr
       sec
     .rept 4
-      ror char1+#	; in second (and next) lines we have C=1 - one SEC enough
+      ror char1+#    ; in second (and next) lines we have C=1 - one SEC enough
       ror char2+#
     .endr
     dex
     bne MakeMask01
 MaskOK01
-	lda dy
-	sec
-	sbc #3
-	sta dy
-	ldx #0
+    lda dy
+    sec
+    sbc #3
+    sta dy
+    ldx #0
 CharLoopi4x4
     ; calculating coordinates from xdraw and ydraw
-	ldy dy
+    ldy dy
     lda dx
-	and #%11111000
-	clc
+    and #%11111000
+    clc
     adc linetableL,y
-	sta xbyte
+    sta xbyte
     lda linetableH,y
     adc dx+1
     sta xbyte+1
 ;--
-	ldy #0
+    ldy #0
     lda (xbyte),y
-    ora mask1,x	
-	bit plot4x4color
-	bpl PutInColor0_1	; only mask - no char
+    ora mask1,x    
+    bit plot4x4color
+    bpl PutInColor0_1    ; only mask - no char
     and char1,x
 PutInColor0_1
     sta (xbyte),y
     ldy #8
     lda (xbyte),y
-    ora mask2,x	
- 	bit plot4x4color
-	bpl PutInColor0_2	; only mask - no char
+    ora mask2,x    
+     bit plot4x4color
+    bpl PutInColor0_2    ; only mask - no char
     and char2,x
 PutInColor0_2
     sta (xbyte),y
-	inc dy
+    inc dy
     inx
-	cpx #4
+    cpx #4
     bne CharLoopi4x4
 .ELSE
-	mwa xdraw char2
-	mwa ydraw mask2
-	mva color mask2+2
-	mwa dx xdraw
-	mwa dy ydraw
-	mvx #3 temp	; line counter (Y)
+    mwa xdraw char2
+    mwa ydraw mask2
+    mva color mask2+2
+    mwa dx xdraw
+    mwa dy ydraw
+    mvx #3 temp    ; line counter (Y)
 CharLoop1
-	mva #3 temp+1	; pixel counter (X)
+    mva #3 temp+1    ; pixel counter (X)
 CharLoop2
-	mva #0 color
-	rol mask1,x
-	bcc NoMaskNoPlot
-	rol char1,x
-	bcs NoPlot
+    mva #0 color
+    rol mask1,x
+    bcc NoMaskNoPlot
+    rol char1,x
+    bcs NoPlot
 MakeCharPlot
-	lda plot4x4color
-	beq ErasingChar
-	inc color
+    lda plot4x4color
+    beq ErasingChar
+    inc color
 ErasingChar
 NoPlot
-	jsr plot.MakePlot
+    jsr plot.MakePlot
 AfterCharPlot
-	inw xdraw
-	ldx temp
-	dec temp+1
-	bpl CharLoop2
-	sec
-	sbw xdraw #4
-	dec ydraw
-	ldx temp
-	dex
-	stx temp
-	bpl CharLoop1
-	mwa char2 xdraw
-	mwa mask2 ydraw
-	mva mask2+2 color
-	bpl EndPut4x4
+    inw xdraw
+    ldx temp
+    dec temp+1
+    bpl CharLoop2
+    sec
+    sbw xdraw #4
+    dec ydraw
+    ldx temp
+    dex
+    stx temp
+    bpl CharLoop1
+    mwa char2 xdraw
+    mwa mask2 ydraw
+    mva mask2+2 color
+    bpl EndPut4x4
 NoMaskNoPlot
-	rol char1,x
-	jmp AfterCharPlot
+    rol char1,x
+    jmp AfterCharPlot
 .ENDIF
 EndPut4x4
     rts
@@ -555,59 +555,59 @@ EndPut4x4
     mwa #linetableL temp2
     mwa #linetableH modify
     ldy #0
-	ldx #0
+    ldx #0
 @     lda temp
       sta (temp2),y
       lda temp+1
       sta (modify),y
-	  cpx #7
-	  bne NotChar
-	  ldx #0
+      cpx #7
+      bne NotChar
+      ldx #0
       adw temp #(320-7)
-	  jmp next8lines
+      jmp next8lines
 NotChar
-	  inw temp
-	  inx
+      inw temp
+      inx
 next8lines
       iny
       cpy #screenheight+1
     bne @-
-	rts
+    rts
 .endp
 ;--------------------------------------------------
 .proc SetMainScreen
-	lda #$b          ; Grey background and border
-	lda WallsType
-	:4 rol
-	sta $d020
-	sta $d021
-	
-	lda $dd00       ; Set video bank to start at 0
-	and #252
-	ora #3
-	sta $dd00
-	lda #$18
-	sta $d018
+    lda #$b          ; Grey background and border
+    lda WallsType
+    :4 rol
+    sta $d020
+    sta $d021
+    
+    lda $dd00       ; Set video bank to start at 0
+    and #252
+    ora #3
+    sta $dd00
+    lda #$18
+    sta $d018
 
-;	SwitchVICBank(0)
-;	SetScreenMemory($2000)
-	SetHiresBitmapMode	; Hires mode on
-	lda #$00
-	sta 53281
-	; clear color RAM
-	ldx #0
-@	lda #1
-	sta $d800,x
-	sta $d900,x
-	sta $da00,x
-	sta $db00,x
-	lda #$0f
-	sta $0400,x
-	sta $0500,x
-	sta $0600,x
-	sta $0700,x
-	inx
-	bne @-
+;    SwitchVICBank(0)
+;    SetScreenMemory($2000)
+    SetHiresBitmapMode    ; Hires mode on
+    lda #$00
+    sta 53281
+    ; clear color RAM
+    ldx #0
+@    lda #1
+    sta $d800,x
+    sta $d900,x
+    sta $da00,x
+    sta $db00,x
+    lda #$0f
+    sta $0400,x
+    sta $0500,x
+    sta $0600,x
+    sta $0700,x
+    inx
+    bne @-
     rts
 .endp
 ;--------------------------------------------------
@@ -623,86 +623,86 @@ next8lines
 ; -------------------------------------------------
     mva #sfx_sandhog sfx_effect
 .IF FASTER_GRAF_PROCS = 1
-	mvy #0 magic 		 	; byte counter (from 0 to 39)
+    mvy #0 magic              ; byte counter (from 0 to 39)
 NextColumn
-	; big loop - we repat internal loops for each column of bytes
-	ldx #120			; line counter (from 0 to 60 )
-	; first loop - inverse column of bytes for a while
+    ; big loop - we repat internal loops for each column of bytes
+    ldx #120            ; line counter (from 0 to 60 )
+    ; first loop - inverse column of bytes for a while
 NextLine1
-	jsr InverseScreenByte
-	dex
-	dex
-	bpl NextLine1
-	;
-	jsr WaitOneFrame	; wait uses A only
-	; second loop - inverse again and put random "snow" to column of bytes
-	ldx #120
-	mva #$55 magic+1
+    jsr InverseScreenByte
+    dex
+    dex
+    bpl NextLine1
+    ;
+    jsr WaitOneFrame    ; wait uses A only
+    ; second loop - inverse again and put random "snow" to column of bytes
+    ldx #120
+    mva #$55 magic+1
 NextLine2
-	jsr InverseScreenByte
-	lda random
-	ora magic+1
-	and (temp),y
-	sta (temp),y
-	lda magic+1
-	eor #$ff
-	sta magic+1
-	dex
-	dex
-	bpl NextLine2
-	; and go to next column
-	inc magic
-	ldy magic
-	cpy #40
-	bne NextColumn
+    jsr InverseScreenByte
+    lda random
+    ora magic+1
+    and (temp),y
+    sta (temp),y
+    lda magic+1
+    eor #$ff
+    sta magic+1
+    dex
+    dex
+    bpl NextLine2
+    ; and go to next column
+    inc magic
+    ldy magic
+    cpy #40
+    bne NextColumn
 .ELSE
-	mva #1 color
-	mwa #120 ydraw
+    mva #1 color
+    mwa #120 ydraw
 NextLineSlow
-	lda #0
-	sta xdraw
-	sta xdraw+1
+    lda #0
+    sta xdraw
+    sta xdraw+1
 NextPixelSlow
-	bit random
-	bpl NoPlot
-	bvc NoPlot
-	jsr plot.MakePlot
+    bit random
+    bpl NoPlot
+    bvc NoPlot
+    jsr plot.MakePlot
 NoPlot
-	inw xdraw
-	cpw xdraw #screenwidth
-	bne NextPixelSlow
-	dec ydraw
-	dec ydraw
-	bpl NextLineSlow
+    inw xdraw
+    cpw xdraw #screenwidth
+    bne NextPixelSlow
+    dec ydraw
+    dec ydraw
+    bpl NextLineSlow
 .ENDIF
-	; and we have "snow" :)
-	lda #0
-	ldx TankNr
-	sta ActiveDefenceWeapon,x	; deactivate Nuclear Winter
-	jsr SetFullScreenSoilRange
+    ; and we have "snow" :)
+    lda #0
+    ldx TankNr
+    sta ActiveDefenceWeapon,x    ; deactivate Nuclear Winter
+    jsr SetFullScreenSoilRange
     jsr SoilDown2.NoClearTanks
-	rts
+    rts
 
-	; in order to optimize the fragment repeated in both internal loops
-	; we save 15 bytes :)
+    ; in order to optimize the fragment repeated in both internal loops
+    ; we save 15 bytes :)
 InverseScreenByte
-	ldy magic
-	sty temp
-	ldy #0
-	sty temp+1
+    ldy magic
+    sty temp
+    ldy #0
+    sty temp+1
     aslw temp
     rolw temp
     rolw temp
-	lda temp
-	adc LineTableL,x
-	sta temp
-	lda LineTableH,x
-	adc temp+1
-	sta temp+1
-	lda (temp),y
-	eor #$ff
-	sta (temp),y
-	rts
+    lda temp
+    adc LineTableL,x
+    sta temp
+    lda LineTableH,x
+    adc temp+1
+    sta temp+1
+    lda (temp),y
+    eor #$ff
+    sta (temp),y
+    rts
 .endp
 
 .ENDIF

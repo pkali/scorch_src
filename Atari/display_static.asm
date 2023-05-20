@@ -13,7 +13,7 @@ OptionsScreen
 
 .IF TARGET = 800
  dta d" Please select option with "
- dta $fe,$dc,$dd,$ff	; cursors in inverse
+ dta $fe,$dc,$dd,$ff    ; cursors in inverse
  dta                                d" and "
  dta                                     d"Tab"*
  dta                                        d" "
@@ -40,7 +40,7 @@ NameScreen5
  .IF TARGET = 800
  dta d"TAB"*
  dta    d" - Port nr  "
- dta $fe,$dc,$dd,$ff	; cursors in inverse
+ dta $fe,$dc,$dd,$ff    ; cursors in inverse
  dta                    d" - Difficulty"
  dta d"  "
  dta   d"INV"*
@@ -182,19 +182,19 @@ dl ; MAIN game display list
 ;-----------------------------------------------
 OptionsDL
         .byte $70
-		.byte $47
-		.word OptionsTitle
+        .byte $47
+        .word OptionsTitle
         .byte $70,$70
        .byte $42
         .word OptionsScreen
         .byte $30,$02,$02,$70
-		.byte $42
-		.word OptionsHere
-		.byte $10
+        .byte $42
+        .word OptionsHere
+        .byte $10
         :maxOptions-1 .by $02,$10
-		:(9-maxOptions) .by $70,$10
-		.byte $80
-		.byte $60  ; to match moved sprites
+        :(9-maxOptions) .by $70,$10
+        .byte $80
+        .byte $60  ; to match moved sprites
         .byte $4f
         .word (display+140*40)
         :21 .by $0f                     ;76
@@ -204,25 +204,25 @@ OptionsDL
 ;Enter names of tanks DL
 NameDL
         .byte $70
-		.byte $47
-		.word DifficultyTitle
-		.byte $70,$70	; 16 empty lines
+        .byte $47
+        .word DifficultyTitle
+        .byte $70,$70    ; 16 empty lines
         .byte $42
         .word NameScreen
-        .byte $30	; 4 empty lines
-		.byte $42
-		.word NameScreen2
-		.byte $30+$80	; 4 empty lines + DLI
-		.byte $42
-		.word NameScreen3
-        .byte $10	; 2 empty lines
-		.byte $42
-		.word NameScreen4
-		.byte $02,$02
-		.byte $30	; 4 empty lines
-		.byte $42
-		.word NameScreen5
-		.byte $02
+        .byte $30    ; 4 empty lines
+        .byte $42
+        .word NameScreen2
+        .byte $30+$80    ; 4 empty lines + DLI
+        .byte $42
+        .word NameScreen3
+        .byte $10    ; 2 empty lines
+        .byte $42
+        .word NameScreen4
+        .byte $02,$02
+        .byte $30    ; 4 empty lines
+        .byte $42
+        .word NameScreen5
+        .byte $02
         .byte $41
         .word NameDL
 ; -------------------------------------------------
@@ -252,8 +252,8 @@ GameOverDL
        .byte $42
        .word GameOverResults
        :5 .byte $00+$80,$02
-	   .byte $01
-	   .word DLCreditsFragm
+       .byte $01
+       .word DLCreditsFragm
 ; ---------------
 ; end of "constants" (ROM)
 ;-----------------------------------------------

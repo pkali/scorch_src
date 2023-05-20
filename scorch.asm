@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;    @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 ;Atari 8-bit Scorched Earth source code
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
@@ -6,7 +6,9 @@
 ;Miami & Warsaw 2022, 2023
 
 ;---------------------------------------------------
-.def TARGET = 800 ; 5200  ; or 800
+.IFNDEF TARGET
+    .def TARGET = 800 ; 5200  ; or 64
+.ENDIF
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -17,11 +19,11 @@
 ;        (direct writes to screen memory - atari only :) )
 ;---------------------------------------------------
 
-   ;OPT r+  ; saves 12 bytes :O
+       ; OPT r+  ; saves 12 bytes :O
 
 ;---------------------------------------------------
 .macro build
-	dta d"1.30" ; number of this build (4 bytes)
+    dta d"1.30" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -34,14 +36,14 @@
 ;---------------------------------------------------
 
 FirstZpageVariable = $57
-    .zpvar DliColorBack		.byte = FirstZpageVariable
-	.zpvar GradientNr		.byte
-	.zpvar GradientColors	.word
-	.zpvar WindChangeInRound	.byte	; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
-	.zpvar JoystickNumber	.byte
-	.zpvar LazyFlag			.byte	; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
-	.zpvar SpyHardFlag		.byte	; >$7f - run SpyHard after inventory
-	.zpvar Vdebug			.byte ; "visual debug" flag ($00 - off, $ff - on)
+    .zpvar DliColorBack        .byte = FirstZpageVariable
+    .zpvar GradientNr        .byte
+    .zpvar GradientColors    .word
+    .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
+    .zpvar JoystickNumber    .byte
+    .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
+    .zpvar SpyHardFlag        .byte    ; >$7f - run SpyHard after inventory
+    .zpvar Vdebug            .byte ; "visual debug" flag ($00 - off, $ff - on)
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -59,7 +61,7 @@ FirstZpageVariable = $57
     .zpvar xtempDRAW        .word ;same as above for XDRAW routine
     .zpvar ytempDRAW        .word ;same as above for XDRAW routine
     .zpvar tempor2          .word
-	.zpvar CreditsVScrol	.byte
+    .zpvar CreditsVScrol    .byte
     ;--------------temps used in circle routine
     .zpvar xi               .word ;X (word) in draw routine
     .zpvar fx               .byte 
@@ -74,21 +76,21 @@ FirstZpageVariable = $57
     .zpvar di               .word
     .zpvar dp               .word
     ;----------------------------
-	.zpvar UnderTank1		.byte
-	.zpvar UnderTank2		.byte	
+    .zpvar UnderTank1        .byte
+    .zpvar UnderTank2        .byte    
     ;----------------------------
-	.zpvar TestFlightFlag	.byte ; For AI test flights ($ff - test, $00 - standard shoot flight)
+    .zpvar TestFlightFlag    .byte ; For AI test flights ($ff - test, $00 - standard shoot flight)
     .zpvar weaponPointer    .word
-	.zpvar dliCounter       .byte
-	.zpvar pressTimer       .byte
-	.zpvar NTSCcounter      .byte
-	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
-	.zpvar sfx_effect		.byte
-	.zpvar RMT_blocked		.byte
-	.zpvar ScrollFlag		.byte
-	.zpvar SkStatSimulator	.byte
-	.zpvar FloatingAlt		.byte	; floating tank altitude
-	.zpvar OverTankDir		.byte	; (0 go right, $ff go left) direction of bypassing tanks on screen
+    .zpvar dliCounter       .byte
+    .zpvar pressTimer       .byte
+    .zpvar NTSCcounter      .byte
+    .zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
+    .zpvar sfx_effect        .byte
+    .zpvar RMT_blocked        .byte
+    .zpvar ScrollFlag        .byte
+    .zpvar SkStatSimulator    .byte
+    .zpvar FloatingAlt        .byte    ; floating tank altitude
+    .zpvar OverTankDir        .byte    ; (0 go right, $ff go left) direction of bypassing tanks on screen
 
     ; --------------OPTIMIZATION VARIABLES--------------
     .zpvar Force .word
@@ -103,7 +105,7 @@ FirstZpageVariable = $57
     .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
     .zpvar Counter .byte ;temporary Counter for outside loops
     .zpvar ExplosionRadius .byte
-	.zpvar FunkyBombCounter .byte
+    .zpvar FunkyBombCounter .byte
     .zpvar ResultY .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
@@ -126,10 +128,10 @@ FirstZpageVariable = $57
     .zpvar RangeLeft .word
     .zpvar RangeRight .word
     .zpvar NewAngle .byte
-    .zpvar escFlag .byte	; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
+    .zpvar escFlag .byte    ; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
     .zpvar LineYdraw .byte
     .zpvar LineXdraw .word
-    .zpvar plot4x4color .byte	; $00 / $ff 
+    .zpvar plot4x4color .byte    ; $00 / $ff 
     .zpvar Multiplier .word
     .zpvar Multiplier_ .byte  ; 3 bytes
     .zpvar HowToDraw .byte
@@ -141,7 +143,7 @@ FirstZpageVariable = $57
     .zpvar goleft .byte
     .zpvar OffsetDL1 .byte
     .zpvar L1 .byte
-	HotNapalmFlag = FunkyBombCounter ; reuse variable!
+    HotNapalmFlag = FunkyBombCounter ; reuse variable!
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
 
     displayposition = modify
@@ -187,14 +189,14 @@ FirstZpageVariable = $57
         _del   = $fc  ;$0c ;not used in 5200
         _M     = $0d
         _S     = $0e
-		_atari = $fd  ; not used in 5200
+        _atari = $fd  ; not used in 5200
         _none = $0f
 
       .ende
     .ELSE
       icl 'Atari/lib/ATARISYS.ASM'
       icl 'Atari/lib/MACRO.ASM'
-      icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
+     ; icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
     .ENDIF
     
 ;-----------------------------------------------
@@ -283,83 +285,83 @@ rom2joy
     ; modify the text
     splash_text = $3c80 ; '.scorch.supersystem.copyright.19xx.atari'
     splash_year = splash_text + $1e
-	splash_copyright = splash_text + $14
-	ldy #19	; 20 characters
-@	lda NewSplashText,y
-	sta splash_copyright,y
-	dey
-	bpl @-    
+    splash_copyright = splash_text + $14
+    ldy #19    ; 20 characters
+@    lda NewSplashText,y
+    sta splash_copyright,y
+    dey
+    bpl @-    
     
     ; splash screen delay. maybe add fire to speed up?
 @    cpx RTCLOK+1
     bne @-
 no5200splash  
     .ENDIF
-	jsr MakeDarkScreen
+    jsr MakeDarkScreen
 
-	; one time zero variables in RAM (non zero page)
-	lda #0
-	ldy #OneTimeZeroVariablesCount-1
-@	  sta OneTimeZeroVariables,y
-	  dey
-	bpl @-
-	
-	; one time zero variables in RAM (zero page)
-	ldy #FirstZpageVariable
-@	sta $0000,y
-	iny
-	bne @-
-	
-	; initialize variables in RAM (non zero page)
-	ldy #initialvaluesCount-1
-@	  lda initialvaluesStart,y
-	  sta variablesToInitialize,y
-	  dey
-	bpl @-
+    ; one time zero variables in RAM (non zero page)
+    lda #0
+    ldy #OneTimeZeroVariablesCount-1
+@      sta OneTimeZeroVariables,y
+      dey
+    bpl @-
+    
+    ; one time zero variables in RAM (zero page)
+    ldy #FirstZpageVariable
+@    sta $0000,y
+    iny
+    bne @-
+    
+    ; initialize variables in RAM (non zero page)
+    ldy #initialvaluesCount-1
+@      lda initialvaluesStart,y
+      sta variablesToInitialize,y
+      dey
+    bpl @-
 
     ; set gradient to the full LGBTIQQAAPP+ flag on start
-	mva #0 GradientNr	; #1 to set gradient number 2 :) (next one)
-	jsr SelectNextGradient.NotWind
+    mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one)
+    jsr SelectNextGradient.NotWind
 
     ; generate linetables
-	jsr GenerateLineTable
+    jsr GenerateLineTable
 
     .IF TARGET = 800
 
 ; pokeys init
-	lda #3	; stereo
-	sta POKEY+$0f ; stereo
-	sta POKEY+$1f ; stereo
+    lda #3    ; stereo
+    sta POKEY+$0f ; stereo
+    sta POKEY+$1f ; stereo
 
-	lda PAL
-	and #%00001110
-	bne NoRMT_PALchange
-	;it is PAL here
-	; Change RMT to PAL version
-	; 5 values in RMT file
-	; not elegant :(
-	mva #$06 MODUL-6+$967	; $07 > $06
-	;mva #$06 MODUL-6+$bc3	; $07 > $06
-	;mva #$06 MODUL-6+$e69	; $08 > $06
-	;mva #$06 MODUL-6+$ebc	; $08 > $06
-	sta MODUL-6+$bc3	; $07 > $06
-	sta MODUL-6+$e69	; $08 > $06
-	sta MODUL-6+$ebc	; $08 > $06
-	mva #$10 MODUL-6+$a69	; $12 > $10
-	mva #$04 MODUL-6+$bf8	; $05 > $04
-	mva #$08 MODUL-6+$e3d	; $0a > $08
-	
-	; and mountains colors table address
-	mva #<dliColorsFore2PAL GradientAddrL+2
-	mva #>dliColorsFore2PAL GradientAddrH+2
-;	mva #$c4 dliColorsFore2+16
-;	mva #$c6 dliColorsFore2+17
-;	mva #$a4 dliColorsFore2+18
-;	mva #$a6 dliColorsFore2+19
-;	sta dliColorsFore2+20
+    lda PAL
+    and #%00001110
+    bne NoRMT_PALchange
+    ;it is PAL here
+    ; Change RMT to PAL version
+    ; 5 values in RMT file
+    ; not elegant :(
+    mva #$06 MODUL-6+$967    ; $07 > $06
+    ;mva #$06 MODUL-6+$bc3    ; $07 > $06
+    ;mva #$06 MODUL-6+$e69    ; $08 > $06
+    ;mva #$06 MODUL-6+$ebc    ; $08 > $06
+    sta MODUL-6+$bc3    ; $07 > $06
+    sta MODUL-6+$e69    ; $08 > $06
+    sta MODUL-6+$ebc    ; $08 > $06
+    mva #$10 MODUL-6+$a69    ; $12 > $10
+    mva #$04 MODUL-6+$bf8    ; $05 > $04
+    mva #$08 MODUL-6+$e3d    ; $0a > $08
+    
+    ; and mountains colors table address
+    mva #<dliColorsFore2PAL GradientAddrL+2
+    mva #>dliColorsFore2PAL GradientAddrH+2
+;    mva #$c4 dliColorsFore2+16
+;    mva #$c6 dliColorsFore2+17
+;    mva #$a4 dliColorsFore2+18
+;    mva #$a6 dliColorsFore2+19
+;    sta dliColorsFore2+20
 NoRMT_PALchange
-	.ELSE
-	mva #$7f SkStatSimulator
+    .ELSE
+    mva #$7f SkStatSimulator
     .ENDIF
 
 
@@ -377,16 +379,16 @@ NoRMT_PALchange
         mva #$04 CONSOL5200          ;Speaker off, Pots enabled, port #1 selected
         mwa #kb_continue VKEYCNT     ;Keyboard handler
     .ENDIF
-    VMAIN VBLinterrupt,7  		;jsr SetVBL
-	
-	mva #2 chactl  ; necessary for 5200
+    VMAIN VBLinterrupt,7          ;jsr SetVBL
+    
+    mva #2 chactl  ; necessary for 5200
 
 ;--------------------------------------------------
 ; Main program of the game
     icl 'game.asm'
 ;--------------------------------------------------
 
-	
+    
 ;--------------------------------------------------
 .proc GetKey
 ; waits for pressing a key and returns pressed value in A
@@ -401,10 +403,10 @@ NoRMT_PALchange
           beq checkJoyGetKey ; key not pressed, check Joy
           cmp #$f7  ; SHIFT
           beq checkJoyGetKey
-	  .ELSE
-		  lda SkStatSimulator
-		  and #%11111110
-		  bne checkJoyGetKey ; key not pressed, check Joy
+      .ELSE
+          lda SkStatSimulator
+          and #%11111110
+          bne checkJoyGetKey ; key not pressed, check Joy
       .ENDIF            
           lda kbcode
           cmp #@kbcode._none
@@ -428,30 +430,30 @@ checkJoyGetKey
       bne getkeyend
 
 notpressedJoyGetKey
-	;fire
-	lda STRIG0
- 	beq JoyButton
-	.IF TARGET = 800	; Select and Option key only on A800
-	bne checkSelectKey
+    ;fire
+    lda STRIG0
+     beq JoyButton
+    .IF TARGET = 800    ; Select and Option key only on A800
+    bne checkSelectKey
 checkSelectKey
-	lda CONSOL
-	and #%00000010	; Select
-	beq SelectPressed
-	lda CONSOL
-	and #%00000100	; Option	
-	.ENDIF
+    lda CONSOL
+    and #%00000010    ; Select
+    beq SelectPressed
+    lda CONSOL
+    and #%00000100    ; Option    
+    .ENDIF
     bne @-
 OptionPressed
-	lda #@kbcode._atari	; Option key
-	bne getkeyend	
+    lda #@kbcode._atari    ; Option key
+    bne getkeyend    
 SelectPressed
-	lda #@kbcode._tab	; Select key
-	bne getkeyend
+    lda #@kbcode._tab    ; Select key
+    bne getkeyend
 JoyButton
     lda #@kbcode._ret ;Return key    
 getkeyend
-	ldy #0
-    sty ATRACT	; reset atract mode	
+    ldy #0
+    sty ATRACT    ; reset atract mode    
     mvy #sfx_keyclick sfx_effect
     rts
 .endp
@@ -468,10 +470,10 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-	mva #128-KeyRepeatSpeed pressTimer	; tricky
-StillWait	
-	bit pressTimer
-	bmi KeyReleased
+    mva #128-KeyRepeatSpeed pressTimer    ; tricky
+StillWait    
+    bit pressTimer
+    bmi KeyReleased
       lda STICK0
       and #$0f
       cmp #$0f
@@ -483,13 +485,13 @@ StillWait
       cmp #$ff
       bne StillWait
       lda CONSOL
-      and #%00000110	; Select and Option only
+      and #%00000110    ; Select and Option only
       cmp #%00000110
       bne StillWait
-	.ELSE
-	lda SkStatSimulator
-	and #%11111110
-	beq StillWait
+    .ELSE
+    lda SkStatSimulator
+    and #%11111110
+    beq StillWait
     .ENDIF
 KeyReleased
       rts
@@ -498,12 +500,12 @@ KeyReleased
 .proc IsKeyPressed
 ; result: A=0 - yes , A>0 - no
 ;--------------------------------------------------
-	lda SKSTAT
-	and #%00000100
-	beq @+
-	lda #1
-@	and STRIG0
-	rts
+    lda SKSTAT
+    and #%00000100
+    beq @+
+    lda #1
+@    and STRIG0
+    rts
 .endp
 ;--------------------------------------------------
 .proc DemoModeOrKey
@@ -530,15 +532,15 @@ peopleAreHere
 ;--------------------------------------------------
 MakeDarkScreen
 ;--------------------------------------------------
-	jsr PMoutofScreen	; hide P/M
-	mva #0 dmactls		; dark screen
-	; and wait one frame :)
+    jsr PMoutofScreen    ; hide P/M
+    mva #0 dmactls        ; dark screen
+    ; and wait one frame :)
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-	lda CONSOL
-	and #%00000001 ; START KEY
-	seq:wait	; or waitRTC ?
+    lda CONSOL
+    and #%00000001 ; START KEY
+    seq:wait    ; or waitRTC ?
     rts
 .endp
 
@@ -563,10 +565,10 @@ MakeDarkScreen
 ; If 'Esc' key is pressed - displays "Are you sure?" and - exit to Menu screen
 ; Just setting the right flags!!!
 
-	; Select and Option
-	lda CONSOL
-	and #%00000101	; Start + Option
-	beq QuitToGameover
+    ; Select and Option
+    lda CONSOL
+    and #%00000101    ; Start + Option
+    beq QuitToGameover
     lda SKSTAT
     cmp #$ff
     jeq nokeys
@@ -578,12 +580,12 @@ MakeDarkScreen
 
     cmp #@kbcode._O  ; $08  ; O
     bne CheckEsc
-	jsr AreYouSure
-	bit escFlag
-	bpl nokeys
+    jsr AreYouSure
+    bit escFlag
+    bpl nokeys
     ;---O pressed-quit game to game over screen---
 QuitToGameover
-	mva #$C0 escFlag	; bits 7 and 6 set
+    mva #$C0 escFlag    ; bits 7 and 6 set
     rts
 CheckEsc
     cmp #@kbcode._esc  ; 28  ; ESC
@@ -592,16 +594,16 @@ DisplayAreYouSure
     jsr AreYouSure
     ;---esc pressed-quit game---
 nokeys
-	bit escFlag
+    bit escFlag
     rts
 ;
 .endp
 ;--------------------------------------------------
 .proc ShellDelay
 ;--------------------------------------------------
-	lda CONSOL
-	and #%00000001 ; START KEY
-	beq noShellDelay
+    lda CONSOL
+    and #%00000001 ; START KEY
+    beq noShellDelay
     ldx flyDelay
 DelayLoop
       lda VCOUNT
@@ -617,17 +619,17 @@ noShellDelay
 .proc RmtSongSelect
 ;  starting song line 0-255 to A reg
 ;--------------------------------------------------
-	cmp #song_ingame
-	bne noingame	; noMusic blocks only ingame song
+    cmp #song_ingame
+    bne noingame    ; noMusic blocks only ingame song
     bit noMusic
     spl:lda #song_silencio
 noingame
-	mvx #$ff RMT_blocked
+    mvx #$ff RMT_blocked
     ldx #<MODUL                 ;low byte of RMT module to X reg
     ldy #>MODUL                 ;hi byte of RMT module to Y reg
     jsr RASTERMUSICTRACKER      ;Init
-	mva #0 RMT_blocked
-	rts
+    mva #0 RMT_blocked
+    rts
 .endp
 ;-------------------------------------------------
 .proc CopyFromROM
@@ -653,7 +655,7 @@ noingame
     rts
 .endp
 ;--------------------------------------------------
-	icl 'Atari/interrupts.asm'
+    icl 'Atari/interrupts.asm'
 ;----------------------------------------------
     icl 'constants.asm'
 ;----------------------------------------------
@@ -669,7 +671,7 @@ noingame
     icl 'artwork/talk.asm'
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv4.fnt',+0,384	; 48 characters only
+    ins 'artwork/tanksv4.fnt',+0,384    ; 48 characters only
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
@@ -686,60 +688,60 @@ font4x4
     tax
 @
     lda CheatName,y
-	sec
+    sec
     sbc tanksnames,x
-	cmp #$27
-	bne NoCheat
+    cmp #$27
+    bne NoCheat
     inx
     dey
     bpl @-
 YesCheat
-	ldx TankNr
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	lda #99
-@	iny
-	sta (temp),y
-	cpy #(number_of_weapons - 1)
-	bne @-
+    ldx TankNr
+    lda TanksWeaponsTableL,x
+    sta temp
+    lda TanksWeaponsTableH,x
+    sta temp+1
+    lda #99
+@    iny
+    sta (temp),y
+    cpy #(number_of_weapons - 1)
+    bne @-
 NoCheat
     rts
 .endp
 CheatName
-	dta d"   008.T"+$27
+    dta d"   008.T"+$27
 ;----------------------------------------------
 .proc DLIinterruptBFG
-	pha
-	lda dliCounter
-	bne EndofBFGDLI
-	lda dliColorsFore
-	bit random
-	bmi @+
-	lda DliColorBack
-@	sta COLPF2
-	lda dliColorsFore
-	bit random
-	bmi @+
-	lda DliColorBack
-@	sta COLPF1
+    pha
+    lda dliCounter
+    bne EndofBFGDLI
+    lda dliColorsFore
+    bit random
+    bmi @+
+    lda DliColorBack
+@    sta COLPF2
+    lda dliColorsFore
+    bit random
+    bmi @+
+    lda DliColorBack
+@    sta COLPF1
 EndofBFGDLI
-	inc dliCounter
+    inc dliCounter
     pla
     rti
 .endp
 ; ------------------------
 .proc BFGblink
-	SetDLI DLIinterruptBFG	; blinking on
-	ldy #50
-	jsr PauseYFrames
-	SetDLI DLIinterruptGraph	; blinking off
-	rts
+    SetDLI DLIinterruptBFG    ; blinking on
+    ldy #50
+    jsr PauseYFrames
+    SetDLI DLIinterruptGraph    ; blinking off
+    rts
 .endp
 ;--------------------------------------------------
     .IF * > MODUL-1
-	  .ECHO *
+      .ECHO *
       .ERROR 'Code and data too long'
     .ENDIF
     .ECHO "Bytes left: ",$b000-*

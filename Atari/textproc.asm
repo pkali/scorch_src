@@ -27,45 +27,44 @@
 
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
-	jsr SetPMWidth
+    jsr SetPMWidth
     mva #TextBackgroundColor COLOR2
     jsr ColorsOfSprites
-	mva #$ca COLOR1
-	mva #$00 COLBAKS	; set color of background
+    mva #$ca COLOR1
+    mva #$00 COLBAKS    ; set color of background
    
     SetDLI DLIinterruptOptions  ; jsr SetDLI for Options text screen
 
-; -------- setup bottom (tanks) line	
-	lda NumberOfPlayers
-	pha
+; -------- setup bottom (tanks) line
+    lda NumberOfPlayers
+    pha
     lda mountainsDeltaTableH
     sta mountainDeltaH
     lda mountainsDeltaTableL
     sta mountainDeltaL
-	mva #6 NumberOfPlayers
+    mva #6 NumberOfPlayers
     jsr PMoutofScreen ;let P/M disappear
     ;jsr clearscreen   ;let the screen be clean (clean-ish already)
-	jsr ClearPMmemory
+    jsr ClearPMmemory
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
     jsr drawmountains ;draw them
-	ldx NumberOfPlayers
-	dex
-@	jsr RandomizeAngle
-	sta AngleTable,x
-	dex
-	bpl @-
+    ldx NumberOfPlayers
+    dex
+@     jsr RandomizeAngle
+      sta AngleTable,x
+      dex
+    bpl @-
     jsr drawtanks     ;finally draw tanks
-	pla
-	sta NumberOfPlayers
-; --------
+    pla
+    sta NumberOfPlayers
 
     mva #0 OptionsY
 
 OptionsMainLoop
 
-	lda WindChangeInRound
-	sta OptionsHere+126
+    lda WindChangeInRound
+    sta OptionsHere+126
 
     jsr OptionsInversion
     jsr getkey
@@ -113,37 +112,39 @@ OptionsNoLeft
 OptionsNoRight
     cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
-    rts		; options selected
-	
+    rts        ; options selected
+    
 OptionsNoReturn
-	cmp #@kbcode._tab	; Tab key
-	bne OptionsNoTab
-	jsr SelectNextGradient
+    cmp #@kbcode._tab    ; Tab key
+    bne OptionsNoTab
+    jsr SelectNextGradient
 OptionsNoTab
     jmp OptionsMainLoop
 .endp
+
 .proc SelectNextGradient
-	lda OptionsY	; if "Wind" option selected
-	cmp #$03
-	bne NotWind
-	lda WindChangeInRound	; wind change after each turn (not round only) flag
-	eor #$1f	; '?' character
-	sta WindChangeInRound
-	rts
+    lda OptionsY    ; if "Wind" option selected
+    cmp #$03
+    bne NotWind
+    lda WindChangeInRound    ; wind change after each turn (not round only) flag
+    eor #$1f    ; '?' character
+    sta WindChangeInRound
+    rts
 NotWind
-	ldy GradientNr
-	iny
-	cpy #$03
-	bne NoGradientLoop
-	ldy #$00
+    ldy GradientNr
+    iny
+    cpy #$03
+    bne NoGradientLoop
+    ldy #$00
 NoGradientLoop
-	sty GradientNr
-	lda GradientAddrL,y
-	sta GradientColors
-	lda GradientAddrH,y
-	sta GradientColors+1	
-	rts
+    sty GradientNr
+    lda GradientAddrL,y
+    sta GradientColors
+    lda GradientAddrH,y
+    sta GradientColors+1    
+    rts
 .endp
+
 ;--------
 ; inversing selected option (cursor)
 ;--------
@@ -154,7 +155,7 @@ optionWidth = 6
 nameWidth = 10
     mwa #OptionsHere temp  ; offset of the first option=11
     mva #0 YPos  ;option number pointer
-    mva #0 Xpos  ;X position in the menu
+    sta Xpos  ;X position in the menu
     tay  ; Y is zero here...
 OptionsSetMainLoop
     ldx YPos  ; Y position in the menu
@@ -204,33 +205,34 @@ invertme
     rts
 .endp
 
+.proc CallPurchaseForEveryTank
 ;-------------------------------------------
 ; call of the purchase (and activate) screens for each tank
-.proc CallPurchaseForEveryTank
+;-------------------------------------------
 
-	mva #0 TankNr
-	sta isInventory
+    mva #0 TankNr
+    sta isInventory
 @
-	ldx TankNr
-	lda SkillTable,x
-	beq ManualPurchase
-	jsr PurchaseAI	; remember to make ActivateAI :) !!!
-	jmp AfterManualPurchase
+    ldx TankNr
+    lda SkillTable,x
+    beq ManualPurchase
+    jsr PurchaseAI    ; remember to make ActivateAI :) !!!
+    jmp AfterManualPurchase
 ManualPurchase
-	lda JoyNumber,x
-	sta JoystickNumber	; set joystick port for player
-	mva #0 isInventory
-	jsr Purchase	; purchase weapons
-	bit escFlag
-	spl:rts
-	jsr DefensivesActivate	; activate weapons
-	bit escFlag
-	spl:rts	
+    lda JoyNumber,x
+    sta JoystickNumber    ; set joystick port for player
+    mva #0 isInventory
+    jsr Purchase    ; purchase weapons
+    bit escFlag
+    spl:rts
+    jsr DefensivesActivate    ; activate weapons
+    bit escFlag
+    spl:rts    
 AfterManualPurchase
-	inc:lda TankNr
-	cmp NumberOfPlayers
-	bne @-
-	rts
+    inc:lda TankNr
+    cmp NumberOfPlayers
+    bne @-
+    rts
 .endp
 ;--------------------------------------------------
 .proc DefensivesActivate
@@ -241,7 +243,7 @@ AfterManualPurchase
     mva #$ff IsInventory
     mva #%10000000 WhichList
     ; offensive weapon - 0, defensive - %10000000
-	jmp Purchase.GoToActivation
+    jmp Purchase.GoToActivation
 .endp
 
 ;--------------------------------------------------
@@ -277,10 +279,10 @@ GoToActivation
     sta dmactls
 
     lda #song_supermarket
-	bit IsInventory
-	bpl @+
-	lda #song_inventory
-@	jsr RmtSongSelect
+    bit IsInventory
+    bpl @+
+    lda #song_inventory
+@    jsr RmtSongSelect
     
     ldx tankNr
     lda TankStatusColoursTable,x
@@ -288,10 +290,10 @@ GoToActivation
 
     ; there is a tank (player) number in tanknr
     ; we are displaying name of the player
-	lda #$ca
-	sta COLOR1 ; set color of header text
-	ldy #0
-	sty COLBAKS	; set color of background
+    lda #$ca
+    sta COLOR1 ; set color of header text
+    ldy #0
+    sty COLBAKS    ; set color of background
     lda tanknr
     :3 asl  ; 8 chars per name
     tax
@@ -302,10 +304,10 @@ NextChar03
     iny
     cpy #$08
     bne NextChar03
-	; displaying number of active controller port
-	ldy JoystickNumber
-	lda digits+1,y
-	sta purchaseTextBuffer+17
+    ; displaying number of active controller port
+    ldy JoystickNumber
+    lda digits+1,y
+    sta purchaseTextBuffer+17
 
     ; and we display cash of the given player
 
@@ -346,7 +348,7 @@ AfterPurchase
       cmp IndexesOfWeaponsL1,y
       beq ?weaponfound
       iny
-      cpy #(last_offensive_____ - first_offensive____)+1  ; maxOffensiveWeapons
+      cpy #(last_offensive      - first_offensive    )+1  ; maxOffensiveWeapons
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -359,7 +361,7 @@ PositionDefensive
 ?weaponFound
     ; weapon index in Y
     sty positionOnTheList
-	jsr _MakeOffsetDown		; set list screen offset
+    jsr _MakeOffsetDown        ; set list screen offset
 
 ; Here we have all we need
 ; So choose the weapon for purchase ......
@@ -405,7 +407,7 @@ GoUpOffensive
     ldy HowManyOnTheListOff
     dey
     sty PositionOnTheList
-	jmp MakeOffsetDown
+    jmp MakeOffsetDown
 MakeOffsetUp
     ; If offset is larger than pointer position,
     ; it must be equal then.
@@ -423,16 +425,16 @@ PurchaseKeyDown
     bne EndGoDownX
     ldy #0
     sty PositionOnTheList
-	beq MakeOffsetUp
+    beq MakeOffsetUp
 GoDownOffensive
     inc:lda PositionOnTheList
     cmp HowManyOnTheListOff
     bne MakeOffsetDown
     ldy #0
     sty PositionOnTheList
-	beq MakeOffsetUp
+    beq MakeOffsetUp
 MakeOffsetDown
-	jsr _MakeOffsetDown
+    jsr _MakeOffsetDown
 EndGoDownX
     jmp ChoosingItemForPurchase
 
@@ -448,7 +450,7 @@ _MakeOffsetDown
     sbc #15
     sta OffsetDL1
 _EndGoDownX
-	rts
+    rts
 
 ; swapping the displayed list and setting pointer to position 0
 ListChange
@@ -464,7 +466,7 @@ ListChange
     beq @+
     ; inventory
     jsr calcPosOffensive
-	jsr _MakeOffsetDown		; set list screen offset
+    jsr _MakeOffsetDown  ; set list screen offset
     jmp ChoosingItemForPurchase
 @
     mva #0 PositionOnTheList
@@ -481,7 +483,7 @@ DeffensiveSelected
     jmp ChoosingItemForPurchase
 
 .endp
-;
+
 ;--------------------------------------------------
 .proc CreateList
 ;--------------------------------------------------
@@ -637,7 +639,7 @@ notInventory
 NotTheSameAsLastTime
     ; increase appropriate counter
     txa
-    cpx #last_offensive_____+1
+    cpx #last_offensive     +1
     bcs DefenceList
     ldy HowManyOnTheListOff
     sta IndexesOfWeaponsL1,y
@@ -655,14 +657,14 @@ NoWeapon
 
     ; next weapon. If no more weapons then finish!
     inx
-    cpx #last_offensive_____+1
+    cpx #last_offensive     +1
     bne NoDefense
 
 ; if we got to the defense weapons,
 ; we switch address to the second table.
     mwa #ListOfDefensiveWeapons xbyte
 NoDefense
-    cpx #last_defensive_____+1
+    cpx #last_defensive     +1
     
     jne CreateList
 
@@ -697,7 +699,7 @@ WeHaveOffset
     ldy #0
 ClearList1
     cpw xbyte #ListOfWeapons1End
-	beq ListCleared1
+    beq ListCleared1
     tya ; now there is zero here
     sta (xbyte),y
     inw xbyte
@@ -722,7 +724,7 @@ ListCleared1
     ldy #0
 ClearList2
     cpw xbyte #ListOfDefensiveWeaponsEnd
-	beq ListCleared2
+    beq ListCleared2
     tya ; now there is zero here
     sta (xbyte),y
     inw xbyte
@@ -773,27 +775,27 @@ positiveMoney
     sty LastWeapon ; store last purchased weapon
     ; because we must put screen pointer next to it
     
-	; but if we purchasing "Buy me!" then we must draw the winning weapon.
-	
-	cpy #ind_Buy_me_________
-	bne NoSuprise
-	
-Suprise	; get a random weapon
-	lda random
-	cmp #51		; defensive weapons are less likely because they are more expensive - probability 255:51 (5:1)
-	bcc GetRandomDefensive
+    ; but if we purchasing "Buy me!" then we must draw the winning weapon.
+    
+    cpy #ind_Buy_me         
+    bne NoSuprise
+    
+Suprise    ; get a random weapon
+    lda random
+    cmp #51        ; defensive weapons are less likely because they are more expensive - probability 255:51 (5:1)
+    bcc GetRandomDefensive
 GetRandomOffensive
-	randomize ind_Missile________ last_offensive_____
-	;cmp #ind_Buy_me_________ ; buy me do not buy buy me :)
-	;beq GetRandomOffensive
-	tay
-	bne NoSuprise	; Y always <> 0
+    randomize ind_Missile         last_offensive     
+    ;cmp #ind_Buy_me          ; buy me do not buy buy me :)
+    ;beq GetRandomOffensive
+    tay
+    bne NoSuprise    ; Y always <> 0
 GetRandomDefensive
-	randomize ind_Battery________ last_defensive_____
-	tay
-;    lda WeaponUnits,y	; check if weapon exist
-;	beq GetRandomDefensive
-	
+    randomize ind_Battery         last_defensive     
+    tay
+;    lda WeaponUnits,y    ; check if weapon exist
+;    beq GetRandomDefensive
+    
 NoSuprise
     lda TanksWeaponsTableL,x
     sta weaponPointer
@@ -828,48 +830,48 @@ invSelectDef
     lda IndexesOfWeaponsL2,y
     tay
     ldx tankNr
-    cmp #ind_Battery________
+    cmp #ind_Battery        
     bne NotBattery
     ; if activate battery, we do it differently
     mva #sfx_battery sfx_effect
-	phy
+    phy
     mva #99 Energy,x
-	jsr MaxForceCalculate
-	ply
+    jsr MaxForceCalculate
+    ply
     jmp DecreaseDefensive ; bypass activation
 NotBattery
-	cmp #ind_Auto_Defense___
-	bne NoAutoDefense
+    cmp #ind_Auto_Defense   
+    bne NoAutoDefense
     ; Auto Defense - do it like battery
     mva #sfx_auto_defense sfx_effect
-    mva #$A1 AutoDefenseFlag,x	; this is "A" in inverse - for status line :)
+    mva #$A1 AutoDefenseFlag,x    ; this is "A" in inverse - for status line :)
     jmp DecreaseDefensive ; bypass activation
 NoAutoDefense
-	cmp #ind_Lazy_Boy_______
-	bne NoLazyBoy
-	; Lazy Boy - do it like battery
-	mva #%01000000 LazyFlag
+    cmp #ind_Lazy_Boy       
+    bne NoLazyBoy
+    ; Lazy Boy - do it like battery
+    mva #%01000000 LazyFlag
     jmp DecreaseDefensive ; bypass activation
 NoLazyBoy
-	cmp #ind_Lazy_Darwin____
-	bne NoLazyDarwin
-	; Lazy Darwin - do it like battery
-	mva #%11000000 LazyFlag
+    cmp #ind_Lazy_Darwin    
+    bne NoLazyDarwin
+    ; Lazy Darwin - do it like battery
+    mva #%11000000 LazyFlag
     jmp DecreaseDefensive ; bypass activation
 NoLazyDarwin
-	cmp #ind_Spy_Hard_______
-	bne NotSpy
-	mva #$ff SpyHardFlag
-    jmp DecreaseDefensive ; bypass activation	
+    cmp #ind_Spy_Hard       
+    bne NotSpy
+    mva #$ff SpyHardFlag
+    jmp DecreaseDefensive ; bypass activation    
 NotSpy
-	cmp #ind_Long_Barrel____
-	bne NotBarrel
-	; if activate long barrel, we do it differently too
-	mva #sfx_long_barrel sfx_effect
+    cmp #ind_Long_Barrel    
+    bne NotBarrel
+    ; if activate long barrel, we do it differently too
+    mva #sfx_long_barrel sfx_effect
     mva #LongBarrel BarrelLength,x
-    bne DecreaseDefensive ; bypass activation	
+    bne DecreaseDefensive ; bypass activation    
 NotBarrel
-    cmp #ind_White_Flag_____
+    cmp #ind_White_Flag     
     bne NotWhiteFlag
     cmp ActiveDefenceWeapon,x
     bne NoDeactivateWhiteFlag
@@ -898,11 +900,12 @@ DecreaseDefensive
     
 DefActivationEnd
     jmp WaitForKeyRelease ; rts
-
 .endp
-; -----------------------------------------------------
+
+;--------------------------------------------------
 .proc calcPosDefensive
 ; calculate positionOnTheList from the activeWeapon (defensives)
+;--------------------------------------------------
     ldx tankNr
     lda ActiveDefenceWeapon,x
     beq ?noWeaponActive
@@ -911,7 +914,7 @@ DefActivationEnd
       cmp IndexesOfWeaponsL2,y
       beq ?weaponfound
       iny
-      cpy #(last_defensive_____ - first_defensive____)+1  ; maxDefensiveWeapon
+      cpy #(last_defensive      - first_defensive    )+1  ; maxDefensiveWeapon
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -934,7 +937,7 @@ DefActivationEnd
       cmp IndexesOfWeaponsL1,y
       beq ?weaponfound
       iny
-      cpy #(last_offensive_____ - first_offensive____)  ; maxOffensiveWeapon
+      cpy #(last_offensive      - first_offensive    )  ; maxOffensiveWeapon
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -946,11 +949,13 @@ DefActivationEnd
     sty positionOnTheList
     rts
 .endp
-; -----------------------------------------------------
+
+;--------------------------------------------------
 .proc PutLitteChar
+;--------------------------------------------------
     ; first let's clear both lists from little chars
     mwa #ListOfWeapons xbyte
-    ldx #last_defensive_____ ; there are xx lines total
+    ldx #last_defensive      ; there are xx lines total
     ldy #$00
 EraseLoop
     tya  ; lda #$00
@@ -967,10 +972,10 @@ EraseLoop
     mwa #ListOfDefensiveWeapons xbyte
     ldx PositionOnTheList
     beq SelectList2 ; if there is 0 we add nothing
-AddLoop2
-    adw xbyte #32  ; narrow screen
-    dex
-    bne AddLoop2
+@
+      adw xbyte #32  ; narrow screen
+      dex
+    bne @-
 SelectList2
     lda #$7f ; little char (tab) - this is the pointer
     sta (xbyte),y
@@ -988,10 +993,10 @@ CharToList1
     mwa #ListOfWeapons xbyte
     ldx PositionOnTheList
     beq SelectList1 ; if there is 0 we add nothing
-AddLoop1
-    adw xbyte #32  ; narrow screen
-    dex
-    bne AddLoop1
+@
+      adw xbyte #32  ; narrow screen
+      dex
+    bne @-
 SelectList1
     lda #$7f ; pointer = little char = (tab)
     sta (xbyte),y
@@ -999,10 +1004,10 @@ SelectList1
     mwa #ListOfWeapons xbyte
     ldx OffsetDL1
     beq SetWindowList1 ; if zero then add nothing
-LoopWindow1
-    adw xbyte #32  ; narrow screen
-    dex
-    bne LoopWindow1
+@
+      adw xbyte #32  ; narrow screen
+      dex
+    bne @-
 SetWindowList1
     mwa xbyte WeaponsListDL  ; and we change Display List
 
@@ -1042,14 +1047,14 @@ NoArrowDown
     SetDLI DLIinterruptText  ; jsr SetDLI for text (names) screen
 
     mva #0 TankNr
-	sta COLBAKS	; set color of background
+    sta COLBAKS    ; set color of background
 @     tax
       lda TankStatusColoursTable,x
       sta COLOR2  ; set color of player name line
       jsr EnterPlayerName
       bit escFlag
       spl:rts
-	  jsr CheckTankCheat
+      jsr CheckTankCheat
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -1072,16 +1077,9 @@ NoArrowDown
     ldx tanknr
     lda skillTable,x
     sta difficultyLevel
-	lda digits+1,x
+    lda digits+1,x
     sta NameScreen2+7
 
-    ; clear tank name editor field - not necessary
-;    ldx #8
-;    lda #0
-;@     sta NameAdr,x
-;      dex
-;    bpl @-
-    
     ; copy existing name and place cursor at end
     lda TankNr
     :3 asl
@@ -1089,7 +1087,6 @@ NoArrowDown
     
     ldy #0
 @     lda TanksNames,x
-;      beq endOfTankName
       sta NameAdr,y
       inx
       iny
@@ -1097,34 +1094,33 @@ NoArrowDown
     bne @-
 endOfTankName
 
-@	lda NameAdr,y
-	and #$7f
-	bne LastNameChar
-	dey
-	bpl @-
+@     lda NameAdr,y
+      and #$7f
+      bne LastNameChar
+      dey
+    bpl @-
 LastNameChar
-	cpy #7
-	beq @+
-	iny
-@	sty PositionInName
+    cpy #7
+    seq:iny
+    sty PositionInName
 
 CheckKeys
     jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
-	ldx TankNr
-	lda JoyNumber,x
+    ldx TankNr
+    lda JoyNumber,x
     tay
-	lda digits+1,y
-    sta NameScreen2+11	; display joystick port number
-	lda TankShape,x
+    lda digits+1,y
+    sta NameScreen2+11    ; display joystick port number
+    lda TankShape,x
     tay
-	lda digits+1,y
-    sta NameScreen2+15	; display tank shape number	
-	jsr CursorDisplay
+    lda digits+1,y
+    sta NameScreen2+15    ; display tank shape number    
+    jsr CursorDisplay
     jsr getkey
     bit escFlag
     spl:rts
     
-	.IF TARGET = 800	; only the A800 has a keyboard
+  .IF TARGET = 800    ; only the A800 has a keyboard
     ; is the char to be recorded?
     ldx #keycodesEnd-keycodes ;table was 38 chars long
 IsLetter
@@ -1140,11 +1136,10 @@ YesLetter
     sta NameAdr,x
     inx
     cpx #$08 ; is there 8 characters?
-	bne @+
-	dex
-@	stx PositionInName ; if not, we store
+    sne:dex
+    stx PositionInName ; if not, we store
     jmp CheckKeys
-	.ENDIF
+  .ENDIF
 CheckFurtherX01 ; here we check Tab, Return and Del
     cmp #@kbcode._ret  ; $0c ; Return
     jeq EndOfNick
@@ -1158,19 +1153,19 @@ CheckFurtherX01 ; here we check Tab, Return and Del
     beq ChangeOfLevel3Up
     cmp #@kbcode._up  ; $e ;cursor up
     beq ChangeOfLevel3Down
-	cmp #@kbcode._atari	; atari (inverse) key
-	jeq ChangeOfShapeUp
+    cmp #@kbcode._atari    ; atari (inverse) key
+    jeq ChangeOfShapeUp
 
     cmp #@kbcode._del  ; $34 ; Backspace (del)
     bne CheckKeys
     ; handling backing one char
     ldx PositionInName
-    beq FirstChar	; ferst char - no go back
-	cpx #7
-	bne NotLastChar
+    beq FirstChar    ; ferst char - no go back
+    cpx #7
+    bne NotLastChar
     lda NameAdr,x
-	and #$7f
-	bne LastIsNotSpace	; last char not empty - first clear last char (no go back)
+    and #$7f
+    bne LastIsNotSpace    ; last char not empty - first clear last char (no go back)
 NotLastChar
     dex
 LastIsNotSpace
@@ -1181,65 +1176,54 @@ FirstChar
     jmp CheckKeys
 ;----
 ChangeOfJoyUp
-	ldx TankNr
-	inc JoyNumber,x
-	lda JoyNumber,x
-	and #%00000011	; max 4 joysticks
-	sta JoyNumber,x
-	.IF TARGET = 5200
-		beq ChangeOfShapeUp	; change tank shape
-	.ENDIF
+    ldx TankNr
+    inc JoyNumber,x
+    lda JoyNumber,x
+    and #%00000011    ; max 4 joysticks
+    sta JoyNumber,x
+    .IF TARGET = 5200
+        beq ChangeOfShapeUp    ; change tank shape
+    .ENDIF
     jmp CheckKeys
 ;----
 ChangeOfLevelUp ; change difficulty level of computer opponent
     inc:lda DifficultyLevel
     cmp #9  ; 9 levels are possible
-    bne DoNotLoopLevelUp
-    mva #$0 DifficultyLevel
-DoNotLoopLevelUp
+    sne:mva #$0 DifficultyLevel  ; DoNotLoopLevelUp
     jmp CheckKeys
 ;----
 ChangeOfLevelDown
     dec:lda DifficultyLevel
-    bpl DoNotLoopLevelDown
-    mva #$8 DifficultyLevel
-DoNotLoopLevelDown
+    spl:mva #$8 DifficultyLevel  ; DoNotLoopLevelDown
     jmp CheckKeys
 ;----
 ChangeOfLevel3Up
     adb DifficultyLevel #3
-
     cmp #9
-    bcc DoNotLoopLevel3Up
-
-    sbb DifficultyLevel #9
-
-DoNotLoopLevel3Up
+    scc:sbb DifficultyLevel #9  ; DoNotLoopLevel3Up
     jmp CheckKeys
 ;----
 ChangeOfLevel3Down
     sbb DifficultyLevel #3
-    bpl @+
-      adb DifficultyLevel #9
-@
+    spl:adb DifficultyLevel #9
     jmp CheckKeys
 ;----
 ChangeOfShapeUp
-	ldx TankNr
-	inc TankShape,x
-	lda TankShape,x
-	cmp #$03
-	bne @+
-	lda #$00
-	sta TankShape,x
-@	jmp CheckKeys
+    ldx TankNr
+    inc TankShape,x
+    lda TankShape,x
+    cmp #$03
+    bne @+
+      lda #$00
+      sta TankShape,x
+@   jmp CheckKeys
 ;----
 EndOfNick
-	; now check long press joy button (or Return...)
+    ; now check long press joy button (or Return...)
     mva #0 pressTimer ; reset
 WaitForLongPress
-    lda STRIG0	; wait only for joy long press
-	bne ShortJoyPress
+    lda STRIG0    ; wait only for joy long press
+    bne ShortJoyPress
     lda pressTimer
     cmp #25  ; 1/2s
     bcc WaitForLongPress
@@ -1253,9 +1237,9 @@ ShortJoyPress
     ldx tanknr
     lda DifficultyLevel
     sta skilltable,x
-	beq NotRobot
-	lda #$03	; shape for robotanks
-	sta TankShape,x
+    beq NotRobot
+    lda #$03    ; shape for robotanks
+    sta TankShape,x
 NotRobot
     ; storing name of the tank in the right space
     ; (without cursor!)
@@ -1280,129 +1264,129 @@ NotRobot
     beq MakeDefaultName
 
     ldy #0
-nextchar04
-    lda NameAdr,y
-    and #$7f ; remove inverse (Cursor)
-    sta tanksnames,x
-    inx
-    iny
-    cpy #$08
-    bne nextchar04
+@
+      lda NameAdr,y
+      and #$7f ; remove inverse (Cursor)
+      sta tanksnames,x
+      inx
+      iny
+      cpy #$08
+    bne @-
     rts
 MakeDefaultName
-nextchar05
-    lda tanksnamesDefault,x
-    sta tanksnames,x
-    inx
-    iny
-    cpy #$08
-    bne nextchar05
+@
+      lda tanksnamesDefault,x
+      sta tanksnames,x
+      inx
+      iny
+      cpy #$08
+    bne @-
     rts
 .endp
 ;--------------------------------------------------
 .proc CursorDisplay
-	ldy #7
+    ldy #7
 CursorLoop
-	lda NameAdr,y
-	and #$7f
-	cpy #0
-	bne NotFirstLetter
-	and #$3f ; First letter should be Capital letter
+    lda NameAdr,y
+    and #$7f
+    cpy #0
+    bne NotFirstLetter
+    and #$3f ; First letter should be Capital letter
     ; (nice trick does not affect digits)
 NotFirstLetter
-	cpy PositionInName
-	bne @+
+    cpy PositionInName
+    bne @+
     ora #$80 ; place cursor
-@	sta NameAdr,y
-	dey
-	bpl CursorLoop
-	rts
+@    sta NameAdr,y
+    dey
+    bpl CursorLoop
+    rts
 .endp
 ;--------------------------------------------------
 .proc EnterNameByJoy
     mva #sfx_keyclick sfx_effect
-	jsr CursorDisplay
-	ldy PositionInName
-	; now in Y we have PositionInName
-	ldx #(keycodesEnd-keycodes)
+    jsr CursorDisplay
+    ldy PositionInName
+    ; now in Y we have PositionInName
+    ldx #(keycodesEnd-keycodes)
 SearchCharacter
-	lda NameAdr,y
-	and #$7f
-	cmp #$20
-	bcc CharOK	; digit or space
-	cmp #$60
-	bcs CharOK	; not capital letter
-	ora #$40
+    lda NameAdr,y
+    and #$7f
+    cmp #$20
+    bcc CharOK    ; digit or space
+    cmp #$60
+    bcs CharOK    ; not capital letter
+    ora #$40
 CharOK
-	cmp scrcodes,x
-	beq CharacterFound
-	dex
-	bpl SearchCharacter
-	inx
+    cmp scrcodes,x
+    beq CharacterFound
+    dex
+    bpl SearchCharacter
+    inx
 CharacterFound
-	; now in X we have Character (index) on PositionInName
-	; wait for centered joy
+    ; now in X we have Character (index) on PositionInName
+    ; wait for centered joy
     mva #128-15 pressTimer ; reset (trick)
-@	lda STICK0
-	and #$0f
-	cmp #$0f
-	beq checkjoy
-	bit pressTimer	; trick (no A change)
-	bpl @-
-checkjoy	
-	lda STICK0
-	and #$0f
-	cmp #$0f
-	bne JoyNotCentered
+@    lda STICK0
+    and #$0f
+    cmp #$0f
+    beq checkjoy
+    bit pressTimer    ; trick (no A change)
+    bpl @-
+checkjoy    
+    lda STICK0
+    and #$0f
+    cmp #$0f
+    bne JoyNotCentered
 
 notpressedJoy
-	;fire
-	lda STRIG0
-	beq checkjoy	; fire still pressed
-	rts
+    ;fire
+    lda STRIG0
+    beq checkjoy    ; fire still pressed
+    rts
 
 JoyNotCentered
-	; this is a place for code :)
-	cmp #7
-	bne NoRight
-	; joy right
-	cpy #7
-	beq GoToMainLoop	; the last character
-	iny
-	bne GoToMainLoop
+    ; this is a place for code :)
+    cmp #7
+    bne NoRight
+    ; joy right
+    cpy #7
+    beq GoToMainLoop    ; the last character
+    iny
+    bne GoToMainLoop
 NoRight
-	cmp #11
-	bne NoLeft
-	; joy left
-	lda #0
-	sta NameAdr,y
-	dey
-	bpl GoToMainLoop
-	iny
-	beq GoToMainLoop
+    cmp #11
+    bne NoLeft
+    ; joy left
+    lda #0
+    sta NameAdr,y
+    dey
+    bpl GoToMainLoop
+    iny
+    beq GoToMainLoop
 NoLeft
-	cmp #14
-	bne NoUp
-	; joy up
-	cpx #(keycodesEnd-keycodes-1)
-	bne @+
-	ldx #$00 	; set to the first character index (loop)
-	beq CharAndMainLoop
-@	inx
-	bne CharAndMainLoop
+    cmp #14
+    bne NoUp
+    ; joy up
+    cpx #(keycodesEnd-keycodes-1)
+    bne @+
+    ldx #$00     ; set to the first character index (loop)
+    beq CharAndMainLoop
+@    inx
+    bne CharAndMainLoop
 NoUp
-	cmp #13
-	bne EnterNameByJoy	; not down
-	; joy down
-	dex
-	bpl CharAndMainLoop
-	ldx #(keycodesEnd-keycodes-1) 	; set to the last character index (loop)
+    cmp #13
+    bne EnterNameByJoy    ; not down
+    ; joy down
+    dex
+    bpl CharAndMainLoop
+    ldx #(keycodesEnd-keycodes-1)     ; set to the last character index (loop)
 CharAndMainLoop
-	lda scrcodes,x
-	sta NameAdr,y
+    lda scrcodes,x
+    sta NameAdr,y
 GoToMainLoop
-	sty PositionInName
-	jmp EnterNameByJoy
+    sty PositionInName
+    jmp EnterNameByJoy
 
 .endp
 ;--------------------------------------------------
@@ -1472,24 +1456,24 @@ TooLittle000 dex
 ;rightnumber
     ; displaying without leading zeroes (if zeroes exist then display space at this position)
     ldy #0
-	ldx #0	; digit flag (cut leading zeroes)
+    ldx #0    ; digit flag (cut leading zeroes)
 displayloop
     lda decimalresult,y
-	cpx #0
-	bne noleading0
-	cpy #4
-	beq noleading0	; if 00000 - last 0 must stay
-	cmp zero
-	bne noleading0
-	lda #space
-	beq displaychar	; space = 0 !
+    cpx #0
+    bne noleading0
+    cpy #4
+    beq noleading0    ; if 00000 - last 0 must stay
+    cmp zero
+    bne noleading0
+    lda #space
+    beq displaychar    ; space = 0 !
 noleading0
-	inx		; set flag (no leading zeroes to cut)
+    inx        ; set flag (no leading zeroes to cut)
 displaychar
     sta (displayposition),y
 nexdigit
     iny
-	cpy #5
+    cpy #5
     bne displayloop
 
     rts
@@ -1546,57 +1530,57 @@ displayloop1
 ;--------------------------------------------------
 .proc GameOverScreen
 ;--------------------------------------------------
-	jsr MakeDarkScreen
+    jsr MakeDarkScreen
     jsr WaitForKeyRelease
     jsr ClearScreen
     jsr ClearPMmemory
-	jsr PrepareCredits
-	jsr GameOverResultsClear
+    jsr PrepareCredits
+    jsr GameOverResultsClear
     jsr CopyFromPurchaseAndGameOver
     mwa #GameOverDL dlptrs
-	mva #$ff ScrollFlag ; credits scroll on
+    mva #$ff ScrollFlag ; credits scroll on
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
     lda #%00100100  ; playfield before P/M
     sta GPRIOR
-	jsr SetPMWidth	
+    jsr SetPMWidth    
     jsr ColorsOfSprites
     mva #0 COLOR1
-	sta COLBAKS	; set color of background
-	sta CreditsVScrol
-	sta JoystickNumber	; set joystick port for player
+    sta COLBAKS    ; set color of background
+    sta CreditsVScrol
+    sta JoystickNumber    ; set joystick port for player
     mva #TextForegroundColor COLOR2
     SetDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
-	; make text and color lines for each tank
+    ; make text and color lines for each tank
     ldx NumberOfPlayers  ;we start from the highest (best) tank
     dex   ;and it is the last one
     stx ResultOfTankNr  ;in TankSequence table
-	ldy #0 ;witch line we are coloring
+    ldy #0 ;witch line we are coloring
 FinalResultOfTheNextPlayer
     ldx ResultOfTankNr ;we are after a round, so we can use TankNr
     lda TankSequence,x ;and we keep here real number if the tank
-	tax
+    tax
     stx TankNr   ;for which we are displaying results
-	lda TankStatusColoursTable,x
-	sta GameOverColoursTable,y
-	; Y - line number (from 0 to 5)
-	; X - TanNr
-	; let's make texts
-	phy
-	; first calculate adres first byte of line
-	mwa #GameOverResults temp
-@	dey
-	bmi LineAdresReady
-	adw temp #40
-	jmp @-
+    lda TankStatusColoursTable,x
+    sta GameOverColoursTable,y
+    ; Y - line number (from 0 to 5)
+    ; X - TanNr
+    ; let's make texts
+    phy
+    ; first calculate adres first byte of line
+    mwa #GameOverResults temp
+@    dey
+    bmi LineAdresReady
+    adw temp #40
+    jmp @-
 LineAdresReady
-	; put position of tank on the screen
-	pla
-	pha	; now we have line number in A register
-	ldy #1
-	tax
-	lda zero+1,x
-	sta (temp),y
+    ; put position of tank on the screen
+    pla
+    pha    ; now we have line number in A register
+    ldy #1
+    tax
+    lda zero+1,x
+    sta (temp),y
 ; puts name of the tank on the screen
     ldy #$03
     lda TankNr
@@ -1609,75 +1593,75 @@ NextChar
     iny
     cpy #$08+3
     bne NextChar
-	; put big points on the screen
+    ; put big points on the screen
     ldx TankNr
     lda ResultsTable,x
     sta decimal
     mva #0 decimal+1
     adw temp #12 displayposition
     jsr displaydec5
-	mva #0 displayposition	; overwrite first digit
-	; put hits points on the screen
-	sta decimal+1	; pozor!!! A=0
+    mva #0 displayposition    ; overwrite first digit
+    ; put hits points on the screen
+    sta decimal+1    ; pozor!!! A=0
     ldx TankNr
     lda DirectHits,x
     sta decimal
-;	lda DirectHitsH,x		; one byte enough
+;    lda DirectHitsH,x        ; one byte enough
     adw temp #19 displayposition
     jsr displaydec5
-	mva #0 displayposition	; overwrite first digit
-	; put AI symbol or joystick
-	ldx TankNr
-	lda SkillTable,x
-	tay
-	bne ThisIsAI
-	ldy JoyNumber,x
-	iny 	; tricky
+    mva #0 displayposition    ; overwrite first digit
+    ; put AI symbol or joystick
+    ldx TankNr
+    lda SkillTable,x
+    tay
+    bne ThisIsAI
+    ldy JoyNumber,x
+    iny     ; tricky
 ThisIsAI
-	lda digits,y
-	ldy #39
-	sta (temp),y ; AI level or joy number
-	ldy #$0a	; Joystick symbol
-	lda SkillTable,x
-	beq NotAItank
-	ldy #$5e	; Computer symbol
+    lda digits,y
+    ldy #39
+    sta (temp),y ; AI level or joy number
+    ldy #$0a    ; Joystick symbol
+    lda SkillTable,x
+    beq NotAItank
+    ldy #$5e    ; Computer symbol
 NotAItank
-	tya
-	ldy #38
-	sta (temp),y 
-	; put earned money on the screen
+    tya
+    ldy #38
+    sta (temp),y 
+    ; put earned money on the screen
     lda EarnedMoneyL,x
     sta decimal
-	lda EarnedMoneyH,x
+    lda EarnedMoneyH,x
     sta decimal+1
     adw temp #30 displayposition
     jsr displaydec5
-	ldy #35
-	lda zero
-	sta (temp),y ; and last zero
-	ply
-	iny
+    ldy #35
+    lda zero
+    sta (temp),y ; and last zero
+    ply
+    iny
     dec ResultOfTankNr
     jpl FinalResultOfTheNextPlayer
 MakeBlackLines
-	cpy #$06
-	beq AllLinesReady
-	lda #0	; black line color for rest of tanks
-	sta GameOverColoursTable,y
-	iny
-	bne MakeBlackLines
+    cpy #$06
+    beq AllLinesReady
+    lda #0    ; black line color for rest of tanks
+    sta GameOverColoursTable,y
+    iny
+    bne MakeBlackLines
 AllLinesReady
     ldx #(MaxPlayers-1)
 MakeAllTanksVisible
     lda #99
     sta eXistenZ,x
-	lda #0
-	sta ActiveDefenceWeapon,x
+    lda #0
+    sta ActiveDefenceWeapon,x
     dex
     bpl MakeAllTanksVisible
-	jsr SetStandardBarrels
+    jsr SetStandardBarrels
 
-	; start music and animations
+    ; start music and animations
     RmtSong song_ending_looped
     ; initial tank positions randomization
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
@@ -1691,15 +1675,15 @@ MainTanksFloatingLoop
 AllTanksFloatingDown    
     stx TankNr
     lda Ytankstable,x
-	cmp #(72-7)		; tank under screen - no erase
-	bcs NoEraseTank
+    cmp #(72-7)        ; tank under screen - no erase
+    bcs NoEraseTank
     jsr ClearTankNr
-	sta ATRACT	; reset atract mode
+    sta ATRACT    ; reset atract mode
 NoEraseTank
-	ldx TankNr
+    ldx TankNr
     inc Ytankstable,x
-	lda ActiveDefenceWeapon,x
-	beq NotFastTank
+    lda ActiveDefenceWeapon,x
+    beq NotFastTank
     :3 inc Ytankstable,x
 NotFastTank
     lda Ytankstable,x
@@ -1714,109 +1698,109 @@ TankUnderScreen
 TankOnScreen
     jsr PutTankNr
 DrawOnlyParachute
-	lda ActiveDefenceWeapon,x
-	bne FastTank
+    lda ActiveDefenceWeapon,x
+    bne FastTank
     jsr DrawTankParachute
 FastTank
 ;    ldx TankNr
     dex
     bpl AllTanksFloatingDown
-	jsr IsKeyPressed
+    jsr IsKeyPressed
     bne MainTanksFloatingLoop   ; neverending loop
-	mva #$00 ScrollFlag	; credits scroll off
-	jsr MakeDarkScreen
-	jsr GameOverResultsClear
+    mva #$00 ScrollFlag    ; credits scroll off
+    jsr MakeDarkScreen
+    jsr GameOverResultsClear
     rts
 RandomizeTankPos
-    randomize 10 (32-7)	; 10 not 8 - barrel !! :)
+    randomize 10 (32-7)    ; 10 not 8 - barrel !! :)
     sta Ytankstable,x
     randomize 0 180
     sta AngleTable,x
     randomize 0 (49-8)
-	; x correction for P/M
-	; --
-	.IF XCORRECTION_FOR_PM = 1
+    ; x correction for P/M
+    ; --
+    .IF XCORRECTION_FOR_PM = 1
     and #%11111110
-	.ENDIF
-	; --
+    .ENDIF
+    ; --
     clc
     adc XtankOffsetGO_L,x
     sta XtankstableL,x
     lda XtankOffsetGO_H,x
     adc #0
     sta XtankstableH,x
-	lda random
-	cmp #32	; like 1:8
-	bcc NowFastTank
-	lda #0
-	sta ActiveDefenceWeapon,x
+    lda random
+    cmp #32    ; like 1:8
+    bcc NowFastTank
+    lda #0
+    sta ActiveDefenceWeapon,x
     rts
 NowFastTank
-	lda #1
-	sta ActiveDefenceWeapon,x
+    lda #1
+    sta ActiveDefenceWeapon,x
     rts
 GameOverResultsClear
-	lda #$00
-	tax
-@	sta GameOverResults,x
-	inx
-	cpx #(6*40)+1
-	bne @-
-	rts
+    lda #$00
+    tax
+@    sta GameOverResults,x
+    inx
+    cpx #(6*40)+1
+    bne @-
+    rts
 PrepareCredits
-	; Rewrites credits and places it in the middle of each line.
-	mwa #CreditsStart temp	; from
-	mwa #Credits temp2	; to
+    ; Rewrites credits and places it in the middle of each line.
+    mwa #CreditsStart temp    ; from
+    mwa #Credits temp2    ; to
 MainRewriteLoop
-	ldy #0
-	cpw temp #CreditsEnd
-	beq EndOfCredits
-	; count characters in this line
-@	lda (temp),y
-	bmi LastCharFound
-	iny
-	bne @-
+    ldy #0
+    cpw temp #CreditsEnd
+    beq EndOfCredits
+    ; count characters in this line
+@    lda (temp),y
+    bmi LastCharFound
+    iny
+    bne @-
 LastCharFound
-	; in Y number of characters reduced by 1
-	; let's count how many spaces add before the text
-	sec
-	sty magic
-	lda #40
-	sbc magic
-	lsr		; now in A we have number of spaces in front
-	sta magic
-	ldy #0
-	tya
-	tax
+    ; in Y number of characters reduced by 1
+    ; let's count how many spaces add before the text
+    sec
+    sty magic
+    lda #40
+    sbc magic
+    lsr        ; now in A we have number of spaces in front
+    sta magic
+    ldy #0
+    tya
+    tax
 FirstSpaces
-	sta (temp2),y	; fill the area in front of the text with spaces
-	iny
-	cpy magic
-	bne FirstSpaces
+    sta (temp2),y    ; fill the area in front of the text with spaces
+    iny
+    cpy magic
+    bne FirstSpaces
 MainText
-	lda (temp,x)
-	sta (temp2),y	; rewrite the text to a new place
-	bmi LastCharWritten
-	inw temp
-	iny
-	bne MainText
+    lda (temp,x)
+    sta (temp2),y    ; rewrite the text to a new place
+    bmi LastCharWritten
+    inw temp
+    iny
+    bne MainText
 LastCharWritten
-	inw temp
-	and #%01111111	; remove inverse
-	sta (temp2),y
-	iny
-	txa	; space to A (0)
+    inw temp
+    and #%01111111    ; remove inverse
+    sta (temp2),y
+    iny
+    txa    ; space to A (0)
 LastSpaces
-	sta (temp2),y	; fill the area behind the text with spaces
-	iny
-	cpy #40
-	bne LastSpaces
+    sta (temp2),y    ; fill the area behind the text with spaces
+    iny
+    cpy #40
+    bne LastSpaces
 NextLine
-	adw temp2 #40
-	jmp MainRewriteLoop
+    adw temp2 #40
+    jmp MainRewriteLoop
 EndOfCredits
-	mwa #Credits DLCreditsAddr	; set address in DL to first line
-	rts
+    mwa #Credits DLCreditsAddr    ; set address in DL to first line
+    rts
 .endp
 ;-------------------------------------------------
 .proc PutTankNameOnScreen
@@ -1824,7 +1808,7 @@ EndOfCredits
 ; puts name of the tank on the screen
     ldy #$00
 ;    lda TankNr
-	txa		; TankNr in X !
+    txa        ; TankNr in X !
     asl
     asl
     asl ; 8 chars per name
@@ -1837,20 +1821,20 @@ NextChar02
     cpy #$08
     bne NextChar02
     ;=========================
-	; displaying number of active controller port or AI level
+    ; displaying number of active controller port or AI level
     ;=========================
-	ldx TankNr
-	ldy #$5e	; Computer symbol
-	lda SkillTable,x
-	tax
-	bne ThisIsAI
-	ldy #$0a	; Joystick symbol
-	ldx JoystickNumber
-	inx 	; tricky
+    ldx TankNr
+    ldy #$5e    ; Computer symbol
+    lda SkillTable,x
+    tax
+    bne ThisIsAI
+    ldy #$0a    ; Joystick symbol
+    ldx JoystickNumber
+    inx     ; tricky
 ThisIsAI
-	sty statusBuffer+16
-	lda digits,x
-	sta statusBuffer+17
+    sty statusBuffer+16
+    lda digits,x
+    sta statusBuffer+17
 ;    rts
 .endp
 ;-------------------------------------------------
@@ -1858,7 +1842,7 @@ ThisIsAI
 ;-------------------------------------------------
 
     ldx TankNr
-	
+    
     ;=========================
     ;displaying symbol of the weapon
     ;=========================
@@ -1900,11 +1884,11 @@ ThisIsAI
     ;=========================
     ;displaying name of the defence weapon (if active)
     ;=========================
-	lda AutoDefenseFlag,x	; Auto Defense symbol (space or "A" in inverse)
-	bpl @+
-	lda #$5e	; Auto Defense symbol
+    lda AutoDefenseFlag,x    ; Auto Defense symbol (space or "A" in inverse)
+    bpl @+
+    lda #$5e    ; Auto Defense symbol
 @
-	sta statusBuffer+80+21
+    sta statusBuffer+80+21
     lda #$08 ; (
     sta statusBuffer+80+22
     lda #$09    ; )
@@ -1973,15 +1957,15 @@ NoShieldEnergy
     ; display Wind
     ;=========================
     mwa Wind temp
-	lda #space
+    lda #space
     bit Wind+3 ; highest byte of 4 byte wind
     bmi DisplayLeftWind
-    sta statusBuffer+80+17	; (space) char
+    sta statusBuffer+80+17    ; (space) char
     lda #$7f  ; (tab) char
     sta statusBuffer+80+20
     bne DisplayWindValue
 DisplayLeftWind
-    sta statusBuffer+80+20	; (space) char
+    sta statusBuffer+80+20    ; (space) char
     lda #$7e  ;(del) char
     sta statusBuffer+80+17
       sec  ; Wind = -Wind
@@ -2021,7 +2005,7 @@ DisplayWindValue
     ;display Angle
     ;=========================
 displayAngle
-	ldy #space
+    ldy #space
     ldx TankNr
     lda AngleTable,x
     cmp #90

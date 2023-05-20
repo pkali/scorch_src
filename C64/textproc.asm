@@ -2,7 +2,7 @@
 
 
     .IF *>0
-	
+    
 WeaponsListDL = 0
 NamesOfLevels = 0
 ;----------------------------------------
@@ -20,68 +20,68 @@ NamesOfLevels = 0
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
 
-	ldx #$08
-@	lda Autoplay_OptionsTable,x
-	sta OptionsTable,x
-	dex
-	bpl @-
+    ldx #$08
+@    lda Autoplay_OptionsTable,x
+    sta OptionsTable,x
+    dex
+    bpl @-
 
-	rts
+    rts
  
 Autoplay_OptionsTable .by 4,4,2,2,4,1,3,2,4
 
 .endp
 
 .proc SelectNextGradient
-	lda OptionsY	; if "Wind" option selected
-	cmp #$03
-	bne NotWind
-	lda WindChangeInRound	; wind change after each turn (not round only) flag
-	eor #$1f	; '?' character
-	sta WindChangeInRound
-	rts
+    lda OptionsY    ; if "Wind" option selected
+    cmp #$03
+    bne NotWind
+    lda WindChangeInRound    ; wind change after each turn (not round only) flag
+    eor #$1f    ; '?' character
+    sta WindChangeInRound
+    rts
 NotWind
-	ldy GradientNr
-	iny
-	cpy #$03
-	bne NoGradientLoop
-	ldy #$00
+    ldy GradientNr
+    iny
+    cpy #$03
+    bne NoGradientLoop
+    ldy #$00
 NoGradientLoop
-	sty GradientNr
-	lda GradientAddrL,y
-	sta GradientColors
-	lda GradientAddrH,y
-	sta GradientColors+1	
-	rts
+    sty GradientNr
+    lda GradientAddrL,y
+    sta GradientColors
+    lda GradientAddrH,y
+    sta GradientColors+1    
+    rts
 .endp
 
 ;-------------------------------------------
 ; call of the purchase (and activate) screens for each tank
 .proc CallPurchaseForEveryTank
 
-	mva #0 TankNr
-	sta isInventory
+    mva #0 TankNr
+    sta isInventory
 @
-	ldx TankNr
-	lda SkillTable,x
-	beq ManualPurchase
-	jsr PurchaseAI	; remember to make ActivateAI :) !!!
-	jmp AfterManualPurchase
+    ldx TankNr
+    lda SkillTable,x
+    beq ManualPurchase
+    jsr PurchaseAI    ; remember to make ActivateAI :) !!!
+    jmp AfterManualPurchase
 ManualPurchase
-	lda JoyNumber,x
-	sta JoystickNumber	; set joystick port for player
-	mva #0 isInventory
-	jsr Purchase	; purchase weapons
-	bit escFlag
-	spl:rts
-	jsr DefensivesActivate	; activate weapons
-	bit escFlag
-	spl:rts	
+    lda JoyNumber,x
+    sta JoystickNumber    ; set joystick port for player
+    mva #0 isInventory
+    jsr Purchase    ; purchase weapons
+    bit escFlag
+    spl:rts
+    jsr DefensivesActivate    ; activate weapons
+    bit escFlag
+    spl:rts    
 AfterManualPurchase
-	inc:lda TankNr
-	cmp NumberOfPlayers
-	bne @-
-	rts
+    inc:lda TankNr
+    cmp NumberOfPlayers
+    bne @-
+    rts
 .endp
 ;--------------------------------------------------
 .proc DefensivesActivate
@@ -92,7 +92,7 @@ AfterManualPurchase
     mva #$ff IsInventory
     mva #%10000000 WhichList
     ; offensive weapon - 0, defensive - %10000000
-	jmp Purchase.GoToActivation
+    jmp Purchase.GoToActivation
 .endp
 
 
@@ -109,8 +109,8 @@ AfterManualPurchase
     mva #$00 WhichList
     ; offensive weapon - 0, deffensive - %10000000
 GoToActivation
-	rts
-	
+    rts
+    
 .endp
 
 ; -----------------------------------------------------
@@ -118,14 +118,14 @@ GoToActivation
     ;entering names of players
 
     mva #0 TankNr
-	sta COLBAKS	; set color of background
+    sta COLBAKS    ; set color of background
 @     tax
       lda TankStatusColoursTable,x
       sta COLOR2  ; set color of player name line
       jsr EnterPlayerName
       bit escFlag
       spl:rts
-	  jsr CheckTankCheat
+      jsr CheckTankCheat
       inc TankNr
       lda TankNr
       cmp NumberOfPlayers
@@ -151,12 +151,12 @@ EndOfNick
     ; level of the computer opponent goes to
     ; the table of levels (difficulties)
     ldx tanknr
-	lda #6	; Spoiler
+    lda #6    ; Spoiler
     sta DifficultyLevel
     sta skilltable,x
-	beq NotRobot
-	lda #$03	; shape for robotanks
-	sta TankShape,x
+    beq NotRobot
+    lda #$03    ; shape for robotanks
+    sta TankShape,x
 NotRobot
     ; storing name of the tank in the right space
     ; (without cursor!)
@@ -234,24 +234,24 @@ TooLittle000 dex
 ;rightnumber
     ; displaying without leading zeroes (if zeroes exist then display space at this position)
     ldy #0
-	ldx #0	; digit flag (cut leading zeroes)
+    ldx #0    ; digit flag (cut leading zeroes)
 displayloop
     lda decimalresult,y
-	cpx #0
-	bne noleading0
-	cpy #4
-	beq noleading0	; if 00000 - last 0 must stay
-	cmp zero
-	bne noleading0
-	lda #space
-	beq displaychar	; space = 0 !
+    cpx #0
+    bne noleading0
+    cpy #4
+    beq noleading0    ; if 00000 - last 0 must stay
+    cmp zero
+    bne noleading0
+    lda #space
+    beq displaychar    ; space = 0 !
 noleading0
-	inx		; set flag (no leading zeroes to cut)
+    inx        ; set flag (no leading zeroes to cut)
 displaychar
     sta (displayposition),y
 nexdigit
     iny
-	cpy #5
+    cpy #5
     bne displayloop
 
     rts
@@ -313,7 +313,7 @@ displayloop1
 ;--------------------------------------------------
 .proc GameOverScreen
 ;--------------------------------------------------
-	rts
+    rts
 .endp
 ;-------------------------------------------------
 .proc PutTankNameOnScreen

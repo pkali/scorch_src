@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;    @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 ;=====================================================
@@ -18,7 +18,7 @@ noMusic .ds 1 ;.by 0  ; 0 - play music, $ff - do not play music
 noSfx   .ds 1 ;.by 0  ; 0 - play SFX, $ff - do not play SFX
 ;----------------------------------------------------
 ; Color table for Game Over Screen (created in a gameover routine)
-	.ds 1 ;.by $00		; labels line color
+    .ds 1 ;.by $00        ; labels line color
 GameOverColoursTable  .ds MaxPlayers; .BYTE $80,$40,$c4,$20,$c0,$e4
 ;----------------------------------------------------
 TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
@@ -102,7 +102,7 @@ ResultsTable ;the results in the gameeeeee
     .DS MaxPlayers
 TempResults
     .DS MaxPlayers
-;DirectHitsH		; one byte enough
+;DirectHitsH        ; one byte enough
 ;    .DS MaxPlayers
 DirectHits
     .DS MaxPlayers
@@ -149,7 +149,7 @@ WindOrientation  .DS 1 ;(0-right,1-left)
 ;----------------------------------------------------
 ;Counter  .DS 1  ;temporary Counter for outside loops
 ;HitFlag  .DS 1 ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank
-WallsType	.ds 1	; bits 6 and 7: 00 - none, 01 - bump, 10 - wrap, 11 - boxy
+WallsType    .ds 1    ; bits 6 and 7: 00 - none, 01 - bump, 10 - wrap, 11 - boxy
 ;----------------------------------------------------
 xtankstableL ;X positions of tanks (lower left point)
     .DS MaxPlayers
@@ -159,15 +159,15 @@ ytankstable ;Y positions of tanks (lower left point)
     .DS MaxPlayers
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS MaxPlayers
-JoyNumber	; Joystick port number (from 0 to 3)
-	.DS MaxPlayers
-TankShape	; Tank shape number (from 0 to 2)
-	.DS MaxPlayers
+JoyNumber    ; Joystick port number (from 0 to 3)
+    .DS MaxPlayers
+TankShape    ; Tank shape number (from 0 to 2)
+    .DS MaxPlayers
 ;----------------------------------------------------
-TargetTankNr	; Target tank index (for AI routines)
-	.DS 1
-SecondTryFlag	; For precise AI aiming
-	.DS 1
+TargetTankNr    ; Target tank index (for AI routines)
+    .DS 1
+SecondTryFlag    ; For precise AI aiming
+    .DS 1
 ;----------------------------------------------------
 ;Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally
@@ -218,8 +218,8 @@ FallingSoundBit .DS 1
 PreviousFall  .DS 1
 EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 ;Parachute .DS 1 ; are you insured with parachute?
-;FloatingAlt	.DS 1	; floating tank altitude
-FunkyWallFlag = FloatingAlt	; reuse this variable in different weapon (Funky Bomb)!
+;FloatingAlt    .DS 1    ; floating tank altitude
+FunkyWallFlag = FloatingAlt    ; reuse this variable in different weapon (Funky Bomb)!
 PreferHumansFlag = FloatingAlt ; second reuse in AI Aim proc
 ;----------------------------------------------------
 ;Flight
@@ -235,7 +235,7 @@ MirvDown .DS [5] ; is given missile down?
 MirvMissileCounter .DS 1 ; missile Counter (mainly for X)
 SmokeTracerFlag .DS 1 ; if Smoketracer
 LaserFlag .DS 1 ; $ff if Laser
-XposFlag .DS 1	; bullet positon X (0 - on screen , %1000000 - off-screen)
+XposFlag .DS 1    ; bullet positon X (0 - on screen , %1000000 - off-screen)
 YposFlag .DS 1  ; bullet positon Y (0 - on screen , %1000000 - over the screen , %0100000 - under the screen)
 ;----------------------------------------------------
 ;CheckCollisionWithTank
@@ -287,9 +287,9 @@ AfterBFGflag .DS 1
     ; tables with indexes of weapons on the right lists
     ; OK (2022) so, L1 is list of offensive weapons, L2 - defensive
 IndexesOfWeaponsL1
-    .ds (last_offensive_____ - first_offensive____+1)
+    .ds (last_offensive      - first_offensive    +1)
 IndexesOfWeaponsL2
-    .ds (last_defensive_____ - first_defensive____+1)
+    .ds (last_defensive      - first_defensive    +1)
 ;----------------------------------------------------
 
 ; variables storing amount of weapons on the first and second

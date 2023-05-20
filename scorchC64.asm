@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;    @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 ;C64 8-bit Scorched Earth source code
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
@@ -20,15 +20,15 @@
     org $801
     org [a($801)],$801
     basic_start(FirstSTART)
-	
-	
+    
+    
 ;---------------------------------------------------
 .macro build
-	dta d"1.28" ; number of this build (4 bytes)
+    dta d"1.28" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
-      lda #:1 	; do nothing in C64
+      lda #:1     ; do nothing in C64
 .endm
 
 ;---------------------------------------------------
@@ -36,14 +36,14 @@
 ;---------------------------------------------------
 
 FirstZpageVariable = $58 ; $57
-    .zpvar DliColorBack		.byte = FirstZpageVariable
-	.zpvar GradientNr		.byte
-	.zpvar GradientColors	.word
-	.zpvar WindChangeInRound	.byte	; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
-	.zpvar JoystickNumber	.byte
-	.zpvar LazyFlag			.byte	; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
-	.zpvar SpyHardFlag		.byte	; >$7f - run SpyHard after inventory
-	.zpvar Vdebug			.byte ; "visual debug" flag ($00 - off, $ff - on)
+    .zpvar DliColorBack        .byte = FirstZpageVariable
+    .zpvar GradientNr        .byte
+    .zpvar GradientColors    .word
+    .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
+    .zpvar JoystickNumber    .byte
+    .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
+    .zpvar SpyHardFlag        .byte    ; >$7f - run SpyHard after inventory
+    .zpvar Vdebug            .byte ; "visual debug" flag ($00 - off, $ff - on)
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -61,7 +61,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar xtempDRAW        .word ;same as above for XDRAW routine
     .zpvar ytempDRAW        .word ;same as above for XDRAW routine
     .zpvar tempor2          .word
-	.zpvar CreditsVScrol	.byte
+    .zpvar CreditsVScrol    .byte
     ;--------------temps used in circle routine
     .zpvar xi               .word ;X (word) in draw routine
     .zpvar fx               .byte 
@@ -76,21 +76,21 @@ FirstZpageVariable = $58 ; $57
     .zpvar di               .word
     .zpvar dp               .word
     ;----------------------------
-	.zpvar UnderTank1		.byte
-	.zpvar UnderTank2		.byte	
+    .zpvar UnderTank1        .byte
+    .zpvar UnderTank2        .byte    
     ;----------------------------
-	.zpvar TestFlightFlag	.byte ; For AI test flights ($ff - test, $00 - standard shoot flight)
+    .zpvar TestFlightFlag    .byte ; For AI test flights ($ff - test, $00 - standard shoot flight)
     .zpvar weaponPointer    .word
-	.zpvar dliCounter       .byte
-	.zpvar pressTimer       .byte
-	.zpvar NTSCcounter      .byte
-	.zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
-	.zpvar sfx_effect		.byte
-	.zpvar RMT_blocked		.byte
-	.zpvar ScrollFlag		.byte
-	.zpvar SkStatSimulator	.byte
-	.zpvar FloatingAlt		.byte	; floating tank altitude
-	.zpvar OverTankDir		.byte	; (0 go right, $ff go left) direction of bypassing tanks on screen
+    .zpvar dliCounter       .byte
+    .zpvar pressTimer       .byte
+    .zpvar NTSCcounter      .byte
+    .zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
+    .zpvar sfx_effect        .byte
+    .zpvar RMT_blocked        .byte
+    .zpvar ScrollFlag        .byte
+    .zpvar SkStatSimulator    .byte
+    .zpvar FloatingAlt        .byte    ; floating tank altitude
+    .zpvar OverTankDir        .byte    ; (0 go right, $ff go left) direction of bypassing tanks on screen
 
     ; --------------OPTIMIZATION VARIABLES--------------
     .zpvar Force .word
@@ -105,7 +105,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
     .zpvar Counter .byte ;temporary Counter for outside loops
     .zpvar ExplosionRadius .byte
-	.zpvar FunkyBombCounter .byte
+    .zpvar FunkyBombCounter .byte
     .zpvar ResultY .byte
     .zpvar xcircle .word
     .zpvar ycircle .word
@@ -128,10 +128,10 @@ FirstZpageVariable = $58 ; $57
     .zpvar RangeLeft .word
     .zpvar RangeRight .word
     .zpvar NewAngle .byte
-    .zpvar escFlag .byte	; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
+    .zpvar escFlag .byte    ; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
     .zpvar LineYdraw .byte
     .zpvar LineXdraw .word
-    .zpvar plot4x4color .byte	; $00 / $ff 
+    .zpvar plot4x4color .byte    ; $00 / $ff 
     .zpvar Multiplier .word
     .zpvar Multiplier_ .byte  ; 3 bytes
     .zpvar HowToDraw .byte
@@ -143,7 +143,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar goleft .byte
     .zpvar OffsetDL1 .byte
     .zpvar L1 .byte
-	HotNapalmFlag = FunkyBombCounter ; reuse variable!
+    HotNapalmFlag = FunkyBombCounter ; reuse variable!
     ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
 
     displayposition = modify
@@ -172,18 +172,18 @@ WeaponFont
 ; Game Code
 ;--------------------------------------------------
 FirstSTART
-	DL = 0
-	StatusBufferROM = 0
-	;StatusBufferCopy = 0
-	StatusBufferCopyEnd = 0
-	TRACKS = 4
-	DisplayCopyPurchaseEnd = 0
-	DisplayCopyPurchaseStart = 0
-	displayC64 = $2000	;	graphics screen memory start
+    DL = 0
+    StatusBufferROM = 0
+    ;StatusBufferCopy = 0
+    StatusBufferCopyEnd = 0
+    TRACKS = 4
+    DisplayCopyPurchaseEnd = 0
+    DisplayCopyPurchaseStart = 0
+    displayC64 = $2000    ;    graphics screen memory start
 
         SEI             ; disable IRQ
- 		LDA #$36
-		STA $0001      ; Turn Off BASIC ROM
+         LDA #$36
+        STA $0001      ; Turn Off BASIC ROM
         LDA #<NMI    ;
         STA $0318       ; change NMI vector
         LDA #>NMI    ; to our routine
@@ -199,43 +199,43 @@ FirstSTART
 
                         ; from here on NMI is disabled
 
-	
-	jsr MakeDarkScreen
-	
-	; one time zero variables in RAM (non zero page)
-	lda #0
-	ldy #OneTimeZeroVariablesCount-1
-@	  sta OneTimeZeroVariables,y
-	  dey
-	bpl @-
-	
-	; one time zero variables in RAM (zero page)
-	ldy #FirstZpageVariable
-@	sta $0000,y
-	iny
-	bne @-
-	
-	; initialize variables in RAM (non zero page)
-	ldy #initialvaluesCount-1
-@	  lda initialvaluesStart,y
-	  sta variablesToInitialize,y
-	  dey
-	bpl @-
+    
+    jsr MakeDarkScreen
+    
+    ; one time zero variables in RAM (non zero page)
+    lda #0
+    ldy #OneTimeZeroVariablesCount-1
+@      sta OneTimeZeroVariables,y
+      dey
+    bpl @-
+    
+    ; one time zero variables in RAM (zero page)
+    ldy #FirstZpageVariable
+@    sta $0000,y
+    iny
+    bne @-
+    
+    ; initialize variables in RAM (non zero page)
+    ldy #initialvaluesCount-1
+@      lda initialvaluesStart,y
+      sta variablesToInitialize,y
+      dey
+    bpl @-
 
 
     ; generate linetables
-	jsr GenerateLineTable
+    jsr GenerateLineTable
 
 
     ; Random INIT
-	InitializeSIDrnd
+    InitializeSIDrnd
 
 ;--------------------------------------------------
 ; Main program of the game
     icl 'game.asm'
 ;--------------------------------------------------
 
-	
+    
 ;--------------------------------------------------
 .proc GetKey
 ; waits for pressing a key and returns pressed value in A
@@ -243,9 +243,9 @@ FirstSTART
 ; result: A=keycode
 ;--------------------------------------------------
     jsr WaitForKeyRelease
-	lda #0
-	sta escFlag
-	lda #$ff
+    lda #0
+    sta escFlag
+    lda #$ff
     rts
 .endp
 
@@ -268,8 +268,8 @@ StillWait
 .proc IsKeyPressed
 ; result: A=0 - yes , A>0 - no
 ;--------------------------------------------------
-	lda #1
-	rts
+    lda #1
+    rts
 .endp
 ;--------------------------------------------------
 .proc DemoModeOrKey
@@ -296,12 +296,12 @@ peopleAreHere
 ;--------------------------------------------------
 MakeDarkScreen
 ;--------------------------------------------------
-;	mva #0 dmactls		; dark screen
-	; and wait one frame :)
+;    mva #0 dmactls        ; dark screen
+    ; and wait one frame :)
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-	wait	; or waitRTC ?
+    wait    ; or waitRTC ?
     rts
 .endp
 
@@ -348,20 +348,20 @@ noShellDelay
 .proc RmtSongSelect
 ;  starting song line 0-255 to A reg
 ;--------------------------------------------------
-	rts
+    rts
 .endp
 .proc CopyFromRom
-	rts
+    rts
 .endp
 ;--------------------------------------------------
-	icl 'C64/interrupts.asm'
+    icl 'C64/interrupts.asm'
 ;----------------------------------------------
     icl 'constants.asm'
 ;----------------------------------------------
     icl 'C64/textproc.asm'
 ;----------------------------------------------
     icl 'grafproc.asm'
-    icl 'C64/gr_basics.asm'	
+    icl 'C64/gr_basics.asm'    
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------
@@ -370,7 +370,7 @@ noShellDelay
     icl 'artwork/talk.asm'
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv4.fnt',+0,384	; 48 characters only
+    ins 'artwork/tanksv4.fnt',+0,384    ; 48 characters only
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
@@ -384,56 +384,56 @@ font4x4
     tax
 @
     lda CheatName,y
-	sec
+    sec
     sbc tanksnames,x
-	cmp #$27
-	bne NoCheat
+    cmp #$27
+    bne NoCheat
     inx
     dey
     bpl @-
 YesCheat
-	ldx TankNr
-	lda TanksWeaponsTableL,x
-	sta temp
-	lda TanksWeaponsTableH,x
-	sta temp+1
-	lda #99
-@	iny
-	sta (temp),y
-	cpy #(number_of_weapons - 1)
-	bne @-
+    ldx TankNr
+    lda TanksWeaponsTableL,x
+    sta temp
+    lda TanksWeaponsTableH,x
+    sta temp+1
+    lda #99
+@    iny
+    sta (temp),y
+    cpy #(number_of_weapons - 1)
+    bne @-
 NoCheat
     rts
 .endp
 CheatName
-	dta d"   008.T"+$27
+    dta d"   008.T"+$27
 ;----------------------------------------------
 .proc DLIinterruptBFG
-	pha
-	lda dliCounter
-	bne EndofBFGDLI
-	lda dliColorsFore
-	bit random
-	bmi @+
-	lda DliColorBack
-@	sta COLPF2
-	lda dliColorsFore
-	bit random
-	bmi @+
-	lda DliColorBack
-@	sta COLPF1
+    pha
+    lda dliCounter
+    bne EndofBFGDLI
+    lda dliColorsFore
+    bit random
+    bmi @+
+    lda DliColorBack
+@    sta COLPF2
+    lda dliColorsFore
+    bit random
+    bmi @+
+    lda DliColorBack
+@    sta COLPF1
 EndofBFGDLI
-	inc dliCounter
+    inc dliCounter
     pla
     rti
 .endp
 ; ------------------------
 .proc BFGblink
-;	SetDLI DLIinterruptBFG	; blinking on
-	ldy #50
-	jsr PauseYFrames
-;	SetDLI DLIinterruptGraph	; blinking off
-	rts
+;    SetDLI DLIinterruptBFG    ; blinking on
+    ldy #50
+    jsr PauseYFrames
+;    SetDLI DLIinterruptGraph    ; blinking off
+    rts
 .endp
 ;----------------------------------------------
     icl 'constants_top.asm'

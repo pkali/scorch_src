@@ -3,37 +3,37 @@
 ; All main procedures of the game not dependent on hardware (I hope) :)
 
 START
-	jsr MakeDarkScreen
+    jsr MakeDarkScreen
     ; Startup sequence
     jsr Initialize
 
-	;jsr GameOverScreen	; only for test !!!
+    ;jsr GameOverScreen    ; only for test !!!
     
     RMTSong song_main_menu
 
     jsr Options  ;startup screen
-	jsr SetVariablesFromOptions
-	jsr MakeDarkScreen
+    jsr SetVariablesFromOptions
+    jsr MakeDarkScreen
     bit escFlag
     bmi START
 
     jsr EnterPlayerNames
-	jsr MakeDarkScreen
+    jsr MakeDarkScreen
     bit escFlag
     bmi START
 
     jsr RandomizeSequence
     ; for the round #1 shooting sequence is random
-	
+    
 MainGameLoop
-	jsr SetWallsType
-	; first set default barrel lengths (fix for Long Schlong activation :) )
-	; we must do it before purchase/activate
-	; and set Auto Defense to off
+    jsr SetWallsType
+    ; first set default barrel lengths (fix for Long Schlong activation :) )
+    ; we must do it before purchase/activate
+    ; and set Auto Defense to off
     jsr SetStandardBarrels
 
-	jsr CallPurchaseForEveryTank
-	jsr MakeDarkScreen
+    jsr CallPurchaseForEveryTank
+    jsr MakeDarkScreen
     bit escFlag
     bmi START
 
@@ -43,19 +43,19 @@ MainGameLoop
     
     jsr MainRoundLoop
     bit escFlag
-	jvs GoGameOver
+    jvs GoGameOver
     bmi START
 
-	jsr CalculateGains
+    jsr CalculateGains
     
     jsr SortSequence
     
     mva #0 TankNr  ; 
-	sta COLBAKS		; set background color to black
-	sta JoystickNumber	; set joystick port for player
+    sta COLBAKS        ; set background color to black
+    sta JoystickNumber    ; set joystick port for player
     
     ; Hide all (easier than hide last ;) ) tanks
-    jsr cleartanks	; A=0
+    jsr cleartanks    ; A=0
 
     ; here gains and losses should be displayed (dollars)
     ; finally we have changed our minds and money of players
@@ -67,13 +67,13 @@ MainGameLoop
     RmtSong song_round_over
     jsr DisplayResults
 
-	jsr DemoModeOrKey
-	jsr MakeDarkScreen
-	
+    jsr DemoModeOrKey
+    jsr MakeDarkScreen
+    
     lda GameIsOver
-	beq NoGameOverYet
+    beq NoGameOverYet
 GoGameOver
-	jsr GameOverScreen
+    jsr GameOverScreen
     jmp START
 NoGameOverYet
     inc CurrentRoundNr
@@ -96,15 +96,15 @@ NoGameOverYet
     ldx NumberOfPlayers
     dex
 CalculateGainsLoop
-	
-	; adding the remaining energy of the tank to gain
-	; winner gets more ! :)
-	lda Energy,x
-	adc gainL,x
-	sta gainL,x
-	bcc @+
-	inc gainH,x
-@	
+    
+    ; adding the remaining energy of the tank to gain
+    ; winner gets more ! :)
+    lda Energy,x
+    adc gainL,x
+    sta gainL,x
+    bcc @+
+    inc gainH,x
+@    
     ; add gain * 2
     asl gainL,x
     rol gainH,x
@@ -172,7 +172,7 @@ eskipzeroing
 
     dex
     jpl CalculateGainsLoop
-	rts
+    rts
 .endp
 ;--------------------------------------------------
 .proc RoundInit 
@@ -186,17 +186,17 @@ eskipzeroing
 
     RmtSong song_ingame
 
-	jsr SetPMWidth	; A=0
-	lda #0
-	sta AfterBFGflag	; reset BFG flag
-	sta COLOR2	; status line "off"
-	sta COLOR1
-	
-	tax
-@	  sta singleRoundVars,x
-	  inx
-	  cpx #(singleRoundVarsEnd-singleRoundVars)
-	bne @-
+    jsr SetPMWidth    ; A=0
+    lda #0
+    sta AfterBFGflag    ; reset BFG flag
+    sta COLOR2    ; status line "off"
+    sta COLOR1
+    
+    tax
+@      sta singleRoundVars,x
+      inx
+      cpx #(singleRoundVarsEnd-singleRoundVars)
+    bne @-
 
     ldx #(MaxPlayers-1)
 SettingEnergies
@@ -234,7 +234,7 @@ SettingEnergies
 ;generating the new landscape
     jsr PMoutofScreen ;let P/M disappear
     jsr clearscreen   ;let the screen be clean
-	jsr ClearPMmemory
+    jsr ClearPMmemory
     jsr placetanks    ;let the tanks be evenly placed
     jsr calculatemountains ;let mountains be easy for the eye
     ;jsr calculatemountains0 ;only for tests - makes mountains flat and 0 height
@@ -251,10 +251,10 @@ SettingEnergies
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
-	mva #$00 TankSequencePointer
+    mva #$00 TankSequencePointer
 
 ;---------round screen is ready---------
-	mva #TextForegroundColor COLOR1	; status line "on"
+    mva #TextForegroundColor COLOR1    ; status line "on"
     rts
 .endp
 
@@ -265,7 +265,7 @@ SettingEnergies
 ;--------------------------------------------------
 
     ldy #0  ; in Y - number of tanks with energy greater than zero
-	sty ATRACT	; reset atract mode
+    sty ATRACT    ; reset atract mode
     ldx NumberOfPlayers
     dex
 CheckingIfRoundIsFinished
@@ -320,19 +320,19 @@ DoNotFinishTheRound
     jmp Seppuku
 
 @
-	; Auto Defense - activates defensives
+    ; Auto Defense - activates defensives
     ldx NumberOfPlayers
     dex
 CheckNextTankAD
-    lda Energy,x	; only active players
+    lda Energy,x    ; only active players
     beq @+
-	lda AutoDefenseFlag,x	; with Auto Defence activated
-	beq @+
-	; run auto defense for tank in X
-	jsr AutoDefense
+    lda AutoDefenseFlag,x    ; with Auto Defence activated
+    beq @+
+    ; run auto defense for tank in X
+    jsr AutoDefense
 @   dex
     bpl CheckNextTankAD
-	jsr DrawTanks	; redraw tanks with new defences
+    jsr DrawTanks    ; redraw tanks with new defences
 ;
     ldx TankSequencePointer
     lda TankSequence,x
@@ -352,75 +352,75 @@ CheckNextTankAD
     lda TankStatusColoursTable,x
     sta COLOR2  ; set color of status line
     jsr PutTankNameOnScreen
-;    jsr DisplayStatus	; There is no need anymore, it is always after PutTankNameOnScreen
+;    jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
 
     lda SkillTable,x
     beq ManualShooting
 
 RoboTanks
-	; robotanks shoot here	
-	; TankNr still in X
+    ; robotanks shoot here    
+    ; TankNr still in X
     jsr ArtificialIntelligence
     ;pause 30
-	ldx TankNr
-	jsr DisplayStatus	; to make visible AI selected defensive (and offensive :) )
+    ldx TankNr
+    jsr DisplayStatus    ; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
     lda kbcode
     cmp #@kbcode._esc ; 28  ; ESC
     bne @+
     jsr AreYouSure
-@	bit escFlag
-    spl:rts		; keys Esc or O
+@    bit escFlag
+    spl:rts        ; keys Esc or O
 
 
     jmp AfterManualShooting
 
 ManualShooting
-	lda JoyNumber,x
-	sta JoystickNumber	; set joystick port for player
+    lda JoyNumber,x
+    sta JoystickNumber    ; set joystick port for player
     jsr WaitForKeyRelease
-	lda #%00000000
-	sta TestFlightFlag	; set "Test Fight" off
+    lda #%00000000
+    sta TestFlightFlag    ; set "Test Fight" off
     jsr BeforeFire
     bit escFlag
-    spl:rts		; keys Esc or O
+    spl:rts        ; keys Esc or O
 
 AfterManualShooting
     mva #$00 plot4x4color
     jsr DisplayTankNameAbove
-	; defensive weapons without flight handling
-	ldx TankNr
-	lda ActiveDefenceWeapon,x
-	cmp #ind_Hovercraft_____
-	beq GoFloat
-	cmp #ind_White_Flag_____ ; White Flag
-	beq ShootWhiteFlag
-	cmp #ind_Nuclear_Winter_
-	bne StandardShoot
+    ; defensive weapons without flight handling
+    ldx TankNr
+    lda ActiveDefenceWeapon,x
+    cmp #ind_Hovercraft     
+    beq GoFloat
+    cmp #ind_White_Flag      ; White Flag
+    beq ShootWhiteFlag
+    cmp #ind_Nuclear_Winter_
+    bne StandardShoot
 ShootAtomicWinter
-	; --- atomic winter ---
-	jsr AtomicWinter
-	jmp NextPlayerShoots ; and we skip shoot
+    ; --- atomic winter ---
+    jsr AtomicWinter
+    jmp NextPlayerShoots ; and we skip shoot
 ShootWhiteFlag
-	; --- white flag ---
-	jsr WhiteFlag
-	jsr TankFlying.SoilDownAfterLanding  ; Soildown like after Hovercraf landing :)
-	jmp NextPlayerShoots ; and we skip shoot
+    ; --- white flag ---
+    jsr WhiteFlag
+    jsr TankFlying.SoilDownAfterLanding  ; Soildown like after Hovercraf landing :)
+    jmp NextPlayerShoots ; and we skip shoot
 GoFloat
-	jsr TankFlying
-	lda #0
-	sta ActiveDefenceWeapon,x ; deactivate after use
-	bit escFlag
-	bpl ManualShooting ; after floating tank can shoot
-	rts
+    jsr TankFlying
+    lda #0
+    sta ActiveDefenceWeapon,x ; deactivate after use
+    bit escFlag
+    bpl ManualShooting ; after floating tank can shoot
+    rts
 StandardShoot
     inc noDeathCounter
 
     jsr DecreaseWeaponBeforeShoot
     jsr DisplayStatus
 
-;	ldx TankNr
-	dec Energy,x   ; lower energy to eventually let tanks commit suicide
+;    ldx TankNr
+    dec Energy,x   ; lower energy to eventually let tanks commit suicide
 
 ShootNow
     jsr Shoot
@@ -430,7 +430,7 @@ ShootNow
     jsr DisplayOffensiveTextNr
 
     bit escFlag
-    spl:rts		; keys Esc or O
+    spl:rts        ; keys Esc or O
     
     lda HitFlag ;0 if missed
     beq missed
@@ -440,16 +440,16 @@ ShootNow
 continueMainRoundLoopAfterSeppuku
 
 AfterExplode
-    jsr SoilDown2	; allways
+    jsr SoilDown2    ; allways
 NoFallDown2
     ;here tanks are falling down
     mva tankNr tempor2
-	ldx NumberOfPlayers
-	dex
+    ldx NumberOfPlayers
+    dex
 TanksFallDown
     stx TankNr
-	lda eXistenZ,x
-	beq NoExistNoFall
+    lda eXistenZ,x
+    beq NoExistNoFall
     jsr TankFalls
 NoExistNoFall
     dex
@@ -477,8 +477,8 @@ NextPlayerShoots
 SeteXistenZ
     lda Energy,x
     sta eXistenZ,x
-	
-	jsr MaxForceCalculate
+    
+    jsr MaxForceCalculate
 
     dex
     bpl SeteXistenZ
@@ -519,17 +519,17 @@ NoPlayerNoDeath
 
     inc:lda TankSequencePointer
     cmp NumberOfPlayers
-	bne NotLastPlayerInRound
+    bne NotLastPlayerInRound
     mva #0 TankSequencePointer
-	
-	lda WindChangeInRound
-	beq NoWindChangeNow
-	jsr GetRandomWind	; wind change after each turn (not round only)
+    
+    lda WindChangeInRound
+    beq NoWindChangeNow
+    jsr GetRandomWind    ; wind change after each turn (not round only)
 NoWindChangeNow
 NotLastPlayerInRound
     jmp MainRoundLoop
 .endp
-	
+    
 ;---------------------------------
 .proc PlayerXdeath
 ; this tank should not explode anymore:
@@ -551,30 +551,30 @@ NotLastPlayerInRound
 
     ; in X there is a number of tank that died
 
-	lda #78	; mumber of defensive text after BFG! ("VERY FUNNY.")
-	bit AfterBFGflag	; check BFG flag
-	bmi TextAfterBFG
-	; if BFG then no points for dead tanks ...
+    lda #78    ; mumber of defensive text after BFG! ("VERY FUNNY.")
+    bit AfterBFGflag    ; check BFG flag
+    bmi TextAfterBFG
+    ; if BFG then no points for dead tanks ...
     lda CurrentResult
     clc
     adc ResultsTable,x
     sta ResultsTable,x
     ;inc CurrentResult
-	
+    
     ; RandomizeDeffensiveText
     randomize talk.NumberOfOffensiveTexts (talk.NumberOfDeffensiveTexts+talk.NumberOfOffensiveTexts-1) 
 TextAfterBFG
     sta TextNumberOff
-    inc CurrentResult	; ... but increase result of winner (BFG)
+    inc CurrentResult    ; ... but increase result of winner (BFG)
     ldy TankTempY
     mva #$ff plot4x4color
     jsr DisplayOffensiveTextNr
-	; tank flash
+    ; tank flash
     ldy TankTempY
-	mva TankNr temp2 ; not elegant, and probably unnecessary
-	sty TankNr
-	jsr FlashTank ; blinking and pausing (like PAUSE 72 - 18x(2+2) )
-	mva temp2 TankNr 
+    mva TankNr temp2 ; not elegant, and probably unnecessary
+    sty TankNr
+    jsr FlashTank ; blinking and pausing (like PAUSE 72 - 18x(2+2) )
+    mva temp2 TankNr 
 
     ;Deffensive text cleanup
     ;here we clear Deffensive text (after a shoot)
@@ -609,26 +609,26 @@ TextAfterBFG
 MetodOfDeath
     lda random
     and #%00011111  ;  range 0-31
-	cmp #(weaponsOfDeathEnd-weaponsOfDeath) ; we have 20 weapons in table (from 0 to 19)
-	bcs MetodOfDeath
-	tay
-	lda weaponsOfDeath,y
+    cmp #(weaponsOfDeathEnd-weaponsOfDeath) ; we have 20 weapons in table (from 0 to 19)
+    bcs MetodOfDeath
+    tay
+    lda weaponsOfDeath,y
     jsr ExplosionDirect
     mva #sfx_silencer sfx_effect
 
-	; Clear current Shooter settings. After that, Shooter will "search" for the target again
-	ldx NumberOfPlayers
-	dex
-@	lda skillTable,x
-	cmp #2		; clear variables only if Shooter
-	bne NotShooter
-	lda #0
-	sta PreviousAngle,x
-	sta PreviousEnergyL,x
-	sta PreviousEnergyH,x
+    ; Clear current Shooter settings. After that, Shooter will "search" for the target again
+    ldx NumberOfPlayers
+    dex
+@    lda skillTable,x
+    cmp #2        ; clear variables only if Shooter
+    bne NotShooter
+    lda #0
+    sta PreviousAngle,x
+    sta PreviousEnergyL,x
+    sta PreviousEnergyH,x
 NotShooter
-	dex
-	bpl @-
+    dex
+    bpl @-
 
     ; jump to after explosion routines (soil fallout, etc.)
     ; After going through these routines we are back
@@ -682,20 +682,20 @@ NotNegativeEnergy
 ; rest of the energy - to decrease tank energy
 ;--------------------------------------------------
     sty EnergyDecrease
-	ldy #0	; if Shield survive then no decrease tank anergy
+    ldy #0    ; if Shield survive then no decrease tank anergy
     ; Energy cannot be less than 0
     lda ShieldEnergy,x
     cmp EnergyDecrease
     bcc UseAllShieldEnergy
     ;sec
     sbc EnergyDecrease
-    bpl NotNegativeShieldEnergy	; jump allways
+    bpl NotNegativeShieldEnergy    ; jump allways
 UseAllShieldEnergy
-	; now calculate rest of energy for future tank energy decrease
-	sec
-	lda EnergyDecrease
-	sbc ShieldEnergy,x
-	tay
+    ; now calculate rest of energy for future tank energy decrease
+    sec
+    lda EnergyDecrease
+    sbc ShieldEnergy,x
+    tay
     lda #0
 NotNegativeShieldEnergy
     sta ShieldEnergy,x
@@ -751,8 +751,8 @@ NotNegativeShieldEnergy
 ; calculates max force for tank (tanknr in X)
 ; Energy of tank X in A
 ;--------------------------------------------------
-	sta L1
-	
+    sta L1
+    
     ;DATA L1,L2
     ;Multiplication 8bit*8bit,
     ;result 16bit
@@ -774,7 +774,7 @@ B0  dey
     sta MaxForceTableH,x
     lda L1
     sta MaxForceTableL,x
-	rts
+    rts
 .endp
 
 ;--------------------------------------------------
@@ -784,15 +784,15 @@ B0  dey
 ;--------------------------------------------------
     ldx #(number_of_weapons - 1)
 @    lda #$0
-      cpx #ind_White_Flag_____  ; White Flag
+      cpx #ind_White_Flag       ; White Flag
       bne no99
 set99 lda #99     
 no99
-	.REPT MaxPlayers, #+1
-	  sta TanksWeapon:1,x
-	.ENDR
+    .REPT MaxPlayers, #+1
+      sta TanksWeapon:1,x
+    .ENDR
       dex
-      beq set99	; Baby Missile (index=0)
+      beq set99    ; Baby Missile (index=0)
     bpl @-
     rts
 .endp
@@ -807,7 +807,7 @@ deletePtr = temp
     ; clean variables
     lda #0
     sta escFlag
-	sta JoystickNumber
+    sta JoystickNumber
     tay
     mwa #variablesStart deletePtr
 @     tya
@@ -816,21 +816,21 @@ deletePtr = temp
       cpw deletePtr #variablesEnd
     bne @-
 
-		; ser initial shapes for each tank (tanks 0-5 has shape 0 now)
-	ldy #1
-	sty TankShape+1
-	sty TankShape+4
-	iny
-	sty TankShape+2
-	sty TankShape+5
-	
+        ; ser initial shapes for each tank (tanks 0-5 has shape 0 now)
+    ldy #1
+    sty TankShape+1
+    sty TankShape+4
+    iny
+    sty TankShape+2
+    sty TankShape+5
+    
 
     mwa #1024 RandBoundaryHigh
     mva #$ff LastWeapon
     sta HowMuchToFall
     mva #1 color
     
-	jsr SetStandardBarrels
+    jsr SetStandardBarrels
     jsr WeaponCleanup        
     
     mva #>WeaponFont chbas
@@ -844,7 +844,7 @@ SetunPlots
     sta oldplotH,x
     lda #0
     sta oldply,x
-	lda #$ff
+    lda #$ff
     sta oldora,x
     dex
     bpl SetunPlots
@@ -854,7 +854,7 @@ SetunPlots
     sta pmbase
     lda #$03    ; P/M on
     sta GRACTL
-	jsr SetPMWidth
+    jsr SetPMWidth
     lda #%00100001 ; P/M priorities (multicolor players on) - prior=1
     sta GPRIOR
     jsr PMoutofScreen
@@ -878,13 +878,13 @@ MakeTanksVisible
 ; for all tanks
 ;--------------------------------------------------
     ldx #maxPlayers-1
-@	lda #StandardBarrel	; standard barrel length
-	sta BarrelLength,x
-	lda #$00	; deactivate Auto Defense
-	sta AutoDefenseFlag,x
-	dex
-	bpl @-
-	rts
+@    lda #StandardBarrel    ; standard barrel length
+    sta BarrelLength,x
+    lda #$00    ; deactivate Auto Defense
+    sta AutoDefenseFlag,x
+    dex
+    bpl @-
+    rts
 .endp
 ;----------------------------------------------
 /* .proc RandomizeSequence0
@@ -973,7 +973,7 @@ UsageLoop
     lda RANDOM
     and #%00000011 ;(0..1023)
     sta temp2+1
-	
+    
     cpw RandBoundaryLow temp2
     seq:bcs RandomizeForce
 
@@ -1007,45 +1007,45 @@ LimitForce
 ;----------------------------------------------
 .proc Table2Force
 ;----------------------------------------------
-	lda ForceTableL,x
-	sta Force
-	lda ForceTableH,x
-	sta Force+1
-	rts
+    lda ForceTableL,x
+    sta Force
+    lda ForceTableH,x
+    sta Force+1
+    rts
 .endp
 ;----------------------------------------------
 .proc MoveBarrelToNewPosition
 ;----------------------------------------------
-	mva #1 Erase
-	jsr DrawTankNr.BarrelChange
-	mva #0 Erase
+    mva #1 Erase
+    jsr DrawTankNr.BarrelChange
+    mva #0 Erase
 MoveBarrel
     mva #sfx_set_power_2 sfx_effect
-	jsr DrawTankNr
-	jsr DisplayStatus.displayAngle
-	;
-	jsr CheckExitKeys
+    jsr DrawTankNr
+    jsr DisplayStatus.displayAngle
+    ;
+    jsr CheckExitKeys
     spl:rts ;---Exit key pressed-quit game---
-	ldx TankNr
-	;
-	mva #1 Erase
-	jsr WaitOneFrame
-	jsr DrawTankNr.BarrelChange
-	mva #0 Erase
-	lda NewAngle
-	cmp AngleTable,x
-	beq BarrelPositionIsFine
-	bcc rotateLeft
-rotateRight			; older is lower
-	inc angleTable,x
-	jmp MoveBarrel
-rotateLeft			; older is bigger
-	dec angleTable,x
-	jmp MoveBarrel
+    ldx TankNr
+    ;
+    mva #1 Erase
+    jsr WaitOneFrame
+    jsr DrawTankNr.BarrelChange
+    mva #0 Erase
+    lda NewAngle
+    cmp AngleTable,x
+    beq BarrelPositionIsFine
+    bcc rotateLeft
+rotateRight            ; older is lower
+    inc angleTable,x
+    jmp MoveBarrel
+rotateLeft            ; older is bigger
+    dec angleTable,x
+    jmp MoveBarrel
 BarrelPositionIsFine
-	jsr DrawTankNr
-	rts
-	
+    jsr DrawTankNr
+    rts
+    
 .endp
 
 ;----------------------------------------------
@@ -1091,39 +1091,39 @@ SequenceStart
 Bubble
     ldx #0 ;i=x
     stx temp2 ; sortflag=temp2
-	inx ; because NumberOfPlayers start from 1 (not 0)
+    inx ; because NumberOfPlayers start from 1 (not 0)
 
 BubbleBobble
-	ldy TankSequence-1,x	; x count from 1 to NumberOfPlayers (we need cout from 0 to NumberOfPlayers-1)
-	lda ResultsTable,y
-	ldy TankSequence,x
-	cmp ResultsTable,y
+    ldy TankSequence-1,x    ; x count from 1 to NumberOfPlayers (we need cout from 0 to NumberOfPlayers-1)
+    lda ResultsTable,y
+    ldy TankSequence,x
+    cmp ResultsTable,y
     bcc nextishigher
-	bne swapvalues
+    bne swapvalues
 nextisequal
-	; if results are equal, check Direct Hits
-	ldy TankSequence-1,x
-	lda DirectHits,y
-	ldy TankSequence,x
-	cmp DirectHits,y
+    ; if results are equal, check Direct Hits
+    ldy TankSequence-1,x
+    lda DirectHits,y
+    ldy TankSequence,x
+    cmp DirectHits,y
     bcc nextishigher
-	bne swapvalues
+    bne swapvalues
 nextisequal2
-	; if results are equal, check money (H)
-	ldy TankSequence-1,x
-	lda EarnedMoneyH,y
-	ldy TankSequence,x
-	cmp EarnedMoneyH,y
+    ; if results are equal, check money (H)
+    ldy TankSequence-1,x
+    lda EarnedMoneyH,y
+    ldy TankSequence,x
+    cmp EarnedMoneyH,y
     bcc nextishigher
-	bne swapvalues
+    bne swapvalues
 nextisequal2b
-	; if results are equal, check money (L)
-	ldy TankSequence-1,x
-	lda EarnedMoneyL,y
-	ldy TankSequence,x
-	cmp EarnedMoneyL,y
-	;
-	beq nextishigher ; this is to block hangs when 2 equal values meet
+    ; if results are equal, check money (L)
+    ldy TankSequence-1,x
+    lda EarnedMoneyL,y
+    ldy TankSequence,x
+    cmp EarnedMoneyL,y
+    ;
+    beq nextishigher ; this is to block hangs when 2 equal values meet
     bcc nextishigher
     ;here we must swap values
     ;because next is smaller than previous
@@ -1149,20 +1149,20 @@ nextishigher
 ;--------------------------------------------------
 .proc SetWallsType
 ;--------------------------------------------------
-	mva #0 WallsType
-	lda OptionsTable+8
-	cmp #4
-	beq SetRandomWalls
-	lsr
-	ror WallsType
-	lsr
-	ror WallsType
-	rts
+    mva #0 WallsType
+    lda OptionsTable+8
+    cmp #4
+    beq SetRandomWalls
+    lsr
+    ror WallsType
+    lsr
+    ror WallsType
+    rts
 SetRandomWalls
-	lda random
-	and #%11000000
-	sta WallsType
-	rts
+    lda random
+    and #%11000000
+    sta WallsType
+    rts
 .endp
 ; --------------------------------------
 ; Sets the appropriate variables based on the options table
@@ -1321,7 +1321,7 @@ ResultOfTheNextPlayer
     ; overwrite the second digit of the points (max 255)
     ;it means ":"
     mva #26 ResultLineBuffer+9
-	
+    
     ldx #0
     lda TankNr
     asl
@@ -1337,7 +1337,7 @@ TankNameCopyLoop
     iny
     cpx #8 ; end of name
     bne TankNameCopyLoop
-	; last letter of tank name overwrites first digit of the points (max 255)
+    ; last letter of tank name overwrites first digit of the points (max 255)
 
 
     ;just after the digits
