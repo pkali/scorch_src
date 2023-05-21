@@ -1043,8 +1043,8 @@ rotateLeft            ; older is bigger
     dec angleTable,x
     jmp MoveBarrel
 BarrelPositionIsFine
-    jsr DrawTankNr
-    rts
+    jmp DrawTankNr
+    ; rts
 
 .endp
 

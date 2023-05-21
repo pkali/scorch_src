@@ -585,8 +585,8 @@ EndPut4x4
 ;    ora #$02     ; 2=normal, 3 = wide screen width
     sta dmactls
     mva WallsType COLBAKS    ; set color of background
-    jsr WaitOneFrame
-    rts
+    jmp WaitOneFrame
+    ; rts
 .endp
 ;--------------------------------------------------
 
@@ -660,8 +660,8 @@ NoPlot
     ldx TankNr
     sta ActiveDefenceWeapon,x    ; deactivate Nuclear Winter
     jsr SetFullScreenSoilRange
-    jsr SoilDown2.NoClearTanks
-    rts
+    jmp SoilDown2.NoClearTanks
+    ; rts
 
     ; in order to optimize the fragment repeated in both internal loops
     ; we save 15 bytes :)

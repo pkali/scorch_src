@@ -27,7 +27,10 @@ You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https:/
 
 This source code was originally compiled with [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
 
-Compilation: `mads scorch.asm -o:scorch.xex`
+Compilation: 
+`mads scorch.asm -o:scorch.xex -d:TARGET=800` for Atari800 version
+`mads scorch.asm -o:scorch.bin -d:TARGET=5200` for Atari 5200 version
+`mads scorchC64.asm -o:scorchC64.prg` for C64 version (WIP, not playable yet)
 
 
 Game source code is split into several parts:
@@ -41,18 +44,25 @@ Game source code is split into several parts:
 - weapons.asm - general arsenal of tankies
 - definitions.asm - label definitions, moved to make it work better with Altirra debug (it doesn't).
 
-We were trying to use macros, pseudo-ops and simple graphics primitives as much as possible.
-This way it should be relatively easy to port this code to e.g. C64
+We were trying to use macros, pseudo-ops, and simple graphics primitives as much as possible. This way, it should be relatively easy to port this code to, for example, the C64.
 
-After those N years of working on this piece of code we are sure it would be much wiser to write it in C, Action! or MadPascal but on the other hand it is so much fun to type 150 chars where all you want to have y=a*x+b :)
+After working on this piece of code for N years, we are sure it would be much wiser to write it in C, Action!, or MadPascal. On the other hand, it is so much fun to type 150 characters when all you want to have is y = a * x + b. :)
 
-Originally most variables were in Polish, comments were sparse, but we wanted to release this piece of code to public.
-Because of being always short of time/energy (to finish the game) we decided it must go in 'English' to let other people work on it.
-It never happened, but we got some encouraging comments and we are still trying to do something from time to time.
+Originally, most variables were in Polish, and comments were sparse. However, we wanted to release this piece of code to the public. Because we were always short of time and energy (to finish the game), we decided to translate it into English so that other people could work on it. This never happened, but we received some encouraging comments, and we are still trying to do something from time to time.
 
 With the advent of [fujinet](https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changelog:
+
+###### Version 1.30
+2023-05-21
+
+Okay, okay, we promised that the single-machine game was done, and it was. However, some bug reports came in, and development of the C64 version unearthed some mostly peaceful and dormant pests. As a result, it appears that a new release is happening.
+
+The most important changes:
+- most machine-dependent code moved to appropriate folders (`Atari/` and `C64`)
+- Game Over results table improved by sorting all 3 values - points, hits and money earned
+- 
 
 ###### Version 1.28
 2023-04-22
@@ -145,11 +155,11 @@ Other (dubious) improvements:
 
 We couldn't resist! This is the Senior Executive Director's Cut.
 By virtue of byte misering we squeezed in a few new features:
-* new selectable tank shapes - change the controller enough times to get a different tank model
-* lonely bad pixel after Liquid Dirt fixed
-* mountain colors (or shades) possible, switch with [Tab] in the main menu
-* active controller number display in the game, store, and inventory screens
-* a very special terminator mode for Moron
+- new selectable tank shapes - change the controller enough times to get a different tank model
+- lonely bad pixel after Liquid Dirt fixed
+- mountain colors (or shades) possible, switch with [Tab] in the main menu
+- active controller number display in the game, store, and inventory screens
+- a very special terminator mode for Moron
 
 
 ###### Version 1.20
@@ -158,72 +168,72 @@ By virtue of byte misering we squeezed in a few new features:
 It's the final cut. Director's Cut.
 We squeezed the code and saved some bytes to add the joystick/controller selection. No more fights for the stick, up to 4 players can have fun with their own manipulators. And the fifth one can still use the keyboard :).
 Our most prolific testers Arek and Alex called for a number of fixes. Thank you, guys!
-* Players can select their controllers.
-* Better Auto Defense symbol in the status line.
-* Battery performance in AI and Auto Defense fixed.
-* More accurate and faster Laser.
-* Boost For Gifts includes a secret, quite powerful weapon.
-* Points counting fix-up (edge cases eliminated).
-* Long lists in inventory and shop were pointing to a weapon outside the screen. Fixed.
-* Lazy Boys now remember the last weapon used.
-* Especially for XEGS - SELECT key changes the joystick similarly to TAB.
-* Rare P/M glitches fixed.
-* ExplosionRange variable glitched (rarely) due to byte/word mix-up. Fixed.
-* Bouncy Castle was bouncing the laser from inside. Fixed.
-* Shielded tanks were autodestructing when shooting with angle 0. Fixed.
-* Physics of bouncing off the walls was incorrect for some weapons. Fixed.
+- Players can select their controllers.
+- Better Auto Defense symbol in the status line.
+- Battery performance in AI and Auto Defense fixed.
+- More accurate and faster Laser.
+- Boost For Gifts includes a secret, quite powerful weapon.
+- Points counting fix-up (edge cases eliminated).
+- Long lists in inventory and shop were pointing to a weapon outside the screen. Fixed.
+- Lazy Boys now remember the last weapon used.
+- Especially for XEGS - SELECT key changes the joystick similarly to TAB.
+- Rare P/M glitches fixed.
+- ExplosionRange variable glitched (rarely) due to byte/word mix-up. Fixed.
+- Bouncy Castle was bouncing the laser from inside. Fixed.
+- Shielded tanks were autodestructing when shooting with angle 0. Fixed.
+- Physics of bouncing off the walls was incorrect for some weapons. Fixed.
 
 
 ###### Version 1.19
 2022-11-04
 
 This is the final round of weapon additions! Also. our beloved testers and players found a number of issues and we were extremely happy to address them.
-* New defensive weapon "Lazy Boy" - aims at the closest enemy.
-* New defensive weapon "Lazy Darwin" - aims at the weakest link, an enemy I mean.
-* New defensive weapon "Auto Defense" - activate it to be automatically protected by shields and stuff (where available)
-* New defensive weapon "Spy Hard" - quickly view energies, weapons and shields of your opponents.
-* New SFXes, improvements in SFX, and music by @mikerro
-* Shooting with angle 0 caused the sudden death of the operator. Fixed.
-* Angles were asymmetrical, now you can go from 0 to 90 and to 0 again (181 degrees of freedom). Fixed with an improved arithmetic rounding of our sub-pixel accuracy.
-* Drawing a barrel when a tank was on the edge of X==256 pixels caused a lonely pixel to appear randomly. Fixed.
-* Liquid Dirt was overflowing from the right edge of the screen to the left. Fixed.
-* Liquid Dirt volume increased significantly, it is now a formidable attack!
-* A single pixel was erroneously plotted when measuring distance (was visible in e.g., Death's Head). Fixed.
-* Not all traces were correctly erased after Funky Bomb, fixed again (for the 3rt time I guess).
-* Soil sedimentation speed after Funky Bomb improved.
-* Pressing [ESC] when in inventory/store was quitting the game, now it quits the menu only.
-* A bug in MADS optimization was causing parts of SEPPUKU message to stay on screen.
-* BIGGEST OF ALL: the lonely pixel after Nuclear Winter was eliminated. https://github.com/pkali/scorch_src/issues/103 We have spent a disproportionately large amount of time trying to slap this bug. It is still there, but is not manifesting itself ;)
+- New defensive weapon "Lazy Boy" - aims at the closest enemy.
+- New defensive weapon "Lazy Darwin" - aims at the weakest link, an enemy I mean.
+- New defensive weapon "Auto Defense" - activate it to be automatically protected by shields and stuff (where available)
+- New defensive weapon "Spy Hard" - quickly view energies, weapons and shields of your opponents.
+- New SFXes, improvements in SFX, and music by @mikerro
+- Shooting with angle 0 caused the sudden death of the operator. Fixed.
+- Angles were asymmetrical, now you can go from 0 to 90 and to 0 again (181 degrees of freedom). Fixed with an improved arithmetic rounding of our sub-pixel accuracy.
+- Drawing a barrel when a tank was on the edge of X==256 pixels caused a lonely pixel to appear randomly. Fixed.
+- Liquid Dirt was overflowing from the right edge of the screen to the left. Fixed.
+- Liquid Dirt volume increased significantly, it is now a formidable attack!
+- A single pixel was erroneously plotted when measuring distance (was visible in e.g., Death's Head). Fixed.
+- Not all traces were correctly erased after Funky Bomb, fixed again (for the 3rt time I guess).
+- Soil sedimentation speed after Funky Bomb improved.
+- Pressing [ESC] when in inventory/store was quitting the game, now it quits the menu only.
+- A bug in MADS optimization was causing parts of SEPPUKU message to stay on screen.
+- BIGGEST OF ALL: the lonely pixel after Nuclear Winter was eliminated. https://github.com/pkali/scorch_src/issues/103 We have spent a disproportionately large amount of time trying to slap this bug. It is still there, but is not manifesting itself ;)
 
 
 ###### Version 1.18
 2022-11-07
 
 Possibly the final single-player version of the game, unless our dear players find another breaking issue!
-* 5200 keypad works as it should. You can now press these finicky foils to your heart's desire.
-* "Unknown" type Robotanks were attacking with Nuclear Winter every time. Fixed!
-* One of the variables was declared as a byte but used as a word that might cause some rare instabilities.
-* Page zero variables are cleared prior to the game start to eliminate rare issues in some software/hardware configurations.
-* The new version of music in NTSC eliminates issues with tempo (not that anyone but the artist noticed that, but still it is an improvement!)
-* You can now wrap around inventory and shop to faster access these options far down below.
-* Visual improvement of the main menu and fixed some color issues with the title headers.
-* Hovercraft was always flying to the top of the screen, it was not intended, it is now hovering just above the mountains!
-* The main menu does not blink now when changing options. This was a very minor thing but it bothered me to some extent. Fixing it required a complete rewrite of this portion of the menu.
+- 5200 keypad works as it should. You can now press these finicky foils to your heart's desire.
+- "Unknown" type Robotanks were attacking with Nuclear Winter every time. Fixed!
+- One of the variables was declared as a byte but used as a word that might cause some rare instabilities.
+- Page zero variables are cleared prior to the game start to eliminate rare issues in some software/hardware configurations.
+- The new version of music in NTSC eliminates issues with tempo (not that anyone but the artist noticed that, but still it is an improvement!)
+- You can now wrap around inventory and shop to faster access these options far down below.
+- Visual improvement of the main menu and fixed some color issues with the title headers.
+- Hovercraft was always flying to the top of the screen, it was not intended, it is now hovering just above the mountains!
+- The main menu does not blink now when changing options. This was a very minor thing but it bothered me to some extent. Fixing it required a complete rewrite of this portion of the menu.
 
 
 ###### Version 1.17
 2022-10-31
 
 Mostly 5200 console port and NTSC improvements.
-* Updated songs from Miker do not require skipping frames on NTSC machines. Crucial for the next point.
-* Bouncy Castle bouncing of Funky Bomb fixed https://github.com/pkali/scorch_src/issues/129
-* 5200 version had various graphical and sound glitches. Although mostly harmless, it hurt our sense of aesthetics. First of all the flickering credits roll is all good now.
-* Rare hang-ups on NTSC machines fixed
-* Screen lowered down by 7 scan lines to help top status line on NTSC CRTs.
-* 5200 ATTRACT mode not going away fixed
-* Autorepeat added to menus what should help 5200 users with their non-centering abomination of a controller.
-* DLI interrupts optimized, few cycles saved.
-* 5200 keypad sort-of-works. Please refer to manual for key bindings.
+- Updated songs from Miker do not require skipping frames on NTSC machines. Crucial for the next point.
+- Bouncy Castle bouncing of Funky Bomb fixed https://github.com/pkali/scorch_src/issues/129
+- 5200 version had various graphical and sound glitches. Although mostly harmless, it hurt our sense of aesthetics. First of all the flickering credits roll is all good now.
+- Rare hang-ups on NTSC machines fixed
+- Screen lowered down by 7 scan lines to help top status line on NTSC CRTs.
+- 5200 ATTRACT mode not going away fixed
+- Autorepeat added to menus what should help 5200 users with their non-centering abomination of a controller.
+- DLI interrupts optimized, few cycles saved.
+- 5200 keypad sort-of-works. Please refer to manual for key bindings.
 
 
 ###### Version 1.16
@@ -236,7 +246,7 @@ Cramming the game into a 32KiB cart and 16KiB RAM was a big task - it required a
 The release is not perfect - we have a number of glitches and improvements to the 5200 controller procedures to work on, but the game is playable.
 
 Changes:
-* numerous, but not very visible
+- numerous, but not very visible
 
 
 ###### Version 1.14
@@ -246,12 +256,12 @@ Minor bugfixes and optimizations.
 Just a small update to allow for more testing and having fun before the bigger release.
 
 Changes:
-* Numerous optimizations that require a solid test. Please have fun and report issues!
-* Small DrawTanks fix.
-* Bouncy Castle bounces like it should.
-* Tracer and Smoke Tracer are not causing defense weapons to trigger anymore.
-* In rare cases direct hit was not accounted for correctly.
-* Manuals updated. https://github.com/pkali/scorch_src/releases/tag/v1.16
+- Numerous optimizations that require a solid test. Please have fun and report issues!
+- Small DrawTanks fix.
+- Bouncy Castle bounces like it should.
+- Tracer and Smoke Tracer are not causing defense weapons to trigger anymore.
+- In rare cases direct hit was not accounted for correctly.
+- Manuals updated. https://github.com/pkali/scorch_src/releases/tag/v1.16
 
 
 ###### Version 1.13
@@ -262,13 +272,13 @@ Getting ready for porting the game!
 Several heavy optimizations and code cleanups in preparation for an unexpected port.
 
 Changes:
-* Overhaul of AI - Cyborgs, Spoilers, and Choosers aim much better.
-* Cyborgs prefer to kill humans.
-* Fine tuning of AI purchases makes the difficulty level aligned with the robot level.
-* Fixed a very difficult and elusive bug that was causing tanks to freeze when falling close to the right edge of the screen fixed.
-* Updated music by @Miker
-* It is now possible to enter tank names with a joystick - all essential game functions are available without touching the keyboard!
-* Manuals updated with AI strategy information and more.
+- Overhaul of AI - Cyborgs, Spoilers, and Choosers aim much better.
+- Cyborgs prefer to kill humans.
+- Fine tuning of AI purchases makes the difficulty level aligned with the robot level.
+- Fixed a very difficult and elusive bug that was causing tanks to freeze when falling close to the right edge of the screen fixed.
+- Updated music by @Miker
+- It is now possible to enter tank names with a joystick - all essential game functions are available without touching the keyboard!
+- Manuals updated with AI strategy information and more.
 
 
 ###### Version 1.12
@@ -277,12 +287,12 @@ Changes:
 What is going on? Are we getting crazy or what?
 
 Changes:
-* Background color indicates the type of walls. This is very useful when the rand option is selected.
-* XEGS users requested that console keys are used when no keyboard is attached! We delivered! [SELECT] to select an offensive weapon, [OPTION] to jump into inventory, defensive section, [START] + [OPTION] - immediate Game Over (no confirmation for you keyboardless folks)
-* A very silly bug detected by our young testers fixed - the game crashed when you built a very high mountain using Dirt Balls :)
-* Boxy infinite bounce bug fixed.
-* Funky bombs bounce off the walls!
-* The first letter entered for a tank name was inserted in the wrong spot. How did it work at all? Magic.
+- Background color indicates the type of walls. This is very useful when the rand option is selected.
+- XEGS users requested that console keys are used when no keyboard is attached! We delivered! [SELECT] to select an offensive weapon, [OPTION] to jump into inventory, defensive section, [START] + [OPTION] - immediate Game Over (no confirmation for you keyboardless folks)
+- A very silly bug detected by our young testers fixed - the game crashed when you built a very high mountain using Dirt Balls :)
+- Boxy infinite bounce bug fixed.
+- Funky bombs bounce off the walls!
+- The first letter entered for a tank name was inserted in the wrong spot. How did it work at all? Magic.
 [ESC] now correctly exits the purchase screen.
 
 
@@ -294,8 +304,8 @@ A release lollapalooza.
 The silliness indicator crashed. What are we doing?
 
 Changes:
-* A very silly buffer overflow bug fixed - it allowed for infinite (well... to the point) lengths of tank names, or rather for overwriting code with arbitrary values.
-* Gamefield walls added https://github.com/pkali/scorch_src/issues/50. Choosing a different wall effect from the main options menu allows for a sophisticated tactics change. 
+- A very silly buffer overflow bug fixed - it allowed for infinite (well... to the point) lengths of tank names, or rather for overwriting code with arbitrary values.
+- Gamefield walls added https://github.com/pkali/scorch_src/issues/50. Choosing a different wall effect from the main options menu allows for a sophisticated tactics change. 
 
 ###### Version 1.10
 2022-08-21
@@ -307,22 +317,22 @@ This release brings a swath of gameplay updates and a generous dose of a new sil
 Version number bump reflects number of unreleased versions and amount of changes.
 
 Changes:
-* Defensive weapons can be activated before the round to make for the unbeatable aiming precision of the robotanks.
-* Fixed bug with Long Schlong activation taking one Schlong too many.
-* Smoke Tracer not disappearing smoke fixed.
-* Bug allowing for infinite shooting outside the screen fixed.
-* Tank colors and P/M sequence as devised by Adam, the gfx artist. Tanks differ more and look better. https://github.com/pkali/scorch_src/issues/119
-* New item in the shop - loot box "Buy me!" with a surprise inside. https://github.com/pkali/scorch_src/issues/97
-* Tank names can have  s p a c e s  now! https://github.com/pkali/scorch_src/issues/120
-* Tanks are mobile now thanks to the new defensive option - Hovercraft https://github.com/pkali/scorch_src/issues/52
-* Main atari library switched to a more standard version based on Mapping the Atari
-* Huge memory optimizations to allow for the new features.
-* Narrow screen in shop / inventory (many bytes saved).
-* Explosion range corrections for a rare event of non-lethal Nuke explosions.
-* Pressing [A] jumps into defensive weapons activation directly.
-* Elusive randomize force error causing rare hangups for Tosser fixed.
-* Activation of defensive weapons moved to front.
-* Additional SFX for new weapons.
+- Defensive weapons can be activated before the round to make for the unbeatable aiming precision of the robotanks.
+- Fixed bug with Long Schlong activation taking one Schlong too many.
+- Smoke Tracer not disappearing smoke fixed.
+- Bug allowing for infinite shooting outside the screen fixed.
+- Tank colors and P/M sequence as devised by Adam, the gfx artist. Tanks differ more and look better. https://github.com/pkali/scorch_src/issues/119
+- New item in the shop - loot box "Buy me!" with a surprise inside. https://github.com/pkali/scorch_src/issues/97
+- Tank names can have  s p a c e s  now! https://github.com/pkali/scorch_src/issues/120
+- Tanks are mobile now thanks to the new defensive option - Hovercraft https://github.com/pkali/scorch_src/issues/52
+- Main atari library switched to a more standard version based on Mapping the Atari
+- Huge memory optimizations to allow for the new features.
+- Narrow screen in shop / inventory (many bytes saved).
+- Explosion range corrections for a rare event of non-lethal Nuke explosions.
+- Pressing [A] jumps into defensive weapons activation directly.
+- Elusive randomize force error causing rare hangups for Tosser fixed.
+- Activation of defensive weapons moved to front.
+- Additional SFX for new weapons.
 
 ###### Version 1.00
 2022-08-13
@@ -336,18 +346,18 @@ All 48KB+ 8-bit Atari computers are supported.
 Thank you @Pecusx and @Miker for your hard work over the last few weeks - I was almost entirely absent because of the real-world attack.
 
 Most important changes:
-* New Game Over screen with a summary of wins, direct hits and earned cash. https://github.com/pkali/scorch_src/issues/9
-* Tank barrels are drawn procedurally to make aiming easier..
-* Various SFX and music updates with new tunes for all parts of the game. https://github.com/pkali/scorch_src/issues/112
-* AI can use White Flag.
-* 3 different tank shapes https://github.com/pkali/scorch_src/issues/64.
-* All AI levels are programmed. Cyborg is tough! https://github.com/pkali/scorch_src/issues/40
-* New weapon - Long Schlong!
-* New splash screen.
-* Game mechanics improved.
-* [O] key skips to the Game Over screen.
-* The game works on Atari 800.
-* Huge amount of optimizations to squeeze the game into 48K.
+- New Game Over screen with a summary of wins, direct hits and earned cash. https://github.com/pkali/scorch_src/issues/9
+- Tank barrels are drawn procedurally to make aiming easier..
+- Various SFX and music updates with new tunes for all parts of the game. https://github.com/pkali/scorch_src/issues/112
+- AI can use White Flag.
+- 3 different tank shapes https://github.com/pkali/scorch_src/issues/64.
+- All AI levels are programmed. Cyborg is tough! https://github.com/pkali/scorch_src/issues/40
+- New weapon - Long Schlong!
+- New splash screen.
+- Game mechanics improved.
+- [O] key skips to the Game Over screen.
+- The game works on Atari 800.
+- Huge amount of optimizations to squeeze the game into 48K.
 
 And now the new adventure begins!
 
@@ -423,10 +433,10 @@ The new inventory system has been added. Call it by pressing the "I" key or shor
 Another significant playability change is #54 - it is not finished yet, but keeping the joystick up or down makes force increase/decrease faster. Also - short press of fire calls Inventory, long press fires the shell. The timings are experimental, please let me know if this needs a modification/improvement.
 
 Tickets closed:
-* https://github.com/pkali/scorch_src/issues/92 - less unnecessary cleaning of the offensive texts
-* https://github.com/pkali/scorch_src/issues/89 - improved collisions with tank
-* https://github.com/pkali/scorch_src/issues/71 - ditto
-* https://github.com/pkali/scorch_src/issues/11, https://github.com/pkali/scorch_src/issues/26, https://github.com/pkali/scorch_src/issues/8, https://github.com/pkali/scorch_src/issues/20 - new inventory system
+- https://github.com/pkali/scorch_src/issues/92 - less unnecessary cleaning of the offensive texts
+- https://github.com/pkali/scorch_src/issues/89 - improved collisions with tank
+- https://github.com/pkali/scorch_src/issues/71 - ditto
+- https://github.com/pkali/scorch_src/issues/11, https://github.com/pkali/scorch_src/issues/26, https://github.com/pkali/scorch_src/issues/8, https://github.com/pkali/scorch_src/issues/20 - new inventory system
 
 ###### Build 143
 2022-06-05

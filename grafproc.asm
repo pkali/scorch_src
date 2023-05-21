@@ -1430,8 +1430,8 @@ ColumnIsReady
     sta color    ; Pozor! :)  we know - now A=1
 NothingToFall
     mva #sfx_silencer sfx_effect
-    jsr DrawTanks
-    rts
+    jmp DrawTanks
+    ; rts
 .endp
 
 ;--------------------------------------------------
@@ -1750,8 +1750,8 @@ end_found
     iny
     sty fx
     ldy tankNr
-    jsr Display4x4AboveTank
-    rts
+    jmp Display4x4AboveTank
+    ; rts
 .endp
 
 ;-------------------------------
@@ -1926,8 +1926,8 @@ X    lda XtanksTableL,x
     sta yc    ; current tank barrel length
     lda angleTable,x
     sta Angle
-    jsr DrawBarrelTech
-    rts
+    jmp DrawBarrelTech
+    ; rts
 .endp
 
 .proc DrawBarrelTech

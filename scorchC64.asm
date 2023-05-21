@@ -287,8 +287,8 @@ checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
     ; no people, just wait a bit
     ;pause 150
     ldy #75
-    jsr PauseYFrames
-    rts
+    jmp PauseYFrames
+    ; rts
 peopleAreHere
     jmp getkey  ; jsr:rts
 .endp

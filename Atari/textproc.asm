@@ -1709,8 +1709,8 @@ FastTank
     bne MainTanksFloatingLoop   ; neverending loop
     mva #$00 ScrollFlag    ; credits scroll off
     jsr MakeDarkScreen
-    jsr GameOverResultsClear
-    rts
+    jmp GameOverResultsClear
+    ; rts
 RandomizeTankPos
     randomize 10 (32-7)    ; 10 not 8 - barrel !! :)
     sta Ytankstable,x

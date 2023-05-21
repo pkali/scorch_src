@@ -22,7 +22,7 @@
     pha
     lda AIRoutines,y
     pha
-;     it's no necessary - PrepareAIShoot is next proc :)
+;    it's no necessary - PrepareAIShoot is next proc :)
 ;    jsr PrepareAIShoot
 ;    rts
 .endp
@@ -203,8 +203,8 @@ forceNow
 endo
     ; choose the best weapon
 
-    jsr ChooseBestOffensive
-    rts
+    jmp ChooseBestOffensive
+    ; rts
 
 ;----------------------------------------------
 AngleTable    ; 16 bytes ;ba w $348b L$3350

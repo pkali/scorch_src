@@ -934,7 +934,7 @@ ExplodeNow
     ; finally a little explosion
     mva #sfx_baby_missile sfx_effect
     jmp xmissile
-    rts
+    ; rts
 .endp
 ; --------------------------------------------------
 .proc checkRollDirection
@@ -2392,8 +2392,8 @@ NoWall
 ; -------------------------------------------------
     jsr PrepareAIShoot.WepTableToTemp
     jsr UseBattery
-    jsr TosserDefensives
-    rts
+    jmp TosserDefensives
+    ; rts
 .endp
 ; -------------------------------------------------
 .proc SpyHard
@@ -2431,15 +2431,15 @@ SelectNextTank
     beq RepeatSpy
 SpyHardEnd
     mvx TargetTankNr TankNr ; restore
-    jsr DisplaySpyInfo
-    rts
+    jmp DisplaySpyInfo
+    ; rts
 .endp
 .proc DisplaySpyInfo
     lda TankStatusColoursTable,x
     sta COLOR2  ; set color of status line
-    jsr PutTankNameOnScreen
-;    jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
-    rts
+    jmp PutTankNameOnScreen
+    ; jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
+    ; rts
 .endp
 ; -------------------------------------------------
 .proc LazyBoys
@@ -2474,8 +2474,8 @@ EndLazy
     sta ForceTableL,x
     lda Force+1
     sta ForceTableH,x
-    jsr MoveBarrelToNewPosition
-    rts
+    jmp MoveBarrelToNewPosition
+    ; rts
 .endp
 ; -------------------------------------------------
 .proc TankFlying
@@ -2839,8 +2839,8 @@ CalculateSoildown
     adc #0
     sta xdraw+1
     mva #$04 ExplosionRadius
-    jsr CalculateExplosionRange
-    rts
+    jmp CalculateExplosionRange
+    ; rts
 
 SetFuelFullText
     mwa #hoverFull LineAddress4x4
