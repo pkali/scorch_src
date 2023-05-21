@@ -60,9 +60,16 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 Okay, okay, we promised that the single-machine game was done, and it was. However, some bug reports came in, and development of the C64 version unearthed some mostly peaceful and dormant pests. As a result, it appears that a new release is happening.
 
 The most important changes:
-- most machine-dependent code moved to appropriate folders (`Atari/` and `C64`)
-- Game Over results table improved by sorting all 3 values - points, hits and money earned
-- 
+- Most machine-dependent code moved to appropriate folders (`Atari/` and `C64`).
+- Game Over results table improved by sorting all 3 values - points, hits and money earned. It was possible in the past to get a lower podium place with e.g., more money.
+- Game Over screen now displays level of robo tanks and controller number for organic players.
+- Gains calculations bug fixed.
+- Manuals now include pictures!
+- More than 6 tanks possible (not for Atari / 5200 where sprites and memory is the limitation)
+- Shield stays up after White Flag bug fixed #138. Finally!!!
+- Quit from game and quit to Game Over is now checked much more often, especially when robo tanks are fighting.
+- Numerous binary size and source code clarity improvements, mainly to facilitate the above changes.
+
 
 ###### Version 1.28
 2023-04-22
