@@ -1,4 +1,4 @@
-;	@com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;    @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
     .IF *>0 ;this is a trick that prevents compiling this file alone
 ;=====================================================
@@ -18,12 +18,12 @@ noMusic .ds 1 ;.by 0  ; 0 - play music, $ff - do not play music
 noSfx   .ds 1 ;.by 0  ; 0 - play SFX, $ff - do not play SFX
 ;----------------------------------------------------
 ; Color table for Game Over Screen (created in a gameover routine)
-	.ds 1 ;.by $00		; labels line color
+    .ds 1 ;.by $00        ; labels line color
 GameOverColoursTable  .ds MaxPlayers; .BYTE $80,$40,$c4,$20,$c0,$e4
 ;----------------------------------------------------
 TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
     ;:6 dta d"        "
-    .ds 6*8
+    .ds MaxPlayers*8
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS MaxPlayers
@@ -55,9 +55,9 @@ StatusBufferCopy
 variablesStart  ; zeroing starts here
 ;=====================================================
 ;isInventory .ds 1  ; 0 - purchase, $ff - inventory
-;-------------- 
+;--------------
 drawFunction .ds 1  ; 0 - plot, %10000000 - LineLength (N), %01000000 - DrawCheck (V)
-;-------------- 
+;--------------
 noDeathCounter .ds 1
 ;--------------
 OptionsY  .ds 1 ;vertical position of cursor on Options screen
@@ -102,7 +102,7 @@ ResultsTable ;the results in the gameeeeee
     .DS MaxPlayers
 TempResults
     .DS MaxPlayers
-;DirectHitsH		; one byte enough
+;DirectHitsH        ; one byte enough
 ;    .DS MaxPlayers
 DirectHits
     .DS MaxPlayers
@@ -125,9 +125,9 @@ BarrelLength ;length of the tank barrel - dont forget to set it to 6 at round st
     .DS MaxPlayers
 ActiveWeapon ;number of the selected weapon
     .DS MaxPlayers
-ActiveDefenceWeapon ;number of the activated defence weapon - 0 
+ActiveDefenceWeapon ;number of the activated defence weapon - 0
     .DS MaxPlayers
-AutoDefenseFlag ; 0 - not activated, >$7f - activated 
+AutoDefenseFlag ; 0 - not activated, >$7f - activated
     .DS MaxPlayers
 WeaponDepleted .DS 1  ; if 0 deactivate the weapon and switch to Baby Missile
 ;----------------------------------------------------
@@ -149,7 +149,7 @@ WindOrientation  .DS 1 ;(0-right,1-left)
 ;----------------------------------------------------
 ;Counter  .DS 1  ;temporary Counter for outside loops
 ;HitFlag  .DS 1 ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank
-WallsType	.ds 1	; bits 6 and 7: 00 - none, 01 - bump, 10 - wrap, 11 - boxy
+WallsType    .ds 1    ; bits 6 and 7: 00 - none, 01 - bump, 10 - wrap, 11 - boxy
 ;----------------------------------------------------
 xtankstableL ;X positions of tanks (lower left point)
     .DS MaxPlayers
@@ -159,15 +159,15 @@ ytankstable ;Y positions of tanks (lower left point)
     .DS MaxPlayers
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS MaxPlayers
-JoyNumber	; Joystick port number (from 0 to 3)
-	.DS MaxPlayers
-TankShape	; Tank shape number (from 0 to 2)
-	.DS MaxPlayers
+JoyNumber    ; Joystick port number (from 0 to 3)
+    .DS MaxPlayers
+TankShape    ; Tank shape number (from 0 to 2)
+    .DS MaxPlayers
 ;----------------------------------------------------
-TargetTankNr	; Target tank index (for AI routines)
-	.DS 1
-SecondTryFlag	; For precise AI aiming
-	.DS 1
+TargetTankNr    ; Target tank index (for AI routines)
+    .DS 1
+SecondTryFlag    ; For precise AI aiming
+    .DS 1
 ;----------------------------------------------------
 ;Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally
@@ -218,8 +218,8 @@ FallingSoundBit .DS 1
 PreviousFall  .DS 1
 EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 ;Parachute .DS 1 ; are you insured with parachute?
-;FloatingAlt	.DS 1	; floating tank altitude
-FunkyWallFlag = FloatingAlt	; reuse this variable in different weapon (Funky Bomb)!
+;FloatingAlt    .DS 1    ; floating tank altitude
+FunkyWallFlag = FloatingAlt    ; reuse this variable in different weapon (Funky Bomb)!
 PreferHumansFlag = FloatingAlt ; second reuse in AI Aim proc
 ;----------------------------------------------------
 ;Flight
@@ -235,7 +235,7 @@ MirvDown .DS [5] ; is given missile down?
 MirvMissileCounter .DS 1 ; missile Counter (mainly for X)
 SmokeTracerFlag .DS 1 ; if Smoketracer
 LaserFlag .DS 1 ; $ff if Laser
-XposFlag .DS 1	; bullet positon X (0 - on screen , %1000000 - off-screen)
+XposFlag .DS 1    ; bullet positon X (0 - on screen , %1000000 - off-screen)
 YposFlag .DS 1  ; bullet positon Y (0 - on screen , %1000000 - over the screen , %0100000 - under the screen)
 ;----------------------------------------------------
 ;CheckCollisionWithTank
@@ -287,9 +287,9 @@ AfterBFGflag .DS 1
     ; tables with indexes of weapons on the right lists
     ; OK (2022) so, L1 is list of offensive weapons, L2 - defensive
 IndexesOfWeaponsL1
-    .ds (last_offensive_____ - first_offensive____+1)
+    .ds (last_offensive      - first_offensive    +1)
 IndexesOfWeaponsL2
-    .ds (last_defensive_____ - first_defensive____+1)
+    .ds (last_defensive      - first_defensive    +1)
 ;----------------------------------------------------
 
 ; variables storing amount of weapons on the first and second
@@ -301,7 +301,7 @@ HowManyOnTheListDef
     .DS 1
 ;PositionOnTheList ; pointer position on the list being displayed
 ;    .DS 1
-LastWeapon 
+LastWeapon
     ; number of the last previously purchased weapon
     ; it is necessary when after purchase some weapon
     ; is removed from the list (because too expensive)
@@ -341,19 +341,10 @@ LaserCoordinate .DS 8 ; 2,2,2,2
 ; Let 0 be "baby missile"
 ; from $30 the defensive weapons begin
 TanksWeapons
-TanksWeapon1
+.REPT MaxPlayers, #+1
+TanksWeapon:1
     .DS number_of_weapons
-TanksWeapon2
-    .DS number_of_weapons
-TanksWeapon3
-    .DS number_of_weapons
-TanksWeapon4
-    .DS number_of_weapons
-TanksWeapon5
-    .DS number_of_weapons
-TanksWeapon6
-    .DS number_of_weapons
-
+.ENDR
 mountaintable ;table of mountains (size=screenwidth)
     .DS [screenwidth]
     .DS 1 ; additional byte for fallout (sometimes 1 pixel)
@@ -370,9 +361,9 @@ TankTempY
 ;-------------- single round variables --------------
 ;----------------------------------------------------
 singleRoundVars
-;-------------- 
+;--------------
 ;escFlag .ds 1   ; 0 - Esc or O not pressed, $80 - Esc pressed, $40 - O pressed
-;-------------- 
+;--------------
 CurrentResult
     .DS 1
 ;--------------

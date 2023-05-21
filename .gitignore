@@ -1,7 +1,5 @@
 .project
 *.bak
-scorch.lab
-scorch.lst
-textproc.lab
-textproc.lst
+*.lab
+*.lst
 artwork/talk.as_

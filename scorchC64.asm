@@ -1,41 +1,41 @@
 ;    @com.wudsn.ide.asm.mainsourcefile=scorch.asm
-;Atari 8-bit Scorched Earth source code
+;C64 8-bit Scorched Earth source code
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
 ;Miami & Warsaw 2022, 2023
 
 ;---------------------------------------------------
-.IFNDEF TARGET
-    .def TARGET = 800 ; 5200
-.ENDIF
-;atari800  -5200 -cart ${outputFilePath} -cart-type 4
-;atari800  -run ${outputFilePath}
+.def TARGET = 64 ; :)
 ;---------------------------------------------------
 .def XCORRECTION_FOR_PM = 0
 ; if 1 - active x position of tanks correction fo PMG
 .def FASTER_GRAF_PROCS = 1
 ; if 1 - activates faster graphics routines
-;        (direct writes to screen memory - atari only :) )
+;        (direct writes to screen memory - C64 only :) )
 ;---------------------------------------------------
 
-       ; OPT r+  ; saves 12 bytes :O
+
+    opt h-f+
+    org $801
+    org [a($801)],$801
+    basic_start(FirstSTART)
+
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.30" ; number of this build (4 bytes)
+    dta d"1.28" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
-      lda #:1
-      jsr RMTSongSelect
+      lda #:1     ; do nothing in C64
 .endm
 
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $57
+FirstZpageVariable = $58 ; $57
     .zpvar DliColorBack        .byte = FirstZpageVariable
     .zpvar GradientNr        .byte
     .zpvar GradientColors    .word
@@ -152,146 +152,54 @@ FirstZpageVariable = $57
 ;-----------------------------------------------
 ; libraries
 ;-----------------------------------------------
-    .IF TARGET = 800
-      icl 'Atari/lib/ATARISYS.ASM'
-      icl 'Atari/lib/MACRO.ASM'
-      icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
-    .ELIF TARGET = 5200
-      OPT h-f+  ; no headers, single block --> cart bin file
-      icl 'Atari/lib/5200SYS.ASM'
-      icl 'Atari/lib/5200MACRO.ASM'
-      .enum @kbcode
-        /*
-        _0
-        _1
-        _2
-        _3
-        _4
-        _5
-        _6
-        _7
-        _8
-        _9
-        _asterisk = $0a
-        _hash = $0b
-        _start = $0c
-        _pause = $0d
-        _reset = $0e
-        */
-        _space = $00
-        _Y     = $01
-        _up    = $02
-        _O     = $03
-        _left  = $04
-        _tab   = $05
-        _right = $06
-        _A     = $07
-        _down  = $08
-        _I     = $09
-        _esc   = $0a
-        _ret   = $fb  ;$0b ;not used in 5200
-        _del   = $fc  ;$0c ;not used in 5200
-        _M     = $0d
-        _S     = $0e
-        _atari = $fd  ; not used in 5200
-        _none = $0f
-
-      .ende
-    .ENDIF
+      icl 'C64/lib/C64_ATARISYS.ASM'
+      icl 'C64/lib/C64SYS.ASM'
+      icl 'C64/lib/MACRO.ASM'
 
 ;-----------------------------------------------
 ; variable declarations in RAM (no code)
 ;-----------------------------------------------
-    ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables + 1)
-    icl 'variables.asm'
 
     ; Game loading address
-    ORG $4000
+    ORG $4100
+    icl 'variables.asm'
 
 WeaponFont
     ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 
-;-----------------------------------------------
-;Screen displays go here to avoid crossing 4kb barrier
-;-----------------------------------------------
-    DisplayCopyRom = *
-    org display, DisplayCopyRom
-DisplayCopyStart
-    icl 'Atari/display_main_menu.asm'
-DisplayCopyEnd
-    org DisplayCopyRom + (DisplayCopyEnd - DisplayCopyStart)
-
-    DisplayCopyPurchaseDlROM = *
-    org DisplayCopyPurchase, DisplayCopyPurchaseDlROM
-DisplayCopyPurchaseStart
-    icl 'Atari/display_purchasedl.asm'
-DisplayCopyPurchaseEnd
-    org DisplayCopyPurchaseDlROM + (DisplayCopyPurchaseEnd - DisplayCopyPurchaseStart)
-
-    StatusBufferROM = *
-    org StatusBufferCopy, StatusBufferROM
-StatusBufferCopyStart
-    icl 'Atari/display_status.asm'
-StatusBufferCopyEnd
-    org StatusBufferROM + (StatusBufferCopyEnd - StatusBufferCopyStart)
-
-
-    icl 'Atari/display_static.asm'
-;----------------------------------------------
 
 ;--------------------------------------------------
 ; Game Code
 ;--------------------------------------------------
 FirstSTART
-    .IF TARGET = 5200
-    ; start in 5200 diagnostic mode
-    ; move original startup procedure to RAM
+    DL = 0
+    StatusBufferROM = 0
+    ;StatusBufferCopy = 0
+    StatusBufferCopyEnd = 0
+    TRACKS = 4
+    DisplayCopyPurchaseEnd = 0
+    DisplayCopyPurchaseStart = 0
+    displayC64 = $2000    ;    graphics screen memory start
 
-    Modified5200Splash = $2100  ; apparently there is some free space here
-    ; check kernel version
-    Atari5200KernelByte = $fff8
-    ; $32 - 4 joy
-    ; $00 - 2 joy
-    ; $ff - Altirra kernel
+        SEI             ; disable IRQ
+         LDA #$36
+        STA $0001      ; Turn Off BASIC ROM
+        LDA #<NMI    ;
+        STA $0318       ; change NMI vector
+        LDA #>NMI    ; to our routine
+        STA $0319       ;
+        LDA #$00        ; stop Timer A
+        STA $DD0E       ;
+        STA $DD04       ; set Timer A to 0, after starting
+        STA $DD05       ; NMI will occur immediately
+        LDA #$81        ;
+        STA $DD0D       ; set Timer A as source for NMI
+        LDA #$01        ;
+        STA $DD0E       ; start Timer A -> NMI
 
-    lda Atari5200KernelByte
-    beq rom2joy
-    cmp #$32
-    beq rom4joy
-altirra_kernel
-    mwa #Modified5200Splash+$8a modify
-    bne @+  ; JMP
+                        ; from here on NMI is disabled
 
-rom4joy
-    mwa #Modified5200Splash+$16b modify
-    bne @+  ; JMP
 
-rom2joy
-    mwa #Modified5200Splash+$181 modify
-@
-    mwa $fffc temp  ; startup proc address
-    mwa #Modified5200Splash temp2
-    jsr CopyFromROM
-    ; modify the end of the splash procedure
-    lda #$60  ; rts
-    sta (temp2),y
-
-    jsr Modified5200Splash+$0f  ; after the diag cart detection
-    ; modify the text
-    splash_text = $3c80 ; '.scorch.supersystem.copyright.19xx.atari'
-    splash_year = splash_text + $1e
-    splash_copyright = splash_text + $14
-    ldy #19    ; 20 characters
-@    lda NewSplashText,y
-    sta splash_copyright,y
-    dey
-    bpl @-
-
-    ; splash screen delay. maybe add fire to speed up?
-@    cpx RTCLOK+1
-    bne @-
-no5200splash
-    .ENDIF
     jsr MakeDarkScreen
 
     ; one time zero variables in RAM (non zero page)
@@ -314,60 +222,13 @@ no5200splash
       dey
     bpl @-
 
-    ; set gradient to the full LGBTIQQAAPP+ flag on start
-    mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one)
-    jsr SelectNextGradient.NotWind
 
     ; generate linetables
     jsr GenerateLineTable
 
-    .IF TARGET = 800
-      ; pokeys init
-      lda #3    ; stereo
-      sta POKEY+$0f ; stereo
-      sta POKEY+$1f ; stereo
-  
-      lda PAL
-      and #%00001110
-      bne NoRMT_PALchange
-      ;it is PAL here
-      ; Change RMT to PAL version
-      ; 5 values in RMT file
-      ; not elegant :(
-      mva #$06 MODUL-6+$967    ; $07 > $06
-      sta MODUL-6+$bc3    ; $07 > $06
-      sta MODUL-6+$e69    ; $08 > $06
-      sta MODUL-6+$ebc    ; $08 > $06
-      mva #$10 MODUL-6+$a69    ; $12 > $10
-      mva #$04 MODUL-6+$bf8    ; $05 > $04
-      mva #$08 MODUL-6+$e3d    ; $0a > $08
-  
-      ; and mountains colors table address
-      mva #<dliColorsFore2PAL GradientAddrL+2
-      mva #>dliColorsFore2PAL GradientAddrH+2
-NoRMT_PALchange
-    .ELIF TARGET = 5200
-      mva #$7f SkStatSimulator
-    .ENDIF
 
-
-    ; RMT INIT
-    lda #$f0                    ;initial value
-    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
-
-    lda #$ff                    ;initial value
-    sta sfx_effect
-
-    RMTSong 0
-
-    .IF TARGET = 5200
-        mva #$0f STICK0
-        mva #$04 CONSOL5200          ;Speaker off, Pots enabled, port #1 selected
-        mwa #kb_continue VKEYCNT     ;Keyboard handler
-    .ENDIF
-    VMAIN VBLinterrupt,7          ;jsr SetVBL
-
-    mva #2 chactl  ; necessary for 5200
+    ; Random INIT
+    InitializeSIDrnd
 
 ;--------------------------------------------------
 ; Main program of the game
@@ -382,65 +243,9 @@ NoRMT_PALchange
 ; result: A=keycode
 ;--------------------------------------------------
     jsr WaitForKeyRelease
-getKeyAfterWait
-    .IF TARGET = 800
-      lda SKSTAT
-      cmp #$ff
-      beq checkJoyGetKey ; key not pressed, check Joy
-      cmp #$f7  ; SHIFT
-      beq checkJoyGetKey
-    .ELIF TARGET = 5200
-      lda SkStatSimulator
-      and #%11111110
-      bne checkJoyGetKey ; key not pressed, check Joy
-    .ENDIF
-    lda kbcode
-    cmp #@kbcode._none
-    beq checkJoyGetKey
-    and #$3f ;CTRL and SHIFT ellimination
-    cmp #@kbcode._esc  ; 28  ; ESC
-    bne getkeyend
-      mvy #$80 escFlag
-    bne getkeyend
-
-checkJoyGetKey
-      ;------------JOY-------------
-      ;happy happy joy joy
-      ;check for joystick now
-      lda STICK0
-      and #$0f
-      cmp #$0f
-      beq notpressedJoyGetKey
-      tay
-      lda joyToKeyTable,y
-      bne getkeyend
-
-notpressedJoyGetKey
-    ;fire
-    lda STRIG0
-     beq JoyButton
-    .IF TARGET = 800    ; Select and Option key only on A800
-      bne checkSelectKey
-checkSelectKey
-      lda CONSOL
-      and #%00000010    ; Select
-      beq SelectPressed
-      lda CONSOL
-      and #%00000100    ; Option
-    .ENDIF
-    bne getKeyAfterWait
-OptionPressed
-    lda #@kbcode._atari    ; Option key
-    bne getkeyend
-SelectPressed
-    lda #@kbcode._tab    ; Select key
-    bne getkeyend
-JoyButton
-    lda #@kbcode._ret ;Return key
-getkeyend
-    ldy #0
-    sty ATRACT    ; reset atract mode
-    mvy #sfx_keyclick sfx_effect
+    lda #0
+    sta escFlag
+    lda #$ff
     rts
 .endp
 
@@ -456,41 +261,14 @@ getkeyend
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    mva #128-KeyRepeatSpeed pressTimer    ; tricky
 StillWait
-    bit pressTimer
-    bmi KeyReleased
-      lda STICK0
-      and #$0f
-      cmp #$0f
-      bne StillWait
-      lda STRIG0
-      beq StillWait
-    .IF TARGET = 800
-      lda SKSTAT
-      cmp #$ff
-      bne StillWait
-      lda CONSOL
-      and #%00000110    ; Select and Option only
-      cmp #%00000110
-      bne StillWait
-    .ELIF TARGET = 5200
-      lda SkStatSimulator
-      and #%11111110
-      beq StillWait
-    .ENDIF
-KeyReleased
       rts
 .endp
 ;--------------------------------------------------
 .proc IsKeyPressed
 ; result: A=0 - yes , A>0 - no
 ;--------------------------------------------------
-    lda SKSTAT
-    and #%00000100
-    beq @+
     lda #1
-@    and STRIG0
     rts
 .endp
 ;--------------------------------------------------
@@ -518,15 +296,12 @@ peopleAreHere
 ;--------------------------------------------------
 MakeDarkScreen
 ;--------------------------------------------------
-    jsr PMoutofScreen    ; hide P/M
-    mva #0 dmactls        ; dark screen
+;    mva #0 dmactls        ; dark screen
     ; and wait one frame :)
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-    lda CONSOL
-    and #%00000001 ; START KEY
-    seq:wait    ; or waitRTC ?
+    wait    ; or waitRTC ?
     rts
 .endp
 
@@ -551,104 +326,42 @@ MakeDarkScreen
 ; If 'Esc' key is pressed - displays "Are you sure?" and - exit to Menu screen
 ; Just setting the right flags!!!
 
-    ; Select and Option
-    lda CONSOL
-    and #%00000101    ; Start + Option
-    beq QuitToGameover
-    lda SKSTAT
-    cmp #$ff
-    jeq nokeys
-    cmp #$f7  ; SHIFT
-    jeq nokeys
-
-    lda kbcode
-    and #%10111111 ; SHIFT elimination
-
-    cmp #@kbcode._O  ; $08  ; O
-    bne CheckEsc
-    jsr AreYouSure
-    bit escFlag
-    bpl nokeys
-    ;---O pressed-quit game to game over screen---
-QuitToGameover
-    mva #$C0 escFlag    ; bits 7 and 6 set
-    rts
-CheckEsc
-    cmp #@kbcode._esc  ; 28  ; ESC
-    bne nokeys
-DisplayAreYouSure
-    jsr AreYouSure
-    ;---esc pressed-quit game---
-nokeys
-    bit escFlag
     rts
 ;
 .endp
 ;--------------------------------------------------
 .proc ShellDelay
-;--------------------------------------------------
-    lda CONSOL
-    and #%00000001 ; START KEY
-    beq noShellDelay
     ldx flyDelay
 DelayLoop
-      lda VCOUNT
-@       cmp VCOUNT
+      lda $d012
+@     cmp $d012
+      beq @-
+      lda $d012
+@     cmp $d012
       beq @-
       dex
     bne DelayLoop
 noShellDelay
     rts
 .endp
-
 ;--------------------------------------------------
 .proc RmtSongSelect
 ;  starting song line 0-255 to A reg
 ;--------------------------------------------------
-    cmp #song_ingame
-    bne noingame    ; noMusic blocks only ingame song
-    bit noMusic
-    spl:lda #song_silencio
-noingame
-    mvx #$ff RMT_blocked
-    ldx #<MODUL                 ;low byte of RMT module to X reg
-    ldy #>MODUL                 ;hi byte of RMT module to Y reg
-    jsr RASTERMUSICTRACKER      ;Init
-    mva #0 RMT_blocked
     rts
 .endp
-;-------------------------------------------------
-.proc CopyFromROM
-;-------------------------------------------------
-;copy from CART to RAM
-; trashes: Y
-; temp: source
-; temp2: destination
-; modify: destination-end
-;usage:
-;    mwa #DisplayCopyRom temp
-;    mwa #display temp2
-;    mwa #DisplayCopyEnd+1 modify
-;    jsr CopyFromROM
-
-    ldy #0
-@     lda (temp),y
-      sta (temp2),y
-      inw temp
-      inw temp2
-      cpw temp2 modify
-    bne @-
+.proc CopyFromRom
     rts
 .endp
 ;--------------------------------------------------
-    icl 'Atari/interrupts.asm'
+    icl 'C64/interrupts.asm'
 ;----------------------------------------------
     icl 'constants.asm'
 ;----------------------------------------------
-    icl 'Atari/textproc.asm'
+    icl 'C64/textproc.asm'
 ;----------------------------------------------
     icl 'grafproc.asm'
-    icl 'Atari/gr_basics.asm'
+    icl 'C64/gr_basics.asm'
 ;----------------------------------------------
     icl 'weapons.asm'
 ;----------------------------------------------
@@ -661,9 +374,6 @@ TankFont
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
-;----------------------------------------------
-;RMT PLAYER loading shenaningans
-    icl 'artwork/sfx/rmtplayr_modified.asm'
 ;-------------------------------------------------
 .proc CheckTankCheat
     ldy #$07
@@ -719,39 +429,16 @@ EndofBFGDLI
 .endp
 ; ------------------------
 .proc BFGblink
-    SetDLI DLIinterruptBFG    ; blinking on
+;    SetDLI DLIinterruptBFG    ; blinking on
     ldy #50
     jsr PauseYFrames
-    SetDLI DLIinterruptGraph    ; blinking off
+;    SetDLI DLIinterruptGraph    ; blinking off
     rts
 .endp
-;--------------------------------------------------
-    .IF * > MODUL-1
-      .ECHO *
-      .ERROR 'Code and data too long'
-    .ENDIF
-    .ECHO "Bytes left: ",$b000-*
-
-
-    org $b000                                    ;address of RMT module
-MODUL
-                                                 ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6  ;include music RMT module
-MODULEND
 ;----------------------------------------------
     icl 'constants_top.asm'
 ;----------------------------------------------
-
-  .ECHO "Bytes on top left: ",$bfe8-* ;ROM_SETTINGS-*
-  .IF TARGET = 800
-     run FirstSTART
-  .ELIF TARGET = 5200
-    .IF * > ROM_SETTINGS-1
-      .ERROR 'Code and RMT song too long to fit in 5200'
-    .ENDIF
-    org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
-    ;     "01234567890123456789"
-    .byte " scorch supersystem "    ;20 characters title
-    .byte " ", $ff          ;$BFFD == $ff means diagnostic cart, no splash screen
-    .word FirstSTART
-  .ENDIF
+NMI
+         INC $D020      ; change border colour, indication for a NMI
+        RTI             ; exit interrupt
+                        ; (not acknowledged!)

@@ -1,10 +1,10 @@
 
     icl '../lib/atari.hea'
-    
+
     org $2000
-joytest    
+joytest
     mva #0 dmactls
-    
+
 @
     lda trig0
     beq pressed
@@ -15,6 +15,5 @@ pressed
     ;ora jstick0
     sta colbak
     jmp @-
-    
-    run joytest    
-    
+
+    run joytest

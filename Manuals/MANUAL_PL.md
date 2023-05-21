@@ -3,11 +3,18 @@
 Grać można przy użyciu klawiatury (wszystkie funkcjonalności) lub joysticka (wszystkie funkcjonalności niezbędne w rozgrywce).
 
 ## 1. Wybór opcji gry.
+![Ekran wyboru opcji gry.](images/MainMenu.png)
+
 Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 * ilość graczy (2 - 6) obejmuje tak ludzi jak graczy sterowanych przez komputer
 * początkową ilość gotówki każdego z graczy (8k to wybrana przez nas wartość optymalna, lecz przy krótkich rozgrywkach warto wybrać większą wartość)
 * grawitacja
-* maksymalna siła wiatru (wiatr jest losowany na początku każdej z rund lub w czasie rundy pomiędzy turami, tu możemy wybrać jak silny może być)
+* maksymalna siła wiatru (wiatr jest losowany na początku każdej z rund lub w czasie rundy pomiędzy turami, tu możemy wybrać jak silny może być):
+	* 1B - maksymalna siła wiatru: 5
+	* 3B - maksymalna siła wiatru: 20
+	* 5B - maksymalna siła wiatru: 40
+	* 7B - maksymalna siła wiatru: 70
+	* 9B - maksymalna siła wiatru: 99
 * liczba rozgrywanych rund
 * szybkość lotu pocisków (nie ma wpływu na tor lotu - zmienia jedynie widoczną prędkość rysowania - nie zmienia nic w samej rozgrywce)
 * częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą “strzelać w próżnię” :) - jeśli grają tylko ludzie optymalne ustawienie to “norm”, w przypadku graczy sterowanych przez komputer… wedle uznania.
@@ -28,6 +35,8 @@ Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmien
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
 ## 2. Wprowadzanie nazwy graczy i wybór poziomu graczy sterowanych przez komputer
+![Ekran wyboru graczy i poziomu trudności.](images/DiffMenu.png)
+
 Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje).
 Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz.
 Klawisz [INVERSE] lub [OPTION] umożliwiają wybór jednego z 3 dostępnych kształtów czołgów. Na konsoli Atari 5200 uzyskuje się to poprzez cykliczne wybieranie kolejnych portów joysticka klawiszem [5].
@@ -38,21 +47,27 @@ Nazwę gracza można wprowadzać także przy pomocy joysticka. Po wciśnięciu i
 Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 
 ## 3. Ekran zakupów (przed każdą rundą)
+![Ekran zakupów broni ofensywnych.](images/PurOffensive.png)
+![Ekran zakupów broni defensywnych.](images/PurDefensive.png)
 
 Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za ten cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz [TAB] lub strzałka w lewo czy też ruch joystickiem w lewo zmieniają ekran na bronie defensywne lub ofensywne, klawisz [SPACJA] lub strzałka w prawo a także joystick w prawo realizują zakup wskazanej broni.
 
 Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu aktywacji broni defensywnych.
+
+![Ekran aktywacji broni defensywnych.](images/ActDefensive.png)
+
 Na ekranie tym można aktywować zakupione wcześniej bronie defensywne czy też ofensywne. Obsługiwany jest identycznie jak ekran zakupów, jednak [SPACJA] lub strzałka w prawo a także joystick w prawo realizują aktywacje wskazanej broni. Umożliwia to aktywowanie osłon jeszcze przed rozpoczęciem rundy.
 
 Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu zakupów następnego gracza.
 (oczywiście dla graczy komputerowych ten ekran się nie pojawia)
 
 ## 4. Główny ekran gry
+![Główny ekran gry.](images/StatusLine.png)
 
 W linii statusowej widoczna jest informacja o tym który z graczy aktualnie może oddać strzał oraz zestaw innych informacji:
 * nazwa czołgu gracza
-* numer aktywnego joysticka
-* wybrana aktualnie broń ofensywna
+* numer aktywnego joysticka lub poziom gracza sterowanego przez komputer (1-**Moron** - 8-**Unknown**),
+* wybrana aktualnie broń ofensywna (symbol ilość nazwa),
 * pozostała ilość punktów energii gracza i jeśli ma on aktywną broń defensywną posiadającą swój zasób energii - w nawiasie ten zasób
 * ustawiony przez gracza kąt nachylenia lufy i kierunek jej nachylenia
 * ustawiona przez gracza siła strzału (maksymalna siła strzału jest ograniczana przez energię gracza - nie może przekroczyć energii * 10 . Oznacza to, że mając małą ilość energii możemy oddać słabsze strzały

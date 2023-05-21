@@ -3,12 +3,18 @@
 You can play using the keyboard (all functionality) or the joystick in the first port (all functionality necessary for gameplay).
 
 ## 1. Game Option Selection.
+![Game options screen.](images/MainMenu.png)
 
 On the first screen, you can configure gameplay options:
 * number of players (2 - 6) includes both human and computer-controlled players
 * the initial amount of cash of each player (2K is the optimal value we chose, but for short games, it is worth choosing a higher value)
 * gravity
-* maximum wind strength (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be)
+* maximum wind strength (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be):
+	* 1B - maximum wind strength: 5
+	* 3B - maximum wind strength: 20
+	* 5B - maximum wind strength: 40
+	* 7B - maximum wind strength: 70
+	* 9B - maximum wind strength: 99
 * number of rounds in a game
 * missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
 * frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
@@ -29,6 +35,7 @@ The [TAB] or [SELECT] key, and on the Atari 5200 console, the [5] controller key
 The [RETURN] key or a joystick button moves to the next screen.
 
 ## 2. Entering the name of players and selecting the level of computer-controlled players
+![Name of players and game level screen.](images/DiffMenu.png)
 
 The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options).
 The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key allow you to choose which joystick port the player will use.
@@ -40,20 +47,27 @@ The player's name can also be entered with the joystick. After pressing and hold
 If the name is not entered, it will be supplemented with the default name.
 
 ## 3. Shopping screen (before each round)
+![Shopping offensives screen.](images/PurOffensive.png)
+![Shopping defensives screen.](images/PurDefensive.png)
 
 On this screen, you can make purchases of offensive and defensive weapons. Only those weapons that the player can afford are visible, along with information about the price and the number of units of a given weapon that will be obtained for that price. The information on the screen probably needs no more description. You move through the lists with the cursor keys (up and down) or with the joystick, the [TAB] key or the left arrow or the left joystick tilt change the screen to defensive or offensive weapons, the [SPACE] key or the right arrow and also the joystick to the right does the purchase of the indicated weapon.
 
-The [RETURN] key or the joystick button press switches to the defensive weapon activation screen. Here you can activate previously bought defensive (or offensive after switching with [TAB], etc) weapons. This makes it possible to activate shields and others before the round starts.
+The [RETURN] key or the joystick button press switches to the defensive weapon activation screen. Here you can activate previously bought defensive (or offensive after switching with [TAB], etc) weapons. 
+
+![Defensives activation screen.](images/ActDefensive.png)
+
+This makes it possible to activate shields and others before the round starts.
 
 Another [RETURN] key or joystick button press switches to the next player's shopping screen.
 (For computer players this screen is not shown.)
 
 ## 4. The main screen of the game
+![Main game screen.](images/StatusLine.png)
 
 The status line shows which player is currently allowed to take a shot and a set of other information:
 * player's tank name,
-* active joystick number
-* currently selected offensive weapon,
+* active joystick number or difficulty level of computer-controlled player (1-**Moron** - 8-**Unknown**),
+* currently selected offensive weapon (symbol quantity and name),
 * the player's remaining energy points and if he has an active defensive weapon that has its energy - in parentheses the energy level,
 * the angle and the direction of the barrel set by the player,
 * the shot strength set by the player (the maximum shot strength is limited by the player's energy - it can not exceed the energy * 10 . This means that you can fire weaker shots only when having a small amount of energy,
@@ -208,13 +222,13 @@ The game has 8 difficulty levels of computer-controlled opponents. Or actually 7
 
 * **Poolshark** - When attacking, he sets the nearest tank as his target, then selects the angle of the shot, and tries to select its strength by drawing it from the selected range. He always shoots with the best weapon he has. He uses defensive weapons. With a probability of 1:3, he activates the best defensive weapon he owns (the highest on the list of weapons he owns - that is, not necessarily the best) before firing. If his energy level drops below 30 units - he uses **Battery** (of course, if he bought it before), if the energy drops below 5 and he has no **Battery** he surrenders - **White Flag**. At the beginning of the round he makes 1 attemp to buy defensive weapons and 6 offensive weapons.
 
-** **Tosser** - When attacking, he acts exactly like **Poolshark** however, he may have a "better" weapon inventory due to a different purchase tactic. He always activates the best defensive weapon he has before shooting. And just like **Poolshark** he uses **Battery** and **White Flag**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/1250) attempts to buy offensive weapons.
+* **Tosser** - When attacking, he acts exactly like **Poolshark** however, he may have a "better" weapon inventory due to a different purchase tactic. He always activates the best defensive weapon he has before shooting. And just like **Poolshark** he uses **Battery** and **White Flag**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/1250) attempts to buy offensive weapons.
 
-** **Chooser** - Takes as a target the weakest opponent (with the least amount of energy) and aims very precisely, but before the shot the energy of the shot is modified by the parameter of luck :) , that is, despite the precise aiming it does not always hit. He shoots with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He always activates the best defensive weapon he has before shooting and, like **Poolshark**, uses **Battery** and **White Flag**. He purchases just like **Tosser**.
+* **Chooser** - Takes as a target the weakest opponent (with the least amount of energy) and aims very precisely, but before the shot the energy of the shot is modified by the parameter of luck :) , that is, despite the precise aiming it does not always hit. He shoots with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He always activates the best defensive weapon he has before shooting and, like **Poolshark**, uses **Battery** and **White Flag**. He purchases just like **Tosser**.
 
 * **Spoiler** - He shoots exactly like **Chooser** except that he has more luck :) , which means that even if he doesn't hit the target of his choice, it can be a more precise shot than **Chooser**. He uses defensive weapons exactly like **Chooser**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/320) attempts to buy offensive weapons. When buying defensive weapons, he buys only strong and precise weapons - that is, weapons that won't accidentally hurt him.
 
-** **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser**. He shops exactly like **Spoiler**.
+* **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser**. He shops exactly like **Spoiler**.
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
 
