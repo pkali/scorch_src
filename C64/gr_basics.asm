@@ -200,18 +200,23 @@ drawmountainsloop
     ;  X - index in bittable (number of bit) and nothing more (for use) in C64 :)
 ;    jmp IntoDraw    ; jumps inside Draw routine
                     ; because one pixel is already plotted (and who cares? :) )
+    lda xdraw
+    and #%11111000
+    sta temp    ; store for a bit faster add
+    clc     ; and faster
 @
     lda (xbyte),y
     and bittable2,x
     sta (xbyte),y
 ;IntoDraw
     inc ydraw
-    lda xdraw
-    and #%11111000
+    lda temp
+;    lda xdraw
+;    and #%11111000
     ;sta xbyte
     ;---
     ldy ydraw
-    clc
+;    clc    ; C allways clear ! ?
     adc linetableL,y
     sta xbyte
     lda linetableH,y
