@@ -247,7 +247,10 @@ MinCalculated
     lda xdraw
     and #%00000111	; only every 8th pixel
     bne NotFillBytes
-    ; A=0 is here
+    lda temp2
+    cmp #screenheight+1   ; only if minimum is not miniminimum :)
+    beq NotFillBytes
+    
     dec ydraw   ; protection if temp2=screenheight
 @   lda #0
     tay

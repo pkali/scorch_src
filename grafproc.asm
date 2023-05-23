@@ -1539,9 +1539,10 @@ EndDrawing
     rts
 .endp
 
-/*
+
+/* 
 ;--------------------------------------------------
-.proc calculatemountains0
+.proc calculatemountains
 ; Only for testing - makes ground flat (0 pixels)
 ; and places tanks on it
 ; remember to remove in final compilation :)
@@ -1555,6 +1556,13 @@ nextPointDrawing
     inw xdraw
     cpw xdraw #screenwidth
     bne nextPointDrawing
+    ; 20 first points - max height!
+    mwa #mountaintable modify
+    ldy #20
+    lda #0
+@   sta (modify),y
+    dey
+    bpl @-
     ldx NumberOfPlayers
     dex
 SetYofNextTank
