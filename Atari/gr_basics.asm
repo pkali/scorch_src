@@ -204,11 +204,22 @@ drawmountainsloop
     sta ydraw
     sty ydraw+1
 .IF FASTER_GRAF_PROCS = 1
+    ; calculate lower opoint in one screen byte
+    lda xdraw
+    and #%00000111	; only every 8th pixel
+    bne MinCalculated
+    ldy #7
+@   cmp (modify),y
+    bcs NotLower
+    lda (modify),y
+NotLower
+    dey
+    bpl @-
+    sta temp2
+    inc temp2	; this is our minimum
+    iny
+MinCalculated
 ;    there was Drawline proc
-    lda #screenheight
-    sec
-    sbc ydraw
-    sta tempbyte01
     jsr plot.MakePlot
     ; after plot we have: (xbyte),y - addres of screen byte; X - index in bittable (number of bit)
 ;    jmp IntoDraw    ; jumps inside Draw routine
@@ -219,9 +230,25 @@ drawmountainsloop
     sta (xbyte),y
 ;IntoDraw
     adw xbyte #screenBytes
-    dec tempbyte01
+    inc ydraw
+    lda ydraw
+    cmp temp2   ; this is our minimum 
     bne @-
 ;    end of Drawline proc
+;   and now fill bytes!
+    lda xdraw
+    and #%00000111	; only every 8th pixel
+    bne NotFillBytes
+    ; A=0 is here
+    dec ydraw   ; protection if temp2=screenheight
+@   lda #0
+    sta (xbyte),y
+    adw xbyte #screenBytes
+    inc ydraw
+    lda ydraw
+    cmp #screenheight
+    bne @-   
+NotFillBytes
 .ELSE
 ;    there was Drawline proc
 drawline
