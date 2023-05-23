@@ -191,6 +191,22 @@ drawmountainsloop
     sta ydraw
     sty ydraw+1
 .IF FASTER_GRAF_PROCS = 1
+    ; calculate lower point in one screen byte
+    lda xdraw
+    and #%00000111	; only every 8th pixel
+    bne MinCalculated
+    ; A=0
+    ldy #7
+@   cmp (modify),y
+    bcs NotLower
+    lda (modify),y
+NotLower
+    dey
+    bpl @-
+    sta temp2
+    inc temp2	; this is our minimum
+    iny
+MinCalculated
 ;    there was Drawline proc
     lda #screenheight
     sec
@@ -222,10 +238,37 @@ drawmountainsloop
     lda linetableH,y
     adc xdraw+1
     sta xbyte+1
+    tya
     ldy #0
-    dec tempbyte01
+    cmp temp2   ; this is our minimum 
     bne @-
 ;    end of Drawline proc
+;   and now fill bytes!
+    lda xdraw
+    and #%00000111	; only every 8th pixel
+    bne NotFillBytes
+    ; A=0 is here
+    dec ydraw   ; protection if temp2=screenheight
+@   lda #0
+    tay
+    sta (xbyte),y
+    inc ydraw
+    lda xdraw
+;    lda xdraw
+;    and #%11111000
+    ;sta xbyte
+    ;---
+    ldy ydraw
+    clc
+    adc linetableL,y
+    sta xbyte
+    lda linetableH,y
+    adc xdraw+1
+    sta xbyte+1
+    tya
+    cmp #screenheight
+    bne @-   
+NotFillBytes
 .ELSE
 ;    there was Drawline proc
 drawline
@@ -240,7 +283,7 @@ NoMountain
     inw modify
     inw xdraw
     cpw xdraw #screenwidth
-    bne drawmountainsloop
+    jne drawmountainsloop
     rts
 .endp
 ;--------------------------------------------------

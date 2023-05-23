@@ -204,7 +204,7 @@ drawmountainsloop
     sta ydraw
     sty ydraw+1
 .IF FASTER_GRAF_PROCS = 1
-    ; calculate lower opoint in one screen byte
+    ; calculate lower point in one screen byte
     lda xdraw
     and #%00000111	; only every 8th pixel
     bne MinCalculated
