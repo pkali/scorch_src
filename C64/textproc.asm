@@ -169,35 +169,33 @@ NotRobot
 
     mva #sfx_next_player sfx_effect
 
-
-    ; check if all chars are empty (" ")
-    ldy #7
-    lda #0
-@     ora #0 ; NameAdr,y
-      and #$7F  ; remove inverse (Cursor)
-      dey
-    bpl @-
-    tay
-    beq MakeDefaultName
-
     ldy #0
-nextchar04
-    lda #0 ; NameAdr,y
-    and #$7f ; remove inverse (Cursor)
-    sta tanksnames,x
-    inx
-    iny
-    cpy #$08
-    bne nextchar04
+    stx temp+1  ; remember start position in tanksnames
+    sty temp    ; 0 if name is empty
+@
+      lda #0 ; NameAdr,y
+      and #$7f ; remove inverse (Cursor)
+      sta tanksnames,x
+      ora temp
+      sta temp
+      inx
+      iny
+      cpy #$08
+    bne @-
+    lda temp    ; check if all chars are empty (" ")
+    beq MakeDefaultName    
     rts
 MakeDefaultName
-nextchar05
-    lda tanksnamesDefault,x
+    ldx temp+1
+    ldy #7
+@   lda tanksnamesDefault,y
     sta tanksnames,x
     inx
-    iny
-    cpy #$08
-    bne nextchar05
+    dey
+    bne @-
+    ldy tanknr
+    lda digits+1,y
+    sta tanksnames,x
     rts
 .endp
 ;--------------------------------------------------

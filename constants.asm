@@ -225,12 +225,7 @@ SlideLeftTable
 SlideLeftTableLen = *-SlideLeftTable
 ;-------------------------------------------------
 TanksNamesDefault
-    dta d"1st.Tank"
-    dta d"2nd.Tank"
-    dta d"3rd.Tank"
-.REPT MaxPlayers-3, #+4
-    dta d":1th.Tank"
-.ENDR
+    dta d"x.n knaT"
 ;-------------------------------------------------
 TankShapesTable         .BYTE char_tank1
                         .BYTE char_tank2
