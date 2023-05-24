@@ -1269,12 +1269,19 @@ NotRobot
     beq MakeDefaultName    
     rts
 MakeDefaultName
+    ldy difficultyLevel
+    lda LevelNameBeginL,y ; address on the screen
+    sta temp2
+    lda LevelNameBeginH,y
+    sta temp2+1
     ldx temp+1
-    ldy #7
-@   lda tanksnamesDefault,y
+    ldy #1  ; after first char (space)
+@   lda (temp2),y
+    and #$7f    ; remove inverse
     sta tanksnames,x
     inx
-    dey
+    iny
+    cpy #8
     bne @-
     ldy tanknr
     lda digits+1,y

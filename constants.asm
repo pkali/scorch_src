@@ -224,9 +224,6 @@ SlideLeftTable
 ;    .BY %00001100
 SlideLeftTableLen = *-SlideLeftTable
 ;-------------------------------------------------
-TanksNamesDefault
-    dta d"x.n knaT"
-;-------------------------------------------------
 TankShapesTable         .BYTE char_tank1
                         .BYTE char_tank2
                         .BYTE char_tank3
