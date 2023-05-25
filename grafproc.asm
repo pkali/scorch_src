@@ -1401,7 +1401,6 @@ FalloutOfLine
     ldy #0
     lda (temp),y
     sta ydraw
-    lda (temp),y
     clc
     adc #1
     sta (temp),y
@@ -1441,11 +1440,11 @@ NothingToFall
 
 ; starting point
 getrandomY   ;getting random Y coordinate
-    sec
+;    sec  ; ???
     lda random
     cmp #screenheight-(margin*4) ;it means that max line=199
     bcs getrandomY
-    clc
+;    clc    ; C is clear
     adc #(margin*2)
     sta ydraw
     sta yfloat+1
@@ -1762,16 +1761,15 @@ DOTOldLowestValue
     :3 asl  ; *8
     clc
     adc #<TanksNames
-    sta temp  ; TextAddress
+    sta LineAddress4x4  ; TextAddress
     lda #0
     adc #>Tanksnames
-    sta temp+1  ; TextAddress+1
-    mwa temp LineAddress4x4
+    sta LineAddress4x4+1  ; TextAddress+1
 
     ;find length of the tank's name
     ldy #7
 @
-      lda (temp),y
+      lda (LineAddress4x4),y
       bne end_found
       dey
     bne @-
@@ -1926,7 +1924,7 @@ quit_seppuku
     lda ytankstable,x
     sta ydraw
     mva #0 ydraw+1
-X    lda XtanksTableL,x
+X   lda XtanksTableL,x
     sta xdraw
     lda XtanksTableH,x
     sta xdraw+1
@@ -2075,7 +2073,7 @@ ybarrel
 ;--------------------------------------------------
     lda #$00 ; let all P/M disappear
     ldy #7
-@    sta hposp0,y
+@   sta hposp0,y
     dey
     bpl @-
     ;:8 sta hposp0+#    ; optimized... but Y!
@@ -2084,7 +2082,7 @@ ybarrel
 ;--------------------------------------------------
 .proc ColorsOfSprites
     ldy #3
-@    lda TankColoursTable,y ; colours of sprites under tanks
+@   lda TankColoursTable,y ; colours of sprites under tanks
     sta PCOLR0,y
     dey
     bpl @-
