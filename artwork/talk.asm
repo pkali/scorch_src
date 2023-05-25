@@ -52,7 +52,7 @@ L48  dta d"I SHALL OIL MY TURRET WITH YOUR BLOOD", d"."*
 L49  dta d"DIE, TANK-SCUM", d"!"*
 L50  dta d"I'M GONNA BREAK YOUR FACE", d"!"*
 L51  dta d"MAMA SAID KNOCK YOU OUT", d"!"*
-L52  dta d"I HOPE YOU ENJOY PAIN"
+L52  dta d"I HOPE YOU ENJOY PAIN", d"!"*
 L53  dta d"HOW'D YOU LIKE ONE ACROSS YOUR LIPS", d"?"*           ;(sanford and son)
 ;--------------------------------
 L54  dta d"PARTING IS SUCH SWEET SORROW... NOT", d"!"*

@@ -1599,32 +1599,30 @@ NotHigher
     ; all text start from `talk` and end with an inverse.
     ; we go through the `talk`, count number of inverses.
     ; if equal to TextNumberOff, it is our text, printit
-    talk_address = temp2
     inverse_counter = temp
     
     tya
     tax  ; save Y
     mwa #0 inverse_counter
     tay  ; ldy #0
-    mwa #(talk-1) talk_address
+    mwa #(talk-1) LineAddress4x4
     
 @   
-    inw talk_address
-    lda (talk_address),y
+    inw LineAddress4x4
+    lda (LineAddress4x4),y
     spl:inc inverse_counter
     lda TextNumberOff
     beq zeroth_talk  ; special treatment of talk #0
     cmp inverse_counter
     bne @-
     
-    inw talk_address  ; we were pointing at the char with inverse, must go 1 further
+    inw LineAddress4x4  ; we were pointing at the char with inverse, must go 1 further
 zeroth_talk
-    mwa talk_address LineAddress4x4
     
     ; now find length of the text
 @   
     iny
-    lda (talk_address),y
+    lda (LineAddress4x4),y
     bpl @-
     iny
     sty fx
