@@ -1597,19 +1597,41 @@ NotHigher
 
 ;--------------------------------------------------------
 .proc DisplayOffensiveTextNr ;
-    ldx TextNumberOff
-    lda talk.OffensiveTextTableL,x
-    sta LineAddress4x4
-    lda talk.OffensiveTextTableH,x
-    sta LineAddress4x4+1
-    inx ; the next text
-    lda talk.OffensiveTextTableH,x
-    sta temp+1
-    lda talk.OffensiveTextTableL,x
-    sta temp  ; opty possible
-    ; substract address of the next text from previous to get text length
-    sbw temp LineAddress4x4 temp2
-    mva temp2 fx
+    ; all text start from `talk` and end with an inverse.
+    ; we go through the `talk`, count number of inverses.
+    ; if equal to TextNumberOff, it is our text, printit
+    talk_address = temp2
+    inverse_counter = temp
+    
+    tya
+    tax  ; save Y
+    mwa #0 inverse_counter
+    tay  ; ldy #0
+    mwa #(talk-1) talk_address
+    
+@   
+    inw talk_address
+    lda (talk_address),y
+    spl:inc inverse_counter
+    lda TextNumberOff
+    beq zeroth_talk  ; special treatment of talk #0
+    cmp inverse_counter
+    bne @-
+    
+    inw talk_address  ; we were pointing at the char with inverse, must go 1 further
+zeroth_talk
+    mwa talk_address LineAddress4x4
+    
+    ; now find length of the text
+@   
+    iny
+    lda (talk_address),y
+    bpl @-
+    iny
+    sty fx
+
+    txa  ; load Y
+    tay
 
     ;jsr Display4x4AboveTank
     ;rts
@@ -1653,7 +1675,7 @@ NotHigher
     bpl DOTNnotLessThanZero
       ;less than zero, so should be zero
       mwa #0 temp
-    beq DOTNnoOverflow
+    beq DOTNnoOverflow  ; jmp
 
 DOTNnotLessThanZero
     ;so check if end larger than screenwidth
@@ -1786,7 +1808,7 @@ TypeLine4x4Loop
     ldy LineCharNr
 
     lda (LineAddress4x4),y
-    and #$3f ;always CAPITAL letters
+    and #$3f ;always CAPITAL letters, also ignore inverse
     sta CharCode4x4
     mwa LineXdraw dx
     mva LineYdraw dy
