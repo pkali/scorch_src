@@ -201,10 +201,12 @@ MakeDefaultName
 @   lda (temp2),y
     and #$7f    ; remove inverse
     sta tanksnames,x
+    beq MakeNumber  ; first space found :)
     inx
     iny
     cpy #8
     bne @-
+MakeNumber
     ldy tanknr
     lda digits+1,y
     sta tanksnames,x
