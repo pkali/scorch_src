@@ -211,10 +211,7 @@ SettingEnergies
       sta LASTeXistenZ,x
       ; anything in eXistenZ table means that this tank exist
       ; in the given round
-      lda #<990
-      sta MaxForceTableL,x
-      lda #>990
-      sta MaxForceTableH,x
+      jsr MaxForceCalculate
       lda #<350
       sta ForceTableL,x
       lda #>350
