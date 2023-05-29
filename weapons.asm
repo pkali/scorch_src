@@ -1075,7 +1075,6 @@ EndOfTheDirt
 @   jsr ClearTankNr
     inc ytankstable,x
     jsr PutTankNr
-    jsr PutTankNr
     dec ExplosionRadius
     bne @-
 
@@ -1122,17 +1121,31 @@ RightSide
     bmi PunchLeft
 PunchRight
     jsr ClearTankNr
+    lda XtanksTableH,x
+    cmp #>(screenwidth-TankWidth-2) ; 2 pixels correction due to a barrel wider than tank
+    bne @+
+    lda XtanksTableL,x
+    cmp #<(screenwidth-TankWidth-2) ; 2 pixels correction due to a barrel wider than tank
+@   bcs RightEdge
     inc xtankstableL,x
     bne @+
     inc xtankstableH,x
+RightEdge
 @   jsr PutTankNr
     jmp TankPunched
 PunchLeft
     jsr ClearTankNr
+    lda XtanksTableH,x
+    bne NotLeftEdge
+    lda XtanksTableL,x
+    cmp #3    ; 2 pixels correction due to a barrel wider than tank
+    bcc LeftEdge
+NotLeftEdge
     lda xtankstableL,x
     bne @+
     dec xtankstableH,x
 @   dec xtankstableL,x
+LeftEdge
     jsr PutTankNr
 TankPunched
     plx
@@ -1142,10 +1155,10 @@ TooFar
 NotMy    
 DeadTank
     dey
-    bpl CheckingNextTank
-    jsr WaitOneFrame
+    jpl CheckingNextTank
+    ;jsr WaitOneFrame
     sbb ExplosionRadius #2
-    bne CheckRange
+    jne CheckRange
     rts
 .endp
 
