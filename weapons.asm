@@ -44,7 +44,7 @@ ExplosionRoutines
     .word babydigger-1               ;Baby_Digger    ;_19
     .word digger-1                   ;Digger         ;_20
     .word heavydigger-1              ;Heavy_Digger   ;_21
-    .word babysandhog-1              ;Baby_Sandhog   ;_22
+    .word punch-1              ;Baby_Sandhog   ;_22
     .word sandhog-1                  ;Sandhog        ;_23
     .word heavysandhog-1             ;Heavy_Sandhog  ;_24
     .word dirtclod-1                 ;Dirt_Clod      ;_25
@@ -1052,6 +1052,103 @@ EndOfTheDirt
     mwa ycircle ydraw
     rts
 .endp
+; --------------------------------------------------
+.proc punch ;
+; --------------------------------------------------
+; 
+    mva #36 ExplosionRadius
+    jsr CalculateExplosionRange
+    
+    mva #sfx_dirt_chrg_s sfx_effect
+    
+    mva #15 ExplosionRadius
+    ; Hoop
+    ; 15 pixels up
+@   jsr ClearTankNr
+    dec ytankstable,x
+    jsr PutTankNr
+    jsr WaitOneFrame
+    dec ExplosionRadius
+    bne @-
+    ; ans down
+    mva #15 ExplosionRadius
+@   jsr ClearTankNr
+    inc ytankstable,x
+    jsr PutTankNr
+    jsr PutTankNr
+    dec ExplosionRadius
+    bne @-
+
+    mva #sfx_dirt_chrg_s sfx_effect
+   
+    mva #32 ExplosionRadius
+CheckRange
+    ; punch all (not dead :) tanks in range
+    ldx TankNr
+    ldy NumberOfPlayers
+    dey
+CheckingNextTank
+    lda eXistenZ,y
+    beq DeadTank
+    cpy TankNr
+    beq NotMy
+    ; it's not dead tank - check range
+    mva #0 temp2    ; tank direction (0 - on right side, $ff - on left side)
+    sec
+    lda xtankstableL,y
+    sbc xtankstableL,x
+    sta temp
+    lda xtankstableH,y
+    sbc xtankstableH,x
+    sta temp+1
+    bpl RightSide
+    dec temp2   ; on left side flag
+    lda temp
+    eor #$ff
+    sta temp
+    lda temp+1
+    eor #$ff
+    sta temp+1
+RightSide
+    bne TooFar
+    lda temp
+    cmp ExplosionRadius
+    bcs TooFar
+    ; tank in range!
+    phy
+    phx
+    sty TankNr
+    bit temp2
+    bmi PunchLeft
+PunchRight
+    jsr ClearTankNr
+    inc xtankstableL,x
+    bne @+
+    inc xtankstableH,x
+@   jsr PutTankNr
+    jmp TankPunched
+PunchLeft
+    jsr ClearTankNr
+    lda xtankstableL,x
+    bne @+
+    dec xtankstableH,x
+@   dec xtankstableL,x
+    jsr PutTankNr
+TankPunched
+    plx
+    ply
+    stx TankNr
+TooFar    
+NotMy    
+DeadTank
+    dey
+    bpl CheckingNextTank
+    jsr WaitOneFrame
+    sbb ExplosionRadius #2
+    bne CheckRange
+    rts
+.endp
+
 ;--------------------------------------------------
 .proc BeforeFire ;TankNr (byte)
 ;--------------------------------------------------
@@ -1494,14 +1591,40 @@ AfterStrongShoot
     bcs ShotUnderGround
     jsr Flight
     mva #1 color
-    rts
+    bne ClearOffensiveText
 ShotUnderGround
     mwa xtraj+1 xdraw    ; but why not XHit and YHit !!!???
     mwa ytraj+1 ydraw
     mva #$ff HitFlag
-    rts
+    ;here we clear offensive text (after a shoot)
+ClearOffensiveText
+    ldy TankNr
+    mva #$00 plot4x4color
+    jmp DisplayOffensiveTextNr
+;    rts
 .endp
 
+;--------------------------------------------------
+.proc NoShoot  ;TankNr (byte)
+;--------------------------------------------------
+; This is "Shoot" procedure for weapons that do not require a flying bullet.
+    ; Shoots tank nr X !!! :)
+    ; set the ending coordinates of bullet with correction
+    ldy #0
+    clc
+    lda xtankstableL,x
+    adc #4  ; tank "center" :)
+    sta xdraw    ; but why not XHit and YHit !!!???
+    tya ;0
+    adc xtankstableH,x
+    sta xdraw+1
+    lda ytankstable,x
+    sta ydraw
+    sty ydraw+1 ;0
+    dey ; $ff
+    sty HitFlag
+    rts
+.endp
 ;--------------------------------------------------
 .proc Flight  ; Force(byte.byte), Wind(0.word)
 ; Angle(byte) 128=0, 255=maxright, 0=maxleft
@@ -2100,13 +2223,10 @@ mrLoopi
 
     jsr ShellDelay
     ;
-    phx
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     bpl ExitnotPressed
-    plx
     rts        ; exit if pressed 'Exit keys'
 ExitnotPressed
-    plx
     ;
 
 MIRVdoNotChangeY

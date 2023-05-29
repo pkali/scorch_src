@@ -420,18 +420,23 @@ StandardShoot
     dec Energy,x   ; lower energy to eventually let tanks commit suicide
 
 ShootNow
-    jsr Shoot
-    ;here we clear offensive text (after a shoot)
-    ldy TankNr
-    mva #$00 plot4x4color
-    jsr DisplayOffensiveTextNr
+    lda ActiveWeapon,x
+    cmp #ind_Buy_me ; BFG
+    beq WeponNoFlight   ; but with explosion 
+    cmp #ind_Baby_Sandhog   ; Punch
+    beq WeponNoFlight   ; but with explosion 
+    
+    jsr Shoot   ; bullet flight
 
     bit escFlag
     spl:rts        ; keys Esc or O
 
     lda HitFlag ;0 if missed
     beq missed
-
+    bne GoExplosion
+WeponNoFlight
+    jsr NoShoot ; no bullet flight
+GoExplosion
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku

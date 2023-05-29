@@ -590,12 +590,12 @@ nokeys
     lda CONSOL
     and #%00000001 ; START KEY
     beq noShellDelay
-    ldx flyDelay
+    ldy flyDelay
 DelayLoop
       lda VCOUNT
 @       cmp VCOUNT
       beq @-
-      dex
+      dey
     bne DelayLoop
 noShellDelay
     rts
