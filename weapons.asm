@@ -1059,7 +1059,7 @@ EndOfTheDirt
     mva #36 ExplosionRadius
     jsr CalculateExplosionRange
     
-    mva #sfx_dirt_chrg_s sfx_effect
+    mva #sfx_baby_missile sfx_effect
     
     mva #15 ExplosionRadius
     ; Hoop
@@ -2857,7 +2857,11 @@ CheckCollisionWithTankLoop
     tay
     lda xtankstableH,x
     sbc #0
+    bpl GreaterThanZero
     ; bmi ShieldOverLeftEdge    ; I do not know whether to check it. Probably not :) !!!
+    ldy #0
+    tya
+GreaterThanZero
     cmp xdraw+1
     bne @+
     cpy xdraw
