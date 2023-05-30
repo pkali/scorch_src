@@ -44,14 +44,14 @@ ExplosionRoutines
     .word babydigger-1               ;Baby_Digger    ;_19
     .word digger-1                   ;Digger         ;_20
     .word heavydigger-1              ;Heavy_Digger   ;_21
-    .word punch-1              ;Baby_Sandhog   ;_22
-    .word sandhog-1                  ;Sandhog        ;_23
-    .word heavysandhog-1             ;Heavy_Sandhog  ;_24
-    .word dirtclod-1                 ;Dirt_Clod      ;_25
-    .word dirtball-1                 ;Dirt_Ball      ;_26
-    .word tonofdirt-1                ;Ton_of_Dirt    ;_27
-    .word liquiddirt-1               ;Liquid_Dirt    ;_28
-    .word dirtcharge-1               ;Dirt_Charge    ;_29
+    .word sandhog-1                  ;Sandhog        ;_22
+    .word heavysandhog-1             ;Heavy_Sandhog  ;_23
+    .word dirtclod-1                 ;Dirt_Clod      ;_24
+    .word dirtball-1                 ;Dirt_Ball      ;_25
+    .word tonofdirt-1                ;Ton_of_Dirt    ;_26
+    .word liquiddirt-1               ;Liquid_Dirt    ;_27
+    .word dirtcharge-1               ;Dirt_Charge    ;_28
+    .word punch-1              ;Baby_Sandhog   ;_29
     .word BFG-1                      ;Buy_me         ;_30
     .word laser-1                    ;Laser          ;_31
 
@@ -1062,12 +1062,21 @@ EndOfTheDirt
     mva #sfx_baby_missile sfx_effect
     
     mva #15 ExplosionRadius
-    ; Hoop
+    
+    lda ytankstable,x
+    cmp #13+15     ; Check if tank is too high (13 - tank with shield, 15 - Jump)
+    bcs TooHighNoJump
+    ; Jump
     ; 15 pixels up
 @   jsr ClearTankNr
     dec ytankstable,x
     jsr PutTankNr
+;    jsr WaitOneFrame
+    lda ExplosionRadius
+    cmp #5
+    bcs Physics
     jsr WaitOneFrame
+Physics
     dec ExplosionRadius
     bne @-
     ; ans down
@@ -1078,6 +1087,7 @@ EndOfTheDirt
     dec ExplosionRadius
     bne @-
 
+TooHighNoJump
     mva #sfx_dirt_chrg_s sfx_effect
    
     mva #32 ExplosionRadius
@@ -1090,7 +1100,7 @@ CheckingNextTank
     lda eXistenZ,y
     beq DeadTank
     cpy TankNr
-    beq NotMy
+    beq Myself
     ; it's not dead tank - check range
     mva #0 temp2    ; tank direction (0 - on right side, $ff - on left side)
     sec
@@ -1152,7 +1162,7 @@ TankPunched
     ply
     stx TankNr
 TooFar    
-NotMy    
+Myself    
 DeadTank
     dey
     jpl CheckingNextTank

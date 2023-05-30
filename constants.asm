@@ -252,7 +252,6 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Baby_Digger
   .by >price_Digger
   .by >price_Heavy_Digger
-  .by >price_Baby_Sandhog
   .by >price_Sandhog
   .by >price_Heavy_Sandhog
   .by >price_Dirt_Clod
@@ -260,6 +259,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Ton_of_Dirt
   .by >price_Liquid_Dirt
   .by >price_Dirt_Charge
+  .by >price_Punch
   .by >price_Buy_me
   .by >price_Laser
   .by >price_White_Flag
@@ -301,7 +301,6 @@ WeaponPriceL
   .by <price_Baby_Digger
   .by <price_Digger
   .by <price_Heavy_Digger
-  .by <price_Baby_Sandhog
   .by <price_Sandhog
   .by <price_Heavy_Sandhog
   .by <price_Dirt_Clod
@@ -309,6 +308,7 @@ WeaponPriceL
   .by <price_Ton_of_Dirt
   .by <price_Liquid_Dirt
   .by <price_Dirt_Charge
+  .by <price_Punch
   .by <price_Buy_me
   .by <price_Laser
   .by <price_White_Flag
@@ -357,14 +357,14 @@ WeaponUnits
   .by 10 ;Baby_Digger    ;_19
   .by 5  ;Digger         ;_20
   .by 2  ;Heavy_Digger   ;_21
-  .by 10 ;Baby_Sandhog   ;_22
-  .by 5  ;Sandhog        ;_23
-  .by 2  ;Heavy_Sandhog  ;_24
-  .by 5  ;Dirt_Clod      ;_25
-  .by 3  ;Dirt_Ball      ;_26
-  .by 1  ;Ton_of_Dirt    ;_27
-  .by 4  ;Liquid_Dirt    ;_28
-  .by 2  ;Dirt_Charge    ;_29
+  .by 5  ;Sandhog        ;_22
+  .by 2  ;Heavy_Sandhog  ;_23
+  .by 5  ;Dirt_Clod      ;_24
+  .by 3  ;Dirt_Ball      ;_25
+  .by 1  ;Ton_of_Dirt    ;_26
+  .by 4  ;Liquid_Dirt    ;_27
+  .by 2  ;Dirt_Charge    ;_28
+  .by 10 ;Punch          ;_29
   .by 1  ;Buy_me         ;_30
   .by 5  ;Laser          ;_31
   .by 1  ;White_Flag     ;_32
@@ -393,10 +393,10 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
     .by %11001110
     ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
-    ; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+    ; "Digger          ","Heavy Digger    ","Sandhog         ","Heavy Sandhog   "
     .by %00000000
-    ; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-    ; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Laser           "
+    ; "Dirt Clod       ","Dirt Ball       ","Ton of Dirt     ","Liquid Dirt     "
+    ; "Dirt Charge     ","Punch           ","Buy me!         ","Laser           "
     .by %00000000
     ; "White Flag      ","Battery         ","Hovercraft      ","Parachute       "
     ; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
@@ -414,10 +414,10 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
     ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
     .by %01000000
     ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
-    ; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+    ; "Digger          ","Heavy Digger    ","Sandhog         ","Heavy Sandhog   "
     .by %00000000
-    ; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-    ; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Laser           "
+    ; "Dirt Clod       ","Dirt Ball       ","Ton of Dirt     ","Liquid Dirt     "
+    ; "Dirt Charge     ","Punch           ","Buy me!         ","Laser           "
     .by %00000000
     ; "White Flag      ","Battery         ","Hovercraft      ","Parachute       "
     ; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
@@ -451,14 +451,14 @@ WeaponSymbols
     .by $53 ;ind_Baby_Digger     ;_19
     .by $54 ;ind_Digger          ;_20
     .by $55 ;ind_Heavy_Digger    ;_21
-    .by $56 ;ind_Baby_Sandhog    ;_22
-    .by $57 ;ind_Sandhog         ;_23
-    .by $58 ;ind_Heavy_Sandhog   ;_24
-    .by $59 ;ind_Dirt_Clod       ;_25
-    .by $5a ;ind_Dirt_Ball       ;_26
-    .by $5b ;ind_Ton_of_Dirt     ;_27
-    .by $60 ;ind_Liquid_Dirt     ;_28
-    .by $7b ;ind_Dirt_Charge     ;_29
+    .by $57 ;ind_Sandhog         ;_22
+    .by $58 ;ind_Heavy_Sandhog   ;_23
+    .by $59 ;ind_Dirt_Clod       ;_24
+    .by $5a ;ind_Dirt_Ball       ;_25
+    .by $5b ;ind_Ton_of_Dirt     ;_26
+    .by $60 ;ind_Liquid_Dirt     ;_27
+    .by $7b ;ind_Dirt_Charge     ;_28
+    .by $56 ;ind_Punch           ;_29
     .by $1f ;ind_Buy_me          ;_30
     .by $20 ;ind_Laser           ;_31
     .by $5f ;ind_White_Flag      ;_32
@@ -502,14 +502,14 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Baby Digger     " ; 19
     dta d"Digger          " ; 20
     dta d"Heavy Digger    " ; 21
-    dta d"Baby Sandhog    " ; 22
-    dta d"Sandhog         " ; 23
-    dta d"Heavy Sandhog   " ; 24
-    dta d"Dirt Clod       " ; 25
-    dta d"Dirt Ball       " ; 26
-    dta d"Ton of Dirt     " ; 27
-    dta d"Liquid Dirt     " ; 28
-    dta d"Dirt Charge     " ; 29
+    dta d"Sandhog         " ; 22
+    dta d"Heavy Sandhog   " ; 23
+    dta d"Dirt Clod       " ; 24
+    dta d"Dirt Ball       " ; 25
+    dta d"Ton of Dirt     " ; 26
+    dta d"Liquid Dirt     " ; 27
+    dta d"Dirt Charge     " ; 28
+    dta d"Punch           " ; 29
     dta d"Best F...g Gifts" ; 30
     dta d"Laser           " ; 31
 ;------defensives
@@ -558,7 +558,6 @@ weaponsOfDeath  ; weapons used in tank death animations
     dta ind_Baby_Digger
     dta ind_Digger
     dta ind_Heavy_Digger
-    dta ind_Baby_Sandhog
     dta ind_Sandhog
     dta ind_Heavy_Sandhog
     dta ind_Dirt_Clod

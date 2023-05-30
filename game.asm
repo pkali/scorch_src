@@ -423,7 +423,7 @@ ShootNow
     lda ActiveWeapon,x
     cmp #ind_Buy_me ; BFG
     beq WeponNoFlight   ; but with explosion 
-    cmp #ind_Baby_Sandhog   ; Punch
+    cmp #ind_Punch   ; Punch
     beq WeponNoFlight   ; but with explosion 
     
     jsr Shoot   ; bullet flight
