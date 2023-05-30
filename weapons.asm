@@ -1238,7 +1238,7 @@ notpressed
 
     lda kbcode
     and #%10111111 ; SHIFT elimination
-
+    
     cmp #@kbcode._A  ; $3f  ; A
     bne @+
 callActivation
@@ -1329,6 +1329,10 @@ checkJoy
     lda joyToKeyTable,y
     jmp jumpFromStick
 notpressedJoy
+    ;second fire
+    lda PADDL0
+    cmp #$e4
+    jne pressedTAB
     ;fire
     lda STRIG0
     jeq pressedSpace

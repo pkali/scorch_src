@@ -418,8 +418,11 @@ checkJoyGetKey
 notpressedJoyGetKey
     ;fire
     lda STRIG0
-     beq JoyButton
-    .IF TARGET = 800    ; Select and Option key only on A800
+    beq JoyButton
+    .IF TARGET = 800    ; Second joy button , Select and Option key only on A800
+      lda PADDL0
+      cmp #$e4
+      bne SecondButton
       bne checkSelectKey
 checkSelectKey
       lda CONSOL
@@ -432,6 +435,7 @@ checkSelectKey
 OptionPressed
     lda #@kbcode._atari    ; Option key
     bne getkeyend
+SecondButton
 SelectPressed
     lda #@kbcode._tab    ; Select key
     bne getkeyend
@@ -467,6 +471,13 @@ StillWait
       lda STRIG0
       beq StillWait
     .IF TARGET = 800
+      ; second joy button
+      lda PADDL0
+      cmp #$e4
+      bne StillWait
+;      lda PADDL1
+;      cmp #$e4
+;      bne StillWait
       lda SKSTAT
       cmp #$ff
       bne StillWait

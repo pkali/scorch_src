@@ -177,6 +177,14 @@ EndOfCreditsVBI
         sta STICK0
         lda STRIG0,x
         sta STRIG0
+        ; and PADDLES (2 and 3 joystick button)
+        txa
+        asl
+        tax
+        lda PADDL0,x
+        sta PADDL0
+        lda PADDL1,x
+        sta PADDL1
         jmp XITVBV
     .ELIF TARGET = 5200
         lda SkStatSimulator
