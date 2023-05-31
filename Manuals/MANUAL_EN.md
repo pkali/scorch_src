@@ -168,13 +168,13 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Baby Digger | 0 (no energy is subtracted, but a portion of the ground is undermined in a radius of 60 pixels from the point of impact) |
 | Digger | 0 (as above - greater undermining) |
 | Heavy Digger | 0 (as above - greatest undermining) |
-| Baby Sandhog | (as above - another way of undermining) |
-| Sandhog | 0 (as above - larger dig) |
+| Sandhog | 0 (as above - another way of undermining) |
 | Heavy Sandhog | 0 (as above - largest dig) |
 | Dirt Clod | 0 (no energy is subtracted, but a ground ball with a radius of 12 pixels from the hit point is created. The weapon is useful for burying the opponent) |
 | Dirt Ball | 0 (as above, but the radius of the ball is 22 pixels) |
 | Ton of Dirt | 0 (as above, but the radius of the ball is 31 pixels) |
 | Liquid Dirt | 0 (floods the ground at the point of hit with liquid soil, filling in the depressions) |
+| Punch | (no energy is subtracted, but all tanks within a radius of 32 pixels are pushed back, and after being pushed back, they may fall or be buried) |
 | Laser | x 100 (but here it is also different - equally 100 only in the case of a direct hit simply subtract 100 units of energy - that is, the tank always dies) |
 
 Large points received by the player is the number of tanks that died earlier than him. If any of the other tanks capitulated earlier (**White Flag**) is not added to those that died and does not give points.

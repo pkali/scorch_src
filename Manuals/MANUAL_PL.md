@@ -168,14 +168,14 @@ A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli br
 | Baby Digger | 0 (nie jest odejmowana energia, ale podkopywana jest część gruntu promieniu 60 pikseli od punktu trafienia) |
 | Digger | 0 (jak wyżej - większy podkop) |
 | Heavy Digger | 0 (jak wyżej - największy podkop) |
-| Baby Sandhog | 0 (jak wyżej - inny sposób podkopywania) |
-| Sandhog | 0 (jak wyżej - większy podkop) |
+| Sandhog | 0 (jak wyżej - inny sposób podkopywania) |
 | Heavy Sandhog | 0 (jak wyżej - największy podkop) |
 | Dirt Clod | 0 (nie jest odejmowana energia, ale tworzona jest kula gruntu o promieniu 12 pikseli od punktu trafienia. Broń przydatna do zakopywania przeciwnika) |
 | Dirt Ball | 0 (jak wyżej, ale promień kuli to 22 piksele) |
 | Ton of Dirt | 0 (jak wyżej, ale promień kuli to 31 pikseli) |
 | Liquid Dirt | 0 (zalewa grunt w punkcie trafienia płynną glebą wypełniając zagłębienia) |
 | Dirt Charge | 0 (nie jest odejmowana energia, ale usypywany jest dodatkowy grunt w górę od punktu trafienia w promieniu 61 pikseli. Broń przydatna do zakopywania przeciwnika) |
+| Punch | 0 (nie jest odejmowana energia, ale wszystkie czołgi w promieniu 32 pikseli zostają odepchnięte, a po odepchnięciu mogą spaść czy zostać zasypane) |
 | Laser | x 100 (ale tu także jest inaczej - równo 100 tylko w przypadku bezpośredniego trafienia po prostu odejmujemy 100 jednostek energii - czyli czołg zawsze ginie).|
 
 Duże punkty otrzymane przez gracza to ilość czołgów, które zginęły wcześniej niż on. Jeśli któryś z innych czołgów skapitulował wcześniej (Biała Flaga) nie jest doliczany do tych które zginęły i nie daje punktów.
