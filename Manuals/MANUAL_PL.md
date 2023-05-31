@@ -30,7 +30,7 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru) lub (jeśli kursor wskazuje opcję wyboru siły wiatru "Wind") zmieniają sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie "Wind".
+Klawisz [TAB], [SELECT] lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny), a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru) lub (jeśli kursor wskazuje opcję wyboru siły wiatru "Wind") zmieniają sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie "Wind".
 
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
@@ -38,7 +38,7 @@ Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 ![Ekran wyboru graczy i poziomu trudności.](images/DiffMenu.png)
 
 Drugi ekran powtarza się dla każdego z graczy można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN) czy też komputer (pozostałe opcje).
-Klawisz [TAB] lub [SELECT], a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz.
+Klawisz [TAB], [SELECT] lub drugi przycisk joysticka, a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz.
 Klawisz [INVERSE] lub [OPTION] umożliwiają wybór jednego z 3 dostępnych kształtów czołgów. Na konsoli Atari 5200 uzyskuje się to poprzez cykliczne wybieranie kolejnych portów joysticka klawiszem [5].
 Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.
 Po naciśnięciu klawisza [RETURN] lub krótkim naciśnięciu przycisku Joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla wszystkich.
@@ -50,7 +50,7 @@ Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 ![Ekran zakupów broni ofensywnych.](images/PurOffensive.png)
 ![Ekran zakupów broni defensywnych.](images/PurDefensive.png)
 
-Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za ten cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz [TAB] lub strzałka w lewo czy też ruch joystickiem w lewo zmieniają ekran na bronie defensywne lub ofensywne, klawisz [SPACJA] lub strzałka w prawo a także joystick w prawo realizują zakup wskazanej broni.
+Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za ten cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz [TAB] lub strzałka w lewo czy też ruch joystickiem w lewo lub drugi przycisk joysticka zmieniają ekran na bronie defensywne lub ofensywne, klawisz [SPACJA] lub strzałka w prawo a także joystick w prawo realizują zakup wskazanej broni.
 
 Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu aktywacji broni defensywnych.
 
@@ -81,7 +81,7 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 | A800 | 5200 | funkcja |
 | --- | --- | --- |
 | [SPACJA] | [0] | lub przycisk joysticka naciśnięte krótko - oddanie strzału |
-| [TAB] lub [SELECT] | [5] | wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio joystickiem - trzeba wybrać Inventory). |
+| [TAB] lub [SELECT] | [5] | lub drugi przycisk joysticka - wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio standardowym joystickiem - trzeba wybrać Inventory). |
 | [I] | [9] | lub dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną. |
 | [A] lub [OPTION] | [7] | bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych. |
 | [M] | [PAUSE] | wyłączenie/włączenie muzyki w tle |

@@ -30,7 +30,7 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
-The [TAB] or [SELECT] key, and on the Atari 5200 console, the [5] controller key change the color of the mountains (3 versions to choose from) or (if the cursor indicates the wind strength selection option "Wind") change the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the "?" sign next to the word "Wind".
+The [TAB], [SELECT] or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the [5] controller key change the color of the mountains (3 versions to choose from) or (if the cursor indicates the wind strength selection option "Wind") change the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the "?" sign next to the word "Wind".
 
 The [RETURN] key or a joystick button moves to the next screen.
 
@@ -38,7 +38,7 @@ The [RETURN] key or a joystick button moves to the next screen.
 ![Name of players and game level screen.](images/DiffMenu.png)
 
 The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options).
-The [TAB] or [SELECT] key, and on the Atari 5200 console the [5] controller key allow you to choose which joystick port the player will use.
+The [TAB], [SELECT] or second joystick button, and on the Atari 5200 console the [5] controller key allow you to choose which joystick port the player will use.
 The [INVERSE] or [OPTION] key allows you to select one of the 3 available tank shapes. On the Atari 5200 console, this is achieved by cycling through joystick ports with the [5] key.
 At the same time, you can enter the name of the selected player from the keyboard.
 When the [RETURN] key is pressed or the Joystick button is pressed briefly, the screen switches to the next player until the difficulty levels for each player are selected.
@@ -50,7 +50,7 @@ If the name is not entered, it will be supplemented with the default name.
 ![Shopping offensives screen.](images/PurOffensive.png)
 ![Shopping defensives screen.](images/PurDefensive.png)
 
-On this screen, you can make purchases of offensive and defensive weapons. Only those weapons that the player can afford are visible, along with information about the price and the number of units of a given weapon that will be obtained for that price. The information on the screen probably needs no more description. You move through the lists with the cursor keys (up and down) or with the joystick, the [TAB] key or the left arrow or the left joystick tilt change the screen to defensive or offensive weapons, the [SPACE] key or the right arrow and also the joystick to the right does the purchase of the indicated weapon.
+On this screen, you can make purchases of offensive and defensive weapons. Only those weapons that the player can afford are visible, along with information about the price and the number of units of a given weapon that will be obtained for that price. The information on the screen probably needs no more description. You move through the lists with the cursor keys (up and down) or with the joystick, the [TAB] key or the left arrow, the left joystick tilt or second joystick button change the screen to defensive or offensive weapons, the [SPACE] key or the right arrow and also the joystick to the right does the purchase of the indicated weapon.
 
 The [RETURN] key or the joystick button press switches to the defensive weapon activation screen. Here you can activate previously bought defensive (or offensive after switching with [TAB], etc) weapons. 
 
@@ -81,7 +81,7 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 | A800 | 5200 | function |
 | --- | --- | --- |
 | [SPACE] | [0] | or joystick button pressed briefly - firing a shot. |
-| [TAB] or [SELECT] | [5] | selection of offensive weapons (this option is not available directly with the joystick - you need to select Inventory). |
+| [TAB] or [SELECT] | [5] | or second joystick button - selection of offensive weapons (this option is not available directly with one button joystick - you need to select Inventory). |
 | [I] | [9] | or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon. |
 | [A] or [OPTION] | [7] | go directly to the defensive weapons activation.
 | [M] | [PAUSE] | disable/enable background music. |
