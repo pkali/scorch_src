@@ -1169,6 +1169,8 @@ DeadTank
     ;jsr WaitOneFrame
     sbb ExplosionRadius #2
     jne CheckRange
+    ldy #10
+    jsr PauseYFrames
     rts
 .endp
 
