@@ -16,7 +16,8 @@
 ; - money each player has on the beginning of the game (moneyL i moneyH)
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
-    jsr clearscreen   ;let the screen be clean
+    mwa #(display+40*140) temp  ; we only need to clear last 60 lines (faster)
+    jsr clearscreen.Go   ;let the screen be clean
 
     mwa #DisplayCopyRom temp
     mwa #display temp2

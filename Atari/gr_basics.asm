@@ -579,7 +579,7 @@ EndPut4x4
 .proc ClearScreen
 ;--------------------------------------------------
     mwa #display temp
-    ldy #0
+Go    ldy #0
 @     lda #$ff
       sta (temp),y
       inw temp
