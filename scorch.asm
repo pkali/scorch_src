@@ -450,6 +450,7 @@ getkeyend
 Check2button
     lda PADDL0
     and #$c0
+    eor #$C0
     cmp PaddleState
     sta PaddleState
     rts
