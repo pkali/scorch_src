@@ -1329,10 +1329,11 @@ checkJoy
     lda joyToKeyTable,y
     jmp jumpFromStick
 notpressedJoy
-    ;second fire
-    lda PADDL0
-    cmp #$e4
-    jne pressedTAB
+    .IF TARGET = 800
+    ;second fire only Atari 800
+    jsr GetKey.Check2button
+    jcc pressedTAB
+    .ENDIF
     ;fire
     lda STRIG0
     jeq pressedSpace

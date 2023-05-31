@@ -35,8 +35,9 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $57
+FirstZpageVariable = $56
     .zpvar DliColorBack        .byte = FirstZpageVariable
+    .zpvar PaddleState      .byte   ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr        .byte
     .zpvar GradientColors    .word
     .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
@@ -420,9 +421,8 @@ notpressedJoyGetKey
     lda STRIG0
     beq JoyButton
     .IF TARGET = 800    ; Second joy button , Select and Option key only on A800
-      lda PADDL0
-      cmp #$e4
-      bne SecondButton
+      jsr Check2button
+      bcc SecondButton
       bne checkSelectKey
 checkSelectKey
       lda CONSOL
@@ -446,6 +446,14 @@ getkeyend
     sty ATRACT    ; reset atract mode
     mvy #sfx_keyclick sfx_effect
     rts
+    .IF TARGET = 800    ; Second joy button only on A800
+Check2button
+    lda PADDL0
+    and #$c0
+    cmp PaddleState
+    sta PaddleState
+    rts
+    .ENDIF
 .endp
 
 ;--------------------------------------------------
@@ -472,12 +480,8 @@ StillWait
       beq StillWait
     .IF TARGET = 800
       ; second joy button
-      lda PADDL0
-      cmp #$e4
-      bne StillWait
-;      lda PADDL1
-;      cmp #$e4
-;      bne StillWait
+;      jsr GetKey.Check2button
+;      bcs StillWait
       lda SKSTAT
       cmp #$ff
       bne StillWait

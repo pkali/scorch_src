@@ -364,7 +364,7 @@ WeaponUnits
   .by 1  ;Ton_of_Dirt    ;_26
   .by 4  ;Liquid_Dirt    ;_27
   .by 2  ;Dirt_Charge    ;_28
-  .by 10 ;Punch          ;_29
+  .by 2  ;Punch          ;_29
   .by 1  ;Buy_me         ;_30
   .by 5  ;Laser          ;_31
   .by 1  ;White_Flag     ;_32
