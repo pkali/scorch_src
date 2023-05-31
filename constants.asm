@@ -530,10 +530,10 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Auto Defense    " ; 46
     dta d"Spy Hard        " ; 47
 
-DefensiveEnergy = *-(last_offensive - first_offensive +1)  ; to fake the table for ALL weapons
+DefensiveEnergy = *-number_of_offensives  ; to fake the table for ALL weapons
     .by 00  ; White Flag
-    .by 00  ; Heat Guidance
-    .by 98  ; Let's go!
+    .by 00  ; Battery
+    .by 98  ; Hovercraft
     .by 00  ; Parachute
     .by 99  ; Strong Parachute
     .by 99  ; Mag Deflector

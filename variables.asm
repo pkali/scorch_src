@@ -102,8 +102,6 @@ ResultsTable ;the results in the gameeeeee
     .DS MaxPlayers
 TempResults
     .DS MaxPlayers
-;DirectHitsH        ; one byte enough
-;    .DS MaxPlayers
 DirectHits
     .DS MaxPlayers
 EarnedMoneyH
@@ -287,9 +285,9 @@ AfterBFGflag .DS 1
     ; tables with indexes of weapons on the right lists
     ; OK (2022) so, L1 is list of offensive weapons, L2 - defensive
 IndexesOfWeaponsL1
-    .ds (last_offensive      - first_offensive    +1)
+    .ds (number_of_offensives)
 IndexesOfWeaponsL2
-    .ds (last_defensive      - first_defensive    +1)
+    .ds (number_of_defensives)
 ;----------------------------------------------------
 
 ; variables storing amount of weapons on the first and second
@@ -409,15 +407,11 @@ CharCode4x4 .DS 1
 ;plot4x4color .DS 1 ;1-white, 0-background
 ; This is moved from display.asm to be easier to relocate
 ListOfWeapons
-                       ;     0123456789012345678901234567890123456789
-; :number_of_offensives dta d"                                "
-  ;:32 dta d"                                "
-    .ds 32*32
+                       ;     01234567890123456789012345678901
+    .ds number_of_offensives*32
 ListOfWeapons1End
 ListOfDefensiveWeapons
-; :number_of_defensives dta d"                                "
-  ;:16 dta d"                                "
-    .ds 16*32
+    .ds number_of_defensives*32
 ListOfDefensiveWeaponsEnd ;constant useful when clearing
 track_variables
 trackn_db   .ds TRACKS
