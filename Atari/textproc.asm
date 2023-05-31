@@ -339,28 +339,12 @@ AfterPurchase
 
     lda whichList
     bne PositionDefensive
-
-; calculate positionOnTheList from the activeWeapon (offensives)
-    ldx tankNr
-    lda activeWeapon,x
-    ldy #0
-@
-      cmp IndexesOfWeaponsL1,y
-      beq ?weaponfound
-      iny
-      cpy #(last_offensive      - first_offensive    )+1  ; maxOffensiveWeapons
-    bne @-
-    ; not found apparently?
-    ; TODO: check border case (the last weapon)
-    ldy #0
-    beq ?weaponFound  ; jmp
+    jsr calcPosOffensive
+    jmp ?weaponFound
 PositionDefensive
     jsr calcPosDefensive
 
-
 ?weaponFound
-    ; weapon index in Y
-    sty positionOnTheList
     jsr _MakeOffsetDown        ; set list screen offset
 
 ; Here we have all we need
@@ -914,7 +898,7 @@ DefActivationEnd
       cmp IndexesOfWeaponsL2,y
       beq ?weaponfound
       iny
-      cpy #(last_defensive      - first_defensive    )+1  ; maxDefensiveWeapon
+      cpy #number_of_defensives  ; maxDefensiveWeapon
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
@@ -927,8 +911,10 @@ DefActivationEnd
     rts
 .endp
 
+;--------------------------------------------------
 .proc calcPosOffensive
 ; calculate positionOnTheList from the activeWeapon (defensives)
+;--------------------------------------------------
     ldx tankNr
     lda ActiveWeapon,x
     beq ?noWeaponActive
@@ -937,7 +923,7 @@ DefActivationEnd
       cmp IndexesOfWeaponsL1,y
       beq ?weaponfound
       iny
-      cpy #(last_offensive      - first_offensive    )  ; maxOffensiveWeapon
+      cpy #number_of_offensives  ; maxOffensiveWeapon
     bne @-
     ; not found apparently?
     ; TODO: check border case (the last weapon)
