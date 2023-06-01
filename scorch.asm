@@ -377,9 +377,9 @@ NoRMT_PALchange
 
 .proc SetJoystickPort
     sta JoystickNumber
-    .IF TARGET = 800
-    jsr WaitOneFrame
-    jmp GetKey.Check2button ; update state second joy button
+    .IF TARGET = 800    ; second joy button state update only on A800
+    jsr WaitOneFrame         ; is necessary for update shadow registers (PADDL0) in VBI
+    jmp GetKey.Check2button  ; update state second joy button
     .ELSE
     rts
     .ENDIF
@@ -515,7 +515,7 @@ KeyReleased
     and #%00000100
     beq @+
     lda #1
-@    and STRIG0
+@   and STRIG0
     rts
 .endp
 ;--------------------------------------------------
@@ -560,9 +560,9 @@ MakeDarkScreen
 ; Y - number of frames to wait (divided by 2)
 ; pauses for maximally 510 frames (255 * 2)
 ;--------------------------------------------------
-@     jsr WaitOneFrame
-      jsr WaitOneFrame
-      dey
+@   jsr WaitOneFrame
+    jsr WaitOneFrame
+    dey
     bne @-
     rts
 .endp
@@ -618,7 +618,7 @@ nokeys
     ldy flyDelay
 DelayLoop
       lda VCOUNT
-@       cmp VCOUNT
+@     cmp VCOUNT
       beq @-
       dey
     bne DelayLoop
