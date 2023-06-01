@@ -1056,22 +1056,41 @@ EndOfTheDirt
 .proc punch ;
 ; --------------------------------------------------
 ; 
+    ldx TankNr
+
+    ; calculate radius from Force
+/*     lda ForceTableL,x
+    sta temp
+    lda ForceTableH,x
+    sta temp+1
+    ldy #3  ; ExplosionRadius = Force/16
+@   lsr temp+1
+    ror temp
+    dey
+    bpl @-
+    
+    clc
+    lda temp
+    pha     ; store radius
+    adc #4  ; add margins for SoliDown
+    sta ExplosionRadius */
+
+    ; fixed radius
     mva #36 ExplosionRadius
+
     jsr CalculateExplosionRange
     
     mva #sfx_baby_missile sfx_effect
-    
-    mva #15 ExplosionRadius
-    
+        
     lda ytankstable,x
     cmp #13+15     ; Check if tank is too high (13 - tank with shield, 15 - Jump)
     bcs TooHighNoJump
     ; Jump
     ; 15 pixels up
+    mva #15 ExplosionRadius
 @   jsr ClearTankNr
     dec ytankstable,x
     jsr PutTankNr
-;    jsr WaitOneFrame
     lda ExplosionRadius
     cmp #5
     bcs Physics
@@ -1079,7 +1098,7 @@ EndOfTheDirt
 Physics
     dec ExplosionRadius
     bne @-
-    ; ans down
+    ; and down
     mva #15 ExplosionRadius
 @   jsr ClearTankNr
     inc ytankstable,x
@@ -1089,8 +1108,14 @@ Physics
 
 TooHighNoJump
     mva #sfx_dirt_chrg_s sfx_effect
-   
+
+    ; calculate radius from Force
+/*     pla     ; restore radius
+    sta ExplosionRadius  */
+
+    ; fixed radius
     mva #32 ExplosionRadius
+
 CheckRange
     ; punch all (not dead :) tanks in range
     ldx TankNr
@@ -1168,7 +1193,7 @@ DeadTank
     jpl CheckingNextTank
     ;jsr WaitOneFrame
     sbb ExplosionRadius #2
-    jne CheckRange
+    jcs CheckRange
     ldy #10
     jsr PauseYFrames
     rts
