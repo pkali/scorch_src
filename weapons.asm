@@ -1191,9 +1191,8 @@ Myself
 DeadTank
     dey
     jpl CheckingNextTank
-    ;jsr WaitOneFrame
-    sbb ExplosionRadius #2
-    jcs CheckRange
+    dec ExplosionRadius
+    jne CheckRange
     ldy #10
     jsr PauseYFrames
     rts
