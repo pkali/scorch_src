@@ -468,9 +468,9 @@ endcircleloop
     sta ydraw
     lda tempcir+1
     sta ydraw+1
-    jsr plot
+    jmp plot  ; jsr:rts
 
-    RTS
+    ; RTS
 .endp
 
 ;-------------------------------*------------------
@@ -892,8 +892,8 @@ tankflash_loop
     jsr plot
     inw xdraw
     inw ydraw
-    jsr plot
-    rts
+    jmp plot  ; jsr:rts
+    ; rts
 .endp
 ;--------------------------------------------------
 .proc DrawTankShieldBoldLine
