@@ -16,9 +16,9 @@
 ; - money each player has on the beginning of the game (moneyL i moneyH)
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
-;    mwa #(display+40*140) temp  ; we only need to clear last 60 lines (faster)
-;    jsr clearscreen.Go   ;let the screen be clean    
-    jsr clearscreen   ;let the screen be clean
+    mwa #(display+40*140) temp  ; we only need to clear last 60 lines (faster)
+    jsr clearscreen.Go   ;let the screen be clean    
+;    jsr clearscreen   ;let the screen be clean
 
     mwa #DisplayCopyRom temp
     mwa #display temp2
@@ -29,9 +29,8 @@
 
     lda #%00111110  ; normal screen width, DL on, P/M on
     sta dmactls
-    jsr SetPMWidth
+    jsr SetPMWidthAndColors
     mva #TextBackgroundColor COLOR2
-    jsr ColorsOfSprites
     mva #$ca COLOR1
     mva #$00 COLBAKS    ; set color of background
 
@@ -1538,8 +1537,7 @@ displayloop1
     sta dmactls
     lda #%00100100  ; playfield before P/M
     sta GPRIOR
-    jsr SetPMWidth
-    jsr ColorsOfSprites
+    jsr SetPMWidthAndColors
     mva #0 COLOR1
     sta COLBAKS    ; set color of background
     sta CreditsVScrol

@@ -2078,25 +2078,18 @@ ybarrel
     rts
 .endp
 ;--------------------------------------------------
-.proc ColorsOfSprites
+.proc SetPMWidthAndColors
+    lda #%01010101
+    sta sizem ; all missiles, double width
     ldy #3
-@   lda TankColoursTable,y ; colours of sprites under tanks
-    sta PCOLR0,y
+@   lda #$00
+    sta sizep0,y ; P0-P3 widths
+    lda TankColoursTable,y ; colours of sprites under tanks
+    sta PCOLR0,y    
     dey
     bpl @-
     LDA TankColoursTable+4
     STA COLOR3     ; joined missiles (5th tank)
-    rts
-.endp
-;--------------------------------------------------
-.proc SetPMWidth
-    lda #%01010101
-    sta sizem ; all missiles, double width
-    lda #$00
-    sta sizep0 ; P0-P3 widths
-    sta sizep0+1
-    sta sizep0+2
-    sta sizep0+3
     rts
 .endp
 

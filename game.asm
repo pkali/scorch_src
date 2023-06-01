@@ -186,7 +186,7 @@ eskipzeroing
 
     RmtSong song_ingame
 
-    jsr SetPMWidth    ; A=0
+    jsr SetPMWidthAndColors    ; A=0
     lda #0
     sta AfterBFGflag    ; reset BFG flag
     sta COLOR2    ; status line "off"
@@ -243,7 +243,6 @@ SettingEnergies
     jsr CopyFromROM
 
     jsr SetMainScreen
-    jsr ColorsOfSprites
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
@@ -857,7 +856,7 @@ SetunPlots
     sta pmbase
     lda #$03    ; P/M on
     sta GRACTL
-    jsr SetPMWidth
+    jsr SetPMWidthAndColors
     lda #%00100001 ; P/M priorities (multicolor players on) - prior=1
     sta GPRIOR
     jsr PMoutofScreen
