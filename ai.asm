@@ -197,7 +197,7 @@ AngleIsSet
 forceNow
     mwa #300 RandBoundaryLow
     mwa #700 RandBoundaryHigh
-    ldx TankNr
+    ; ldx TankNr  ; looks like not necessary
     jsr RandomizeForce
 
 endo
