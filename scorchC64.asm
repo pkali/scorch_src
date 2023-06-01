@@ -235,6 +235,9 @@ FirstSTART
     icl 'game.asm'
 ;--------------------------------------------------
 
+.proc SetJoystickPort
+    rts
+.endp
 
 ;--------------------------------------------------
 .proc GetKey

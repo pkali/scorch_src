@@ -16,8 +16,9 @@
 ; - money each player has on the beginning of the game (moneyL i moneyH)
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
-    mwa #(display+40*140) temp  ; we only need to clear last 60 lines (faster)
-    jsr clearscreen.Go   ;let the screen be clean
+;    mwa #(display+40*140) temp  ; we only need to clear last 60 lines (faster)
+;    jsr clearscreen.Go   ;let the screen be clean    
+    jsr clearscreen   ;let the screen be clean
 
     mwa #DisplayCopyRom temp
     mwa #display temp2
@@ -221,7 +222,7 @@ invertme
     jmp AfterManualPurchase
 ManualPurchase
     lda JoyNumber,x
-    sta JoystickNumber    ; set joystick port for player
+    jsr SetJoystickPort    ; set joystick port for player
     mva #0 isInventory
     jsr Purchase    ; purchase weapons
     bit escFlag
@@ -1542,7 +1543,7 @@ displayloop1
     mva #0 COLOR1
     sta COLBAKS    ; set color of background
     sta CreditsVScrol
-    sta JoystickNumber    ; set joystick port for player
+    jsr SetJoystickPort    ; set joystick port for player
     mva #TextForegroundColor COLOR2
     SetDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
     ; make text and color lines for each tank

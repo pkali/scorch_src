@@ -375,6 +375,15 @@ NoRMT_PALchange
     icl 'game.asm'
 ;--------------------------------------------------
 
+.proc SetJoystickPort
+    sta JoystickNumber
+    .IF TARGET = 800
+    jsr WaitOneFrame
+    jmp GetKey.Check2button ; update state second joy button
+    .ELSE
+    rts
+    .ENDIF
+.endp
 
 ;--------------------------------------------------
 .proc GetKey

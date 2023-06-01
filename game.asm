@@ -52,7 +52,7 @@ MainGameLoop
 
     mva #0 TankNr  ;
     sta COLBAKS        ; set background color to black
-    sta JoystickNumber    ; set joystick port for player
+    jsr SetJoystickPort    ; set joystick port for player
 
     ; Hide all (easier than hide last ;) ) tanks
     jsr cleartanks    ; A=0
@@ -374,7 +374,7 @@ RoboTanks
 
 ManualShooting
     lda JoyNumber,x
-    sta JoystickNumber    ; set joystick port for player
+    jsr SetJoystickPort    ; set joystick port for player
     jsr WaitForKeyRelease
     lda #%00000000
     sta TestFlightFlag    ; set "Test Fight" off
@@ -809,7 +809,6 @@ deletePtr = temp
     ; clean variables
     lda #0
     sta escFlag
-    sta JoystickNumber
     tay
     mwa #variablesStart deletePtr
 @     tya
@@ -817,6 +816,8 @@ deletePtr = temp
       inw deletePtr
       cpw deletePtr #variablesEnd
     bne @-
+    tya
+    jsr SetJoystickPort
 
         ; ser initial shapes for each tank (tanks 0-5 has shape 0 now)
     ldy #1
