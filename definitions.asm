@@ -28,6 +28,7 @@ space = 0  ; space in screencodes
 KeyRepeatSpeed = 10 ; (max 127 !!!)
 
 ;character codes for symbols (tank, parachute, etc. )
+; characters from tanks.fnt (graphics screen)
 char_parachute        = $02
 char_flag             = $1e
 char_flame            = $14
@@ -39,6 +40,14 @@ char_tank1            = $20
 char_tank2            = $24
 char_tank3            = $2c
 char_tank4            = $28    ; robotank shape
+; characters from weapons.fnt (text mode - menus etc.)
+char_TAB              = $7f
+char_DEL              = $7e
+char_bracketO         = $08 ; (
+char_bracketC         = $09 ; )
+char_computer         = $5e ; computer symbol (Auto Defense)
+char_joy              = $0a ; joystick symbol
+char_tank             = $0b ; tank symbol
 
 ;Weapon prices (*10 on screen)
 price_Baby_Missile    =    0  ;_00

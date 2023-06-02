@@ -964,7 +964,7 @@ EraseLoop
       dex
     bne @-
 SelectList2
-    lda #$7f ; little char (tab) - this is the pointer
+    lda #char_TAB ; little char (tab) - this is the pointer
     sta (xbyte),y
     ; now we clear up and down arrows indicating more content below or above screen
     ldx #<EmptyLine
@@ -985,7 +985,7 @@ CharToList1
       dex
     bne @-
 SelectList1
-    lda #$7f ; pointer = little char = (tab)
+    lda #char_TAB ; pointer = little char = (tab)
     sta (xbyte),y
     ; now moving the window basing on given offset
     mwa #ListOfWeapons xbyte
@@ -1614,10 +1614,10 @@ ThisIsAI
     lda digits,y
     ldy #39
     sta (temp),y ; AI level or joy number
-    ldy #$0a    ; Joystick symbol
+    ldy #char_joy    ; Joystick symbol
     lda SkillTable,x
     beq NotAItank
-    ldy #$5e    ; Computer symbol
+    ldy #char_computer    ; Computer symbol
 NotAItank
     tya
     ldy #38
@@ -1817,11 +1817,11 @@ NextChar02
     ; displaying number of active controller port or AI level
     ;=========================
     ldx TankNr
-    ldy #$5e    ; Computer symbol
+    ldy #char_computer    ; Computer symbol
     lda SkillTable,x
     tax
     bne ThisIsAI
-    ldy #$0a    ; Joystick symbol
+    ldy #char_joy    ; Joystick symbol
     ldx JoystickNumber
     inx     ; tricky
 ThisIsAI
@@ -1879,12 +1879,12 @@ ThisIsAI
     ;=========================
     lda AutoDefenseFlag,x    ; Auto Defense symbol (space or "A" in inverse)
     bpl @+
-    lda #$5e    ; Auto Defense symbol
+    lda #char_computer    ; Auto Defense symbol
 @
     sta statusBuffer+80+21
-    lda #$08 ; (
+    lda #char_bracketO ; (
     sta statusBuffer+80+22
-    lda #$09    ; )
+    lda #char_bracketC    ; )
     sta statusBuffer+80+39
     lda ActiveDefenceWeapon,x
     bne ActiveDefence
@@ -1937,11 +1937,11 @@ ClearingOnly
     lda ShieldEnergy,x
     beq NoShieldEnergy
     sta decimal ; displayed value
-    lda #$08 ; (
+    lda #char_bracketO ; (
     sta statusBuffer+40+10
     mwa #statusBuffer+40+11 displayposition
     jsr displaybyte
-    lda #$09    ; )
+    lda #char_bracketC    ; )
     sta statusBuffer+40+13
 NoDefenceWeapon
 NoShieldEnergy
@@ -1954,12 +1954,12 @@ NoShieldEnergy
     bit Wind+3 ; highest byte of 4 byte wind
     bmi DisplayLeftWind
     sta statusBuffer+80+17    ; (space) char
-    lda #$7f  ; (tab) char
+    lda #char_TAB  ; (tab) char
     sta statusBuffer+80+20
     bne DisplayWindValue
 DisplayLeftWind
     sta statusBuffer+80+20    ; (space) char
-    lda #$7e  ;(del) char
+    lda #char_DEL  ;(del) char
     sta statusBuffer+80+17
       sec  ; Wind = -Wind
       lda #$00
@@ -2008,7 +2008,7 @@ AngleToRight
     ; now we have values from 0 to 89 and right angle
     sta decimal
     sty statusBuffer+40+22  ; (space) character
-    lda #$7f  ; (tab) character
+    lda #char_TAB  ; (tab) character
     sta statusBuffer+40+25
     bne AngleDisplay
 AngleToLeft
@@ -2018,7 +2018,7 @@ AngleToLeft
     ; angles 180 - 91 converted to 0 - 89
     sta decimal
     sty statusBuffer+40+25  ; (space) character
-    lda #$7e  ;(del) char
+    lda #char_DEL  ;(del) char
     sta statusBuffer+40+22
     bne AngleDisplay
 VerticallyUp
