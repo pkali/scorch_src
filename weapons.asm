@@ -1057,7 +1057,7 @@ EndOfTheDirt
 ; 
 
     ; calculate radius from Force
-/*     lda ForceTableL,x
+     lda ForceTableL,x
     sta temp
     lda ForceTableH,x
     sta temp+1
@@ -1071,10 +1071,10 @@ EndOfTheDirt
     lda temp
     pha     ; store radius
     adc #4  ; add margins for SoliDown
-    sta ExplosionRadius */
+    sta ExplosionRadius 
 
     ; fixed radius
-    mva #36 ExplosionRadius
+;    mva #36 ExplosionRadius
 
     jsr CalculateExplosionRange
     
@@ -1108,11 +1108,11 @@ TooHighNoJump
     mva #sfx_dirt_chrg_s sfx_effect
 
     ; calculate radius from Force
-/*     pla     ; restore radius
-    sta ExplosionRadius  */
+    pla     ; restore radius
+    sta ExplosionRadius  
 
     ; fixed radius
-    mva #32 ExplosionRadius
+;    mva #32 ExplosionRadius
 
 CheckRange
     ; punch all (not dead :) tanks in range
