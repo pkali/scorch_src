@@ -15,10 +15,10 @@
 .endp
 .proc ExplosionDirect
     asl
-    tax
-    lda ExplosionRoutines+1,x
+    tay
+    lda ExplosionRoutines+1,y
     pha
-    lda ExplosionRoutines,x
+    lda ExplosionRoutines,y
     pha
     rts
 ExplosionRoutines
@@ -681,7 +681,7 @@ ToHighFill
 ; in xdraw and ydraw we have hit point coordinates
 ; from Shoot/Flight procedures (invisible flight)
 ; ------------------------
-    ldx TankNr
+;    ldx TankNr
     lda AngleTable,x
     tay
 
@@ -1056,7 +1056,6 @@ EndOfTheDirt
 .proc punch ;
 ; --------------------------------------------------
 ; 
-    ldx TankNr
 
     ; calculate radius from Force
 /*     lda ForceTableL,x
