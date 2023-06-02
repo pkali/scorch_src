@@ -304,8 +304,7 @@ PutFlameChar
     bcs CharOffTheScreen
     jsr TypeChar
 CharOffTheScreen
-    adw xdraw #4    ; reverse half character correction (we need positon of character center)
-    adw xdraw #1    ; next char 1 pixels to right
+    adw xdraw #5    ; reverse half character correction (4 px - we need positon of character center) and next char 1 pixels to righ
     inc magic+1
     lda magic+1
     cmp #(2*napalmRadius+1)    ; 10 pixels on left, 10 pixels on right and 1 in center
