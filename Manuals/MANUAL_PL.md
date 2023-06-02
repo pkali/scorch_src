@@ -175,7 +175,7 @@ A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli br
 | Ton of Dirt | 0 (jak wyżej, ale promień kuli to 31 pikseli) |
 | Liquid Dirt | 0 (zalewa grunt w punkcie trafienia płynną glebą wypełniając zagłębienia) |
 | Dirt Charge | 0 (nie jest odejmowana energia, ale usypywany jest dodatkowy grunt w górę od punktu trafienia w promieniu 61 pikseli. Broń przydatna do zakopywania przeciwnika) |
-| Punch | 0 (nie jest odejmowana energia, ale wszystkie czołgi w promieniu 32 pikseli zostają odepchnięte, a po odepchnięciu mogą spaść czy zostać zasypane) |
+| Stomp | 0 (nie jest odejmowana energia, ale wszystkie czołgi w promieniu 32 pikseli zostają odepchnięte, a po odepchnięciu mogą spaść czy zostać zasypane) |
 | Laser | x 100 (ale tu także jest inaczej - równo 100 tylko w przypadku bezpośredniego trafienia po prostu odejmujemy 100 jednostek energii - czyli czołg zawsze ginie).|
 
 Duże punkty otrzymane przez gracza to ilość czołgów, które zginęły wcześniej niż on. Jeśli któryś z innych czołgów skapitulował wcześniej (Biała Flaga) nie jest doliczany do tych które zginęły i nie daje punktów.

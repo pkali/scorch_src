@@ -174,7 +174,7 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Dirt Ball | 0 (as above, but the radius of the ball is 22 pixels) |
 | Ton of Dirt | 0 (as above, but the radius of the ball is 31 pixels) |
 | Liquid Dirt | 0 (floods the ground at the point of hit with liquid soil, filling in the depressions) |
-| Punch | (no energy is subtracted, but all tanks within a radius of 32 pixels are pushed back, and after being pushed back, they may fall or be buried) |
+| Stomp | (no energy is subtracted, but all tanks within a radius of 32 pixels are pushed back, and after being pushed back, they may fall or be buried) |
 | Laser | x 100 (but here it is also different - equally 100 only in the case of a direct hit simply subtract 100 units of energy - that is, the tank always dies) |
 
 Large points received by the player is the number of tanks that died earlier than him. If any of the other tanks capitulated earlier (**White Flag**) is not added to those that died and does not give points.

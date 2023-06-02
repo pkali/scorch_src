@@ -1084,7 +1084,7 @@ EndOfTheDirt
         
     lda ytankstable,x
     cmp #13+15     ; Check if tank is too high (13 - tank with shield, 15 - Jump)
-    bcs TooHighNoJump
+    bcc TooHighNoJump
     ; Jump
     ; 15 pixels up
     mva #15 ExplosionRadius

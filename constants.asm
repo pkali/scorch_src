@@ -509,7 +509,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Ton of Dirt     " ; 26
     dta d"Liquid Dirt     " ; 27
     dta d"Dirt Charge     " ; 28
-    dta d"Punch           " ; 29
+    dta d"Stomp           " ; 29
     dta d"Best F...g Gifts" ; 30
     dta d"Laser           " ; 31
 ;------defensives
