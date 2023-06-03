@@ -475,9 +475,9 @@ DeffensiveSelected
 ; Creating full list of the available weapons for displaying
 ; in X there is an index of the weapon to be checked,
 ; in 'Xbyte' address of the first char in filled screen line
+@weapon_index = temp
 
-CreateList
-    stx temp ; index of a weapon will be necessary later
+    stx @weapon_index ; index of a weapon will be necessary later
     ; checking if the weapon of the given index is present
     lda WeaponUnits,x
     jeq NoWeapon
@@ -493,7 +493,7 @@ CreateList
     mwa #PurchaseTitle DLPurTitleAddr
 
     ; checking if we can afford buying this weapon
-    ldx temp
+    ;ldx @weapon_index
     lda moneyH,y
     cmp WeaponPriceH,x
     bne @+
@@ -505,14 +505,18 @@ CreateList
     ; we have enough cash and the weapon can be
     ; added to the list
 
-    ; first parentheses and other special chars
+
+    ; clear list line
+    lda #0
+    tay  ; ldy #0
+@     sta (XBYTE),y
+      iny
+      cpy #32  ; end of price
+    bne @-
+
+    ; first special chars
     ; (it's easier this way)
-    ;ldy #22
-    ;lda #08 ; "("
-    ;STA (XBYTE),y
-    ;ldy #32
-    ;lda #09 ; ")"
-    ;sta (xbyte),y
+
     ldy #24
     lda #15 ; "/"
     sta (xbyte),y
@@ -525,7 +529,7 @@ CreateList
     lda WeaponUnits,x
     sta decimal
     jsr displaybyte
-    ldx temp ;getting back index of the weapon
+    ldx @weapon_index ;getting back index of the weapon
 
     ; and now price of the weapon
     adw xbyte #25 displayposition  ; 26 chars from the beginning of the line
@@ -546,62 +550,36 @@ itIsInventory
     ; and Title
     mwa #InventoryTitle DLPurTitleAddr
 
-    ldx temp
+    ; ldx @weapon_index
+    ; WHAT THE HECK IS Y HERE???? I DO NOT UNDERSTAND!!!!
     lda TanksWeaponsTableL,y
     sta weaponPointer
     lda TanksWeaponsTableH,y
     sta weaponPointer+1
-    ldy temp
+    ldy @weapon_index
     lda (weaponPointer),y
     jeq noWeapon
-
-    ; clear price area
-    ldy #21  ; beginning of the price area
-    lda #0
-@     sta (XBYTE),y
-      iny
-      cpy #32  ; end of price
-    bne @-
 
 notInventory
 
     ; number of posessed shells
-    lda temp ; weapon index again
+    lda @weapon_index ; weapon index again
     jsr HowManyBullets
     sta decimal
 
     adw xbyte #1 displayposition
     jsr displaybyte
 
-    ldx temp ;weapon index
+    ldx @weapon_index
     ; now symbol of the weapon
     lda WeaponSymbols,x
     ldy #$4  ; 4 chars from the beginning of the line
     sta (xbyte),y
 
     ; and now name of the weapon and finisheeeedd !!!!
-    mva #0 temp+1  ; this number is only in X
-    ; times 16 (it's length of the names of weapons)
-    ldy #3 ; Rotate 4 times
-@
-    asl temp
-    rol temp+1
-    dey
-    bpl @-
-
-    adw temp #NamesOfWeapons-6 weaponPointer
-
-    ldy #6 ; from 6th char on screen
-
-@
-    lda (weaponPointer),y
-    sta (xbyte),y
-    iny
-    cpy #(16+6)
-    bne @-
-
-
-    ; in X there is what we need (weapon index)
+    adw xbyte #6 weaponPointer  ; from 6th char on screen
+    txa
+    jsr DisplayWeaponName
 
     ; If on screen after the purchase there is still
     ; present the weapon purchased recently,
@@ -1855,28 +1833,15 @@ ThisIsAI
     ;=========================
     ;displaying name of the weapon
     ;=========================
+    mwa #statusBuffer+24 weaponPointer  ; from 24th char on screen
     ldx TankNr
     lda ActiveWeapon,x
-    sta temp ;get back number of the weapon
-    mva #0 temp+1
-    ; times 16 (because this is length of weapon name)
-    ldy #3 ; shift left 4 times
-@
-      aslw temp
-      dey
-    bpl @-
-
-    adw temp #NamesOfWeapons
-    ldy #15
-@
-      lda (temp),y
-      sta statusBuffer+24,y
-      dey
-    bpl @-
+    jsr DisplayWeaponName
 
     ;=========================
     ;displaying name of the defence weapon (if active)
     ;=========================
+    mwa #statusBuffer+40+40+23 weaponPointer ; where to display the 
     lda AutoDefenseFlag,x    ; Auto Defense symbol (space or "A" in inverse)
     bpl @+
     lda #char_computer    ; Auto Defense symbol
@@ -1892,26 +1857,11 @@ ThisIsAI
     lda #space
     sta statusBuffer+80+22
     sta statusBuffer+80+39
-    mwa #emptyLine temp
-    jmp ClearingOnly
+    ; lda #0  ; #space == #0
+    tay
+    jsr DisplayWeaponName.ClearingOnly
 ActiveDefence
-    sta temp ;get back number of the weapon
-    mva #0 temp+1
-    ; times 16 (because this is length of weapon name)
-    ldy #3 ; shift left 4 times
-@
-      aslw temp
-      dey
-    bpl @-
-
-    adw temp #NamesOfWeapons
-ClearingOnly
-    ldy #15
-@
-      lda (temp),y
-      sta statusBuffer+40+40+23,y
-      dey
-    bpl @-
+    jsr DisplayWeaponName
 
     ;=========================
     ;displaying the energy of a tank
@@ -2070,5 +2020,45 @@ AngleDisplay
 
     rts
 .endp
+;-------------------------------------------------
+.proc DisplayWeaponName
+; nr of weapon in A,  address to put in weaponPointer
+@weapon_index = temp
+    sta @weapon_index ;get back number of the weapon
+
+@inverse_counter = temp+1
+    
+    mwa #0 @inverse_counter
+    tay  ; ldy #0
+    mwa #(NamesOfWeapons-1) LineAddress4x4
+    
+@   
+    inw LineAddress4x4
+    lda (LineAddress4x4),y
+    spl:inc @inverse_counter
+    lda @weapon_index
+    beq zeroth_talk  ; special treatment of talk #0
+    cmp @inverse_counter
+    bne @-
+    
+    inw LineAddress4x4  ; we were pointing at the char with inverse, must go 1 further
+zeroth_talk
+    
+    ; now copy text to screen
+    dey  ; ldy #-1
+@   
+    iny
+    lda (LineAddress4x4),y
+    sta (weaponPointer),y
+    bpl @-
+    and #%01111111  ; remove reverse
+clearingOnly
+    sta (weaponPointer),y
+    lda #0  ; clean the rest
+    iny:cpy #16  ; weapon name is max 16 chars
+    bne clearingonly 
+    rts
+.endp
+
 
 .endif

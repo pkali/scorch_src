@@ -1599,7 +1599,7 @@ NotHigher
     ; all text start from `talk` and end with an inverse.
     ; we go through the `talk`, count number of inverses.
     ; if equal to TextNumberOff, it is our text, printit
-    inverse_counter = temp
+    inverse_counter = temp+1
     
     tya
     tax  ; save Y
