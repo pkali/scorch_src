@@ -1804,7 +1804,6 @@ TypeLine4x4Loop
     ldy LineCharNr
 
     lda (LineAddress4x4),y
-    and #$3f ;always CAPITAL letters, also ignore inverse
     sta CharCode4x4
     mwa LineXdraw dx
     mva LineYdraw dy

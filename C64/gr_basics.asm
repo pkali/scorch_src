@@ -450,11 +450,12 @@ EndPutChar
     ; char to the table
     lda CharCode4x4
     and #%00000001
-    beq Upper4bits
+    beq Upper4bits  ; A=0
     lda #$ff         ; better option to check (nibbler4x4 = $00 or $ff)
 Upper4bits
     sta nibbler4x4
     lda CharCode4x4
+    and #$3f ;always CAPITAL letters, also ignore inverse
     lsr
     sta fontind
     lda #$00
