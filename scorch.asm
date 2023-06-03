@@ -9,6 +9,7 @@
 .IFNDEF TARGET
     .def TARGET = 800 ; 5200
 .ENDIF
+;WARNING! requires mads compiled on 2023-06-03 or later
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
@@ -19,7 +20,7 @@
 ;        (direct writes to screen memory - atari only :) )
 ;---------------------------------------------------
 
-       ; OPT r+  ; saves 12 bytes :O
+       ; OPT r+  ; saves 12 bytes, but does not work (yet): https://github.com/tebe6502/Mad-Assembler/issues/10 
 
 ;---------------------------------------------------
 .macro build

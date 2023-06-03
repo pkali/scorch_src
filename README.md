@@ -27,7 +27,7 @@ You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https:/
 
 This source code was originally compiled with [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
 
-Compilation: 
+Compilation: (requires mads compiled on 2023-06-03 or later)
 - `mads scorch.asm -o:scorch.xex -d:TARGET=800` for Atari800 version
 - `mads scorch.asm -o:scorch.bin -d:TARGET=5200` for Atari 5200 version
 - `mads scorchC64.asm -o:scorchC64.prg` for C64 version (WIP, not playable yet)

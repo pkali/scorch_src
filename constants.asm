@@ -480,55 +480,55 @@ WeaponSymbols
 
 ; Names of weapons (max 16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
-    dta d"Baby Missil", d"e"*     ; 0
-    dta d"Missil", d"e"*          ; 1
-    dta d"Baby Nuk", d"e"*        ; 2
-    dta d"Nuk", d"e"*             ; 3
-    dta d"LeapFro", d"g"*         ; 4
-    dta d"Funky Bom", d"b"*       ; 5
-    dta d"MIR", d"V"*             ; 6
-    dta d"Death's Hea", d"d"*     ; 7
-    dta d"Napal", d"m"*           ; 8
-    dta d"Hot Napal", d"m"*       ; 9
-    dta d"Trace", d"r"*           ; 10
-    dta d"Smoke Trace", d"r"*     ; 11
-    dta d"Baby Rolle", d"r"*      ; 12
-    dta d"Rolle", d"r"*           ; 13
-    dta d"Heavy Rolle", d"r"*     ; 14
-    dta d"Riot Charg", d"e"*      ; 15
-    dta d"Riot Blas", d"t"*       ; 16
-    dta d"Riot Bom", d"b"*        ; 17
-    dta d"Heavy Riot Bom", d"b"*  ; 18
-    dta d"Baby Digge", d"r"*      ; 19
-    dta d"Digge", d"r"*           ; 20
-    dta d"Heavy Digge", d"r"*     ; 21
-    dta d"Sandho", d"g"*          ; 22
-    dta d"Heavy Sandho", d"g"*    ; 23
-    dta d"Dirt Clo", d"d"*        ; 24
-    dta d"Dirt Bal", d"l"*        ; 25
-    dta d"Ton of Dir", d"t"*      ; 26
-    dta d"Liquid Dir", d"t"*      ; 27
-    dta d"Dirt Charg", d"e"*      ; 28
-    dta d"Stom", d"p"*            ; 29
-    dta d"Best F...g Gift", d"s"* ; 30
-    dta d"Lase", d"r"*            ; 31
+    dta d"Baby Missile"^     ; 0
+    dta d"Missile"^          ; 1
+    dta d"Baby Nuke"^        ; 2
+    dta d"Nuke"^             ; 3
+    dta d"LeapFrog"^         ; 4
+    dta d"Funky Bomb"^       ; 5
+    dta d"MIRV"^             ; 6
+    dta d"Death's Head"^     ; 7
+    dta d"Napalm"^           ; 8
+    dta d"Hot Napalm"^       ; 9
+    dta d"Tracer"^           ; 10
+    dta d"Smoke Tracer"^     ; 11
+    dta d"Baby Roller"^      ; 12
+    dta d"Roller"^           ; 13
+    dta d"Heavy Roller"^     ; 14
+    dta d"Riot Charge"^      ; 15
+    dta d"Riot Blast"^       ; 16
+    dta d"Riot Bomb"^        ; 17
+    dta d"Heavy Riot Bomb"^  ; 18
+    dta d"Baby Digger"^      ; 19
+    dta d"Digger"^           ; 20
+    dta d"Heavy Digger"^     ; 21
+    dta d"Sandhog"^          ; 22
+    dta d"Heavy Sandhog"^    ; 23
+    dta d"Dirt Clod"^        ; 24
+    dta d"Dirt Ball"^        ; 25
+    dta d"Ton of Dirt"^      ; 26
+    dta d"Liquid Dirt"^      ; 27
+    dta d"Dirt Charge"^      ; 28
+    dta d"Stomp"^            ; 29
+    dta d"Best F...g Gifts"^ ; 30
+    dta d"Laser"^            ; 31
 ;------defensives
-    dta d"White Fla", d"g"*       ; 32
-    dta d"Batter", d"y"*          ; 33
-    dta d"Hovercraf", d"t"*       ; 34
-    dta d"Parachut", d"e"*        ; 35    - no energy
-    dta d"Strong Parachut", d"e"* ; 36    - with energy  (earlier Battery)
-    dta d"Mag Deflecto", d"r"*    ; 37    - with shield and energy
-    dta d"Shiel", d"d"*           ; 38    - shield for one shot - no energy
-    dta d"Heavy Shiel", d"d"*     ; 39    - shield with energy
-    dta d"Force Shiel", d"d"*     ; 40    - shield with energy and parachute
-    dta d"Bouncy Castl", d"e"*    ; 41    - with shield and energy
-    dta d"Long Schlon", d"g"*     ; 42
-    dta d"Nuclear Winte", d"r"*   ; 43
-    dta d"Lazy Bo", d"y"*         ; 44
-    dta d"Lazy Darwi", d"n"*      ; 45
-    dta d"Auto Defens", d"e"*     ; 46
-    dta d"Spy Har", d"d"*         ; 47
+    dta d"White Flag"^       ; 32
+    dta d"Battery"^          ; 33
+    dta d"Hovercraft"^       ; 34
+    dta d"Parachute"^        ; 35    - no energy
+    dta d"Strong Parachute"^ ; 36    - with energy  (earlier Battery)
+    dta d"Mag Deflector"^    ; 37    - with shield and energy
+    dta d"Shield"^           ; 38    - shield for one shot - no energy
+    dta d"Heavy Shield"^     ; 39    - shield with energy
+    dta d"Force Shield"^     ; 40    - shield with energy and parachute
+    dta d"Bouncy Castle"^    ; 41    - with shield and energy
+    dta d"Long Schlong"^     ; 42
+    dta d"Nuclear Winter"^   ; 43
+    dta d"Lazy Boy"^         ; 44
+    dta d"Lazy Darwin"^      ; 45
+    dta d"Auto Defense"^     ; 46
+    dta d"Spy Hard"^         ; 47
 
 DefensiveEnergy = *-number_of_offensives  ; to fake the table for ALL weapons
     .by 00  ; White Flag
@@ -610,54 +610,54 @@ gameOverSpritesTop
 ;------credits
 CreditsStart
     dta   d"         "*
-    dta   d"You were playin",d"g"*
-    dta   d"Scorc",d"h"*
-    dta   d"Warsaw, Miam",d"i"*
-    dta   d"2000-202",d"3"*
+    dta   d"You were playing"^
+    dta   d"Scorch"^
+    dta   d"Warsaw, Miami"^
+    dta   d"2000-2023"^
     dta   d" "*
-    dta   d"Programmin",d"g"*
-    dta   d"Tomasz 'Pecus' Peck",d"o"*
-    dta   d"Pawel 'pirx' Kalinowsk",d"i"*
+    dta   d"Programming"^
+    dta   d"Tomasz 'Pecus' Pecko"^
+    dta   d"Pawel 'pirx' Kalinowski"^
     dta   d" "*
-    dta   d"SFX, Music and Suppor",d"t"*
-    dta   d"Michal 'Miker' Szpilowsk",d"i"*
+    dta   d"SFX, Music and Support"^
+    dta   d"Michal 'Miker' Szpilowski"^
     dta   d" "*
     .IF TARGET = 800
-      dta d"Additional Musi",d"c"*
-      dta d"Mario 'Emkay' Kri",d"x"*
+      dta d"Additional Music"^
+      dta d"Mario 'Emkay' Krix"^
       dta d" "*
     .ENDIF
-    dta   d"Code Optimizatio",d"n"*
-    dta   d"Piotr '0xF' Fusi",d"k"*
+    dta   d"Code Optimization"^
+    dta   d"Piotr '0xF' Fusik"^
     dta   d" "*
-    dta   d"Ar",d"t"*
-    dta   d"Adam Wachowsk",d"i"*
+    dta   d"Art"^
+    dta   d"Adam Wachowski"^
     .IF TARGET = 800
-      dta d"Roman 'xorcerer' Fierfa",d"s"*
+      dta d"Roman 'xorcerer' Fierfas"^
     .ENDIF
     dta   d" "*
-    dta   d"Ideas, help and Q",d"A"*
-    dta   d"Bocianu, Probabilitydragon",d","*
-    dta   d"EnderDude, Dracon",d","*
-    dta   d"Beeblebrox, KrzysRog, lopezpb",d","*
-    dta   d"brad-colbert, archon800, nowy80",d","*
+    dta   d"Ideas, help and QA"^
+    dta   d"Bocianu, Probabilitydragon,"^
+    dta   d"EnderDude, Dracon,"^
+    dta   d"Beeblebrox, KrzysRog, lopezpb,"^
+    dta   d"brad-colbert, archon800, nowy80,"^
     dta   d"Shaggy the Atarian, RetroBorsuk, ZPH"
     .IF TARGET = 800
       dta d" "*
     .ELIF TARGET = 5200
       dta d","*
-      dta d"x-usr(1536), Aking, JAC!, phaeron",d","*
-      dta d"RB520",d"0"*
+      dta d"x-usr(1536), Aking, JAC!, phaeron,"^
+      dta d"RB5200"^
     .ENDIF
     dta   d" "*
-    dta   d"Additional testin",d"g"*
-    dta   d"Arek and Alex Peck",d"o"*
+    dta   d"Additional testing"^
+    dta   d"Arek and Alex Pecko"^
     dta   d" "*
-    dta   d"Special thank",d"s"*
-    dta   d"Krzysztof 'Kaz' Ziembi",d"k"*
+    dta   d"Special thanks"^
+    dta   d"Krzysztof 'Kaz' Ziembik"^
     .IF TARGET = 800
       dta d"  "*
-      dta d"Stay tuned for the FujiNet version",d"!"*
+      dta d"Stay tuned for the FujiNet version!"^
     .ENDIF
     dta d"         "*
 CreditsEnd
