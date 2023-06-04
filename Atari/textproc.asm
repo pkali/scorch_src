@@ -505,15 +505,6 @@ DeffensiveSelected
     ; we have enough cash and the weapon can be
     ; added to the list
 
-
-    ; clear list line
-    lda #0
-    tay  ; ldy #0
-@     sta (XBYTE),y
-      iny
-      cpy #32  ; end of price
-    bne @-
-
     ; first special chars
     ; (it's easier this way)
 
@@ -551,7 +542,7 @@ itIsInventory
     mwa #InventoryTitle DLPurTitleAddr
 
     ; ldx @weapon_index
-    ; WHAT THE HECK IS Y HERE???? I DO NOT UNDERSTAND!!!!
+    ; Y contains TankNr 
     lda TanksWeaponsTableL,y
     sta weaponPointer
     lda TanksWeaponsTableH,y
@@ -559,6 +550,14 @@ itIsInventory
     ldy @weapon_index
     lda (weaponPointer),y
     jeq noWeapon
+
+    ; clear price area
+    ldy #21  ; beginning of the price area
+    lda #0
+@     sta (XBYTE),y
+      iny
+      cpy #32  ; end of price
+    bne @-
 
 notInventory
 
