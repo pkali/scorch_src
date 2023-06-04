@@ -1599,6 +1599,9 @@ NotHigher
     ; all text start from `talk` and end with an inverse.
     ; we go through the `talk`, count number of inverses.
     ; if equal to TextNumberOff, it is our text, printit
+    lda #0
+notZero
+    sta plot4x4color
     tya
     tax  ; save Y
     mwa #(talk-1) LineAddress4x4

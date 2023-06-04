@@ -467,7 +467,6 @@ missed
 
     ;here we clear offensive text (after a shoot)
     ldy TankNr
-    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
 NextPlayerShoots
@@ -568,8 +567,8 @@ TextAfterBFG
     sta TextNumberOff
     inc CurrentResult    ; ... but increase result of winner (BFG)
     ldy TankTempY
-    mva #$ff plot4x4color
-    jsr DisplayOffensiveTextNr
+    lda #$ff
+    jsr DisplayOffensiveTextNr.notZero
     ; tank flash
     ldy TankTempY
     mva TankNr temp2 ; not elegant, and probably unnecessary
@@ -580,7 +579,6 @@ TextAfterBFG
     ;Deffensive text cleanup
     ;here we clear Deffensive text (after a shoot)
     ldy TankTempY
-    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
     ; calculate position of the explosion (the post-death one)

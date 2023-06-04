@@ -1594,8 +1594,8 @@ RandomizeOffensiveText
 
     sta TextNumberOff
     ldy TankNr
-    mva #$ff plot4x4color
-    jsr DisplayOffensiveTextNr
+    lda #$ff
+    jsr DisplayOffensiveTextNr.notZero
 
 AfterOffensiveText
     mva #0 LaserFlag    ; $ff - Laser
@@ -1651,7 +1651,6 @@ ShotUnderGround
     ;here we clear offensive text (after a shoot)
 ClearOffensiveText
     ldy TankNr
-    mva #$00 plot4x4color
     jmp DisplayOffensiveTextNr
 ;    rts
 .endp
@@ -2472,7 +2471,6 @@ MIRValreadyAll
 
     ;first clean the offensive text...
     ldy TankNr
-    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
     ; temporary removing tanks from the screen (otherwise they will fall down with soil)
