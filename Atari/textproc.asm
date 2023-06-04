@@ -2022,27 +2022,10 @@ AngleDisplay
 ;-------------------------------------------------
 .proc DisplayWeaponName
 ; nr of weapon in A,  address to put in weaponPointer
-@weapon_index = temp
+@weapon_index = TextNumberOff
     sta @weapon_index ;get back number of the weapon
-
-@inverse_counter = temp+1
-    
-    mwa #0 @inverse_counter
-    tay  ; ldy #0
     mwa #(NamesOfWeapons-1) LineAddress4x4
-    
-@   
-    inw LineAddress4x4
-    lda (LineAddress4x4),y
-    spl:inc @inverse_counter
-    lda @weapon_index
-    beq zeroth_talk  ; special treatment of talk #0
-    cmp @inverse_counter
-    bne @-
-    
-    inw LineAddress4x4  ; we were pointing at the char with inverse, must go 1 further
-zeroth_talk
-    
+    jsr _calc_inverse_display
     ; now copy text to screen
     dey  ; ldy #-1
 @   
@@ -2058,6 +2041,27 @@ clearingOnly
     bne clearingonly 
     rts
 .endp
-
-
+;-------------------------------------------------
+.proc _calc_inverse_display
+; optymalization station. not a real function
+; or is it?
+@weapon_index = TextNumberOff
+@inverse_counter = temp+1
+    
+    mwa #0 @inverse_counter
+    tay  ; ldy #0
+@   
+    inw LineAddress4x4
+    lda (LineAddress4x4),y
+    spl:inc @inverse_counter
+    lda @weapon_index
+    beq zeroth_talk  ; special treatment of talk #0
+    cmp @inverse_counter
+    bne @-
+    
+    inw LineAddress4x4  ; we were pointing at the char with inverse, must go 1 further
+zeroth_talk
+    rts
+.endp
+    
 .endif
