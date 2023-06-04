@@ -1247,8 +1247,8 @@ SetRandomWalls
     cmp RoundsInTheGame
     beq GameOver4x4
 
-    sta decimal
-    mwa #RoundNrDisplay displayposition
+    ;sta decimal
+    mwx #RoundNrDisplay displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
 
     mwa #LineHeader1 LineAddress4x4

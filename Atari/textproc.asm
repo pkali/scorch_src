@@ -518,7 +518,7 @@ DeffensiveSelected
     ;now number of units (shells) to be purchased
     adw xbyte #22 displayposition  ; 23 chars from the beginning of the line
     lda WeaponUnits,x
-    sta decimal
+    ;sta decimal
     jsr displaybyte
     ldx @weapon_index ;getting back index of the weapon
 
@@ -562,11 +562,10 @@ itIsInventory
 notInventory
 
     ; number of posessed shells
+    adw xbyte #1 displayposition
     lda @weapon_index ; weapon index again
     jsr HowManyBullets
-    sta decimal
-
-    adw xbyte #1 displayposition
+    ;sta decimal
     jsr displaybyte
 
     ldx @weapon_index
@@ -1456,6 +1455,7 @@ nexdigit
 ; leading zeores are removed
 ; the range is (00..99 - one byte)
 
+    sta decimal
     ldy #1 ; there will be 2 digits
 NextDigit2
     ldx #8 ; 8-bit dividee so Rotate 8 times
@@ -1825,8 +1825,8 @@ ThisIsAI
     ;=========================
     lda ActiveWeapon,x
     jsr HowManyBullets
-    sta decimal
-    mwa #statusBuffer+21 displayposition
+    ;sta decimal
+    mwx #statusBuffer+21 displayposition
     jsr displaybyte
 
     ;=========================
@@ -1866,8 +1866,8 @@ ActiveDefence
     ;displaying the energy of a tank
     ;=========================
     lda Energy,x
-    sta decimal
-    mwa #statusBuffer+48 displayposition
+    ;sta decimal
+    mwx #statusBuffer+48 displayposition
     jsr displaybyte
 
     ;=========================
@@ -1885,10 +1885,9 @@ ActiveDefence
     beq NoDefenceWeapon
     lda ShieldEnergy,x
     beq NoShieldEnergy
-    sta decimal ; displayed value
-    lda #char_bracketO ; (
-    sta statusBuffer+40+10
-    mwa #statusBuffer+40+11 displayposition
+    ;sta decimal ; displayed value
+    mvx #char_bracketO statusBuffer+40+10  ; (
+    mwx #statusBuffer+40+11 displayposition
     jsr displaybyte
     lda #char_bracketC    ; )
     sta statusBuffer+40+13
@@ -1920,16 +1919,16 @@ DisplayLeftWind
 DisplayWindValue
     :4 lsrw temp ;divide by 16 to have a nice value on a screen
     lda temp
-    sta decimal
-    mwa #statusBuffer+80+18 displayposition
+    ;sta decimal
+    mwx #statusBuffer+80+18 displayposition
     jsr displaybyte
 
     ;=========================
     ;display round number
     ;=========================
     lda CurrentRoundNr
-    sta decimal
-    mwa #statusBuffer+80+7 displayposition
+    ;sta decimal
+    mwx #statusBuffer+80+7 displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
 
     ;=========================
@@ -1955,29 +1954,27 @@ displayAngle
     bcs AngleToLeft
 AngleToRight
     ; now we have values from 0 to 89 and right angle
-    sta decimal
+    ;sta decimal
     sty statusBuffer+40+22  ; (space) character
-    lda #char_TAB  ; (tab) character
-    sta statusBuffer+40+25
+    mvx #char_TAB statusBuffer+40+25  ; (tab) character 
     bne AngleDisplay
 AngleToLeft
     sec
     lda #180
     sbc AngleTable,x
     ; angles 180 - 91 converted to 0 - 89
-    sta decimal
+    ;sta decimal
     sty statusBuffer+40+25  ; (space) character
-    lda #char_DEL  ;(del) char
-    sta statusBuffer+40+22
+    mvx #char_DEL statusBuffer+40+22  ;(del) char
     bne AngleDisplay
 VerticallyUp
     ; now we have value 90
-    sta decimal
+    ;sta decimal
     sty statusBuffer+40+25  ; (space) character
     sty statusBuffer+40+22  ; (space) character
 
 AngleDisplay
-    mwa #statusBuffer+40+23 displayposition
+    mwx #statusBuffer+40+23 displayposition
     jsr displaybyte
     ldx TankNr
     rts
