@@ -282,12 +282,12 @@ petlabajtowpoziomo
 @   sta (modify),y
     dey
     bpl @-
-    iny
-    sty ydraw
+    tax
+    ;stx ydraw
 petlakolumny
-    lda LineTableL,y    ; Y=ydraw - sprawdziæ
+    lda LineTableL,x    ; Y=ydraw - sprawdziæ
     sta xbyte
-    lda LineTableH,y
+    lda LineTableH,x
     sta xbyte+1
     ldy xdraw
     lda (xbyte),y
@@ -296,18 +296,18 @@ petlakolumny
 petlabajtu
     lsr temp2
     bcc NoPixel
-    clc
+    ;clc
     ; C = 0
-    lda #1
+    lda #0  ; becouse C=1
     adc (modify),y
     sta (modify),y
 NoPixel
     dey
     bpl petlabajtu
-    iny     ;  Y=0
-    inc ydraw
-    ldy ydraw
-    cpy #screenheight+1
+    inx     ;  ydraw
+    ;inc ydraw
+    ;ldy ydraw
+    cpx #screenheight
     bne petlakolumny
     
     adw modify #8
