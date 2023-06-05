@@ -270,6 +270,66 @@ NoMountain
     rts
 .endp
 ;--------------------------------------------------
+.proc CalculateMountainTable
+;--------------------------------------------------
+; Calculate mountaintable from screen data
+; for speedup SoilDown, etc.
+    mwa #0 xdraw
+    mwa #mountaintable modify
+petlabajtowpoziomo
+    lda #0
+    ldy #7
+@   sta (modify),y
+    dey
+    bpl @-
+    iny
+    sty ydraw
+petlakolumny
+    lda LineTableL,y    ; Y=ydraw - sprawdziæ
+    sta xbyte
+    lda LineTableH,y
+    sta xbyte+1
+    ldy xdraw
+    lda (xbyte),y
+    sta temp2
+    ldy #7
+petlabajtu
+    lsr temp2
+    bcc NoPixel
+    clc
+    ; C = 0
+    lda #1
+    adc (modify),y
+    sta (modify),y
+NoPixel
+    dey
+    bpl petlabajtu
+    iny     ;  Y=0
+    inc ydraw
+    ldy ydraw
+    cpy #screenheight+1
+    bne petlakolumny
+    
+    adw modify #8
+    inc xdraw
+    lda xdraw
+    cmp #screenBytes
+    bne petlabajtowpoziomo
+    rts
+.endp
+;--------------------------------------------------
+.proc SoilDown3
+;--------------------------------------------------
+; fast SoilDown froc - test
+    jsr ClearTanks
+NoClearTanks
+    jsr CalculateMountainTable
+    jsr ClearScreen
+    jsr drawmountains
+    jmp DrawTanks
+    ;rts
+.endp
+;--------------------------------------------------
 .proc TypeChar
 ; puts char on the graphics screen
 ; in: CharCode
