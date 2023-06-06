@@ -598,6 +598,24 @@ EndPut4x4
       cpw temp #displayC64+screenheight*screenBytes+1
     bne @-
    rts
+   
+    ldy #<displayC64
+    lda #0
+    sta temp
+    lda #>displayC64
+    sta temp+1
+Go
+loop  lda #$ff
+      sta (temp),y
+      iny
+      bne @+
+      inc temp+1
+@     cpy #<(displayC64+screenheight*screenBytes+1)
+      bne loop
+      lda temp+1
+      cmp #>(displayC64+screenheight*screenBytes+1)
+      bne loop
+   rts
 .endp
 
 ;--------------------------------------------------

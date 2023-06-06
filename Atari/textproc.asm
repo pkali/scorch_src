@@ -16,7 +16,12 @@
 ; - money each player has on the beginning of the game (moneyL i moneyH)
 ; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
 
-    mwa #(display+40*140) temp  ; we only need to clear last 60 lines (faster)
+   ; we only need to clear last 60 lines (faster)
+    ldy #<(display+40*140)
+    lda #0
+    sta temp
+    lda #>(display+40*140)
+    sta temp+1
     jsr clearscreen.Go   ;let the screen be clean    
 ;    jsr clearscreen   ;let the screen be clean
 

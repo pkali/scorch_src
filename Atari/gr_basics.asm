@@ -641,13 +641,22 @@ EndPut4x4
 ;--------------------------------------------------
 .proc ClearScreen
 ;--------------------------------------------------
-    mwa #display temp
-Go    ldy #0
-@     lda #$ff
+    ldy #<display
+    lda #0
+    sta temp
+    lda #>display
+    sta temp+1
+Go
+loop  lda #$ff
       sta (temp),y
-      inw temp
-      cpw temp #display+screenheight*screenBytes+1
-    bne @-
+      iny
+      bne @+
+      inc temp+1
+@     cpy #<(display+screenheight*screenBytes+1)
+      bne loop
+      lda temp+1
+      cmp #>(display+screenheight*screenBytes+1)
+      bne loop
    rts
 .endp
 
