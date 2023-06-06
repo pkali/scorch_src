@@ -2038,9 +2038,9 @@ AngleDisplay
     and #%01111111  ; remove reverse
 clearingOnly
     sta (weaponPointer),y
-;    lda #0  ; clean the rest
-;    iny:cpy #16  ; weapon name is max 16 chars
-;    bne clearingonly 
+    lda #0  ; clean the rest
+    iny:cpy #16  ; weapon name is max 16 chars
+    bne clearingonly 
     rts
 .endp
 ;-------------------------------------------------
