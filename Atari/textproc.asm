@@ -2026,7 +2026,7 @@ AngleDisplay
 ; nr of weapon in A,  address to put in weaponPointer
 @weapon_index = TextNumberOff
     sta @weapon_index ;get back number of the weapon
-    mwa #(NamesOfWeapons-1) LineAddress4x4
+    mwa #NamesOfWeapons LineAddress4x4
     jsr _calc_inverse_display
     ; now copy text to screen
     dey  ; ldy #-1
@@ -2038,9 +2038,9 @@ AngleDisplay
     and #%01111111  ; remove reverse
 clearingOnly
     sta (weaponPointer),y
-    lda #0  ; clean the rest
-    iny:cpy #16  ; weapon name is max 16 chars
-    bne clearingonly 
+;    lda #0  ; clean the rest
+;    iny:cpy #16  ; weapon name is max 16 chars
+;    bne clearingonly 
     rts
 .endp
 ;-------------------------------------------------
@@ -2050,19 +2050,29 @@ clearingOnly
 @weapon_index = TextNumberOff
 @inverse_counter = temp+1
     
-    mwa #0 @inverse_counter
-    tay  ; ldy #0
-@   
-    inw LineAddress4x4
+    mva #0 @inverse_counter
+    ldy LineAddress4x4  ; lower byte to Y
+    sta LineAddress4x4  ; #0
+loop  
     lda (LineAddress4x4),y
     spl:inc @inverse_counter
     lda @weapon_index
     beq zeroth_talk  ; special treatment of talk #0
     cmp @inverse_counter
-    bne @-
+    beq lets_talk
+    iny
+    bne loop
+    inc LineAddress4x4+1
+    bne loop
     
-    inw LineAddress4x4  ; we were pointing at the char with inverse, must go 1 further
+lets_talk
+    iny
+    bne @+
+    inc LineAddress4x4+1
+@
 zeroth_talk
+    sty LineAddress4x4
+    ldy #0
     rts
 .endp
     

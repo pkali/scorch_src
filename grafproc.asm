@@ -1604,7 +1604,7 @@ notZero
     sta plot4x4color
     tya
     tax  ; save Y
-    mwa #(talk-1) LineAddress4x4
+    mwa #talk LineAddress4x4
     jsr _calc_inverse_display
     
     ; now find length of the text
