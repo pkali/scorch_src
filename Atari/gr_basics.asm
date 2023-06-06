@@ -274,9 +274,9 @@ NoMountain
 ;--------------------------------------------------
 ; Calculate mountaintable from screen data
 ; for speedup SoilDown, etc.
-    mwa #0 xdraw
+    mwa #0 temp ; byte in screen line
     mwa #mountaintable modify
-petlabajtowpoziomo
+HorizontalByteLoop
     lda #0
     ldy #7
 @   sta (modify),y
@@ -284,16 +284,16 @@ petlabajtowpoziomo
     bpl @-
     tax
     ;stx ydraw
-petlakolumny
-    lda LineTableL,x    ; Y=ydraw - sprawdziæ
-    sta xbyte
+ColumnLoop
+    lda LineTableL,x    ; X=ydraw
+    sta xbyte   ; address of first byte in line X
     lda LineTableH,x
     sta xbyte+1
-    ldy xdraw
+    ldy temp
     lda (xbyte),y
-    sta temp2
+    sta temp2   ; byte from screen (8 pixels)
     ldy #7
-petlabajtu
+ByteLoop
     lsr temp2
     bcc NoPixel
     ;clc
@@ -303,18 +303,20 @@ petlabajtu
     sta (modify),y
 NoPixel
     dey
-    bpl petlabajtu
+    bpl ByteLoop    ; next bit in byte
+
     inx     ;  ydraw
     ;inc ydraw
     ;ldy ydraw
     cpx #screenheight
-    bne petlakolumny
+    bne ColumnLoop  ; next byte in colum
     
     adw modify #8
-    inc xdraw
-    lda xdraw
+    inc temp
+    lda temp
     cmp #screenBytes
-    bne petlabajtowpoziomo
+    bne HorizontalByteLoop  ; next column of bytes
+
     rts
 .endp
 ;--------------------------------------------------
