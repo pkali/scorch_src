@@ -465,9 +465,9 @@ missed
       sta ActiveWeapon,x
 @
 
-    ;here we clear offensive text (after a shoot)
-    ldy TankNr
-    jsr DisplayOffensiveTextNr
+    ;here we clear offensive text (after a shoot) - is cleared !! :)
+   ; ldy TankNr
+   ; jsr DisplayOffensiveTextNr
 
 NextPlayerShoots
     ;before it shoots, the eXistenZ table must be updated
