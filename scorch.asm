@@ -1,4 +1,4 @@
-;    @com.wudsn.ide.asm.mainsourcefile=scorch.asm
+;    @com.wudsn.ide.lng.mainsourcefile=scorch.asm
 ;Atari 8-bit Scorched Earth source code
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
