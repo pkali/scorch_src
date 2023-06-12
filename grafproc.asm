@@ -1327,6 +1327,14 @@ NoClearTanks
     sta color
     jsr plot
 
+.IF TARGET >= 800
+.IF FASTER_GRAF_PROCS = 1
+    lda FastSoilDown
+    beq @+
+    jmp SoilDownTurbo.NoClearTanks
+@
+.ENDIF
+.ENDIF
 ; First we look for highest pixels and fill with their coordinates
 ; both tables
 
@@ -1367,14 +1375,6 @@ FoundPeek1
     beq NextColumn1
 ; we have both tables filled with starting values
 
-.IF TARGET >= 800
-.IF FASTER_GRAF_PROCS = 1
-    lda FastSoilDown
-    beq @+
-    jmp SoilDownTurbo.NoClearTanks
-@
-.ENDIF
-.ENDIF
 ; main loop starts here
 MainFallout2
 .IF TARGET = 800
