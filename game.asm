@@ -598,9 +598,7 @@ TextAfterBFG
     sta ydraw+1   ; there is 0 left in A, so... TODO: bad code above. revisit
 
     ;cleanup of the soil fall down ranges (left and right)
-    sta RangeRight
-    sta RangeRight+1
-    mwa #screenwidth RangeLeft
+    jsr ClearScreenSoilRange
 
     ; We are randomizing the weapon now.
     ; jumping into the middle of the explosion

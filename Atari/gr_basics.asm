@@ -275,8 +275,32 @@ NoMountain
 ;--------------------------------------------------
 ; Calculate mountaintable from screen data
 ; for speedup SoilDown, etc.
-    mwa #0 temp ; byte in screen line
-    mwa #mountaintable modify
+
+; Range alignment to full bytes.
+    lda RangeLeft
+    and #%11111000
+    sta RangeLeft
+    adw RangeRight #7
+    lda RangeRight
+    and #%11111000
+    sta RangeRight
+    cpw RangeLeft RangeRight
+    jcs NothingToFall
+    ; convert range to bytes
+    mwa RangeLeft temp
+    lsr temp+1    ; temp / 8
+    ror temp
+    lsr temp     ; max range is 511 ! (9 bits)
+    lsr temp     ; temp+1 = 0
+    mva RangeRight temp+1
+    mva RangeRight+1 temp2
+    lsr temp2    ; temp+1 / 8
+    ror temp+1
+    lsr temp+1   ; max range is 511 ! (9 bits)
+    lsr temp+1   ; temp+1 = 0
+    
+    ; mwa #0 temp+1 ; byte in screen line
+    adw RangeLeft #mountaintable modify
 HorizontalByteLoop
     lda #0
     ldy #7
@@ -315,9 +339,9 @@ NoPixel
     adw modify #8
     inc temp
     lda temp
-    cmp #screenBytes
+    cmp temp+1
     bne HorizontalByteLoop  ; next column of bytes
-
+NothingToFall
     rts
 .endp
 ;--------------------------------------------------
