@@ -36,8 +36,9 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $56
+FirstZpageVariable = $55
     .zpvar DliColorBack        .byte = FirstZpageVariable
+    .zpvar ClearSky         .byte   ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte   ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr        .byte
     .zpvar GradientColors    .word

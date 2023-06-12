@@ -197,6 +197,14 @@ ClearPlot
     mva #1 color
 
 drawmountainsloop
+    jsr DrawMountainLine
+NoMountain
+    inw modify
+    inw xdraw
+    cpw xdraw #screenwidth
+    bne drawmountainsloop
+    rts
+DrawMountainLine
 .IF FASTER_GRAF_PROCS = 1
     ; calculate lower point in one screen byte
     lda xdraw
@@ -211,15 +219,26 @@ NotLower
     bpl @-
     sta temp2
     inc temp2	; this is our minimum
+    bit ClearSky
+    bpl NoClearSky
+    ; Clear Sky
+    mwa #0 ydraw
+    jsr plot.MakePlot    
+@   lda #$ff
+    sta (xbyte),y
+    adw xbyte #screenBytes
+    inc ydraw
+    lda ydraw
+    cmp temp2
+    bne @-   
+NoClearSky
 MinCalculated
-.ENDIF
     ldy #0
     lda (modify),y
     cmp #screenheight
     beq NoMountain
     sta ydraw
     sty ydraw+1
-.IF FASTER_GRAF_PROCS = 1
 ;    there was Drawline proc
     jsr plot.MakePlot
     ; after plot we have: (xbyte),y - addres of screen byte; X - index in bittable (number of bit)
@@ -254,6 +273,12 @@ MinCalculated
     bne @-   
 NotFillBytes
 .ELSE
+    ldy #0
+    lda (modify),y
+    cmp #screenheight
+    beq NoMountain
+    sta ydraw
+    sty ydraw+1
 ;    there was Drawline proc
 drawline
     jsr plot.MakePlot
@@ -263,19 +288,14 @@ drawline
     bne drawline
 ;    end of Drawline proc
 .ENDIF
-NoMountain
-    inw modify
-    inw xdraw
-    cpw xdraw #screenwidth
-    bne drawmountainsloop
     rts
 .endp
 ;--------------------------------------------------
-.proc CalculateMountainTable
+.proc CalcAndDrawMountains
 ;--------------------------------------------------
 ; Calculate mountaintable from screen data
 ; for speedup SoilDown, etc.
-
+    mva #$ff ClearSky
 ; Range alignment to full bytes.
     lda RangeLeft
     and #%11111000
@@ -287,17 +307,15 @@ NoMountain
     cpw RangeLeft RangeRight
     jcs NothingToFall
     ; convert range to bytes
-    mwa RangeLeft temp
-    lsr temp+1    ; temp / 8
+    lda RangeLeft
+    sta temp
+    sta xdraw
+    lda RangeLeft+1
+    sta xdraw+1
+    lsr @        ; temp / 8
     ror temp
     lsr temp     ; max range is 511 ! (9 bits)
     lsr temp     ; temp+1 = 0
-    mva RangeRight temp+1
-    mva RangeRight+1 temp2
-    lsr temp2    ; temp+1 / 8
-    ror temp+1
-    lsr temp+1   ; max range is 511 ! (9 bits)
-    lsr temp+1   ; temp+1 = 0
     
     ; mwa #0 temp+1 ; byte in screen line
     adw RangeLeft #mountaintable modify
@@ -335,13 +353,18 @@ NoPixel
     ;ldy ydraw
     cpx #screenheight
     bne ColumnLoop  ; next byte in colum
-    
-    adw modify #8
+    ; redrawing a column (byte) of mountains uses the drawmountains fragment
+    mva #7 temp+1   ; draw 8 mountain columns
+@   jsr drawmountains.DrawMountainLine
+    inw modify
+    inw xdraw
+    dec temp+1
+    bpl @-
     inc temp
-    lda temp
-    cmp temp+1
+    cpw xdraw RangeRight
     bne HorizontalByteLoop  ; next column of bytes
 NothingToFall
+    mva #$00 ClearSky
     rts
 .endp
 ;--------------------------------------------------
@@ -350,9 +373,7 @@ NothingToFall
 ; fast SoilDown froc - test
     jsr ClearTanks
 NoClearTanks
-    jsr CalculateMountainTable
-    jsr ClearScreen
-    jsr drawmountains
+    jsr CalcAndDrawMountains
     jmp DrawTanks
     ;rts
 .endp
