@@ -1289,7 +1289,7 @@ drawmountainspixelloop
     rts
  */
 ;--------------------------------------------------
-.proc SoilDown2
+.proc SoilDown
 ;--------------------------------------------------
 
 ; how it is supposed to work:
@@ -1418,6 +1418,15 @@ ColumnIsReady
     bcc FalloutOfLine
     beq FalloutOfLine
 
+.IF TARGET = 800
+.IF FASTER_GRAF_PROCS = 1
+    lda CONSOL
+    and #%00000001 ; START KEY
+    bne NoFastDown
+    jmp SoilDownTurbo.NoClearTanks
+NoFastDown
+.ENDIF
+.ENDIF
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
 

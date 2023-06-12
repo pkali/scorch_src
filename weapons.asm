@@ -115,7 +115,7 @@ GoBabyNukeSFX
 SecondRepeat
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
-    jsr SoilDown2
+    jsr SoilDown
 
     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
@@ -151,7 +151,7 @@ EndOfLeapping
     jsr CalculateExplosionRange0
     jsr xmissile.NoRangeCalc
 
-    jsr SoilDown2
+    jsr SoilDown
     ;
     jsr cleartanks    ; maybe not?
     mva #1 color
@@ -2474,7 +2474,7 @@ MIRValreadyAll
     jsr DisplayOffensiveTextNr
 
     ; temporary removing tanks from the screen (otherwise they will fall down with soil)
-    jsr SoilDown2
+    jsr SoilDown
     mva #$ff HitFlag        ; but why ??
     rts
 .endp
@@ -2730,7 +2730,7 @@ ReachSky
     adc #0
     sta RangeRight+1
     ; hide tanks and ...
-    jsr SoilDown2
+    jsr SoilDown
     jsr ClearScreenSoilRange
     ldx TankNr
 
@@ -2999,7 +2999,7 @@ NotHighest
     ; calculate range
     jsr CalculateSoildown
     ; hide tanks and ...
-    jsr SoilDown2
+    jsr SoilDown
     ldx TankNr
     rts
 

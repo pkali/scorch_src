@@ -368,7 +368,7 @@ NothingToFall
     rts
 .endp
 ;--------------------------------------------------
-.proc SoilDown3
+.proc SoilDownTurbo
 ;--------------------------------------------------
 ; fast SoilDown froc - test
     jsr ClearTanks
@@ -807,7 +807,7 @@ NoPlot
     ldx TankNr
     sta ActiveDefenceWeapon,x    ; deactivate Nuclear Winter
     jsr SetFullScreenSoilRange
-    jmp SoilDown2.NoClearTanks
+    jmp SoilDown.NoClearTanks
     ; rts
 
     ; in order to optimize the fragment repeated in both internal loops

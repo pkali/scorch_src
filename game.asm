@@ -441,7 +441,7 @@ GoExplosion
 continueMainRoundLoopAfterSeppuku
 
 AfterExplode
-    jsr SoilDown2    ; allways
+    jsr SoilDown    ; allways
 NoFallDown2
     ;here tanks are falling down
     mva tankNr tempor2
