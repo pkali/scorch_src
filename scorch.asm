@@ -36,13 +36,14 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $55
+FirstZpageVariable = $54
     .zpvar DliColorBack        .byte = FirstZpageVariable
     .zpvar ClearSky         .byte   ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte   ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr        .byte
     .zpvar GradientColors    .word
     .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
+    .zpvar FastSoilDown     .byte   ; 0 - standard, >0 - fast
     .zpvar JoystickNumber    .byte
     .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
     .zpvar SpyHardFlag        .byte    ; >$7f - run SpyHard after inventory

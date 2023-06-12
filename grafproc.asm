@@ -1367,8 +1367,26 @@ FoundPeek1
     beq NextColumn1
 ; we have both tables filled with starting values
 
+.IF TARGET >= 800
+.IF FASTER_GRAF_PROCS = 1
+    lda FastSoilDown
+    beq @+
+    jmp SoilDownTurbo.NoClearTanks
+@
+.ENDIF
+.ENDIF
 ; main loop starts here
 MainFallout2
+.IF TARGET = 800
+.IF FASTER_GRAF_PROCS = 1
+    lda CONSOL
+    and #%00000001 ; START KEY
+    bne NoFastDown
+    jmp SoilDownTurbo.NoClearTanks
+NoFastDown
+.ENDIF
+.ENDIF
+
     mwa RangeLeft xdraw
     adw RangeLeft #mountaintable temp
     adw RangeLeft #mountaintable2 tempor2
@@ -1417,16 +1435,6 @@ ColumnIsReady
     cpw xdraw RangeRight
     bcc FalloutOfLine
     beq FalloutOfLine
-
-.IF TARGET = 800
-.IF FASTER_GRAF_PROCS = 1
-    lda CONSOL
-    and #%00000001 ; START KEY
-    bne NoFastDown
-    jmp SoilDownTurbo.NoClearTanks
-NoFastDown
-.ENDIF
-.ENDIF
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
 

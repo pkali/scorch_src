@@ -70,7 +70,9 @@
 OptionsMainLoop
 
     lda WindChangeInRound
-    sta OptionsHere+126
+    sta OptionsHere+128
+    lda FastSoilDown
+    sta OptionsHere+88
 
     jsr OptionsInversion
     jsr getkey
@@ -137,6 +139,13 @@ OptionsNoTab
     sta WindChangeInRound
     rts
 NotWind
+    cmp #$02
+    bne NotGravity
+    lda FastSoilDown
+    eor #$66    ; 'f' character
+    sta FastSoilDown
+    rts
+NotGravity
     ldy GradientNr
     iny
     cpy #$03

@@ -198,7 +198,6 @@ ClearPlot
 
 drawmountainsloop
     jsr DrawMountainLine
-NoMountain
     inw modify
     inw xdraw
     cpw xdraw #screenwidth
@@ -229,6 +228,8 @@ NotLower
     adw xbyte #screenBytes
     inc ydraw
     lda ydraw
+    cmp #screenheight
+    beq NoClearSky
     cmp temp2
     bne @-   
 NoClearSky
@@ -288,6 +289,7 @@ drawline
     bne drawline
 ;    end of Drawline proc
 .ENDIF
+NoMountain
     rts
 .endp
 ;--------------------------------------------------
