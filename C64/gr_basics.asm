@@ -184,12 +184,6 @@ ClearPlot
     mva #1 color
 
 drawmountainsloop
-    ldy #0
-    lda (modify),y
-    cmp #screenheight
-    beq NoMountain
-    sta ydraw
-    sty ydraw+1
 .IF FASTER_GRAF_PROCS = 1
     ; calculate lower point in one screen byte
     lda xdraw
@@ -205,8 +199,15 @@ NotLower
     bpl @-
     sta temp2
     inc temp2	; this is our minimum
-    iny
 MinCalculated
+.ENDIF
+    ldy #0
+    lda (modify),y
+    cmp #screenheight
+    beq NoMountain
+    sta ydraw
+    sty ydraw+1
+.IF FASTER_GRAF_PROCS = 1
 ;    there was Drawline proc
     lda #screenheight
     sec
