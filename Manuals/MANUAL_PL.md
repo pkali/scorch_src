@@ -30,7 +30,9 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz [TAB], [SELECT] lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny), a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru) lub (jeśli kursor wskazuje opcję wyboru siły wiatru "Wind") zmieniają sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie "Wind".
+Klawisz [TAB], [SELECT] lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny), a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru).
+Jeśli kursor wskazuje opcję wyboru siły wiatru "Wind" zmienia sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie "Wind".
+Jeśli kursor wskazuje opcję wyboru siły ciążenia "Gravity" zmienia procedurę opadania ziemi na mniej efektowną, ale szybszą i odwrotnie. Wybranie szybkiego opadania ziemi sygnalizowane jest literą "f" przy słowie "Gravity".
 
 Klawisz [RETURN] lub przycisk Joysticka przechodzi do następnego ekranu.
 
@@ -229,7 +231,7 @@ Gra posiada 8 poziomów trudności przeciwników sterowanych przez komputer. A w
 
 * **Spoiler** - Strzela dokładnie tak jak **Chooser** tyle, że ma więcej szczęścia :) , co oznacza że nawet jeśli nie trafi w wybrany cel, to może być to strzał precyzyjniejszy niż **Chooser**. Broni defensywnych używa dokładnie tak jak **Chooser**. Na początku rundy ocenia ile ma pieniędzy i w zależności od tego podejmuje (pieniądze/5100) prób zakupu broni defensywnych a następnie jeszcze raz sprawdza ile pieniędzy mu zostało i podejmuje (pieniądze/320) prób zakupu broni ofensywnych. Przy zakupie broni defensywnych kupuje tylko bronie silne i precyzyjne - czyli takie, które nie zrobią mu przypadkiem krzywdy.
 
-* **Cyborg** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) lecz preferuje przeciwników sterowanych przez człowieka. Celuje bardzo dokładnie i w zdecydowanej większości przypadków trafia za pierwszym strzałem. Strzał oddaje najlepszą posiadaną bronią chyba że cel jest blisko. Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Broni defensywnych używa dokładnie tak jak **Chooser**. Zakupy robi dokładnie tak jak **Spoiler**
+* **Cyborg** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii) lecz preferuje przeciwników sterowanych przez człowieka. Celuje bardzo dokładnie i w zdecydowanej większości przypadków trafia za pierwszym strzałem. Strzał oddaje najlepszą posiadaną bronią chyba że cel jest blisko. Wtedy zmienia broń na **Baby Missile** by unikać trafienia samego siebie. Broni defensywnych używa dokładnie tak jak **Chooser** ale jeśli ma więcej niź 2 sztuki **Battery** stosuje je jeśli energia zmniejszy się poniższej 60 jednostek. Zakupy robi dokładnie tak jak **Spoiler**
 
 * **Unknown** - Przed oddaniem każdego strzału losowo wybiera sposób działania od **Poolsharka** do **Cyborga** i stosuje jego taktykę. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
 

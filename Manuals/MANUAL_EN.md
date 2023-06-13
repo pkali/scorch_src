@@ -30,7 +30,9 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
-The [TAB], [SELECT] or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the [5] controller key change the color of the mountains (3 versions to choose from) or (if the cursor indicates the wind strength selection option "Wind") change the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the "?" sign next to the word "Wind".
+The [TAB], [SELECT] or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the [5] controller key change the color of the mountains (3 versions to choose from).
+If the cursor indicates the wind strength selection option "Wind" change the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the "?" sign next to the word "Wind".
+If the cursor indicates the gravity selection option "Gravity" changes the procedure of falling the ground to a less impressive but faster one, and vice versa. The selection of fast ground fall is indicated by the letter "f" next to the word "Gravity".
 
 The [RETURN] key or a joystick button moves to the next screen.
 
@@ -228,7 +230,7 @@ The game has 8 difficulty levels of computer-controlled opponents. Or actually 7
 
 * **Spoiler** - He shoots exactly like **Chooser** except that he has more luck :) , which means that even if he doesn't hit the target of his choice, it can be a more precise shot than **Chooser**. He uses defensive weapons exactly like **Chooser**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/320) attempts to buy offensive weapons. When buying defensive weapons, he buys only strong and precise weapons - that is, weapons that won't accidentally hurt him.
 
-* **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser**. He shops exactly like **Spoiler**.
+* **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser** but if he has more than 2 pieces of **Battery** he uses them if the energy decreases below 60 units.. He shops exactly like **Spoiler**.
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
 

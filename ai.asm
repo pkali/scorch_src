@@ -227,6 +227,30 @@ EnoughEnergy
     rts
 .endp
 ;
+.proc CyborgBattery
+    ; cyborg is smarter :)
+    ; if have more than 2 batteries and less than 60 of energy
+    ; then uses battery
+    lda Energy,x
+    cmp #60
+    bcs EnoughEnergy
+    ; lower than 30 units - check battery
+    ldy #ind_Battery
+    lda (temp),y  ; has address of TanksWeaponsTable
+    cmp #2
+    bcc LowBatteries
+    ; we have more than 2 batteries - use one
+    sec
+    sbc #1
+    sta (temp),y
+    lda #99
+    sta Energy,x
+    jsr MaxForceCalculate
+EnoughEnergy
+LowBatteries
+    ; if low energy ten use battery (no RTS :) )
+.endp
+;
 .proc UseBattery
     ; if low energy ten use battery
     lda Energy,x
@@ -378,7 +402,8 @@ HighForce
 .endp
 ;----------------------------------------------
 .proc Cyborg
-    jsr UseBatteryOrFlag
+    ; if low energy ten use battery
+    jsr CyborgBattery
     ; use defensives like Tosser
     jsr TosserDefensives
     ; now select best target
