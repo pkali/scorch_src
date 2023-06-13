@@ -1329,7 +1329,13 @@ NoClearTanks
 
 .IF TARGET >= 800
     lda FastSoilDown
-    beq @+
+    bne GoFast
+.IF TARGET = 800
+    lda CONSOL
+    and #%00000001 ; START KEY
+    bne @+
+.ENDIF
+GoFast
     jmp SoilDownTurbo.NoClearTanks
 @
 .ENDIF
