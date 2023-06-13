@@ -374,6 +374,7 @@ NoPixel
     ; redrawing a column (byte) of mountains uses the drawmountains fragment
     mva #7 temp+1   ; draw 8 mountain columns
 @   jsr drawmountains.DrawMountainLine
+    mva #sfx_silencer sfx_effect
     inw modify
     inw xdraw
     dec temp+1
