@@ -1860,10 +1860,6 @@ ThisIsAI
     lda #char_computer    ; Auto Defense symbol
 @
     sta statusBuffer+80+21
-    lda #char_bracketO ; (
-    sta statusBuffer+80+22
-    lda #char_bracketC    ; )
-    sta statusBuffer+80+39
     lda ActiveDefenceWeapon,x
     bne ActiveDefence
     ; clear brackets
@@ -1873,8 +1869,14 @@ ThisIsAI
     ; lda #0  ; #space == #0
     tay
     jsr DisplayWeaponName.ClearingOnly
+    beq NoDefenceName   ; like JMP
 ActiveDefence
     jsr DisplayWeaponName
+    lda #char_bracketO ; (
+    sta statusBuffer+80+22
+    lda #char_bracketC    ; )
+    sta statusBuffer+80+39
+NoDefenceName
 
     ;=========================
     ;displaying the energy of a tank
