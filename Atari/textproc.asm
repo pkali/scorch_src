@@ -281,11 +281,13 @@ AfterManualPurchase
 
     mwa #ListOfWeapons WeaponsListDL ;switch to the list of offensive weapons
 
-; we are clearing list of the weapons
     mva #$00 WhichList
     ; offensive weapon - 0, deffensive - %10000000
 GoToActivation
     mva #$ff LastWeapon
+    
+; we are clearing list of the weapons    
+    jsr ClearLists  ; fast lists clear
 
     SetDLI DLIinterruptText  ; jsr SetDLI for text (purchase) screen
     jsr PMoutofScreen
@@ -343,7 +345,6 @@ AfterPurchase
     ; in xbyte there is the address of the line that
     ; is being processed now
     mwa #ListOfWeapons xbyte
-    jsr ClearLists  ; fast lists clear
     ldx #$00  ; index of the checked weapon
     stx HowManyOnTheListOff ; amounts of weapons (shells, bullets) in both lists
     stx HowManyOnTheListDef
