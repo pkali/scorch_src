@@ -343,6 +343,7 @@ AfterPurchase
     ; in xbyte there is the address of the line that
     ; is being processed now
     mwa #ListOfWeapons xbyte
+    jsr ClearLists  ; fast lists clear
     ldx #$00  ; index of the checked weapon
     stx HowManyOnTheListOff ; amounts of weapons (shells, bullets) in both lists
     stx HowManyOnTheListDef
@@ -1014,6 +1015,26 @@ NoArrowDown
     stx MoreDowndl
     sty MoreDowndl+1
     rts
+.endp
+;--------------------------------------------------
+.proc ClearLists
+;--------------------------------------------------
+    ldy #<ListOfWeapons
+    lda #0
+    sta temp2
+    lda #>ListOfWeapons
+    sta temp2+1
+Go  lda #$0
+loop  sta (temp2),y
+      iny
+      bne @+
+      inc temp2+1
+@     cpy #<ListOfDefensiveWeaponsEnd
+      bne loop
+      ldx temp2+1
+      cpx #>ListOfDefensiveWeaponsEnd
+      bne loop
+   rts
 .endp
 ; -----------------------------------------------------
 .proc EnterPlayerNames

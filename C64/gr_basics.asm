@@ -184,6 +184,13 @@ ClearPlot
     mva #1 color
 
 drawmountainsloop
+    jsr DrawMountainLine
+    inw modify
+    inw xdraw
+    cpw xdraw #screenwidth
+    jne drawmountainsloop
+    rts
+DrawMountainLine
 .IF FASTER_GRAF_PROCS = 1
     ; calculate lower point in one screen byte
     lda xdraw
@@ -200,14 +207,12 @@ NotLower
     sta temp2
     inc temp2	; this is our minimum
 MinCalculated
-.ENDIF
     ldy #0
     lda (modify),y
     cmp #screenheight
     beq NoMountain
     sta ydraw
     sty ydraw+1
-.IF FASTER_GRAF_PROCS = 1
 ;    there was Drawline proc
     lda #screenheight
     sec
@@ -274,6 +279,12 @@ MinCalculated
     bne @-   
 NotFillBytes
 .ELSE
+    ldy #0
+    lda (modify),y
+    cmp #screenheight
+    beq NoMountain
+    sta ydraw
+    sty ydraw+1
 ;    there was Drawline proc
 drawline
     jsr plot.MakePlot
@@ -284,10 +295,6 @@ drawline
 ;    end of Drawline proc
 .ENDIF
 NoMountain
-    inw modify
-    inw xdraw
-    cpw xdraw #screenwidth
-    jne drawmountainsloop
     rts
 .endp
 ;--------------------------------------------------
