@@ -212,21 +212,6 @@ AngleTable    ; 16 bytes ;ba w $348b L$3350
     .by 18,26,34,43,50,58,66,74
 .endp
 ;----------------------------------------------
-.proc UseBatteryOrFlag
-    jsr UseBattery    ; as subroutine for reuse in AutoDefense
-    ; if very low energy and no battery then use White Flag
-    lda Energy,x
-    cmp #5
-    bcs EnoughEnergy
-    ; lower than 5 units - white flag
-    jsr ClearTankNr    ; we must hide tank to erase shields (issue #138)
-    lda #ind_White_Flag
-    sta ActiveDefenceWeapon,x
-    jsr PutTankNr    ; and draw tank witch Flag
-EnoughEnergy
-    rts
-.endp
-;
 .proc CyborgBattery
     ; cyborg is smarter :)
     ; if have more than 2 batteries and less than 60 of energy
@@ -249,6 +234,22 @@ EnoughEnergy
 EnoughEnergy
 LowBatteries
     ; if low energy ten use battery (no RTS :) )
+.endp
+;
+.proc UseBatteryOrFlag
+    jsr UseBattery    ; as subroutine for reuse in AutoDefense
+    ; if very low energy and no battery then use White Flag
+    lda Energy,x
+    cmp #5
+    bcs EnoughEnergy
+    ; lower than 5 units - white flag
+    jsr ClearTankNr    ; we must hide tank to erase shields (issue #138)
+    lda #ind_White_Flag
+    sta ActiveDefenceWeapon,x
+    jsr PutTankNr    ; and draw tank witch Flag
+    clc
+EnoughEnergy
+    rts     ; Carry = 0 - White Flag , Carry = 1 - We don't give up :)
 .endp
 ;
 .proc UseBattery
@@ -379,7 +380,7 @@ HighForce
     jsr FindBestTarget3
     sty TargetTankNr
     ; aiming
-    jsr TakeAim        ; direction still in A (0 - left, >0 - right)
+    jsr TakeAimExtra        ; direction still in A (0 - left, >0 - right)
 
     ; choose the best weapon
     jsr ChooseBestOffensive
@@ -411,8 +412,7 @@ HighForce
     jsr FindBestTarget3
     sty TargetTankNr
     ; aiming
-    jsr TakeAim        ; direction still in A (0 - left, >0 - right)
-
+    jsr TakeAimExtra        ; direction still in A (0 - left, >0 - right)
     ; choose the best weapon
     ldy #ind_Nuke           +1
     jsr ChooseBestOffensive.NotFromAll
@@ -549,9 +549,10 @@ skipThisPlayer
 ; returns angle and power of shoot tank X (TankNr)
 ; in the appropriate variables (Angle and Force)
 ;----------------------------------------------
+    mva #$ff SecondTryFlag
+NoSecondTry
     lda ActiveWeapon,x
     pha                    ; store active weapon
-    mva #$ff SecondTryFlag
     ; set initial Angle and Force values
     lda OptionsTable+2    ; selected gravity
     asl
@@ -781,6 +782,46 @@ SetStartAndFlight    ; set start point (virtual barrel end :) ) and make test fl
     mva NewAngle Angle
     jsr Flight
     ldx TankNr
+    rts
+.endp
+;----------------------------------------------
+.proc TakeAimExtra
+; It triggers aiming and if it misses the target, 
+; repeats the targeting by aiming at other tanks.
+;----------------------------------------------
+    jsr TakeAim ; standard aiming first
+    ldy HitFlag
+    bpl TankHit
+    ; Target missed - repeat aiming
+    mva TargetTankNr FirstTargetTankNr
+    ldy NumberOfPlayers
+    dey
+SetNextTarget
+    cpy TankNr  ; Don't aim at yourself
+    beq skipThisPlayer
+    cpy FirstTargetTankNr   ; Don't aim at the original target
+    beq skipThisPlayer
+    lda eXistenZ,y
+    beq skipThisPlayer
+    ; check target direction
+    mva #0 tempor2  ; check target direction
+    lda LowResDistances,x
+    cmp LowResDistances,y
+    bcs EnemyOnTheLeft
+    ; enemy on right
+    inc tempor2    ; set direction to right
+    sty TargetTankNr    ; new target for aiming
+EnemyOnTheLeft
+    ; Go Aiming!
+    phy
+    jsr TakeAim.NoSecondTry ; standard aiming first (only first try)
+    ply
+    lda HitFlag
+    bpl TankHit
+skipThisPlayer
+    dey
+    bpl SetNextTarget
+TankHit
     rts
 .endp
 ;----------------------------------------------

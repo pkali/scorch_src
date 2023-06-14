@@ -164,6 +164,8 @@ TankShape    ; Tank shape number (from 0 to 2)
 ;----------------------------------------------------
 TargetTankNr    ; Target tank index (for AI routines)
     .DS 1
+FirstTargetTankNr    ; Target tank index (for AI routines)
+    .DS 1
 SecondTryFlag    ; For precise AI aiming
     .DS 1
 ;----------------------------------------------------
