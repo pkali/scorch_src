@@ -443,7 +443,7 @@ WriteToBranches
     sta digtabyH,x
     dex
     bpl WriteToBranches
-    ;jsr DiggerCharacter ; start character
+    ;jsr DiggerCharacter ; start character ; No memory to check Y range! Let's not draw this char - fix for very high mountans
 
     adw xdraw #4
     lda DigLong
