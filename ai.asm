@@ -815,12 +815,11 @@ SetNextTarget
     bcs EnemyOnTheLeft
     ; enemy on right
     inc tempor2    ; set direction to right
-    sty TargetTankNr    ; new target for aiming
 EnemyOnTheLeft
+    sty TargetTankNr    ; new target for aiming
     ; Go Aiming!
-    phy
     jsr TakeAim.NoSecondTry ; standard aiming first (only first try)
-    ply
+    ldy TargetTankNr
     lda HitFlag
     bpl TankHit
 skipThisPlayer
