@@ -347,6 +347,7 @@ CheckNextTankAD
     ldx tankNr
     lda TankStatusColoursTable,x
     sta COLOR2  ; set color of status line
+    jsr RandomizeForce.LimitForce
     jsr PutTankNameOnScreen
 ;    jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
 
