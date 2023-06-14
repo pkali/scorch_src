@@ -1027,7 +1027,10 @@ MoveBarrel
     ldx TankNr
     ;
     mva #1 Erase
+    bit TestFlightFlag
+    bmi AIaim
     jsr WaitOneFrame
+AIaim
     jsr DrawTankNr.BarrelChange
     mva #0 Erase
     lda NewAngle
