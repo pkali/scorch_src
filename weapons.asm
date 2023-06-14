@@ -443,7 +443,7 @@ WriteToBranches
     sta digtabyH,x
     dex
     bpl WriteToBranches
-    jsr DiggerCharacter ; start character
+    ;jsr DiggerCharacter ; start character
 
     adw xdraw #4
     lda DigLong
@@ -479,24 +479,18 @@ DigRight ; odd go right (everytime 4 pixels)
     sta digtabxH,x
 DigRandomize
     lda random
-    and #$87
+    ;and #$87
     bmi DigUp
 DigDown
     and #$07
     clc
     adc digtabyL,x
     sta digtabyL,x
-    lda digtabyH,x
-    adc #$00
-    sta digtabyH,x
-    ;crashing bug here - if too much added to digtaby, it gets over screenheight and starts writing over random areas
-    ;WARNING! fix for 1 byte screenheight. TODO
-    lda digtabyL,x
-    cmp #screenheight
-    bcc @+ ; branch if less
-      lda #screenheight-1
-      sta digtabyL,x
-@   jmp DigCalculateNext
+    bcc @+
+    inc digtabyH,x
+;    adc #$00
+@ ;    sta digtabyH,x
+    jmp DigCalculateNext
 DigUp
     and #$07
     sta temp
@@ -504,10 +498,34 @@ DigUp
     lda digtabyL,x
     sbc temp
     sta digtabyL,x
-    lda digtabyH,x
-    sbc #$00
-    sta digtabyH,x
+    bcs @+
+    dec digtabyH,x
+;    sbc #$00
+@ ;    sta digtabyH,x
 DigCalculateNext
+    ;second crashing bug here :) - if too much subtracted from digtaby, it gets under 8 (char height) and starts writing over random areas
+    lda digtabyH,x
+    bmi ToHigh
+;    cmp #0 ; necessary only if screenheight > 255 
+;    bne @+
+    lda digtabyL,x
+    cmp #7
+;@
+    bcs CheckLow
+ToHigh
+    lda #0
+    sta digtabyH,x
+    lda #7
+    sta digtabyL,x 
+CheckLow
+    ;crashing bug here - if too much added to digtaby, it gets over screenheight and starts writing over random areas
+    ;WARNING! fix for 1 byte screenheight. TODO
+    lda digtabyL,x
+    cmp #screenheight
+    bcc @+ ; branch if less
+      lda #screenheight-1
+      sta digtabyL,x
+@
     dex
     bpl CalculateBranches
     ; here we draw...
