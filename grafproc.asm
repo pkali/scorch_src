@@ -660,7 +660,7 @@ DrawTankNrX
     ldx tanknr
     jsr SetupXYdraw
 
-    jsr TypeChar
+    jsr TypeChar.Fast
     lda Erase
     jne noTankNoPM
     ; now P/M graphics on the screen (only for 5 tanks)
@@ -787,7 +787,7 @@ DrawTankFlag
     sec
     sbc #8
     sta ydraw
-    jsr TypeChar
+    jsr TypeChar.Fast
 NoShieldDraw
 BarrelChange
     ldy #$01
@@ -925,7 +925,7 @@ tankflash_loop
     sbc #8
     sta ydraw
     jsr SetupXYdraw.X
-    jsr TypeChar
+    jsr TypeChar.Fast
 ToHighToParachute
     ldx TankNr
     rts

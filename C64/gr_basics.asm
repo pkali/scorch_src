@@ -303,6 +303,18 @@ NoMountain
 ; in: CharCode
 ; in: left LOWER corner of the char coordinates (xdraw, ydraw)
 ;--------------------------------------------------
+    ; check coordinates
+    cpw xdraw #(screenwidth-7)
+    bcs CharOffTheScreen
+    lda ydraw
+    cmp #7
+    bcc CharOffTheScreen
+    cmp #(screenHeight-1)
+    bcc CharOnTheScreen
+CharOffTheScreen
+    rts
+CharOnTheScreen
+Fast    ; Put char without coordinates check!
     ; char to the table
     lda CharCode
     sta fontind
@@ -456,6 +468,7 @@ EndPutChar
     jcs TypeChar.EndPutChar ;nearest RTS
     ; checks ommited.
     ; char to the table
+Fast    ; Put char without coordinates check!
     lda CharCode4x4
     and #%00000001
     beq Upper4bits  ; A=0

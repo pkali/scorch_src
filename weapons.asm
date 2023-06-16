@@ -294,16 +294,7 @@ LastNapalmRepeat
     lda #char_clear_flame         ; clear flame symbol
 PutFlameChar
     sta CharCode
-    ; check coordinates
-    cpw xdraw #(screenwidth-7)
-    bcs CharOffTheScreen
-    lda ydraw
-    cmp #7
-    bcc CharOffTheScreen
-    cmp #(screenHeight-1)
-    bcs CharOffTheScreen
     jsr TypeChar
-CharOffTheScreen
     adw xdraw #5    ; reverse half character correction (4 px - we need positon of character center) and next char 1 pixels to righ
     inc magic+1
     lda magic+1
@@ -443,8 +434,7 @@ WriteToBranches
     sta digtabyH,x
     dex
     bpl WriteToBranches
-    ;jsr DiggerCharacter ; start character ; No memory to check Y range! Let's not draw this char - fix for very high mountans
-
+    jsr DiggerCharacter ; start character
     adw xdraw #4
     lda DigLong
     ; looks strange, but it is (DigLong+2)*4
@@ -503,29 +493,6 @@ DigUp
 ;    sbc #$00
 @ ;    sta digtabyH,x
 DigCalculateNext
-    ;second crashing bug here :) - if too much subtracted from digtaby, it gets under 8 (char height) and starts writing over random areas
-    lda digtabyH,x
-    bmi ToHigh
-;    cmp #0 ; necessary only if screenheight > 255 
-;    bne @+
-    lda digtabyL,x
-    cmp #7
-;@
-    bcs CheckLow
-ToHigh
-    lda #0
-    sta digtabyH,x
-    lda #7
-    sta digtabyL,x 
-CheckLow
-    ;crashing bug here - if too much added to digtaby, it gets over screenheight and starts writing over random areas
-    ;WARNING! fix for 1 byte screenheight. TODO
-    lda digtabyL,x
-    cmp #screenheight
-    bcc @+ ; branch if less
-      lda #screenheight-1
-      sta digtabyL,x
-@
     dex
     bpl CalculateBranches
     ; here we draw...

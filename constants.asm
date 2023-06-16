@@ -638,7 +638,7 @@ CreditsStart
     dta   d" "*
     dta   d"Ideas, help and QA"^
     dta   d"Bocianu, Probabilitydragon,"^
-    dta   d"EnderDude, Dracon,"^
+    dta   d"EnderDude, Dracon, TDC,"^
     dta   d"Beeblebrox, KrzysRog, lopezpb,"^
     dta   d"brad-colbert, archon800, nowy80,"^
     dta   d"Shaggy the Atarian, RetroBorsuk, ZPH"
