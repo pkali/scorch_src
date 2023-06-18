@@ -335,6 +335,7 @@ displayloop1
 ;-------------------------------------------------
 .proc DisplayStatus
 ;-------------------------------------------------
+DisplayEnergy
 DisplayAngle
     ldx TankNr
     rts

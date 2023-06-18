@@ -247,9 +247,9 @@ LowBatteries
     lda #ind_White_Flag
     sta ActiveDefenceWeapon,x
     jsr PutTankNr    ; and draw tank witch Flag
-    clc
 EnoughEnergy
-    rts     ; Carry = 0 - White Flag , Carry = 1 - We don't give up :)
+    jsr DisplayStatus.DisplayEnergy
+    rts
 .endp
 ;
 .proc UseBattery

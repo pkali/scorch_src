@@ -1900,6 +1900,7 @@ ActiveDefence
     sta statusBuffer+80+39
 NoDefenceName
 
+DisplayEnergy
     ;=========================
     ;displaying the energy of a tank
     ;=========================
