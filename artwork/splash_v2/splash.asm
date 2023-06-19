@@ -30,6 +30,9 @@ byt2    .ds 1
 
 zc    .ds ZCOLORS
 
+    org $600
+ManualLangFlag .ds 1
+
 * ---    BASIC switch OFF
     org $2000\ mva #$ff portb\ rts\ ini $2000
 
@@ -67,6 +70,7 @@ mother
     icl "lzss_player.asm"    ; player (and data) for splash music
 
 main
+    mva #00 ManualLangFlag  ; no manual page
     jsr init_song
 
 * ---    init PMG
@@ -173,7 +177,10 @@ s0    lda #$03
     lda skctl        ; ANY KEY
     and #$04
     bne skp
-
+    lda kbcode
+    cmp #$25    ; "M" key
+    bne stop
+    mva #01 ManualLangFlag  ; english manual page 
 stop    mva #$00 pmcntl        ;PMG disabled
     tax
     sta:rne hposp0,x+
@@ -195,6 +202,37 @@ stop    mva #$00 pmcntl        ;PMG disabled
     mva #$ff portb        ;ROM switch on
     mva #$40 nmien        ;only NMI interrupts, DLI disabled
     cli            ;IRQ enabled
+
+    lda ManualLangFlag
+    beq waitkey2release
+    ; and now display manual language selection screen
+    mva <lngDL dlptrs
+    mva >lngDL dlptrs+1
+    mva #%00111110 dmactls    ;set new screen width
+
+    ; wait for key
+waitkey2
+    lda skctl        ; ANY KEY
+    and #$04
+    bne waitkey2
+    lda kbcode
+    cmp #$2A    ; "E" key
+    bne notEng
+    mva #01 ManualLangFlag  ; english manual page
+    bne endsplash
+notEng
+    cmp #$0A    ; "P" key
+    bne waitkey2
+    mva #02 ManualLangFlag  ; polish manual page 
+endsplash
+    ;no glitching please (issue #67)
+    lda #0
+    sta $D400 ;dmactl
+    sta $022F ;dmactls
+waitkey2release
+    lda skctl        ; ANY KEY
+    and #$04
+    beq waitkey2release
 
     rts            ;return to ... DOS
 skp
@@ -223,6 +261,23 @@ byt3    brk
 
 ;---
 
+lngDL
+        .byte $70,$70,$70,$70,$70
+        .byte $47
+        .word LngTitle
+        .byte $70,$70
+       .byte $42
+        .word LngList
+        .byte $50,$02
+        .byte $41
+        .word lngDL
+LngTitle
+    dta d"  select language   "*
+LngList
+    dta d"         E - English Manual             "
+    dta d"         P - Polska instrukcja          "
+
+;---
 .MACRO    ANTIC_PROGRAM
     dta $70,$70
     :+8 dta $4e,a(:1+$0000+#*40)
