@@ -3046,7 +3046,7 @@ CheckCollisionWithTankLoop
     lda ActiveDefenceWeapon,x
     cmp #ind_Mag_Deflector      ; first shielded weapon
     bcc CheckCollisionWithNotShieldedTank
-    cmp #ind_Bouncy_Castle  +1    ; last shielded weapon
+    cmp #ind_Bouncy_Castle+1    ; last shielded weapon
     bcc CheckCollisionWithShieldedTank    ; tank with shield is bigger :)
 
     ;lda ShieldEnergy,x        ; there is wrong method to check shield :)

@@ -268,6 +268,9 @@ EnoughEnergy
     lda #99
     sta Energy,x
     jsr MaxForceCalculate
+    mva #sfx_battery sfx_effect
+    ldy #7
+    jsr PauseYFrames    ; wait 14 frames (Battery SFX)
 EnoughEnergy
 NoBatteries
     rts
