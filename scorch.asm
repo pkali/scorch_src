@@ -755,6 +755,9 @@ EndofBFGDLI
     rts
 .endp
 ;--------------------------------------------------
+    .if variablesEnd > (PMGraph + $300)
+      .ERROR 'Variables too long'    
+    .endif
     .IF * > MODUL-1
       .ECHO *
       .ERROR 'Code and data too long'
