@@ -134,6 +134,7 @@ raster_program_end
 
     lda >FontSplash
     sta chbase
+    sta chbas
 c0    lda #$00
     sta colbak
 c1    lda #$00
