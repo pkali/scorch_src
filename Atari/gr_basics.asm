@@ -756,16 +756,17 @@ loop  sta (temp),y
       iny
       cpy #screenheight+1
     bne @-
-    ; and bittables for fastes plot and point
+    ; and bittables for fastest plot and point (thanks @jhusak)
     ldy #0
-@   tya
-    and #%00000111
-    tax
-    lda bittable,x
+    lda #$40
+@   asl
+    adc #0
     sta bittable1_long,y
+    tax
     eor #%11111111
     sta bittable2_long,y
-    iny
+    txa
+    dey
     bne @-
     rts
 .endp
