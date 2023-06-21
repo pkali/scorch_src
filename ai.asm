@@ -219,18 +219,12 @@ AngleTable    ; 16 bytes ;ba w $348b L$3350
     lda Energy,x
     cmp #60
     bcs EnoughEnergy
-    ; lower than 30 units - check battery
+    ; lower than 60 units - check battery
     ldy #ind_Battery
     lda (temp),y  ; has address of TanksWeaponsTable
     cmp #2
-    bcc LowBatteries
     ; we have more than 2 batteries - use one
-    sec
-    sbc #1
-    sta (temp),y
-    lda #99
-    sta Energy,x
-    jsr MaxForceCalculate
+    bcs UseBattery.UseIt
 EnoughEnergy
 LowBatteries
     ; if low energy ten use battery (no RTS :) )
@@ -262,6 +256,7 @@ EnoughEnergy
     lda (temp),y  ; has address of TanksWeaponsTable
     beq NoBatteries
     ; we have batteries - use one
+UseIt
     sec
     sbc #1
     sta (temp),y
