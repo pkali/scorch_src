@@ -872,10 +872,10 @@ PurchaseAIRoutines
     sta temp+1
     :3 lsr    ; A=A/8
     sta temp
-    tya
-    and #%00000111
-    tay
-    lda bittable,y
+;    tya    ; optimization (256 bytes long bittable)
+;    and #%00000111
+;    tay
+    lda bittable1_long,y
     ldy temp
     and PurchaseMeTable2,y
     beq TryToPurchaseOnePiece.SorryNoPurchase
@@ -890,10 +890,10 @@ PurchaseAIRoutines
     sta temp+1
     :3 lsr    ; A=A/8
     sta temp
-    tya
-    and #%00000111
-    tay
-    lda bittable,y
+;    tya    ; optimization (256 bytes long bittable)
+;    and #%00000111
+;    tay
+    lda bittable1_long,y
     ldy temp
     and PurchaseMeTable,y
     beq SorryNoPurchase

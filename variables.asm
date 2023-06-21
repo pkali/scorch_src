@@ -450,6 +450,13 @@ trackn_audctl   .ds TRACKS
 v_aspeed        .ds 1
 track_endvariables
 
+ClearedvariablesEnd
+; These tebles are at the beginning of memory pages becouse ....
+bittable1_long
+    .ds $100
+bittable2_long
+    .ds $100
+; .... variablesEnd is aligned to PMGraph + $0300 in scorch.asm (before include this file)
 variablesEnd
 ;----------------------------------------------------
 

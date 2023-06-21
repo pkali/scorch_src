@@ -207,7 +207,7 @@ FirstZpageVariable = $54
 ;-----------------------------------------------
 ; variable declarations in RAM (no code)
 ;-----------------------------------------------
-    ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables + 1)
+    ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables)
     icl 'variables.asm'
 
     ; Game loading address
@@ -755,9 +755,6 @@ EndofBFGDLI
     rts
 .endp
 ;--------------------------------------------------
-    .if variablesEnd > (PMGraph + $300)
-      .ERROR 'Variables too long'    
-    .endif
     .IF * > MODUL-1
       .ECHO *
       .ERROR 'Code and data too long'

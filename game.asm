@@ -810,7 +810,7 @@ deletePtr = temp
 @     tya
       sta (deletePtr),y
       inw deletePtr
-      cpw deletePtr #variablesEnd
+      cpw deletePtr #ClearedvariablesEnd
     bne @-
     tya
     jsr SetJoystickPort

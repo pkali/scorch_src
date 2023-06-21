@@ -44,9 +44,11 @@ MakeUnPlot
     sta xbyte+1
     sta oldplot+1
 
-    lda xdraw
-    and #$7
-    tax
+;    lda xdraw
+;    and #$7
+;    tax
+    ldx xdraw   ; optimization (256 bytes long bittable)
+    
     ldy #0
 
     lda color
@@ -55,13 +57,13 @@ MakeUnPlot
     ;plotting here
     lda (xbyte),y
     sta OldOraTemp
-    ora bittable,x
+    ora bittable1_long,x
     sta (xbyte),y
     bne ContinueUnPlot ; allways <>0
 ClearUnPlot
     lda (xbyte),y
     sta OldOraTemp
-    and bittable2,x
+    and bittable2_long,x
     sta (xbyte),y
 ContinueUnPlot
     ldx WhichUnPlot
@@ -128,21 +130,23 @@ MakePlot
     adc xdraw+1
     sta xbyte+1
 
-    lda xdraw
-    and #$7
-    tax
+;    lda xdraw
+;    and #$7
+;    tax
+    ldx xdraw   ; optimization (256 bytes long bittable)
+    
     ldy #0
     lda color
     bne ClearPlot
 
     lda (xbyte),y
-    ora bittable,x
+    ora bittable1_long,x
     sta (xbyte),y
 EndOfPlot
     rts
 ClearPlot
     lda (xbyte),y
-    and bittable2,x
+    and bittable2_long,x
     sta (xbyte),y
     rts
 .endp
@@ -167,13 +171,15 @@ ClearPlot
     adc xdraw+1
     sta xbyte+1
 
-    lda xdraw
-    and #$7
-    tax
+;    lda xdraw
+;    and #$7
+;    tax
+    ldx xdraw   ; optimization (256 bytes long bittable)
+
     ldy #0
     lda (xbyte),y
     eor #$ff
-    and bittable,x
+    and bittable1_long,x
     rts
 .endp
 ;--------------------------------------------------
@@ -228,7 +234,7 @@ MinCalculated
     clc     ; and faster
 @
     lda (xbyte),y
-    and bittable2,x
+    and bittable2_long,x
     sta (xbyte),y
 ;IntoDraw
     inc ydraw
@@ -652,6 +658,17 @@ NotChar
 next8lines
       iny
       cpy #screenheight+1
+    bne @-
+    ; and bittables for fastes plot and point
+    ldy #0
+@   tya
+    and #%00000111
+    tax
+    lda bittable,x
+    sta bittable1_long,y
+    eor #%11111111
+    sta bittable2_long,y
+    iny
     bne @-
     rts
 .endp

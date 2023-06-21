@@ -199,10 +199,11 @@ sintable
 ;linetableH
 ;    :screenheight+1 .by >(display+screenBytes*#)
 ;----------------------------
+; now long (256 bytes) bittables are generated in RAM based on one bittable:
 bittable
     .by $80,$40,$20,$10,$08,$04,$02,$01
-bittable2
-    .by $7f,$bf,$df,$ef,$f7,$fb,$fd,$fe
+;bittable2
+;    .by $7f,$bf,$df,$ef,$f7,$fb,$fd,$fe
 ;----------------------------
 disktance ;tanks distance
     .by 0,0
