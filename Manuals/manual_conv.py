@@ -1,0 +1,58 @@
+""" Converts manual files to atari SCREENCODES ready for display
+"""
+import re
+import sys
+
+MAX_W = 40
+
+def break_long_string(long_string):
+    """ write a python function that breaks a long string of words to a list of MAX_W long strings.
+    Important - each new string must contain the full word, no breaking inside words."""
+    words = long_string.split()
+    result = []
+    current_string = ''
+
+    for word in words:
+        if len(current_string) + len(word) <= MAX_W:
+            current_string += word + ' '
+        else:
+            result.append(current_string.rstrip())
+            current_string = word + ' '
+
+    if current_string:
+        result.append(current_string.rstrip())
+
+    return result
+
+
+def remove_wierd(t: str) -> str:
+    t = re.sub(r'!.*\)?', '', t)  # remove embedded image
+    return re.sub(r'[#`]', '', t)
+
+
+with open(sys.argv[1], 'r') as f:
+    md = f.readlines()
+out = ''
+for line in md:
+    if line.startswith('#'):
+        line = remove_wierd(line)
+        out += line
+        out += '-' * len(line) + '\n'
+    else:
+        line = remove_wierd(line)
+        out += line
+
+# make lines break on words
+out2 = ''
+for line in out.split('\n'):
+    if len(line) <= MAX_W:
+        out2 += line + '\n'
+    else:
+        for line_shorter in break_long_string(line):
+            out2 += line_shorter + '\n'
+
+# convert to SCREENCODES
+for line in out2.split('\n'):
+    line = line + ' '*(MAX_W-len(line))
+    line = line.replace('"', '""')
+    print(f'    dta d"{line}"')
