@@ -656,16 +656,19 @@ CreditsStart
     dta   d" "*
     dta   d"Special thanks"^
     dta   d"Krzysztof 'Kaz' Ziembik"^
+    dta   d" "*
+    dta   d"and"^
+    dta   d"! Wendell Hicken !"^
     .IF TARGET = 800
       dta d"  "*
       dta d"Stay tuned for the FujiNet version!"^
     .ENDIF
-    dta d"         "*
+    dta d"       "*
 CreditsEnd
 .IF TARGET = 800
-  CreditsLines=40 + 7  ; add 7 for scrollout
+  CreditsLines=42 + 7  ; add 7 for scrollout
 .ELIF TARGET = 5200
-  CreditsLines=34 + 7; add 7 for scrollout
+  CreditsLines=37 + 7; add 7 for scrollout
 .ENDIF
 
 .IF TARGET = 5200
