@@ -242,7 +242,7 @@ LowBatteries
     sta ActiveDefenceWeapon,x
     jsr PutTankNr    ; and draw tank witch Flag
 EnoughEnergy
-    jsr DisplayStatus.DisplayEnergy
+;    jsr DisplayStatus.DisplayEnergy ; not necessary - status update after othher defensives
     rts
 .endp
 ;
@@ -276,37 +276,9 @@ NoBatteries
     ; but not allways
     randomize 1 3
     cmp #1
-    bne NoUseDefensive
-    ; first check check if any is in use
-    lda ActiveDefenceWeapon,x
-    bne DefensiveInUse
-    ldy #last_real_defensive+1 ;the last defensive weapon
-@
-    dey
-    cpy #ind_Hovercraft      ;first defensive weapon    (White Flag, Battery and Hovercraft - never use)
-    beq NoUseDefensive
-    lda (temp),y  ; has address of TanksWeaponsTable
-    beq @-
-    ; decrease in inventory
-    sec
-    sbc #1
-    sta (temp),y  ; has address of TanksWeaponsTable
-    ; activate defensive weapon
-    tya        ; number of selectet defensive weapon
-    sta ActiveDefenceWeapon,x
-    lda DefensiveEnergy,y
-    sta ShieldEnergy,x
-NoUseDefensive
-DefensiveInUse
-    rts
-.endp
-;----------------------------------------------
-.proc Tosser
-    jsr UseBatteryOrFlag
-    ; use best defensive :)
-    jsr TosserDefensives
-    ; Toosser is like Poolshark but allways uses defensives
-    jmp Poolshark.firstShoot
+    bne UseBattery.NoBatteries  ; nearest RTS
+    ; now use defensive like Tosser
+    jmp TosserDefensives
 .endp
 ;----------------------------------------------
 .proc TosserDefensives
@@ -333,7 +305,18 @@ DefensiveInUse
     sta ShieldEnergy,x
 DefensiveInUse
 NoUseDefensive
+DefensiveStatusLine
+    ; update status line
+    jsr DisplayStatus
     rts
+.endp
+;----------------------------------------------
+.proc Tosser
+    jsr UseBatteryOrFlag
+    ; use best defensive :)
+    jsr TosserDefensives
+    ; Toosser is like Poolshark but allways uses defensives
+    jmp Poolshark.firstShoot
 .endp
 ;----------------------------------------------
 .proc Chooser
