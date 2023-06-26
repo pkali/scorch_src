@@ -263,6 +263,7 @@ UseIt
     lda #99
     sta Energy,x
     jsr MaxForceCalculate
+    ; and SFX
     mva #sfx_battery sfx_effect
     ldy #7
     jsr PauseYFrames    ; wait 14 frames (Battery SFX)
@@ -303,6 +304,10 @@ NoBatteries
     sta ActiveDefenceWeapon,x
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
+    ; and SFX
+    mva #sfx_auto_defense sfx_effect
+    ldy #7
+    jsr PauseYFrames    ; wait 14 frames (Defense SFX)
 DefensiveInUse
 NoUseDefensive
 DefensiveStatusLine
