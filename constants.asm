@@ -658,7 +658,8 @@ CreditsStart
     dta   d"Krzysztof 'Kaz' Ziembik"^
     dta   d" "*
     dta   d"and"^
-    dta   d"! Wendell Hicken !"^
+    dta   d"Wendell Hicken"^
+    dta   d"for the original Scorched Earth"^
     .IF TARGET = 800
       dta d"  "*
       dta d"Stay tuned for the FujiNet version!"^
@@ -666,9 +667,9 @@ CreditsStart
     dta d"       "*
 CreditsEnd
 .IF TARGET = 800
-  CreditsLines=42 + 7  ; add 7 for scrollout
+  CreditsLines=43 + 7  ; add 7 for scrollout
 .ELIF TARGET = 5200
-  CreditsLines=37 + 7; add 7 for scrollout
+  CreditsLines=38 + 7; add 7 for scrollout
 .ENDIF
 
 .IF TARGET = 5200
