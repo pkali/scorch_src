@@ -204,8 +204,9 @@ stop    mva #$00 pmcntl        ;PMG disabled
     mva #$40 nmien        ;only NMI interrupts, DLI disabled
     cli            ;IRQ enabled
 
-    lda ManualLangFlag
+/*     lda ManualLangFlag
     beq waitkey2release
+    
     ; and now display manual language selection screen
     mva <lngDL dlptrs
     mva >lngDL dlptrs+1
@@ -234,7 +235,7 @@ waitkey2release
     lda skctl        ; ANY KEY
     and #$04
     beq waitkey2release
-
+ */
     rts            ;return to ... DOS
 skp
 
@@ -262,7 +263,7 @@ byt3    brk
 
 ;---
 
-lngDL
+/* lngDL
         .byte $70,$70,$70,$70,$70
         .byte $47
         .word LngTitle
@@ -276,7 +277,7 @@ LngTitle
     dta d"  select language   "*
 LngList
     dta d"         E - English Manual             "
-    dta d"         P - Polska instrukcja          "
+    dta d"         P - Polska instrukcja          " */
 
 ;---
 .MACRO    ANTIC_PROGRAM

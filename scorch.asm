@@ -160,7 +160,7 @@ FirstZpageVariable = $54
       icl 'Atari/lib/ATARISYS.ASM'
       icl 'Atari/lib/MACRO.ASM'
       icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
-      icl 'Atari/Manual/manual.asm'     ; manuals display
+;      icl 'Atari/Manual/manual.asm'     ; manuals display
     .ELIF TARGET = 5200
       OPT h-f+  ; no headers, single block --> cart bin file
       icl 'Atari/lib/5200SYS.ASM'
