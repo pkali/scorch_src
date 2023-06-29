@@ -279,12 +279,25 @@ NoBatteries
     cmp #1
     bne UseBattery.NoBatteries  ; nearest RTS
     ; now use defensive like Tosser
-    jmp TosserDefensives
+    ;jmp TosserDefensives
 .endp
 ;----------------------------------------------
 .proc TosserDefensives
     ; use best defensive :)
     ; allways
+    jsr GetBestDefensive
+    bcc NoUseDefensive
+    ; and SFX
+    mva #sfx_auto_defense sfx_effect
+    ldy #7
+    jsr PauseYFrames    ; wait 14 frames (Defense SFX)
+NoUseDefensive
+    ; update status line
+    jmp DisplayStatus   ; jsr/rts
+;    rts
+.endp
+;----------------------------------------------
+.proc GetBestDefensive
     ; first check check if any is in use
     lda ActiveDefenceWeapon,x
     bne DefensiveInUse
@@ -304,15 +317,11 @@ NoBatteries
     sta ActiveDefenceWeapon,x
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
-    ; and SFX
-    mva #sfx_auto_defense sfx_effect
-    ldy #7
-    jsr PauseYFrames    ; wait 14 frames (Defense SFX)
+    sec
+    rts
 DefensiveInUse
 NoUseDefensive
-DefensiveStatusLine
-    ; update status line
-    jsr DisplayStatus
+    clc
     rts
 .endp
 ;----------------------------------------------

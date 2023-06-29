@@ -2547,7 +2547,7 @@ NoWall
 ; -------------------------------------------------
     jsr PrepareAIShoot.WepTableToTemp
     jsr UseBattery
-    jmp TosserDefensives
+    jmp GetBestDefensive
     ; rts
 .endp
 ; -------------------------------------------------
