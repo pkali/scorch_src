@@ -89,7 +89,7 @@
     dta d"BIF!"^
     dta d"BAM!"^
     dta d"ZONK!"^
-    dta d"I SHOULD'VE LISTENED TO MY MOTHER."^
+    dta d"I SHOULD'VE LISTENED TO MY MOM."^
     dta d"I WALK THROUGH THE VALLEY OF THE SHADOW..."^
     dta d"WHAT WAS THAT NOISE?"^
     dta d"MAMA SAID THERE'D BE DAYS LIKE THIS."^

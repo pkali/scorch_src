@@ -1633,10 +1633,13 @@ ShotUnderGround
     mwa xtraj+1 xdraw    ; but why not XHit and YHit !!!???
     mwa ytraj+1 ydraw
     mva #$ff HitFlag
-    ;here we clear offensive text (after a shoot)
+    ;here we clear offensive text (after a shoot) - clear only if no test flight (Lazy Darvin)
 ClearOffensiveText
+    bit TestFlightFlag
+    bmi @+
     ldy TankNr
     jmp DisplayOffensiveTextNr
+@
 ;    rts
 .endp
 
@@ -2453,7 +2456,6 @@ MIRValreadyAll
     mwa ycircle ydraw
 
     ; we must do it manually because of the VOID pointer
-
     ;first clean the offensive text...
     ldy TankNr
     jsr DisplayOffensiveTextNr
