@@ -286,12 +286,6 @@ NoBatteries
     ; use best defensive :)
     ; allways
     jsr GetBestDefensive
-    bcc NoUseDefensive
-    ; and SFX
-    mva #sfx_auto_defense sfx_effect
-    ldy #7
-    jsr PauseYFrames    ; wait 14 frames (Defense SFX)
-NoUseDefensive
     ; update status line
     jmp DisplayStatus   ; jsr/rts
 ;    rts
@@ -317,11 +311,12 @@ NoUseDefensive
     sta ActiveDefenceWeapon,x
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
-    sec
-    rts
+    ; and SFX
+    mva #sfx_auto_defense sfx_effect
+    ldy #7
+    jsr PauseYFrames    ; wait 14 frames (Defense SFX)
 DefensiveInUse
 NoUseDefensive
-    clc
     rts
 .endp
 ;----------------------------------------------

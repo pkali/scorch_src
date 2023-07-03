@@ -659,7 +659,7 @@ CreditsStart
     dta   d" "*
     dta   d"and"^
     dta   d"Wendell Hicken"^
-    dta   d"for original Scorched Earth"^
+    dta   d"for original Scorched Earth game"^
     .IF TARGET = 800
       dta d"  "*
       dta d"Stay tuned for the FujiNet version!"^
