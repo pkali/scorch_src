@@ -53,6 +53,41 @@ for line in out.split('\n'):
 
 # convert to SCREENCODES
 for line in out2.split('\n'):
-    line = line + ' '*(MAX_W-len(line))
-    line = line.replace('"', '""')
-    print(f'    dta d"{line}"')
+    # line = line + ' '*(MAX_W-len(line))
+    line_out = ""
+    if '**' not in line:
+        line_out = line.replace('"', '""')
+    else:
+        # replace **text** with inverse 
+        if line.strip().startswith('**'):
+            inverse = True
+        else:
+            inverse = False
+        chunks = line.split('**')
+        line_length = 0
+
+        for chunk in chunks:
+            line_length += len(chunk)
+            if not chunk:
+                continue
+            chunk = chunk.replace('"', '""')
+            print(f'    dta d"{chunk}"', end='')
+            if inverse:
+                print('*')
+            else:
+                print()
+            inverse = not inverse
+        # add missing spaces
+        print(f'    dta d"{" "*(MAX_W-line_length)}"')
+    if '*' in line_out:
+        if line_out.startswith('*'):
+            line_out = line_out.replace('*', '$5a, d"', 1) + '"'
+        else:
+            line_out = 'd"' + line_out.replace('*', '", $5a, d"') + '"'
+    elif line_out:
+        line_out = '"' + line_out + '"'
+    print('    .align 40')
+    if line_out:
+        print(f'    dta {line_out}')
+
+    
