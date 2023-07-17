@@ -5,6 +5,7 @@ import sys
 
 MAX_W = 40
 
+
 def break_long_string(long_string):
     """ write a python function that breaks a long string of words to a list of MAX_W long strings.
     Important - each new string must contain the full word, no breaking inside words."""
@@ -51,43 +52,104 @@ for line in out.split('\n'):
         for line_shorter in break_long_string(line):
             out2 += line_shorter + '\n'
 
+utf_to_internal = {
+    ' ': 0,
+    '!': 1,
+    '"': 2,
+    '#': 3,
+    '$': 4,
+    '%': 5,
+    '&': 6,
+    "'": 7,
+    '(': 8,
+    ')': 9,
+    '*': 10,
+    '+': 11,
+    ',': 12,
+    '-': 13,
+    '.': 14,
+    '/': 15,
+    '0': 16,
+    '1': 17,
+    '2': 18,
+    '3': 19,
+    '4': 20,
+    '5': 21,
+    '6': 22,
+    '7': 23,
+    '8': 24,
+    '9': 25,
+    ':': 26,
+    ';': 27,
+    '<': 28,
+    '=': 29,
+    '>': 30,
+    '?': 31,
+    '@': 32,
+    'A': 33,
+    'B': 34,
+    'C': 35,
+    'D': 36,
+    'E': 37,
+    'F': 38,
+    'G': 39,
+    'H': 40,
+    'I': 41,
+    'J': 42,
+    'K': 43,
+    'L': 44,
+    'M': 45,
+    'N': 46,
+    'O': 47,
+    'P': 48,
+    'Q': 49,
+    'R': 50,
+    'S': 51,
+    'T': 52,
+    'U': 53,
+    'V': 54,
+    'W': 55,
+    'X': 56,
+    'Y': 57,
+    'Z': 58,
+    '[': 59,
+    '\\': 60,
+    ']': 61,
+    '^': 62,
+    '_': 63,
+    'a': 97,
+    'b': 98,
+    'c': 99,
+    'd': 100,
+    'e': 101,
+    'f': 102,
+    'g': 103,
+    'h': 104,
+    'i': 105,
+    'j': 106,
+    'k': 107,
+    'l': 108,
+    'm': 109,
+    'n': 110,
+    'o': 111,
+    'p': 112,
+    'q': 113,
+    'r': 114,
+    's': 115,
+    't': 116,
+    'u': 117,
+    'v': 118,
+    'w': 119,
+    'x': 120,
+    'y': 121,
+    'z': 122,
+    '|': 124,
+}
+
 # convert to SCREENCODES
+bin_out = bytearray()
 for line in out2.split('\n'):
-    # line = line + ' '*(MAX_W-len(line))
-    line_out = ""
-    if '**' not in line:
-        line_out = line.replace('"', '""')
-    else:
-        # replace **text** with inverse 
-        if line.strip().startswith('**'):
-            inverse = True
-        else:
-            inverse = False
-        chunks = line.split('**')
-        line_length = 0
+    for i, c in enumerate(line):
 
-        for chunk in chunks:
-            line_length += len(chunk)
-            if not chunk:
-                continue
-            chunk = chunk.replace('"', '""')
-            print(f'    dta d"{chunk}"', end='')
-            if inverse:
-                print('*')
-            else:
-                print()
-            inverse = not inverse
-        # add missing spaces
-        print(f'    dta d"{" "*(MAX_W-line_length)}"')
-    if '*' in line_out:
-        if line_out.startswith('*'):
-            line_out = line_out.replace('*', '$5a, d"', 1) + '"'
-        else:
-            line_out = 'd"' + line_out.replace('*', '", $5a, d"') + '"'
-    elif line_out:
-        line_out = '"' + line_out + '"'
-    print('    .align 40')
-    if line_out:
-        print(f'    dta {line_out}')
-
-    
+        bin_out.append(utf_to_internal[c])
+print(bin_out)
