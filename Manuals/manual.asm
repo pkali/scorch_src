@@ -153,7 +153,7 @@ escflag .byte 0
 paddlestate .byte 0
     .align 40
 man_text_en
-    icl 'man_cart_txt_EN.asm'
+    ins 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
 man_text_en_end
 
     .align $400
