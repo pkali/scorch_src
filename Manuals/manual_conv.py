@@ -40,7 +40,6 @@ def remove_wierd(t: str) -> str:
         else:
             out += t[i]
             i += 1
-    print(out)
     return out
 
 
@@ -48,6 +47,7 @@ with open(sys.argv[1], 'r') as f:
     md = f.readlines()
 out = ''
 for line in md:
+    line = line.replace('ó', 'ɠ')  # this is a dirty trick to avoid tripping 'ó' which is a legit LATIN-1 char
     if line.startswith('#'):
         line = remove_wierd(line)
         out += line
@@ -157,6 +157,24 @@ utf_to_internal = {
     'y': 121,
     'z': 122,
     '|': 124,
+    'Ą': 65,
+    'ą': 66,
+    'Ć': 67,
+    'ć': 68,
+    'Ę': 69,
+    'ę': 70,
+    'Ł': 76,
+    'ł': 77,
+    'Ń': 78,
+    'ń': 79,
+    'Ó': 80,
+    'ɠ': 81,  # 'ó': 81,
+    'Ś': 83,
+    'ś': 84,
+    'Ż': 87,
+    'ż': 88,
+    'Ź': 89,
+    'ź': 90,
     # INVERSE
     chr(ord(' ')+128): 128+0,
     chr(ord('!')+128): 128+1,
@@ -249,12 +267,31 @@ utf_to_internal = {
     chr(ord('y')+128): 128+121,
     chr(ord('z')+128): 128+122,
     chr(ord('|')+128): 128+124,
+    # chr(ord('Ą')+128): 128+65,
+    # chr(ord('ą')+128): 128+66,
+    # chr(ord('Ć')+128): 128+67,
+    # chr(ord('ć')+128): 128+68,
+    # chr(ord('Ę')+128): 128+69,
+    # chr(ord('ę')+128): 128+70,
+    # chr(ord('Ł')+128): 128+76,
+    # chr(ord('ł')+128): 128+77,
+    # chr(ord('Ń')+128): 128+78,
+    # chr(ord('ń')+128): 128+79,
+    # chr(ord('Ó')+128): 128+80,
+    # chr(ord('ó')+128): 128+81,
+    # chr(ord('Ś')+128): 128+83,
+    # chr(ord('ś')+128): 128+84,
+    # chr(ord('Ż')+128): 128+87,
+    # chr(ord('ż')+128): 128+88,
+    # chr(ord('Ź')+128): 128+89,
+    # chr(ord('ź')+128): 128+90,
 }
 
 # convert to SCREENCODES
 bin_out = bytearray()
 for line in out2.split('\n'):
     for i, c in enumerate(line):
+        print(c, ord(c), utf_to_internal[c])
         bin_out.append(utf_to_internal[c])
     if len(line) < 40:
         bin_out += bytes(40-len(line))

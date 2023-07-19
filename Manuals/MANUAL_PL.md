@@ -10,23 +10,23 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 * początkową ilość gotówki każdego z graczy (8k to wybrana przez nas wartość optymalna, lecz przy krótkich rozgrywkach warto wybrać większą wartość)
 * grawitacja
 * maksymalna siła wiatru (wiatr jest losowany na początku każdej z rund lub w czasie rundy pomiędzy turami, tu możemy wybrać jak silny może być):
-	* 1B - maksymalna siła wiatru: 5
-	* 3B - maksymalna siła wiatru: 20
-	* 5B - maksymalna siła wiatru: 40
-	* 7B - maksymalna siła wiatru: 70
-	* 9B - maksymalna siła wiatru: 99
+    * 1B - maksymalna siła wiatru: 5
+    * 3B - maksymalna siła wiatru: 20
+    * 5B - maksymalna siła wiatru: 40
+    * 7B - maksymalna siła wiatru: 70
+    * 9B - maksymalna siła wiatru: 99
 * liczba rozgrywanych rund
 * szybkość lotu pocisków (nie ma wpływu na tor lotu - zmienia jedynie widoczną prędkość rysowania - nie zmienia nic w samej rozgrywce)
-* częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą “strzelać w próżnię” :) - jeśli grają tylko ludzie optymalne ustawienie to “norm”, w przypadku graczy sterowanych przez komputer… wedle uznania.
+* częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą "strzelać w próżnię" :) - jeśli grają tylko ludzie optymalne ustawienie to "norm", w przypadku graczy sterowanych przez komputer... wedle uznania.
 * wysokość (i pofałdowanie) gór od prawie płaskich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
 * sposób działania ścian (krawędzi ekranu):
-	* none - pociski, które wyleciały poza ekran nie wracają (czarny kolor ramki ekranu)
-	* wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony i odwrotnie (fioletowy kolor ramki ekranu)
-	* bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć (granatowy kolor ramki ekranu)
-	* boxy - tak jak bump, tyle że "sufit" także odbija pociski (zielony kolor ramki ekranu)
-	* rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
-	
-	W trakcie rozgrywki aktualny sposób działania ścian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - granatowy, boxy - zielony.
+    * none - pociski, które wyleciały poza ekran nie wracają (czarny kolor ramki ekranu)
+    * wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony i odwrotnie (fioletowy kolor ramki ekranu)
+    * bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć (granatowy kolor ramki ekranu)
+    * boxy - tak jak bump, tyle że "sufit" także odbija pociski (zielony kolor ramki ekranu)
+    * rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
+    
+    W trakcie rozgrywki aktualny sposób działania ścian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - granatowy, boxy - zielony.
 
 Wybór opcji klawiszami kursora lub joystickiem.
 

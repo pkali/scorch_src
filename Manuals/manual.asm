@@ -158,6 +158,6 @@ man_text_en_end
 
     .align $400
 WeaponFont
-    ins 'manual_font.fnt'  ; 'artwork/weapons.fnt'
+    ins 'manual_font_pl.fnt'  ; 'artwork/weapons.fnt'
 
     run start
