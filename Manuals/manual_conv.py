@@ -9,20 +9,26 @@ MAX_W = 40
 def break_long_string(long_string):
     """ write a python function that breaks a long string of words to a list of MAX_W long strings.
     Important - each new string must contain the full word, no breaking inside words."""
-    words = long_string.split()
+    # words = long_string.split()
     result = []
-    current_string = ''
-
-    for word in words:
-        if len(current_string) + len(word) <= MAX_W:
-            current_string += word + ' '
-        else:
-            result.append(current_string.rstrip())
-            current_string = word + ' '
-
-    if current_string:
-        result.append(current_string.rstrip())
-
+    # current_string = ' ' * spaces
+    # for word in words:
+    #     if len(current_string) + len(word) <= MAX_W:
+    #         current_string += word + ' '
+    #     else:
+    #         result.append(current_string.rstrip())
+    #         current_string = word + ' '
+    #
+    # if current_string:
+    #     result.append(current_string.rstrip())
+    while len(long_string) > MAX_W:
+        spaces = len(long_string) - len(long_string.lstrip())
+        brk = long_string.rfind(' ', 0, MAX_W)
+        result.append(long_string[0:brk])
+        long_string = ' ' * (spaces - 1) + long_string[brk:]
+    else:
+        result.append(long_string)
+    print(result)
     return result
 
 
@@ -175,6 +181,7 @@ utf_to_internal = {
     'ż': 88,
     'Ź': 89,
     'ź': 90,
+    '↓': 93,
     # INVERSE
     chr(ord(' ')+128): 128+0,
     chr(ord('!')+128): 128+1,
@@ -291,7 +298,7 @@ utf_to_internal = {
 bin_out = bytearray()
 for line in out2.split('\n'):
     for i, c in enumerate(line):
-        print(c, ord(c), utf_to_internal[c])
+        # print(c, ord(c), utf_to_internal[c])
         bin_out.append(utf_to_internal[c])
     if len(line) < 40:
         bin_out += bytes(40-len(line))

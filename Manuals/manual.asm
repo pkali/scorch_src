@@ -2,9 +2,10 @@
     icl '../Atari/lib/MACRO.ASM'
 
 screen_height = 26
+screen_width = 40
 screen = $1000 ; start - 40*screen_height
 
-    org $2010  ; after the screen 
+    org screen+screen_height*40  ; after the screen
 
 src = $80
 dest = $82
@@ -22,14 +23,14 @@ main_loop
 
     ldx #screen_height-1
 screen_copy    
-    ldy #39
+    ldy #screen_width-1
 @
       lda (src),y
       sta (dest),y
       dey
     bpl @-
-    adw src #40
-    adw dest #40
+    adw src #screen_width
+    adw dest #screen_width
     dex
     bpl screen_copy
     
@@ -41,13 +42,13 @@ screen_copy
     jmp main_loop
   
 scroll_down
-    adw top_src #40
-    cpw top_src #(man_text_en_end-screen_height*40)
-    scc:mwa #(man_text_en_end-screen_height*40) top_src
+    adw top_src #screen_width
+    cpw top_src #(man_text_en_end-screen_height*screen_width)
+    scc:mwa #(man_text_en_end-screen_height*screen_width) top_src
     jmp main_loop
 
 scroll_up
-    sbw top_src #40
+    sbw top_src #screen_width
     cpw top_src #man_text_en
     scs:mwa #man_text_en top_src
     jmp main_loop
@@ -151,7 +152,6 @@ joyToKeyTable
 
 escflag .byte 0
 paddlestate .byte 0
-    .align 40
 man_text_en
     ins 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
 man_text_en_end
