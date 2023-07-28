@@ -234,7 +234,7 @@ EndOfCreditsVBI
           mva #consol_reset consol
           mva #@kbcode._none kbcode
 @
-
+exit
         pla
         tay
         pla
@@ -245,14 +245,15 @@ EndOfCreditsVBI
 .endp
     .IF TARGET = 5200
 .proc kb_continue
+    mvx #%00000111 CONSOL   ; virtual CONSOL keys not pressed
+    cmp #$0c    ; START key on 5200 keypad
+    beq StartPressed
     sta kbcode          ;Store key code in shadow.
     mva #0 SkStatSimulator
-exit    pla
-    tay
-    pla
-    tax
-    pla
-    rti
+    beq VBLinterrupt.exit
+StartPressed
+    mvx #%00000110 CONSOL   ; virtual CONSOL Start key pressed
+    bne VBLinterrupt.exit
 .endp
     .ENDIF
 
