@@ -10,61 +10,55 @@
 ; --- dmsc LZSS player routine on zero page
     org $80
 
-chn_copy    .ds     9
+/* chn_copy    .ds     9
 chn_pos     .ds     9
 bptr        .ds     2
 cur_pos     .ds     1
 chn_bits    .ds     1
 
-bit_data    .ds     1
+bit_data    .ds     1 */
 
     org $00
 
-fcnt	.ds 2
+/* fcnt	.ds 2
 fadr	.ds 2
 fhlp	.ds 2
 cloc	.ds 1
 regA	.ds 1
 regX	.ds 1
-regY	.ds 1
-
-WIDTH	= 40
-HEIGHT	= 30
+regY	.ds 1 */
 
 ; ---	BASIC switch OFF
 	org $2000\ mva #$ff portb\ rts\ ini $2000
 
 ; ---	MAIN PROGRAM
 	org $2000
-ant	dta $C2,a(scr)
+ant1	dta $C2,a(scr1)
 	dta $02,$82,$02,$02,$82,$02,$82,$02,$82,$02,$02,$02,$82,$02,$82,$82
 	dta $02,$02,$82,$02,$02,$82,$02,$02,$82,$82,$02,$82,$22
 	;dta $42,a(verline)
-	dta $41,a(ant)
+	dta $41,a(ant1)
 
 ;verline
 ;    :37 dta d" "
 ;    dta build
     
-scr	ins "Scorch50.scr"
+scr1	ins "Scorch50.scr"
 
 	.ds 0*40
 
 	.ALIGN $0400
-fnt	ins "Scorch50.fnt"
+fnt1	ins "Scorch50.fnt"
 
-	ift USESPRITES
 	.ALIGN $0800
-pmg	.ds $0300
-	ift FADECHR = 0
-	SPRITES
-	els
-	.ds $500
-	eif
-	eif
+pmg1	.ds $0300
+	SPRITES1
 
-main
-
+main1
+    lda SplashTypeFlag
+    bpl old_splash
+    rts 
+old_splash
     jsr init_song
     
 ;    ; copy system font to $a000
@@ -82,10 +76,8 @@ main
 
 ; ---	init PMG
 
-	ift USESPRITES
-	mva >pmg pmbase		;missiles and players data address
+	mva >pmg1 pmbase		;missiles and players data address
 	mva #$03 GRACTL		;enable players and missiles
-	eif
 
 	lda:cmp:req $14		;wait 1 frame
 
@@ -115,22 +107,23 @@ main
 
 	mva #$c0 nmien		;switch on NMI+DLI again
 
-_lp	lda trig0		; FIRE #0
-	beq stop
+;_stp jmp _stp
+_lp1	lda trig0		; FIRE #0
+	beq stop1
 
 	lda trig1		; FIRE #1
-	beq stop
+	beq stop1
 
 	lda consol		; START
 	and #1
-	beq stop
+	beq stop1
 
 	lda skctl
 	and #$04
-	bne _lp			;wait to press any key; here you can put any own routine
+	bne _lp1			;wait to press any key; here you can put any own routine
 
 
-stop
+stop1
 	
 	cli
 	vmain sysvbv,6
@@ -180,14 +173,14 @@ c9	lda #$14
 
 dli2
 	sta regA
-	lda >fnt+$400*$01
+	lda >fnt1+$400*$01
 	sta wsync		;line=24
 	sta chbase
 	DLINEW dli3 1 0 0
 
 dli3
 	sta regA
-	lda >fnt+$400*$02
+	lda >fnt1+$400*$02
 	sta wsync		;line=48
 	sta chbase
 	sta wsync		;line=49
@@ -234,7 +227,7 @@ x13	lda #$A9
 
 dli4
 	sta regA
-	lda >fnt+$400*$03
+	lda >fnt1+$400*$03
 	sta wsync		;line=80
 	sta chbase
 	DLINEW dli5 1 0 0
@@ -242,7 +235,7 @@ dli4
 dli5
 	sta regA
 	stx regX
-	lda >fnt+$400*$04
+	lda >fnt1+$400*$04
 	sta wsync		;line=112
 	sta chbase
 	sta wsync		;line=113
@@ -288,7 +281,7 @@ dli6
 	sta regA
 	stx regX
 	sty regY
-	lda >fnt+$400*$05
+	lda >fnt1+$400*$05
 	sta wsync		;line=136
 	sta chbase
 	sta wsync		;line=137
@@ -337,7 +330,7 @@ c14	lda #$04
 
 dli7
 	sta regA
-	lda >fnt+$400*$06
+	lda >fnt1+$400*$06
 	sta wsync		;line=160
 	sta chbase
 	DLINEW dli8 1 0 0
@@ -346,7 +339,7 @@ dli8
 	sta regA
 	stx regX
 	sty regY
-	lda >fnt+$400*$07
+	lda >fnt1+$400*$07
 	sta wsync		;line=184
 	sta chbase
 	sta wsync		;line=185
@@ -438,7 +431,7 @@ dli9
 	sta regA
 	stx regX
 	sty regY
-	lda >fnt+$400*$08
+	lda >fnt1+$400*$08
 c36	ldx #$0A
 	sta wsync		;line=216
 	sta chbase
@@ -482,7 +475,7 @@ c42	ldx #$00
 	sta wsync		;line=223
 	sta colpf1
 	stx colpf2
-	lda >fnt+$400*$01
+	lda >fnt1+$400*$01
 s18	ldx #$50
 x30	ldy #$44
 	sta wsync		;line=224
@@ -505,7 +498,7 @@ c45	lda #$0E
 
 dli10
 	sta regA
-	lda >fnt+$400*$00
+	lda >fnt1+$400*$00
 	sta wsync		;line=232
 	sta chbase
     ;DLINEW dli11 1 0 0
@@ -530,12 +523,7 @@ dli10
 
 ; ---
 
-CHANGES = 1
-FADECHR	= 0
-
-SCHR	= 127
-
-dliv = $0200
+dliv1 = $0200
 
 ; ---
 
@@ -554,7 +542,7 @@ VBL
 
 	;sta nmist		;reset NMI flag
 
-	mwa #ant dlptr		;ANTIC address program
+	mwa #ant1 dlptr		;ANTIC address program
 
 	mva #@dmactl(standard|dma|lineX1|players|missiles) dmactl	;set new screen width
 
@@ -562,7 +550,7 @@ VBL
 
 ; Initial values
 
-	lda >fnt+$400*$00
+	lda >fnt1+$400*$00
 	sta chbase
 c0	lda #$00
 	sta colbak
@@ -611,29 +599,29 @@ x7	lda #$A6
 c8	lda #$00
 	sta colpf0
 
-	mwa #DLI.dli_start dliv	;set the first address of DLI interrupt
+	mwa #DLI.dli_start dliv1	;set the first address of DLI interrupt
 
 ;this area is for yours routines
     jsr play_frame
 
-quit
+
 	lda regA
 	ldx regX
 	ldy regY
 	jmp sysvbv
 
 .endp
-
-    icl "..\splash_v2\lzss_player.asm"    ; player (and data) for splash music
+music1
+;    icl "..\splash_v2\lzss_player.asm"    ; player (and data) for splash music
 
 
 ; ---
-	ini main
+	ini main1
 ; ---
 
 	opt l-
 
-.MACRO	SPRITES
+.MACRO	SPRITES1
 missiles
 	.he 00 00 00 00 00 00 00 00 03 03 C3 03 03 03 03 03
 	.he 03 03 03 03 03 03 03 03 03 03 03 03 03 03 03 03
@@ -721,12 +709,10 @@ player3
 	.he 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 .ENDM
 
-USESPRITES = 1
-
 .MACRO	DLINEW
-	mva <:1 dliv
+	mva <:1 dliv1
 	ift [>?old_dli]<>[>:1]
-	mva >:1 dliv+1
+	mva >:1 dliv1+1
 	eif
 
 	ift :2

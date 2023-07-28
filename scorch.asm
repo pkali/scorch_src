@@ -13,6 +13,8 @@
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
+.def CART_VERSION = 0
+; if 1 - dual splash screen
 .def XCORRECTION_FOR_PM = 0
 ; if 1 - active x position of tanks correction fo PMG
 .def FASTER_GRAF_PROCS = 1
@@ -159,8 +161,10 @@ FirstZpageVariable = $54
     .IF TARGET = 800
       icl 'Atari/lib/ATARISYS.ASM'
       icl 'Atari/lib/MACRO.ASM'
-      icl 'artwork/splash_v2/splash.asm'  ; splash screen and musix
-;      icl 'artwork/splash_v1/splash.asm'  ; splash screen and musix
+      icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
+    .IF CART_VERSION
+      icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
+    .ENDIF
 ;      icl 'Atari/Manual/manual.asm'     ; manuals display
     .ELIF TARGET = 5200
       OPT h-f+  ; no headers, single block --> cart bin file

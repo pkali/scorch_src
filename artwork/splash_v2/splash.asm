@@ -32,6 +32,7 @@ zc    .ds ZCOLORS
 
     org $600
 ManualLangFlag .ds 1
+SplashTypeFlag .ds 1
 
 * ---    BASIC switch OFF
     org $2000\ mva #$ff portb\ rts\ ini $2000
@@ -69,6 +70,13 @@ mother
     dta d"      Father Unknown of All Games       "
 
 main
+.IF CART_VERSION
+    lda random
+    bmi new_splash
+    sta SplashTypeFlag
+    rts ; KAZ splash :)
+new_splash
+.ENDIF
     mva #00 ManualLangFlag  ; no manual page
     jsr init_song
 
@@ -159,7 +167,7 @@ s0    lda #$03
     lda #$14
     sta gtictl
 
-
+;    jmp stop
 //--------------------
 //    EXIT
 //--------------------
@@ -259,6 +267,7 @@ _rts    rts
 
 byt3    brk
 
+    org $8000   ; fixed address of music routine and data
     icl "lzss_player.asm"    ; player (and data) for splash music
 
 ;---
