@@ -67,7 +67,6 @@ FontSplash
 mother
 ;    dta d"        The Mother of All Games         "
     dta d"      Father Unknown of All Games       "
-    icl "lzss_player.asm"    ; player (and data) for splash music
 
 main
     mva #00 ManualLangFlag  ; no manual page
@@ -260,6 +259,7 @@ _rts    rts
 
 byt3    brk
 
+    icl "lzss_player.asm"    ; player (and data) for splash music
 
 ;---
 
