@@ -634,6 +634,9 @@ CreditsStart
     dta   d"Art"^
     dta   d"Adam Wachowski"^
     .IF TARGET = 800
+      .IF CART_VERSION
+      dta   d"Krzysztof 'Kaz' Ziembik"^
+      .ENDIF
       dta d"Roman 'xorcerer' Fierfas"^
     .ENDIF
     dta   d" "*
@@ -645,6 +648,9 @@ CreditsStart
     dta   d"Shaggy the Atarian, RetroBorsuk, ZPH"
     .IF TARGET = 800
       dta d" "*
+      .IF CART_VERSION = 0
+      dta   d"Krzysztof 'Kaz' Ziembik"^
+      .ENDIF
     .ELIF TARGET = 5200
       dta d","*
       dta d"x-usr(1536), Aking, JAC!, phaeron,"^
@@ -655,9 +661,6 @@ CreditsStart
     dta   d"Arek and Alex Pecko"^
     dta   d" "*
     dta   d"Special thanks"^
-    dta   d"Krzysztof 'Kaz' Ziembik"^
-    dta   d" "*
-    dta   d"and"^
     dta   d"Wendell Hicken"^
     dta   d"for original Scorched Earth game"^
     .IF TARGET = 800
@@ -667,9 +670,9 @@ CreditsStart
     dta d"       "*
 CreditsEnd
 .IF TARGET = 800
-  CreditsLines=43 + 7  ; add 7 for scrollout
+  CreditsLines=41 + 7  ; add 7 for scrollout
 .ELIF TARGET = 5200
-  CreditsLines=38 + 7; add 7 for scrollout
+  CreditsLines=35 + 7; add 7 for scrollout
 .ENDIF
 
 .IF TARGET = 5200
