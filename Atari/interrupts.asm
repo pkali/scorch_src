@@ -245,7 +245,6 @@ exit
 .endp
     .IF TARGET = 5200
 .proc kb_continue
-    mvx #%00000111 CONSOL   ; virtual CONSOL keys not pressed
     cmp #$0c    ; START key on 5200 keypad
     beq StartPressed
     sta kbcode          ;Store key code in shadow.
