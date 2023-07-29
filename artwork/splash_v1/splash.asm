@@ -56,7 +56,7 @@ pmg1	.ds $0300
 
 main1
     lda SplashTypeFlag
-    bpl old_splash
+    beq old_splash
     rts 
 old_splash
     jsr init_song

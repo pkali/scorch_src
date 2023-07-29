@@ -72,8 +72,9 @@ mother
 main
 .IF CART_VERSION
     lda random
-    bmi new_splash
+    and #%11100000  ; Old splash probability 1/8
     sta SplashTypeFlag
+    bne new_splash
     rts ; KAZ splash :)
 new_splash
 .ENDIF
