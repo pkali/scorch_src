@@ -113,13 +113,13 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 | [A]/[OPTION]     | [7]     | bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych. |
 | [M]              | [PAUSE] | wyłączenie/włączenie muzyki w tle |
 | [S]              | [RESET] | wyłączenie/włączenie dźwięków efektów |
-| [START]          | brak    | przyspiesza/pomija niektóre animacje w grze |
+| [START]          | [SYART] | przyspiesza/pomija niektóre animacje w grze |
 | [O]              | [3]     | wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza [ESC] z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy. |
 | [START]+[OPTION] | brak    | natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak [O], ale bez potwierdzenia. |
 | [G]              | brak    | zmienia wariant kolorystyczny gór (3 wersje do wyboru) |
 | [ESC]            | [*]     | w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem). |
 | [Y]              | [1]     | w przypadku pytania o przerwanie lub zakończenie gry - potwierdzenie decyzji |
-| [CTRL]+[HELP]    | brak    | Przełącza tryb "visual debug". Wizualizuje mierzone odległości, celowanie lasera oraz technikę celowania komputera. Pozostawia bałagan na ekranie, co nie zmienia rozgrywki, tylko ją nieco utrudnia. |
+| [CTRL]+[HELP]    | [#] długo | Przełącza tryb "visual debug". Wizualizuje mierzone odległości, celowanie lasera oraz technikę celowania komputera. Pozostawia bałagan na ekranie, co nie zmienia rozgrywki, tylko ją nieco utrudnia. |
 
 
 ## 5. Zasady gry - bronie ofensywne

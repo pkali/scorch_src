@@ -1292,14 +1292,24 @@ NoSpyHard
 
 jumpFromStick
     .IF TARGET = 800
-      cmp #$80|17    ; Ctrl+Help
+      cmp #$80|@kbcode._help    ; Ctrl+Help
       bne NoVdebugSwitch
+    .ELSE
+      cmp #@kbcode._help    ; Help (# in A5200)
+      bne NoVdebugSwitch
+      sta pressTimer ; reset 0+@kbcode._help (tricky)
+      jsr WaitForKeyRelease.StillWait
+      lda pressTimer
+      cmp #(25+@kbcode._help)  ; 1/2s - long press only
+      bcc NoVdebugSwitch
+    .ENDIF
       lda Vdebug
       eor #$ff
       sta Vdebug
+      mva #sfx_long_barrel sfx_effect
       jmp ReleaseAndLoop
 NoVdebugSwitch
-    .ENDIF
+
     and #$3f ;CTRL and SHIFT ellimination
     cmp #@kbcode._up  ; $e
     jeq pressedUp

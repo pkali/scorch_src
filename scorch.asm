@@ -199,11 +199,12 @@ FirstZpageVariable = $54
         _down  = $08
         _I     = $09
         _esc   = $0a
-        _ret   = $fb  ;$0b ;not used in 5200
+        _help   = $0b  ;Visual Debug in 5200
         _del   = $fc  ;$0c ;not used in 5200
         _M     = $0d
         _S     = $0e
         _atari = $fd  ; not used in 5200
+        _ret   = $fd  ; not used in 5200
         _none = $0f
 
       .ende
