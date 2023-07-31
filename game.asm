@@ -228,6 +228,15 @@ SettingEnergies
       dex
     bpl SettingEnergies
 
+; set mountain type if ...
+    lda RandomMountains
+    beq noRandomMountains
+@   ldy RANDOM
+    cpy #5
+    bcs @-
+    jsr SetVariablesFromOptions.setMountainsType
+noRandomMountains
+
 ;generating the new landscape
     jsr PMoutofScreen ;let P/M disappear
     jsr clearscreen   ;let the screen be clean
@@ -1216,6 +1225,7 @@ SetRandomWalls
 
     ;8th option (how aggressive are mountains)
     ldy OptionsTable+7
+setMountainsType
     lda mountainsDeltaTableH,y
     sta mountainDeltaH
     lda mountainsDeltaTableL,y

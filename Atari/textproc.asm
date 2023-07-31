@@ -68,7 +68,8 @@
     mva #0 OptionsY
 
 OptionsMainLoop
-
+    lda RandomMountains
+    sta OptionsHere+288
     lda WindChangeInRound
     sta OptionsHere+128
     lda FastSoilDown
@@ -146,6 +147,13 @@ NotWind
     sta FastSoilDown
     rts
 NotGravity
+    cmp #$07
+    bne NoMountains
+    lda RandomMountains
+    eor  #$1f    ; '?' character
+    sta RandomMountains
+    rts
+NoMountains
     ldy GradientNr
     iny
     cpy #$03

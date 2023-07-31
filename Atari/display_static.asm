@@ -69,7 +69,9 @@ MoreDown
  dta 93,93,93
  dta d"  more  "
  dta 93,93,93
- dta d"         "
+; dta d"         "   ; common part of text and empty line :)
+EmptyLine
+ dta d"                                        "
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
@@ -105,8 +107,6 @@ ActivateDescription
    dta                    d"FIRE"*
    dta                        d": Finish "
 .ENDIF
-EmptyLine
- dta d"                                        "
 ;---------------------------------------------------
 OptionsTitle
 .IF TARGET = 800
@@ -115,13 +115,13 @@ OptionsTitle
    dta d" scorch supersystem "*
 .ENDIF
 DifficultyTitle
- dta d"   difficulty   "*
+ dta d"   difficulty"* ; "   " 3 bytes - common part of 2 texts
+GameOverTitle
+ dta d"     game  over     "*
 PurchaseTitle
  dta d"purchase weapons"
 InventoryTitle
  dta d"activate weapons"*
-GameOverTitle
- dta d"     game  over     "*
 GameOverTitle2
  dta d"   Player   Points  Hits   Earned Money "
 ;-----------------------------------------------------

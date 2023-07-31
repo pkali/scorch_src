@@ -45,6 +45,8 @@ Jeśli kursor wskazuje opcję wyboru siły wiatru "Wind" zmienia sposób losowan
 
 Jeśli kursor wskazuje opcję wyboru siły ciążenia "Gravity" zmienia procedurę opadania ziemi na mniej efektowną, ale szybszą i odwrotnie. Wybranie szybkiego opadania ziemi sygnalizowane jest literą "f" przy słowie "Gravity".
 
+Jeśli kursor wskazuje opcję wyboru wysokości gór "Mountain" przełącza opcję zmiennej co rundę wysokości gór. Losowanie co rundę jest sygnalizowane znakiem "?" przy słowie "Mountain".  
+
 Klawisz [RETURN] lub przycisk joysticka przechodzi do następnego ekranu.
 
 

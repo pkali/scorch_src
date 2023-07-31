@@ -26,7 +26,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.32" ; number of this build (4 bytes)
+    dta d"1.33" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -38,13 +38,14 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $54
+FirstZpageVariable = $53
     .zpvar DliColorBack        .byte = FirstZpageVariable
     .zpvar ClearSky         .byte   ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte   ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr        .byte
     .zpvar GradientColors    .word
     .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
+    .zpvar RandomMountains  .byte   ; mountains type change after each turn flag - (0 - round only, >0 - each turn)
     .zpvar FastSoilDown     .byte   ; 0 - standard, >0 - fast
     .zpvar JoystickNumber    .byte
     .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing

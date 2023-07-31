@@ -33,6 +33,7 @@ Select options with cursor keys or a joystick.
 The [TAB], [SELECT] or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the [5] controller key change the color of the mountains (3 versions to choose from).  
 If the cursor indicates the wind strength selection option "Wind" change the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the "?" sign next to the word "Wind".  
 If the cursor indicates the gravity selection option "Gravity" changes the procedure of falling the ground to a less impressive but faster one, and vice versa. The selection of fast ground fall is indicated by the letter "f" next to the word "Gravity".
+If the cursor points to the option of selecting the height of the mountains "Mountain" toggles the option of changing the height of the mountains every round. Drawing every round is indicated by the "?" sign next to the word "Mountain".
 
 The [RETURN] key or a joystick button moves to the next screen.
 

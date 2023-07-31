@@ -6,7 +6,7 @@
     dta d"YOU'RE TOAST!"^
     dta d"BANZAI!"^
     dta d"FROM HELL'S HEART I STAB AT THEE..."^
-    dta d"I DIDN'T DO IT. NOBODY SAW ME DO IT."^
+    dta d"I DIDN'T DO IT. I'M NOT HERE."^
     dta d"TAKE A HIKE!"^
     dta d"YOU'RE DEAD MEAT."^
     dta d"MAKE MY DAY."^
@@ -65,7 +65,7 @@
     dta d"EEEK!"^
     dta d"AACCH!"^
     dta d"I HATE IT WHEN THAT HAPPENS."^
-    dta d"ONE DIRECT HIT CAN RUIN YOUR WHOLE DAY."^
+    dta d"ONE HIT CAN RUIN YOUR WHOLE DAY."^
     dta d"OH NO!"^
     dta d"NOT ME!"^
     dta d"OUCH."^
