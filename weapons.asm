@@ -1974,7 +1974,8 @@ SkipCollisionCheck
     bvc NoTestFlight
     bit Vdebug
     bpl NoUnplot
-    jsr WaitOneFrame    ; visualize AI targeting
+    ldy #20    ; delay for visualize AI targeting
+    jsr ShellDelay.Y
     jmp YesUnPlot
 NoTestFlight
     lda tracerflag

@@ -622,10 +622,10 @@ nokeys
 ;--------------------------------------------------
 .proc ShellDelay
 ;--------------------------------------------------
-    lda CONSOL
+    ldy flyDelay
+Y   lda CONSOL
     and #%00000001 ; START KEY
     beq noShellDelay
-    ldy flyDelay
 DelayLoop
       lda VCOUNT
 @     cmp VCOUNT
