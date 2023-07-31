@@ -301,8 +301,8 @@ for line in out2.split('\n'):
         # print(c, ord(c), utf_to_internal[c])
         bin_out.append(utf_to_internal[c])
     if len(line) < 40:
-        bin_out += bytes(40-len(line))
-
+        # bin_out += bytes(40-len(line))
+        bin_out.append(255)
 # save to a file
 with open('manual.bin', 'wb') as f:
     f.write(bin_out)

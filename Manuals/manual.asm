@@ -23,12 +23,17 @@ main_loop
 
     ldx #screen_height-1
 screen_copy    
-    ldy #screen_width-1
+    ldy #0
 @
       lda (src),y
+      cmp #$ff  ; end of line marker
+      bne not_eol
+
+not_eol
       sta (dest),y
-      dey
-    bpl @-
+      iny
+      cpy #screen_width
+    bne @-
     adw src #screen_width
     adw dest #screen_width
     dex
