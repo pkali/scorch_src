@@ -63,9 +63,9 @@ MoreUp
  dta 92,92,92
  dta d"  more  "
  dta 92,92,92
- dta d"         "
+; dta d"         "
 MoreDown
- dta d"         "
+ dta d"         "   ; common part of both texts
  dta 93,93,93
  dta d"  more  "
  dta 93,93,93

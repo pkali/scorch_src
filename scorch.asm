@@ -640,8 +640,8 @@ noShellDelay
 .proc RmtSongSelect
 ;  starting song line 0-255 to A reg
 ;--------------------------------------------------
-    cmp #song_ingame
-    bne noingame    ; noMusic blocks only ingame song
+    cmp #song_main_menu
+    beq noingame    ; noMusic blocks only ingame songs
     bit noMusic
     spl:lda #song_silencio
 noingame
