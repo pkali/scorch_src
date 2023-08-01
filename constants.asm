@@ -628,9 +628,6 @@ CreditsStart
       dta d"Mario 'Emkay' Krix"^
       dta d" "*
     .ENDIF
-    dta   d"Code Optimization"^
-    dta   d"Piotr '0xF' Fusik"^
-    dta   d" "*
     dta   d"Art"^
     dta   d"Adam Wachowski"^
     .IF TARGET = 800
@@ -641,8 +638,9 @@ CreditsStart
     .ENDIF
     dta   d" "*
     dta   d"Ideas, help and QA"^
+    dta   d"Piotr '0xF' Fusik, Shanti, Jakub Husak"^
     dta   d"Bocianu, Probabilitydragon,"^
-    dta   d"EnderDude, Dracon, Jakub Husak, TDC,"^
+    dta   d"EnderDude, Dracon, TDC,"^
     dta   d"Beeblebrox, KrzysRog, lopezpb,"^
     dta   d"brad-colbert, archon800, nowy80,"^
     dta   d"Shaggy the Atarian, RetroBorsuk, ZPH"
@@ -654,7 +652,7 @@ CreditsStart
     .ELIF TARGET = 5200
       dta d","*
       dta d"x-usr(1536), Aking, JAC!, phaeron,"^
-      dta d"RB5200"^
+      dta d"RB5200, Krzysztof 'Kaz' Ziembik"^
     .ENDIF
     dta   d" "*
     dta   d"Additional testing"^
@@ -670,9 +668,9 @@ CreditsStart
     dta d"       "*
 CreditsEnd
 .IF TARGET = 800
-  CreditsLines=41 + 7  ; add 7 for scrollout
+  CreditsLines=39 + 7  ; add 7 for scrollout
 .ELIF TARGET = 5200
-  CreditsLines=35 + 7; add 7 for scrollout
+  CreditsLines=33 + 7; add 7 for scrollout
 .ENDIF
 
 .IF TARGET = 5200

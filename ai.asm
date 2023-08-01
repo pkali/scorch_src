@@ -452,7 +452,13 @@ ItIsHuman
     clc
     adc Energy,y    ; if robotank energy=energy+100 (100 or 0 from PreferHumansFlag)
     cmp temp2 ; lowest
-    bcs lowestIsLower
+    bcc lowestIsHigher
+    ; lower or equal
+    bne lowestIsLower
+    ; if equal then select random (of two tanks)
+    bit RANDOM
+    bmi lowestIsLower
+lowestIsHigher
     sta temp2
     sty temp2+1 ; number of the closest tank
     mva #0 tempor2
