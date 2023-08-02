@@ -452,9 +452,10 @@ ItIsHuman
     clc
     adc Energy,y    ; if robotank energy=energy+100 (100 or 0 from PreferHumansFlag)
     cmp temp2 ; lowest
+    beq lowestIsEqual
     bcc lowestIsHigher
-    ; lower or equal
-    bne lowestIsLower
+    ; if lower
+lowestIsEqual
     ; if equal then select random (of two tanks)
     bit RANDOM
     bmi lowestIsLower
