@@ -7,9 +7,12 @@ screen = $1000 ; start - 40*screen_height
 
     org screen+screen_height*40  ; after the screen
 
-src = $80
-dest = $82
-top_src = $84
+    .zpvar src .word = $80
+    .zpvar dest .word
+    .zpvar top_src .word
+    .zpvar next_line_begin .byte
+    .zpvar end_address .word
+    .zpvar start_address .word
 
 start
     mwa #dl dlptrs
@@ -22,22 +25,41 @@ main_loop
     mwa #screen dest
 
     ldx #screen_height-1
-screen_copy    
+screen_copy
+    mwa top_src start_address
     ldy #0
 @
       lda (src),y
       cmp #$ff  ; end of line marker
       bne not_eol
+        sty next_line_begin
+        lda #$00
+@         sta (dest),y
+          iny
+          cpy #screen_width
+        bne @-
+        jmp next_line
 
 not_eol
       sta (dest),y
       iny
       cpy #screen_width
-    bne @-
-    adw src #screen_width
+    bne @-1
+    mva #screen_width-1 next_line_begin
+next_line
     adw dest #screen_width
+    ; adw src #screen_width
+    inc next_line_begin
+    clc
+    lda src
+    adc next_line_begin
+    sta src
+    scc:inc src+1
+    
     dex
     bpl screen_copy
+    ; save the current end of the printed text source
+    mwa src end_address
     
     jsr GetKey
     cmp #@kbcode._down
@@ -47,9 +69,22 @@ not_eol
     jmp main_loop
   
 scroll_down
-    adw top_src #screen_width
-    cpw top_src #(man_text_en_end-screen_height*screen_width)
-    scc:mwa #(man_text_en_end-screen_height*screen_width) top_src
+    ; find first $ff after top_src and move it there
+    ldy #-1
+@     iny
+      lda (top_src),y
+      cmp #$ff
+    bne @-
+    iny
+    tya
+    clc
+    adc top_src
+    sta top_src
+    scc:inc top_src+1
+    
+    ;adw top_src #screen_width
+    cpw end_address #man_text_en_end
+    scc:mwa start_address top_src
     jmp main_loop
 
 scroll_up
