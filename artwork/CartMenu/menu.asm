@@ -4,6 +4,7 @@
 
     .zpvar dliCounter        .byte = $80
     .zpvar TetryxColor       .byte
+    .zpvar TetryxColorS      .byte
 
     org $2000
 
@@ -12,15 +13,19 @@ WeaponFont
 
 main
     lda #0
+    sta dmactls
+    jsr WaitOneFrame
+    lda #0
     sta TetryxColor
+    sta TetryxColorS
     lda RANDOM
     bmi TnotVisible
     lda #10
     sta TetryxColor
 TnotVisible
+    lda #0
     ldx #3
-@   lda colors,x
-    sta COLOR0-1,x
+@   sta COLOR0-1,x
     dex
     bpl @-
     mva #>WeaponFont chbas
@@ -29,10 +34,35 @@ TnotVisible
     SetDLI DLIinterrupt
     lda #@dmactl(narrow|dma) ; narrow screen width, DL on, P/M off
     sta dmactls
-
+    jsr WaitOneFrame
+    jsr MakeColors
+    jsr WaitOneFrame
 stop
     jmp stop
 
+;--------------------------------------------------
+.proc MakeColors
+    ldy #15
+FirstLoop
+    ldx #3
+@   lda COLOR0-1,x
+    cmp colors,x
+    beq ColorOK
+    inc COLOR0-1,x
+ColorOK
+    dex
+    bpl @-
+    lda TetryxColorS
+    cmp TetryxColor
+    beq TcolorOK
+    inc TetryxColorS
+TcolorOK
+    jsr WaitOneFrame
+    jsr WaitOneFrame
+    dey
+    bpl FirstLoop
+    rts
+.endp
 ;--------------------------------------------------
 .proc DLIinterrupt
     pha
@@ -44,7 +74,7 @@ FirstDLI
     sta COLPF2
     beq EndOfDLI
 SecondDLI
-    lda TetryxColor
+    lda TetryxColorS
     sta COLPF1
 EndOfDLI
     inc dliCounter
@@ -70,6 +100,12 @@ DLIinterruptNone
     STY VDSLST
     STX VDSLST+1
     STA NMIEN
+    rts
+.endp
+;--------------------------------------------------
+.proc WaitOneFrame
+;--------------------------------------------------
+    waitRTC    ; or wait ?
     rts
 .endp
 ;--------------------------------------------------
