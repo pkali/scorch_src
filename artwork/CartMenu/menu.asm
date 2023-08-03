@@ -2,12 +2,22 @@
       icl '../../Atari/lib/ATARISYS.ASM'
       icl '../../Atari/lib/MACRO.ASM'
 
+    .zpvar dliCounter        .byte = $80
+    .zpvar TetryxColor       .byte
+
     org $2000
 
 WeaponFont
     ins '../weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
 
 main
+    lda #0
+    sta TetryxColor
+    lda RANDOM
+    bmi TnotVisible
+    lda #10
+    sta TetryxColor
+TnotVisible
     ldx #3
 @   lda colors,x
     sta COLOR0-1,x
@@ -15,11 +25,54 @@ main
     bpl @-
     mva #>WeaponFont chbas
     mwa #MenuDL dlptrs
+    VMAIN VBLinterrupt,7          ;jsr SetVBL
+    SetDLI DLIinterrupt
     lda #@dmactl(narrow|dma) ; narrow screen width, DL on, P/M off
     sta dmactls
 
 stop
     jmp stop
+
+;--------------------------------------------------
+.proc DLIinterrupt
+    pha
+    lda dliCounter
+    bne SecondDLI
+FirstDLI
+    lda #0
+    ;sta WSYNC
+    sta COLPF2
+    beq EndOfDLI
+SecondDLI
+    lda TetryxColor
+    sta COLPF1
+EndOfDLI
+    inc dliCounter
+    pla
+DLIinterruptNone
+    rti
+.endp
+;--------------------------------------------------
+.proc VBLinterrupt
+    mva #0 dliCounter
+    jmp XITVBV
+.endp
+;--------------------------------------------------
+.macro SetDLI
+;    SetDLI #WORD
+;    Initialises Display List Interrupts
+         LDY # <:1
+         LDX # >:1
+         jsr _SetDLIproc
+.endm
+.proc _SetDLIproc
+    LDA #$C0
+    STY VDSLST
+    STX VDSLST+1
+    STA NMIEN
+    rts
+.endp
+;--------------------------------------------------
 
 ; DL for menu
 MenuDL
@@ -27,7 +80,7 @@ MenuDL
         .byte $4e
         .word picData
         :29 .byte $0e
-        .byte $70,$70
+        .byte $70,$70+$80
         .byte $47
         .word MenuTitle
         .byte $30,$70
@@ -35,6 +88,7 @@ MenuDL
         .word MenuOptions
         .byte $10,$02
         .byte $10,$02
+        .byte $10+$80,$02
         .byte $41
         .word MenuDL
 
@@ -78,10 +132,11 @@ colors
     .BYTE 0,14,10,4
  
 MenuTitle
-    dta d" select  option "*
+    dta d" SELECT  OPTION "
 MenuOptions
     dta d"     E - English Manual         "
     dta d"     P - Polska instrukcja      "
     dta d"     G - Start Game             "
+    dta d"     T - Start Tetryx Game      "
 
     run main
