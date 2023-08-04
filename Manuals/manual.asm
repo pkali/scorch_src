@@ -211,8 +211,8 @@ escflag .byte 0
 paddlestate .byte 0
 man_text_en
     ins 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
-    .by $ff, $ff
 man_text_en_end
+    .by $ff, $ff
 
     .align $400
 WeaponFont

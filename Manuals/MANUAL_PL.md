@@ -331,28 +331,29 @@ Na początku losowana jest jedna z broni (wśród wszystkich możliwych ofensywn
 
 Tabela broni kupowanych przez **Shooter**, **Poolshark**, **Tosser** i **Chooser**
 
-| bronie ofensywne | bronie defensywne |
-|------------------|-------------------|
-| Missile          | Battery           |
-| Baby Nuke        | Parachute         |
-| Nuke             | Strong Parachute  |
-| LeapFrog         | Mag Deflector     |
-| Funky Bomb       | Shield            |
-| MIRV             | Heavy Shield      |
-| Death's Head     | Force Shield      |
-| Napalm           | Bouncy Castle     |
-| Hot Napalm       |                   |
-| Baby Roller      |                   |
-| Roller           |                   |
-| Heavy Roller     |                   |
+|    ofensywa    |     defensywa    |
+|----------------|------------------|
+| Missile        | Battery          |
+| Baby Nuke      | Parachute        |
+| Nuke           | Strong Parachute |
+| LeapFrog       | Mag Deflector    |
+| Funky Bomb     | Shield           |
+| MIRV           | Heavy Shield     |
+| Death's Head   | Force Shield     |
+| Napalm         | Bouncy Castle    |
+| Hot Napalm     |                  |
+| Baby Roller    |                  |
+| Roller         |                  |
+| Heavy Roller   |                  |
 
 Tabela broni kupowanych przez **Spoiler** i **Cyborg**
 
-| bronie ofensywne | bronie defensywne |
-|------------------|-------------------|
-| Missile          | Battery           |
-| Baby Nuke        | Strong Parachute  |
-| Nuke             | Mag Deflector     |
-| Hot Napalm       | Heavy Shield      |
-|                  | Force Shield      |
-|                  | Bouncy Castle     |
+|    ofensywa    |     defensywa    |
+|----------------|------------------|
+| Missile        | Battery          |
+| Baby Nuke      | Strong Parachute |
+| Nuke           | Mag Deflector    |
+| Hot Napalm     | Heavy Shield     |
+|                | Force Shield     |
+|                | Bouncy Castle    |
+
