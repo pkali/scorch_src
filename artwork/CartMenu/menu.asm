@@ -35,13 +35,27 @@ TnotVisible
     lda #@dmactl(narrow|dma) ; narrow screen width, DL on, P/M off
     sta dmactls
     jsr WaitOneFrame
-    jsr MakeColors
+    jsr FadeIn
     jsr WaitOneFrame
+    
+    jsr GetKey
+
+    jsr WaitOneFrame
+    jsr FadeOut
+    VMAIN XITVBV,7          ; jsr SetVBL (off user proc)
+    LDA #%01000000          ; DLI off
+    STA NMIEN
+    lda #0 ; DL off, P/M off
+    sta dmactls
+    jsr WaitOneFrame
+    
+    jmp main
+    
 stop
     jmp stop
 
 ;--------------------------------------------------
-.proc MakeColors
+.proc FadeIn
     ldy #15
 FirstLoop
     ldx #3
@@ -58,6 +72,25 @@ ColorOK
     inc TetryxColorS
 TcolorOK
     jsr WaitOneFrame
+    dey
+    bpl FirstLoop
+    rts
+.endp
+;--------------------------------------------------
+.proc FadeOut
+    ldy #15
+FirstLoop
+    ldx #3
+@   lda COLOR0-1,x
+    beq ColorOK
+    dec COLOR0-1,x
+ColorOK
+    dex
+    bpl @-
+    lda TetryxColorS
+    beq TcolorOK
+    dec TetryxColorS
+TcolorOK
     jsr WaitOneFrame
     dey
     bpl FirstLoop
@@ -96,7 +129,7 @@ DLIinterruptNone
          jsr _SetDLIproc
 .endm
 .proc _SetDLIproc
-    LDA #$C0
+    LDA #%11000000
     STY VDSLST
     STX VDSLST+1
     STA NMIEN
@@ -174,5 +207,55 @@ MenuOptions
     dta d"     P - Polska instrukcja      "
     dta d"     G - Start Game             "
     dta d"     T - Start Tetryx Game      "
+
+;--------------------------------------------------
+.proc GetKey
+; waits for pressing a key and returns pressed value in A
+; result: A=keycode
+;--------------------------------------------------
+    jsr WaitForKeyRelease
+getKeyAfterWait
+    lda SKSTAT
+    cmp #$ff
+    beq checkJoyGetKey ; key not pressed, check Joy
+    lda kbcode
+    cmp #@kbcode._none
+    beq checkJoyGetKey
+    and #$3f ;CTRL and SHIFT ellimination
+    bne getkeyend   ; allways
+checkJoyGetKey
+    ;fire
+    lda STRIG0
+    beq JoyButton
+checkStarttKey
+      lda CONSOL
+      and #%00000001    ; Start
+      beq StartPressed
+    bne getKeyAfterWait
+StartPressed
+JoyButton
+    lda #@kbcode._space    ; Start key
+getkeyend
+    ldy #0
+    sty ATRACT    ; reset atract mode
+    rts
+.endp
+;--------------------------------------------------
+.proc WaitForKeyRelease
+;--------------------------------------------------
+StillWait
+      lda STRIG0
+      beq StillWait
+      lda SKSTAT
+      cmp #$ff
+      bne StillWait
+      lda CONSOL
+      and #%00000001    ; Start only
+      cmp #%00000001
+      bne StillWait
+KeyReleased
+      rts
+.endp
+
 
     run main
