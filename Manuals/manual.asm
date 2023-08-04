@@ -13,6 +13,7 @@ screen = $1000 ; start - 40*screen_height
     .zpvar next_line_begin .byte
     .zpvar end_address .word
     .zpvar start_address .word
+    .zpvar temp .word
 
 start
     mwa #dl dlptrs
@@ -88,7 +89,23 @@ scroll_down
     jmp main_loop
 
 scroll_up
-    sbw top_src #screen_width
+    ; find second $ff before top_src
+    sbw top_src #$00ff temp
+    ldy #$ff-1
+@     dey
+      lda (temp),y
+      cmp #$ff
+    bne @-
+    iny
+    tya
+    clc
+    adc temp
+    sta top_src
+    lda temp+1
+    adc #0
+    sta top_src+1
+    
+    ;sbw top_src #screen_width
     cpw top_src #man_text_en
     scs:mwa #man_text_en top_src
     jmp main_loop
@@ -194,6 +211,7 @@ escflag .byte 0
 paddlestate .byte 0
 man_text_en
     ins 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
+    .by $ff, $ff
 man_text_en_end
 
     .align $400
