@@ -5,6 +5,8 @@ screen_height = 26
 screen_width = 40
 screen = $1000 ; start - 40*screen_height
 
+STEREOMODE  equ 0
+
     org screen+screen_height*40  ; after the screen
 
     .zpvar src .word = $80
@@ -16,15 +18,33 @@ screen = $1000 ; start - 40*screen_height
     .zpvar temp .word
 
 start
+    jsr CheckPALorNTSC
+    ldx #<MODUL                  ;low byte of RMT module to X reg
+    ldy #>MODUL                 ;hi byte of RMT module to Y reg
+    lda #0                      ;starting song line 0-255 to A reg
+    jsr RASTERMUSICTRACKER      ;Init
+    ;second POKEY init
+    lda #0
+    sta $d218
+    ldy #3
+    sty $d21f
+    ldy #8
+@   
+      sta $d210,y
+      dey
+    bpl @-
+    
+    
     mwa #dl dlptrs
     mva #>WeaponFont chbas
     
     mwa #man_text_en top_src
     
+    vmain VBLANK,7
+    
 main_loop
     bit escflag
     spl:rts  ; EXIT THIS WAY --->
-    mva #0 shiftflag
     mwa top_src src
     mwa #screen dest
 
@@ -73,13 +93,6 @@ next_line
     jmp main_loop
   
 scroll_down
-    lda #1  ; repeat_counter
-    ; make it repeat 10 times if SHIFT is pressed
-    bit shiftflag
-    spl:lda #screen_height
-    sta repeat_counter
-    
-scroll_repeat_loop
     ; find first $ff after top_src and move it there
     ldy #-1
 @     iny
@@ -96,8 +109,6 @@ scroll_repeat_loop
     ;adw top_src #screen_width
     cpw end_address #man_text_en_end
     scc:mwa start_address top_src
-    dec repeat_counter
-    bne scroll_repeat_loop
     jmp main_loop
 
 scroll_up
@@ -134,11 +145,7 @@ getKeyAfterWait
       cmp #$ff
       beq checkJoyGetKey ; key not pressed, check Joy
       cmp #$f7  ; SHIFT
-      bne @+
-      mva #$80 shiftflag
-      bne checkJoyGetKey
-      
-@
+      beq checkJoyGetKey
     lda kbcode
     cmp #@kbcode._none
     beq checkJoyGetKey
@@ -183,7 +190,6 @@ SelectPressed
     bne getkeyend
 JoyButton
     lda #@kbcode._ret ;Return key
-    mva #$80 shiftflag
 getkeyend
     ldy #0
     sty ATRACT    ; reset atract mode
@@ -196,6 +202,55 @@ Check2button
     sta PaddleState
     rts
 .endp
+
+;--------------------------------------------------
+.proc VBLANK  ;vertical blank interrupt
+;--------------------------------------------------
+    lda ticksPerSecond
+    cmp #60
+    bne PALMusic
+    ; it is NTSC HERE -- slow down the sound
+    lda ticks
+    and #%00000111
+    beq skipSoundFrame
+PALMusic
+    lda ticks
+    and #%00000011
+    beq skipSoundFrame
+playNow
+    jsr RASTERMUSICTRACKER+3
+    ; fake POKEY reverb
+    ldy #8
+@     lda fake_pokey,y
+      sta $d210,y
+      dey
+    bpl @-
+skipSoundFrame
+
+    ;time update
+    inc:lda ticks
+    cmp ticksPerSecond
+    sne:mva #0 ticks
+
+VBLANKEND   
+    jmp XITVBV
+.endp
+;--------------------------------------------------
+.proc CheckPALorNTSC
+;--------------------------------------------------
+    lda $d014 ;http://www.myatari.com/nirdary.html
+    and #%00001110
+    bne NTSC
+    lda #50
+    sta ticksPerSecond
+    rts
+NTSC
+    lda #60
+    sta ticksPerSecond
+    rts
+.endp
+
+    icl "music/rmtplayr.a65"  
 
 
 dl
@@ -224,10 +279,14 @@ joyToKeyTable
     .by @kbcode._up     ;0e
     .by $ff             ;0f
 
+
 escflag .byte 0
-shiftflag .byte 0
-repeat_counter .byte 0
 paddlestate .byte 0
+ticks .byte 0
+ticksPerSecond .byte 0
+fake_pokey :9 .byte 0
+
+
 man_text_en
     ins 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
 man_text_en_end
@@ -236,5 +295,10 @@ man_text_en_end
     .align $400
 WeaponFont
     ins 'manual_font_pl.fnt'  ; 'artwork/weapons.fnt'
+
+       opt h-                       ;RMT module is standard Atari binary file already
+    ins "music/czytaczu1_stripped.rmt"             ;include music RMT module
+    opt h+
+MODUL   equ $B000
 
     run start
