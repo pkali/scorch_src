@@ -107,21 +107,49 @@ W linii statusowej widoczna jest informacja o tym, który z graczy aktualnie mo�
 
 Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana kąta nachylenia lufy, góra/dół - zmiana ustawienia siły strzału.
 
-| A800             | 5200    | funkcja |
-|------------------|---------| ------- |
-| [SPACJA]         | [0]     | lub przycisk joysticka naciśnięte krótko - oddanie strzału |
-| [TAB]/[SELECT]   | [5]     | lub drugi przycisk joysticka - wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio standardowym joystickiem - trzeba wybrać Inventory). |
-| [I]              | [9]     | lub dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne - z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną. |
-| [A]/[OPTION]     | [7]     | bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych. |
-| [M]              | [PAUSE] | wyłączenie/włączenie muzyki w tle |
-| [S]              | [RESET] | wyłączenie/włączenie dźwięków efektów |
-| [START]          | [SYART] | przyspiesza/pomija niektóre animacje w grze |
-| [O]              | [3]     | wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza [ESC] z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy. |
-| [START]+[OPTION] | brak    | natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak [O], ale bez potwierdzenia. |
-| [G]              | brak    | zmienia wariant kolorystyczny gór (3 wersje do wyboru) |
-| [ESC]            | [*]     | w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem). |
-| [Y]              | [1]     | w przypadku pytania o przerwanie lub zakończenie gry - potwierdzenie decyzji |
-| [CTRL]+[HELP]    | [#] długo | Przełącza tryb "visual debug". Wizualizuje mierzone odległości, celowanie lasera oraz technikę celowania komputera. Pozostawia bałagan na ekranie, co nie zmienia rozgrywki, tylko ją nieco utrudnia. |
+| A800             | funkcja          |
+|------------------|------------------|
+| [SPACJA]/[FIRE]  | strzał (zob. ↓)  |
+| [TAB]/[SELECT]   | zmiana broni (↓) |
+| [I]              | inwentarz (↓)    |
+| [A]/[OPTION]     | defensywa (↓)    |
+| [M]              | wł/wył muzyki    |
+| [S]              | wł/wył dźwięków  |
+| [START]          | tryb turbo (↓)   |
+| [O]              | koniec gry (↓)   |
+| [START]+[OPTION] | bezw. koniec (↓) |
+| [G]              | inne kolory (↓)  |
+| [ESC]            | powrót (↓)       |
+| [Y]              | zatwierdzam (↓)  |
+| [CTRL]+[HELP]    | vis. debug (↓)   |
+
+| 5200       | funkcja          |
+|------------|------------------|
+| [FIRE]/[0] | strzał (zob. ↓)  |
+| [5]        | zmiana broni (↓) |
+| [9]        | inwentarz (↓)    |
+| [7]        | defensywa (↓)    |
+| [PAUSE]    | wł/wył muzyki    |
+| [RESET]    | wł/wył dźwięków  |
+| [START]    | tryb turbo (↓)   |
+| [3]        | koniec gry (↓)   |
+| brak       | bezw. koniec (↓) |
+| brak       | inne kolory (↓)  |
+| [*]        | powrót (↓)       |
+| [1]        | zatwierdzam (↓)  |
+| [#] długo  | vis. debug (↓)   |
+
+* **strzał**, przycisk joysticka naciśnięte krótko - oddanie strzału
+* **zmiana broni**, drugi przycisk joysticka - wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio standardowym joystickiem - trzeba wybrać Inventory).
+* **inwentarz**, dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne - z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną.
+* **defensywa** - bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych.
+* **tryb turbo** - przyspiesza/pomija niektóre animacje w grze
+* **koniec gry** - wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza [ESC] z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy.
+* **bezw. koniec** - natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak [O], ale bez potwierdzenia.
+* **inne kolory** - zmienia wariant kolorystyczny gór (3 wersje do wyboru)
+* **powrót** - w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem).
+* **zatwierdzam** - w przypadku pytania o przerwanie lub zakończenie gry - potwierdzenie decyzji
+* **vis. debug** - przełącza tryb "visual debug". Wizualizuje mierzone odległości, celowanie lasera oraz technikę celowania komputera. Pozostawia bałagan na ekranie, co nie zmienia rozgrywki, tylko ją nieco utrudnia.
 
 
 ## 5. Zasady gry - bronie ofensywne
@@ -181,7 +209,7 @@ W przypadku trafienia tą samą bronią w odległości 10-ciu pikseli od centrum
 
 A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli broń eksploduje kilka razy, każda z eksplozji jest obliczana niezależnie (dodatkowe wartości w tabeli):
 
-| Broń ofensywna  | Max ubytku energii |
+| Broń ofensywna  | Max ubytku   |
 |-----------------|--------------|
 | Baby Missile    | 88           |
 | Missile         | 136          |
@@ -273,9 +301,9 @@ Tylko te punkty decydują o kolejności w podsumowaniu.
 
 * **Force Shield** - najmocniejsza osłona - działa tak jak Heavy Shield, tyle że połączona z Parachute. Co ważne, w jej przypadku upadek nie zabiera energii osłonie ani czołgowi. Zabierają ją tylko trafienia.
 
-* **Bouncy Castle** - broń agresywna :) Działa następująco: w przypadku bezpośredniego trafienia w czołg (i osłonę) powoduje "odbicie" pocisku w przeciwnym kierunku z taką samą siłą, z jaką był wystrzelony. W przypadku braku wiatru i różnicy poziomów broń trafia wtedy w czołg, który ją wystrzelił. Po takim odbiciu dezaktywuje się. W związku z tym, że broń ta reaguje w ten sposób tylko na precyzyjne trafienia, jest także osłoną odpowiadającą działaniu Heavy Shield i ma na starcie 99 jednostek (prawdopodobnie trzeba będzie przemyśleć tę wartość i dać tu mniejszą).
+* **Bouncy Castle** - broń agresywna :) Działa następująco: w przypadku bezpośredniego trafienia w czołg (i osłonę) powoduje "odbicie" pocisku w przeciwnym kierunku z taką samą siłą, z jaką był wystrzelony. W przypadku braku wiatru i różnicy poziomów broń trafia wtedy w czołg, który ją wystrzelił. Po takim odbiciu dezaktywuje się. W związku z tym, że broń ta reaguje w ten sposób tylko na precyzyjne trafienia, jest także osłoną odpowiadającą działaniu Heavy Shield i ma na starcie 99 jednostek.
 
-* **Mag Deflector** - druga broń agresywna :) W przypadku bezpośredniego trafienia w czołg (i osłonę) powoduje przesunięcie punktu trafienia losowo w lewo lub prawą stronę chronionego czołgu, ale niezbyt daleko, więc można dostać "odłamkiem" przy silniejszej broni. Tak jak w przypadku Bouncy Castle jest także osłoną odpowiadającą działaniu Heavy Shield i ma na starcie 99 jednostek (prawdopodobnie i tutaj trzeba będzie przemyśleć tę wartość i dać mniejszą).
+* **Mag Deflector** - druga broń agresywna :) W przypadku bezpośredniego trafienia w czołg (i osłonę) powoduje przesunięcie punktu trafienia losowo w lewo lub prawą stronę chronionego czołgu, ale niezbyt daleko, więc można dostać "odłamkiem" przy silniejszej broni. Tak jak w przypadku Bouncy Castle jest także osłoną odpowiadającą działaniu Heavy Shield i ma na starcie 99 jednostek.
 
 * **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broń nie tyle defensywna, co obosieczna. Zasypuje teren opadem "radioaktywnym", który jest zwyczajną glebą. Jeśli nie mamy pod ręką żadnej broni odkopującej teren i do tego osłony (najlepiej jednorazowej), to po takim "opadzie" będzie trzeba strzelić do siebie - bo będąc pod ziemią inaczej się nie da. Ewentualnie pozostaje zawsze White Flag.
 

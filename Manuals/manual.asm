@@ -292,13 +292,12 @@ man_text_en
 man_text_en_end
     .by $ff, $ff
 
-    .align $400
-WeaponFont
-    ins 'manual_font_pl.fnt'  ; 'artwork/weapons.fnt'
-
        opt h-                       ;RMT module is standard Atari binary file already
     ins "music/czytaczu1_stripped.rmt"             ;include music RMT module
     opt h+
 MODUL   equ $B000
+    org $BC00
+WeaponFont
+    ins 'manual_font_pl.fnt'  ; 'artwork/weapons.fnt'
 
     run start
