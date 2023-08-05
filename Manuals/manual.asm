@@ -22,6 +22,9 @@ start
     mwa #man_text_en top_src
     
 main_loop
+    bit escflag
+    spl:rts  ; EXIT THIS WAY --->
+    mva #0 shiftflag
     mwa top_src src
     mwa #screen dest
 
@@ -70,6 +73,13 @@ next_line
     jmp main_loop
   
 scroll_down
+    lda #1  ; repeat_counter
+    ; make it repeat 10 times if SHIFT is pressed
+    bit shiftflag
+    spl:lda #screen_height
+    sta repeat_counter
+    
+scroll_repeat_loop
     ; find first $ff after top_src and move it there
     ldy #-1
 @     iny
@@ -86,6 +96,8 @@ scroll_down
     ;adw top_src #screen_width
     cpw end_address #man_text_en_end
     scc:mwa start_address top_src
+    dec repeat_counter
+    bne scroll_repeat_loop
     jmp main_loop
 
 scroll_up
@@ -122,7 +134,11 @@ getKeyAfterWait
       cmp #$ff
       beq checkJoyGetKey ; key not pressed, check Joy
       cmp #$f7  ; SHIFT
-      beq checkJoyGetKey
+      bne @+
+      mva #$80 shiftflag
+      bne checkJoyGetKey
+      
+@
     lda kbcode
     cmp #@kbcode._none
     beq checkJoyGetKey
@@ -167,6 +183,7 @@ SelectPressed
     bne getkeyend
 JoyButton
     lda #@kbcode._ret ;Return key
+    mva #$80 shiftflag
 getkeyend
     ldy #0
     sty ATRACT    ; reset atract mode
@@ -208,6 +225,8 @@ joyToKeyTable
     .by $ff             ;0f
 
 escflag .byte 0
+shiftflag .byte 0
+repeat_counter .byte 0
 paddlestate .byte 0
 man_text_en
     ins 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
