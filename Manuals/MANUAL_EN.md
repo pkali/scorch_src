@@ -111,7 +111,7 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 
 | A800         | Function           |
 |--------------|--------------------|
-| **SPACJA**/**FIRE**  | shoot       (see ↓)|
+| **SPACE**/**FIRE**   | shoot       (see ↓)|
 | **TAB**/**SELECT**   | weapon change   (↓)|
 | **I**            | inventory       (↓)|
 | **A**/**OPTION**     | defensives      (↓)|
