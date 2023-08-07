@@ -2,100 +2,130 @@
 
 You can play using the keyboard (all functionality) or the joystick in the first port (all functionality necessary for gameplay).
 
+
 ## 1. Game Option Selection.
 ![Game options screen.](images/MainMenu.png)
-
 On the first screen, you can configure gameplay options:
-* number of players (2 - 6) includes both human and computer-controlled players
-* the initial amount of cash of each player (2K is the optimal value we chose, but for short games, it is worth choosing a higher value)
-* gravity
-* maximum wind strength (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be):
+
+* **Players** - number of players (2 - 6) includes both human and computer-controlled players
+* **Cash** - the initial amount of cash of each player (2K is the optimal value we chose, but for short games, it is worth choosing a higher value)
+* **Gravity** - strength of gravity
+* **Wind** - maximum wind strength in Beaufort scale (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be):
 	* 1B - maximum wind strength: 5
 	* 3B - maximum wind strength: 20
 	* 5B - maximum wind strength: 40
 	* 7B - maximum wind strength: 70
 	* 9B - maximum wind strength: 99
-* number of rounds in a game
-* missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
-* frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
-* The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
-* the way the walls (edges of the screen) work:
-    * none - projectiles that flew off the screen do not return (black color of the screen frame)
-    * wrap - the screen "wraps" and projectiles that flew to the right appear on the left side and vice versa (purple color of the screen frame)
-    * bump - the right and left walls deflect projectiles that want to fly through them (dark blue color of the screen frame)
-    * boxy - just like bump, except that the "ceiling" also reflects projectiles (green color of the screen frame)
-    * rand - at the beginning of each round, one of the above 4 ways the walls work is drawn.
+* **Rounds** - number of rounds in a game
+* **Missiles** - missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
+* **Seppuku** - frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
+* **Mountain** - The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
+* **Walls** - the way the walls (edges of the screen) work:
+    * **none** - projectiles that flew off the screen never return (black color of the screen frame)
+    * **wrap** - the screen "wraps" and projectiles that flew to the right appear on the left side and vice versa (purple color of the screen frame)
+    * **bump** - the right and left walls deflect projectiles that try to fly through them (dark blue color of the screen frame)
+    * **boxy** - just like bump, except that the "ceiling" also bounces projectiles off (green color of the screen frame)
+    * **rand** - at the beginning of each round, one of the above 4 ways the walls work is drawn.
 
     During gameplay, the current mode of the walls is represented by the color of the screen frame: none - black, wrap - purple, bump - dark blue, boxy - green.
 
 Select options with cursor keys or a joystick.
 
-The [TAB], [SELECT] or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the [5] controller key change the color of the mountains (3 versions to choose from).  
-If the cursor indicates the wind strength selection option "Wind" change the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the "?" sign next to the word "Wind".  
-If the cursor indicates the gravity selection option "Gravity" changes the procedure of falling the ground to a less impressive but faster one, and vice versa. The selection of fast ground fall is indicated by the letter "f" next to the word "Gravity".
-If the cursor points to the option of selecting the height of the mountains "Mountain" toggles the option of changing the height of the mountains every round. Drawing every round is indicated by the "?" sign next to the word "Mountain".
+The **TAB**, **SELECT** or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key change the color of the mountains (3 versions to choose from).  
+If the cursor indicates the wind strength selection option **Wind**, pressing **TAB** changes the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the **?** sign next to the word **Wind**.  
+If the cursor indicates the gravity selection option **Gravity**, pressing **TAB** changes the procedure of falling the ground to a less impressive but faster one, and vice versa. The selection of fast ground fall is indicated by the letter **f** next to the word **Gravity**.
+If the cursor points to the option of selecting the height of the mountains **Mountain**, pressing **TAB** toggles the option of changing the height of the mountains every round. Drawing every round is indicated by the **?** sign next to the word **Mountain**.
 
-The [RETURN] key or a joystick button moves to the next screen.
+The **RETURN** key or a joystick button moves to the next screen.
 
-## 2. Entering the name of players and selecting the level of computer-controlled players
+
+## 2. Players and robotank levels
 ![Name of players and game level screen.](images/DiffMenu.png)
+Entering names of players and selecting levels of computer-controlled players.
 
 The second screen is shown for each player. Here you can use the cursor keys or joystick to select whether the tank will be driven by a human (HUMAN option) or a computer (other options).  
-The [TAB], [SELECT] or second joystick button, and on the Atari 5200 console the [5] controller key allow you to choose which joystick port the player will use.  
-The [INVERSE] or [OPTION] key allows you to select one of the 3 available tank shapes. On the Atari 5200 console, this is achieved by cycling through joystick ports with the [5] key.  
+
+The **TAB**, **SELECT** or second joystick button, and on the Atari 5200 console the **5** controller key allow you to choose which joystick port the player will use.  
+
+The **INVERSE** or **OPTION** key allows you to select one of the 3 available tank shapes. On the Atari 5200 console, this is achieved by cycling through joystick ports with the **5** key.  
 At the same time, you can enter the name of the selected player from the keyboard.  
-When the [RETURN] key is pressed or the Joystick button is pressed briefly, the screen switches to the next player until the difficulty levels for each player are selected.
+
+When the **RETURN** key is pressed or the Joystick button is pressed briefly, the screen switches to the next player until the difficulty levels for each player are selected.
+
 The player's name can also be entered with the joystick. After pressing and holding the button for more than 1s. you can use up/down movements to change the letter being entered, and left/right movements to change its position in the name. Releasing the button ends the name entry and returns to the level selection.
 
-If the name is not entered, it will be supplemented with the default name.
+If name is not entered, it will be supplemented with the default one.
+
 
 ## 3. Shopping screen (before each round)
 ![Shopping offensives screen.](images/PurOffensive.png)
 ![Shopping defensives screen.](images/PurDefensive.png)
+In this screen you can make purchases of offensive and defensive weapons. Only those weapons that the player can afford are visible, along with information about the price and the number of units of a given weapon that will be obtained for that price. The information on the screen probably needs no more description. You move through the lists with the cursor keys (up and down) or with the joystick, the **TAB** key or the left arrow, the left joystick tilt or second joystick button change the screen to defensive or offensive weapons, the **SPACE** key or the right arrow and also the joystick to the right does the purchase of the indicated weapon.
 
-On this screen, you can make purchases of offensive and defensive weapons. Only those weapons that the player can afford are visible, along with information about the price and the number of units of a given weapon that will be obtained for that price. The information on the screen probably needs no more description. You move through the lists with the cursor keys (up and down) or with the joystick, the [TAB] key or the left arrow, the left joystick tilt or second joystick button change the screen to defensive or offensive weapons, the [SPACE] key or the right arrow and also the joystick to the right does the purchase of the indicated weapon.
-
-The [RETURN] key or the joystick button press switches to the defensive weapon activation screen. Here you can activate previously bought defensive (or offensive after switching with [TAB], etc) weapons. 
+The **RETURN** key or the joystick button press switches to the defensive weapon activation screen. Here you can activate previously bought defensive (or offensive after switching with **TAB**, etc) weapons. 
 
 ![Defensives activation screen.](images/ActDefensive.png)
-
 This makes it possible to activate shields and others before the round starts.
-
-Another [RETURN] key or joystick button press switches to the next player's shopping screen.
+ 
+**RETURN** key or joystick button press switches to the next player's shopping screen.
 (For computer players this screen is not shown.)
+
 
 ## 4. The main screen of the game
 ![Main game screen.](images/StatusLine.png)
-
 The status line shows which player is currently allowed to take a shot and a set of other information:
-* player's tank name,
+
+* **Player** - player's tank name,
+
 * active joystick number or difficulty level of computer-controlled player (1-**Moron** - 8-**Unknown**),
+
 * currently selected offensive weapon (symbol quantity and name),
-* the player's remaining energy points and if he has an active defensive weapon that has its energy - in parentheses the energy level,
-* the angle and the direction of the barrel set by the player,
-* the shot strength set by the player (the maximum shot strength is limited by the player's energy - it can not exceed the energy * 10 . This means that you can fire weaker shots only when having a small amount of energy,
-* the current round number,
-* wind speed and direction,
+
+* **Energy** - the player's remaining energy points and if he has an active defensive weapon that has its energy - in parentheses the energy level,
+
+* **Angle** - the angle and the direction of the barrel set by the player,
+
+* **Force** - the shot strength set by the player (the maximum shot strength is limited by the player's energy - it can not exceed the energy * 10 . This means that you can fire weaker shots only when having a small amount of energy,
+
+* **Round** - the current round number,
+
+* **Wind** - wind speed and direction,
+
 * "computer" symbol if **Auto Defense** is active,
+
 * in parentheses is the name of the active defensive weapon - if there is any activated by the player.
 
 The keyboard controls here are simple, cursor keys or joystick: left/right - change the angle of the barrel, up/down - change the the force of the shot.
 
-| A800               | 5200           | function                                                                                                                                                                                                                                                                                                     |
-|--------------------|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [SPACE]            | [0]            | or joystick button pressed briefly - firing a shot.                                                                                                                                                                                                                                                          |
-| [TAB] or [SELECT]  | [5]            | or second joystick button - selection of offensive weapons (this option is not available directly with one button joystick - you need to select Inventory).                                                                                                                                                  |
-| [I]                | [9]            | or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon.                              |
-| [A] or [OPTION]    | [7]            | go directly to the defensive weapons activation.                                                                                                                                                                                                                                                             
-| [M]                | [PAUSE]        | disable/enable background music.                                                                                                                                                                                                                                                                             |
-| [S]                | [RESET]        | disable/enable effect sounds.                                                                                                                                                                                                                                                                                |
-| [START]            | [START]        | speed up some game animations.                                                                                                                                                                                                                                                                               |
-| [O]                | [3]            | end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the [ESC] key with the difference that the summary and credits are displayed. |
-| [START] + [OPTION] | N/A            | immediately force the end of the game (Game Over), just like [O] but without confirmation.                                                                                                                                                                                                                   
-| [G]                | N/A            | changes the mountain shading                                                                                                                                                                                                                                                                                 |
-| [ESC]              | [*]            | during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the [ESC] key, which allows you to abort the game and return to the beginning (of course, there is protection against accidental pressing).                                       |
-| [Y]                | [1]            | when asked to abort or terminate the game - confirmation                                                                                                                                                                                                                                                     |
-| [CTRL] + [HELP]    | [#] long press | Toggle "visual debug" mode. It displays distances measured, laser aiming, and aiming technique. It leaves a mess on the screen, but it does not impair the game, just makes it a bit harder.                                                                                                                 |
+
+| A800         | funkcja            |
+|--------------|--------------------|
+| **SPACJA**/**FIRE**  | shoot (see ↓)      |
+| **TAB**/**SELECT**   | weapon change (↓)  |
+| **I**            | inventory (↓)      |
+| **A**/**OPTION**     | defensives (↓)     |
+| **M**            | musin on/off       |
+| **S**            | sound on/off       |
+| **START**        | turbo mode (↓)     |
+| **O**            | game over (↓)      |
+| **START**+**OPTION** | immediate quit (↓) |
+| **G**            | color scheme (↓)   |
+| **ESC**          | return (↓)         |
+| **Y**            | confirm (↓)        |
+| **CTRL**+**HELP**    | vis. debug (↓)     |
+
+* **shoot** or joystick button pressed briefly - firing a shot.
+* **weapon change** or second joystick button - selection of offensive weapons (this option is not available directly with one button joystick - you need to select Inventory)
+* **inventory** or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon.
+* **defensives** - go directly to the defensive weapons activation.
+* **turbo mode** - speed up some game animations.
+* **game over** - end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the **ESC** key with the difference that the summary and credits are displayed.
+* **immediate quit** - force the end of the game (Game Over), just like **game over** but without confirmation.
+* **color scheme** - changes the mountain and background shading
+* **return** - during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the **ESC** key, which allows you to abort the game and return to the previous menu (of course, there is protection against accidental pressing).
+* **confirm** - when asked to abort or terminate the game - confirmation
+* **vis. debug** - Toggle **visual debug** mode. It displays distances measured, laser aiming, and aiming technique. It leaves a mess on the screen, but it does not impair the game.
+
 
 ## 5. Game mechanics - offensive weapons
 
@@ -106,35 +136,37 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
     * while falling (one pixel down - 2 units).
     * when a projectile hits the tank or next to it - and here the amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
 
-### How energy subtraction works (and earning money!).
+### Energy and money.
+How energy subtraction and earning money works:
 After each round the amount of money gained/lost is calculated, this is done on the basis of two variables accumulated by each tank during the round. These variables are:
 
-`gain` - energy "captured" from tanks hit (also if you hit yourself :) and here's the catch, if you have very little energy left it can be profitable to hit yourself with a powerful weapon!
+**gain** - energy "captured" from tanks hit (also if you hit yourself :) and here's the catch, if you have very little energy left it can be profitable to hit yourself with a powerful weapon!
 
-`lose` - energy lost due to explosion/fall (and here it is important - to count the total loss of energy even if the tank has less at the moment of hit).
+**loss** - energy lost due to explosion/fall (and here it is important - to count the total loss of energy even if the tank has less at the moment of hit).
 
 In addition, the tank that won the round has a parameter gain (captured from hit tanks energy) increased by the remaining energy at the end of the round (because it did not die and should have it - although it also happens otherwise :) )
 
 Specifically:
 
 ### After each round:
-`money = money + (20 * (gain+energy))`.
+**money = money + (20 * (gain+energy))**
 
-`money = money - (10 * lose)`.
+**money = money - (10 * loss)**
 
-`if money <0 then money=0`.
+**if money < 0 then money = 0**
 
-(at the start of each round `gain` and `lose` have a value of 0).
+(at the start of each round **gain** and **loss** have a value of 0).
 
 During a round, if another tank is hit as a result of a shot fired by a tank, the tank firing the shot "gets the energy" taken away from the hit tank.
+
 ### tank taking a shot:
-`gain = gain + EnergyDecrease`.
+**gain = gain + EnergyDecrease**
 ### tank hit:
-`lose = lose + EnergyDecrease`.
+**loss = loss + EnergyDecrease**
 
-Where `EnergyDecrease` is the loss of energy due to the hit.
+Where **EnergyDecrease** is the loss of energy due to the hit.
 
-Of course, at the same time the hit tank loses the amount of energy stored in `EnergyDecrease`, except that here the loss cannot exceed the energy you have.
+Of course, at the same time the hit tank loses the amount of energy stored in **EnergyDecrease**, except that here the loss cannot exceed the energy you have.
 
 ## How a hit works.
 
@@ -149,35 +181,58 @@ If you hit with the same weapon at a distance of 10 pixels from the center of th
 
 And here are the values of maximum energy loss for individual weapons. If a weapon explodes several times, each explosion is calculated independently (additional values in the table):
 
-| Offensive weapons | maximum energy loss |
-| --- | --- |
-| Baby Missile | 88 |
-| Missile | 136 |
-| Baby Nuke | 200 |
-| Nuke | 240 |
-| LeapFrog| 136 112 112 |
-| Funky Bomb | 168 88 (* 5) |
-| MIRV | 136 (* 5) |
-| Death's Head | 240 (* 5) |
-| Napalm | 40 (this weapon is different and the distance from the center is not determined, simply any tank in range of the flames loses 40 units of energy) |
-| Hot Napalm | 80 (the rule is the same as in Napalm) |
-| Baby Roller | 88 |
-| Roller | 168 |
-| Heavy Roller | 240 |
-| Riot Charge | 0 (no energy is subtracted, but a portion of the ground upward from the hit point in a 31-pixel radius is removed) |
-| Riot Blast | 0 (as in Riot Charge, but in a radius of 61 pixels) |
-| Riot Bomb | 0 (no energy is subtracted, but the ground in a radius of 17 pixels from the hit point is destroyed - as in the case of Missile. The weapon is useful for digging out after being buried, or for undermining an opponent) |
-| Heavy Riot Bomb | 0 (as in Riot Bomb, but the explosion radius is 29 pixels from the point of impact - as in the case of Nuke) |
-| Baby Digger | 0 (no energy is subtracted, but a portion of the ground is undermined in a radius of 60 pixels from the point of impact) |
-| Digger | 0 (as above - greater undermining) |
-| Heavy Digger | 0 (as above - greatest undermining) |
-| Sandhog | 0 (as above - another way of undermining) |
-| Heavy Sandhog | 0 (as above - largest dig) |
-| Dirt Clod | 0 (no energy is subtracted, but a ground ball with a radius of 12 pixels from the hit point is created. The weapon is useful for burying the opponent) |
-| Dirt Ball | 0 (as above, but the radius of the ball is 22 pixels) |
-| Ton of Dirt | 0 (as above, but the radius of the ball is 31 pixels) |
-| Liquid Dirt | 0 (floods the ground at the point of hit with liquid soil, filling in the depressions) |
-| Stomp | 0 (no energy is subtracted, but all tanks within a radius depending on the force of the shot are pushed back, and after being pushed back they may fall or be buried. With a maximum force of 990 units, the radius of action is about 60 pixels) |
+
+| Offensive weapon | Max loss    |
+|------------------|-------------|
+| Baby Missile     | 88          |
+| Missile          | 136         |
+| Baby Nuke        | 200         |
+| Nuke             | 240         |
+| LeapFrog         | 136 112 112 |
+| Funky Bomb       | 168 88 (*5) |
+| MIRV             | 136 (*5)    |
+| Death's Head     | 240 (*5)    |
+| Napalm           | 40  (see ↓) |
+| Hot Napalm       | 80      (↓) |
+| Baby Roller      | 88          |
+| Roller           | 168         |
+| Heavy Roller     | 240         |
+| Riot Charge      | 0       (↓) |
+| Riot Blast       | 0       (↓) |
+| Riot Bomb        | 0       (↓) |
+| Heavy Riot Bomb  | 0       (↓) |
+| Baby Digger      | 0       (↓) |
+| Digger           | 0       (↓) |
+| Heavy Digger     | 0       (↓) |
+| Sandhog          | 0       (↓) |
+| Heavy Sandhog    | 0       (↓) |
+| Dirt Clod        | 0       (↓) |
+| Dirt Ball        | 0       (↓) |
+| Ton of Dirt      | 0       (↓) |
+| Liquid Dirt      | 0       (↓) |
+| Dirt Charge      | 0       (↓) |
+| Stomp            | 0       (↓) |
+| Laser            | 100     (↓) |
+
+Remarks:
+* **Napalm** - this weapon is different and the distance from the center is not determined, simply any tank in range of the flames loses 40 units of energy.
+
+* **Hot Napalm** - the rule is the same as in **Napalm**, 80 units.
+
+* **Riot Charge** - no energy is subtracted, but a portion of the soil upward from the hit point in a 31-pixel radius is removed.
+* **Riot Blast** - as in Riot Charge, but in a radius of 61 pixels.
+* **Riot Bomb** - no energy is subtracted, but the soil in a radius of 17 pixels from the hit point is destroyed - as in the case of **Missile**. The weapon is useful for digging out after being buried, or for digging under an opponent.
+* **Heavy Riot Bomb** as in **Riot Bomb**, but the explosion radius is 29 pixels from the point of impact - as in the case of **Nuke**
+* **Baby Digger** - no energy is subtracted, but a portion of the soil is dig in a radius of 60 pixels from the point of impact.
+* **Digger** - as above - more digging.
+* **Heavy Digger** - as above - even more digging.
+* **Sandhog** - as above - another way of digging
+* **Heavy Sandhog** - as above - the largest dig 
+* **Dirt Clod** - no energy is subtracted, but a soil ball with a radius of 12 pixels from the hit point is created. The weapon is useful for burying the opponent.
+* **Dirt Ball** - as above, but the radius of the ball is 22 pixels.
+* **Ton of Dirt** - as above, but the radius of the ball is 31 pixels.
+* **Liquid Dirt** - (floods the ground at the point of hit with liquid soil, filling in the depressions.
+* **Stomp** - no energy is subtracted, but all tanks within a radius depending on the force of the shot are pushed back, and after being pushed back they may fall or be buried. With a maximum force of 990 units, the radius of action is about 60 pixels
 | Laser | x 100 (but here it is also different - equally 100 only in the case of a direct hit simply subtract 100 units of energy - that is, the tank always dies) |
 
 Large points received by the player is the number of tanks that died earlier than him. If any of the other tanks capitulated earlier (**White Flag**) is not added to those that died and does not give points.
