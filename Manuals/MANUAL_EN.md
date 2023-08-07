@@ -8,18 +8,26 @@ You can play using the keyboard (all functionality) or the joystick in the first
 On the first screen, you can configure gameplay options:
 
 * **Players** - number of players (2 - 6) includes both human and computer-controlled players
+
 * **Cash** - the initial amount of cash of each player (2K is the optimal value we chose, but for short games, it is worth choosing a higher value)
+
 * **Gravity** - strength of gravity
+
 * **Wind** - maximum wind strength in Beaufort scale (wind is drawn at the beginning of each round or during the round between turns, here we can choose how strong it can be):
-	* 1B - maximum wind strength: 5
-	* 3B - maximum wind strength: 20
-	* 5B - maximum wind strength: 40
-	* 7B - maximum wind strength: 70
-	* 9B - maximum wind strength: 99
+    * 1B - maximum wind strength: 5
+    * 3B - maximum wind strength: 20
+    * 5B - maximum wind strength: 40
+    * 7B - maximum wind strength: 70
+    * 9B - maximum wind strength: 99
+
 * **Rounds** - number of rounds in a game
+
 * **Missiles** - missile speed (does not affect the flight path - only changes the apparent missile speed - does not change anything in the gameplay itself)
+
 * **Seppuku** - frequency of suicides :) - if for a number of turns the game has not recorded hits (tanks are constantly shooting inaccurately), after one of such misses a tank commits suicide - here you determine how long they can "shooting for the stars" :) - if only people play the optimal setting is "norm", in the case of computer-controlled players ... you choose.
+
 * **Mountain** - The height (and undulation) of the mountains from almost flat (NL - Kingdom of the Netherlands), to soaring and high (NP - Federal Democratic Republic of Nepal)
+
 * **Walls** - the way the walls (edges of the screen) work:
     * **none** - projectiles that flew off the screen never return (black color of the screen frame)
     * **wrap** - the screen "wraps" and projectiles that flew to the right appear on the left side and vice versa (purple color of the screen frame)
@@ -32,8 +40,11 @@ On the first screen, you can configure gameplay options:
 Select options with cursor keys or a joystick.
 
 The **TAB**, **SELECT** or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key change the color of the mountains (3 versions to choose from).  
+
 If the cursor indicates the wind strength selection option **Wind**, pressing **TAB** changes the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the **?** sign next to the word **Wind**.  
+
 If the cursor indicates the gravity selection option **Gravity**, pressing **TAB** changes the procedure of falling the ground to a less impressive but faster one, and vice versa. The selection of fast ground fall is indicated by the letter **f** next to the word **Gravity**.
+
 If the cursor points to the option of selecting the height of the mountains **Mountain**, pressing **TAB** toggles the option of changing the height of the mountains every round. Drawing every round is indicated by the **?** sign next to the word **Mountain**.
 
 The **RETURN** key or a joystick button moves to the next screen.
@@ -98,21 +109,21 @@ The status line shows which player is currently allowed to take a shot and a set
 The keyboard controls here are simple, cursor keys or joystick: left/right - change the angle of the barrel, up/down - change the the force of the shot.
 
 
-| A800         | funkcja            |
+| A800         | Function           |
 |--------------|--------------------|
-| **SPACJA**/**FIRE**  | shoot (see ↓)      |
-| **TAB**/**SELECT**   | weapon change (↓)  |
-| **I**            | inventory (↓)      |
-| **A**/**OPTION**     | defensives (↓)     |
-| **M**            | musin on/off       |
+| **SPACJA**/**FIRE**  | shoot       (see ↓)|
+| **TAB**/**SELECT**   | weapon change   (↓)|
+| **I**            | inventory       (↓)|
+| **A**/**OPTION**     | defensives      (↓)|
+| **M**            | music on/off       |
 | **S**            | sound on/off       |
-| **START**        | turbo mode (↓)     |
-| **O**            | game over (↓)      |
-| **START**+**OPTION** | immediate quit (↓) |
-| **G**            | color scheme (↓)   |
-| **ESC**          | return (↓)         |
-| **Y**            | confirm (↓)        |
-| **CTRL**+**HELP**    | vis. debug (↓)     |
+| **START**        | turbo mode      (↓)|
+| **O**            | game over       (↓)|
+| **START**+**OPTION** | immediate quit  (↓)|
+| **G**            | color scheme    (↓)|
+| **ESC**          | return          (↓)|
+| **Y**            | confirm         (↓)|
+| **CTRL**+**HELP**    | visual debug    (↓)|
 
 * **shoot** or joystick button pressed briefly - firing a shot.
 * **weapon change** or second joystick button - selection of offensive weapons (this option is not available directly with one button joystick - you need to select Inventory)
@@ -129,15 +140,21 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 
 ## 5. Game mechanics - offensive weapons
 
+Large points received by the player is the number of tanks that died earlier. If any of the other tanks capitulated earlier (with **White Flag**) it is not added to those that died and does not grant points.
+Only these points determine the order in the summary.
+
+
 ### Energy of tanks.
-- At the beginning of each round, each tank has 99 ash units of energy.
-- Tanks' energy is depleted in 3 ways:
+* At the beginning of each round, each tank has 99 units of energy.
+* Energy of tanks is depleted in 3 ways:
     * one unit after each shot is fired
     * while falling (one pixel down - 2 units).
     * when a projectile hits the tank or next to it - and here the amount of energy subtracted depends on the distance from the center of the explosion and the type/power of the projectile.
 
+
 ### Energy and money.
 How energy subtraction and earning money works:
+
 After each round the amount of money gained/lost is calculated, this is done on the basis of two variables accumulated by each tank during the round. These variables are:
 
 **gain** - energy "captured" from tanks hit (also if you hit yourself :) and here's the catch, if you have very little energy left it can be profitable to hit yourself with a powerful weapon!
@@ -147,6 +164,7 @@ After each round the amount of money gained/lost is calculated, this is done on 
 In addition, the tank that won the round has a parameter gain (captured from hit tanks energy) increased by the remaining energy at the end of the round (because it did not die and should have it - although it also happens otherwise :) )
 
 Specifically:
+
 
 ### After each round:
 **money = money + (20 * (gain+energy))**
@@ -161,12 +179,14 @@ During a round, if another tank is hit as a result of a shot fired by a tank, th
 
 ### tank taking a shot:
 **gain = gain + EnergyDecrease**
+
 ### tank hit:
 **loss = loss + EnergyDecrease**
 
 Where **EnergyDecrease** is the loss of energy due to the hit.
 
 Of course, at the same time the hit tank loses the amount of energy stored in **EnergyDecrease**, except that here the loss cannot exceed the energy you have.
+
 
 ## How a hit works.
 
@@ -220,40 +240,66 @@ Remarks:
 * **Hot Napalm** - the rule is the same as in **Napalm**, 80 units.
 
 * **Riot Charge** - no energy is subtracted, but a portion of the soil upward from the hit point in a 31-pixel radius is removed.
-* **Riot Blast** - as in Riot Charge, but in a radius of 61 pixels.
-* **Riot Bomb** - no energy is subtracted, but the soil in a radius of 17 pixels from the hit point is destroyed - as in the case of **Missile**. The weapon is useful for digging out after being buried, or for digging under an opponent.
-* **Heavy Riot Bomb** as in **Riot Bomb**, but the explosion radius is 29 pixels from the point of impact - as in the case of **Nuke**
-* **Baby Digger** - no energy is subtracted, but a portion of the soil is dig in a radius of 60 pixels from the point of impact.
-* **Digger** - as above - more digging.
-* **Heavy Digger** - as above - even more digging.
-* **Sandhog** - as above - another way of digging
-* **Heavy Sandhog** - as above - the largest dig 
-* **Dirt Clod** - no energy is subtracted, but a soil ball with a radius of 12 pixels from the hit point is created. The weapon is useful for burying the opponent.
-* **Dirt Ball** - as above, but the radius of the ball is 22 pixels.
-* **Ton of Dirt** - as above, but the radius of the ball is 31 pixels.
-* **Liquid Dirt** - (floods the ground at the point of hit with liquid soil, filling in the depressions.
-* **Stomp** - no energy is subtracted, but all tanks within a radius depending on the force of the shot are pushed back, and after being pushed back they may fall or be buried. With a maximum force of 990 units, the radius of action is about 60 pixels
-| Laser | x 100 (but here it is also different - equally 100 only in the case of a direct hit simply subtract 100 units of energy - that is, the tank always dies) |
 
-Large points received by the player is the number of tanks that died earlier than him. If any of the other tanks capitulated earlier (**White Flag**) is not added to those that died and does not give points.
-Only these points determine the order in the summary
+* **Riot Blast** - as in Riot Charge, but in a radius of 61 pixels.
+
+* **Riot Bomb** - no energy is subtracted, but the soil in a radius of 17 pixels from the hit point is destroyed - as in the case of **Missile**. The weapon is useful for digging out after being buried, or for digging under an opponent.
+
+* **Heavy Riot Bomb** as in **Riot Bomb**, but the explosion radius is 29 pixels from the point of impact - as in the case of **Nuke**
+
+* **Baby Digger** - no energy is subtracted, but a portion of the soil is dig in a radius of 60 pixels from the point of impact.
+
+* **Digger** - as above - more digging.
+
+* **Heavy Digger** - as above - even more digging.
+
+* **Sandhog** - as above - another way of digging
+
+* **Heavy Sandhog** - as above - the largest dig 
+
+* **Dirt Clod** - no energy is subtracted, but a soil ball with a radius of 12 pixels from the hit point is created. The weapon is useful for burying the opponent.
+
+* **Dirt Ball** - as above, but the radius of the ball is 22 pixels.
+
+* **Ton of Dirt** - as above, but the radius of the ball is 31 pixels.
+
+* **Liquid Dirt** - (floods the ground at the point of hit with liquid soil, filling in the depressions.
+
+* **Stomp** - no energy is subtracted, but all tanks within a radius depending on the force of the shot are pushed back, and after being pushed back they may fall or be buried. With a maximum force of 990 units, the radius of action is about 60 pixels.
+
+* **Laser** - 100 energy units deducted, but only in the case of a direct hit - that is, the hit tank always dies.
+
 
 ## 6. And now for defensive weapons:
 
 * **White Flag** - causes the surrender of the player (can sometimes be useful in a hopeless situation). The advantage is that by surrendering you don't give a big point to your opponents and don't cause one of them to gain by killing us, you also limit the loss of your energy and also cash. An important note - this is the only defensive weapon that can be deactivated. All you have to do is re-enter inventory and once again select its activation.
+
 * **Battery** - when activated, it recharges the tank's energy to full (99 units). It is one of three defensive weapons that does not deactivate other defensive weapons when used.
-* **Hovercraft** - a weapon that allows the tank to move. It has its own fuel supply in form of electric eels and in addition, it can be activated multiple times during the same turn, and after using it, you can activate another defensive weapon and fire a shot in the same turn. After using it, the tank rises above the mountains and using the cursor keys or a joystick you can move the tank to a new position. [SPACE] or the joystick button cause the tank to land in a new place. You can fly until the tank runs out of eels (presented on the status bar like the energy of a defensive weapon), if the eel fuel runs out the tank will fall down on its own. It is not possible to land on other tanks.
+
+* **Hovercraft** - a weapon that allows the tank to move. It has its own fuel supply in form of electric eels and in addition, it can be activated multiple times during the same turn, and after using it, you can activate another defensive weapon and fire a shot in the same turn. After using it, the tank rises above the mountains and using the cursor keys or a joystick you can move the tank to a new position. **SPACE** or the joystick button cause the tank to land in a new place. You can fly until the tank runs out of eels (presented on the status bar like the energy of a defensive weapon), if the eel fuel runs out the tank will fall down on its own. It is not possible to land on other tanks.
+
 * **Parachute** - does not protect against loss of energy due to a neighboring explosion, makes you not lose energy during ONE fall. After such a fall, it deactivates and a new parachute must be activated.
+
 * **Shield** - the simplest shield works exactly the opposite of **Parachute**, it does not protect against energy loss while falling, instead it protects against energy loss caused by ONE adjacent explosion. It protects once, no matter how strong the explosion is (whether tis but a scratch or a direct hit with a nuke), and deactivates immediately afterward.
+
 * **Heavy Shield** - a shield with its own energy (at the start of 99 units), it works the same as **Shield** (does not protect against falling) with the exception that it has its own energy resource. When exploding, the energy of this shield is reduced first, and if it reaches 0, the shield deactivates and further reduces the tank's energy. Due to this action, a tank with this type of shield can be "killed" by undermining it, because falling reduces the energy of the tank and not the shield.
+
 * **Force Shield** - the strongest shield - works just like Heavy Shield only that it is combined with **Parachute**. What is important in this case, falling does not take energy away from the shield or the tank. It is only taken away by hits.
-* **Bouncy Castle** - a passive-aggressive weapon :). It works as follows - in a case of a direct tank hit (and shield), it causes the projectile to "bounce" in the opposite direction with the same force with which it was fired. In the absence of wind and a difference in level, the weapon then hits the tank that fired it. After such a bounce, it deactivates. As the weapon reacts in this way only to precise hits, it is also works like **Heavy Shield** and has 99 units at the start (we will probably have to rethink this value and give a smaller one here).
-* **Mag Deflector** - the second passive-aggressive weapon :) . In case of a direct hit on a tank (and shield), it causes the hit point to move randomly to the left or right side of the protected tank, but not very far, so you can get "shrapnel" with stronger weapons. As in the case of **Bouncy Castle**, it is also a shield that corresponds to the action of **Heavy Shield** and has 99 units at the start (probably here we will have also to rethink this value and give a smaller one).
+
+* **Bouncy Castle** - a passive-aggressive weapon :). It works as follows - in a case of a direct tank hit (and shield), it causes the projectile to "bounce" in the opposite direction with the same force with which it was fired. In the absence of wind and a difference in level, the weapon then hits the tank that fired it. After such a bounce, it deactivates. As the weapon reacts in this way only to precise hits, it is also works like **Heavy Shield** and has 99 units at the start.
+
+* **Mag Deflector** - the second passive-aggressive weapon :) . In case of a direct hit on a tank (and shield), it causes the hit point to move randomly to the left or right side of the protected tank, but not very far, so you can get "shrapnel" with stronger weapons. As in the case of **Bouncy Castle**, it is also a shield that corresponds to the action of **Heavy Shield** and has 99 units at the start.
+
 * **Nuclear Winter** - adds nothing, takes nothing away :) - in fact, it is not so much a defensive weapon as a double-edged one. It floods the area with "radioactive" fallout, which is ordinary soil. If you do not have at hand any weapon that digs up the terrain, and for that a shield (preferably disposable), then after such "fallout" you will have to shoot yourself - because being underground is otherwise impossible. Alternatively, **White Flag** always remains.
+
 * **Long Schlong** - a special weapon :) - Costs a lot, doesn't really help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated).
+
 * **Lazy Boy** - it is not actually a defensive weapon. It is an aiming aid. When it is activated, the tank tries to aim at the nearest enemy and automatically adjusts the power of the shot and angle. If it has too little energy, it can sometimes aim wrong (it uses a method like **Cyborg** to aim). Like **Battery**, it does not deactivate other defensive weapons when used. Note: There is no point in activating this weapon before the round, targeting will not take place because there is nothing to target yet.
+
 * **Lazy Darwin** - works just like **Lazy Boy** but targets the weakest opponent. In this weapon, after automatic targeting, "visual targeting" remains active, so you can easily change the target and independently select another opponent by seeing if you hit him.
+
 * **Auto Defense** - activates the mode of automatic activation of defensive weapons. After its activation, the tank automatically activates the strongest shield it has (consuming it, of course) at any time when there is no shield (also between shots of other players). At the same time, if the tank's energy level drops below 30 units, it automatically activates **Battery** if it has it. This weapon remains active until the end of the round and is indicated by the "computer" symbol before the name of the active defensive weapon in the status line. It is the second defensive weapon that does not deactivate other defensive weapons when used.
+
 * **Spy Hard** - Help for the forgetful :) . When activated, it shows a preview of information about the next opponents one by one. Left/Right - changes the "spied" tank. Fire/Space/Return/Esc - ends the "spying". This is the last defensive weapon, which does not deactivate other defensive weapons when used.
 
 Due to the different warhead tracking system of **MIRV** weapons, the **Bouncy Castle** and **Mag Deflector** defensive weapons only use the shielding function when hit by these weapons. In addition, **MIRV** warheads do not bounce or fly through sidewalls when falling!
@@ -266,11 +312,13 @@ You can only have one defensive weapon active at a time (except **Long Schlong**
 
 And of course, activating a weapon when you already have some other weapon activated causes the loss of the previous one (no returns :) ).
 
+
 ## 7. "Other" weapons:
 
 * **Best F...g Gifts** - this is a 'loot box', not a weapon per se. Buying it draws one of the offensive or (rarely) defensive weapons and adds it to the player's arsenal. It is a lottery in which you can lose (if you draw a weapon cheaper than the **Best F...g Gifts** price) but also gain. You can get a weapon otherwise not affordable at all! There is a small probability of drawing by **Best F...g Gifts** itself :). You can then try to use it in battle.
 
-## 8. difficulty levels of computer-controlled opponents:
+
+## 8. AI opponents levels:
 
 The game has 8 difficulty levels of computer-controlled opponents. Or actually 7 different ones and one "surprise". Each has its own way of buying defensive and offensive weapons and a different method of target selection and targeting itself, as well as weapon selection. They are arranged in the list according to increasing "skills":
 
@@ -284,39 +332,40 @@ The game has 8 difficulty levels of computer-controlled opponents. Or actually 7
 
 * **Chooser** - Takes as a target the weakest opponent (with the least amount of energy) and aims very precisely, but before the shot the energy of the shot is modified by the parameter of luck :) , that is, despite the precise aiming it does not always hit. He shoots with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He always activates the best defensive weapon he has before shooting and, like **Poolshark**, uses **Battery** and **White Flag**. He purchases just like **Tosser**.
 
-* **Spoiler** - He shoots exactly like **Chooser** except that he has more luck :) , which means that even if he doesn't hit the target of his choice, it can be a more precise shot than **Chooser**. If he is unable to hit his chosen target, he tries to choose another target that he can accurately hit. He uses defensive weapons exactly like **Chooser**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/320) attempts to buy offensive weapons. When buying defensive weapons, he buys only strong and precise weapons - that is, weapons that won't accidentally hurt him.
+* **Spoiler** - He shoots exactly like **Chooser** except that he has more luck, which means that even if he doesn't hit the target of his choice, it can be a more precise shot than **Chooser**. If he is unable to hit his chosen target, he tries to choose another target that he can accurately hit. He uses defensive weapons exactly like **Chooser**. At the beginning of the round, he assesses how much money he has and depending on that, he makes (money/5100) attempts to buy defensive weapons and then checks again how much money he has left and makes (money/320) attempts to buy offensive weapons. When buying defensive weapons, he buys only strong and precise weapons - that is, weapons that won't accidentally hurt him.
 
 * **Cyborg** - Takes aim at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. If he is unable to hit his chosen target, he tries to choose another target that he can accurately hit. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser** but if he has more than 2 pieces of **Battery** he uses them if the energy decreases below 60 units.. He shops exactly like **Spoiler**.
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
 
-Trying to buy a weapon (offensive or defensive) is as follows:
+Buying a weapon (offensive or defensive) works as follows:
 First, one of the weapons is drawn (among all possible offensive or defensive weapons). Then a check is performed to see if the drawn weapon is in the list of weapons possible for purchase by the tank. If not, no weapon is bought in this trial, and if so, its price is checked. If the tank has that much money, the weapon is bought, otherwise the trial ends without making a purchase.
 
 Table of weapons purchased by: **Shooter**, **Poolshark**, **Tosser** and **Chooser**.
 
-| Offensive weapons | Defensive weapons |
-| --- | --- |
-| Missile | Battery |
-| Baby Nuke | Parachute |
-| Nuke | Strong Parachute |
-| LeapFrog | Mag Deflector |
-| Funky Bomb | Shield |
-| MIRV | Heavy Shield |
-| Death's Head | Force Shield |
-| Napalm | Bouncy Castle |
-| Hot Napalm | |
-| Baby Roller | |
-| Roller | |
-| Heavy Roller | |
+| Offensive    | Defensive        |
+|--------------|------------------|
+| Missile      | Battery          |
+| Baby Nuke    | Parachute        |
+| Nuke         | Strong Parachute |
+| LeapFrog     | Mag Deflector    |
+| Funky Bomb   | Shield           |
+| MIRV         | Heavy Shield     |
+| Death's Head | Force Shield     |
+| Napalm       | Bouncy Castle    |
+| Hot Napalm   |                  |
+| Baby Roller  |                  |
+| Roller       |                  |
+| Heavy Roller |                  |
 
 Table of weapons purchased by: **Spoiler** and **Cyborg**.
 
-| Offensive weapons | Defensive weapons |
-| --- | --- |
-| Missile | Battery |
-| Baby Nuke | Strong Parachute |
-| Nuke | Mag Deflector |
-| Hot Napalm | Heavy Shield |
-| | Force Shield |
-| | Bouncy Castle |
+| Offensive    | Defensive        |
+|--------------|------------------|
+| Missile      | Battery          |
+| Baby Nuke    | Strong Parachute |
+| Nuke         | Mag Deflector    |
+| Hot Napalm   | Heavy Shield     |
+|              | Force Shield     |
+|              | Bouncy Castle    |
+

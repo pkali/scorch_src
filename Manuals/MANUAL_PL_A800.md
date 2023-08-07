@@ -140,6 +140,11 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 
 ## 5. Zasady gry - bronie ofensywne
 
+Duże punkty otrzymane przez gracza to liczba czołgów, które zginęły wcześniej niż on. Jeśli któryś z innych czołgów skapitulował wcześniej (**White Flag**) nie jest doliczany do tych, które zginęły, i nie daje punktów.
+
+Tylko te punkty decydują o kolejności w podsumowaniu.
+
+
 ### Energia czołgów
 * Na początku każdej rundy każdy czołg ma 99 jednostek energii.
 
@@ -263,11 +268,6 @@ Uwagi:
 * **Stomp** - nie jest odejmowana energia, ale wszystkie czołgi w promieniu zależnym od siły strzału zostają odepchnięte, a po odepchnięciu mogą spaść lub zostać zasypane. Przy maksymalnej sile 990 jednostek promień działania to około 60 pikseli.
 
 * **Laser** - tu także jest inaczej - równo 100 tylko w przypadku bezpośredniego trafienia po prostu odejmujemy 100 jednostek energii - czyli czołg zawsze ginie.
-
-
-Duże punkty otrzymane przez gracza to liczba czołgów, które zginęły wcześniej niż on. Jeśli któryś z innych czołgów skapitulował wcześniej (**White Flag**) nie jest doliczany do tych, które zginęły, i nie daje punktów.
-
-Tylko te punkty decydują o kolejności w podsumowaniu.
 
 
 ## 6. A teraz bronie defensywne:

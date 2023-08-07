@@ -359,7 +359,7 @@ man_text
     .if LANG = "PL"
       ins 'MANUAL_PL_A800.bin' ; 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
     .else
-      ins 'MANUAL_EN_A800.bin'
+      ins 'MANUAL_EN.bin'
     .endif
 man_text_end
     .by $ff, $ff
