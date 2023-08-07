@@ -22,7 +22,7 @@ main
     sta TetryxColorS
     lda RANDOM
     bmi TnotVisible
-    lda #8
+    lda colors+2    ; visible
     sta TetryxColor
 TnotVisible
     lda #0
@@ -171,7 +171,7 @@ picData
  
 ; Color data
 colors
-    .BYTE 0,14,8,4
+    .BYTE 0,14,10,6
  
 MenuTitle
     dta d" SELECT  OPTION "
