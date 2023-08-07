@@ -22,6 +22,13 @@ STEREOMODE  equ 0
     .zpvar temp .word
 
 start
+    lda #0
+    sta dmactls ; screen off
+    ldx #3
+@   sta COLOR0-1,x
+    dex
+    bpl @-
+    jsr WaitOneFrame    
     jsr CheckPALorNTSC
     ldx #<MODUL                  ;low byte of RMT module to X reg
     ldy #>MODUL                 ;hi byte of RMT module to Y reg
@@ -45,47 +52,30 @@ start
     mwa #man_text top_src
     
     vmain VBLANK,7
+
+    jsr MakeScreenCopy
+    
+    lda #@dmactl(standard|dma) ; standard screen width, DL on, P/M off
+    sta dmactls
+    jsr WaitOneFrame
+    jsr FadeIn
     
 main_loop
     bit escflag
-    spl:rts  ; EXIT THIS WAY --->
-    mwa top_src src
-    mwa #screen dest
-
-    ldx #screen_height-1
-screen_copy
-    mwa top_src start_address
-    ldy #0
-@
-      lda (src),y
-      cmp #$ff  ; end of line marker
-      bne not_eol
-        sty next_line_begin
-        lda #$00
-@         sta (dest),y
-          iny
-          cpy #screen_width
-        bne @-
-        jmp next_line
-
-not_eol
-      sta (dest),y
-      iny
-      cpy #screen_width
-    bne @-1
-    mva #screen_width-1 next_line_begin
-next_line
-    adw dest #screen_width
-    ; adw src #screen_width
-    inc next_line_begin
-    clc
-    lda src
-    adc next_line_begin
-    sta src
-    scc:inc src+1
-    
-    dex
-    bpl screen_copy
+    bpl NoEscape
+      ; EXIT THIS WAY --->
+    jsr FadeOut
+    VMAIN XITVBV,7          ; jsr SetVBL (off user proc)
+    LDA #%01000000          ; DLI off
+    STA NMIEN
+    lda #0  ; screen off
+    sta dmactls
+    sta escflag
+    jsr WaitOneFrame
+    ; exit
+    jmp start
+NoEscape    
+    jsr MakeScreenCopy
     ; save the current end of the printed text source
     mwa src end_address
     
@@ -137,6 +127,74 @@ scroll_up
     scs:mwa #man_text top_src
     jmp main_loop
     
+;--------------------------------------------------
+.proc MakeScreenCopy
+    mwa top_src src
+    mwa #screen dest
+
+    ldx #screen_height-1
+screen_copy
+    mwa top_src start_address
+    ldy #0
+@
+      lda (src),y
+      cmp #$ff  ; end of line marker
+      bne not_eol
+        sty next_line_begin
+        lda #$00
+@         sta (dest),y
+          iny
+          cpy #screen_width
+        bne @-
+        jmp next_line
+
+not_eol
+      sta (dest),y
+      iny
+      cpy #screen_width
+    bne @-1
+    mva #screen_width-1 next_line_begin
+next_line
+    adw dest #screen_width
+    ; adw src #screen_width
+    inc next_line_begin
+    clc
+    lda src
+    adc next_line_begin
+    sta src
+    scc:inc src+1
+    
+    dex
+    bpl screen_copy
+    rts
+.endp    
+;--------------------------------------------------
+.proc FadeIn
+    ldy #15
+FirstLoop
+    lda COLOR1
+    cmp #13
+    beq ColorOK
+    inc COLOR1
+ColorOK
+    jsr WaitOneFrame
+    dey
+    bpl FirstLoop
+    rts
+.endp
+;--------------------------------------------------
+.proc FadeOut
+    ldy #15
+FirstLoop
+    lda COLOR1
+    beq ColorOK
+    dec COLOR1
+ColorOK
+    jsr WaitOneFrame
+    dey
+    bpl FirstLoop
+    rts
+.endp
 
 ;--------------------------------------------------
 .proc GetKey
@@ -238,6 +296,12 @@ skipSoundFrame
 
 VBLANKEND   
     jmp XITVBV
+.endp
+;--------------------------------------------------
+.proc WaitOneFrame
+;--------------------------------------------------
+    waitRTC    ; or wait ?
+    rts
 .endp
 ;--------------------------------------------------
 .proc CheckPALorNTSC
