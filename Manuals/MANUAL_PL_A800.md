@@ -7,47 +7,47 @@ Grać można przy użyciu klawiatury (wszystkie funkcjonalności) lub joysticka 
 ![Ekran wyboru opcji gry.](images/MainMenu.png)
 Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
-* liczba graczy (2 - 6) obejmuje tak ludzi, jak graczy sterowanych przez komputer
+* **Players** - liczba graczy (2 - 6) obejmuje tak ludzi, jak graczy sterowanych przez komputer
 
-* początkową ilość gotówki każdego z graczy (8k to wybrana przez nas wartość optymalna, lecz przy krótkich rozgrywkach warto wybrać większą wartość)
+* **Cash** - początkową ilość gotówki każdego z graczy (8k to wybrana przez nas wartość optymalna, lecz przy krótkich rozgrywkach warto wybrać większą wartość)
 
-* grawitacja
+* **Gravity** - siła grtawitacji 
 
-* maksymalna siła wiatru w skali Beauforta (wiatr jest losowany na początku każdej z rund lub w czasie rundy pomiędzy turami, tu możemy wybrać jak silny może być):
+* **Wind** - maksymalna siła wiatru w skali Beauforta (wiatr jest losowany na początku każdej z rund lub w czasie rundy pomiędzy turami, tu możemy wybrać jak silny może być):
     * 1B - maksymalna siła wiatru: 5
     * 3B - maksymalna siła wiatru: 20
     * 5B - maksymalna siła wiatru: 40
     * 7B - maksymalna siła wiatru: 70
     * 9B - maksymalna siła wiatru: 99
 
-* liczba rozgrywanych rund
+* **Rounds** - liczba rozgrywanych rund
 
-* szybkość lotu pocisków (nie ma wpływu na tor lotu - zmienia jedynie widoczną prędkość rysowania - nie zmienia nic w samej rozgrywce)
+* **Missiles** - szybkość lotu pocisków (nie ma wpływu na tor lotu - zmienia jedynie widoczną prędkość rysowania - nie zmienia nic w samej rozgrywce)
 
-* częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą "strzelać w próżnię" :) - jeśli grają tylko ludzie, optymalne ustawienie to "norm", a w przypadku graczy sterowanych przez komputer... wedle uznania.
+* **Seppuku** - częstotliwość samobójstw :) - jeśli przez ileś tur gra nie odnotowała trafień (czołgi ciągle strzelają niecelnie) jeden z takich pudłujących czołgów popełnia samobójstwo - tu określamy jak długo mogą "strzelać w próżnię" :) - jeśli grają tylko ludzie, optymalne ustawienie to "norm", a w przypadku graczy sterowanych przez komputer... wedle uznania.
 
-* wysokość (i pofałdowanie) gór od prawie płaskich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
+* **Mountain** - wysokość (i pofałdowanie) gór od prawie płaskich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
 
-* sposób działania ścian (krawędzi ekranu):
-    * none - pociski, które wyleciały poza ekran nie wracają (czarny kolor ramki ekranu)
-    * wrap - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony i odwrotnie (fioletowy kolor ramki ekranu)
-    * bump - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć (granatowy kolor ramki ekranu)
-    * boxy - tak jak bump, tyle że "sufit" także odbija pociski (zielony kolor ramki ekranu)
-    * rand - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
+* **Walls** - sposób działania ścian (krawędzi ekranu):
+    * **none** - pociski, które wyleciały poza ekran nie wracają (czarny kolor ramki ekranu)
+    * **wrap** - ekran "zawija się" i pociski, które wyleciały w prawo pojawiają się z lewej strony i odwrotnie (fioletowy kolor ramki ekranu)
+    * **bump** - prawa i lewa ściana odbijają pociski, które chcą przez nie przelecieć (granatowy kolor ramki ekranu)
+    * **boxy** - tak jak bump, tyle że "sufit" także odbija pociski (zielony kolor ramki ekranu)
+    * **rand** - na początku każdej rundy losowany jest jeden z 4 powyższych sposobów działania ścian
     
     W trakcie rozgrywki aktualny sposób działania ścian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - granatowy, boxy - zielony.
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz [TAB], [SELECT] lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny), a na konsoli Atari 5200 klawisz [5] kontrolera zmieniają kolor gór (3 wersje do wyboru).  
+Klawisz **TAB**, **SELECT** lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny) zmieniają kolor gór (3 wersje do wyboru).  
 
-Jeśli kursor wskazuje opcję wyboru siły wiatru "Wind" zmienia sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie "Wind".  
+Jeśli kursor wskazuje opcję wyboru siły wiatru **Wind**, wciśnięcie **TAB** zmienia sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie **Wind**.  
 
-Jeśli kursor wskazuje opcję wyboru siły ciążenia "Gravity" zmienia procedurę opadania ziemi na mniej efektowną, ale szybszą i odwrotnie. Wybranie szybkiego opadania ziemi sygnalizowane jest literą "f" przy słowie "Gravity".
+Jeśli kursor wskazuje opcję wyboru siły ciążenia **Gravity**, **TAB** zmienia procedurę opadania ziemi na mniej efektowną, ale szybszą i odwrotnie. Wybranie szybkiego opadania ziemi sygnalizowane jest literą "f" przy słowie **Gravity**.
 
-Jeśli kursor wskazuje opcję wyboru wysokości gór "Mountain" przełącza opcję zmiennej co rundę wysokości gór. Losowanie co rundę jest sygnalizowane znakiem "?" przy słowie "Mountain".  
+Jeśli kursor wskazuje opcję wyboru wysokości gór **Mountain**, **TAB** przełącza opcję zmiennej co rundę wysokości gór. Losowanie co rundę jest sygnalizowane znakiem "?" przy słowie **Mountain**.  
 
-Klawisz [RETURN] lub przycisk joysticka przechodzi do następnego ekranu.
+Klawisz **RETURN** lub przycisk joysticka przechodzi do następnego ekranu.
 
 
 ## 2. Gracze i poziom przeciwników
@@ -56,98 +56,84 @@ Wprowadzanie nazw graczy i wybór poziomu graczy sterowanych przez komputer.
 
 Drugi ekran powtarza się dla każdego z graczy, można na nim klawiszami kursora lub joystickiem wybrać czy danym czołgiem będzie kierował człowiek (opcja HUMAN), czy też komputer (pozostałe opcje).  
 
-Klawisz [TAB], [SELECT] lub drugi przycisk joysticka, a na konsoli Atari 5200 klawisz [5] kontrolera pozwalają wybrać z którego portu joysticka będzie korzystał gracz.  
+Klawisz **TAB**, **SELECT** lub drugi przycisk joysticka pozwalają wybrać z którego portu joysticka będzie korzystał gracz.  
 
-Klawisz [INVERSE] lub [OPTION] umożliwiają wybór jednego z 3 dostępnych kształtów czołgów. Na konsoli Atari 5200 uzyskuje się to poprzez cykliczne wybieranie kolejnych portów joysticka klawiszem [5].  
+Klawisz **INVERSE** lub **OPTION** umożliwiają wybór jednego z 3 dostępnych kształtów czołgów.
 
 Jednocześnie z klawiatury można wprowadzić nazwę wybranego gracza.  
 
-Po naciśnięciu klawisza [RETURN] lub krótkim naciśnięciu przycisku joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla wszystkich.
+Po naciśnięciu klawisza **RETURN** lub krótkim naciśnięciu przycisku joysticka ekran przechodzi na następnego gracza aż zostaną wybrane poziomy trudności dla wszystkich.
 
 Nazwę gracza można wprowadzać także przy pomocy joysticka. Po wciśnięciu i przytrzymaniu przycisku ponad 1s. za pomocą ruchów góra/dół można zmienić wprowadzaną literę, a lewo/prawo jej pozycję w nazwie. Puszczenie przycisku kończy wprowadzanie nazwy i wraca do wyboru poziomu.
 
 Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 
+
 ## 3. Ekran zakupów (przed każdą rundą)
 ![Ekran zakupów broni ofensywnych.](images/PurOffensive.png)
 ![Ekran zakupów broni defensywnych.](images/PurDefensive.png)
-Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie, na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za tę cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz [TAB] lub strzałka w lewo, czy też ruch joystickiem w lewo lub drugi przycisk joysticka zmieniają ekran na bronie defensywne lub ofensywne, klawisz [SPACJA] lub strzałka w prawo, a także joystick w prawo realizują zakup wskazanej broni.
+Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie, na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za tę cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz **TAB** lub strzałka w lewo, czy też ruch joystickiem w lewo lub drugi przycisk joysticka zmieniają ekran na bronie defensywne lub ofensywne, klawisz **SPACJA** lub strzałka w prawo, a także joystick w prawo realizują zakup wskazanej broni.
 
-Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu aktywacji broni defensywnych.
+Klawisz **RETURN** lub przycisk joysticka przechodzi do ekranu aktywacji broni defensywnych.
 
 ![Ekran aktywacji broni defensywnych.](images/ActDefensive.png)
-Na ekranie tym można aktywować zakupione wcześniej bronie defensywne czy też ofensywne. Obsługiwany jest identycznie jak ekran zakupów, jednak [SPACJA] lub strzałka w prawo, a także joystick w prawo realizują aktywacje wskazanej broni. Umożliwia to aktywowanie osłon jeszcze przed rozpoczęciem rundy.
+Na ekranie tym można aktywować zakupione wcześniej bronie defensywne czy też ofensywne. Obsługiwany jest identycznie jak ekran zakupów, jednak **SPACJA** lub strzałka w prawo, a także joystick w prawo realizują aktywacje wskazanej broni. Umożliwia to aktywowanie osłon jeszcze przed rozpoczęciem rundy.
 
-Klawisz [RETURN] lub przycisk joysticka przechodzi do ekranu zakupów następnego gracza.
+Klawisz **RETURN** lub przycisk joysticka przechodzi do ekranu zakupów następnego gracza.
 (oczywiście dla graczy komputerowych ten ekran się nie pojawia)
+
 
 ## 4. Główny ekran gry
 ![Główny ekran gry.](images/StatusLine.png)
 W linii statusowej widoczna jest informacja o tym, który z graczy aktualnie może oddać strzał oraz zestaw innych informacji:
 
-* nazwa czołgu gracza
+* **Player** - nazwa czołgu gracza
 
 * numer aktywnego joysticka lub poziom gracza sterowanego przez komputer (1-**Moron** - 8-**Unknown**),
 
 * wybrana aktualnie broń ofensywna (symbol - ilość - nazwa),
 
-* pozostała ilość punktów energii gracza i jeśli ma on aktywną broń defensywną posiadającą swój zasób energii - w nawiasie ten zasób
+* **Energy** - pozostała ilość punktów energii gracza i jeśli ma on aktywną broń defensywną posiadającą swój zasób energii - w nawiasie ten zasób
 
-* ustawiony przez gracza kąt nachylenia lufy i kierunek jej nachylenia
+* **Angle** - ustawiony przez gracza kąt nachylenia lufy i kierunek jej nachylenia
 
-* ustawiona przez gracza siła strzału (maksymalna siła strzału jest ograniczana przez energię gracza - nie może przekroczyć energii * 10 . Oznacza to, że mając małą ilość energii możemy oddać słabsze strzały
+* **Force** - ustawiona przez gracza siła strzału (maksymalna siła strzału jest ograniczana przez energię gracza - nie może przekroczyć energii * 10 . Oznacza to, że mając małą ilość energii możemy oddać słabsze strzały
 
-* numer aktualnej rundy rozgrywki
+* **Round** - numer aktualnej rundy rozgrywki
 
-* prędkość i kierunek wiatru
+* **Wind** - prędkość i kierunek wiatru
 
 * symbol "komputera" jeśli aktywna jest **Auto Defense**
 
-* w nawiasie nazwę aktywnej broni defensywnej - jeśli jest jakaś aktywowana przez gracza
+* w nawiasie nazwa aktywnej broni defensywnej - jeśli jest jakaś aktywowana przez gracza
 
 Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana kąta nachylenia lufy, góra/dół - zmiana ustawienia siły strzału.
 
-| A800             | funkcja          |
-|------------------|------------------|
-| [SPACJA]/[FIRE]  | strzał (zob. ↓)  |
-| [TAB]/[SELECT]   | zmiana broni (↓) |
-| [I]              | inwentarz (↓)    |
-| [A]/[OPTION]     | defensywa (↓)    |
-| [M]              | wł/wył muzyki    |
-| [S]              | wł/wył dźwięków  |
-| [START]          | tryb turbo (↓)   |
-| [O]              | koniec gry (↓)   |
-| [START]+[OPTION] | bezw. koniec (↓) |
-| [G]              | inne kolory (↓)  |
-| [ESC]            | powrót (↓)       |
-| [Y]              | zatwierdzam (↓)  |
-| [CTRL]+[HELP]    | vis. debug (↓)   |
-
-| 5200       | funkcja          |
-|------------|------------------|
-| [FIRE]/[0] | strzał (zob. ↓)  |
-| [5]        | zmiana broni (↓) |
-| [9]        | inwentarz (↓)    |
-| [7]        | defensywa (↓)    |
-| [PAUSE]    | wł/wył muzyki    |
-| [RESET]    | wł/wył dźwięków  |
-| [START]    | tryb turbo (↓)   |
-| [3]        | koniec gry (↓)   |
-| brak       | bezw. koniec (↓) |
-| brak       | inne kolory (↓)  |
-| [*]        | powrót (↓)       |
-| [1]        | zatwierdzam (↓)  |
-| [#] długo  | vis. debug (↓)   |
+| A800         | funkcja          |
+|--------------|------------------|
+| **SPACJA**/**FIRE**  | strzał (zob. ↓)  |
+| **TAB**/**SELECT**   | zmiana broni (↓) |
+| **I**            | inwentarz (↓)    |
+| **A**/**OPTION**     | defensywa (↓)    |
+| **M**            | wł/wył muzyki    |
+| **S**            | wł/wył dźwięków  |
+| **START**        | tryb turbo (↓)   |
+| **O**            | koniec gry (↓)   |
+| **START**+**OPTION** | bezw. koniec (↓) |
+| **G**            | inne kolory (↓)  |
+| **ESC**          | powrót (↓)       |
+| **Y**            | zatwierdzam (↓)  |
+| **CTRL**+**HELP**    | vis. debug (↓)   |
 
 * **strzał**, przycisk joysticka naciśnięte krótko - oddanie strzału
 * **zmiana broni**, drugi przycisk joysticka - wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio standardowym joystickiem - trzeba wybrać Inventory).
 * **inwentarz**, dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne - z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną.
 * **defensywa** - bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych.
 * **tryb turbo** - przyspiesza/pomija niektóre animacje w grze
-* **koniec gry** - wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza [ESC] z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy.
-* **bezw. koniec** - natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak [O], ale bez potwierdzenia.
+* **koniec gry** - wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza **ESC** z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy.
+* **bezw. koniec** - natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak **O**, ale bez potwierdzenia.
 * **inne kolory** - zmienia wariant kolorystyczny gór (3 wersje do wyboru)
-* **powrót** - w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz [ESC], który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem).
+* **powrót** - w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz **ESC**, który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem).
 * **zatwierdzam** - w przypadku pytania o przerwanie lub zakończenie gry - potwierdzenie decyzji
 * **vis. debug** - przełącza tryb "visual debug". Wizualizuje mierzone odległości, celowanie lasera oraz technikę celowania komputera. Pozostawia bałagan na ekranie, co nie zmienia rozgrywki, tylko ją nieco utrudnia.
 
@@ -167,34 +153,34 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 Jak działa odejmowanie energii i zarabianie kasy:
 Po każdej rundzie wyliczana jest ilość zdobytych/straconych pieniędzy, robione jest to na podstawie dwóch zmiennych gromadzonych przez każdy z czołgów w trakcie rundy. Te zmienne to:
 
-`gain` - energia "przechwycona" od trafionych czołgów (także jeśli trafimy w samego siebie :) i tu haczyk, jeśli pozostało nam bardzo mało energii opłacalne może być trafienie w siebie mocną bronią!
+**gain** - energia "przechwycona" od trafionych czołgów (także jeśli trafimy w samego siebie :) i tu haczyk, jeśli pozostało nam bardzo mało energii opłacalne może być trafienie w siebie mocną bronią!
 
-`lose` - energia stracona w wyniku eksplozji/upadku (i tu ważne - liczona jest całkowita utrata energii nawet jeśli czołg ma w chwili trafienia mniej).
+**lose** - energia stracona w wyniku eksplozji/upadku (i tu ważne - liczona jest całkowita utrata energii nawet jeśli czołg ma w chwili trafienia mniej).
 
 Dodatkowo czołg, który wygrał rundę, ma parametr gain (przechwyconej od trafionych czołgów energii) zwiększany o pozostałą mu na koniec rundy energię (bo nie zginął i powinien ją mieć - choć bywa też inaczej :) )
 
 Konkretnie:
 
 ### Po każdej rundzie:
-`money = money + (20 * (gain+energy))`
+**money = money + (20 * (gain+energy))**
 
-`money = money - (10 * lose)`
+**money = money - (10 * lose)**
 
-`jeśli money <0 to money=0`
+**jeśli money < 0 to money = 0**
 
-(na starcie każdej rundy `gain` i `lose` mają wartość 0)
+(na starcie każdej rundy **gain** i **lose** mają wartość 0)
 
 W czasie rundy, jeśli w wyniku strzału oddanego przez czołg inny czołg zostanie trafiony, czołg oddający strzał "dostaje energię" zabraną czołgowi trafionemu.
 
 ### czołg oddający strzał:
-`gain = gain + EnergyDecrease`
+**gain = gain + EnergyDecrease**
 
 ### czołg trafiony:
-`lose = lose + EnergyDecrease`
+**lose = lose + EnergyDecrease**
 
-gdzie `EnergyDecrease` to utrata energii w wyniku trafienia.
+gdzie **EnergyDecrease** to utrata energii w wyniku trafienia.
 
-Oczywiście jednocześnie trafiony czołg traci ilość energii zapisaną w `EnergyDecrease`, z tym że tutaj strata nie może przekroczyć posiadanej energii.
+Oczywiście jednocześnie trafiony czołg traci ilość energii zapisaną w **EnergyDecrease**, z tym że tutaj strata nie może przekroczyć posiadanej energii.
 
 ## Jak działa trafienie.
 
@@ -202,9 +188,9 @@ Każda broń, która skutkuje eksplozją, ma swój promień rażenia.
 
 Po eksplozji każdy czołg w jej zasięgu traci energię.
 
-Działa to tak, że jeśli trafienie jest dokładnie w centralny punkt czołgu, `EnergyDecrease` otrzymuje maksymalną wartość dla danej broni, a z każdym pikselem odległości od centrum czołgu wartość ta jest zmniejszana o 8.
+Działa to tak, że jeśli trafienie jest dokładnie w centralny punkt czołgu, **EnergyDecrease** otrzymuje maksymalną wartość dla danej broni, a z każdym pikselem odległości od centrum czołgu wartość ta jest zmniejszana o 8.
 
-Przykładowo: jeśli strzał oddany za pomocą broni Baby Missile trafi idealnie w centrum czołgu, to straci on dokładnie 88 jednostek energii (plus to, co straci spadając po eksplozji).
+Przykładowo: jeśli strzał oddany za pomocą broni **Baby Missile** trafi idealnie w centrum czołgu, to straci on dokładnie 88 jednostek energii (plus to, co straci spadając po eksplozji).
 W przypadku trafienia tą samą bronią w odległości 10-ciu pikseli od centrum czołgu strata ta będzie wynosiła już tyko 8 jednostek.
 
 A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli broń eksploduje kilka razy, każda z eksplozji jest obliczana niezależnie (dodatkowe wartości w tabeli):
@@ -242,35 +228,35 @@ A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli br
 | Laser           | 100 (zob. ↓) |
 
 Uwagi:
-* **Napalm** - ta broń jest inna i nie jest wyznaczana odległość od centrum, po prostu każdy czołg znajdujący się w zasięgu płomieni traci 40 jednostek energii
+* **Napalm** - ta broń jest inna i nie jest wyznaczana odległość od centrum, po prostu każdy czołg znajdujący się w zasięgu płomieni traci 40 jednostek energii.
 
-* **Hot Napalm** - zasada taka jak w Napalm
+* **Hot Napalm** - zasada taka jak w Napalm, 80 jednostek.
 
-* **Riot Charge** - nie jest odejmowana energia, ale usuwana jest część gruntu w górę od punktu trafienia w promieniu 31 pikseli
+* **Riot Charge** - nie jest odejmowana energia, ale usuwana jest część gruntu w górę od punktu trafienia w promieniu 31 pikseli.
 
-* **Riot Blast** - jak w Riot Charge, tyle że w promieniu 61 pikseli
+* **Riot Blast** - jak w Riot Charge, tyle że w promieniu 61 pikseli.
 
-* **Riot Bomb** - nie jest odejmowana energia, ale niszczony jest grunt w promieniu 17 pikseli od punktu trafienia - tak jak w wypadku **Missile**. Broń przydatna do odkopywania się po zasypaniu, bądź podkopywania przeciwnika
+* **Riot Bomb** - nie jest odejmowana energia, ale niszczony jest grunt w promieniu 17 pikseli od punktu trafienia - tak jak w wypadku **Missile**. Broń przydatna do odkopywania się po zasypaniu, bądź podkopywania przeciwnika.
 
-* **Heavy Riot Bomb** - jak w Riot Bomb, ale promień eksplozji to 29 pikseli od punktu trafienia - tak jak w wypadku **Nuke**
+* **Heavy Riot Bomb** - jak w Riot Bomb, ale promień eksplozji to 29 pikseli od punktu trafienia - tak jak w wypadku **Nuke**.
 
-* **Baby Digger** - nie jest odejmowana energia, ale podkopywana jest część gruntu promieniu 60 pikseli od punktu trafienia
+* **Baby Digger** - nie jest odejmowana energia, ale podkopywana jest część gruntu promieniu 60 pikseli od punktu trafienia.
 
-* **Digger** - jak wyżej - większy podkop
+* **Digger** - jak wyżej - większy podkop.
 
-* **Heavy Digger** - jak wyżej - największy podkop
+* **Heavy Digger** - jak wyżej - największy podkop.
 
-* **Sandhog** - jak wyżej - inny sposób podkopywania
+* **Sandhog** - jak wyżej - inny sposób podkopywania.
 
-* **Heavy Sandhog** - jak wyżej - największy podkop
+* **Heavy Sandhog** - jak wyżej - największy podkop.
 
 * **Dirt Clod** - nie jest odejmowana energia, ale tworzona jest kula gruntu o promieniu 12 pikseli od punktu trafienia. Broń przydatna do zakopywania przeciwnika.
 
-* **Dirt Ball** - jak wyżej, ale promień kuli to 22 piksele
+* **Dirt Ball** - jak wyżej, ale promień kuli to 22 piksele.
 
-* **Ton of Dirt** - jak wyżej, ale promień kuli to 31 pikseli
+* **Ton of Dirt** - jak wyżej, ale promień kuli to 31 pikseli.
 
-* **Liquid Dirt** - zalewa grunt w punkcie trafienia płynną glebą, wypełniając zagłębienia
+* **Liquid Dirt** - zalewa grunt w punkcie trafienia płynną glebą, wypełniając zagłębienia.
 
 * **Dirt Charge** - nie jest odejmowana energia, ale usypywany jest dodatkowy grunt w górę od punktu trafienia w promieniu 61 pikseli. Broń przydatna do zakopywania przeciwnika.
 
@@ -279,9 +265,10 @@ Uwagi:
 * **Laser** - tu także jest inaczej - równo 100 tylko w przypadku bezpośredniego trafienia po prostu odejmujemy 100 jednostek energii - czyli czołg zawsze ginie.
 
 
-Duże punkty otrzymane przez gracza to liczba czołgów, które zginęły wcześniej niż on. Jeśli któryś z innych czołgów skapitulował wcześniej (Biała Flaga) nie jest doliczany do tych, które zginęły, i nie daje punktów.
+Duże punkty otrzymane przez gracza to liczba czołgów, które zginęły wcześniej niż on. Jeśli któryś z innych czołgów skapitulował wcześniej (**White Flag**) nie jest doliczany do tych, które zginęły, i nie daje punktów.
 
 Tylko te punkty decydują o kolejności w podsumowaniu.
+
 
 ## 6. A teraz bronie defensywne:
 
@@ -289,7 +276,7 @@ Tylko te punkty decydują o kolejności w podsumowaniu.
 
 * **Battery** - w momencie aktywacji doładowuje energię czołgu do pełna (99 jednostek). Jest to jedna z trzech broni defensywnych, która nie dezaktywuje innych broni defensywnych w przypadku jej użycia.
 
-* **Hovercraft** - broń umożliwiająca przemieszczanie się czołgu. Posiada własny zasób paliwa, a dodatkowo może być aktywowana wielokrotnie w czasie tej samej tury, a po jej użyciu możemy w tej samej turze aktywować inną broń defensywną i oddać strzał. W wyniku jej użycia czołg uniesie się ponad góry i za pomocą klawiszy kursora lub joysticka: lewo/prawo możemy przemieścić czołg na nową pozycję, a [SPACJA] lub przycisk joysticka powodują wylądowanie czołgu w nowym miejscu. Latać można do chwili skończenia się "paliwa" (prezentowanego na pasku statusu tak jak energia broni defensywnej), a gdy paliwo się skończy, czołg opadnie samodzielnie. Nie da się lądować na innych czołgach.
+* **Hovercraft** - broń umożliwiająca przemieszczanie się czołgu. Posiada własny zasób paliwa, a dodatkowo może być aktywowana wielokrotnie w czasie tej samej tury, a po jej użyciu możemy w tej samej turze aktywować inną broń defensywną i oddać strzał. W wyniku jej użycia czołg uniesie się ponad góry i za pomocą klawiszy kursora lub joysticka: lewo/prawo możemy przemieścić czołg na nową pozycję, a **SPACJA** lub przycisk joysticka powodują wylądowanie czołgu w nowym miejscu. Latać można do chwili skończenia się "paliwa" (prezentowanego na pasku statusu tak jak energia broni defensywnej), a gdy paliwo się skończy, czołg opadnie samodzielnie. Nie da się lądować na innych czołgach.
 
 * **Parachute** - nie chroni przed ubytkiem energii z powodu sąsiedniej eksplozji, powoduje że nie ubywa energii w czasie JEDNEGO spadania. Po takim upadku dezaktywuje się i trzeba aktywować nowy spadochron.
 

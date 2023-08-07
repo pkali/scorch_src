@@ -1,6 +1,10 @@
     icl '../Atari/lib/ATARISYS.ASM'
     icl '../Atari/lib/MACRO.ASM'
 
+.IFNDEF LANG
+    .def LANG = "PL"
+.ENDIF
+
 screen_height = 26
 screen_width = 40
 screen = $1000 ; start - 40*screen_height
@@ -38,7 +42,7 @@ start
     mwa #dl dlptrs
     mva #>WeaponFont chbas
     
-    mwa #man_text_en top_src
+    mwa #man_text top_src
     
     vmain VBLANK,7
     
@@ -107,7 +111,7 @@ scroll_down
     scc:inc top_src+1
     
     ;adw top_src #screen_width
-    cpw end_address #man_text_en_end
+    cpw end_address #man_text_end
     scc:mwa start_address top_src
     jmp main_loop
 
@@ -129,8 +133,8 @@ scroll_up
     sta top_src+1
     
     ;sbw top_src #screen_width
-    cpw top_src #man_text_en
-    scs:mwa #man_text_en top_src
+    cpw top_src #man_text
+    scs:mwa #man_text top_src
     jmp main_loop
     
 
@@ -287,9 +291,13 @@ ticksPerSecond .byte 0
 fake_pokey :9 .byte 0
 
 
-man_text_en
-    ins 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
-man_text_en_end
+man_text
+    .if LANG = "PL"
+      ins 'MANUAL_PL_A800.bin' ; 'manual.bin'  ;icl 'man_cart_txt_EN.asm'
+    .else
+      ins 'MANUAL_EN_A800.bin'
+    .endif
+man_text_end
     .by $ff, $ff
 
        opt h-                       ;RMT module is standard Atari binary file already

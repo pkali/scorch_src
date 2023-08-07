@@ -28,7 +28,6 @@ def break_long_string(long_string):
         long_string = ' ' * (spaces - 1) + long_string[brk:]
     else:
         result.append(long_string)
-    print(result)
     return result
 
 
@@ -276,6 +275,7 @@ utf_to_internal = {
     chr(ord('|')+128): 128+124,
     'ǂ': 128+77,  # ł
     'ˠ': 128+81,  # ó
+    'Ǜ': 128+84,  # ś
     # chr(ord('Ą')+128): 128+65,
     # chr(ord('ą')+128): 128+66,
     # chr(ord('Ć')+128): 128+67,
@@ -299,12 +299,17 @@ utf_to_internal = {
 # convert to SCREENCODES
 bin_out = bytearray()
 for line in out2.split('\n'):
+    # print(line)
     for i, c in enumerate(line):
         # print(c, ord(c), utf_to_internal[c])
-        bin_out.append(utf_to_internal[c])
+        try:
+            bin_out.append(utf_to_internal[c])
+        except KeyError:
+            print('-'*100, 'ERROR:', c)
+            bin_out.append(0)
     if len(line) < 40:
         # bin_out += bytes(40-len(line))
         bin_out.append(255)
 # save to a file
-with open('manual.bin', 'wb') as f:
+with open(sys.argv[1].split('.')[0]+'.bin', 'wb') as f:
     f.write(bin_out)
