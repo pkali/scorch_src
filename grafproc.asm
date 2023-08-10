@@ -352,7 +352,7 @@ not_endcircleloop
 ; plot xcircle-YC,ycircle-XC
 ; plot xcircle-YC,ycircle+XC
 
-    clc
+    ;clc - allways after BCC
     lda xcircle
     adc XC
     sta xdraw
@@ -469,105 +469,6 @@ else01
 endif01
     jmp circleloop
 .endp
-;----
-/* .proc splot8
-; plot xcircle+XC,ycircle+YC
-; plot xcircle+XC,ycircle-YC
-; plot xcircle-XC,ycircle-YC
-; plot xcircle-XC,ycircle+YC
-
-; plot xcircle+YC,ycircle+XC
-; plot xcircle+YC,ycircle-XC
-; plot xcircle-YC,ycircle-XC
-; plot xcircle-YC,ycircle+XC
-
-    clc
-    lda xcircle
-    adc XC
-    sta xdraw
-    lda xcircle+1
-    adc #0
-    sta xdraw+1
-    ;clc
-    lda ycircle
-    adc YC
-    sta ydraw
-    sta tempcir
-    lda ycircle+1
-    adc #$00
-    sta ydraw+1
-    sta tempcir+1
-    jsr plot
-
-    sec
-    lda ycircle
-    sbc YC
-    sta ydraw
-    lda ycircle+1
-    sbc #$00
-    sta ydraw+1
-    jsr plot
-
-    sec
-    lda xcircle
-    sbc XC
-    sta xdraw
-    lda xcircle+1
-    sbc #0
-    sta xdraw+1
-    jsr plot
-
-    lda tempcir
-    sta ydraw
-    lda tempcir+1
-    sta ydraw+1
-    jsr plot
-;---
-    clc
-    lda xcircle
-    adc yC
-    sta xdraw
-    lda xcircle+1
-    adc #0
-    sta xdraw+1
-    ;clc
-    lda ycircle
-    adc xC
-    sta ydraw
-    sta tempcir
-    lda ycircle+1
-    adc #$00
-    sta ydraw+1
-    sta tempcir+1
-    jsr plot
-
-    sec
-    lda ycircle
-    sbc xC
-    sta ydraw
-    lda ycircle+1
-    sbc #$00
-    sta ydraw+1
-    jsr plot
-
-    sec
-    lda xcircle
-    sbc yC
-    sta xdraw
-    lda xcircle+1
-    sbc #0
-    sta xdraw+1
-    jsr plot
-
-    lda tempcir
-    sta ydraw
-    lda tempcir+1
-    sta ydraw+1
-    jmp plot  ; jsr:rts
-
-    ; RTS
-.endp
- */
 ;-------------------------------*------------------
 .proc placetanks
 ;--------------------------------------------------
