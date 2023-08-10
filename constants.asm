@@ -645,9 +645,11 @@ CreditsStart
     dta   d"brad-colbert, archon800, nowy80,"^
     dta   d"Shaggy the Atarian, RetroBorsuk, ZPH"
     .IF TARGET = 800
-      dta d" "*
       .IF CART_VERSION = 0
+      dta   d","*
       dta   d"Krzysztof 'Kaz' Ziembik"^
+      .ELSE
+      dta d" "*
       .ENDIF
     .ELIF TARGET = 5200
       dta d","*

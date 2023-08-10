@@ -1,3 +1,5 @@
+.IF *>0 ;this is a trick that prevents compiling this file alone
+
 ;    @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 ; artificial intelligence of tanks goes here!
@@ -1072,3 +1074,5 @@ YisLower
     sbc LowResDistances,y
     rts
 .endp
+
+.ENDIF
