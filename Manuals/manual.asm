@@ -276,9 +276,9 @@ Check2button
     and #%00000111
     beq skipSoundFrame
 PALMusic
-    lda ticks
-    and #%00000011
-    beq skipSoundFrame
+    ;lda ticks
+    ;and #%00000011
+    ;beq skipSoundFrame
 playNow
     jsr RASTERMUSICTRACKER+3
     ; fake POKEY reverb
