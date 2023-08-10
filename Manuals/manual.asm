@@ -36,12 +36,12 @@ start
     jsr RASTERMUSICTRACKER      ;Init
     ;second POKEY init
     lda #0
-    sta $d218
+    sta AUDCTL+$10
     ldy #3
-    sty $d21f
+    sty SKCTL+$10
     ldy #8
 @   
-      sta $d210,y
+      sta POKEY+$10,y
       dey
     bpl @-
     
@@ -66,6 +66,18 @@ main_loop
       ; EXIT THIS WAY --->
     jsr FadeOut
     VMAIN XITVBV,7          ; jsr SetVBL (off user proc)
+    lda #0  ; stereo silence
+    sta AUDCTL
+    sta AUDCTL+$10
+    ldy #3
+    sty SKCTL
+    sty SKCTL+$10
+    ldy #8
+@   
+      sta POKEY,y
+      sta POKEY+$10,y
+      dey
+    bpl @-
     LDA #%01000000          ; DLI off
     STA NMIEN
     lda #0  ; screen off
@@ -84,6 +96,10 @@ NoEscape
     beq scroll_down
     cmp #@kbcode._up
     beq scroll_up
+    cmp #@kbcode._left
+    beq prev_chapter
+    cmp #@kbcode._right
+    jeq next_chapter
     jmp main_loop
   
 scroll_down
@@ -127,6 +143,44 @@ scroll_up
     scs:mwa #man_text top_src
     jmp main_loop
     
+prev_chapter
+    ; find first $fe above the screen
+    sbw top_src #screen_width temp  ; start a bit above the current screen
+    ldy #0
+prev_letter
+    lda (temp),y
+    cmp #$fe  ; $fe - chapter marker
+    beq prev_chapter_found
+    dew temp
+    cpw temp #man_text
+    bcs @+
+      mwa #man_text top_src
+      jmp main_loop
+@
+    jmp prev_letter
+prev_chapter_found
+    mwa temp top_src
+
+    jmp main_loop
+    
+next_chapter
+    ; find first $fe below the top of the screen
+    adw top_src #screen_width temp  ; start ~1 line below the current screen top
+    ldy #0
+next_letter
+    lda (temp),y
+    cmp #$fe
+    beq next_chapter_found
+    inw temp
+    cpw temp #man_text_end-screen_width*4
+    bcc @+
+      mwa start_address top_src
+      jmp main_loop
+@
+    jmp next_letter
+next_chapter_found
+    mwa temp top_src
+    jmp main_loop
 ;--------------------------------------------------
 .proc MakeScreenCopy
     mwa top_src src

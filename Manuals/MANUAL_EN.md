@@ -1,6 +1,6 @@
 # Basic instruction manual:
 
-You can play using the keyboard (all functionality) or the joystick in the first port (all functionality necessary for gameplay).
+You can play using the keyboard (all functionality) or the joystick in any port (all functionality necessary for gameplay).
 
 
 ## 1. Game Option Selection.

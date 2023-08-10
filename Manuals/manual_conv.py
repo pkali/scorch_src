@@ -53,9 +53,9 @@ with open(sys.argv[1], 'r') as f:
 out = ''
 for line in md:
     line = line.replace('ó', 'ɠ')  # this is a dirty trick to avoid tripping 'ó' which is a legit LATIN-1 char
-    if line.startswith('#'):
+    if line.startswith('#'):  # header
         line = remove_wierd(line)
-        out += line
+        out += '←' + line  # header marker
         out += '-' * len(line) + '\n'
     else:
         line = remove_wierd(line)
@@ -181,6 +181,7 @@ utf_to_internal = {
     'Ź': 89,
     'ź': 90,
     '↓': 93,
+    '←': 0xfe,  # header marker
     # INVERSE
     chr(ord(' ')+128): 128+0,
     chr(ord('!')+128): 128+1,
@@ -305,7 +306,7 @@ for line in out2.split('\n'):
         try:
             bin_out.append(utf_to_internal[c])
         except KeyError:
-            print('-'*100, 'ERROR:', c)
+            print('-'*70, 'ERROR:', ord(c),  c)
             bin_out.append(0)
     if len(line) < 40:
         # bin_out += bytes(40-len(line))

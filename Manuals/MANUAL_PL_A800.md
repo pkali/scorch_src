@@ -1,6 +1,6 @@
 # Podstawowa instrukcja:
 
-Grać można przy użyciu klawiatury (wszystkie funkcjonalności) lub joysticka (wszystkie funkcjonalności niezbędne w rozgrywce).
+Grać można przy użyciu klawiatury (wszystkie funkcjonalności) lub joysticka w dowolnym porcie (wszystkie funkcjonalności niezbędne w rozgrywce).
 
 
 ## 1. Wybór opcji gry.
