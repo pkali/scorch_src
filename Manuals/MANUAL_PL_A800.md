@@ -372,3 +372,18 @@ Tabela broni kupowanych przez **Spoiler** i **Cyborg**
 |                | Force Shield     |
 |                | Bouncy Castle    |
 
+## 9. Porady spod lady:
+
+Pamiętaj o broniach defensywnych. **Auto Defense**, **Shield** i **Lazy Darwin** odpowiednio użyte pomogą wygrać z Cyborgiem nawet przy pomocy **Baby Missile**.
+
+Droższe nie znaczy lepsze. Zwykła osłona typu **Shield** jest czasem skuteczniejsza od droższych osłon.
+
+Napalmy przenikają przez osłony a także przez glebę. Mimo że palą się powyżej niszczą zasypane czołgi.
+
+**Lazy Darwin** wspomaga także celowanie bronią typu **Laser**.
+
+Roboczołgi nie umieją się odkopywać. Zakopane giną od własnych strzałów.
+
+W sytuacji beznadziejnej smobójstwo może być lepsze od **White Flag**. Jeśli trafisz w siebie silną bronią zarobisz więcej pieniędzy niż stracisz (sprawdź sposób obliczania zysków i strat).
+
+W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
