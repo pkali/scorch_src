@@ -59,21 +59,25 @@ DrawOnTheScreen
     sta XI+1
     sta YI
     sta YI+1
-
+    
+    sta HowToDraw       ; reset flags
+    sta DrawDirFactor   ; reset flags
+    
     ; setting the direction controll bits
     cpw ydraw ybyte
     bcc LineDown
     ; here one line up
-    ; we are setting bit 0
-    mva #1 HowToDraw  ;here we can because it's first operation
     ; we are subctracting Yend from Ybegin (reverse order)
     ; DY=YI-YK
     sbw ydraw ybyte DY
-    jmp CheckDirectionX
+    ; we are setting bit 7
+    lda #%10000000
+    sta HowToDraw  ;here we can because it's first operation
+    bne CheckDirectionX ; JMP
 LineDown
     ; one line down here
-    ; we are setting bit 0
-    mva #0 HowToDraw  ;here we can because it's first operation
+    ; we are clearing bit 7 (it's cleared :) )
+;    mva #0 HowToDraw  ;here we can because it's first operation
     ; substract Ybegin from Yend (normal order)
     ; DY=YK-YI
     sbw ybyte ydraw DY
@@ -81,22 +85,21 @@ CheckDirectionX
     cpw xdraw xbyte
     bcc LineRight
     ; here goes line to the left
-    ; we set bit 1
-
-    lda HowToDraw
-    ora #$02
-    sta HowToDraw
     ; substract Xend from Xbegin (reverse)
     ; DX=XI-XK
     sbw xdraw xbyte DX
-    jmp CheckDirectionFactor
+    ; we set bit 6
+    lda HowToDraw
+    ora #%01000000
+    sta HowToDraw
+    bne CheckDirectionFactor    ; JMP
 LineRight
     ; here goes one line to the right
-    ; we clear bit 0
+    ; we clear bit 6
     ; we can do nothing because the bit is cleared!
 
     ;lda HowToDraw
-    ;and #$FD
+    ;and #%10111111
     ;sta HowToDraw
 
     ; substracting Xbegin from Xend (normal way)
@@ -111,17 +114,7 @@ CheckDirectionFactor
     ; we already have DX in A
     cpw DX DY
 
-    bcc SwapXY
-    ; 'a' factor is fire, so we copy parameters
-    ; XK=DX
-    mwa DX XK
-    ; and clearing bit 2
-    ; and bit 2 clear
-    ; (is not needed because already cleared)
-    ;lda HowToDraw
-    ;and #$FB
-    ;sta HowToDraw
-    jmp LineParametersReady
+    bcs NoSwapXY
 SwapXY
     ; not this half of a quarter! - parameters must be swapped
     ; XK=DY
@@ -132,10 +125,18 @@ SwapXY
     mwa DX DY
     mwa XK DX
 
-    ; and let's set bit 2
-    lda HowToDraw
-    ora #$04
-    sta HowToDraw
+    ; and let's set bit 7 of DrawDirFactor
+    dec DrawDirFactor
+;    bmi LineParametersReady ; JMP - but we don't need JMP :)
+NoSwapXY
+    ; 'a' factor is fire, so we copy parameters
+    ; XK=DX
+    mwa DX XK
+    ; and clearing bit 7 of DrawDirFactor
+    ; and bit 7 clear
+    ; (is not needed because already cleared)
+    ;lda #0
+    ;sta DrawDirFactor
 LineParametersReady
     ; let's check if length is not zero
     lda DX
@@ -191,9 +192,8 @@ drplot ; Our plot that checks how to calculate pixels.
     ;  and YI to temp)
 
 
-    lda HowToDraw
-    and #$04
-    bne SwappedXY
+    bit DrawDirFactor
+    bmi SwappedXY
     mwa XI temp
     mwa YI temp2
     jmp CheckPlotY
@@ -201,9 +201,8 @@ SwappedXY
     mwa XI temp2
     mwa YI temp
 CheckPlotY
-    lda HowToDraw
-    and #01
-    bne LineGoesUp
+    bit HowToDraw
+    bmi LineGoesUp
     ; here we know that line goes down and we are not changing Y
     adw temp2 ytempDRAW ydraw ; YI
     jmp CheckPlotX
@@ -211,9 +210,8 @@ LineGoesUp
     ; line goes up here - we are reversing Y
     sbw ytempDRAW temp2 ydraw ; YI
 CheckPlotX
-    lda HowToDraw
-    and #02
-    bne LineGoesLeft
+    bit HowToDraw
+    bvs LineGoesLeft
     ; here we know that line goes right and we are not changing X
     adw temp xtempDRAW xdraw ; XI
     jmp PutPixelinDraw

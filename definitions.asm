@@ -25,7 +25,7 @@ TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
 TextForegroundColor = $0A
 space = 0  ; space in screencodes
 
-KeyRepeatSpeed = 10 ; (max 127 !!!)
+KeyRepeatSpeed = 8 ; (max 127 !!!)
 
 ;character codes for symbols (tank, parachute, etc. )
 ; characters from tanks.fnt (graphics screen)

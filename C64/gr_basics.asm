@@ -304,6 +304,16 @@ NoMountain
     rts
 .endp
 ;--------------------------------------------------
+.proc SoilDownTurbo
+;--------------------------------------------------
+; fast SoilDown froc - test
+    jsr ClearTanks
+NoClearTanks
+;    jsr CalcAndDrawMountains
+    jmp DrawTanks
+    ;rts
+.endp
+;--------------------------------------------------
 .proc TypeChar
 ; puts char on the graphics screen
 ; in: CharCode

@@ -24,7 +24,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.32" ; number of this build (4 bytes)
+    dta d"1.33" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -35,11 +35,12 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $58 ; $57
+FirstZpageVariable = $56 ; $57
     .zpvar DliColorBack        .byte = FirstZpageVariable
     .zpvar GradientNr        .byte
     .zpvar GradientColors    .word
     .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
+    .zpvar RandomMountains  .byte   ; mountains type change after each turn flag - (0 - round only, >0 - each turn)
     .zpvar JoystickNumber    .byte
     .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
     .zpvar SpyHardFlag        .byte    ; >$7f - run SpyHard after inventory
@@ -135,6 +136,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar Multiplier .word
     .zpvar Multiplier_ .byte  ; 3 bytes
     .zpvar HowToDraw .byte
+    .zpvar DrawDirFactor .byte
     .zpvar gravity .byte
     .zpvar LineLength .word
     .zpvar tracerflag .byte
@@ -334,7 +336,8 @@ MakeDarkScreen
 .endp
 ;--------------------------------------------------
 .proc ShellDelay
-    ldx flyDelay
+    ldy flyDelay
+Y
 DelayLoop
       lda $d012
 @     cmp $d012
@@ -342,7 +345,7 @@ DelayLoop
       lda $d012
 @     cmp $d012
       beq @-
-      dex
+      dey
     bne DelayLoop
 noShellDelay
     rts
