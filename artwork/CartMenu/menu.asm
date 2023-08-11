@@ -148,11 +148,14 @@ DLIinterruptNone
 
 ; DL for menu
 MenuDL
-        .byte $70,$70,$70,$70
+        .byte $70,$70,$70
         .byte $44
         .word picData
         :3 .byte $04
-        .byte $70,$70+$80
+        .byte $20+$80
+        .byte $42
+        .word MenuTitle2        
+        .byte $70,$70
         .byte $47
         .word MenuTitle
         .byte $30,$70
@@ -172,7 +175,9 @@ picData
 ; Color data
 colors
     .BYTE 0,14,10,6
- 
+    
+MenuTitle2
+    dta d"   Father Unknown of All Games  "
 MenuTitle
     dta d" SELECT  OPTION "
 MenuOptions
