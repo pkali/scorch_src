@@ -449,6 +449,7 @@ GoExplosion
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku
+    mva #sfx_silencer sfx_effect
 
 AfterExplode
     jsr SoilDown    ; allways

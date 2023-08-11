@@ -229,7 +229,6 @@ NoUpperCircle
     mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
 NoLowerCircle
-    mva #sfx_silencer sfx_effect
     rts
 
 GoXmissileWithSaveXYdraw
@@ -345,7 +344,6 @@ TankOutOfFire
 EndNurnedCheckLoop
     dex
     bpl BurnedCheckLoop
-    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; ------------------------
@@ -514,7 +512,6 @@ DigDrawing
     dec:lda DigLong
     jpl BranchNotFinished
 DoNotPutDig
-    mva #sfx_silencer sfx_effect
     rts
 DiggerCharacter
     lda random
@@ -559,7 +556,6 @@ dirtLoop
     lda radius
     cmp ExplosionRadius
     bne dirtLoop
-    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; ------------------------
@@ -833,7 +829,6 @@ TankIsNotWithinTheRange
 EndOfDistanceCheckLoop
     dex
     jpl DistanceCheckLoop
-    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; -----------------
