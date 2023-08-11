@@ -340,8 +340,8 @@ Gra posiada 8 poziomów trudności przeciwników sterowanych przez komputer. A w
 
 * **Unknown** - Przed oddaniem każdego strzału losowo wybiera sposób działania od **Poolsharka** do **Cyborga** i stosuje jego taktykę. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
 
+### AI idzie na zakupy
 Próba zakupu broni (ofensywnej lub defensywnej) wygląda następująco:
-
 Na początku losowana jest jedna z broni (wśród wszystkich możliwych ofensywnych lub defensywnych). Następnie wykonywane jest sprawdzenie, czy wylosowana broń jest na liście broni możliwych do zakupu przez czołg. Jeśli nie, to w tej próbie żadna broń nie jest kupowana, a jeśli tak, to sprawdzana jest jej cena. Jeśli czołg ma tyle pieniędzy, broń jest kupowana, w przeciwnym wypadku próba kończy się bez dokonania zakupu.
 
 Tabela broni kupowanych przez **Shooter**, **Poolshark**, **Tosser** i **Chooser**

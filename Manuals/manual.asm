@@ -8,6 +8,8 @@
 screen_height = 26
 screen_width = 40
 screen = $1000 ; start - 40*screen_height
+KeyRepeatSpeed = 15 ; (max 127 !!!)
+
 
 STEREOMODE  equ 0
 
@@ -160,7 +162,7 @@ prev_letter
     jmp prev_letter
 prev_chapter_found
     mwa temp top_src
-
+    jsr WaitForKeyRelease
     jmp main_loop
     
 next_chapter
@@ -180,6 +182,7 @@ next_letter
     jmp next_letter
 next_chapter_found
     mwa temp top_src
+    jsr WaitForKeyRelease
     jmp main_loop
 ;--------------------------------------------------
 .proc MakeScreenCopy
@@ -325,8 +328,32 @@ Check2button
 .endp
 
 ;--------------------------------------------------
+.proc WaitForKeyRelease
+;--------------------------------------------------
+    mva #128-KeyRepeatSpeed pressTimer    ; tricky
+StillWait
+    bit pressTimer
+    bmi KeyReleased
+      lda STICK0
+      and #$0f
+      cmp #$0f
+      bne StillWait
+      lda STRIG0
+      beq StillWait
+      lda SKSTAT
+      cmp #$ff
+      bne StillWait
+      lda CONSOL
+      and #%00000110    ; Select and Option only
+      cmp #%00000110
+      bne StillWait
+KeyReleased
+      rts
+.endp
+;--------------------------------------------------
 .proc VBLANK  ;vertical blank interrupt
 ;--------------------------------------------------
+    
     lda ticksPerSecond
     cmp #60
     bne PALMusic
@@ -335,6 +362,7 @@ Check2button
     and #%00000111
     beq skipSoundFrame
 PALMusic
+    bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
     ;lda ticks
     ;and #%00000011
     ;beq skipSoundFrame
@@ -407,11 +435,12 @@ joyToKeyTable
     .by $ff             ;0f
 
 
-escflag .byte 0
+escflag     .byte 0
 paddlestate .byte 0
-ticks .byte 0
+ticks       .byte 0
 ticksPerSecond .byte 0
-fake_pokey :9 .byte 0
+fake_pokey  :9 .byte 0
+pressTimer  .byte 0
 
 
 man_text
