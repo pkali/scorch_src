@@ -55,7 +55,7 @@ for line in md:
     line = line.replace('ó', 'ɠ')  # this is a dirty trick to avoid tripping 'ó' which is a legit LATIN-1 char
     if line.startswith('#'):  # header
         line = remove_wierd(line)
-        out += '←' + line  # header marker
+        out += '←' + line[1:]  # header marker
         out += '-' * len(line) + '\n'
     else:
         line = remove_wierd(line)

@@ -192,6 +192,11 @@ screen_copy
     ldy #0
 @
       lda (src),y
+      cmp #$fe  ; chapter marker
+      bne not_chapter
+      lda #0
+      beq not_eol
+not_chapter
       cmp #$ff  ; end of line marker
       bne not_eol
         sty next_line_begin
