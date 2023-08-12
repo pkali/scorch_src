@@ -226,7 +226,7 @@ PutPixelinDraw
     inw LineLength
     bit Vdebug
     bmi MeasureVisualisation
-    jmp ContinueDraw  ; was `bne` - not good, because LineLength starts from $ffff
+    bpl ContinueDraw  ; jmp
 @
     bvc @+
 DrawCheck
@@ -765,7 +765,7 @@ noTankNoPM
     bne NoShieldDraw
 DrawTankSh
     jsr DrawTankShield
-    jmp NoShieldDraw
+    beq NoShieldDraw    ; JMP
 DrawTankShieldWihHorns
     jsr DrawTankShield
     jsr DrawTankShieldHorns
@@ -773,7 +773,7 @@ DrawTankShieldWihHorns
 DrawTankShieldBold
     jsr DrawTankShield
     jsr DrawTankShieldBoldLine
-    jmp NoShieldDraw
+    beq NoShieldDraw    ; JMP
 DrawTankFlag
     lda #char_flag                ; flag symbol
     sta CharCode
@@ -868,7 +868,7 @@ tankflash_loop
     inw ydraw
     dec temp
     bne @-
-    rts
+    rts     ; Z allways set
 .endp
 ;--------------------------------------------------
 .proc DrawTankShieldHorns
@@ -904,7 +904,7 @@ tankflash_loop
 .nowarn    dew xdraw
     dec temp
     bne @-
-    rts
+    rts ; Z allways set
 .endp
 ;--------------------------------------------------
 .proc DrawTankParachute
@@ -1264,24 +1264,6 @@ ThereWasNoParachute
     rts
 .endp
 
-/*
-;--------------------------------------------------
-drawmountainspixel        ; never used ?
-;--------------------------------------------------
-    mwa #0 xdraw
-    mwa #mountaintable modify
-drawmountainspixelloop
-    ldy #0
-    lda (modify),y
-    sta ydraw
-    sty ydraw+1
-    jsr plot
-    inw modify
-    inw xdraw
-    cpw xdraw #screenwidth
-    bne drawmountainspixelloop
-    rts
- */
 ;--------------------------------------------------
 .proc SoilDown
 ;--------------------------------------------------
@@ -1946,7 +1928,7 @@ X   lda XtanksTableL,x
     sta yc    ; current tank barrel length
     lda angleTable,x
     sta Angle
-    jmp DrawBarrelTech
+    ; jmp DrawBarrelTech    ; POZOR !
     ; rts
 .endp
 
