@@ -814,6 +814,9 @@ SetNextTarget
     beq skipThisPlayer
     lda eXistenZ,y
     beq skipThisPlayer
+    lda BarrelLength,y
+    cmp #LongBarrel     ; if target has Long Schlong do not aim
+    beq skipThisPlayer
     ; check target direction
     mva #0 tempor2  ; check target direction
     lda LowResDistances,x
