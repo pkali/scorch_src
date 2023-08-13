@@ -435,6 +435,7 @@ HighForce
 ;    jsr MakeLowResDistances
     lda #202
     sta temp2 ; max possible energy
+    stx temp2+1 ; set target tank to himself (if it doesn't find targets - Long Shlong :) )
     lda #0
     sta tempor2    ; direction of shoot
     ;ldx TankNr
@@ -446,7 +447,9 @@ loop01
     beq skipThisPlayer
     lda eXistenZ,y
     beq skipThisPlayer
-
+    lda BarrelLength,y
+    cmp #LongBarrel     ; if target has Long Schlong do not aim
+    beq skipThisPlayer
     lda skilltable,y
     beq ItIsHuman
     lda PreferHumansFlag
@@ -493,6 +496,7 @@ skipThisPlayer
 ;----------------------------------------------
 ;    jsr MakeLowResDistances
     mva #$ff temp2 ; min possible distance
+    stx temp2+1 ; set target tank to himself (if it doesn't find targets - Long Shlong :) )
     mva #0 tempor2    ; direction of shoot
 
     ;ldx TankNr
@@ -503,6 +507,9 @@ loop01
     cpy TankNr
     beq skipThisPlayer
     lda eXistenZ,y
+    beq skipThisPlayer
+    lda BarrelLength,y
+    cmp #LongBarrel     ; if target has Long Schlong do not aim
     beq skipThisPlayer
 
     lda LowResDistances,x
