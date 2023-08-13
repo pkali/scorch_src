@@ -387,3 +387,5 @@ Roboczołgi nie umieją się odkopywać. Zakopane giną od własnych strzałów.
 W sytuacji beznadziejnej smobójstwo może być lepsze od **White Flag**. Jeśli trafisz w siebie silną bronią zarobisz więcej pieniędzy niż stracisz (sprawdź sposób obliczania zysków i strat).
 
 W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
+
+Powodzenia!

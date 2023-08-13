@@ -82,7 +82,7 @@ This makes it possible to activate shields and others before the round starts.
 (For computer players this screen is not shown.)
 
 
-## 4. The main screen of the game
+## 4. The main screen of the game.
 ![Main game screen.](images/StatusLine.png)
 The status line shows which player is currently allowed to take a shot and a set of other information:
 
@@ -138,7 +138,7 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 * **vis. debug** - Toggle **visual debug** mode. It displays distances measured, laser aiming, and aiming technique. It leaves a mess on the screen, but it does not impair the game.
 
 
-## 5. Game mechanics - offensive weapons
+## 5. Game mechanics - offensive weapons.
 
 Large points received by the player is the number of tanks that died earlier. If any of the other tanks capitulated earlier (with **White Flag**) it is not added to those that died and does not grant points.
 Only these points determine the order in the summary.
@@ -338,7 +338,7 @@ The game has 8 difficulty levels of computer-controlled opponents. Or actually 7
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
 
-### AI weapon purchase
+### AI goes shopping.
 Buying a weapon (offensive or defensive) works as follows:
 First, one of the weapons is drawn (among all possible offensive or defensive weapons). Then a check is performed to see if the drawn weapon is in the list of weapons possible for purchase by the tank. If not, no weapon is bought in this trial, and if so, its price is checked. If the tank has that much money, the weapon is bought, otherwise the trial ends without making a purchase.
 
@@ -370,3 +370,21 @@ Table of weapons purchased by: **Spoiler** and **Cyborg**.
 |              | Force Shield     |
 |              | Bouncy Castle    |
 
+
+## 9. Tips from the peanut gallery.
+
+Remember your defensive tools. Properly using **Auto Defense**, **Shield**, and **Lazy Darwin** will help you defeat the **Cyborg**, even with the help of a **Baby Missile**.
+
+Fancier doesn't always mean better. Sometimes, a basic shield like the **Shield** is more effective than its pricier counterparts.
+
+**Napalm** pierces through shields and even the ground. Although it's burning above, it scorches buried tanks.
+
+**Lazy Darwin** also lends a hand in aiming weapons like the **Laser**.
+
+Robo-tanks don't have a knack for digging themselves out. When buried, they meet their demise from their own shots.
+
+In a hopeless situation, self-destruction might be a better option than waving the **White Flag**. Hitting yourself with a powerful weapon can earn you more cash than you'll lose (check the profit and loss calculation method).
+
+As a last resort, you can always become a Terminator (the standard model, not T-1000 :) ).
+
+Good luck!
