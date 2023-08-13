@@ -50,7 +50,7 @@ Jeśli kursor wskazuje opcję wyboru wysokości gór **Mountain**, **TAB** prze�
 Klawisz **RETURN** lub przycisk joysticka przechodzi do następnego ekranu.
 
 
-## 2. Gracze i poziom przeciwników
+## 2. Gracze i poziom przeciwników.
 ![Ekran wyboru graczy i poziomu trudności.](images/DiffMenu.png)
 Wprowadzanie nazw graczy i wybór poziomu graczy sterowanych przez komputer.
 
@@ -69,7 +69,7 @@ Nazwę gracza można wprowadzać także przy pomocy joysticka. Po wciśnięciu i
 Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 
 
-## 3. Ekran zakupów (przed każdą rundą)
+## 3. Ekran zakupów (przed każdą rundą).
 ![Ekran zakupów broni ofensywnych.](images/PurOffensive.png)
 ![Ekran zakupów broni defensywnych.](images/PurDefensive.png)
 Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie, na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za tę cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz **TAB** lub strzałka w lewo, czy też ruch joystickiem w lewo lub drugi przycisk joysticka zmieniają ekran na bronie defensywne lub ofensywne, klawisz **SPACJA** lub strzałka w prawo, a także joystick w prawo realizują zakup wskazanej broni.
@@ -83,7 +83,7 @@ Klawisz **RETURN** lub przycisk joysticka przechodzi do ekranu zakupów następn
 (oczywiście dla graczy komputerowych ten ekran się nie pojawia)
 
 
-## 4. Główny ekran gry
+## 4. Główny ekran gry.
 ![Główny ekran gry.](images/StatusLine.png)
 W linii statusowej widoczna jest informacja o tym, który z graczy aktualnie może oddać strzał oraz zestaw innych informacji:
 
@@ -111,41 +111,51 @@ Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmi
 
 | A800         | funkcja          |
 |--------------|------------------|
-| **SPACJA**/**FIRE**  | strzał (zob. ↓)  |
-| **TAB**/**SELECT**   | zmiana broni (↓) |
-| **I**            | inwentarz (↓)    |
-| **A**/**OPTION**     | defensywa (↓)    |
+| **SPACJA**/**FIRE**  | strzał   (zob. ↓)|
+| **TAB**/**SELECT**   | zmiana broni  (↓)|
+| **I**            | inwentarz     (↓)|
+| **A**/**OPTION**     | defensywa     (↓)|
 | **M**            | wł/wył muzyki    |
 | **S**            | wł/wył dźwięków  |
-| **START**        | tryb turbo (↓)   |
-| **O**            | koniec gry (↓)   |
-| **START**+**OPTION** | bezw. koniec (↓) |
-| **G**            | inne kolory (↓)  |
-| **ESC**          | powrót (↓)       |
-| **Y**            | zatwierdzam (↓)  |
-| **CTRL**+**HELP**    | vis. debug (↓)   |
+| **START**        | tryb turbo    (↓)|
+| **O**            | koniec gry    (↓)|
+| **START**+**OPTION** | bezw. koniec  (↓)|
+| **G**            | inne kolory   (↓)|
+| **ESC**          | powrót        (↓)|
+| **Y**            | zatwierdzam   (↓)|
+| **CTRL**+**HELP**    | visual debug  (↓)|
 
 * **strzał**, przycisk joysticka naciśnięte krótko - oddanie strzału
+
 * **zmiana broni**, drugi przycisk joysticka - wybór broni ofensywnej (ta opcja nie jest dostępna bezpośrednio standardowym joystickiem - trzeba wybrać Inventory).
+
 * **inwentarz**, dłuższe przytrzymanie przycisku joysticka - przejście do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliźniaczo podobny do ekranu zakupów. Zasady poruszania się są identyczne - z tym, że tu nie kupujemy broni, ale wybieramy jedną z ofensywnych, którą będziemy strzelać lub aktywujemy broń defensywną.
+
 * **defensywa** - bezpośrednie przejście na ekran Inventory aktywacji broni defensywnych.
+
 * **tryb turbo** - przyspiesza/pomija niektóre animacje w grze
+
 * **koniec gry** - wymuszenie zakończenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagę przerwana właśnie runda rozgrywki, a wyłącznie rundy zakończone wcześniej. Odpowiada to wciśnięciu klawisza **ESC** z tą różnicą, że wyświetlane jest podsumowanie oraz creditsy.
+
 * **bezw. koniec** - natychmiastowe wymuszenie zakończenia gry (Game Over), tak jak **O**, ale bez potwierdzenia.
+
 * **inne kolory** - zmienia wariant kolorystyczny gór (3 wersje do wyboru)
+
 * **powrót** - w czasie całej gry w dowolnym momencie (chyba że akurat gra komputer, wtedy czasem trzeba chwilę poczekać) można nacisnąć klawisz **ESC**, który umożliwia przerwanie gry i powrót na początek (oczywiście jest zabezpieczenie przed przypadkowym naciśnięciem).
+
 * **zatwierdzam** - w przypadku pytania o przerwanie lub zakończenie gry - potwierdzenie decyzji
-* **vis. debug** - przełącza tryb "visual debug". Wizualizuje mierzone odległości, celowanie lasera oraz technikę celowania komputera. Pozostawia bałagan na ekranie, co nie zmienia rozgrywki, tylko ją nieco utrudnia.
+
+* **visual debug** - przełącza tryb "visual debug". Wizualizuje mierzone odległości, celowanie lasera oraz technikę celowania komputera. Pozostawia bałagan na ekranie, co nie zmienia rozgrywki, tylko ją nieco utrudnia.
 
 
-## 5. Zasady gry - bronie ofensywne
+## 5. Zasady gry - bronie ofensywne.
 
 Duże punkty otrzymane przez gracza to liczba czołgów, które zginęły wcześniej niż on. Jeśli któryś z innych czołgów skapitulował wcześniej (**White Flag**) nie jest doliczany do tych, które zginęły, i nie daje punktów.
 
 Tylko te punkty decydują o kolejności w podsumowaniu.
 
 
-### Energia czołgów
+### Energia czołgów.
 * Na początku każdej rundy każdy czołg ma 99 jednostek energii.
 
 * Energii czołgom ubywa na 3 sposoby: 
@@ -210,27 +220,27 @@ A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli br
 | Funky Bomb      | 168 88 (*5)  |
 | MIRV            | 136 (*5)     |
 | Death's Head    | 240 (*5)     |
-| Napalm          | 40 (zob. ↓)  |
-| Hot Napalm      | 80 (zob. ↓)  |
+| Napalm          | 40   (zob. ↓)|
+| Hot Napalm      | 80        (↓)|
 | Baby Roller     | 88           |
 | Roller          | 168          |
 | Heavy Roller    | 240          |
-| Riot Charge     | 0 (zob. ↓)   |
-| Riot Blast      | 0 (zob. ↓)   |
-| Riot Bomb       | 0 (zob. ↓)   |
-| Heavy Riot Bomb | 0 (zob. ↓)   |
-| Baby Digger     | 0 (zob. ↓)   |
-| Digger          | 0 (zob. ↓)   |
-| Heavy Digger    | 0 (zob. ↓)   |
-| Sandhog         | 0 (zob. ↓)   |
-| Heavy Sandhog   | 0 (zob. ↓)   |
-| Dirt Clod       | 0 (zob. ↓)   |
-| Dirt Ball       | 0 (zob. ↓)   |
-| Ton of Dirt     | 0 (zob. ↓)   |
-| Liquid Dirt     | 0 (zob. ↓)   |
-| Dirt Charge     | 0 (zob. ↓)   |
-| Stomp           | 0 (zob. ↓)   |
-| Laser           | 100 (zob. ↓) |
+| Riot Charge     | 0         (↓)|
+| Riot Blast      | 0         (↓)|
+| Riot Bomb       | 0         (↓)|
+| Heavy Riot Bomb | 0         (↓)|
+| Baby Digger     | 0         (↓)|
+| Digger          | 0         (↓)|
+| Heavy Digger    | 0         (↓)|
+| Sandhog         | 0         (↓)|
+| Heavy Sandhog   | 0         (↓)|
+| Dirt Clod       | 0         (↓)|
+| Dirt Ball       | 0         (↓)|
+| Ton of Dirt     | 0         (↓)|
+| Liquid Dirt     | 0         (↓)|
+| Dirt Charge     | 0         (↓)|
+| Stomp           | 0         (↓)|
+| Laser           | 100       (↓)|
 
 Uwagi:
 * **Napalm** - ta broń jest inna i nie jest wyznaczana odległość od centrum, po prostu każdy czołg znajdujący się w zasięgu płomieni traci 40 jednostek energii.
@@ -341,6 +351,7 @@ Gra posiada 8 poziomów trudności przeciwników sterowanych przez komputer. A w
 * **Unknown** - Przed oddaniem każdego strzału losowo wybiera sposób działania od **Poolsharka** do **Cyborga** i stosuje jego taktykę. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
 
 ### AI idzie na zakupy
+
 Próba zakupu broni (ofensywnej lub defensywnej) wygląda następująco:
 Na początku losowana jest jedna z broni (wśród wszystkich możliwych ofensywnych lub defensywnych). Następnie wykonywane jest sprawdzenie, czy wylosowana broń jest na liście broni możliwych do zakupu przez czołg. Jeśli nie, to w tej próbie żadna broń nie jest kupowana, a jeśli tak, to sprawdzana jest jej cena. Jeśli czołg ma tyle pieniędzy, broń jest kupowana, w przeciwnym wypadku próba kończy się bez dokonania zakupu.
 
@@ -372,6 +383,7 @@ Tabela broni kupowanych przez **Spoiler** i **Cyborg**
 |                | Force Shield     |
 |                | Bouncy Castle    |
 
+
 ## 9. Porady spod lady:
 
 Pamiętaj o broniach defensywnych. **Auto Defense**, **Shield** i **Lazy Darwin** odpowiednio użyte pomogą wygrać z Cyborgiem nawet przy pomocy **Baby Missile**.
@@ -388,4 +400,4 @@ W sytuacji beznadziejnej smobójstwo może być lepsze od **White Flag**. Jeśli
 
 W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
 
-Powodzenia!
+Połamania luf życzą autorzy.

@@ -126,16 +126,26 @@ The keyboard controls here are simple, cursor keys or joystick: left/right - cha
 | **CTRL**+**HELP**    | visual debug    (↓)|
 
 * **shoot** or joystick button pressed briefly - firing a shot.
+
 * **weapon change** or second joystick button - selection of offensive weapons (this option is not available directly with one button joystick - you need to select Inventory)
+
 * **inventory** or longer holding the joystick button - go to Inventory. It is a screen (actually two) with the same layout as the shopping menu, it also works similarly except that here you don't buy weapons, but choose one of the offensive ones to shoot or activate a defensive weapon.
+
 * **defensives** - go directly to the defensive weapons activation.
+
 * **turbo mode** - speed up some game animations.
+
 * **game over** - end the current game and jump to the Game Over screen with a summary. The summary of the results does not take into account the current round of the game, but only the rounds completed earlier. This corresponds to pressing the **ESC** key with the difference that the summary and credits are displayed.
+
 * **immediate quit** - force the end of the game (Game Over), just like **game over** but without confirmation.
+
 * **color scheme** - changes the mountain and background shading
+
 * **return** - during the entire game at any time (unless the computer is playing, then sometimes you have to wait a while) you can press the **ESC** key, which allows you to abort the game and return to the previous menu (of course, there is protection against accidental pressing).
+
 * **confirm** - when asked to abort or terminate the game - confirmation
-* **vis. debug** - Toggle **visual debug** mode. It displays distances measured, laser aiming, and aiming technique. It leaves a mess on the screen, but it does not impair the game.
+
+* **visual debug** - Toggle **visual debug** mode. It displays distances measured, laser aiming, and aiming technique. It leaves a mess on the screen, but it does not impair the game.
 
 
 ## 5. Game mechanics - offensive weapons.
@@ -196,7 +206,7 @@ After the explosion, every tank in its range loses energy.
 
 It works in such a way that if the hit is exactly on the center point of the tank `EnergyDecrease` receives the maximum value for the weapon, and for each pixel of distance from the center of the tank this value is reduced by 8.
 
-For example, if a hit with the Baby Missile weapon hits the center of the tank perfectly, it will lose exactly 88 units of energy (plus what it loses falling after the explosion).
+For example, if **Baby Missile** hits the center of the tank perfectly, it will lose exactly 88 units of energy (plus what it loses falling after the explosion).
 If you hit with the same weapon at a distance of 10 pixels from the center of the tank, the loss will be only 8 units.
 
 And here are the values of maximum energy loss for individual weapons. If a weapon explodes several times, each explosion is calculated independently (additional values in the table):
@@ -272,7 +282,7 @@ Remarks:
 
 ## 6. And now for defensive weapons:
 
-* **White Flag** - causes the surrender of the player (can sometimes be useful in a hopeless situation). The advantage is that by surrendering you don't give a big point to your opponents and don't cause one of them to gain by killing us, you also limit the loss of your energy and also cash. An important note - this is the only defensive weapon that can be deactivated. All you have to do is re-enter inventory and once again select its activation.
+* **White Flag** - causes the surrender of the player (can sometimes be useful in a hopeless situation). The advantage is that by surrendering you don't give a big point to your opponents and don't cause one of them to gain cash. You also limit the loss of your energy and cash. An important note - this is the only defensive weapon that can be deactivated. All you have to do is re-enter inventory and once again select its activation.
 
 * **Battery** - when activated, it recharges the tank's energy to full (99 units). It is one of three defensive weapons that does not deactivate other defensive weapons when used.
 
@@ -387,4 +397,4 @@ In a hopeless situation, self-destruction might be a better option than waving t
 
 As a last resort, you can always become a Terminator (the standard model, not T-1000 :) ).
 
-Good luck!
+Break a barrel or two.
