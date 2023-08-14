@@ -639,11 +639,11 @@ CreditsStart
     dta   d" "*
     dta   d"Ideas, help and QA"^
     dta   d"Piotr '0xF' Fusik, Shanti, Jakub Husak"^
-    dta   d"Bocianu, Probabilitydragon,"^
-    dta   d"EnderDude, Dracon, TDC,"^
-    dta   d"Beeblebrox, KrzysRog, lopezpb,"^
-    dta   d"brad-colbert, archon800, nowy80,"^
-    dta   d"Shaggy the Atarian, RetroBorsuk, ZPH"
+    dta   d"Bocianu, Probabilitydragon, lopezpb,"^
+    dta   d"ZPH, KrzysRog, EnderDude, Dracon, TDC,"^
+    dta   d"Beeblebrox, brad-colbert, archon800,"^
+    dta   d"nowy80, Irgendwer, Eyvind,"^
+    dta   d"ascrnet, Bobo Cujo, RetroBorsuk"
     .IF TARGET = 800
       .IF CART_VERSION = 0
       dta   d","*

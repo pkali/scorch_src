@@ -1594,6 +1594,8 @@ AfterOffensiveText
     cmp #ind_Laser           ; laser
     bne NotStrongShoot
     ; Laser: (not)very strong - invisible - shot for laser beam end coordinates
+    bit TestFlightFlag
+    bmi @+ ; visible if Lazy Darwin
     bit Vdebug
     bmi @+
     mva #0 color

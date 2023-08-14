@@ -177,7 +177,7 @@ colors
     .BYTE 0,14,10,6
     
 MenuTitle2
-    dta d"   Father Unknown of All Games  "
+    dta d"   Unknown Father of All Games  "
 MenuTitle
     dta d" SELECT  OPTION "
 MenuOptions

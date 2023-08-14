@@ -67,7 +67,7 @@ FontSplash
 
 mother
 ;    dta d"        The Mother of All Games         "
-    dta d"      Father Unknown of All Games       "
+    dta d"      Unknown Father of All Games       "
 
 main
 .IF CART_VERSION
