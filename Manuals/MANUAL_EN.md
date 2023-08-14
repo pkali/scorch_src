@@ -395,6 +395,8 @@ Robo-tanks don't have a knack for digging themselves out. When buried, they meet
 
 In a hopeless situation, self-destruction might be a better option than waving the **White Flag**. Hitting yourself with a powerful weapon can earn you more cash than you'll lose (check the profit and loss calculation method).
 
+**Long Schlong** has got a serious intimidating power. Become the alpha tank and fear not.
+
 As a last resort, you can always become a Terminator (the standard model, not T-1000 :) ).
 
 Break a barrel or two.

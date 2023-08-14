@@ -398,6 +398,8 @@ Roboczołgi nie umieją się odkopywać. Zakopane giną od własnych strzałów.
 
 W sytuacji beznadziejnej smobójstwo może być lepsze od **White Flag**. Jeśli trafisz w siebie silną bronią zarobisz więcej pieniędzy niż stracisz (sprawdź sposób obliczania zysków i strat).
 
+**Long Schlong** potrafi znacząco onieśmielić przeciwników. Bądź alfa-czołgiem i porzuć wszelkie lęki.
+
 W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
 
 Połamania luf życzą autorzy.
