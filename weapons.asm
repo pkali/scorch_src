@@ -205,13 +205,10 @@ NoWallsInFunky
 ; ------------------------
 .proc deathshead
     mva #30 ExplosionRadius
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     sbw xdraw #34
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     adw xdraw #68
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     sbw xdraw #34
     ;
@@ -219,19 +216,18 @@ NoWallsInFunky
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoUpperCircle
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
 NoUpperCircle
     adw ydraw #68
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
 NoLowerCircle
     rts
 
 GoXmissileWithSaveXYdraw
+    mva #sfx_nuke sfx_effect
     mwa xdraw tempXROLLER
     mwa ydraw modify
     jsr xmissile
