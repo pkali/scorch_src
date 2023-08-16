@@ -190,7 +190,9 @@ EnemyOnLeft
     sta AngleTablePointer
 AngleIsSet
 
-    randomize 0 8
+    ;randomize 0 8
+    lda RANDOM
+    and #%00000111
     ldy AngleTablePointer
     clc
     adc AngleTable,y
@@ -210,8 +212,8 @@ endo
 
 ;----------------------------------------------
 AngleTable    ; 16 bytes ;ba w $348b L$3350
-    .by 106,114,122,130,138,146,154,162
-    .by 18,26,34,43,50,58,66,74
+    .by 91,99,107,115,123,131,139,147
+    .by 25,33,41,49,57,65,73,81
 .endp
 ;----------------------------------------------
 .proc CyborgBattery
