@@ -399,4 +399,6 @@ In a hopeless situation, self-destruction might be a better option than waving t
 
 As a last resort, you can always become a Terminator (the standard model, not T-1000 :) ).
 
+Robo-tanks do not possess **Autodefense**, so their defenses activate only directly before their shot. A concentrated attack by several players on one robo-tank guarantees success.
+
 Break a barrel or two.
