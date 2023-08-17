@@ -306,7 +306,7 @@ rom2joy
 no5200splash
     .ENDIF
     jsr MakeDarkScreen
-
+    
     ; one time zero variables in RAM (non zero page)
     lda #0
     ldy #OneTimeZeroVariablesCount-1
@@ -339,6 +339,8 @@ no5200splash
       lda #3    ; stereo
       sta POKEY+$0f ; stereo
       sta POKEY+$1f ; stereo
+
+      sta COLDST    ; Cold start after Reset key
   
       lda PAL
       and #%00001110
