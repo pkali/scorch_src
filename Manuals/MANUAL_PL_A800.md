@@ -390,7 +390,7 @@ Pamiętaj o broniach defensywnych. **Auto Defense**, **Shield** i **Lazy Darwin*
 
 Droższe nie znaczy lepsze. Zwykła osłona typu **Shield** jest czasem skuteczniejsza od droższych osłon.
 
-Napalmy przenikają przez osłony a także przez glebę. Mimo że palą się powyżej niszczą zasypane czołgi.
+**Napalmy** przenikają przez osłony a także przez glebę. Mimo że palą się powyżej niszczą zasypane czołgi.
 
 **Lazy Darwin** wspomaga także celowanie bronią typu **Laser**.
 
@@ -401,5 +401,7 @@ W sytuacji beznadziejnej smobójstwo może być lepsze od **White Flag**. Jeśli
 **Long Schlong** potrafi znacząco onieśmielić przeciwników. Bądź alfa-czołgiem i porzuć wszelkie lęki.
 
 W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
+
+Roboczołgi nie mają **Autodefense**, więc defensywy aktywują tylko bezpośrednio przed swoim strzałem. Zmasowany atak liku graczy na jednego roboczołga gwarantuje sukces.
 
 Połamania luf życzą autorzy.
