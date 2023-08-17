@@ -402,6 +402,6 @@ W sytuacji beznadziejnej smobójstwo może być lepsze od **White Flag**. Jeśli
 
 W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
 
-Roboczołgi nie mają **Autodefense**, więc defensywy aktywują tylko bezpośrednio przed swoim strzałem. Zmasowany atak liku graczy na jednego roboczołga gwarantuje sukces.
+Roboczołgi nie mają **Autodefense**, więc defensywy aktywują tylko bezpośrednio przed swoim strzałem. Zmasowany atak kilku graczy na jednego roboczołga gwarantuje sukces.
 
 Połamania luf życzą autorzy.
