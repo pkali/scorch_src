@@ -328,7 +328,11 @@ no5200splash
     bpl @-
 
     ; set gradient to the full LGBTIQQAAPP+ flag on start
-    mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one)
+    .IF CART_VERSION = 1
+     mva #$ff GradientNr    ; #1 to set gradient number 2 :) (next one) - 0 (B/W)
+    .ELSE
+     mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one) - 1 (polish rainbow)
+    .ENDIF
     jsr SelectNextGradient.NotWind
 
     ; generate linetables
