@@ -127,24 +127,27 @@ shootingLeftAtThisMomentOfTime
 
 firstShoot
     ; compare the x position with the middle of the screen
-    lda xTanksTableH,x
-    cmp #>(screenwidth/2)
-    bne @+
-    lda xTanksTableL,x
-    cmp #<(screenwidth/2)
+    lda LowResDistances,x
+    cmp #(screenwidth/8) ; screenwidth/2 but LowResDistances are already /4
 @    bcc tankIsOnTheRight
 
     ; enemy tank is on the left
-    randomize 95 125
+    ;randomize 95 125
+    lda RANDOM  ; Shorter an faster randomize
+    and #%00011111  ; 0 - 31
+    adc #95     ; Carry doesn't matter :)
     sta NewAngle
     bne forceNow
 
 tankIsOnTheRight
-    randomize 55 85
+    ;randomize 55 85
+    lda RANDOM  ; Shorter an faster randomize
+    and #%00011111  ; 0 - 31
+    adc #54     ; Carry doesn't matter :)
     sta NewAngle
 
 forceNow
-    mwa #100 RandBoundaryLow
+    mwa #200 RandBoundaryLow
     mwa #800 RandBoundaryHigh
     ;ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce
