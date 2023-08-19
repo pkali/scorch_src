@@ -77,35 +77,37 @@ CheckNextTankBFG
 .endp
 ; ------------------------
 .proc babymissile
-    mva #11 ExplosionRadius
+    lda #11 ; ExplosionRadius
 GoBabyMissileSFX
+    sta ExplosionRadius
     mva #sfx_baby_missile sfx_effect
 GoXmissile
     jmp xmissile
 .endp
 ; ------------------------
 .proc missile ;
-    mva #17 ExplosionRadius
+    lda #17 ; ExplosionRadius
     bne babymissile.GoBabyMissileSFX
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc babynuke
-    mva #25 ExplosionRadius
+    lda #25 ; ExplosionRadius
 GoBabyNukeSFX
+    sta ExplosionRadius
     mva #sfx_nuke sfx_effect     ; allways <>0
     bne babymissile.GoXmissile
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc nuke
-    mva #30 ExplosionRadius
+    lda #30 ; ExplosionRadius
     bne babynuke.GoBabyNukeSFX
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc leapfrog
-    mva #17 ExplosionRadius
+    lda #17 ; ExplosionRadius
 ;    mva #sfx_baby_missile sfx_effect
 ;    jsr xmissile
     jsr babymissile.GoBabyMissileSFX
@@ -237,16 +239,17 @@ GoXmissileWithSaveXYdraw
 .endp
 ; ------------------------
 .proc napalm
-    mva #0 HotNapalmFlag    ; in this weapon - flag: 0 - napalm, 1 - hotnapalm
+    lda #0      ; in this weapon - flag: 0 - napalm, 1 - hotnapalm
     beq xnapalm
 .endp
 ; ------------------------
 .proc hotnapalm
-    mva #1 HotNapalmFlag    ; in this weapon - flag: 0 - napalm, 1 - hotnapalm
+    lda #1   ; in this weapon - flag: 0 - napalm, 1 - hotnapalm
 ;    jmp xnapalm
 .endp
 ; ------------------------
 .proc xnapalm
+    sta HotNapalmFlag
     mva #sfx_napalm sfx_effect
     mva #(napalmRadius+4) ExplosionRadius     ; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
@@ -344,40 +347,43 @@ EndNurnedCheckLoop
 .endp
 ; ------------------------
 .proc babyroller
-    mva #11 ExplosionRadius
+    lda #11 ; ExplosionRadius
 GoRoller
+    sta ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc roller ;
-    mva #21 ExplosionRadius
+    lda #21 ; ExplosionRadius
     bne babyroller.GoRoller    ; 1 byte saved
 ;    jmp xroller
 .endp
 ; ------------------------
 .proc heavyroller
-    mva #30 ExplosionRadius
+    lda #30 ; ExplosionRadius
     bne babyroller.GoRoller    ; 1 byte saved
 ;    jmp xroller
 .endp
 ; ------------------------
 .proc riotbomb
-    mva #17 ExplosionRadius
+    lda #17 ; ExplosionRadius
 GoRiotBomb
+    sta ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
 .endp
 ; ------------------------
 .proc heavyriotbomb
-    mva #29 ExplosionRadius
+    lda #29 ; ExplosionRadius
     bne riotbomb.GoRiotBomb ; 4 bytes saved - optimization :)
 ;    jsr CalculateExplosionRange
 ;    jmp xriotbomb
 .endp
 ; ------------------------
 .proc babydigger
-    mva #1 diggery  ; how many branches (-1)
+    lda #1  ; diggery  ; how many branches (-1)
 GoBabydiggerSFX
+    sta diggery
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
     mva #13 DigLong
@@ -385,28 +391,29 @@ GoBabydiggerSFX
 .endp
 ; ------------------------
 .proc digger ;
-    mva #3 diggery  ; how many branches (-1)
+    lda #3  ;   diggery  ; how many branches (-1)
     bne babydigger.GoBabydiggerSFX
 .endp
 ; ------------------------
 .proc heavydigger
-    mva #7 diggery  ; how many branches  (-1)
+    lda #7  ; diggery  ; how many branches  (-1)
     bne babydigger.GoBabydiggerSFX
 .endp
 ; ------------------------
 .proc babysandhog
-    mva #1 diggery  ; how many branches (-1)
+    lda #1  ; diggery  ; how many branches (-1)
     bne heavysandhog.GoHeavysandhogSFX
 .endp
 ; ------------------------
 .proc sandhog
-    mva #3 diggery  ; how many branches (-1)
+    lda #3  ; diggery  ; how many branches (-1)
     bne heavysandhog.GoHeavysandhogSFX
 .endp
 ; ------------------------
 .proc heavysandhog
-    mva #5 diggery  ; how many branches (-1)
+    lda #5  ; diggery  ; how many branches (-1)
 GoHeavysandhogSFX
+    sta diggery
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
     mva #13 DigLong
@@ -522,22 +529,23 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc dirtclod
-    mva #12 ExplosionRadius
+    lda #12 ; ExplosionRadius
     bne xdirt
 .endp
 ; ------------------------
 .proc dirtball
-    mva #22 ExplosionRadius
+    lda #22 ; ExplosionRadius
     bne xdirt
 .endp
 ; ------------------------
 .proc tonofdirt
-    mva #31 ExplosionRadius
+    lda #31 ; ExplosionRadius
 ;    jmp xdirt
 .endp
 ; -----------------
 .proc xdirt ;
 ; -----------------
+    sta ExplosionRadius
     jsr CalculateExplosionRange
     mva #sfx_dirt_charge sfx_effect
     lda #1
