@@ -23,11 +23,11 @@ GoGradient
     iny
     lda (GradientColors),y        ; mountains colors array
     sta COLPF2
-    jmp DLIinterruptGameOver.EndOfDLI_GO
-;    inc dliCounter
-;    ply
-;    pla
-;    rti
+EndOfDLI_Gr
+    inc dliCounter
+    ply
+    pla
+    rti
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptOptions
@@ -42,13 +42,13 @@ GoGradient
     ldy #1
 @    lda (GradientColors),y        ; mountains colors array
     sta COLPF2  ; allways <> 0 !!!
-    bne DLIinterruptGameOver.EndOfDLI_GO
+    bne DLIinterruptGraph.EndOfDLI_Gr
 Subtitle
     lda #0
     sta COLPF2
     lda #4
     sta COLPF1
-    bne DLIinterruptGameOver.EndOfDLI_GO
+    bne DLIinterruptGraph.EndOfDLI_Gr
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGameOver
@@ -59,14 +59,14 @@ Subtitle
     lda #%00100001    ; playfield after P/M - prior=1
     ;STA WSYNC
     sta PRIOR
-    bne EndOfDLI_GO
+    bne DLIinterruptGraph.EndOfDLI_Gr
 EndofPMG
     cmp #1
     bne ColoredLines
     lda #%00100100    ; playfield before P/M
     ;STA WSYNC
     sta PRIOR
-    bne EndOfDLI_GO
+    bne DLIinterruptGraph.EndOfDLI_Gr
 ColoredLines
     cmp #9
     beq CreditsScroll
@@ -76,15 +76,11 @@ ColoredLines
     ;STA WSYNC
     sta COLPF2
     sty COLPF1
-    bne EndOfDLI_GO
+    bne DLIinterruptGraph.EndOfDLI_Gr
 CreditsScroll
     lda #$00
     sta COLPF2
-EndOfDLI_GO
-    inc dliCounter
-    ply
-    pla
-    rti
+    beq DLIinterruptGraph.EndOfDLI_Gr
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptText
