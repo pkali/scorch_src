@@ -28,12 +28,12 @@ ExplosionRoutines
     .word nuke-1                     ;Nuke           ;_03
     .word leapfrog-1                 ;LeapFrog       ;_04
     .word funkybomb-1                ;Funky_Bomb     ;_05
-    .word mirv-1                     ;MIRV           ;_06
+    .word BFG.mirv-1                 ;MIRV           ;_06
     .word deathshead-1               ;Death_s_Head   ;_07
     .word napalm-1                   ;Napalm         ;_08
     .word hotnapalm-1                ;Hot_Napalm     ;_09
-    .word tracer-1                   ;Tracer         ;_10
-    .word tracer-1                   ;Smoke_Tracer   ;_11
+    .word BFG.tracer-1               ;Tracer         ;_10
+    .word BFG.tracer-1               ;Smoke_Tracer   ;_11
     .word babyroller-1               ;Baby_Roller    ;_12
     .word roller-1                   ;Roller         ;_13
     .word heavyroller-1              ;Heavy_Roller   ;_14
@@ -51,14 +51,11 @@ ExplosionRoutines
     .word tonofdirt-1                ;Ton_of_Dirt    ;_26
     .word liquiddirt-1               ;Liquid_Dirt    ;_27
     .word dirtcharge-1               ;Dirt_Charge    ;_28
-    .word punch-1              ;Baby_Sandhog   ;_29
+    .word punch-1                    ;Baby_Sandhog   ;_29
     .word BFG-1                      ;Buy_me         ;_30
     .word laser-1                    ;Laser          ;_31
-
-VOID
-tracer
-    rts
 .endp
+
 .proc BFG
     mva #sfx_plasma_2_2 sfx_effect
     jsr BFGblink
@@ -73,6 +70,9 @@ CheckNextTankBFG
 @   dex
     bpl CheckNextTankBFG
     stx AfterBFGflag ; $ff
+VOID
+tracer
+mirv
     rts
 .endp
 ; ------------------------
@@ -140,9 +140,9 @@ EndOfLeapping
     rts
 .endp
 ; ------------------------
-.proc mirv ;  the whole mirv is performed by Flight routine
-    rts
-.endp
+;.proc mirv ;  the whole mirv is performed by Flight routine
+;    rts
+;.endp
 ; ------------------------
 .proc funkybomb ;
     mva #sfx_baby_missile sfx_effect
@@ -477,10 +477,9 @@ DigDown
     clc
     adc digtabyL,x
     sta digtabyL,x
-    bcc @+
-    inc digtabyH,x
+    scc:inc digtabyH,x
 ;    adc #$00
-@ ;    sta digtabyH,x
+;    sta digtabyH,x
     jmp DigCalculateNext
 DigUp
     and #$07
@@ -489,10 +488,9 @@ DigUp
     lda digtabyL,x
     sbc temp
     sta digtabyL,x
-    bcs @+
-    dec digtabyH,x
+    scs:dec digtabyH,x
 ;    sbc #$00
-@ ;    sta digtabyH,x
+;    sta digtabyH,x
 DigCalculateNext
     dex
     bpl CalculateBranches
