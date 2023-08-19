@@ -23,25 +23,32 @@ GoGradient
     iny
     lda (GradientColors),y        ; mountains colors array
     sta COLPF2
-    inc dliCounter
-    ply
-    pla
-    rti
+    jmp DLIinterruptGameOver.EndOfDLI_GO
+;    inc dliCounter
+;    ply
+;    pla
+;    rti
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptOptions
     pha
     phy
+    lda dliCounter
+    bne Subtitle
     lda #0    ; background color
     sta COLPF1
     ldy GradientNr
     beq @+
     ldy #1
 @    lda (GradientColors),y        ; mountains colors array
+    sta COLPF2  ; allways <> 0 !!!
+    bne DLIinterruptGameOver.EndOfDLI_GO
+Subtitle
+    lda #0
     sta COLPF2
-    ply
-    pla
-    rti
+    lda #4
+    sta COLPF1
+    bne DLIinterruptGameOver.EndOfDLI_GO
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGameOver

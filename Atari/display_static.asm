@@ -124,6 +124,8 @@ InventoryTitle
  dta d"activate weapons"*
 GameOverTitle2
  dta d"   Player   Points  Hits   Earned Money "
+OptionsSubTitle
+ dta d"       Unknown Father of All Games      "
 ;-----------------------------------------------------
 ;-------------display-lists---------------------------
 ;-----------------------------------------------------
@@ -193,6 +195,9 @@ OptionsDL
         .byte $4f
         .word (display+140*40)
         :21 .by $0f                     ;76
+        .byte $70+$80
+        .byte $42
+        .word OptionsSubTitle
         .byte $41
         .word OptionsDL
 ;------------------------
