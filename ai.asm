@@ -81,7 +81,7 @@ AIRoutines
 .proc Moron
     jsr RandomizeAngle
     sta NewAngle
-    mwa #80 RandBoundaryLow
+    mwa #180 RandBoundaryLow
     mwa #800 RandBoundaryHigh
     jsr RandomizeForce
     ; choose the best weapon
@@ -603,6 +603,8 @@ RepeatAim
 AimingRight
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
+    bit escFlag
+    bmi EndOfAim
     lda HitFlag
     beq NoHitInFirstLoopR    ; impossible :)
     bmi GroundHitInFirstLoopR
@@ -646,6 +648,8 @@ EndOfFirstLoopR
 SecondLoopR
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
+    bit escFlag
+    bmi EndOfAim
     lda HitFlag
     beq NoHitInSecondLoopR    ; impossible :)
     bmi GroundHitInSecondLoopR
@@ -698,6 +702,8 @@ AimSecondTry
 AimingLeft
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
+    bit escFlag
+    bmi EndOfAim
     lda HitFlag
     beq NoHitInFirstLoopL    ; impossible :)
     bmi GroundHitInFirstLoopL
@@ -741,6 +747,8 @@ EndOfFirstLoopL
 SecondLoopL
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
+    bit escFlag
+    bmi EndOfAim
     lda HitFlag
     beq NoHitInSecondLoopL    ; impossible :)
     bmi GroundHitInSecondLoopL
@@ -795,8 +803,11 @@ SetStartAndFlight    ; set start point (virtual barrel end :) ) and make test fl
     and #%00000001 ; START KEY
     beq @speedup
     jsr MoveBarrelToNewPosition
+    bit escFlag
+    bmi exit
 @speedup
     jsr Flight
+exit
     ldx TankNr
     rts
 .endp
@@ -1077,16 +1088,14 @@ loop
 ; result in A
 ;----------------------------------------------
     ldy TargetTankNr
-    lda LowResDistances,x
-    cmp LowResDistances,y
-@    bcs YisLower
     sec
-    lda LowResDistances,y
-    sbc LowResDistances,x
-    rts
-YisLower
     lda LowResDistances,x
     sbc LowResDistances,y
+    bcs YisLower
+XisLower
+    eor #$ff
+    adc #1
+YisLower
     rts
 .endp
 
