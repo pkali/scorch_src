@@ -1355,12 +1355,13 @@ FoundPeek1
 
 ; main loop starts here
 MainFallout2
+.IF TARGET >= 800
     lda CONSOL
     and #%00000001 ; START KEY
     bne NoFastDown
     jmp SoilDownTurbo.NoClearTanks
 NoFastDown
-
+.ENDIF
     mwa RangeLeft xdraw
     adw RangeLeft #mountaintable temp
     adw RangeLeft #mountaintable2 tempor2
