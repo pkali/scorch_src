@@ -38,8 +38,9 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $52
+FirstZpageVariable = $51
     .zpvar DliColorBack        .byte = FirstZpageVariable
+    .zpvar FirstKeypressDelay    .byte
     .zpvar ClearSky         .byte   ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte   ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr        .byte
@@ -496,10 +497,13 @@ Check2button
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    mva #128-KeyRepeatSpeed pressTimer    ; tricky
+    lda #128-KeyRepeatSpeed ; tricky
+    sec
+    sbc FirstKeypressDelay    ; tricky 2 :)
+    sta pressTimer
 StillWait
     bit pressTimer
-    bmi KeyReleased
+    bmi KeyAutoReleased
       lda STICK0
       and #$0f
       cmp #$0f
@@ -520,6 +524,10 @@ StillWait
       beq StillWait
     .ENDIF
 KeyReleased
+      mva #FirstKeySpeed FirstKeypressDelay
+      rts
+KeyAutoReleased ; autorepeat
+      mva #0 FirstKeypressDelay
       rts
 .endp
 ;--------------------------------------------------

@@ -26,6 +26,7 @@ TextForegroundColor = $0A
 space = 0  ; space in screencodes
 
 KeyRepeatSpeed = 8 ; (max 127 !!!)
+FirstKeySpeed = 8   ; additional delay for first keypress
 
 ;character codes for symbols (tank, parachute, etc. )
 ; characters from tanks.fnt (graphics screen)
