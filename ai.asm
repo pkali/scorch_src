@@ -34,13 +34,12 @@
     ; by dividing positions by 4
     ldy #MaxPlayers-1
 loop
-    lda xtankstableL,y
-    sta temp
-    lda xtankstableH,y
-    sta temp+1
     ;= /4
-    :2 lsrw temp
-    lda temp
+    lda xtankstableH,y
+    lsr
+    lda xtankstableL,y
+    ror ;just one bit over 256. Max screenwidth = 512!!!
+    lsr
     sta LowResDistances,y
     dey
     bpl loop
@@ -1084,18 +1083,27 @@ loop
 .endp
 ;----------------------------------------------
 .proc GetDistance
-; calculates lores ( /4 ) distance from tank X to TargetTankNr(Y)
+; calculates lores ( /4 ) distance from tank X to last plot
+; (explosion position after Flight proc)
+; This procedure must be called immediately after targeting.
+; xdraw value should remain unchanged from the end of the Flight procedure.
+;
 ; result in A
 ;----------------------------------------------
-    ldy TargetTankNr
+    ;xdraw/4
+    lda xdraw+1
+    lsr
+    lda xdraw
+    ror ;just one bit over 256. Max screenwidth = 512!!!
+    lsr
+    ;
     sec
-    lda LowResDistances,x
-    sbc LowResDistances,y
-    bcs YisLower
-XisLower
+    sbc LowResDistances,x
+    bcs XisLower
+YisLower
     eor #$ff
     adc #1
-YisLower
+XisLower
     rts
 .endp
 
