@@ -1722,9 +1722,9 @@ FastTank
     jsr IsKeyPressed
     bne MainTanksFloatingLoop   ; neverending loop
     mva #$00 ScrollFlag    ; credits scroll off
-    jsr MakeDarkScreen
-    jmp GameOverResultsClear
-    ; rts
+    jmp MakeDarkScreen
+;    jsr GameOverResultsClear
+;    rts
 RandomizeTankPos
     randomize 10 (32-7)    ; 10 not 8 - barrel !! :)
     sta Ytankstable,x
@@ -1743,14 +1743,13 @@ RandomizeTankPos
     lda XtankOffsetGO_H,x
     adc #0
     sta XtankstableH,x
+    ldy #0
     lda random
     cmp #32    ; like 1:8
-    bcc NowFastTank
-    lda #0
-    sta ActiveDefenceWeapon,x
-    rts
-NowFastTank
-    lda #1
+    bcs NowNotFastTank
+    iny
+NowNotFastTank
+    tya
     sta ActiveDefenceWeapon,x
     rts
 GameOverResultsClear

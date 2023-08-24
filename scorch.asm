@@ -507,9 +507,6 @@ StillWait
       lda STRIG0
       beq StillWait
     .IF TARGET = 800
-      ; second joy button
-;      jsr GetKey.Check2button
-;      bcs StillWait
       lda SKSTAT
       cmp #$ff
       bne StillWait

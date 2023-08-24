@@ -58,8 +58,11 @@ NameScreen5
    dta             d" - Proceed          "
 .ENDIF
 ;-----------------------------------------------
+OptionsSubTitle
+ dta d"       Unknown Father of All Games"
+;-----------------------------------------------
 MoreUp
- dta d"         "
+ dta d"         "    ; common part of this text and OptionsSubTitle :)
  dta 92,92,92
  dta d"  more  "
  dta 92,92,92
@@ -124,8 +127,6 @@ InventoryTitle
  dta d"activate weapons"*
 GameOverTitle2
  dta d"   Player   Points  Hits   Earned Money "
-OptionsSubTitle
- dta d"       Unknown Father of All Games      "
 ;-----------------------------------------------------
 ;-------------display-lists---------------------------
 ;-----------------------------------------------------

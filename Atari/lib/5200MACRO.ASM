@@ -113,10 +113,11 @@
     .endif
 ?rand
       lda random
-      cmp #:1 ;floor
-      bcc ?rand
-      cmp #:2+1 ;ceiling
+      cmp #:2+1-:1 ;ceiling
       bcs ?rand
+    .if %1>0    ; if floor = 0 - no add offset
+      adc #:1
+    .endif
     .endm
 ;-------------------------------------
     .macro phx
