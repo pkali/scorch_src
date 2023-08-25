@@ -10,6 +10,16 @@
 ; - shoots random direction and force
 ; greeeting to myself 10 years older in 2013-11-09... still no idea
 
+;----------------
+AIRoutines
+    .word Moron-1
+    .word Shooter-1 ;Shooter
+    .word Poolshark-1 ;Poolshark
+    .word Tosser-1 ;Tosser
+    .word Chooser-1 ;Chooser
+    .word Spoiler-1 ;Spoiler
+    .word Cyborg-1 ;Cyborg
+    .word Unknown-1 ;Unknown
 
 ;----------------------------------------------
 .proc ArtificialIntelligence ;
@@ -53,28 +63,11 @@ WepTableToTemp
     sta temp+1
     rts
 .endp
-;----------------
-AIRoutines
-    .word Moron-1
-    .word Shooter-1 ;Shooter
-    .word Poolshark-1 ;Poolshark
-    .word Tosser-1 ;Tosser
-    .word Chooser-1 ;Chooser
-    .word Spoiler-1 ;Spoiler
-    .word Cyborg-1 ;Cyborg
-    .word Unknown-1 ;Unknown
-
 ;----------------------------------------------
 .proc Unknown
     ; random robotank (from Poolshark to Cyborg)
-    randomize 4 13
-    and #%11111110
-    tay
-    lda AIRoutines+1,y
-    pha
-    lda AIRoutines,y
-    pha
-    rts
+    randomize 3 7
+    bne ArtificialIntelligence  ; We know that PrepareAIShoot is already done, but.... who cares :)
 .endp
 ;----------------------------------------------
 .proc Moron

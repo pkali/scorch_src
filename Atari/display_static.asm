@@ -19,12 +19,30 @@ OptionsScreen
    dta                                        d" "
    dta d"        Press "
    dta               d"Return"*
-   dta                     d" to proceed         "
+   dta                     d" to proceed  " ; this text has common part with OptionsSubTitle (7bytes) :)
 .ELIF TARGET = 5200
    dta d" Please select option with joystick one "
-   dta d"       and press FIRE to proceed        "
+   dta d"       and press FIRE to proceed " ; this text has common part with OptionsSubTitle (7bytes) :)
 .ENDIF
      ; 0123456789012345678901234567890123456789
+;-----------------------------------------------
+OptionsSubTitle
+ dta d"       Unknown Father of All Games"
+;-----------------------------------------------
+MoreUp
+ dta d"         "    ; common part of this text and OptionsSubTitle :)
+ dta 92,92,92
+ dta d"  more  "
+ dta 92,92,92
+; dta d"         "
+MoreDown
+ dta d"         "   ; common part of both texts
+ dta 93,93,93
+ dta d"  more  "
+ dta 93,93,93
+; dta d"         "   ; common part of text and empty line :)
+EmptyLine
+ dta d"                                        "
 ;-----------------------------------------------
 NameScreen
 .IF TARGET = 800
@@ -57,24 +75,6 @@ NameScreen5
    dta        d"FIRE"*
    dta             d" - Proceed          "
 .ENDIF
-;-----------------------------------------------
-OptionsSubTitle
- dta d"       Unknown Father of All Games"
-;-----------------------------------------------
-MoreUp
- dta d"         "    ; common part of this text and OptionsSubTitle :)
- dta 92,92,92
- dta d"  more  "
- dta 92,92,92
-; dta d"         "
-MoreDown
- dta d"         "   ; common part of both texts
- dta 93,93,93
- dta d"  more  "
- dta 93,93,93
-; dta d"         "   ; common part of text and empty line :)
-EmptyLine
- dta d"                                        "
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
