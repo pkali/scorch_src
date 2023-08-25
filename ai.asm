@@ -20,6 +20,16 @@ AIRoutines
     .word Spoiler-1 ;Spoiler
     .word Cyborg-1 ;Cyborg
     .word Unknown-1 ;Unknown
+;----------------
+PurchaseAIRoutines
+    .word MoronPurchase-1
+    .word ShooterPurchase-1 ;ShooterPurchase
+    .word PoolsharkPurchase-1 ;PoolsharkPurchase
+    .word TosserPurchase-1 ;TosserPurchase
+    .word TosserPurchase-1 ;ChooserPurchase
+    .word CyborgPurchase-1 ;SpoilerPurchase
+    .word CyborgPurchase-1 ;CyborgPurchase
+    .word TosserPurchase-1 ;UnknownPurchase
 
 ;----------------------------------------------
 .proc ArtificialIntelligence ;
@@ -29,10 +39,9 @@ AIRoutines
 ;----------------------------------------------
     asl
     tay
-    :2 dey  ;credit KK
-    lda AIRoutines+1,y
+    lda AIRoutines-1,y  ; -1 and -2 because AI players are numbered from 1 not from 0 (Human)
     pha
-    lda AIRoutines,y
+    lda AIRoutines-2,y
     pha
 ;    it's no necessary - PrepareAIShoot is next proc :)
 ;    jsr PrepareAIShoot
@@ -845,6 +854,7 @@ skipThisPlayer
 TankHit
     rts
 .endp
+
 ;----------------------------------------------
 .proc PurchaseAI ;
 ; A - skill of the TankNr
@@ -853,24 +863,12 @@ TankHit
 ;----------------------------------------------
     asl
     tax
-    :2 dex  ;credit KK
-    lda PurchaseAIRoutines+1,x
+    lda PurchaseAIRoutines-1,x  ; -1 and -2 because AI players are numbered from 1 not from 0 (Human)
     pha
-    lda PurchaseAIRoutines,x
+    lda PurchaseAIRoutines-2,x
     pha
-    rts
+ ;   rts    ; MoronPurchase has rts :)
     .endp
-
-;----------------
-PurchaseAIRoutines
-    .word MoronPurchase-1
-    .word ShooterPurchase-1 ;ShooterPurchase
-    .word PoolsharkPurchase-1 ;PoolsharkPurchase
-    .word TosserPurchase-1 ;TosserPurchase
-    .word TosserPurchase-1 ;ChooserPurchase
-    .word CyborgPurchase-1 ;SpoilerPurchase
-    .word CyborgPurchase-1 ;CyborgPurchase
-    .word TosserPurchase-1 ;UnknownPurchase
 
 ;----------------------------------------------
 .proc MoronPurchase
