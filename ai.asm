@@ -359,13 +359,8 @@ NotNegativeEnergy
     adw Force #100 RandBoundaryHigh
     jsr RandomizeForce
     ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
-    jsr GetDistance
-    cmp #6 ; 24/4
-    bcs HighForce
-    lda #ind_Baby_Missile
-    sta ActiveWeapon,x
-HighForce
-    rts
+    jmp GetDistance
+    ;rts
 .endp
 ;----------------------------------------------
 .proc Spoiler
@@ -391,13 +386,8 @@ NotNegativeEnergy
     adw Force #50 RandBoundaryHigh
     jsr RandomizeForce
     ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
-    jsr GetDistance
-    cmp #6    ; 24/4
-    bcs HighForce
-    lda #ind_Baby_Missile
-    sta ActiveWeapon,x
-HighForce
-    rts
+    jmp GetDistance
+    ;rts
 .endp
 ;----------------------------------------------
 .proc Cyborg
@@ -419,14 +409,9 @@ HighForce
     sta ForceTableL,x
     lda Force+1
     sta ForceTableH,x
-    ; if target distance lower than 32 - set weapon to Baby Missile (for security :)
-    jsr GetDistance
-    cmp #8    ;32/4
-    bcs HighForce
-    lda #ind_Baby_Missile
-    sta ActiveWeapon,x
-HighForce
-    rts
+    ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
+    jmp GetDistance
+    ;rts
 .endp
 
 ;----------------------------------------------
@@ -1079,7 +1064,7 @@ loop
 ; This procedure must be called immediately after targeting.
 ; xdraw value should remain unchanged from the end of the Flight procedure.
 ;
-; result in A
+; if target distance lower than 24 - set weapon to Baby Missile
 ;----------------------------------------------
     ;xdraw/4
     lda xdraw+1
@@ -1095,6 +1080,16 @@ YisLower
     eor #$ff
     adc #1
 XisLower
+    ;rts
+    cpx TargetTankNr    ; If tank is aiming at itself don't change weapon,
+    beq NoChangeToBM    ; he is the only one without a Long Shlong :)
+    ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
+    cmp #6    ; 24/4
+    bcs HighDistance
+    lda #ind_Baby_Missile
+    sta ActiveWeapon,x
+HighDistance
+NoChangeToBM
     rts
 .endp
 
