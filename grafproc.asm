@@ -1152,9 +1152,8 @@ NotRightEdge
     lda XtankstableL,x
     adc #1
     sta XtankstableL,x
-    lda XtankstableH,x
-    adc #0
-    sta XtankstableH,x
+    scc
+    inc XtankstableH,x
     mva #%10000000 PreviousFall    ; set bit 7 - right
     bne EndOfFCycle
 FallingLeft
@@ -1173,9 +1172,8 @@ NotLeftEdge
     lda XtankstableL,x
     sbc #1
     sta XtankstableL,x
-    lda XtankstableH,x
-    sbc #0
-    sta XtankstableH,x
+    scs
+    dec XtankstableH,x
     mva #%01000000 PreviousFall    ; set bit 6 - left
     bne EndOfFCycle
 EndLeftFall

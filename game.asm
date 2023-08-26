@@ -657,9 +657,8 @@ NotShooter
     clc
     adc EnergyDecrease
     sta loseL,x
-    lda loseH,x
-    adc #$00
-    sta loseH,x
+    scc
+    inc loseH,x
     ; Energy now, not less than 0
     lda Energy,x
     cmp EnergyDecrease
@@ -678,7 +677,7 @@ NotNegativeEnergy
     adc EnergyDecrease
     sta gainL,y
     lda gainH,y
-    adc #$00
+    adc #0
     sta gainH,y
     rts
 .endp

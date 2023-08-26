@@ -456,18 +456,16 @@ diglewy ; even branches go left
     lda digtabxL,x
     sbc #$04
     sta digtabxL,x
-    lda digtabxH,x
-    sbc #$00
-    sta digtabxH,x
+    scs
+    dec digtabxH,x
     jmp DigRandomize
 DigRight ; odd go right (everytime 4 pixels)
     clc
     lda digtabxL,x
     adc #$04
     sta digtabxL,x
-    lda digtabxH,x
-    adc #$00
-    sta digtabxH,x
+    scc
+    inc digtabxH,x
 DigRandomize
     lda random
     ;and #$87
@@ -477,9 +475,8 @@ DigDown
     clc
     adc digtabyL,x
     sta digtabyL,x
-    scc:inc digtabyH,x
-;    adc #$00
-;    sta digtabyH,x
+    scc
+    inc digtabyH,x
     jmp DigCalculateNext
 DigUp
     and #$07
@@ -488,9 +485,8 @@ DigUp
     lda digtabyL,x
     sbc temp
     sta digtabyL,x
-    scs:dec digtabyH,x
-;    sbc #$00
-;    sta digtabyH,x
+    scs
+    dec digtabyH,x
 DigCalculateNext
     dex
     bpl CalculateBranches
@@ -767,7 +763,7 @@ DistanceCheckLoop
     adc #3  ;measure from middle of the tank
     sta xbyte
     lda XtankstableH,x
-    clc
+;    clc    ; ops :)
     adc #0  ;measure from middle of the tank
     sta xbyte+1
     lda Ytankstable,x
