@@ -39,19 +39,19 @@
 ;---------------------------------------------------
 
 FirstZpageVariable = $51
-    .zpvar DliColorBack        .byte = FirstZpageVariable
-    .zpvar FirstKeypressDelay    .byte
+    .zpvar DliColorBack     .byte = FirstZpageVariable
+    .zpvar FirstKeypressDelay .byte
     .zpvar ClearSky         .byte   ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte   ; old state 2nd button for 2 buttons joysticks
-    .zpvar GradientNr        .byte
-    .zpvar GradientColors    .word
-    .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
+    .zpvar GradientNr       .byte
+    .zpvar GradientColors   .word
+    .zpvar WindChangeInRound .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
     .zpvar RandomMountains  .byte   ; mountains type change after each turn flag - (0 - round only, >0 - each turn)
     .zpvar FastSoilDown     .byte   ; 0 - standard, >0 - fast
-    .zpvar JoystickNumber    .byte
-    .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
-    .zpvar SpyHardFlag        .byte    ; >$7f - run SpyHard after inventory
-    .zpvar Vdebug            .byte ; "visual debug" flag ($00 - off, $ff - on)
+    .zpvar JoystickNumber   .byte
+    .zpvar LazyFlag         .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
+    .zpvar SpyHardFlag      .byte    ; >$7f - run SpyHard after inventory
+    .zpvar Vdebug           .byte ; "visual debug" flag ($00 - off, $ff - on)
     .zpvar xdraw            .word ;= $64 ;variable X for plot
     .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
@@ -71,92 +71,91 @@ FirstZpageVariable = $51
     .zpvar tempor2          .word
     .zpvar CreditsVScrol    .byte
     ;--------------temps used in circle routine
-    .zpvar xi               .word ;X (word) in draw routine
+    .zpvar xi               .word  ; X (word) in draw routine
     .zpvar fx               .byte
-    .zpvar yi               .word ;Y (word) in draw routine
+    .zpvar yi               .word  ; Y (word) in draw routine
     .zpvar fy               .byte
     .zpvar xk               .word
     .zpvar fs               .byte
-    .zpvar yc               .byte ;ycircle - temporary for circle
+    .zpvar yc               .byte  ; ycircle - temporary for circle
     .zpvar dx               .word
     .zpvar dy               .word
     .zpvar dd               .word
     .zpvar di               .word
     .zpvar dp               .word
     ;----------------------------
-    .zpvar UnderTank1        .byte
-    .zpvar UnderTank2        .byte
+    .zpvar UnderTank1       .byte
+    .zpvar UnderTank2       .byte
     ;----------------------------
-    .zpvar TestFlightFlag    .byte ; For AI test flights ($ff - test, $00 - standard shoot flight)
+    .zpvar TestFlightFlag   .byte  ; For AI test flights ($ff - test, $00 - standard shoot flight)
     .zpvar weaponPointer    .word
     .zpvar dliCounter       .byte
     .zpvar pressTimer       .byte
     .zpvar NTSCcounter      .byte
-    .zpvar IsEndOfTheFallFlag .byte ; for small speedup ground falling
-    .zpvar sfx_effect        .byte
-    .zpvar RMT_blocked        .byte
-    .zpvar ScrollFlag        .byte
-    .zpvar SkStatSimulator    .byte
-    .zpvar FloatingAlt        .byte    ; floating tank altitude
-    .zpvar OverTankDir        .byte    ; (0 go right, $ff go left) direction of bypassing tanks on screen
+    .zpvar IsEndOfTheFallFlag .byte  ; for small speedup ground falling
+    .zpvar sfx_effect       .byte
+    .zpvar RMT_blocked      .byte
+    .zpvar ScrollFlag       .byte
+    .zpvar SkStatSimulator  .byte
+    .zpvar FloatingAlt      .byte  ; floating tank altitude
+    .zpvar OverTankDir      .byte  ; (0 go right, $ff go left) direction of bypassing tanks on screen
 
     ; --------------OPTIMIZATION VARIABLES--------------
-    .zpvar Force .word
-    .zpvar Force_ .byte ; Force is 3 bytes long
-    .zpvar Angle .byte
-    .zpvar Parachute .byte ; are you insured with parachute?
-    .zpvar color .byte
-    .zpvar Erase .byte  ; if 1 only mask of the character is printed
-                        ; on the graphics screen. if 0 character is printed normally
-    .zpvar radius .byte
-    .zpvar decimal .word
-    .zpvar NumberOfPlayers .byte ;current number of players (counted from 1)
-    .zpvar Counter .byte ;temporary Counter for outside loops
-    .zpvar ExplosionRadius .byte
+    .zpvar Force            .word
+    .zpvar Force_           .byte  ; Force is 3 bytes long
+    .zpvar Angle            .byte
+    .zpvar Parachute        .byte  ; are you insured with parachute?
+    .zpvar color            .byte
+    .zpvar Erase            .byte  ; if 1 only mask of the character is printed
+                                   ; on the graphics screen. if 0 character is printed normally
+    .zpvar radius           .byte
+    .zpvar decimal          .word
+    .zpvar NumberOfPlayers  .byte  ; current number of players (counted from 1)
+    .zpvar Counter          .byte  ; temporary Counter for outside loops
+    .zpvar ExplosionRadius  .byte
     .zpvar FunkyBombCounter .byte
-    .zpvar ResultY .byte
-    .zpvar xcircle .word
-    .zpvar ycircle .word
-    .zpvar vy .word
-    .zpvar vy_ .word ; 4 bytes
-    .zpvar vx .word
-    .zpvar vx_ .word ; 4 bytes
+    .zpvar ResultY          .byte
+    .zpvar xcircle          .word
+    .zpvar ycircle          .word
+    .zpvar vy               .word
+    .zpvar vy_              .word ; 4 bytes
+    .zpvar vx               .word
+    .zpvar vx_              .word ; 4 bytes
     .zpvar HitFlag .byte ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank
     .zpvar PositionOnTheList .byte ; pointer position on the list being displayed
-    .zpvar XHit .word
-    .zpvar delta .word
-    .zpvar HowMuchToFall .byte
-    .zpvar magic .word
-    .zpvar xtraj .word
-    .zpvar xtraj_ .byte  ; 3 bytes
-    .zpvar ytraj .word
-    .zpvar ytraj_ .byte  ; 3 bytes
-    .zpvar Wind .word
-    .zpvar Wind_ .word  ; 4 bytes
-    .zpvar RangeLeft .word
-    .zpvar RangeRight .word
-    .zpvar NewAngle .byte
-    .zpvar escFlag .byte    ; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
-    .zpvar LineYdraw .byte
-    .zpvar LineXdraw .word
-    .zpvar plot4x4color .byte    ; $00 / $ff
-    .zpvar Multiplier .word
-    .zpvar Multiplier_ .byte  ; 3 bytes
-    .zpvar HowToDraw .byte
-    .zpvar DrawDirFactor .byte
-    .zpvar gravity .byte
-    .zpvar LineLength .word
-    .zpvar tracerflag .byte
-    .zpvar isInventory .byte
-    .zpvar DifficultyLevel .byte
-    .zpvar goleft .byte
-    .zpvar OffsetDL1 .byte
-    .zpvar L1 .byte
+    .zpvar XHit             .word
+    .zpvar delta            .word
+    .zpvar HowMuchToFall    .byte
+    .zpvar magic            .word  ; worst var name in the whole business
+    .zpvar xtraj            .word
+    .zpvar xtraj_           .byte  ; 3 bytes
+    .zpvar ytraj            .word
+    .zpvar ytraj_           .byte  ; 3 bytes
+    .zpvar Wind             .word
+    .zpvar Wind_            .word  ; 4 bytes
+    .zpvar RangeLeft        .word
+    .zpvar RangeRight       .word
+    .zpvar NewAngle         .byte
+    .zpvar escFlag .byte  ; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
+    .zpvar LineYdraw        .byte
+    .zpvar LineXdraw        .word
+    .zpvar plot4x4color     .byte  ; $00 / $ff
+    .zpvar Multiplier       .word
+    .zpvar Multiplier_      .byte  ; 3 bytes
+    .zpvar HowToDraw        .byte
+    .zpvar DrawDirFactor    .byte
+    .zpvar gravity          .byte
+    .zpvar LineLength       .word
+    .zpvar tracerflag       .byte
+    .zpvar isInventory      .byte
+    .zpvar DifficultyLevel  .byte
+    .zpvar goleft           .byte
+    .zpvar OffsetDL1        .byte
+    .zpvar L1               .byte
     HotNapalmFlag = FunkyBombCounter ; reuse variable!
-    ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr.a65
-
     displayposition = modify
     LineAddress4x4 = xcircle
+    ;* RMT ZeroPage addresses in artwork/sfx/scorch_str9-NTSC.rmt
 
 ;-----------------------------------------------
 ; libraries
@@ -202,14 +201,13 @@ FirstZpageVariable = $51
         _down  = $08
         _I     = $09
         _esc   = $0a
-        _help   = $0b  ;Visual Debug in 5200
-        _del   = $fc  ;$0c ;not used in 5200
+        _help  = $0b  ; Visual Debug in 5200
+        _del   = $fc  ; $0c ;not used in 5200
         _M     = $0d
         _S     = $0e
         _atari = $fd  ; not used in 5200
         _ret   = $fd  ; not used in 5200
-        _none = $0f
-
+        _none  = $0f
       .ende
     .ENDIF
 
@@ -251,7 +249,6 @@ StatusBufferCopyEnd
 
 
     icl 'Atari/display_static.asm'
-;----------------------------------------------
 
 ;--------------------------------------------------
 ; Game Code
@@ -330,9 +327,9 @@ no5200splash
 
     ; set gradient to the full LGBTIQQAAPP+ flag on start
     .IF CART_VERSION = 1
-     mva #$ff GradientNr    ; #1 to set gradient number 2 :) (next one) - 0 (B/W)
+       mva #$ff GradientNr  ; #1 to set gradient number 2 :) (next one) - 0 (B/W)
     .ELSE
-     mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one) - 1 (polish rainbow)
+       mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one) - 1 (polish rainbow)
     .ENDIF
     jsr SelectNextGradient.NotWind
 
@@ -341,7 +338,7 @@ no5200splash
 
     .IF TARGET = 800
       ; pokeys init
-      lda #3    ; stereo
+      lda #3        ; stereo (pseudo)
       sta POKEY+$0f ; stereo
       sta POKEY+$1f ; stereo
 
@@ -372,20 +369,20 @@ NoRMT_PALchange
 
 
     ; RMT INIT
-    lda #$f0                    ;initial value
-    sta RMTSFXVOLUME            ;sfx note volume * 16 (0,16,32,...,240)
+    lda #$f0                    ; initial value
+    sta RMTSFXVOLUME            ; sfx note volume * 16 (0,16,32,...,240)
 
-    lda #$ff                    ;initial value
+    lda #$ff                    ; initial value
     sta sfx_effect
 
     RMTSong 0
 
     .IF TARGET = 5200
-        mva #$0f STICK0
-        mva #$04 CONSOL5200          ;Speaker off, Pots enabled, port #1 selected
-        mwa #kb_continue VKEYCNT     ;Keyboard handler
+      mva #$0f STICK0
+      mva #$04 CONSOL5200       ; Speaker off, Pots enabled, port #1 selected
+      mwa #kb_continue VKEYCNT  ; Keyboard handler
     .ENDIF
-    VMAIN VBLinterrupt,7          ;jsr SetVBL
+    VMAIN VBLinterrupt,7        ; jsr SetVBL
 
     mva #2 chactl  ; necessary for 5200
 
@@ -396,11 +393,11 @@ NoRMT_PALchange
 
 .proc SetJoystickPort
     sta JoystickNumber
-    .IF TARGET = 800    ; second joy button state update only on A800
-    jsr WaitOneFrame         ; is necessary for update shadow registers (PADDL0) in VBI
-    jmp GetKey.Check2button  ; update state second joy button
+    .IF TARGET = 800           ; second joy button state update only on A800
+      jsr WaitOneFrame         ; is necessary for update shadow registers (PADDL0) in VBI
+      jmp GetKey.Check2button  ; update state second joy button
     .ELSE
-    rts
+      rts
     .ENDIF
 .endp
 
@@ -490,14 +487,14 @@ Check2button
 ;--------------------------------------------------
     jsr WaitForKeyRelease
     lda kbcode
-    and #$3f ;CTRL and SHIFT ellimination
+    and #$3f ; CTRL and SHIFT ellimination
     rts
 .endp
 
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    lda #128-KeyRepeatSpeed ; tricky
+    lda #128-KeyRepeatSpeed   ; tricky
     sec
     sbc FirstKeypressDelay    ; tricky 2 :)
     sta pressTimer
@@ -574,7 +571,7 @@ MakeDarkScreen
 ;--------------------------------------------------
     lda CONSOL
     and #%00000001 ; START KEY
-    seq:wait    ; or waitRTC ?
+    seq:wait       ; or waitRTC ?
     rts
 .endp
 
@@ -619,7 +616,7 @@ MakeDarkScreen
     bpl nokeys
     ;---O pressed-quit game to game over screen---
 QuitToGameover
-    mva #$C0 escFlag    ; bits 7 and 6 set
+    mva #$C0 escFlag   ; bits 7 and 6 set
     rts
 CheckEsc
     cmp #@kbcode._esc  ; 28  ; ESC
@@ -654,14 +651,14 @@ noShellDelay
 ;  starting song line 0-255 to A reg
 ;--------------------------------------------------
     cmp #song_main_menu
-    beq noingame    ; noMusic blocks only ingame songs
+    beq noingame           ; noMusic blocks only ingame songs
     bit noMusic
     spl:lda #song_silencio
 noingame
     mvx #$ff RMT_blocked
-    ldx #<MODUL                 ;low byte of RMT module to X reg
-    ldy #>MODUL                 ;hi byte of RMT module to Y reg
-    jsr RASTERMUSICTRACKER      ;Init
+    ldx #<MODUL            ; low byte of RMT module to X reg
+    ldy #>MODUL            ; hi byte of RMT module to Y reg
+    jsr RASTERMUSICTRACKER ; Init
     mva #0 RMT_blocked
     rts
 .endp
@@ -720,14 +717,13 @@ font4x4
     asl
     asl ; 8 chars per name
     tax
-@
-    lda CheatName,y
-    sec
-    sbc tanksnames,x
-    cmp #$27
-    bne NoCheat
-    inx
-    dey
+@     lda CheatName,y
+      sec
+      sbc tanksnames,x
+      cmp #$27
+      bne NoCheat
+      inx
+      dey
     bpl @-
 YesCheat
     ldx TankNr
@@ -736,9 +732,9 @@ YesCheat
     lda TanksWeaponsTableH,x
     sta temp+1
     lda #99
-@    iny
-    sta (temp),y
-    cpy #(number_of_weapons - 1)
+@     iny
+      sta (temp),y
+      cpy #(number_of_weapons - 1)
     bne @-
 NoCheat
     rts
@@ -752,14 +748,12 @@ CheatName
     bne EndofBFGDLI
     lda dliColorsFore
     bit random
-    bmi @+
-    lda DliColorBack
-@    sta COLPF2
+    smi:lda DliColorBack
+    sta COLPF2
     lda dliColorsFore
     bit random
-    bmi @+
-    lda DliColorBack
-@    sta COLPF1
+    smi:lda DliColorBack
+    sta COLPF1
 EndofBFGDLI
     inc dliCounter
     pla
@@ -770,7 +764,7 @@ EndofBFGDLI
     SetDLI DLIinterruptBFG    ; blinking on
     ldy #50
     jsr PauseYFrames
-    SetDLI DLIinterruptGraph    ; blinking off
+    SetDLI DLIinterruptGraph  ; blinking off
     rts
 .endp
 ;--------------------------------------------------
@@ -797,9 +791,9 @@ MODULEND
     .IF * > ROM_SETTINGS-1
       .ERROR 'Code and RMT song too long to fit in 5200'
     .ENDIF
-    org ROM_SETTINGS  ; 5200 ROM settings address $bfe8
+    org ROM_SETTINGS             ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
-    .byte " scorch supersystem "    ;20 characters title
-    .byte " ", $ff          ;$BFFD == $ff means diagnostic cart, no splash screen
+    .byte " scorch supersystem " ; 20 characters title
+    .byte " ", $ff               ; $BFFD == $ff means diagnostic cart, no splash screen
     .word FirstSTART
   .ENDIF

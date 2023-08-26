@@ -2067,5 +2067,17 @@ ybarrel
     STA COLOR3     ; joined missiles (5th tank)
     rts
 .endp
+;--------------------------------------------------
+.proc Lissajous
+;--------------------------------------------------
+;  x = Asin(at + fi)
+;  y = Bsin(bt)
+; center: xdraw, ydraw
+
+
+
+
+    rts
+.endp
 
 .endif
