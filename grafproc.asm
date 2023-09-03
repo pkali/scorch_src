@@ -542,7 +542,7 @@ NotHigherByte02
     ; x correction for P/M
     ; --
     .IF XCORRECTION_FOR_PM = 1
-    and #$fe
+      and #$fe
     .ENDIF
     ; --
     sta xtankstableL,x
@@ -585,7 +585,7 @@ UnequalTanks
     jsr PMoutofScreen
     mva #1 Erase    ; erase tanks flag
 .endp
-;--
+;-------------------------------------------------
 .proc drawtanks
 ;-------------------------------------------------
     lda TankNr
@@ -705,12 +705,12 @@ NoMissile
 ClearPM
     cpy temp
     bne ZeroesToGo
-@    lda (xbyte),y
-    and #%11110000
-    ora #%00001111 ; (2 bits set) we set on two pixels in three lines
-    sta (xbyte),y
-    dey
-    dex
+@     lda (xbyte),y
+      and #%11110000
+      ora #%00001111 ; (2 bits set) we set on two pixels in three lines
+      sta (xbyte),y
+      dey
+      dex
     bne @-
 ZeroesToGo
     lda (xbyte),y
@@ -725,12 +725,12 @@ PMForTank6
 ClearPM6
     cpy temp
     bne ZeroesToGo6
-@    lda (xbyte),y
-    and #%00001111
-    ora #%11110000 ; (2 bits set) we set on two pixels in three lines
-    sta (xbyte),y
-    dey
-    dex
+@     lda (xbyte),y
+      and #%00001111
+      ora #%11110000 ; (2 bits set) we set on two pixels in three lines
+      sta (xbyte),y
+      dey
+      dex
     bne @-
 ZeroesToGo6
     lda (xbyte),y
@@ -743,9 +743,8 @@ NoPlayerMissile
 noTankNoPM
     ldy #$01
     lda Erase
-    beq @+
-    dey
-@    sty color
+    seq:dey
+    sty color
     ; draw defensive weapons like shield ( tank number in X )
     ; in xdraw, ydraw we have coordinates left LOWER corner of Tank char
     ldx TankNr
@@ -786,9 +785,8 @@ NoShieldDraw
 BarrelChange
     ldy #$01
     lda Erase
-    beq @+
-    dey
-@    sty color
+    seq:dey
+    sty color
     jsr DrawBarrel
     ldx TankNr
 DoNotDrawTankNr
@@ -879,7 +877,7 @@ tankflash_loop
 .nowarn    dew xdraw            ; 1 pixel left
     sbw ydraw #$0a        ; 10 pixels up
     jsr plot
-.nowarn    dew ydraw
+.nowarn dew ydraw
     inw xdraw
     jsr plot
     sbw xdraw #$0d        ; 13 pixels left
@@ -895,14 +893,14 @@ tankflash_loop
 ; this proc draws bold top on shield.
 ; Symbol of ablative shield ? :)
 ;--------------------------------------------------
-    sbw xdraw #$04            ; 5 pixels left
+    sbw xdraw #$04        ; 5 pixels left
     sbw ydraw #$0b        ; 11 pixels up
     ; draw additional top horizontal line of shield ( _ )
     mva #6 temp
 @
-    jsr plot
-.nowarn    dew xdraw
-    dec temp
+      jsr plot
+.nowarn  dew xdraw
+      dec temp
     bne @-
     rts ; Z allways set
 .endp
@@ -910,7 +908,7 @@ tankflash_loop
 .proc DrawTankParachute
 ;Tank number in X
 ;--------------------------------------------------
-    lda #char_parachute           ; parachute symbol
+    lda #char_parachute  ; parachute symbol
     sta CharCode
     lda Ytankstable,x
     cmp #16
@@ -953,18 +951,18 @@ ToHighToParachute
     dec temp
     bne @-
 
-    sbw xdraw #2    ; 2 pixels left
+    sbw xdraw #2 ; 2 pixels left
     inw ydraw    ; 1 pixel down
 
     ; draw second horizontal line
     mva #3 temp
 @
-    jsr plot
-.nowarn    dew xdraw
-    dec temp
+      jsr plot
+.nowarn dew xdraw
+      dec temp
     bne @-
 
-    adw xdraw #2    ; 2 pixels right
+    adw xdraw #2 ; 2 pixels right
     inw ydraw    ; 1 pixel down
 
     ; and last pixel
@@ -995,14 +993,14 @@ ToHighToParachute
     inw xdraw
     ; plot 6 random color pixels
     mva #6 temp
-@    lda Erase
-    eor #%00000001
-    and random
-    and #%00000001
-    sta color
-    jsr plot
-    inw xdraw
-    dec temp
+@   lda Erase
+      eor #%00000001
+      and random
+      and #%00000001
+      sta color
+      jsr plot
+      inw xdraw
+      dec temp
     bne @-
     ; clear last pixel under tank
     mva #0 color
@@ -1046,11 +1044,11 @@ NoFallingSound
     and #01
     beq DoNotClearParachute
     ; here we clear the parachute
-;    ldx TankNr
+    ; ldx TankNr
     jsr DrawTankParachute
 DoNotClearParachute
     mva #0 Erase
-;    ldx TankNr
+    ; ldx TankNr
     lda EndOfTheFallFlag    ; We only get byte below the tank if still falling
     bne NoGroundCheck
     ; coordinates of the first pixel under the tank
@@ -1062,8 +1060,8 @@ DoNotClearParachute
     ; time in our lives! Tada! It opens a new chapter!!!
     sta ydraw
     ;
-;    UnderTank1    ; byte under tank
-;    UnderTank2    ; byte under tank reversed (for simple check right direction)
+    ; UnderTank1    ; byte under tank
+    ; UnderTank2    ; byte under tank reversed (for simple check right direction)
     lda #08
     sta temp  ; Loop Counter
 ByteBelowTank
@@ -1569,14 +1567,14 @@ SetYofNextTank
     ldy #0
     ldx #screenheight-1
 nextPointChecking
-    txa
-    cmp (modify),y
-    bcc NotHigher
-    lda (modify),y
-    tax
+      txa
+      cmp (modify),y
+      bcc NotHigher
+      lda (modify),y
+      tax
 NotHigher
-    inw modify
-    cpw modify #(mountaintable+screenwidth)
+      inw modify
+      cpw modify #(mountaintable+screenwidth)
     bne nextPointChecking
     txa
     rts
@@ -1596,9 +1594,8 @@ notZero
     jsr _calc_inverse_display
     
     ; now find length of the text
-@   
-    iny
-    lda (LineAddress4x4),y
+@     iny
+      lda (LineAddress4x4),y
     bpl @-
     iny
     sty fx
@@ -2046,8 +2043,8 @@ ybarrel
 ;--------------------------------------------------
     lda #$00 ; let all P/M disappear
     ldy #7
-@   sta hposp0,y
-    dey
+@     sta hposp0,y
+      dey
     bpl @-
     ;:8 sta hposp0+#    ; optimized... but Y!
     rts
@@ -2057,27 +2054,16 @@ ybarrel
     lda #%01010101
     sta sizem ; all missiles, double width
     ldy #3
-@   lda #$00
-    sta sizep0,y ; P0-P3 widths
-    lda TankColoursTable,y ; colours of sprites under tanks
-    sta PCOLR0,y    
-    dey
+@     lda #$00
+      sta sizep0,y ; P0-P3 widths
+      lda TankColoursTable,y ; colours of sprites under tanks
+      sta PCOLR0,y    
+      dey
     bpl @-
     LDA TankColoursTable+4
     STA COLOR3     ; joined missiles (5th tank)
     rts
 .endp
-;--------------------------------------------------
-.proc Lissajous
-;--------------------------------------------------
-;  x = Asin(at + fi)
-;  y = Bsin(bt)
-; center: xdraw, ydraw
 
-
-
-
-    rts
-.endp
 
 .endif

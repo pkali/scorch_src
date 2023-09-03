@@ -52,19 +52,23 @@ AdditionalZPvariables = $20
 FirstZpageVariable = $51
     .zpvar DliColorBack     .byte = FirstZpageVariable
     .zpvar FirstKeypressDelay .byte
-    .zpvar ClearSky         .byte   ; $ff - Crear sky during drawmountains, 0 - no clear sky
-    .zpvar PaddleState      .byte   ; old state 2nd button for 2 buttons joysticks
+    .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
+    .zpvar PaddleState      .byte  ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr       .byte
     .zpvar GradientColors   .word
-    .zpvar WindChangeInRound .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
-    .zpvar RandomMountains  .byte   ; mountains type change after each turn flag - (0 - round only, >0 - each turn)
-    .zpvar FastSoilDown     .byte   ; 0 - standard, >0 - fast
+    .zpvar WindChangeInRound .byte ; wind change after each turn (not round only) flag
+                                   ; (0 - round only, >0 - each turn)
+    .zpvar RandomMountains  .byte  ; mountains type change after each turn flag
+                                   ; (0 - round only, >0 - each turn)
+    .zpvar FastSoilDown     .byte  ; 0 - standard, >0 - fast
     .zpvar JoystickNumber   .byte
-    .zpvar LazyFlag         .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
-    .zpvar SpyHardFlag      .byte    ; >$7f - run SpyHard after inventory
-    .zpvar Vdebug           .byte ; "visual debug" flag ($00 - off, $ff - on)
-    .zpvar xdraw            .word ;= $64 ;variable X for plot
-    .zpvar ydraw            .word ;variable Y for plot (like in Atari Basic - Y=0 in upper right corner of the screen)
+    .zpvar LazyFlag         .byte  ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory
+                                   ; 0 - nothing
+    .zpvar SpyHardFlag      .byte  ; >$7f - run SpyHard after inventory
+    .zpvar Vdebug           .byte  ; "visual debug" flag ($00 - off, $ff - on)
+    .zpvar xdraw            .word  ; = $64 ;variable X for plot
+    .zpvar ydraw            .word  ; variable Y for plot 
+                                   ; (like in Atari Basic - Y=0 in upper right corner of the screen)
     .zpvar xbyte            .word
     .zpvar ybyte            .word
     .zpvar CharCode         .byte
@@ -73,12 +77,12 @@ FirstZpageVariable = $51
     .zpvar TankSequencePointer .byte
     .zpvar oldplot          .word
     .zpvar xc               .word
-    .zpvar temp             .word ;temporary word for the most embeded loops only
-    .zpvar temp2            .word ;same as above
-    .zpvar modify           .word ;origially used to replace self-modyfying code
-    .zpvar tempXROLLER      .word ;same as above for XROLLER routine (used also in result display routine)
-    .zpvar xtempDRAW        .word ;same as above for XDRAW routine
-    .zpvar ytempDRAW        .word ;same as above for XDRAW routine
+    .zpvar temp             .word  ; temporary word for the most embeded loops only
+    .zpvar temp2            .word  ; same as above
+    .zpvar modify           .word  ; origially used to replace self-modyfying code
+    .zpvar tempXROLLER      .word  ; same as above for XROLLER routine (used also in result display routine)
+    .zpvar xtempDRAW        .word  ; same as above for XDRAW routine
+    .zpvar ytempDRAW        .word  ; same as above for XDRAW routine
     .zpvar tempor2          .word
     .zpvar CreditsVScrol    .byte
     ;--------------temps used in circle routine
@@ -103,7 +107,7 @@ FirstZpageVariable = $51
     .zpvar dliCounter       .byte
     .zpvar pressTimer       .byte
     .zpvar NTSCcounter      .byte
-    .zpvar IsEndOfTheFallFlag .byte  ; for small speedup ground falling
+    .zpvar IsEndOfTheFallFlag .byte ;for small speedup ground falling
     .zpvar sfx_effect       .byte
     .zpvar RMT_blocked      .byte
     .zpvar ScrollFlag       .byte
@@ -129,10 +133,11 @@ FirstZpageVariable = $51
     .zpvar xcircle          .word
     .zpvar ycircle          .word
     .zpvar vy               .word
-    .zpvar vy_              .word ; 4 bytes
+    .zpvar vy_              .word  ; 4 bytes
     .zpvar vx               .word
-    .zpvar vx_              .word ; 4 bytes
-    .zpvar HitFlag .byte ;$ff when missile hit ground, $00 when no hit, $01-$06 tank index+1 when hit tank
+    .zpvar vx_              .word  ; 4 bytes
+    .zpvar HitFlag          .byte  ; $ff when missile hit ground, $00 when no hit,
+                                   ; $01-$06 tank index+1 when hit tank
     .zpvar PositionOnTheList .byte ; pointer position on the list being displayed
     .zpvar XHit             .word
     .zpvar delta            .word
@@ -147,7 +152,8 @@ FirstZpageVariable = $51
     .zpvar RangeLeft        .word
     .zpvar RangeRight       .word
     .zpvar NewAngle         .byte
-    .zpvar escFlag .byte  ; 7 bit - Exit game, 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
+    .zpvar escFlag          .byte  ; 7 bit - Exit game, 
+                                   ; 6 bit - Exit to GameOver (cleared - exit to Menu), 0 - nothing
     .zpvar LineYdraw        .byte
     .zpvar LineXdraw        .word
     .zpvar plot4x4color     .byte  ; $00 / $ff
@@ -163,7 +169,7 @@ FirstZpageVariable = $51
     .zpvar goleft           .byte
     .zpvar OffsetDL1        .byte
     .zpvar L1               .byte
-    HotNapalmFlag = FunkyBombCounter ; reuse variable!
+    HotNapalmFlag = FunkyBombCounter  ; variable reuse!
     displayposition = modify
     LineAddress4x4 = xcircle
     ;* RMT ZeroPage addresses in artwork/sfx/scorch_str9-NTSC.rmt
@@ -184,23 +190,6 @@ FirstZpageVariable = $51
       icl 'Atari/lib/5200SYS.ASM'
       icl 'Atari/lib/5200MACRO.ASM'
       .enum @kbcode
-        /*
-        _0
-        _1
-        _2
-        _3
-        _4
-        _5
-        _6
-        _7
-        _8
-        _9
-        _asterisk = $0a
-        _hash = $0b
-        _start = $0c
-        _pause = $0d
-        _reset = $0e
-        */
         _space = $00
         _Y     = $01
         _up    = $02
@@ -266,15 +255,15 @@ StatusBufferCopyEnd
 ;--------------------------------------------------
 FirstSTART
     .IF TARGET = 5200
-    ; start in 5200 diagnostic mode
-    ; move original startup procedure to RAM
+      ; start in 5200 diagnostic mode
+      ; move original startup procedure to RAM
 
     Modified5200Splash = $2100  ; apparently there is some free space here
-    ; check kernel version
+      ; check kernel version
     Atari5200KernelByte = $fff8
-    ; $32 - 4 joy
-    ; $00 - 2 joy
-    ; $ff - Altirra kernel
+      ; $32 - 4 joy
+      ; $00 - 2 joy
+      ; $ff - Altirra kernel
 
     lda Atari5200KernelByte
     beq rom2joy
