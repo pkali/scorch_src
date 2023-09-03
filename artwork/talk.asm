@@ -45,7 +45,7 @@
     dta d"HASTA LA VISTA, BABY!"^
     dta d"THIS IS YOUR BRAIN ON SCORCH."^
     dta d"TAKE THIS!"^
-    dta d"THIS SCREEN AIN'T BIG ENOUGH FOR THE BOTH OF US."^
+    dta d"THIS SCREEN AIN'T BIG ENOUGH FOR US."^
     dta d"DIE, ALIEN SWINE!"^
     dta d"AWRUK!!!"^
     dta d"I SHALL OIL MY TURRET WITH YOUR BLOOD."^
@@ -78,12 +78,12 @@
     dta d"OH MAN!"^
     dta d"DOOUGH!"^
     dta d"NEW DAY, NEW BOMB."^
-    dta d"THIS IS THE END, MY ONLY FRIEND."^
+    dta d"THIS IS END."^
     dta d"VERY FUNNY."^
     dta d"THE FAT LADY SANG."^
-    dta d"WHY DOES EVERYTHING HAPPEN TO ME?"^
+    dta d"WHY DOES HAPPEN TO ME?"^
     dta d"I'M GOING DOWN."^
-    dta d"I'VE GOT A BAD FEELING ABOUT THIS."^
+    dta d"I'VE GOT A BAD FEELING."^
     dta d"CRAPOLA."^
     dta d"POW!"^
     dta d"BIF!"^

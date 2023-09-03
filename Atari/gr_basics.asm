@@ -162,6 +162,36 @@ ClearPlot
 .endp
 
 ; -----------------------------------------
+.proc ExPlot  ;ExPlot (EplotX, EplotY)
+; EOR plot:
+; Inverts color of a pixel
+; Note: No coordinate control!!!
+;       With off-screen coordinates, it can damage main program.
+; -----------------------------------------
+    ; let's calculate coordinates from xdraw and ydraw
+    ;xbyte = xbyte/8
+    lda EplotX+1
+    lsr
+    lda EplotX
+    ror ;just one bit over 256. Max screenwidth = 512!!!
+    lsr
+    lsr
+    sta EplotByte
+    ;---
+    ldx EplotY
+    ldy linetableL,x
+    lda linetableH,x
+    sta EplotByte+1
+
+    ldx EplotX   ; optimization (256 bytes long bittable)
+
+    lda (EplotByte),y
+    eor bittable1_long,x
+    sta (EplotByte),y
+    rts
+.endp
+
+; -----------------------------------------
 .proc point_plot
 ; -----------------------------------------
     ; checks state of the pixel (coordinates in xdraw and ydraw)

@@ -26,7 +26,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.37" ; number of this build (4 bytes)
+    dta d"1.38" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -37,6 +37,17 @@
 ;---------------------------------------------------
     icl 'definitions.asm'
 ;---------------------------------------------------
+AdditionalZPvariables = $20
+    .zpvar EplotX       .word = AdditionalZPvariables
+    .zpvar EplotByte    .word
+    .zpvar EplotY       .byte
+    .zpvar Mpoint1X     .word   ; meteor first point X position
+    .zpvar Mpoint1Y     .byte   ; meteor first point Y position
+    .zpvar Mpoint2X     .word   ; meteor last point X position
+    .zpvar Mpoint2Y     .byte   ; meteor last point Y position
+    .zpvar Mcounter     .byte   ; meteor length counter ( $ff - no meteor on sky )
+    .zpvar MeteorsFlag  .byte   ; $ff - block meteors
+    
 
 FirstZpageVariable = $51
     .zpvar DliColorBack     .byte = FirstZpageVariable
@@ -374,7 +385,9 @@ NoRMT_PALchange
 
     lda #$ff                    ; initial value
     sta sfx_effect
-
+    sta Mcounter
+    sta MeteorsFlag
+    
     RMTSong 0
 
     .IF TARGET = 5200

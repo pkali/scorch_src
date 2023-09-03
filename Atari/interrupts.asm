@@ -142,6 +142,54 @@ lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
     ; ------- RMT -------
 SkipRMTVBL
+    ; ------ meteors ------ start
+    bit Mcounter
+    bpl MeteorOnSky
+    bit MeteorsFlag
+    bmi SkipMeteors
+    ; randomize meteor
+    lda random
+    and #%11111111
+    bne SkipMeteors
+    lda random
+    sta Mpoint1X
+    sta Mpoint2X
+    lda #0
+    sta Mpoint1X+1
+    sta Mpoint2X+1
+    lda random
+    and #$1f
+    sta Mpoint1Y
+    sta Mpoint2Y
+    mva #10 Mcounter
+MeteorOnSky
+    lda Mpoint1Y
+    cmp #64
+    beq NoFirstPlot
+    sta EplotY
+    inc Mpoint1Y
+    mwa Mpoint1X EplotX
+    inw Mpoint1X
+    jsr Explot
+NoFirstPlot
+    lda Mcounter
+    beq @+
+    dec Mcounter
+    bpl SkipSecondPlot
+@   lda Mpoint2Y
+    cmp #64
+    bne GoSecondPlot
+    mva #$ff Mcounter
+    bmi SkipMeteors
+GoSecondPlot
+    sta EplotY
+    inc Mpoint2Y
+    mwa Mpoint2X EplotX
+    inw Mpoint2X
+    jsr Explot
+SkipSecondPlot
+SkipMeteors
+    ; ------ meteors ------ end
     bit ScrollFlag
     bpl EndOfCreditsVBI
 CreditsVBI

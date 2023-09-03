@@ -42,6 +42,7 @@ MainGameLoop
     jsr RoundInit
 
     jsr MainRoundLoop
+    mva #$ff MeteorsFlag
     bit escFlag
     jvs GoGameOver
     bmi START
@@ -360,6 +361,8 @@ CheckNextTankAD
     jsr PutTankNameOnScreen
 ;    jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
 
+    mva #0 MeteorsFlag
+    
     lda SkillTable,x
     beq ManualShooting
 
@@ -392,6 +395,7 @@ ManualShooting
     spl:rts        ; keys Esc or O
 
 AfterManualShooting
+    mva #$ff MeteorsFlag
     mva #$00 plot4x4color
     jsr DisplayTankNameAbove
     ; defensive weapons without flight handling
