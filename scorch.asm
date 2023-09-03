@@ -42,10 +42,10 @@ AdditionalZPvariables = $20
     .zpvar EplotByte    .word
     .zpvar EplotY       .byte
     .zpvar Mpoint1X     .word   ; meteor first point X position
-    .zpvar Mpoint1Y     .byte   ; meteor first point Y position
     .zpvar Mpoint2X     .word   ; meteor last point X position
-    .zpvar Mpoint2Y     .byte   ; meteor last point Y position
+    .zpvar Mpoint1Y     .byte   ; meteor first point Y position
     .zpvar Mcounter     .byte   ; meteor length counter ( $ff - no meteor on sky )
+    .zpvar Mpoint2Y     .byte   ; meteor last point Y position
     .zpvar MeteorsFlag  .byte   ; $ff - block meteors
     
 

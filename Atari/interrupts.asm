@@ -143,6 +143,7 @@ lab2
     ; ------- RMT -------
 SkipRMTVBL
     ; ------ meteors ------ start
+    ldx #0
     bit Mcounter
     bpl MeteorOnSky
     bit MeteorsFlag
@@ -163,30 +164,20 @@ SkipRMTVBL
     sta Mpoint2Y
     mva #10 Mcounter
 MeteorOnSky
-    lda Mpoint1Y
-    cmp #64
-    beq NoFirstPlot
-    sta EplotY
-    inc Mpoint1Y
-    mwa Mpoint1X EplotX
-    inw Mpoint1X
-    jsr Explot
+    jsr GoMplot
 NoFirstPlot
+    ldx #2  ; second point coordinates
     lda Mcounter
     beq @+
     dec Mcounter
     bpl SkipSecondPlot
-@   lda Mpoint2Y
+@   lda Mpoint1Y,x
     cmp #64
     bne GoSecondPlot
     mva #$ff Mcounter
     bmi SkipMeteors
 GoSecondPlot
-    sta EplotY
-    inc Mpoint2Y
-    mwa Mpoint2X EplotX
-    inw Mpoint2X
-    jsr Explot
+    jsr GoMplot2
 SkipSecondPlot
 SkipMeteors
     ; ------ meteors ------ end
@@ -293,6 +284,18 @@ exit
         pla
         rti
     .ENDIF
+GoMplot
+    lda Mpoint1Y,x
+    cmp #64
+    beq @+
+GoMplot2
+    sta EplotY
+    inc Mpoint1Y,x
+    mwa Mpoint1X,x EplotX
+    inw Mpoint1X,x
+    jmp Explot
+@   rts
+
 .endp
     .IF TARGET = 5200
 .proc kb_continue
