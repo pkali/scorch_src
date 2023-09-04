@@ -400,8 +400,10 @@ ManualShooting
     spl:rts        ; keys Esc or O
 
 AfterManualShooting
-    mva #$ff MeteorsFlag
-    mva #$00 plot4x4color
+    ldy #$00
+    sty plot4x4color
+    dex
+    sty MeteorsFlag ; $ff
     jsr DisplayTankNameAbove
     ; defensive weapons without flight handling
     ldx TankNr
@@ -444,7 +446,12 @@ ShootNow
     cmp #ind_Punch   ; Punch
     beq WeponNoFlight   ; but with explosion 
     
+    bit MeteorsRound
+    bmi @+
+    mva #0 MeteorsFlag
+@    
     jsr Shoot   ; bullet flight
+    mva #$ff MeteorsFlag
 
     bit escFlag
     spl:rts        ; keys Esc or O
