@@ -35,9 +35,10 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $54 ; $57
+FirstZpageVariable = $53 ; $57
     .zpvar DliColorBack        .byte = FirstZpageVariable
-    .zpvar MeteorsFlag      .byte
+    .zpvar MeteorsFlag  .byte   ; set 7th bit - block meteors
+    .zpvar MeteorsRound .byte   ; set 7th bit - block meteors in round
     .zpvar GradientNr        .byte
     .zpvar GradientColors    .word
     .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)

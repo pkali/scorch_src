@@ -46,7 +46,8 @@ AdditionalZPvariables = $20
     .zpvar Mpoint1Y     .byte   ; meteor first point Y position
     .zpvar Mcounter     .byte   ; meteor length counter ( $ff - no meteor on sky )
     .zpvar Mpoint2Y     .byte   ; meteor last point Y position
-    .zpvar MeteorsFlag  .byte   ; $ff - block meteors
+    .zpvar MeteorsFlag  .byte   ; set 7th bit - block meteors
+    .zpvar MeteorsRound .byte   ; set 7th bit - block meteors in round
     
 
 FirstZpageVariable = $51

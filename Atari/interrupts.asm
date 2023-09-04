@@ -143,6 +143,7 @@ lab2
     ; ------- RMT -------
 SkipRMTVBL
     ; ------ meteors ------ start
+  .IF TARGET = 5200 .OR CART_VERSION = 1
     ldx #0
     bit Mcounter
     bpl MeteorOnSky
@@ -180,6 +181,7 @@ GoSecondPlot
     jsr GoMplot2
 SkipSecondPlot
 SkipMeteors
+  .ENDIF
     ; ------ meteors ------ end
     bit ScrollFlag
     bpl EndOfCreditsVBI

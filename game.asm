@@ -258,6 +258,9 @@ noRandomMountains
     jsr drawtanks     ;finally draw tanks
 
     mva #$00 TankSequencePointer
+    
+    lda random
+    sta MeteorsRound    ; Turns meteors on or off during the next round.
 
 ;---------round screen is ready---------
     mva #TextForegroundColor COLOR1    ; status line "on"
@@ -360,9 +363,11 @@ CheckNextTankAD
     jsr RandomizeForce.LimitForce
     jsr PutTankNameOnScreen
 ;    jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
-
+   
+    bit MeteorsRound
+    bmi @+
     mva #0 MeteorsFlag
-    
+@    
     lda SkillTable,x
     beq ManualShooting
 
