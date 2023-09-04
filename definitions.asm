@@ -1,32 +1,31 @@
 ;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 screenheight = 200
-screenBytes = 40
-screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
+screenBytes  = 40
+screenwidth  = screenBytes*8  ; Max screenwidth = 512!!!
 
 TankWidth    =    8
 ;----------------------------------------------
 ; Player/missile memory
-PMGraph =  $1800  ; real PM start = PMGraph + $0300
-; Generated tables
-display = $2010 ;screen takes $1f68 because it has screenHeight+1 lines because of out of screen tracer(?)
+PMGraph = $1800  ; real PM start = PMGraph + $0300
+display = $2010  ; screen takes $1f68 because it has screenHeight+1 lines because of out of screen tracer(?)
 ;----------------------------------------------
 
-margin = 40 ;mountain drawing Y variable margin
-MaxPlayers = 6
-maxOptions = 9  ;number of all options
-PMOffsetX = $2C ; P/M to graphics offset
-PMOffsetY = $2A ; P/M to graphics offset
-napalmRadius = 10
-StandardBarrel = 6 ; standard tank barrel length
-LongBarrel = 20    ; long barrel length
+margin         = 40  ; mountain drawing Y variable margin
+MaxPlayers     = 6
+maxOptions     = 9   ; number of all options
+PMOffsetX      = $2C ; P/M to graphics offset
+PMOffsetY      = $2A ; P/M to graphics offset
+napalmRadius   = 10
+StandardBarrel = 6   ; standard tank barrel length
+LongBarrel     = 20  ; long barrel length
 
 TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
 TextForegroundColor = $0A
 space = 0  ; space in screencodes
 
-KeyRepeatSpeed = 8 ; (max 127 !!!)
-FirstKeySpeed = 8   ; additional delay for first keypress
+KeyRepeatSpeed = 8  ; (max 127 !!!)
+FirstKeySpeed  = 8  ; additional delay for first keypress
 
 ;character codes for symbols (tank, parachute, etc. )
 ; characters from tanks.fnt (graphics screen)
@@ -36,11 +35,11 @@ char_flame            = $14
 char_clear_flame      = $1c
 char_digger           = $04
 char_sandhog          = $0c
-char_sandhog_offset = char_sandhog          - char_digger
+char_sandhog_offset = char_sandhog - char_digger
 char_tank1            = $20
 char_tank2            = $24
 char_tank3            = $2c
-char_tank4            = $28    ; robotank shape
+char_tank4            = $28 ; robotank shape
 ; characters from weapons.fnt (text mode - menus etc.)
 char_TAB              = $7f
 char_DEL              = $7e
@@ -153,8 +152,8 @@ ind_Auto_Defense    = 46
 ind_Spy_Hard        = 47
 last_defensive      = ind_Spy_Hard
 last_real_defensive = ind_Bouncy_Castle
-number_of_offensives = last_offensive      - first_offensive    +1
-number_of_defensives = (last_defensive      - first_defensive    +1)
+number_of_offensives = last_offensive - first_offensive + 1
+number_of_defensives = last_defensive - first_defensive + 1
 number_of_weapons = number_of_offensives + number_of_defensives
 ;--------------------------------
 ; names of RMT instruments (sfx)
@@ -190,9 +189,9 @@ sfx_liquid_dirt = $1b ;2
 sfx_battery     = $1c ;3
 sfx_white_flag  = $1d ;4
 sfx_long_barrel = $1e
-sfx_tank_move    = $1f
+sfx_tank_move   = $1f
 sfx_auto_defense= $2b
-sfx_lazy_boys    = $2c
+sfx_lazy_boys   = $2c
 ;--------------------------------
 ; RMT songs (lines)
 ;--------------------------------
@@ -201,5 +200,5 @@ song_main_menu  = $02
 song_ingame     = $06
 song_round_over = $0b
 song_ending_looped = $0e
-song_supermarket = $1b
-song_inventory = $1d
+song_supermarket= $1b
+song_inventory  = $1d

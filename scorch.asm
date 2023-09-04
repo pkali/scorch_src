@@ -293,9 +293,9 @@ rom2joy
     splash_year = splash_text + $1e
     splash_copyright = splash_text + $14
     ldy #19    ; 20 characters
-@    lda NewSplashText,y
-    sta splash_copyright,y
-    dey
+@     lda NewSplashText,y
+      sta splash_copyright,y
+      dey
     bpl @-
 
     ; splash screen delay. maybe add fire to speed up?
@@ -308,19 +308,19 @@ no5200splash
     ; one time zero variables in RAM (non zero page)
     lda #0
     ldy #OneTimeZeroVariablesCount-1
-@      sta OneTimeZeroVariables,y
+@     sta OneTimeZeroVariables,y
       dey
     bpl @-
 
     ; one time zero variables in RAM (zero page)
     ldy #FirstZpageVariable
-@    sta $0000,y
-    iny
+@     sta $0000,y
+      iny
     bne @-
 
     ; initialize variables in RAM (non zero page)
     ldy #initialvaluesCount-1
-@      lda initialvaluesStart,y
+@     lda initialvaluesStart,y
       sta variablesToInitialize,y
       dey
     bpl @-

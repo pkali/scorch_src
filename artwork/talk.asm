@@ -6,7 +6,7 @@
     dta d"YOU'RE TOAST!"^
     dta d"BANZAI!"^
     dta d"FROM HELL'S HEART I STAB AT THEE..."^
-    dta d"I DIDN'T DO IT. I'M NOT HERE."^
+    dta d"DO YOU FEEL LUCKY, TANK?"^
     dta d"TAKE A HIKE!"^
     dta d"YOU'RE DEAD MEAT."^
     dta d"MAKE MY DAY."^
@@ -78,7 +78,7 @@
     dta d"OH MAN!"^
     dta d"DOOUGH!"^
     dta d"NEW DAY, NEW BOMB."^
-    dta d"THIS IS END."^
+    dta d"THIS IS THE END."^
     dta d"VERY FUNNY."^
     dta d"THE FAT LADY SANG."^
     dta d"WHY DOES HAPPEN TO ME?"^
@@ -93,7 +93,7 @@
     dta d"I WALK THROUGH THE VALLEY OF THE SHADOW..."^
     dta d"WHAT WAS THAT NOISE?"^
     dta d"MAMA SAID THERE'D BE DAYS LIKE THIS."^
-    dta d"ITS JUST ONE OF THOSE DAYS..."^
+    dta d"IT'S JUST ONE OF THOSE DAYS..."^
     dta d"I SEE A BRIGHT LIGHT..."^
     dta d"MOMMY? IS THAT YOU?"^
     dta d"I LET YOU HIT ME!"^
@@ -102,7 +102,7 @@
     dta d"-<SOB>-"^
     dta d"WAS THAT AS CLOSE AS I THINK IT WAS?"^
     dta d"JOIN THE ARMY, SEE THE WORLD THEY SAID."^
-    dta d"IT WASN'T JUST A JOB IT WAS AN ADVENTURE!"^
+    dta d"IT WASN'T JUST A JOB, IT WAS AN ADVENTURE!"^
     dta d"I DIDN'T LIKE VIOLENCE ANYWAY!"^
     dta d"I THOUGHT YOU LIKED ME?"^
     dta d"CTO XYEB"^
