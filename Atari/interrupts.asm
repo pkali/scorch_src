@@ -286,6 +286,8 @@ exit
         pla
         rti
     .ENDIF
+    ; ------ meteors plot/flight subroutine ------ start
+  .IF TARGET = 5200 .OR CART_VERSION = 1
 GoMplot
     lda Mpoint1Y,x
     cmp #64
@@ -297,7 +299,8 @@ GoMplot2
     inw Mpoint1X,x
     jmp Explot
 @   rts
-
+  .ENDIF
+    ; ------ meteors plot/flight subroutine ------ end
 .endp
     .IF TARGET = 5200
 .proc kb_continue
