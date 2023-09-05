@@ -402,7 +402,7 @@ ManualShooting
 AfterManualShooting
     ldy #$00
     sty plot4x4color
-    dex
+    dey
     sty MeteorsFlag ; $ff
     jsr DisplayTankNameAbove
     ; defensive weapons without flight handling
