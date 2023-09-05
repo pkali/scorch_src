@@ -156,7 +156,10 @@ EndOfNick
     ; level of the computer opponent goes to
     ; the table of levels (difficulties)
     ldx tanknr
-    lda #6    ; Spoiler
+    txa
+    clc
+    adc #2
+;    lda #6    ; Spoiler
     sta DifficultyLevel
     sta skilltable,x
     beq NotRobot
