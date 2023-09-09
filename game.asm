@@ -260,6 +260,7 @@ noRandomMountains
     mva #$00 TankSequencePointer
     
     lda random
+    ;lda #$00    ; allways
     sta MeteorsRound    ; Turns meteors on or off during the next round.
 
 ;---------round screen is ready---------
