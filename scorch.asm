@@ -15,6 +15,8 @@
 ;---------------------------------------------------
 .def CART_VERSION = 0
 ; if 1 - dual splash screen
+.def METEORS = 1
+; if 1 - meteors on game
 .def XCORRECTION_FOR_PM = 0
 ; if 1 - active x position of tanks correction fo PMG
 .def FASTER_GRAF_PROCS = 1

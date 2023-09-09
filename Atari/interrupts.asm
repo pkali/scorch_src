@@ -143,7 +143,7 @@ lab2
     ; ------- RMT -------
 SkipRMTVBL
     ; ------ meteors ------ start
-  .IF TARGET = 5200 .OR CART_VERSION = 1
+  .IF METEORS = 1
     ldx #0
     bit Mcounter
     bpl MeteorOnSky
@@ -287,7 +287,7 @@ exit
         rti
     .ENDIF
     ; ------ meteors plot/flight subroutine ------ start
-  .IF TARGET = 5200 .OR CART_VERSION = 1
+  .IF METEORS = 1
 GoMplot
     lda Mpoint1Y,x
     cmp #64

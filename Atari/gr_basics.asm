@@ -161,12 +161,14 @@ ClearPlot
     rts
 .endp
 
+.IF METEORS = 1
 ; -----------------------------------------
 .proc ExPlot  ;ExPlot (EplotX, EplotY)
 ; EOR plot:
 ; Inverts color of a pixel
 ; Note: No coordinate control!!!
 ;       With off-screen coordinates, it can damage main program.
+; only for ingame meteors
 ; -----------------------------------------
     ; let's calculate coordinates from xdraw and ydraw
     ;xbyte = xbyte/8
@@ -190,7 +192,7 @@ ClearPlot
     sta (EplotByte),y
     rts
 .endp
-
+.ENDIF
 ; -----------------------------------------
 .proc point_plot
 ; -----------------------------------------
