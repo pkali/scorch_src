@@ -1114,12 +1114,10 @@ LastNameChar
 CheckKeys
     jsr HighlightLevel ; setting choosen level of the opponent (Moron, etc)
     ldx TankNr
-    lda JoyNumber,x
-    tay
+    ldy JoyNumber,x
     lda digits+1,y
     sta NameScreen2+11    ; display joystick port number
-    lda TankShape,x
-    tay
+    ldy TankShape,x
     lda digits+1,y
     sta NameScreen2+15    ; display tank shape number
     jsr CursorDisplay
@@ -1626,8 +1624,7 @@ NextChar
     mva #0 displayposition    ; overwrite first digit
     ; put AI symbol or joystick
     ldx TankNr
-    lda SkillTable,x
-    tay
+    ldy SkillTable,x
     bne ThisIsAI
     ldy JoyNumber,x
     iny     ; tricky

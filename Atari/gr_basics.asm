@@ -16,8 +16,7 @@ unPlotAfterX
     lda oldplotH,x
     sta oldplot+1
 
-    lda oldply,x
-    tay
+    ldy oldply,x
     lda oldora,x
     sta (oldplot),y
 
