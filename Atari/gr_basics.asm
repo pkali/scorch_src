@@ -41,7 +41,7 @@ MakeUnPlot
 ;---
     tay
     ldx WhichUnPlot
-    tya
+    ;tya
     sta oldply,x
 
     ldx ydraw
