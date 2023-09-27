@@ -6,6 +6,16 @@
     .zpvar TetryxColor       .byte
     .zpvar TetryxColorS      .byte
 
+; ------- constans --------
+; start addr of loader
+Loader_Start    =   $0700
+Bank_Set    = $0710 ; (one byte??)
+; cart banks numbers
+LoaderBank  = $01
+MenuPLBank  = $02
+MenuENBank  = $03
+ScorchBank  = $04
+TetryxBank  = $05
     org $2000
 
 WeaponFont
@@ -21,7 +31,8 @@ main
     sta TetryxColor
     sta TetryxColorS
     lda RANDOM
-    bmi TnotVisible
+    and #%11110000  ; 1:16
+    bne TnotVisible
     lda colors+2    ; visible
     sta TetryxColor
 TnotVisible
@@ -40,8 +51,26 @@ TnotVisible
     jsr FadeIn
     jsr WaitOneFrame
     
+WaitForKey
     jsr GetKey
+    cmp #@kbcode._space
+    bne @+
+    mva #ScorchBank Bank_Set
+    bne GoLoader
+@   cmp #@kbcode._E
+    bne @+
+    mva #MenuENBank Bank_Set
+    bne GoLoader
+@   cmp #@kbcode._P
+    bne @+
+    mva #MenuPLBank Bank_Set
+    bne GoLoader
+@   cmp #@kbcode._T
+    bne WaitForKey
+    mva #TetryxBank Bank_Set
+    bne GoLoader
 
+GoLoader
     jsr WaitOneFrame
     jsr FadeOut
     VMAIN XITVBV,7          ; jsr SetVBL (off user proc)
@@ -52,7 +81,7 @@ TnotVisible
     jsr WaitOneFrame
     
     jmp main
-    
+    ;jmp Loader_Start
 stop
     jmp stop
 
@@ -183,7 +212,7 @@ MenuTitle
 MenuOptions
     dta d"     E - English Manual         "
     dta d"     P - Polska instrukcja      "
-    dta d"     G - Start Scorch Game      "
+    dta d" SPACE - Start Scorch Game      "
     dta d"     T - Start Tetryx Game      "
 
 ;--------------------------------------------------
