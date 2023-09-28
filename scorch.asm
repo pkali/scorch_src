@@ -24,7 +24,7 @@
 ;        (direct writes to screen memory - atari only :) )
 ;---------------------------------------------------
 
-       ; OPT r+  ; saves 12 bytes, but does not work (yet): https://github.com/tebe6502/Mad-Assembler/issues/10 
+         OPT r+  ; saves 10 bytes, and probably work :) : https://github.com/tebe6502/Mad-Assembler/issues/10 
 
 ;---------------------------------------------------
 .macro build

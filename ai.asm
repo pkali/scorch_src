@@ -546,9 +546,10 @@ End rts
 ; returns angle and power of shoot tank X (TankNr)
 ; in the appropriate variables (Angle and Force)
 ;----------------------------------------------
-;    lda ActiveDefenceWeapon,x  ; sorry memory !!!
-;    cmp #ind_White_Flag     ; if a white flag, targeting makes no sense
-;    beq FindBestTarget2.End ; nearest RTS
+    lda ActiveDefenceWeapon,x 
+    cmp #ind_White_Flag     ; if a white flag, targeting makes no sense
+    beq FindBestTarget2.End ; nearest RTS
+;
     mva #$ff SecondTryFlag
 NoSecondTry
     lda ActiveWeapon,x
