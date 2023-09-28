@@ -536,7 +536,7 @@ skipThisPlayer
     ; in temp2 we have x distance divided by 8
     ldy temp2+1
     lda tempor2
-    rts
+End rts
 .endp
 
 ;----------------------------------------------
@@ -546,6 +546,9 @@ skipThisPlayer
 ; returns angle and power of shoot tank X (TankNr)
 ; in the appropriate variables (Angle and Force)
 ;----------------------------------------------
+;    lda ActiveDefenceWeapon,x  ; sorry memory !!!
+;    cmp #ind_White_Flag     ; if a white flag, targeting makes no sense
+;    beq FindBestTarget2.End ; nearest RTS
     mva #$ff SecondTryFlag
 NoSecondTry
     lda ActiveWeapon,x
