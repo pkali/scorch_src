@@ -29,6 +29,7 @@
     mwa #display temp2
     mwa #DisplayCopyEnd+1 modify
     jsr CopyFromROM
+    jsr OptionsInversion    ; to prevent flashing of options
 
     mwa #OptionsDL dlptrs
 
