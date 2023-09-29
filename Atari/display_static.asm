@@ -94,9 +94,9 @@ PurchaseDescription
    dta $ff  ; right arrow symbol
    dta d"/"
    dta   d"Space"*
-   dta        d": Purchase "
+   dta        d": Purchase   "
    dta                   d"Return"*
-   dta                         d": Finish"
+   dta                         d": Next"
 .ELIF TARGET = 5200
    dta d"Right"*
    dta      d": Purchase    "
@@ -109,9 +109,9 @@ ActivateDescription
    dta $ff  ; right arrow symbol
    dta  d"/"
    dta   d"Space"*
-   dta        d": Activate "
+   dta        d": Activate   "
    dta                   d"Return"*
-   dta                         d": Finish"
+   dta                         d": Next"
 .ELIF TARGET = 5200
    dta d"Right"*
    dta      d": Activate    "
