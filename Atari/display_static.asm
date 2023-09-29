@@ -111,7 +111,7 @@ ActivateDescription
    dta   d"Space"*
    dta        d": Activate   "
    dta                   d"Return"*
-   dta                         d": Next"
+   dta                         d": Exit"
 .ELIF TARGET = 5200
    dta d"Right"*
    dta      d": Activate    "
