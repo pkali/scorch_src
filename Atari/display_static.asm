@@ -78,19 +78,25 @@ NameScreen5
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
-   dta d"Tab"*
-   dta d   ": Defensive/Offensive weapon "
+   dta d"  "
+   dta $fe  ; left arrow symbol
+   dta    d"/"
+   dta     d"Tab"*
+   dta d       ": Defensives/Offensives  "
 .ELIF TARGET = 5200
-   dta d"Left"*
-   dta d    ": Defensive/Offensive weapon"
+   dta d"  "
+   dta   d"Left"*
+   dta d      ":  Defensives/Offensives  "
 .ENDIF
 PurchaseDescription
-     ; 0123456789012345678901234567890123456789
+       ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
-   dta d"Space"*
-   dta      d": Purchase  "
-   dta                  d"Return"*
-   dta                        d": Finish "
+   dta $ff  ; right arrow symbol
+   dta d"/"
+   dta   d"Space"*
+   dta        d": Purchase "
+   dta                   d"Return"*
+   dta                         d": Finish"
 .ELIF TARGET = 5200
    dta d"Right"*
    dta      d": Purchase    "
@@ -98,12 +104,14 @@ PurchaseDescription
    dta                        d": Finish "
 .ENDIF
 ActivateDescription
-     ; 0123456789012345678901234567890123456789
+       ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
-   dta d"Space"*
-   dta      d": Activate  "
-   dta                  d"Return"*
-   dta                        d": Finish "
+   dta $ff  ; right arrow symbol
+   dta  d"/"
+   dta   d"Space"*
+   dta        d": Activate "
+   dta                   d"Return"*
+   dta                         d": Finish"
 .ELIF TARGET = 5200
    dta d"Right"*
    dta      d": Activate    "
