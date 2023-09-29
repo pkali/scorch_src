@@ -46,7 +46,9 @@ EndOfDLI_Gr
 Subtitle
     lda #0
     sta COLPF2
-    lda #4
+    lda random
+    and #%00000011
+    ora #%00010000
     sta COLPF1
     bne DLIinterruptGraph.EndOfDLI_Gr
 .endp

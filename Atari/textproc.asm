@@ -69,12 +69,6 @@
     mva #0 OptionsY
 
 OptionsMainLoop
-    lda RandomMountains
-    sta OptionsHere+288
-    lda WindChangeInRound
-    sta OptionsHere+128
-    lda FastSoilDown
-    sta OptionsHere+88
 
     jsr OptionsInversion
     jsr getkey
@@ -173,6 +167,15 @@ NoGradientLoop
 ; inversing selected option (cursor)
 ;--------
 .proc OptionsInversion
+
+    ; Additional option symbols
+    lda RandomMountains
+    sta OptionsHere+288
+    lda WindChangeInRound
+    sta OptionsHere+128
+    lda FastSoilDown
+    sta OptionsHere+88
+
 YPos = temp2
 XPos = temp2+1
 optionWidth = 6
