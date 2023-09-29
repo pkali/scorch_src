@@ -95,13 +95,13 @@ PurchaseDescription
    dta d"/"
    dta   d"Space"*
    dta        d": Purchase   "
-   dta                   d"Return"*
-   dta                         d": Next"
+   dta                     d"Return"*
+   dta                           d": Next"
 .ELIF TARGET = 5200
    dta d"Right"*
-   dta      d": Purchase    "
-   dta                    d"FIRE"*
-   dta                        d": Finish "
+   dta      d": Purchase      "
+   dta                      d"FIRE"*
+   dta                          d": Next "
 .ENDIF
 ActivateDescription
        ; 0123456789012345678901234567890123456789
@@ -114,9 +114,9 @@ ActivateDescription
    dta                         d": Exit"
 .ELIF TARGET = 5200
    dta d"Right"*
-   dta      d": Activate    "
-   dta                    d"FIRE"*
-   dta                        d": Finish "
+   dta      d": Activate      "
+   dta                      d"FIRE"*
+   dta                          d": Exit "
 .ENDIF
 ;---------------------------------------------------
 OptionsTitle
