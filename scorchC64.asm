@@ -186,8 +186,9 @@ FirstSTART
     DisplayCopyPurchaseStart = 0
     displayC64 = $2000    ;    graphics screen memory start
 
+StartAfterSplash
         SEI             ; disable IRQ
-         LDA #$36
+        LDA #$36
         STA $0001      ; Turn Off BASIC ROM
         LDA #<NMI    ;
         STA $0318       ; change NMI vector

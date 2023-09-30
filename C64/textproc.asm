@@ -31,6 +31,9 @@ NamesOfLevels
     dex
     bpl @-
 
+    lda  #$1f    ; '?' character
+    sta RandomMountains
+
     rts
 
 Autoplay_OptionsTable .by 4,4,2,2,4,1,3,2,4
@@ -278,6 +281,7 @@ nexdigit
 ; leading zeores are removed
 ; the range is (00..99 - one byte)
 
+    sta decimal
     ldy #1 ; there will be 2 digits
 NextDigit2
     ldx #8 ; 8-bit dividee so Rotate 8 times
