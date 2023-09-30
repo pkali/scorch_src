@@ -306,6 +306,7 @@ rom2joy
     bne @-
 no5200splash
     .ENDIF
+StartAfterSplash
     jsr MakeDarkScreen
     
     ; one time zero variables in RAM (non zero page)

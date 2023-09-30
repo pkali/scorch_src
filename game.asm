@@ -15,8 +15,12 @@ START
     jsr SetVariablesFromOptions
     jsr MakeDarkScreen
     bit escFlag
-    bmi START
-
+    bpl @+
+    lda CONSOL
+    and #%00000001 ; START KEY
+    bne START
+    jmp StartAfterSplash    ; reset all game option if Start key pressed (and Esc)
+@
     jsr EnterPlayerNames
     jsr MakeDarkScreen
     bit escFlag
