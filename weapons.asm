@@ -2628,11 +2628,11 @@ EndLazy
 .proc LazyAim
     ; aiming proc for Lazy ... weapons
     ; as proc for memory optimisation
-    ; Y - target tan nr
+    ; Y - target tank nr
     ; A - target direction
     sty TargetTankNr
     ; aiming
-    jsr TakeAim        ; direction still in A (0 - left, >0 - right)
+    jsr TakeAimExtra        ; direction still in A (0 - left, >0 - right)
     lda Force
     sta ForceTableL,x
     lda Force+1
