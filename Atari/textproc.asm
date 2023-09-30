@@ -77,19 +77,20 @@ OptionsMainLoop
 
     cmp #@kbcode._down  ; $f  ;cursor down
     bne OptionsNoDown
-    inc:lda OptionsY
-    cmp #maxoptions
-    bne OptionsMainLoop
-    mva #maxoptions-1 OptionsY
-    jmp OptionsMainLoop
+    ldx OptionsY
+    inx
+    cpx #maxoptions
+    beq OptionsMainLoop
+    stx OptionsY
+    bne OptionsMainLoop ; allways not 0
 
 OptionsNoDown
     cmp #@kbcode._up  ; $e ;cursor up
     bne OptionsNoUp
     dec OptionsY
     bpl OptionsMainLoop
-    mva #0 OptionsY
-    jmp OptionsMainLoop
+    inc OptionsY
+    beq OptionsMainLoop ; allways 0
 
 OptionsNoUp
     cmp #@kbcode._left  ; $6 ;cursor left
@@ -99,7 +100,7 @@ OptionsNoUp
     lda OptionsTable,X
     bpl OptionsMainLoop
     inc OptionsTable,X
-    jmp OptionsMainLoop
+    beq OptionsMainLoop ; allways 0
 
 OptionsNoLeft
     cmp #@kbcode._right  ; $7 ;cursor right
@@ -111,7 +112,7 @@ OptionsNoLeft
     cmp #5  ; number of columns in options
     bne OptionsMainLoop
     dec OptionsTable,X
-    jmp OptionsMainLoop
+    bne OptionsMainLoop ; allways not 0
 
 OptionsNoRight
     cmp #@kbcode._ret  ; $c ;Return key
