@@ -1,17 +1,19 @@
 ;    @com.wudsn.ide.lng.mainsourcefile=scorch.asm
-;Atari 8-bit Scorched Earth source code
+
+;Atari 8-bit Scorch source code
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
 ;Miami & Warsaw 2022, 2023
 
+;WARNING! requires mads compiled on 2023-09-13 or later
+;atari800  -5200 -cart ${outputFilePath} -cart-type 4
+;atari800  -run ${outputFilePath}
+
 ;---------------------------------------------------
 .IFNDEF TARGET
     .def TARGET = 800 ; 5200
 .ENDIF
-;WARNING! requires mads compiled on 2023-06-03 or later
-;atari800  -5200 -cart ${outputFilePath} -cart-type 4
-;atari800  -run ${outputFilePath}
 ;---------------------------------------------------
 .def CART_VERSION = 0
 ; if 1 - dual splash screen
@@ -24,7 +26,7 @@
 ;        (direct writes to screen memory - atari only :) )
 ;---------------------------------------------------
 
-         OPT r+  ; saves 10 bytes, and probably work :) : https://github.com/tebe6502/Mad-Assembler/issues/10 
+         OPT r+  ; saves 10 bytes, and probably works :) https://github.com/tebe6502/Mad-Assembler/issues/10
 
 ;---------------------------------------------------
 .macro build
@@ -40,30 +42,24 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 AdditionalZPvariables = $20
-    .zpvar EplotX       .word = AdditionalZPvariables
-    .zpvar EplotByte    .word
-    .zpvar EplotY       .byte
-    .zpvar Mpoint1X     .word   ; meteor first point X position
-    .zpvar Mpoint2X     .word   ; meteor last point X position
-    .zpvar Mpoint1Y     .byte   ; meteor first point Y position
-    .zpvar Mcounter     .byte   ; meteor length counter ( $ff - no meteor on sky )
-    .zpvar Mpoint2Y     .byte   ; meteor last point Y position
-    .zpvar MeteorsFlag  .byte   ; set 7th bit - block meteors
-    .zpvar MeteorsRound .byte   ; set 7th bit - block meteors in round
+    .zpvar EplotX           .word = AdditionalZPvariables
+    .zpvar EplotByte        .word
+    .zpvar EplotY           .byte
+    .zpvar Mpoint1X         .word  ; meteor first point X position
+    .zpvar Mpoint2X         .word  ; meteor last point X position
+    .zpvar Mpoint1Y         .byte  ; meteor first point Y position
+    .zpvar Mcounter         .byte  ; meteor length counter ( $ff - no meteor on sky )
+    .zpvar Mpoint2Y         .byte  ; meteor last point Y position
+    .zpvar MeteorsFlag      .byte  ; set 7th bit - block meteors
+    .zpvar MeteorsRound     .byte  ; set 7th bit - block meteors in round
     
 
 FirstZpageVariable = $51
     .zpvar DliColorBack     .byte = FirstZpageVariable
-    .zpvar FirstKeypressDelay .byte
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte  ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr       .byte
     .zpvar GradientColors   .word
-    .zpvar WindChangeInRound .byte ; wind change after each turn (not round only) flag
-                                   ; (0 - round only, >0 - each turn)
-    .zpvar RandomMountains  .byte  ; mountains type change after each turn flag
-                                   ; (0 - round only, >0 - each turn)
-    .zpvar FastSoilDown     .byte  ; 0 - standard, >0 - fast
     .zpvar JoystickNumber   .byte
     .zpvar LazyFlag         .byte  ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory
                                    ; 0 - nothing
@@ -77,7 +73,6 @@ FirstZpageVariable = $51
     .zpvar CharCode         .byte
     .zpvar fontind          .word
     .zpvar tanknr           .byte
-    .zpvar TankSequencePointer .byte
     .zpvar oldplot          .word
     .zpvar xc               .word
     .zpvar temp             .word  ; temporary word for the most embeded loops only
@@ -110,7 +105,6 @@ FirstZpageVariable = $51
     .zpvar dliCounter       .byte
     .zpvar pressTimer       .byte
     .zpvar NTSCcounter      .byte
-    .zpvar IsEndOfTheFallFlag .byte ;for small speedup ground falling
     .zpvar sfx_effect       .byte
     .zpvar RMT_blocked      .byte
     .zpvar ScrollFlag       .byte
@@ -141,7 +135,15 @@ FirstZpageVariable = $51
     .zpvar vx_              .word  ; 4 bytes
     .zpvar HitFlag          .byte  ; $ff when missile hit ground, $00 when no hit,
                                    ; $01-$06 tank index+1 when hit tank
-    .zpvar PositionOnTheList .byte ; pointer position on the list being displayed
+    .zpvar PositionOnTheList   .byte ; pointer position on the list being displayed
+    .zpvar FirstKeypressDelay  .byte
+    .zpvar IsEndOfTheFallFlag  .byte ;for small speedup ground falling
+    .zpvar TankSequencePointer .byte
+    .zpvar WindChangeInRound   .byte ; wind change after each turn (not round only) flag
+                                     ; (0 - round only, >0 - each turn)
+    .zpvar RandomMountains  .byte  ; mountains type change after each turn flag
+                                   ; (0 - round only, >0 - each turn)
+    .zpvar FastSoilDown     .byte  ; 0 - standard, >0 - fast
     .zpvar XHit             .word
     .zpvar delta            .word
     .zpvar HowMuchToFall    .byte
@@ -373,10 +375,10 @@ NoRMT_PALchange
 
 
     ; RMT INIT
-    lda #$f0                    ; initial value
-    sta RMTSFXVOLUME            ; sfx note volume * 16 (0,16,32,...,240)
+    lda #$f0                   ; initial value
+    sta RMTSFXVOLUME           ; sfx note volume * 16 (0,16,32,...,240)
 
-    lda #$ff                    ; initial value
+    lda #$ff                   ; initial value
     sta sfx_effect
     sta Mcounter
     sta MeteorsFlag
@@ -385,12 +387,12 @@ NoRMT_PALchange
 
     .IF TARGET = 5200
       mva #$0f STICK0
-      mva #$04 CONSOL5200       ; Speaker off, Pots enabled, port #1 selected
-      mwa #kb_continue VKEYCNT  ; Keyboard handler
+      mva #$04 CONSOL5200      ; Speaker off, Pots enabled, port #1 selected
+      mwa #kb_continue VKEYCNT ; Keyboard handler
     .ENDIF
-    VMAIN VBLinterrupt,7        ; jsr SetVBL
+    VMAIN VBLinterrupt,7       ; jsr SetVBL
 
-    mva #2 chactl  ; necessary for 5200
+    mva #2 chactl              ; necessary for 5200
 
 ;--------------------------------------------------
 ; Main program of the game
@@ -418,19 +420,19 @@ getKeyAfterWait
     .IF TARGET = 800
       lda SKSTAT
       cmp #$ff
-      beq checkJoyGetKey ; key not pressed, check Joy
-      cmp #$f7  ; SHIFT
+      beq checkJoyGetKey       ; key not pressed, check Joy
+      cmp #$f7                 ; SHIFT
       beq checkJoyGetKey
     .ELIF TARGET = 5200
       lda SkStatSimulator
       and #%11111110
-      bne checkJoyGetKey ; key not pressed, check Joy
+      bne checkJoyGetKey       ; key not pressed, check Joy
     .ENDIF
     lda kbcode
     cmp #@kbcode._none
     beq checkJoyGetKey
-    and #$3f ;CTRL and SHIFT ellimination
-    cmp #@kbcode._esc  ; 28  ; ESC
+    and #$3f                   ; CTRL and SHIFT ellimination
+    cmp #@kbcode._esc          ; 28  ; ESC
     bne getkeyend
       mvy #$80 escFlag
     bne getkeyend
@@ -451,33 +453,33 @@ notpressedJoyGetKey
     ;fire
     lda STRIG0
     beq JoyButton
-    .IF TARGET = 800    ; Second joy button , Select and Option key only on A800
+    .IF TARGET = 800           ; Second joy button , Select and Option key only on A800
       jsr Check2button
       bcc SecondButton
       bne checkSelectKey
 checkSelectKey
       lda CONSOL
-      and #%00000010    ; Select
+      and #%00000010           ; Select
       beq SelectPressed
       lda CONSOL
-      and #%00000100    ; Option
+      and #%00000100           ; Option
     .ENDIF
     bne getKeyAfterWait
 OptionPressed
-    lda #@kbcode._atari    ; Option key
+    lda #@kbcode._atari        ; Option key
     bne getkeyend
 SecondButton
 SelectPressed
-    lda #@kbcode._tab    ; Select key
+    lda #@kbcode._tab          ; Select key
     bne getkeyend
 JoyButton
-    lda #@kbcode._ret ;Return key
+    lda #@kbcode._ret          ; Return key
 getkeyend
     ldy #0
-    sty ATRACT    ; reset atract mode
+    sty ATRACT                 ; reset atract mode
     mvy #sfx_keyclick sfx_effect
     rts
-    .IF TARGET = 800    ; Second joy button only on A800
+    .IF TARGET = 800           ; Second joy button only on A800
 Check2button
     lda PADDL0
     and #$c0
@@ -493,16 +495,16 @@ Check2button
 ;--------------------------------------------------
     jsr WaitForKeyRelease
     lda kbcode
-    and #$3f ; CTRL and SHIFT ellimination
+    and #$3f                   ; CTRL and SHIFT ellimination
     rts
 .endp
 
 ;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
-    lda #128-KeyRepeatSpeed   ; tricky
+    lda #128-KeyRepeatSpeed    ; tricky
     sec
-    sbc FirstKeypressDelay    ; tricky 2 :)
+    sbc FirstKeypressDelay     ; tricky 2 :)
     sta pressTimer
 StillWait
     bit pressTimer
@@ -518,7 +520,7 @@ StillWait
       cmp #$ff
       bne StillWait
       lda CONSOL
-      and #%00000110    ; Select and Option only
+      and #%00000110           ; Select and Option only
       cmp #%00000110
       bne StillWait
     .ELIF TARGET = 5200
@@ -529,7 +531,7 @@ StillWait
 KeyReleased
       mva #FirstKeySpeed FirstKeypressDelay
       rts
-KeyAutoReleased ; autorepeat
+KeyAutoReleased                ; autorepeat
       mva #0 FirstKeypressDelay
       rts
 .endp
@@ -552,13 +554,12 @@ KeyAutoReleased ; autorepeat
     ;check demo mode
     ldx numberOfPlayers
     dex
-checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
+checkForHuman                  ; if all in skillTable other than 0 then switch to DEMO MODE
     lda skillTable,x
     beq peopleAreHere
     dex
     bpl checkForHuman
     ; no people, just wait a bit
-    ;pause 150
     ldy #75
     jmp PauseYFrames
     ; rts
@@ -569,15 +570,15 @@ peopleAreHere
 ;--------------------------------------------------
 MakeDarkScreen
 ;--------------------------------------------------
-    jsr PMoutofScreen    ; hide P/M
-    mva #0 dmactls        ; dark screen
+    jsr PMoutofScreen          ; hide P/M
+    mva #0 dmactls             ; dark screen
     ; and wait one frame :)
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
     lda CONSOL
-    and #%00000001 ; START KEY
-    seq:wait       ; or waitRTC ?
+    and #%00000001             ; START KEY
+    seq:wait                   ; or waitRTC ?
     rts
 .endp
 
@@ -604,28 +605,28 @@ MakeDarkScreen
 
     ; Select and Option
     lda CONSOL
-    and #%00000101    ; Start + Option
+    and #%00000101             ; Start + Option
     beq QuitToGameover
     lda SKSTAT
     cmp #$ff
     jeq nokeys
-    cmp #$f7  ; SHIFT
+    cmp #$f7                   ; SHIFT
     jeq nokeys
 
     lda kbcode
-    and #%10111111 ; SHIFT elimination
+    and #%10111111             ; SHIFT elimination
 
-    cmp #@kbcode._O  ; $08  ; O
+    cmp #@kbcode._O            ; $08  ; O
     bne CheckEsc
     jsr AreYouSure
     bit escFlag
     bpl nokeys
     ;---O pressed-quit game to game over screen---
 QuitToGameover
-    mva #$C0 escFlag   ; bits 7 and 6 set
+    mva #$C0 escFlag           ; bits 7 and 6 set
     rts
 CheckEsc
-    cmp #@kbcode._esc  ; 28  ; ESC
+    cmp #@kbcode._esc          ; 28  ; ESC
     bne nokeys
 DisplayAreYouSure
     jsr AreYouSure
@@ -640,7 +641,7 @@ nokeys
 ;--------------------------------------------------
     ldy flyDelay
 Y   lda CONSOL
-    and #%00000001 ; START KEY
+    and #%00000001             ; START KEY
     beq noShellDelay
 DelayLoop
       lda VCOUNT
@@ -657,14 +658,14 @@ noShellDelay
 ;  starting song line 0-255 to A reg
 ;--------------------------------------------------
     cmp #song_main_menu
-    beq noingame           ; noMusic blocks only ingame songs
+    beq noingame               ; noMusic blocks only ingame songs
     bit noMusic
     spl:lda #song_silencio
 noingame
     mvx #$ff RMT_blocked
-    ldx #<MODUL            ; low byte of RMT module to X reg
-    ldy #>MODUL            ; hi byte of RMT module to Y reg
-    jsr RASTERMUSICTRACKER ; Init
+    ldx #<MODUL                ; low byte of RMT module to X reg
+    ldy #>MODUL                ; hi byte of RMT module to Y reg
+    jsr RASTERMUSICTRACKER     ; Init
     mva #0 RMT_blocked
     rts
 .endp
@@ -708,7 +709,7 @@ noingame
     icl 'artwork/talk.asm'
 ;----------------------------------------------
 TankFont
-    ins 'artwork/tanksv4.fnt',+0,384    ; 48 characters only
+    ins 'artwork/tanksv4.fnt',+0,384   ; 48 characters only
 ;----------------------------------------------
 font4x4
     ins 'artwork/font4x4s.bmp',+62
@@ -721,7 +722,7 @@ font4x4
     lda TankNr
     asl
     asl
-    asl ; 8 chars per name
+    asl                        ; 8 chars per name
     tax
 @     lda CheatName,y
       sec
@@ -767,10 +768,10 @@ EndofBFGDLI
 .endp
 ; ------------------------
 .proc BFGblink
-    SetDLI DLIinterruptBFG    ; blinking on
+    SetDLI DLIinterruptBFG     ; blinking on
     ldy #50
     jsr PauseYFrames
-    SetDLI DLIinterruptGraph  ; blinking off
+    SetDLI DLIinterruptGraph   ; blinking off
     rts
 .endp
 ;--------------------------------------------------
@@ -781,16 +782,17 @@ EndofBFGDLI
     .ECHO "Bytes left: ",$b000-*
 
 
-    org $b000                                    ;address of RMT module
+    org $b000  ; address of RMT module
 MODUL
-                                                 ;RMT module is standard Atari binary file already
-      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6  ;include music RMT module
+               ; RMT module is standard Atari binary file already
+               ; include music RMT module:
+      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6
 MODULEND
 ;----------------------------------------------
     icl 'constants_top.asm'
 ;----------------------------------------------
 
-  .ECHO "Bytes on top left: ",$bfe8-* ;ROM_SETTINGS-*
+  .ECHO "Bytes on top left: ",$bfe8-* ; ROM_SETTINGS-*
   .IF TARGET = 800
      run FirstSTART
   .ELIF TARGET = 5200

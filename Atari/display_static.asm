@@ -30,7 +30,7 @@ OptionsSubTitle
  dta d"       Unknown Father of All Games"
 ;-----------------------------------------------
 MoreUp
- dta d"         "    ; common part of this text and OptionsSubTitle :)
+ dta d"         "   ; common part of this text and OptionsSubTitle :)
  dta 92,92,92
  dta d"  more  "
  dta 92,92,92
@@ -40,7 +40,7 @@ MoreDown
  dta 93,93,93
  dta d"  more  "
  dta 93,93,93
-; dta d"         "   ; common part of text and empty line :)
+; dta d"         "  ; common part of text and empty line :)
 EmptyLine
  dta d"                                        "
 ;-----------------------------------------------
