@@ -150,6 +150,13 @@ NotGravity
     sta RandomMountains
     rts
 NoMountains
+    cmp #$08
+    bne NoBlackHole
+    lda BlackHole
+    eor #$5d    ; cursor down character
+    sta BlackHole
+    rts
+NoBlackHole    
     ldy GradientNr
     iny
     cpy #$03
@@ -170,6 +177,8 @@ NoGradientLoop
 .proc OptionsInversion
 
     ; Additional option symbols
+    lda BlackHole
+    sta OptionsHere+328
     lda RandomMountains
     sta OptionsHere+288
     lda WindChangeInRound

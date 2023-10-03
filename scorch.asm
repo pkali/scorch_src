@@ -30,7 +30,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.40" ; number of this build (4 bytes)
+    dta d"1.41" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -54,7 +54,7 @@ AdditionalZPvariables = $20
     .zpvar MeteorsRound     .byte  ; set 7th bit - block meteors in round
     
 
-FirstZpageVariable = $51
+FirstZpageVariable = $50
     .zpvar DliColorBack     .byte = FirstZpageVariable
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte  ; old state 2nd button for 2 buttons joysticks
@@ -144,6 +144,7 @@ FirstZpageVariable = $51
     .zpvar RandomMountains  .byte  ; mountains type change after each turn flag
                                    ; (0 - round only, >0 - each turn)
     .zpvar FastSoilDown     .byte  ; 0 - standard, >0 - fast
+    .zpvar BlackHole        .byte  ; 0 - no, >0 - yes
     .zpvar XHit             .word
     .zpvar delta            .word
     .zpvar HowMuchToFall    .byte

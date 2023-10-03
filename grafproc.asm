@@ -1237,6 +1237,16 @@ NoParachuteWeapon
     beq ThereWasNoParachute
     jsr DrawTankParachute
 ThereWasNoParachute
+    lda BlackHole
+    beq NotBlackHole
+    lda Ytankstable,x
+    cmp #screenheight-1
+    bcc NotBlackHole
+    lda #0
+    sta eXistenZ,x
+    sta LastExistenZ,x
+    sta Energy,x
+NotBlackHole    
 ;    ldx TankNr
     jsr PutTankNr    ; redraw tank after erase parachute (exactly for redraw leaky schield :) )
     mva #sfx_silencer sfx_effect

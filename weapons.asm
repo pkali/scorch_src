@@ -2961,7 +2961,9 @@ GoDown
     adw temp #4     ;    center of the tank
     ldy #0
     lda (temp),y
-    sta OverTankDir    ; not elegant!!! Reuse as height of tank flight
+    tay
+    dey ; 1 pixel up!
+    sty OverTankDir    ; not elegant!!! Reuse as height of tank flight
 FloatDown
     lda ytankstable,x
     cmp OverTankDir

@@ -24,7 +24,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.33" ; number of this build (4 bytes)
+    dta d"1.41" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -35,7 +35,7 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $53 ; $57
+FirstZpageVariable = $52 ; $57
     .zpvar DliColorBack        .byte = FirstZpageVariable
     .zpvar MeteorsFlag  .byte   ; set 7th bit - block meteors
     .zpvar MeteorsRound .byte   ; set 7th bit - block meteors in round
@@ -44,6 +44,7 @@ FirstZpageVariable = $53 ; $57
     .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
     .zpvar RandomMountains  .byte   ; mountains type change after each turn flag - (0 - round only, >0 - each turn)
     .zpvar FastSoilDown     .byte   ; 0 - standard, >0 - fast
+    .zpvar BlackHole        .byte  ; 0 - no, >0 - yes
     .zpvar JoystickNumber    .byte
     .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
     .zpvar SpyHardFlag        .byte    ; >$7f - run SpyHard after inventory
