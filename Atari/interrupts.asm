@@ -7,6 +7,8 @@
     pha
     phy
     ldy dliCounter
+    cpy #$14
+    beq GoBlackHole
     lda dliColorsBack,y
     .IF TARGET = 800
         nop  ; necessary on 800 because DLIs take less time, jitter visible without it
@@ -14,7 +16,7 @@
         nop
     .ENDIF
     nop
-    nop
+    ;nop
     sta COLPF1
     lda GradientNr
     bne GoGradient
@@ -23,11 +25,19 @@ GoGradient
     iny
     lda (GradientColors),y        ; mountains colors array
     sta COLPF2
+NoBlacHoleLine
 EndOfDLI_Gr
     inc dliCounter
     ply
     pla
     rti
+GoBlackHole
+    lda BlackHole
+    beq NoBlacHoleLine
+    nop
+    lda #$00    ; color of last line
+    sta COLPF2
+    beq EndOfDLI_Gr
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptOptions

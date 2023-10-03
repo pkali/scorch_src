@@ -180,7 +180,8 @@ dl ; MAIN game display list
         .by $0f+$80 ; DLI
         :2 .by $0f                      ;2
         .by $0f+$80 ; DLI (black to end);1
-       :38 .byte $0f                    ;35 ..... = 200
+       :37 .byte $0f                    ;34 ..... = 199
+        .by $0f+$80 ; DLI - Black Hole
         .by $4f
         .wo EmptyLine   ; additional line of ground
         .byte $41
