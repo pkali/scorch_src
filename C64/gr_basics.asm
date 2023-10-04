@@ -223,7 +223,6 @@ MinCalculated
     lda #screenheight
     sec
     sbc ydraw
-    sta tempbyte01
     jsr plot.MakePlot
     ;  X - index in bittable (number of bit) and nothing more (for use) in C64 :)
 ;    jmp IntoDraw    ; jumps inside Draw routine

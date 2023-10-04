@@ -100,8 +100,6 @@ LASTeXistenZ ; eXistenZ before shoot
 
 ResultsTable ;the results in the gameeeeee
     .DS MaxPlayers
-TempResults
-    .DS MaxPlayers
 DirectHits
     .DS MaxPlayers
 EarnedMoneyH
@@ -272,7 +270,6 @@ char1  .DS [8]
 char2  .DS [8]
 ;color  .DS 1
 ybit  .DS 1
-tempbyte01 .DS 1
 ;delta  .DS 2
 yfloat  .DS 2
 deltaX  .DS 1
@@ -377,8 +374,6 @@ EndOfTheBarrelY
 previousAngle
     .DS MaxPlayers
 previousEnergyL
-    .DS MaxPlayers
-previousLeftRange
     .DS MaxPlayers
 previousEnergyH
     .DS MaxPlayers
