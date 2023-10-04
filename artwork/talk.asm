@@ -90,11 +90,11 @@
     dta d"BAM!"^
     dta d"ZONK!"^
     dta d"I SHOULD'VE LISTENED TO MY MOM."^
-    dta d"I WALK THROUGH THE VALLEY OF THE SHADOW."^
+    dta d"I WALK THROUGH THE VALLEY OF THE SHADOW..."^
     dta d"WHAT WAS THAT NOISE?"^
     dta d"MAMA SAID THERE'D BE DAYS LIKE THIS."^
-    dta d"IT'S JUST ONE OF THOSE DAYS."^
-    dta d"I SEE A BRIGHT LIGHT.."^
+    dta d"IT'S JUST ONE OF THOSE DAYS..."^
+    dta d"I SEE A BRIGHT LIGHT..."^
     dta d"MOMMY? IS THAT YOU?"^
     dta d"I LET YOU HIT ME!"^
     dta d"SUCKER SHOT!"^

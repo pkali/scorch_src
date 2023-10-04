@@ -640,18 +640,15 @@ No6thTankHide
     jmp DoNotDrawTankNr
 SkipHidingPM
 
-    lda TankShape,x
-    tax
-    ldy TankShapesTable,x
-    ldx TankNr
+    ldy TankShape,x
+    lda TankShapesTable,y
+    tay
     lda AngleTable,x
     cmp #91        ; left or right tank shape
     bcs LeftTank
     :2 iny    ; right tank
 LeftTank
     sty CharCode
-DrawTankNrX
-    ldx tanknr
     jsr SetupXYdraw
 
     jsr TypeChar.Fast
@@ -1946,7 +1943,7 @@ X   lda XtanksTableL,x
     bcc angleUnder90
 
     ;over 90
-    sec
+    ;sec - allways set
     sbc #90
     tax
     ; barrel start offset over 90deg
