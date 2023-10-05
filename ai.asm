@@ -130,7 +130,7 @@ firstShoot
     ; compare the x position with the middle of the screen
     lda LowResDistances,x
     cmp #(screenwidth/8) ; screenwidth/2 but LowResDistances are already /4
-@    bcc tankIsOnTheRight
+    bcc tankIsOnTheRight
 
     ; enemy tank is on the left
     ;randomize 95 125
@@ -202,13 +202,11 @@ AngleIsSet
     adc AngleTable,y
     sta NewAngle
 
-forceNow
     mwa #300 RandBoundaryLow
     mwa #700 RandBoundaryHigh
     ; ldx TankNr  ; looks like not necessary
     jsr RandomizeForce
 
-endo
     ; choose the best weapon
 
     jmp ChooseBestOffensive
@@ -846,15 +844,15 @@ TankHit
 
 ;----------------------------------------------
 .proc PurchaseAI ;
-; A - skill of the TankNr
+; A - skill of the TankNr, TankNr in X
 ; makes purchase for AI opponents
 ; results of this routine are not visible on the screen
 ;----------------------------------------------
     asl
-    tax
-    lda PurchaseAIRoutines-1,x  ; -1 and -2 because AI players are numbered from 1 not from 0 (Human)
+    tay
+    lda PurchaseAIRoutines-1,y  ; -1 and -2 because AI players are numbered from 1 not from 0 (Human)
     pha
-    lda PurchaseAIRoutines-2,x
+    lda PurchaseAIRoutines-2,y
     pha
  ;   rts    ; MoronPurchase has rts :)
     .endp
@@ -944,17 +942,10 @@ SorryNoPurchase
 ;----------------------------------------------
 .proc ShooterPurchase
     ; first try to buy defensives
-;    mva #2 tempXroller; number of offensive purchases to perform
-    ldx TankNr
-@
     randomize ind_Battery         ind_StrongParachute
     jsr TryToPurchaseOnePiece
-;    dec tempXroller
-;    bne @-
-
     ; and now offensives
     mva #4 tempXroller; number of offensive purchases to perform
-    ;ldx TankNr
 @
     randomize ind_Missile         ind_Heavy_Roller
     jsr TryToPurchaseOnePiece
@@ -966,13 +957,9 @@ SorryNoPurchase
 ;----------------------------------------------
 .proc PoolsharkPurchase
     ; first try to buy defensives
-;    mva #2 tempXroller; number of offensive purchases to perform
-    ldx TankNr
-@
     randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece
     dec tempXroller
-;    bpl @-
 
     ; and now offensives
     mva #6 tempXroller; number of purchases to perform
@@ -987,14 +974,11 @@ SorryNoPurchase
 .endp
 ;----------------------------------------------
 .proc TosserPurchase
-
     ; what is my money level
-    ldx TankNr
     lda MoneyH,x ; money / 256
     lsr        ; /2
     sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-;    mva #1 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece
@@ -1015,14 +999,11 @@ SorryNoPurchase
 .endp
 ;----------------------------------------------
 .proc CyborgPurchase
-
     ; what is my money level
-    ldx TankNr
     lda MoneyH,x ; money / 256
     lsr        ; /2
     sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-;    mva #1 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece2

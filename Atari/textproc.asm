@@ -253,7 +253,7 @@ invertme
     ldx TankNr
     lda SkillTable,x
     beq ManualPurchase
-    jsr PurchaseAI    ; remember to make ActivateAI :) !!!
+    jsr PurchaseAI    ; skill of the TankNr in A, TankNr in X
     jmp AfterManualPurchase
 ManualPurchase
     lda JoyNumber,x

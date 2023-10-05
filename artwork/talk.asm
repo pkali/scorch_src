@@ -78,7 +78,7 @@
     dta d"OH MAN!"^
     dta d"DOOUGH!"^
     dta d"NEW DAY, NEW BOMB."^
-    dta d"THIS IS THE END."^
+    dta d"THIS IS THE END, MY ONLY FRIEND."^
     dta d"VERY FUNNY."^
     dta d"THE FAT LADY SANG."^
     dta d"WHY DOES HAPPEN TO ME?"^

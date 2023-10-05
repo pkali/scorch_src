@@ -2939,7 +2939,6 @@ ItIsMe
     ldx TankNr
     mva #sfx_shield_off sfx_effect
     jsr ClearTankNr
-    mva #0 Erase
     ; x correction for P/M
     ; --
     .IF XCORRECTION_FOR_PM = 1
@@ -2949,17 +2948,17 @@ ItIsMe
     .ENDIF
     ; --
 GoDown
-
-    mwa #mountaintable temp
+    mvy #0 Erase    ; Y=0
+;    mwa #mountaintable temp
     clc
-    lda temp
+    lda #<mountaintable
     adc XtankstableL,x
     sta temp
-    lda temp+1
+    lda #>mountaintable
     adc XtankstableH,x
     sta temp+1
     adw temp #4     ;    center of the tank
-    ldy #0
+    ;ldy #0
     lda (temp),y
     tay
     dey ; 1 pixel up!
