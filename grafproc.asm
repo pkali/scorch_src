@@ -320,8 +320,9 @@ EndOfDraw
     asl FY
     mva FY FS
     asl FY
-    clc
-    lda FS
+    ; A = FS and C = 0
+    ;clc
+    ;lda FS
     adc #3
     sta FS
 
@@ -1231,12 +1232,12 @@ NoParachuteWeapon
     beq ThereWasNoParachute
     jsr DrawTankParachute
 ThereWasNoParachute
-    lda BlackHole
+    lda BlackHole       ; if Black Hole option is set ...
     beq NotBlackHole
-    lda Ytankstable,x
-    cmp #screenheight-1
+    lda Ytankstable,x   ; ... and tank has fallen to the bottom ...
+    cmp #screenheight-1 
     bcc NotBlackHole
-    lda #0
+    lda #0              ; ... then the tank disappears.
     sta eXistenZ,x
     sta LastExistenZ,x
     sta Energy,x
