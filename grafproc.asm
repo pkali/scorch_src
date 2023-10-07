@@ -32,20 +32,17 @@
     ; will be needed, because everything is calculated relatively
     mwa #$ffff LineLength
     mwa xdraw xtempDRAW
-    mwa ydraw ytempDRAW
+    
+    ; It's a little crazy, but we don't have to check later to see if Y is out of screen
+    mva ydraw ytempDRAW
+    mva ydraw+1 ytempDRAW+1
+    bmi DrawOutOfTheScreen
 
     ; if line goes our of the screen we are not drawing it, but...
-
     cpw xdraw #screenwidth
     bcs DrawOutOfTheScreen
     cpw xbyte #screenwidth
     bcs DrawOutOfTheScreen
-    ;cpw ydraw #screenheight
-    ;bcs DrawOutOfTheScreen
-    ;cpw ybyte #screenheight
-    ;bcc DrawOnTheScreen
-    lda ydraw+1
-    bmi DrawOutOfTheScreen
     lda ybyte+1
     bpl DrawOnTheScreen
 DrawOutOfTheScreen
@@ -1496,9 +1493,15 @@ OnePart
     beq ToBottom
 
 ToTop  ;it means substracting
-
-    sbw yfloat delta
+    ;sbw yfloat delta
+    sec
+    lda yfloat
+    sbc delta
+    sta yfloat
     lda yfloat+1
+    sbc delta+1
+    sta yfloat+1
+    ;lda yfloat+1
     cmp #margin
     bcs @+
       ; if smaller than 10
@@ -1507,8 +1510,15 @@ ToTop  ;it means substracting
       jmp @+
 
 ToBottom
-      adw yfloat delta
+      ;adw yfloat delta
+      clc
+      lda yfloat
+      adc delta
+      sta yfloat
       lda yfloat+1
+      adc delta+1
+      sta yfloat+1
+      ;lda yfloat+1
       cmp #screenheight-margin
       bcc @+
         ; if higher than screen
