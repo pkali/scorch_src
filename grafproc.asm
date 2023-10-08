@@ -46,7 +46,6 @@
     lda ybyte+1
     bpl DrawOnTheScreen
 DrawOutOfTheScreen
-    ;jsr DrawJumpPad
     rts
 DrawOnTheScreen
     ; constant parameters
@@ -118,9 +117,13 @@ SwapXY
     ; DY=DX
     ; DX=XK  - because DY is there so DY and DX are swapped
     ; YK ... not used
-    mwa DY XK
+    mvy DY XK
+    mvx DY+1 XK+1
+    ; now we have XK in Y and X for optimization
     mwa DX DY
-    mwa XK DX
+    ; DX=XK optimized (4 bytes saved!)
+    sty DX
+    stx DX+1
 
     ; and let's set bit 7 of DrawDirFactor
     dec DrawDirFactor

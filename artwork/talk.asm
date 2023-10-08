@@ -116,10 +116,10 @@
     dta d"I'LL BE BACK..."^
     dta d"I'VE GOT LAWYERS!"^
     dta d"CALL 1-900-SUE-TANK."^
-;    dta d"YOU BIG DUMMY!"^                 ;(sanford and son)
+    dta d"YOU BIG DUMMY!"^                 ;(sanford and son)
 LEND
 NumberOfOffensiveTexts=53
-NumberOfDeffensiveTexts=61
+NumberOfDeffensiveTexts=62
 .endp
 hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"^
 hoverFullEnd
