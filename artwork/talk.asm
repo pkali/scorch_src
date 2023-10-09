@@ -53,7 +53,7 @@
     dta d"I'M GONNA BREAK YOUR FACE!"^
     dta d"MAMA SAID KNOCK YOU OUT!"^
     dta d"I HOPE YOU ENJOY PAIN!"^
-;    dta d"HOW'D YOU LIKE ONE ACROSS YOUR LIPS?"^           ;(sanford and son)
+    dta d"HOW'D YOU LIKE ONE ACROSS YOUR LIPS?"^           ;(sanford and son)
 ;----------------------------
     dta d"PARTING IS SUCH SWEET SORROW... NOT!"^
     dta d"UGH!"^
@@ -118,7 +118,7 @@
     dta d"CALL 1-900-SUE-TANK."^
     dta d"YOU BIG DUMMY!"^                 ;(sanford and son)
 LEND
-NumberOfOffensiveTexts=53
+NumberOfOffensiveTexts=54
 NumberOfDeffensiveTexts=62
 .endp
 hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"^

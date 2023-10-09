@@ -1748,8 +1748,8 @@ DOTOldLowestValue
 .endp
 
 ;--------------------------------------------------------
-.proc DisplayTankNameAbove ;
-    lda tankNr
+.proc DisplayTankNameAbove ; TankNr in X
+    txa ; TankNr
     :3 asl  ; *8
     clc
     adc #<TanksNames

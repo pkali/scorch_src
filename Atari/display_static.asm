@@ -64,7 +64,7 @@ NameScreen5
    dta   d"INV"*
    dta      d" - Shape "
    dta               d"Return"*
-   dta                     d" - Proceed  "
+   dta                     d" - Proceed"    ; two spaces in nex text
 .ELIF TARGET = 5200
    dta d" "
    dta  d"(5)"*
@@ -73,12 +73,12 @@ NameScreen5
    dta                      d" - Diffic. "
    dta d"        "
    dta        d"FIRE"*
-   dta             d" - Proceed          "
+   dta             d" - Proceed        "    ; two spaces in nex text
 .ENDIF
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
-   dta d"  "
+   dta d"  "   ; common part of this and previous text
    dta $fe  ; left arrow symbol
    dta    d"/"
    dta     d"Tab"*

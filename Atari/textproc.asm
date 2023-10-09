@@ -230,13 +230,11 @@ _inverter
     ; clean inversion otherwise
     lda (temp),y
     and #$7f  ; clear the top bit
-    sta (temp),y
     bpl @+  ; JMP
 invertme
     lda (temp),y
     ora #$80  ; set the top bit
-    sta (temp),y
-@
+@   sta (temp),y
     ; next character in an option
     iny
     rts
@@ -333,7 +331,7 @@ GoToActivation
     sta COLOR1 ; set color of header text
     ldy #0
     sty COLBAKS    ; set color of background
-    lda tanknr
+    txa ; TankNr
     :3 asl  ; 8 chars per name
     tax
 NextChar03
@@ -482,7 +480,7 @@ ListChange
     lda WhichList
     eor #%10000000  ; flip WhichList
     sta WhichList
-    bne DeffensiveSelected
+    bmi DeffensiveSelected
 
     mwa #ListOfWeapons WeaponsListDL
     lda isInventory
@@ -687,15 +685,14 @@ WeHaveOffset
     sta xbyte ; multiplier (temporarily here, it will be erased anyway)
     lda #$00 ;
     sta xbyte+1 ; higher byte of the Result
-    ldx #$05 ; 2^5
+    ldy #$05 ; 2^5
 @     asl xbyte
       rol xbyte+1
-      dex
+      dey
     bne @-
-
+    ; Y = 0 now
     ; add to the address of the list
     adw xbyte #ListOfWeapons
-    ldy #0
 ClearList1
     cpw xbyte #ListOfWeapons1End
     beq ListCleared1
@@ -712,15 +709,14 @@ ListCleared1
     sta xbyte ; multiplier (temporarily here, it will be erased anyway)
     lda #$00 ;
     sta xbyte+1 ; higher byte of the Result
-    ldx #$05 ; 2^5
+    ldy #$05 ; 2^5
 @     asl xbyte
       rol xbyte+1
-      dex
+      dey
     bne @-
-
+    ; Y = 0 now
     ; add to the address of the list
     adw xbyte #ListOfDefensiveWeapons
-    ldy #0
 ClearList2
     cpw xbyte #ListOfDefensiveWeaponsEnd
     beq ListCleared2
@@ -785,15 +781,11 @@ Suprise    ; get a random weapon
     bcc GetRandomDefensive
 GetRandomOffensive
     randomize ind_Missile         last_offensive
-    ;cmp #ind_Buy_me          ; buy me do not buy buy me :)
-    ;beq GetRandomOffensive
     tay
     bne NoSuprise    ; Y always <> 0
 GetRandomDefensive
     randomize ind_Battery         last_defensive
     tay
-;    lda WeaponUnits,y    ; check if weapon exist
-;    beq GetRandomDefensive
 
 NoSuprise
     lda TanksWeaponsTableL,x
@@ -802,14 +794,13 @@ NoSuprise
     sta weaponPointer+1
 
     clc
-    lda (weaponPointer),y  ; and we have number of posessed bullets of the weapon
-    adc WeaponUnits,y
-    sta (weaponPointer),y ; and we added appropriate number of bullets
-    cmp #100 ; but there should be no more than 99 bullets
+    lda (weaponPointer),y   ; and we have number of posessed bullets of the weapon
+    adc WeaponUnits,y       ; and we added appropriate number of bullets
+    cmp #100                ; but there should be no more than 99 bullets
     bcc LessThan100
-      lda #99
-      sta (weaponPointer),y
+    lda #99
 LessThan100
+    sta (weaponPointer),y
 
     mva #0 PositionOnTheList  ; to move the pointer to the top when no more monies
     jmp Purchase.AfterPurchase
@@ -908,15 +899,13 @@ DefActivationEnd
     ldx tankNr
     lda ActiveDefenceWeapon,x
     beq ?noWeaponActive
-    ldy #0  ; min defensive weapon
+    ldy #number_of_defensives  ; maxDefensiveWeapon
 @
       cmp IndexesOfWeaponsL2,y
       beq ?weaponfound
-      iny
-      cpy #number_of_defensives  ; maxDefensiveWeapon
+      dey
     bne @-
-    ; not found apparently?
-    ; TODO: check border case (the last weapon)
+    ; Y = 0
 ?noWeaponActive
     ldy #0
 ?weaponFound
@@ -933,15 +922,13 @@ DefActivationEnd
     ldx tankNr
     lda ActiveWeapon,x
     beq ?noWeaponActive
-    ldy #0  ; min defensive weapon
+    ldy #number_of_offensives  ; maxOffensiveWeapon
 @
       cmp IndexesOfWeaponsL1,y
       beq ?weaponfound
-      iny
-      cpy #number_of_offensives  ; maxOffensiveWeapon
+      dey
     bne @-
-    ; not found apparently?
-    ; TODO: check border case (the last weapon)
+    ; Y = 0
 ?noWeaponActive
     ldy #0
 ?weaponFound
@@ -1095,14 +1082,14 @@ loop  sta (temp2),y
 
     jsr PMoutofScreen
     ; display tank number
-    ldx tanknr
+    ldx TankNr
     lda skillTable,x
     sta difficultyLevel
     lda digits+1,x
     sta NameScreen2+7
 
     ; copy existing name and place cursor at end
-    lda TankNr
+    txa ; TankNr
     :3 asl
     tax
 
