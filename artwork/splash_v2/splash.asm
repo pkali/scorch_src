@@ -30,8 +30,7 @@ byt2    .ds 1
 
 zc    .ds ZCOLORS
 
-    org $600
-ManualLangFlag .ds 1
+    org $1fff
 SplashTypeFlag .ds 1
 
 * ---    BASIC switch OFF
@@ -78,7 +77,9 @@ main
     rts ; KAZ splash :)
 new_splash
 .ENDIF
+/*
     mva #00 ManualLangFlag  ; no manual page
+*/
     jsr init_song
 
 * ---    init PMG
@@ -186,10 +187,10 @@ s0    lda #$03
     lda skctl        ; ANY KEY
     and #$04
     bne skp
-    lda kbcode
+/*     lda kbcode
     cmp #$25    ; "M" key
     bne stop
-    mva #01 ManualLangFlag  ; english manual page 
+    mva #01 ManualLangFlag  ; english manual page  */
 stop    mva #$00 pmcntl        ;PMG disabled
     tax
     sta:rne hposp0,x+
