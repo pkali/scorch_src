@@ -369,9 +369,10 @@ CheckNextTankAD
     jsr PutTankNameOnScreen
 ;    jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
    
-    bit MeteorsRound
+    lda MeteorsRound
     bmi @+
-    mva #0 MeteorsFlag
+    ; A = 0
+    sta MeteorsFlag
 @    
     lda SkillTable,x
     beq ManualShooting
@@ -380,8 +381,8 @@ RoboTanks
     ; robotanks shoot here
     ; TankNr still in X
     jsr ArtificialIntelligence
-    ;pause 30
-    ldx TankNr
+    ; after calliing AI we allways have TankNr in X
+    ;ldx TankNr
     jsr DisplayStatus    ; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
     lda kbcode
@@ -451,9 +452,10 @@ ShootNow
     cmp #ind_Punch   ; Punch
     beq WeponNoFlight   ; but with explosion 
     
-    bit MeteorsRound
+    lda MeteorsRound
     bmi @+
-    mva #0 MeteorsFlag
+    ; A = 0
+    sta MeteorsFlag
 @    
     jsr Shoot   ; bullet flight
     mva #$ff MeteorsFlag
@@ -681,13 +683,11 @@ NotShooter
     scc
     inc loseH,x
     ; Energy now, not less than 0
+    sec
     lda Energy,x
-    cmp EnergyDecrease
-    bcc ldahashzero
-    ;sec
     sbc EnergyDecrease
-    bpl NotNegativeEnergy
-ldahashzero
+    bcs NotNegativeEnergy
+    ; if less than 0 then 0
     lda #0
 NotNegativeEnergy
     sta Energy,x
@@ -712,18 +712,16 @@ NotNegativeEnergy
     sty EnergyDecrease
     ldy #0    ; if Shield survive then no decrease tank anergy
     ; Energy cannot be less than 0
+    sec
     lda ShieldEnergy,x
-    cmp EnergyDecrease
-    bcc UseAllShieldEnergy
-    ;sec
     sbc EnergyDecrease
-    bpl NotNegativeShieldEnergy    ; jump allways
-UseAllShieldEnergy
+    bcs NotNegativeShieldEnergy
     ; now calculate rest of energy for future tank energy decrease
     sec
     lda EnergyDecrease
     sbc ShieldEnergy,x
     tay
+    ; ShieldEnargy less than 0 then .. 0
     lda #0
 NotNegativeShieldEnergy
     sta ShieldEnergy,x
@@ -764,8 +762,7 @@ NotNegativeShieldEnergy
     :4 aslw Wind
     ; decide the direction
     lda random
-    and #$01
-    beq @+
+    bmi @+
       sec  ; Wind = -Wind
       .rept 4
         lda #$00
