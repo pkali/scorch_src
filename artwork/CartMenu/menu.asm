@@ -11,13 +11,15 @@
 ; ------- constans --------
 ; start addr of loader
 Loader_Start    =   $0700
-Bank_Set    = $0710 ; (one byte??)
+Clear_Set    = $07fc
+Bank_Set    = $07Fd 
+Addr_Set    = $07fe
 ; cart banks numbers
-LoaderBank  = $01
-MenuPLBank  = $02
-MenuENBank  = $03
-ScorchBank  = $04
-TetryxBank  = $05
+LoaderBank  = 0
+ScorchBank  = 1
+MenuENBank  = 10
+MenuPLBank  = 15
+TetryxBank  = 20
     org $2000
 
 WeaponFont
@@ -81,9 +83,11 @@ GoLoader
     lda #0 ; DL off, P/M off
     sta dmactls
     jsr WaitOneFrame
-    
-    jmp main
-    ;jmp Loader_Start
+    mwa #$a000 Addr_Set
+    mva #$10 Clear_Set
+    ;cli
+    ;jmp main
+    jmp Loader_Start
 stop
     jmp stop
 
@@ -212,10 +216,10 @@ MenuTitle2
 MenuTitle
     dta d" SELECT  OPTION "
 MenuOptions
-    dta d"     E - English Manual         "
-    dta d"     P - Polska instrukcja      "
-    dta d" SPACE - Start Scorch Game      "
-    dta d"     T - Start Tetryx Game      "
+    dta d"       E - English Manual       "
+    dta d"       P - Polska instrukcja    "
+    dta d"   SPACE - Start Scorch Game    "
+    dta d"       T - Start Tetryx Game    "
 
 ;--------------------------------------------------
 .proc GetKey
