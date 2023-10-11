@@ -1,6 +1,6 @@
 
 BankNr = $D500
-; ---	BASIC switch OFF
+; ---	
 	org $0100
 reset_proc
     ; set cartridge bank to 0
