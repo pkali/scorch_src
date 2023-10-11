@@ -348,9 +348,9 @@ StartAfterSplash
       lda #3        ; stereo (pseudo)
       sta POKEY+$0f ; stereo
       sta POKEY+$1f ; stereo
-
+    .IF CART_VERSION = 0
       sta COLDST    ; Cold start after Reset key
-  
+    .ENDIF
       lda PAL
       and #%00001110
       bne NoRMT_PALchange

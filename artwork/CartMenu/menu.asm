@@ -2,6 +2,8 @@
       icl '../../Atari/lib/ATARISYS.ASM'
       icl '../../Atari/lib/MACRO.ASM'
 
+    icl 'cart_reset.asm'
+
     .zpvar dliCounter        .byte = $80
     .zpvar TetryxColor       .byte
     .zpvar TetryxColorS      .byte
