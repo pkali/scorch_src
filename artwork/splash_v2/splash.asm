@@ -17,7 +17,7 @@ chn_bits    .ds     1
 bit_data    .ds     1
 ; ---
 
-    org $00
+    org $80
 
 fcnt    .ds 2
 fadr    .ds 2
