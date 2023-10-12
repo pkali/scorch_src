@@ -44,9 +44,11 @@ MakeUnPlot
     sta xbyte+1
     sta oldplot+1
 
-    lda xdraw
-    and #$7
-    tax
+;    lda xdraw
+;    and #$7
+;    tax
+    ldx xdraw   ; optimization (256 bytes long bittable)
+    
     ldy #0
 
     lda color
@@ -55,13 +57,13 @@ MakeUnPlot
     ;plotting here
     lda (xbyte),y
     sta OldOraTemp
-    ora bittable,x
+    ora bittable1_long,x
     sta (xbyte),y
     bne ContinueUnPlot ; allways <>0
 ClearUnPlot
     lda (xbyte),y
     sta OldOraTemp
-    and bittable2,x
+    and bittable2_long,x
     sta (xbyte),y
 ContinueUnPlot
     ldx WhichUnPlot
@@ -128,21 +130,23 @@ MakePlot
     adc xdraw+1
     sta xbyte+1
 
-    lda xdraw
-    and #$7
-    tax
+;    lda xdraw
+;    and #$7
+;    tax
+    ldx xdraw   ; optimization (256 bytes long bittable)
+    
     ldy #0
     lda color
     bne ClearPlot
 
     lda (xbyte),y
-    ora bittable,x
+    ora bittable1_long,x
     sta (xbyte),y
 EndOfPlot
     rts
 ClearPlot
     lda (xbyte),y
-    and bittable2,x
+    and bittable2_long,x
     sta (xbyte),y
     rts
 .endp
@@ -167,13 +171,15 @@ ClearPlot
     adc xdraw+1
     sta xbyte+1
 
-    lda xdraw
-    and #$7
-    tax
+;    lda xdraw
+;    and #$7
+;    tax
+    ldx xdraw   ; optimization (256 bytes long bittable)
+
     ldy #0
     lda (xbyte),y
     eor #$ff
-    and bittable,x
+    and bittable1_long,x
     rts
 .endp
 ;--------------------------------------------------
@@ -184,30 +190,86 @@ ClearPlot
     mva #1 color
 
 drawmountainsloop
+    jsr DrawMountainLine
+    inw modify
+    inw xdraw
+    cpw xdraw #screenwidth
+    jne drawmountainsloop
+    rts
+DrawMountainLine
+.IF FASTER_GRAF_PROCS = 1
+    ; calculate lower point in one screen byte
+    lda xdraw
+    and #%00000111	; only every 8th pixel
+    bne MinCalculated
+    ; A=0
+    ldy #7
+@   cmp (modify),y
+    bcs NotLower
+    lda (modify),y
+NotLower
+    dey
+    bpl @-
+    sta temp2
+    inc temp2	; this is our minimum
+MinCalculated
     ldy #0
     lda (modify),y
     cmp #screenheight
     beq NoMountain
     sta ydraw
     sty ydraw+1
-.IF FASTER_GRAF_PROCS = 1
 ;    there was Drawline proc
     lda #screenheight
     sec
     sbc ydraw
-    sta tempbyte01
     jsr plot.MakePlot
     ;  X - index in bittable (number of bit) and nothing more (for use) in C64 :)
 ;    jmp IntoDraw    ; jumps inside Draw routine
                     ; because one pixel is already plotted (and who cares? :) )
+    lda xdraw
+    and #%11111000
+    sta temp    ; store for a bit faster add
+    clc     ; and faster
 @
     lda (xbyte),y
-    and bittable2,x
+    and bittable2_long,x
     sta (xbyte),y
 ;IntoDraw
     inc ydraw
+    lda temp
+;    lda xdraw
+;    and #%11111000
+    ;sta xbyte
+    ;---
+    ldy ydraw
+;    clc    ; C allways clear ! ?
+    adc linetableL,y
+    sta xbyte
+    lda linetableH,y
+    adc xdraw+1
+    sta xbyte+1
+    tya
+    ldy #0
+    cmp temp2   ; this is our minimum 
+    bne @-
+;    end of Drawline proc
+;   and now fill bytes!
     lda xdraw
-    and #%11111000
+    and #%00000111	; only every 8th pixel
+    bne NotFillBytes
+    lda temp2
+    cmp #screenheight+1   ; only if minimum is not miniminimum :)
+    beq NotFillBytes
+    
+    dec ydraw   ; protection if temp2=screenheight
+@   lda #0
+    tay
+    sta (xbyte),y
+    inc ydraw
+    lda xdraw
+;    lda xdraw
+;    and #%11111000
     ;sta xbyte
     ;---
     ldy ydraw
@@ -217,11 +279,17 @@ drawmountainsloop
     lda linetableH,y
     adc xdraw+1
     sta xbyte+1
-    ldy #0
-    dec tempbyte01
-    bne @-
-;    end of Drawline proc
+    tya
+    cmp #screenheight
+    bne @-   
+NotFillBytes
 .ELSE
+    ldy #0
+    lda (modify),y
+    cmp #screenheight
+    beq NoMountain
+    sta ydraw
+    sty ydraw+1
 ;    there was Drawline proc
 drawline
     jsr plot.MakePlot
@@ -232,11 +300,17 @@ drawline
 ;    end of Drawline proc
 .ENDIF
 NoMountain
-    inw modify
-    inw xdraw
-    cpw xdraw #screenwidth
-    bne drawmountainsloop
     rts
+.endp
+;--------------------------------------------------
+.proc SoilDownTurbo
+;--------------------------------------------------
+; fast SoilDown froc - test
+    jsr ClearTanks
+NoClearTanks
+;    jsr CalcAndDrawMountains
+    jmp DrawTanks
+    ;rts
 .endp
 ;--------------------------------------------------
 .proc TypeChar
@@ -244,6 +318,18 @@ NoMountain
 ; in: CharCode
 ; in: left LOWER corner of the char coordinates (xdraw, ydraw)
 ;--------------------------------------------------
+    ; check coordinates
+    cpw xdraw #(screenwidth-7)
+    bcs CharOffTheScreen
+    lda ydraw
+    cmp #7
+    bcc CharOffTheScreen
+    cmp #(screenHeight-1)
+    bcc CharOnTheScreen
+CharOffTheScreen
+    rts
+CharOnTheScreen
+Fast    ; Put char without coordinates check!
     ; char to the table
     lda CharCode
     sta fontind
@@ -397,13 +483,15 @@ EndPutChar
     jcs TypeChar.EndPutChar ;nearest RTS
     ; checks ommited.
     ; char to the table
+Fast    ; Put char without coordinates check!
     lda CharCode4x4
     and #%00000001
-    beq Upper4bits
+    beq Upper4bits  ; A=0
     lda #$ff         ; better option to check (nibbler4x4 = $00 or $ff)
 Upper4bits
     sta nibbler4x4
     lda CharCode4x4
+    and #$3f ;always CAPITAL letters, also ignore inverse
     lsr
     sta fontind
     lda #$00
@@ -538,13 +626,21 @@ EndPut4x4
 ;--------------------------------------------------
 .proc ClearScreen
 ;--------------------------------------------------
-    mwa #displayC64 temp
-    ldy #0
-@     lda #$ff
-      sta (temp),y
-      inw temp
-      cpw temp #displayC64+screenheight*screenBytes+1
-    bne @-
+    ldy #<displayC64
+    lda #0
+    sta temp
+    lda #>displayC64
+    sta temp+1
+Go  lda #$ff
+loop  sta (temp),y
+      iny
+      bne @+
+      inc temp+1
+@     cpy #<(displayC64+screenheight*screenBytes+1)
+      bne loop
+      ldx temp+1
+      cpx #>(displayC64+screenheight*screenBytes+1)
+      bne loop
    rts
 .endp
 
@@ -571,6 +667,18 @@ NotChar
 next8lines
       iny
       cpy #screenheight+1
+    bne @-
+    ; and bittables for fastest plot and point (thanks @jhusak)
+    ldy #0
+    lda #$40
+@   asl
+    adc #0
+    sta bittable1_long,y
+    tax
+    eor #%11111111
+    sta bittable2_long,y
+    txa
+    dey
     bne @-
     rts
 .endp
@@ -680,7 +788,7 @@ NoPlot
     ldx TankNr
     sta ActiveDefenceWeapon,x    ; deactivate Nuclear Winter
     jsr SetFullScreenSoilRange
-    jmp SoilDown2.NoClearTanks
+    jmp SoilDown.NoClearTanks
     ; rts
 
     ; in order to optimize the fragment repeated in both internal loops

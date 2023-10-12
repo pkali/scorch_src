@@ -7,6 +7,8 @@
     pha
     phy
     ldy dliCounter
+    cpy #$14
+    beq GoBlackHole
     lda dliColorsBack,y
     .IF TARGET = 800
         nop  ; necessary on 800 because DLIs take less time, jitter visible without it
@@ -14,7 +16,7 @@
         nop
     .ENDIF
     nop
-    nop
+    ;nop
     sta COLPF1
     lda GradientNr
     bne GoGradient
@@ -23,25 +25,42 @@ GoGradient
     iny
     lda (GradientColors),y        ; mountains colors array
     sta COLPF2
+NoBlacHoleLine
+EndOfDLI_Gr
     inc dliCounter
     ply
     pla
     rti
+GoBlackHole
+    lda BlackHole
+    beq NoBlacHoleLine
+    nop
+    lda #$00    ; color of last line
+    sta COLPF2
+    beq EndOfDLI_Gr
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptOptions
     pha
     phy
+    lda dliCounter
+    bne Subtitle
     lda #0    ; background color
     sta COLPF1
     ldy GradientNr
     beq @+
     ldy #1
 @    lda (GradientColors),y        ; mountains colors array
+    sta COLPF2  ; allways <> 0 !!!
+    bne DLIinterruptGraph.EndOfDLI_Gr
+Subtitle
+    lda #0
     sta COLPF2
-    ply
-    pla
-    rti
+    lda random
+    and #%00000011
+    ora #%00010000
+    sta COLPF1
+    bne DLIinterruptGraph.EndOfDLI_Gr
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptGameOver
@@ -52,14 +71,14 @@ GoGradient
     lda #%00100001    ; playfield after P/M - prior=1
     ;STA WSYNC
     sta PRIOR
-    bne EndOfDLI_GO
+    bne DLIinterruptGraph.EndOfDLI_Gr
 EndofPMG
     cmp #1
     bne ColoredLines
     lda #%00100100    ; playfield before P/M
     ;STA WSYNC
     sta PRIOR
-    bne EndOfDLI_GO
+    bne DLIinterruptGraph.EndOfDLI_Gr
 ColoredLines
     cmp #9
     beq CreditsScroll
@@ -69,15 +88,11 @@ ColoredLines
     ;STA WSYNC
     sta COLPF2
     sty COLPF1
-    bne EndOfDLI_GO
+    bne DLIinterruptGraph.EndOfDLI_Gr
 CreditsScroll
     lda #$00
     sta COLPF2
-EndOfDLI_GO
-    inc dliCounter
-    ply
-    pla
-    rti
+    beq DLIinterruptGraph.EndOfDLI_Gr
 .endp
 ;--------------------------------------------------
 .proc DLIinterruptText
@@ -139,6 +154,47 @@ lab2
     jsr RASTERMUSICTRACKER+3    ;1 play
     ; ------- RMT -------
 SkipRMTVBL
+    ; ------ meteors ------ start
+  .IF METEORS = 1
+    ldx #0
+    bit Mcounter
+    bpl MeteorOnSky
+    bit MeteorsFlag
+    bmi SkipMeteors
+    ; randomize meteor
+    lda random
+    and #%11111111
+    bne SkipMeteors
+    lda random
+    sta Mpoint1X
+    sta Mpoint2X
+    lda #0
+    sta Mpoint1X+1
+    sta Mpoint2X+1
+    lda random
+    and #$1f
+    sta Mpoint1Y
+    sta Mpoint2Y
+    mva #10 Mcounter
+MeteorOnSky
+    jsr GoMplot
+NoFirstPlot
+    ldx #2  ; second point coordinates
+    lda Mcounter
+    beq @+
+    dec Mcounter
+    bpl SkipSecondPlot
+@   lda Mpoint1Y,x
+    cmp #64
+    bne GoSecondPlot
+    mva #$ff Mcounter
+    bmi SkipMeteors
+GoSecondPlot
+    jsr GoMplot2
+SkipSecondPlot
+SkipMeteors
+  .ENDIF
+    ; ------ meteors ------ end
     bit ScrollFlag
     bpl EndOfCreditsVBI
 CreditsVBI
@@ -177,6 +233,14 @@ EndOfCreditsVBI
         sta STICK0
         lda STRIG0,x
         sta STRIG0
+        ; and PADDLES (2 and 3 joystick button)
+        txa
+        asl
+        tax
+        lda PADDL0,x
+        sta PADDL0
+;        lda PADDL1,x
+;        sta PADDL1
         jmp XITVBV
     .ELIF TARGET = 5200
         lda SkStatSimulator
@@ -226,7 +290,7 @@ EndOfCreditsVBI
           mva #consol_reset consol
           mva #@kbcode._none kbcode
 @
-
+exit
         pla
         tay
         pla
@@ -234,17 +298,32 @@ EndOfCreditsVBI
         pla
         rti
     .ENDIF
+    ; ------ meteors plot/flight subroutine ------ start
+  .IF METEORS = 1
+GoMplot
+    lda Mpoint1Y,x
+    cmp #64
+    beq @+
+GoMplot2
+    sta EplotY
+    inc Mpoint1Y,x
+    mwa Mpoint1X,x EplotX
+    inw Mpoint1X,x
+    jmp Explot
+@   rts
+  .ENDIF
+    ; ------ meteors plot/flight subroutine ------ end
 .endp
     .IF TARGET = 5200
 .proc kb_continue
+    cmp #$0c    ; START key on 5200 keypad
+    beq StartPressed
     sta kbcode          ;Store key code in shadow.
     mva #0 SkStatSimulator
-exit    pla
-    tay
-    pla
-    tax
-    pla
-    rti
+    beq VBLinterrupt.exit
+StartPressed
+    mvx #%00000110 CONSOL   ; virtual CONSOL Start key pressed
+    bne VBLinterrupt.exit
 .endp
     .ENDIF
 

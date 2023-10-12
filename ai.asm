@@ -1,3 +1,5 @@
+.IF *>0 ;this is a trick that prevents compiling this file alone
+
 ;    @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 ; artificial intelligence of tanks goes here!
@@ -8,6 +10,26 @@
 ; - shoots random direction and force
 ; greeeting to myself 10 years older in 2013-11-09... still no idea
 
+;----------------
+AIRoutines
+    .word Moron-1
+    .word Shooter-1 ;Shooter
+    .word Poolshark-1 ;Poolshark
+    .word Tosser-1 ;Tosser
+    .word Chooser-1 ;Chooser
+    .word Spoiler-1 ;Spoiler
+    .word Cyborg-1 ;Cyborg
+    .word Unknown-1 ;Unknown
+;----------------
+PurchaseAIRoutines
+    .word MoronPurchase-1
+    .word ShooterPurchase-1 ;ShooterPurchase
+    .word PoolsharkPurchase-1 ;PoolsharkPurchase
+    .word TosserPurchase-1 ;TosserPurchase
+    .word TosserPurchase-1 ;ChooserPurchase
+    .word CyborgPurchase-1 ;SpoilerPurchase
+    .word CyborgPurchase-1 ;CyborgPurchase
+    .word TosserPurchase-1 ;UnknownPurchase
 
 ;----------------------------------------------
 .proc ArtificialIntelligence ;
@@ -17,10 +39,9 @@
 ;----------------------------------------------
     asl
     tay
-    :2 dey  ;credit KK
-    lda AIRoutines+1,y
+    lda AIRoutines-1,y  ; -1 and -2 because AI players are numbered from 1 not from 0 (Human)
     pha
-    lda AIRoutines,y
+    lda AIRoutines-2,y
     pha
 ;    it's no necessary - PrepareAIShoot is next proc :)
 ;    jsr PrepareAIShoot
@@ -32,13 +53,12 @@
     ; by dividing positions by 4
     ldy #MaxPlayers-1
 loop
-    lda xtankstableL,y
-    sta temp
-    lda xtankstableH,y
-    sta temp+1
     ;= /4
-    :2 lsrw temp
-    lda temp
+    lda xtankstableH,y
+    lsr
+    lda xtankstableL,y
+    ror ;just one bit over 256. Max screenwidth = 512!!!
+    lsr
     sta LowResDistances,y
     dey
     bpl loop
@@ -52,34 +72,17 @@ WepTableToTemp
     sta temp+1
     rts
 .endp
-;----------------
-AIRoutines
-    .word Moron-1
-    .word Shooter-1 ;Shooter
-    .word Poolshark-1 ;Poolshark
-    .word Tosser-1 ;Tosser
-    .word Chooser-1 ;Chooser
-    .word Spoiler-1 ;Spoiler
-    .word Cyborg-1 ;Cyborg
-    .word Unknown-1 ;Unknown
-
 ;----------------------------------------------
 .proc Unknown
     ; random robotank (from Poolshark to Cyborg)
-    randomize 4 13
-    and #%11111110
-    tay
-    lda AIRoutines+1,y
-    pha
-    lda AIRoutines,y
-    pha
-    rts
+    randomize 3 7
+    bne ArtificialIntelligence  ; We know that PrepareAIShoot is already done, but.... who cares :)
 .endp
 ;----------------------------------------------
 .proc Moron
     jsr RandomizeAngle
     sta NewAngle
-    mwa #80 RandBoundaryLow
+    mwa #180 RandBoundaryLow
     mwa #800 RandBoundaryHigh
     jsr RandomizeForce
     ; choose the best weapon
@@ -125,24 +128,27 @@ shootingLeftAtThisMomentOfTime
 
 firstShoot
     ; compare the x position with the middle of the screen
-    lda xTanksTableH,x
-    cmp #>(screenwidth/2)
-    bne @+
-    lda xTanksTableL,x
-    cmp #<(screenwidth/2)
-@    bcc tankIsOnTheRight
+    lda LowResDistances,x
+    cmp #(screenwidth/8) ; screenwidth/2 but LowResDistances are already /4
+    bcc tankIsOnTheRight
 
     ; enemy tank is on the left
-    randomize 95 125
+    ;randomize 95 125
+    lda RANDOM  ; Shorter an faster randomize
+    and #%00011111  ; 0 - 31
+    adc #95     ; Carry doesn't matter :)
     sta NewAngle
     bne forceNow
 
 tankIsOnTheRight
-    randomize 55 85
+    ;randomize 55 85
+    lda RANDOM  ; Shorter an faster randomize
+    and #%00011111  ; 0 - 31
+    adc #54     ; Carry doesn't matter :)
     sta NewAngle
 
 forceNow
-    mwa #100 RandBoundaryLow
+    mwa #200 RandBoundaryLow
     mwa #800 RandBoundaryHigh
     ;ldx TankNr ;this is possibly not necessary
     jsr RandomizeForce
@@ -188,19 +194,19 @@ EnemyOnLeft
     sta AngleTablePointer
 AngleIsSet
 
-    randomize 0 8
+    ;randomize 0 8
+    lda RANDOM
+    and #%00000111
     ldy AngleTablePointer
     clc
     adc AngleTable,y
     sta NewAngle
 
-forceNow
     mwa #300 RandBoundaryLow
     mwa #700 RandBoundaryHigh
-    ldx TankNr
+    ; ldx TankNr  ; looks like not necessary
     jsr RandomizeForce
 
-endo
     ; choose the best weapon
 
     jmp ChooseBestOffensive
@@ -208,10 +214,28 @@ endo
 
 ;----------------------------------------------
 AngleTable    ; 16 bytes ;ba w $348b L$3350
-    .by 106,114,122,130,138,146,154,162
-    .by 18,26,34,43,50,58,66,74
+    .by 91,99,107,115,123,131,139,147
+    .by 25,33,41,49,57,65,73,81
 .endp
 ;----------------------------------------------
+.proc CyborgBattery
+    ; cyborg is smarter :)
+    ; if have more than 2 batteries and less than 60 of energy
+    ; then uses battery
+    lda Energy,x
+    cmp #60
+    bcs EnoughEnergy
+    ; lower than 60 units - check battery
+    ldy #ind_Battery
+    lda (temp),y  ; has address of TanksWeaponsTable
+    cmp #2
+    ; we have more than 2 batteries - use one
+    bcs UseBattery.UseIt
+EnoughEnergy
+LowBatteries
+    ; if low energy ten use battery (no RTS :) )
+.endp
+;
 .proc UseBatteryOrFlag
     jsr UseBattery    ; as subroutine for reuse in AutoDefense
     ; if very low energy and no battery then use White Flag
@@ -224,6 +248,7 @@ AngleTable    ; 16 bytes ;ba w $348b L$3350
     sta ActiveDefenceWeapon,x
     jsr PutTankNr    ; and draw tank witch Flag
 EnoughEnergy
+;    jsr DisplayStatus.DisplayEnergy ; not necessary - status update after othher defensives
     rts
 .endp
 ;
@@ -237,12 +262,17 @@ EnoughEnergy
     lda (temp),y  ; has address of TanksWeaponsTable
     beq NoBatteries
     ; we have batteries - use one
+UseIt
     sec
     sbc #1
     sta (temp),y
     lda #99
     sta Energy,x
     jsr MaxForceCalculate
+    ; and SFX
+    mva #sfx_battery sfx_effect
+    ldy #7
+    jsr PauseYFrames    ; wait 14 frames (Battery SFX)
 EnoughEnergy
 NoBatteries
     rts
@@ -253,7 +283,21 @@ NoBatteries
     ; but not allways
     randomize 1 3
     cmp #1
-    bne NoUseDefensive
+    bne UseBattery.NoBatteries  ; nearest RTS
+    ; now use defensive like Tosser
+    ;jmp TosserDefensives
+.endp
+;----------------------------------------------
+.proc TosserDefensives
+    ; use best defensive :)
+    ; allways
+    jsr GetBestDefensive
+    ; update status line
+    jmp DisplayStatus   ; jsr/rts
+;    rts
+.endp
+;----------------------------------------------
+.proc GetBestDefensive
     ; first check check if any is in use
     lda ActiveDefenceWeapon,x
     bne DefensiveInUse
@@ -273,8 +317,12 @@ NoBatteries
     sta ActiveDefenceWeapon,x
     lda DefensiveEnergy,y
     sta ShieldEnergy,x
-NoUseDefensive
+    ; and SFX
+    mva #sfx_auto_defense sfx_effect
+    ldy #7
+    jsr PauseYFrames    ; wait 14 frames (Defense SFX)
 DefensiveInUse
+NoUseDefensive
     rts
 .endp
 ;----------------------------------------------
@@ -284,33 +332,6 @@ DefensiveInUse
     jsr TosserDefensives
     ; Toosser is like Poolshark but allways uses defensives
     jmp Poolshark.firstShoot
-.endp
-;----------------------------------------------
-.proc TosserDefensives
-    ; use best defensive :)
-    ; allways
-    ; first check check if any is in use
-    lda ActiveDefenceWeapon,x
-    bne DefensiveInUse
-    ldy #last_real_defensive+1 ;the last defensive weapon
-@
-    dey
-    cpy #ind_Hovercraft      ;first defensive weapon    (White Flag, Battery and Hovercraft - never use)
-    beq NoUseDefensive
-    lda (temp),y  ; has address of TanksWeaponsTable
-    beq @-
-    ; decrease in inventory
-    sec
-    sbc #1
-    sta (temp),y  ; has address of TanksWeaponsTable
-    ; activate defensive weapon
-    tya        ; number of selectet defensive weapon
-    sta ActiveDefenceWeapon,x
-    lda DefensiveEnergy,y
-    sta ShieldEnergy,x
-DefensiveInUse
-NoUseDefensive
-    rts
 .endp
 ;----------------------------------------------
 .proc Chooser
@@ -336,13 +357,8 @@ NotNegativeEnergy
     adw Force #100 RandBoundaryHigh
     jsr RandomizeForce
     ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
-    jsr GetDistance
-    cmp #6 ; 24/4
-    bcs HighForce
-    lda #ind_Baby_Missile
-    sta ActiveWeapon,x
-HighForce
-    rts
+    jmp GetDistance
+    ;rts
 .endp
 ;----------------------------------------------
 .proc Spoiler
@@ -355,7 +371,7 @@ HighForce
     jsr FindBestTarget3
     sty TargetTankNr
     ; aiming
-    jsr TakeAim        ; direction still in A (0 - left, >0 - right)
+    jsr TakeAimExtra        ; direction still in A (0 - left, >0 - right)
 
     ; choose the best weapon
     jsr ChooseBestOffensive
@@ -368,17 +384,13 @@ NotNegativeEnergy
     adw Force #50 RandBoundaryHigh
     jsr RandomizeForce
     ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
-    jsr GetDistance
-    cmp #6    ; 24/4
-    bcs HighForce
-    lda #ind_Baby_Missile
-    sta ActiveWeapon,x
-HighForce
-    rts
+    jmp GetDistance
+    ;rts
 .endp
 ;----------------------------------------------
 .proc Cyborg
-    jsr UseBatteryOrFlag
+    ; if low energy ten use battery
+    jsr CyborgBattery
     ; use defensives like Tosser
     jsr TosserDefensives
     ; now select best target
@@ -386,8 +398,7 @@ HighForce
     jsr FindBestTarget3
     sty TargetTankNr
     ; aiming
-    jsr TakeAim        ; direction still in A (0 - left, >0 - right)
-
+    jsr TakeAimExtra        ; direction still in A (0 - left, >0 - right)
     ; choose the best weapon
     ldy #ind_Nuke           +1
     jsr ChooseBestOffensive.NotFromAll
@@ -396,14 +407,9 @@ HighForce
     sta ForceTableL,x
     lda Force+1
     sta ForceTableH,x
-    ; if target distance lower than 32 - set weapon to Baby Missile (for security :)
-    jsr GetDistance
-    cmp #8    ;32/4
-    bcs HighForce
-    lda #ind_Baby_Missile
-    sta ActiveWeapon,x
-HighForce
-    rts
+    ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
+    jmp GetDistance
+    ;rts
 .endp
 
 ;----------------------------------------------
@@ -418,6 +424,7 @@ HighForce
 ;    jsr MakeLowResDistances
     lda #202
     sta temp2 ; max possible energy
+    stx temp2+1 ; set target tank to himself (if it doesn't find targets - Long Shlong :) )
     lda #0
     sta tempor2    ; direction of shoot
     ;ldx TankNr
@@ -429,7 +436,9 @@ loop01
     beq skipThisPlayer
     lda eXistenZ,y
     beq skipThisPlayer
-
+    lda BarrelLength,y
+    cmp #LongBarrel     ; if target has Long Schlong do not aim
+    beq skipThisPlayer
     lda skilltable,y
     beq ItIsHuman
     lda PreferHumansFlag
@@ -437,7 +446,14 @@ ItIsHuman
     clc
     adc Energy,y    ; if robotank energy=energy+100 (100 or 0 from PreferHumansFlag)
     cmp temp2 ; lowest
-    bcs lowestIsLower
+    beq lowestIsEqual
+    bcc lowestIsHigher
+    ; if lower
+lowestIsEqual
+    ; if equal then select random (of two tanks)
+    bit RANDOM
+    bmi lowestIsLower
+lowestIsHigher
     sta temp2
     sty temp2+1 ; number of the closest tank
     mva #0 tempor2
@@ -469,6 +485,7 @@ skipThisPlayer
 ;----------------------------------------------
 ;    jsr MakeLowResDistances
     mva #$ff temp2 ; min possible distance
+    stx temp2+1 ; set target tank to himself (if it doesn't find targets - Long Shlong :) )
     mva #0 tempor2    ; direction of shoot
 
     ;ldx TankNr
@@ -479,6 +496,9 @@ loop01
     cpy TankNr
     beq skipThisPlayer
     lda eXistenZ,y
+    beq skipThisPlayer
+    lda BarrelLength,y
+    cmp #LongBarrel     ; if target has Long Schlong do not aim
     beq skipThisPlayer
 
     lda LowResDistances,x
@@ -514,7 +534,7 @@ skipThisPlayer
     ; in temp2 we have x distance divided by 8
     ldy temp2+1
     lda tempor2
-    rts
+End rts
 .endp
 
 ;----------------------------------------------
@@ -524,9 +544,14 @@ skipThisPlayer
 ; returns angle and power of shoot tank X (TankNr)
 ; in the appropriate variables (Angle and Force)
 ;----------------------------------------------
+    lda ActiveDefenceWeapon,x 
+    cmp #ind_White_Flag     ; if a white flag, targeting makes no sense
+    beq FindBestTarget2.End ; nearest RTS
+;
+    mva #$ff SecondTryFlag
+NoSecondTry
     lda ActiveWeapon,x
     pha                    ; store active weapon
-    mva #$ff SecondTryFlag
     ; set initial Angle and Force values
     lda OptionsTable+2    ; selected gravity
     asl
@@ -566,6 +591,8 @@ RepeatAim
 AimingRight
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
+    bit escFlag
+    bmi EndOfAim
     lda HitFlag
     beq NoHitInFirstLoopR    ; impossible :)
     bmi GroundHitInFirstLoopR
@@ -609,6 +636,8 @@ EndOfFirstLoopR
 SecondLoopR
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
+    bit escFlag
+    bmi EndOfAim
     lda HitFlag
     beq NoHitInSecondLoopR    ; impossible :)
     bmi GroundHitInSecondLoopR
@@ -661,6 +690,8 @@ AimSecondTry
 AimingLeft
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
+    bit escFlag
+    bmi EndOfAim
     lda HitFlag
     beq NoHitInFirstLoopL    ; impossible :)
     bmi GroundHitInFirstLoopL
@@ -704,6 +735,8 @@ EndOfFirstLoopL
 SecondLoopL
     ; make test Shoot (Flight)
     jsr SetStartAndFlight
+    bit escFlag
+    bmi EndOfAim
     lda HitFlag
     beq NoHitInSecondLoopL    ; impossible :)
     bmi GroundHitInSecondLoopL
@@ -754,36 +787,75 @@ SetStartAndFlight    ; set start point (virtual barrel end :) ) and make test fl
     sta ytraj+1
     mva #0 ytraj+2
     mva NewAngle Angle
+    lda CONSOL
+    and #%00000001 ; START KEY
+    beq @speedup
+    jsr MoveBarrelToNewPosition
+    bit escFlag
+    bmi exit
+@speedup
     jsr Flight
+exit
     ldx TankNr
     rts
 .endp
 ;----------------------------------------------
+.proc TakeAimExtra
+; It triggers aiming and if it misses the target, 
+; repeats the targeting by aiming at other tanks.
+;----------------------------------------------
+    jsr TakeAim ; standard aiming first
+    ldy HitFlag
+    bpl TankHit
+    ; Target missed - repeat aiming
+    mva TargetTankNr FirstTargetTankNr
+    ldy NumberOfPlayers
+    dey
+SetNextTarget
+    cpy TankNr  ; Don't aim at yourself
+    beq skipThisPlayer
+    cpy FirstTargetTankNr   ; Don't aim at the original target
+    beq skipThisPlayer
+    lda eXistenZ,y
+    beq skipThisPlayer
+    lda BarrelLength,y
+    cmp #LongBarrel     ; if target has Long Schlong do not aim
+    beq skipThisPlayer
+    ; check target direction
+    mva #0 tempor2  ; check target direction
+    lda LowResDistances,x
+    cmp LowResDistances,y
+    bcs EnemyOnTheLeft
+    ; enemy on right
+    inc tempor2    ; set direction to right
+EnemyOnTheLeft
+    sty TargetTankNr    ; new target for aiming
+    ; Go Aiming!
+    jsr TakeAim.NoSecondTry ; standard aiming first (only first try)
+    ldy TargetTankNr
+    lda HitFlag
+    bpl TankHit
+skipThisPlayer
+    dey
+    bpl SetNextTarget
+TankHit
+    rts
+.endp
+
+;----------------------------------------------
 .proc PurchaseAI ;
-; A - skill of the TankNr
+; A - skill of the TankNr, TankNr in X
 ; makes purchase for AI opponents
 ; results of this routine are not visible on the screen
 ;----------------------------------------------
     asl
-    tax
-    :2 dex  ;credit KK
-    lda PurchaseAIRoutines+1,x
+    tay
+    lda PurchaseAIRoutines-1,y  ; -1 and -2 because AI players are numbered from 1 not from 0 (Human)
     pha
-    lda PurchaseAIRoutines,x
+    lda PurchaseAIRoutines-2,y
     pha
-    rts
+ ;   rts    ; MoronPurchase has rts :)
     .endp
-
-;----------------
-PurchaseAIRoutines
-    .word MoronPurchase-1
-    .word ShooterPurchase-1 ;ShooterPurchase
-    .word PoolsharkPurchase-1 ;PoolsharkPurchase
-    .word TosserPurchase-1 ;TosserPurchase
-    .word TosserPurchase-1 ;ChooserPurchase
-    .word CyborgPurchase-1 ;SpoilerPurchase
-    .word CyborgPurchase-1 ;CyborgPurchase
-    .word TosserPurchase-1 ;UnknownPurchase
 
 ;----------------------------------------------
 .proc MoronPurchase
@@ -799,10 +871,10 @@ PurchaseAIRoutines
     sta temp+1
     :3 lsr    ; A=A/8
     sta temp
-    tya
-    and #%00000111
-    tay
-    lda bittable,y
+;    tya    ; optimization (256 bytes long bittable)
+;    and #%00000111
+;    tay
+    lda bittable1_long,y
     ldy temp
     and PurchaseMeTable2,y
     beq TryToPurchaseOnePiece.SorryNoPurchase
@@ -817,10 +889,10 @@ PurchaseAIRoutines
     sta temp+1
     :3 lsr    ; A=A/8
     sta temp
-    tya
-    and #%00000111
-    tay
-    lda bittable,y
+;    tya    ; optimization (256 bytes long bittable)
+;    and #%00000111
+;    tay
+    lda bittable1_long,y
     ldy temp
     and PurchaseMeTable,y
     beq SorryNoPurchase
@@ -870,17 +942,10 @@ SorryNoPurchase
 ;----------------------------------------------
 .proc ShooterPurchase
     ; first try to buy defensives
-;    mva #2 tempXroller; number of offensive purchases to perform
-    ldx TankNr
-@
     randomize ind_Battery         ind_StrongParachute
     jsr TryToPurchaseOnePiece
-;    dec tempXroller
-;    bne @-
-
     ; and now offensives
     mva #4 tempXroller; number of offensive purchases to perform
-    ;ldx TankNr
 @
     randomize ind_Missile         ind_Heavy_Roller
     jsr TryToPurchaseOnePiece
@@ -892,13 +957,9 @@ SorryNoPurchase
 ;----------------------------------------------
 .proc PoolsharkPurchase
     ; first try to buy defensives
-;    mva #2 tempXroller; number of offensive purchases to perform
-    ldx TankNr
-@
     randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece
     dec tempXroller
-;    bpl @-
 
     ; and now offensives
     mva #6 tempXroller; number of purchases to perform
@@ -913,14 +974,11 @@ SorryNoPurchase
 .endp
 ;----------------------------------------------
 .proc TosserPurchase
-
     ; what is my money level
-    ldx TankNr
     lda MoneyH,x ; money / 256
     lsr        ; /2
     sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-;    mva #1 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece
@@ -941,14 +999,11 @@ SorryNoPurchase
 .endp
 ;----------------------------------------------
 .proc CyborgPurchase
-
     ; what is my money level
-    ldx TankNr
     lda MoneyH,x ; money / 256
     lsr        ; /2
     sta tempXroller ; perform this many purchase attempts
     ; first try to buy defensives
-;    mva #1 tempXroller; number of defensive purchases to perform
 @
     randomize ind_Battery         ind_Bouncy_Castle
     jsr TryToPurchaseOnePiece2
@@ -989,19 +1044,38 @@ loop
 .endp
 ;----------------------------------------------
 .proc GetDistance
-; calculates lores ( /4 ) distance from tank X to TargetTankNr(Y)
-; result in A
+; calculates lores ( /4 ) distance from tank X to last plot
+; (explosion position after Flight proc)
+; This procedure must be called immediately after targeting.
+; xdraw value should remain unchanged from the end of the Flight procedure.
+;
+; if target distance lower than 24 - set weapon to Baby Missile
 ;----------------------------------------------
-    ldy TargetTankNr
-    lda LowResDistances,x
-    cmp LowResDistances,y
-@    bcs YisLower
+    ;xdraw/4
+    lda xdraw+1
+    lsr
+    lda xdraw
+    ror ;just one bit over 256. Max screenwidth = 512!!!
+    lsr
+    ;
     sec
-    lda LowResDistances,y
     sbc LowResDistances,x
-    rts
+    bcs XisLower
 YisLower
-    lda LowResDistances,x
-    sbc LowResDistances,y
+    eor #$ff
+    adc #1
+XisLower
+    ;rts
+    cpx TargetTankNr    ; If tank is aiming at itself don't change weapon,
+    beq NoChangeToBM    ; he is the only one without a Long Shlong :)
+    ; if target distance lower than 24 - set weapon to Baby Missile (for security :)
+    cmp #6    ; 24/4
+    bcs HighDistance
+    lda #ind_Baby_Missile
+    sta ActiveWeapon,x
+HighDistance
+NoChangeToBM
     rts
 .endp
+
+.ENDIF

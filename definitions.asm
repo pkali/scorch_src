@@ -1,44 +1,53 @@
 ;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
 
 screenheight = 200
-screenBytes = 40
-screenwidth = screenBytes*8 ; Max screenwidth = 512!!!
+screenBytes  = 40
+screenwidth  = screenBytes*8  ; Max screenwidth = 512!!!
 
 TankWidth    =    8
 ;----------------------------------------------
 ; Player/missile memory
-PMGraph =  $1800  ; real PM start = PMGraph + $0300
-; Generated tables
-display = $2010 ;screen takes $1f68 because it has screenHeight+1 lines because of out of screen tracer(?)
+PMGraph = $1800  ; real PM start = PMGraph + $0300
+display = $2010  ; screen takes $1f68 because it has screenHeight+1 lines because of out of screen tracer(?)
 ;----------------------------------------------
 
-margin = 40 ;mountain drawing Y variable margin
-MaxPlayers = 6
-maxOptions = 9  ;number of all options
-PMOffsetX = $2C ; P/M to graphics offset
-PMOffsetY = $2A ; P/M to graphics offset
-napalmRadius = 10
-StandardBarrel = 6 ; standard tank barrel length
-LongBarrel = 20    ; long barrel length
+margin         = 40  ; mountain drawing Y variable margin
+MaxPlayers     = 6
+maxOptions     = 9   ; number of all options
+PMOffsetX      = $2C ; P/M to graphics offset
+PMOffsetY      = $2A ; P/M to graphics offset
+napalmRadius   = 10
+StandardBarrel = 6   ; standard tank barrel length
+LongBarrel     = 20  ; long barrel length
 
 TextBackgroundColor = $02   ; REAL constans - use: LDA #TextBackgroundColor
 TextForegroundColor = $0A
 space = 0  ; space in screencodes
 
-KeyRepeatSpeed = 10 ; (max 127 !!!)
+KeyRepeatSpeed = 8  ; (max 127 !!!)
+FirstKeySpeed  = 8  ; additional delay for first keypress
 
 ;character codes for symbols (tank, parachute, etc. )
+; characters from tanks.fnt (graphics screen)
 char_parachute        = $02
 char_flag             = $1e
 char_flame            = $14
 char_clear_flame      = $1c
 char_digger           = $04
 char_sandhog          = $0c
-char_sandhog_offset = char_sandhog          - char_digger
+char_sandhog_offset = char_sandhog - char_digger
 char_tank1            = $20
 char_tank2            = $24
 char_tank3            = $2c
-char_tank4            = $28    ; robotank shape
+char_tank4            = $28 ; robotank shape
+; characters from weapons.fnt (text mode - menus etc.)
+char_TAB              = $7f
+char_DEL              = $7e
+char_bracketO         = $08 ; (
+char_bracketC         = $09 ; )
+char_computer         = $5e ; computer symbol (Auto Defense)
+char_joy              = $0a ; joystick symbol
+char_tank             = $0b ; tank symbol
 
 ;Weapon prices (*10 on screen)
 price_Baby_Missile    =    0  ;_00
@@ -63,14 +72,14 @@ price_Heavy_Riot_Bomb =  272  ;_18
 price_Baby_Digger     =  136  ;_19
 price_Digger          =  176  ;_20
 price_Heavy_Digger    =  207  ;_21
-price_Baby_Sandhog    =  158  ;_22
-price_Sandhog         =  191  ;_23
-price_Heavy_Sandhog   =  223  ;_24
-price_Dirt_Clod       =  104  ;_25
-price_Dirt_Ball       =  130  ;_26
-price_Ton_of_Dirt     =  171  ;_27
-price_Liquid_Dirt     =  330  ;_28
-price_Dirt_Charge     =  343  ;_29
+price_Sandhog         =  191  ;_22
+price_Heavy_Sandhog   =  223  ;_23
+price_Dirt_Clod       =  104  ;_24
+price_Dirt_Ball       =  130  ;_25
+price_Ton_of_Dirt     =  171  ;_26
+price_Liquid_Dirt     =  330  ;_27
+price_Dirt_Charge     =  343  ;_28
+price_Punch           =  208  ;_29
 price_Buy_me          =  170  ;_30
 price_Laser           =  277  ;_31
 price_White_Flag      =   $0  ;_32
@@ -113,14 +122,14 @@ ind_Heavy_Riot_Bomb = 18
 ind_Baby_Digger     = 19
 ind_Digger          = 20
 ind_Heavy_Digger    = 21
-ind_Baby_Sandhog    = 22
-ind_Sandhog         = 23
-ind_Heavy_Sandhog   = 24
-ind_Dirt_Clod       = 25
-ind_Dirt_Ball       = 26
-ind_Ton_of_Dirt     = 27
-ind_Liquid_Dirt     = 28
-ind_Dirt_Charge     = 29
+ind_Sandhog         = 22
+ind_Heavy_Sandhog   = 23
+ind_Dirt_Clod       = 24
+ind_Dirt_Ball       = 25
+ind_Ton_of_Dirt     = 26
+ind_Liquid_Dirt     = 27
+ind_Dirt_Charge     = 28
+ind_Punch           = 29
 ind_Buy_me          = 30
 ind_Laser           = 31
 last_offensive      = ind_Laser
@@ -143,8 +152,8 @@ ind_Auto_Defense    = 46
 ind_Spy_Hard        = 47
 last_defensive      = ind_Spy_Hard
 last_real_defensive = ind_Bouncy_Castle
-number_of_offensives = last_offensive      - first_offensive    +1
-number_of_defensives = (last_defensive      - first_defensive    +1)
+number_of_offensives = last_offensive - first_offensive + 1
+number_of_defensives = last_defensive - first_defensive + 1
 number_of_weapons = number_of_offensives + number_of_defensives
 ;--------------------------------
 ; names of RMT instruments (sfx)
@@ -180,9 +189,9 @@ sfx_liquid_dirt = $1b ;2
 sfx_battery     = $1c ;3
 sfx_white_flag  = $1d ;4
 sfx_long_barrel = $1e
-sfx_tank_move    = $1f
+sfx_tank_move   = $1f
 sfx_auto_defense= $2b
-sfx_lazy_boys    = $2c
+sfx_lazy_boys   = $2c
 ;--------------------------------
 ; RMT songs (lines)
 ;--------------------------------
@@ -191,5 +200,5 @@ song_main_menu  = $02
 song_ingame     = $06
 song_round_over = $0b
 song_ending_looped = $0e
-song_supermarket = $1b
-song_inventory = $1d
+song_supermarket= $1b
+song_inventory  = $1d

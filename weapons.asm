@@ -15,10 +15,10 @@
 .endp
 .proc ExplosionDirect
     asl
-    tax
-    lda ExplosionRoutines+1,x
+    tay
+    lda ExplosionRoutines+1,y
     pha
-    lda ExplosionRoutines,x
+    lda ExplosionRoutines,y
     pha
     rts
 ExplosionRoutines
@@ -28,12 +28,12 @@ ExplosionRoutines
     .word nuke-1                     ;Nuke           ;_03
     .word leapfrog-1                 ;LeapFrog       ;_04
     .word funkybomb-1                ;Funky_Bomb     ;_05
-    .word mirv-1                     ;MIRV           ;_06
+    .word BFG.mirv-1                 ;MIRV           ;_06
     .word deathshead-1               ;Death_s_Head   ;_07
     .word napalm-1                   ;Napalm         ;_08
     .word hotnapalm-1                ;Hot_Napalm     ;_09
-    .word tracer-1                   ;Tracer         ;_10
-    .word tracer-1                   ;Smoke_Tracer   ;_11
+    .word BFG.tracer-1               ;Tracer         ;_10
+    .word BFG.tracer-1               ;Smoke_Tracer   ;_11
     .word babyroller-1               ;Baby_Roller    ;_12
     .word roller-1                   ;Roller         ;_13
     .word heavyroller-1              ;Heavy_Roller   ;_14
@@ -44,21 +44,18 @@ ExplosionRoutines
     .word babydigger-1               ;Baby_Digger    ;_19
     .word digger-1                   ;Digger         ;_20
     .word heavydigger-1              ;Heavy_Digger   ;_21
-    .word babysandhog-1              ;Baby_Sandhog   ;_22
-    .word sandhog-1                  ;Sandhog        ;_23
-    .word heavysandhog-1             ;Heavy_Sandhog  ;_24
-    .word dirtclod-1                 ;Dirt_Clod      ;_25
-    .word dirtball-1                 ;Dirt_Ball      ;_26
-    .word tonofdirt-1                ;Ton_of_Dirt    ;_27
-    .word liquiddirt-1               ;Liquid_Dirt    ;_28
-    .word dirtcharge-1               ;Dirt_Charge    ;_29
+    .word sandhog-1                  ;Sandhog        ;_22
+    .word heavysandhog-1             ;Heavy_Sandhog  ;_23
+    .word dirtclod-1                 ;Dirt_Clod      ;_24
+    .word dirtball-1                 ;Dirt_Ball      ;_25
+    .word tonofdirt-1                ;Ton_of_Dirt    ;_26
+    .word liquiddirt-1               ;Liquid_Dirt    ;_27
+    .word dirtcharge-1               ;Dirt_Charge    ;_28
+    .word punch-1                    ;Baby_Sandhog   ;_29
     .word BFG-1                      ;Buy_me         ;_30
     .word laser-1                    ;Laser          ;_31
-
-VOID
-tracer
-    rts
 .endp
+
 .proc BFG
     mva #sfx_plasma_2_2 sfx_effect
     jsr BFGblink
@@ -73,39 +70,44 @@ CheckNextTankBFG
 @   dex
     bpl CheckNextTankBFG
     stx AfterBFGflag ; $ff
+VOID
+tracer
+mirv
     rts
 .endp
 ; ------------------------
 .proc babymissile
-    mva #11 ExplosionRadius
+    lda #11 ; ExplosionRadius
 GoBabyMissileSFX
+    sta ExplosionRadius
     mva #sfx_baby_missile sfx_effect
 GoXmissile
     jmp xmissile
 .endp
 ; ------------------------
 .proc missile ;
-    mva #17 ExplosionRadius
+    lda #17 ; ExplosionRadius
     bne babymissile.GoBabyMissileSFX
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc babynuke
-    mva #25 ExplosionRadius
+    lda #25 ; ExplosionRadius
 GoBabyNukeSFX
+    sta ExplosionRadius
     mva #sfx_nuke sfx_effect     ; allways <>0
     bne babymissile.GoXmissile
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc nuke
-    mva #30 ExplosionRadius
+    lda #30 ; ExplosionRadius
     bne babynuke.GoBabyNukeSFX
 ;    jmp xmissile
 .endp
 ; ------------------------
 .proc leapfrog
-    mva #17 ExplosionRadius
+    lda #17 ; ExplosionRadius
 ;    mva #sfx_baby_missile sfx_effect
 ;    jsr xmissile
     jsr babymissile.GoBabyMissileSFX
@@ -115,7 +117,7 @@ GoBabyNukeSFX
 SecondRepeat
     ; soil must fall down now! there is no other way...
     ; hide tanks or they fall down with soil
-    jsr SoilDown2
+    jsr SoilDown
 
     ; it looks like force is divided by 4 here BUT"
     ; in Flight routine force is multiplied by 2 and left
@@ -138,9 +140,9 @@ EndOfLeapping
     rts
 .endp
 ; ------------------------
-.proc mirv ;  the whole mirv is performed by Flight routine
-    rts
-.endp
+;.proc mirv ;  the whole mirv is performed by Flight routine
+;    rts
+;.endp
 ; ------------------------
 .proc funkybomb ;
     mva #sfx_baby_missile sfx_effect
@@ -151,7 +153,7 @@ EndOfLeapping
     jsr CalculateExplosionRange0
     jsr xmissile.NoRangeCalc
 
-    jsr SoilDown2
+    jsr SoilDown
     ;
     jsr cleartanks    ; maybe not?
     mva #1 color
@@ -205,13 +207,10 @@ NoWallsInFunky
 ; ------------------------
 .proc deathshead
     mva #30 ExplosionRadius
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     sbw xdraw #34
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     adw xdraw #68
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
     sbw xdraw #34
     ;
@@ -219,20 +218,18 @@ NoWallsInFunky
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoUpperCircle
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
 NoUpperCircle
     adw ydraw #68
     ;jsr CalculateExplosionRange
     cpw ydraw #screenHeight
     bcs NoLowerCircle
-    mva #sfx_nuke sfx_effect
     jsr GoXmissileWithSaveXYdraw
 NoLowerCircle
-    mva #sfx_silencer sfx_effect
     rts
 
 GoXmissileWithSaveXYdraw
+    mva #sfx_nuke sfx_effect
     mwa xdraw tempXROLLER
     mwa ydraw modify
     jsr xmissile
@@ -242,16 +239,17 @@ GoXmissileWithSaveXYdraw
 .endp
 ; ------------------------
 .proc napalm
-    mva #0 HotNapalmFlag    ; in this weapon - flag: 0 - napalm, 1 - hotnapalm
+    lda #0      ; in this weapon - flag: 0 - napalm, 1 - hotnapalm
     beq xnapalm
 .endp
 ; ------------------------
 .proc hotnapalm
-    mva #1 HotNapalmFlag    ; in this weapon - flag: 0 - napalm, 1 - hotnapalm
+    lda #1   ; in this weapon - flag: 0 - napalm, 1 - hotnapalm
 ;    jmp xnapalm
 .endp
 ; ------------------------
 .proc xnapalm
+    sta HotNapalmFlag
     mva #sfx_napalm sfx_effect
     mva #(napalmRadius+4) ExplosionRadius     ; real radius + 4 pixels (half characrer width)
     jsr CalculateExplosionRange
@@ -294,18 +292,8 @@ LastNapalmRepeat
     lda #char_clear_flame         ; clear flame symbol
 PutFlameChar
     sta CharCode
-    ; check coordinates
-    cpw xdraw #(screenwidth-7)
-    bcs CharOffTheScreen
-    lda ydraw
-    cmp #7
-    bcc CharOffTheScreen
-    cmp #(screenHeight-1)
-    bcs CharOffTheScreen
     jsr TypeChar
-CharOffTheScreen
-    adw xdraw #4    ; reverse half character correction (we need positon of character center)
-    adw xdraw #1    ; next char 1 pixels to right
+    adw xdraw #5    ; reverse half character correction (4 px - we need positon of character center) and next char 1 pixels to righ
     inc magic+1
     lda magic+1
     cmp #(2*napalmRadius+1)    ; 10 pixels on left, 10 pixels on right and 1 in center
@@ -355,45 +343,47 @@ TankOutOfFire
 EndNurnedCheckLoop
     dex
     bpl BurnedCheckLoop
-    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; ------------------------
 .proc babyroller
-    mva #11 ExplosionRadius
+    lda #11 ; ExplosionRadius
 GoRoller
+    sta ExplosionRadius
     jmp xroller
 .endp
 ; ------------------------
 .proc roller ;
-    mva #21 ExplosionRadius
+    lda #21 ; ExplosionRadius
     bne babyroller.GoRoller    ; 1 byte saved
 ;    jmp xroller
 .endp
 ; ------------------------
 .proc heavyroller
-    mva #30 ExplosionRadius
+    lda #30 ; ExplosionRadius
     bne babyroller.GoRoller    ; 1 byte saved
 ;    jmp xroller
 .endp
 ; ------------------------
 .proc riotbomb
-    mva #17 ExplosionRadius
+    lda #17 ; ExplosionRadius
 GoRiotBomb
+    sta ExplosionRadius
     jsr CalculateExplosionRange
     jmp xriotbomb
 .endp
 ; ------------------------
 .proc heavyriotbomb
-    mva #29 ExplosionRadius
+    lda #29 ; ExplosionRadius
     bne riotbomb.GoRiotBomb ; 4 bytes saved - optimization :)
 ;    jsr CalculateExplosionRange
 ;    jmp xriotbomb
 .endp
 ; ------------------------
 .proc babydigger
-    mva #1 diggery  ; how many branches (-1)
+    lda #1  ; diggery  ; how many branches (-1)
 GoBabydiggerSFX
+    sta diggery
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
     mva #13 DigLong
@@ -401,28 +391,29 @@ GoBabydiggerSFX
 .endp
 ; ------------------------
 .proc digger ;
-    mva #3 diggery  ; how many branches (-1)
+    lda #3  ;   diggery  ; how many branches (-1)
     bne babydigger.GoBabydiggerSFX
 .endp
 ; ------------------------
 .proc heavydigger
-    mva #7 diggery  ; how many branches  (-1)
+    lda #7  ; diggery  ; how many branches  (-1)
     bne babydigger.GoBabydiggerSFX
 .endp
 ; ------------------------
 .proc babysandhog
-    mva #1 diggery  ; how many branches (-1)
+    lda #1  ; diggery  ; how many branches (-1)
     bne heavysandhog.GoHeavysandhogSFX
 .endp
 ; ------------------------
 .proc sandhog
-    mva #3 diggery  ; how many branches (-1)
+    lda #3  ; diggery  ; how many branches (-1)
     bne heavysandhog.GoHeavysandhogSFX
 .endp
 ; ------------------------
 .proc heavysandhog
-    mva #5 diggery  ; how many branches (-1)
+    lda #5  ; diggery  ; how many branches (-1)
 GoHeavysandhogSFX
+    sta diggery
     mva #sfx_sandhog sfx_effect
     mva #char_sandhog_offset sandhogflag
     mva #13 DigLong
@@ -445,7 +436,6 @@ WriteToBranches
     dex
     bpl WriteToBranches
     jsr DiggerCharacter ; start character
-
     adw xdraw #4
     lda DigLong
     ; looks strange, but it is (DigLong+2)*4
@@ -466,38 +456,28 @@ diglewy ; even branches go left
     lda digtabxL,x
     sbc #$04
     sta digtabxL,x
-    lda digtabxH,x
-    sbc #$00
-    sta digtabxH,x
+    scs
+    dec digtabxH,x
     jmp DigRandomize
 DigRight ; odd go right (everytime 4 pixels)
     clc
     lda digtabxL,x
     adc #$04
     sta digtabxL,x
-    lda digtabxH,x
-    adc #$00
-    sta digtabxH,x
+    scc
+    inc digtabxH,x
 DigRandomize
     lda random
-    and #$87
+    ;and #$87
     bmi DigUp
 DigDown
     and #$07
     clc
     adc digtabyL,x
     sta digtabyL,x
-    lda digtabyH,x
-    adc #$00
-    sta digtabyH,x
-    ;crashing bug here - if too much added to digtaby, it gets over screenheight and starts writing over random areas
-    ;WARNING! fix for 1 byte screenheight. TODO
-    lda digtabyL,x
-    cmp #screenheight
-    bcc @+ ; branch if less
-      lda #screenheight-1
-      sta digtabyL,x
-@   jmp DigCalculateNext
+    scc
+    inc digtabyH,x
+    jmp DigCalculateNext
 DigUp
     and #$07
     sta temp
@@ -505,9 +485,8 @@ DigUp
     lda digtabyL,x
     sbc temp
     sta digtabyL,x
-    lda digtabyH,x
-    sbc #$00
-    sta digtabyH,x
+    scs
+    dec digtabyH,x
 DigCalculateNext
     dex
     bpl CalculateBranches
@@ -530,7 +509,6 @@ DigDrawing
     dec:lda DigLong
     jpl BranchNotFinished
 DoNotPutDig
-    mva #sfx_silencer sfx_effect
     rts
 DiggerCharacter
     lda random
@@ -545,22 +523,23 @@ DiggerCharacter
 .endp
 ; ------------------------
 .proc dirtclod
-    mva #12 ExplosionRadius
+    lda #12 ; ExplosionRadius
     bne xdirt
 .endp
 ; ------------------------
 .proc dirtball
-    mva #22 ExplosionRadius
+    lda #22 ; ExplosionRadius
     bne xdirt
 .endp
 ; ------------------------
 .proc tonofdirt
-    mva #31 ExplosionRadius
+    lda #31 ; ExplosionRadius
 ;    jmp xdirt
 .endp
 ; -----------------
 .proc xdirt ;
 ; -----------------
+    sta ExplosionRadius
     jsr CalculateExplosionRange
     mva #sfx_dirt_charge sfx_effect
     lda #1
@@ -575,7 +554,6 @@ dirtLoop
     lda radius
     cmp ExplosionRadius
     bne dirtLoop
-    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; ------------------------
@@ -681,7 +659,7 @@ ToHighFill
 ; in xdraw and ydraw we have hit point coordinates
 ; from Shoot/Flight procedures (invisible flight)
 ; ------------------------
-    ldx TankNr
+;    ldx TankNr
     lda AngleTable,x
     tay
 
@@ -785,7 +763,7 @@ DistanceCheckLoop
     adc #3  ;measure from middle of the tank
     sta xbyte
     lda XtankstableH,x
-    clc
+;    clc    ; ops :)
     adc #0  ;measure from middle of the tank
     sta xbyte+1
     lda Ytankstable,x
@@ -849,7 +827,6 @@ TankIsNotWithinTheRange
 EndOfDistanceCheckLoop
     dex
     jpl DistanceCheckLoop
-    mva #sfx_silencer sfx_effect
     rts
 .endp
 ; -----------------
@@ -1052,6 +1029,151 @@ EndOfTheDirt
     mwa ycircle ydraw
     rts
 .endp
+; --------------------------------------------------
+.proc punch ;
+; --------------------------------------------------
+; 
+
+    ; calculate radius from Force
+     lda ForceTableL,x
+    sta temp
+    lda ForceTableH,x
+    sta temp+1
+    ldy #3  ; ExplosionRadius = Force/16
+@   lsr temp+1
+    ror temp
+    dey
+    bpl @-
+    
+    clc
+    lda temp
+    pha     ; store radius
+    adc #4  ; add margins for SoliDown
+    sta ExplosionRadius 
+
+    ; fixed radius
+;    mva #36 ExplosionRadius
+
+    jsr CalculateExplosionRange
+    
+    mva #sfx_baby_missile sfx_effect
+        
+    lda ytankstable,x
+    cmp #13+15     ; Check if tank is too high (13 - tank with shield, 15 - Jump)
+    bcc TooHighNoJump
+    ; Jump
+    ; 15 pixels up
+    mva #15 ExplosionRadius
+@   jsr ClearTankNr
+    dec ytankstable,x
+    jsr PutTankNr
+    lda ExplosionRadius
+    cmp #5
+    bcs Physics
+    jsr WaitOneFrame
+Physics
+    dec ExplosionRadius
+    bne @-
+    ; and down
+    mva #15 ExplosionRadius
+@   jsr ClearTankNr
+    inc ytankstable,x
+    jsr PutTankNr
+    dec ExplosionRadius
+    bne @-
+
+TooHighNoJump
+    mva #sfx_dirt_chrg_s sfx_effect
+
+    ; calculate radius from Force
+    pla     ; restore radius
+    sta ExplosionRadius  
+
+    ; fixed radius
+;    mva #32 ExplosionRadius
+
+CheckRange
+    ; punch all (not dead :) tanks in range
+    ldx TankNr
+    ldy NumberOfPlayers
+    dey
+CheckingNextTank
+    lda eXistenZ,y
+    beq DeadTank
+    cpy TankNr
+    beq Myself
+    ; it's not dead tank - check range
+    mva #0 temp2    ; tank direction (0 - on right side, $ff - on left side)
+    sec
+    lda xtankstableL,y
+    sbc xtankstableL,x
+    sta temp
+    lda xtankstableH,y
+    sbc xtankstableH,x
+    sta temp+1
+    bpl RightSide
+    dec temp2   ; on left side flag
+    lda temp
+    eor #$ff
+    sta temp
+    lda temp+1
+    eor #$ff
+    sta temp+1
+RightSide
+    bne TooFar
+    lda temp
+    cmp ExplosionRadius
+    bcs TooFar
+    ; tank in range!
+    phy
+    phx
+    sty TankNr
+    bit temp2
+    bmi PunchLeft
+PunchRight
+    jsr ClearTankNr
+    lda XtanksTableH,x
+    cmp #>(screenwidth-TankWidth-2) ; 2 pixels correction due to a barrel wider than tank
+    bne @+
+    lda XtanksTableL,x
+    cmp #<(screenwidth-TankWidth-2) ; 2 pixels correction due to a barrel wider than tank
+@   bcs RightEdge
+    inc xtankstableL,x
+    bne @+
+    inc xtankstableH,x
+RightEdge
+@   jsr PutTankNr
+    jmp TankPunched
+PunchLeft
+    jsr ClearTankNr
+    lda XtanksTableH,x
+    bne NotLeftEdge
+    lda XtanksTableL,x
+    cmp #3    ; 2 pixels correction due to a barrel wider than tank
+    bcc LeftEdge
+NotLeftEdge
+    lda xtankstableL,x
+    bne @+
+    dec xtankstableH,x
+@   dec xtankstableL,x
+LeftEdge
+    jsr PutTankNr
+TankPunched
+    plx
+    ply
+    stx TankNr
+TooFar    
+Myself    
+DeadTank
+    dey
+    jpl CheckingNextTank
+    dec ExplosionRadius
+    jne CheckRange
+    ldy #10
+    jsr PauseYFrames
+    rts
+.endp
+
 ;--------------------------------------------------
 .proc BeforeFire ;TankNr (byte)
 ;--------------------------------------------------
@@ -1118,7 +1240,7 @@ notpressed
 
     lda kbcode
     and #%10111111 ; SHIFT elimination
-
+    
     cmp #@kbcode._A  ; $3f  ; A
     bne @+
 callActivation
@@ -1163,14 +1285,24 @@ NoSpyHard
 
 jumpFromStick
     .IF TARGET = 800
-      cmp #$80|17    ; Ctrl+Help
+      cmp #$80|@kbcode._help    ; Ctrl+Help
       bne NoVdebugSwitch
+    .ELSE
+      cmp #@kbcode._help    ; Help (# in A5200)
+      bne NoVdebugSwitch
+      sta pressTimer ; reset 0+@kbcode._help (tricky)
+      jsr WaitForKeyRelease.StillWait
+      lda pressTimer
+      cmp #(25+@kbcode._help)  ; 1/2s - long press only
+      bcc NoVdebugSwitch
+    .ENDIF
       lda Vdebug
       eor #$ff
       sta Vdebug
+      mva #sfx_long_barrel sfx_effect
       jmp ReleaseAndLoop
 NoVdebugSwitch
-    .ENDIF
+
     and #$3f ;CTRL and SHIFT ellimination
     cmp #@kbcode._up  ; $e
     jeq pressedUp
@@ -1209,6 +1341,11 @@ checkJoy
     lda joyToKeyTable,y
     jmp jumpFromStick
 notpressedJoy
+    .IF TARGET = 800
+    ;second fire only Atari 800
+    jsr GetKey.Check2button
+    jcc pressedTAB
+    .ENDIF
     ;fire
     lda STRIG0
     jeq pressedSpace
@@ -1445,8 +1582,8 @@ RandomizeOffensiveText
 
     sta TextNumberOff
     ldy TankNr
-    mva #$ff plot4x4color
-    jsr DisplayOffensiveTextNr
+    lda #$ff
+    jsr DisplayOffensiveTextNr.notZero
 
 AfterOffensiveText
     mva #0 LaserFlag    ; $ff - Laser
@@ -1455,6 +1592,8 @@ AfterOffensiveText
     cmp #ind_Laser           ; laser
     bne NotStrongShoot
     ; Laser: (not)very strong - invisible - shot for laser beam end coordinates
+    bit TestFlightFlag
+    bmi @+ ; visible if Lazy Darwin
     bit Vdebug
     bmi @+
     mva #0 color
@@ -1494,14 +1633,42 @@ AfterStrongShoot
     bcs ShotUnderGround
     jsr Flight
     mva #1 color
-    rts
+    bne ClearOffensiveText
 ShotUnderGround
     mwa xtraj+1 xdraw    ; but why not XHit and YHit !!!???
     mwa ytraj+1 ydraw
     mva #$ff HitFlag
-    rts
+    ;here we clear offensive text (after a shoot) - clear only if no test flight (Lazy Darvin)
+ClearOffensiveText
+    bit TestFlightFlag
+    bmi @+
+    ldy TankNr
+    jmp DisplayOffensiveTextNr
+@
+;    rts
 .endp
 
+;--------------------------------------------------
+.proc NoShoot  ;TankNr (byte)
+;--------------------------------------------------
+; This is "Shoot" procedure for weapons that do not require a flying bullet.
+    ; Shoots tank nr X !!! :)
+    ; set the ending coordinates of bullet with correction
+    ldy #0
+    clc
+    lda xtankstableL,x
+    adc #4  ; tank "center" :)
+    sta xdraw    ; but why not XHit and YHit !!!???
+    tya ;0
+    adc xtankstableH,x
+    sta xdraw+1
+    lda ytankstable,x
+    sta ydraw
+    sty ydraw+1 ;0
+    dey ; $ff
+    sty HitFlag
+    rts
+.endp
 ;--------------------------------------------------
 .proc Flight  ; Force(byte.byte), Wind(0.word)
 ; Angle(byte) 128=0, 255=maxright, 0=maxleft
@@ -1802,7 +1969,8 @@ SkipCollisionCheck
     bvc NoTestFlight
     bit Vdebug
     bpl NoUnplot
-    jsr WaitOneFrame    ; visualize AI targeting
+    ldy #20    ; delay for visualize AI targeting
+    jsr ShellDelay.Y
     jmp YesUnPlot
 NoTestFlight
     lda tracerflag
@@ -2100,13 +2268,10 @@ mrLoopi
 
     jsr ShellDelay
     ;
-    phx
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     bpl ExitnotPressed
-    plx
     rts        ; exit if pressed 'Exit keys'
 ExitnotPressed
-    plx
     ;
 
 MIRVdoNotChangeY
@@ -2297,14 +2462,12 @@ MIRValreadyAll
     mwa ycircle ydraw
 
     ; we must do it manually because of the VOID pointer
-
     ;first clean the offensive text...
     ldy TankNr
-    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
     ; temporary removing tanks from the screen (otherwise they will fall down with soil)
-    jsr SoilDown2
+    jsr SoilDown
     mva #$ff HitFlag        ; but why ??
     rts
 .endp
@@ -2392,7 +2555,7 @@ NoWall
 ; -------------------------------------------------
     jsr PrepareAIShoot.WepTableToTemp
     jsr UseBattery
-    jmp TosserDefensives
+    jmp GetBestDefensive
     ; rts
 .endp
 ; -------------------------------------------------
@@ -2465,11 +2628,11 @@ EndLazy
 .proc LazyAim
     ; aiming proc for Lazy ... weapons
     ; as proc for memory optimisation
-    ; Y - target tan nr
+    ; Y - target tank nr
     ; A - target direction
     sty TargetTankNr
     ; aiming
-    jsr TakeAim        ; direction still in A (0 - left, >0 - right)
+    jsr TakeAimExtra        ; direction still in A (0 - left, >0 - right)
     lda Force
     sta ForceTableL,x
     lda Force+1
@@ -2560,7 +2723,7 @@ ReachSky
     adc #0
     sta RangeRight+1
     ; hide tanks and ...
-    jsr SoilDown2
+    jsr SoilDown
     jsr ClearScreenSoilRange
     ldx TankNr
 
@@ -2724,7 +2887,11 @@ CheckCollisionWithTankLoop
     tay
     lda xtankstableH,x
     sbc #0
+    bpl GreaterThanZero
     ; bmi ShieldOverLeftEdge    ; I do not know whether to check it. Probably not :) !!!
+    ldy #0
+    tya
+GreaterThanZero
     cmp xdraw+1
     bne @+
     cpy xdraw
@@ -2772,7 +2939,6 @@ ItIsMe
     ldx TankNr
     mva #sfx_shield_off sfx_effect
     jsr ClearTankNr
-    mva #0 Erase
     ; x correction for P/M
     ; --
     .IF XCORRECTION_FOR_PM = 1
@@ -2782,19 +2948,21 @@ ItIsMe
     .ENDIF
     ; --
 GoDown
-
-    mwa #mountaintable temp
+    mvy #0 Erase    ; Y=0
+;    mwa #mountaintable temp
     clc
-    lda temp
+    lda #<mountaintable
     adc XtankstableL,x
     sta temp
-    lda temp+1
+    lda #>mountaintable
     adc XtankstableH,x
     sta temp+1
     adw temp #4     ;    center of the tank
-    ldy #0
+    ;ldy #0
     lda (temp),y
-    sta OverTankDir    ; not elegant!!! Reuse as height of tank flight
+    tay
+    dey ; 1 pixel up!
+    sty OverTankDir    ; not elegant!!! Reuse as height of tank flight
 FloatDown
     lda ytankstable,x
     cmp OverTankDir
@@ -2825,7 +2993,7 @@ NotHighest
     ; calculate range
     jsr CalculateSoildown
     ; hide tanks and ...
-    jsr SoilDown2
+    jsr SoilDown
     ldx TankNr
     rts
 
@@ -2887,7 +3055,7 @@ CheckCollisionWithTankLoop
     lda ActiveDefenceWeapon,x
     cmp #ind_Mag_Deflector      ; first shielded weapon
     bcc CheckCollisionWithNotShieldedTank
-    cmp #ind_Bouncy_Castle  +1    ; last shielded weapon
+    cmp #ind_Bouncy_Castle+1    ; last shielded weapon
     bcc CheckCollisionWithShieldedTank    ; tank with shield is bigger :)
 
     ;lda ShieldEnergy,x        ; there is wrong method to check shield :)

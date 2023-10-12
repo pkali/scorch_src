@@ -4,7 +4,12 @@
     .IF *>0
 
 WeaponsListDL = 0
-NamesOfLevels = 0
+
+NamesOfLevels
+ dta  d" HUMAN     Moron     Shooter   "
+ dta d"  Poolshark Tosser    Chooser   "
+ dta d"  Spoiler   Cyborg    Unknown   "
+
 ;----------------------------------------
 ; this module contains routines used in text mode
 ; like shop and start-up options
@@ -25,6 +30,9 @@ NamesOfLevels = 0
     sta OptionsTable,x
     dex
     bpl @-
+
+    lda  #$1f    ; '?' character
+    sta RandomMountains
 
     rts
 
@@ -151,7 +159,10 @@ EndOfNick
     ; level of the computer opponent goes to
     ; the table of levels (difficulties)
     ldx tanknr
-    lda #6    ; Spoiler
+    txa
+    clc
+    adc #2
+;    lda #6    ; Spoiler
     sta DifficultyLevel
     sta skilltable,x
     beq NotRobot
@@ -169,35 +180,42 @@ NotRobot
 
     mva #sfx_next_player sfx_effect
 
-
-    ; check if all chars are empty (" ")
-    ldy #7
-    lda #0
-@     ora #0 ; NameAdr,y
-      and #$7F  ; remove inverse (Cursor)
-      dey
-    bpl @-
-    tay
-    beq MakeDefaultName
-
     ldy #0
-nextchar04
-    lda #0 ; NameAdr,y
-    and #$7f ; remove inverse (Cursor)
-    sta tanksnames,x
-    inx
-    iny
-    cpy #$08
-    bne nextchar04
+    stx temp+1  ; remember start position in tanksnames
+    sty temp    ; 0 if name is empty
+@
+      lda #0 ; NameAdr,y
+      and #$7f ; remove inverse (Cursor)
+      sta tanksnames,x
+      ora temp
+      sta temp
+      inx
+      iny
+      cpy #$08
+    bne @-
+    lda temp    ; check if all chars are empty (" ")
+    beq MakeDefaultName    
     rts
 MakeDefaultName
-nextchar05
-    lda tanksnamesDefault,x
+    ldy difficultyLevel
+    lda LevelNameBeginL,y ; address on the screen
+    sta temp2
+    lda LevelNameBeginH,y
+    sta temp2+1
+    ldx temp+1
+    ldy #1  ; after first char (space)
+@   lda (temp2),y
+    and #$7f    ; remove inverse
     sta tanksnames,x
+    beq MakeNumber  ; first space found :)
     inx
     iny
-    cpy #$08
-    bne nextchar05
+    cpy #8
+    bne @-
+MakeNumber
+    ldy tanknr
+    lda digits+1,y
+    sta tanksnames,x
     rts
 .endp
 ;--------------------------------------------------
@@ -263,6 +281,7 @@ nexdigit
 ; leading zeores are removed
 ; the range is (00..99 - one byte)
 
+    sta decimal
     ldy #1 ; there will be 2 digits
 NextDigit2
     ldx #8 ; 8-bit dividee so Rotate 8 times
@@ -323,8 +342,31 @@ displayloop1
 ;-------------------------------------------------
 .proc DisplayStatus
 ;-------------------------------------------------
+DisplayEnergy
 DisplayAngle
     ldx TankNr
+    rts
+.endp
+;-------------------------------------------------
+.proc _calc_inverse_display
+; optymalization station. not a real function
+; or is it?
+@weapon_index = TextNumberOff
+@inverse_counter = temp+1
+    
+    mwa #0 @inverse_counter
+    tay  ; ldy #0
+@   
+    inw LineAddress4x4
+    lda (LineAddress4x4),y
+    spl:inc @inverse_counter
+    lda @weapon_index
+    beq zeroth_talk  ; special treatment of talk #0
+    cmp @inverse_counter
+    bne @-
+    
+    inw LineAddress4x4  ; we were pointing at the char with inverse, must go 1 further
+zeroth_talk
     rts
 .endp
 ;-------------------------------------------------

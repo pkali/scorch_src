@@ -24,7 +24,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.28" ; number of this build (4 bytes)
+    dta d"1.43" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -35,11 +35,16 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $58 ; $57
+FirstZpageVariable = $52 ; $57
     .zpvar DliColorBack        .byte = FirstZpageVariable
+    .zpvar MeteorsFlag  .byte   ; set 7th bit - block meteors
+    .zpvar MeteorsRound .byte   ; set 7th bit - block meteors in round
     .zpvar GradientNr        .byte
     .zpvar GradientColors    .word
     .zpvar WindChangeInRound    .byte    ; wind change after each turn (not round only) flag - (0 - round only, >0 - each turn)
+    .zpvar RandomMountains  .byte   ; mountains type change after each turn flag - (0 - round only, >0 - each turn)
+    .zpvar FastSoilDown     .byte   ; 0 - standard, >0 - fast
+    .zpvar BlackHole        .byte  ; 0 - no, >0 - yes
     .zpvar JoystickNumber    .byte
     .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
     .zpvar SpyHardFlag        .byte    ; >$7f - run SpyHard after inventory
@@ -135,6 +140,7 @@ FirstZpageVariable = $58 ; $57
     .zpvar Multiplier .word
     .zpvar Multiplier_ .byte  ; 3 bytes
     .zpvar HowToDraw .byte
+    .zpvar DrawDirFactor .byte
     .zpvar gravity .byte
     .zpvar LineLength .word
     .zpvar tracerflag .byte
@@ -181,8 +187,9 @@ FirstSTART
     DisplayCopyPurchaseStart = 0
     displayC64 = $2000    ;    graphics screen memory start
 
+StartAfterSplash
         SEI             ; disable IRQ
-         LDA #$36
+        LDA #$36
         STA $0001      ; Turn Off BASIC ROM
         LDA #<NMI    ;
         STA $0318       ; change NMI vector
@@ -235,6 +242,9 @@ FirstSTART
     icl 'game.asm'
 ;--------------------------------------------------
 
+.proc SetJoystickPort
+    rts
+.endp
 
 ;--------------------------------------------------
 .proc GetKey
@@ -331,7 +341,8 @@ MakeDarkScreen
 .endp
 ;--------------------------------------------------
 .proc ShellDelay
-    ldx flyDelay
+    ldy flyDelay
+Y
 DelayLoop
       lda $d012
 @     cmp $d012
@@ -339,7 +350,7 @@ DelayLoop
       lda $d012
 @     cmp $d012
       beq @-
-      dex
+      dey
     bne DelayLoop
 noShellDelay
     rts

@@ -13,7 +13,7 @@ OptionsHere
  dta d"Rounds   :  10    20    30    40    50  "
  dta d"Missiles : slug  slow  norm  fast  hare "
  dta d"Seppuku  : nevr  rare  norm  oftn  alws "
- dta d"Mountains:  NL    BE    CZ    CH    NP  "
+ dta d"Mountain :  NL    BE    CZ    CH    NP  "
  dta d"Walls    : none  wrap  bump  boxy  rand "
 ;;      01234567890123456789012345678901
 ; dta d"Players:  2    3    4    5    6 "
@@ -29,9 +29,13 @@ OptionsScreenEnd
 
 ;-----------------------------------------------
 NameScreen2
- dta d"  Tank 1  *1  +1  Name:"
+ dta d"  Tank 1  "
+ dta char_joy
+ dta            d"1  "
+ dta char_tank
+ dta                d"1  Name:"
 NameAdr
- dta                      d"         "
+ dta                        d"         "
 NameScreen4
  dta d" "
 NamesOfLevels

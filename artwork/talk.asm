@@ -1,135 +1,127 @@
 .proc talk
 ; Maximum text length is 63 characters!!!
-L0   dta d"CYKA BLAT"
-L1   dta d"DIE!"
-L2   dta d"EAT MY SHORTS!"
-L3   dta d"YOU'RE TOAST!"
-L4   dta d"BANZAI!"
-L5   dta d"FROM HELL'S HEART I STAB AT THEE..."
-L6   dta d"I DIDN'T DO IT. NOBODY SAW ME DO IT."
-L7   dta d"TAKE A HIKE!"
-L8   dta d"YOU'RE DEAD MEAT."
-L9   dta d"MAKE MY DAY."
-L10  dta d"CHARGE!"
-L11  dta d"ATTACK!"
-L12  dta d"YOU'RE OUTTA HERE."
-L13  dta d"WATTSA MATTA YOU?"
-L14  dta d"FREEZE, OR I'LL SHOOT!"
-L15  dta d"HA HA HA."
-L16  dta d"WE COME IN PEACE - SHOOT TO KILL!"
-L17  dta d"IN YOUR FACE!"
-L18  dta d"DIE COMMIE PIG!"
-L19  dta d"I LOVE THE SMELL OF NAPALM IN THE MORNING."
-L20  dta d"VICTORY!"
-L21  dta d"SHOW SOME RESPECT."
-L22  dta d"JUST WHO DO YOU THINK YOU ARE?"
-L23  dta d"LOOK OUT BELOW!"
-L24  dta d"KNOCK, KNOCK."
-L25  dta d"LOOK OVER THERE."
-L26  dta d"GUESS WHAT'S COMING FOR DINNER?"
-L27  dta d"MERRY CHRISTMAS."
-L28  dta d"OPEN WIDE!"
-L29  dta d"HERE GOES NOTHING..."
-L30  dta d"DON'T WORRY, IT ISN'T A LIVE ROUND."
-L31  dta d"BLOOD, PAIN, VIOLENCE!"
-L32  dta d"TAKE THIS, SISSY!"
-L33  dta d"I SHALL FLATTEN YOU!"
-L34  dta d"I SHALL SMASH YOUR UGLY TANK!"
-L35  dta d"I WONDER WHAT THIS BUTTON DOES?"
-L36  dta d"DON'T TAKE THIS PERSONALLY."
-L37  dta d"WOULD THIS MAKE YOU MAD?"
-L38  dta d"I TOLD YOU TO LEAVE MY SISTER ALONE!"
-L39  dta d"I COULD SPARE YOU, BUT WHY?"
-L40  dta d"MY BOMB IS BIGGER THAN YOURS."
-L41  dta d"DON'T FORGET ABOUT ME!"
-L42  dta d"HASTA LA VISTA, BABY!"
-L43  dta d"THIS IS YOUR BRAIN ON SCORCH."
-L44  dta d"TAKE THIS!"
-L45  dta d"THIS SCREEN AIN'T BIG ENOUGH FOR THE BOTH OF US."
-L46  dta d"DIE, ALIEN SWINE!"
-L47  dta d"AWRUK!!!"
-L48  dta d"I SHALL OIL MY TURRET WITH YOUR BLOOD."
-L49  dta d"DIE, TANK-SCUM!"
-L50  dta d"I'M GONNA BREAK YOUR FACE!"
-L51  dta d"MAMA SAID KNOCK YOU OUT!"
-L52  dta d"I HOPE YOU ENJOY PAIN!"
-L53  dta d"HOW'D YOU LIKE ONE ACROSS YOUR LIPS?"             ;(sanford and son)
-;--------------------------------
-L54  dta d"PARTING IS SUCH SWEET SORROW... NOT!"
-L55  dta d"UGH!"
-L56  dta d"AARGH!"
-L57  dta d"AAAGGHHH!"
-L58  dta d"I'M MELTING!"
-L59  dta d"OOF.."
-L60  dta d"OH!"
-L61  dta d"EEEK!"
-L62  dta d"AACCH!"
-L63  dta d"I HATE IT WHEN THAT HAPPENS."
-L64  dta d"ONE DIRECT HIT CAN RUIN YOUR WHOLE DAY."
-L65  dta d"OH NO!"
-L66  dta d"NOT ME!"
-L67  dta d"OUCH."
-L68  dta d"OH NO, NOT AGAIN."
-L69  dta d"ANOTHER ONE BITES THE DUST."
-L70  dta d"GOODBYE."
-L71  dta d"HELP ME!"
-L72  dta d"FAREWELL, CRUEL WORLD."
-L73  dta d"REMEMBER THE ALAMO!"
-L74  dta d"OH MAN!"
-L75  dta d"DOOUGH!"
-L76  dta d"NEW DAY, NEW BOMB."
-L77  dta d"THIS IS THE END, MY ONLY FRIEND."
-L78  dta d"VERY FUNNY."
-L79  dta d"THE FAT LADY SANG."
-L80  dta d"WHY DOES EVERYTHING HAPPEN TO ME?"
-L81  dta d"I'M GOING DOWN."
-L82  dta d"I'VE GOT A BAD FEELING ABOUT THIS."
-L83  dta d"CRAPOLA."
-L84  dta d"POW!"
-L85  dta d"BIF!"
-L86  dta d"BAM!"
-L87  dta d"ZONK!"
-L88  dta d"I SHOULD'VE LISTENED TO MY MOTHER."
-L89  dta d"I WALK THROUGH THE VALLEY OF THE SHADOW..."
-L90  dta d"WHAT WAS THAT NOISE?"
-L91  dta d"MAMA SAID THERE'D BE DAYS LIKE THIS."
-L92  dta d"ITS JUST ONE OF THOSE DAYS..."
-L93  dta d"I SEE A BRIGHT LIGHT..."
-L94  dta d"MOMMY? IS THAT YOU?"
-L95  dta d"I LET YOU HIT ME!"
-L96  dta d"SUCKER SHOT!"
-L97  dta d"I DIDN'T WANT TO LIVE ANYWAY."
-L98  dta d"-<SOB>-"
-L99  dta d"WAS THAT AS CLOSE AS I THINK IT WAS?"
-L100  dta d"JOIN THE ARMY, SEE THE WORLD THEY SAID."
-L101 dta d"IT WASN'T JUST A JOB IT WAS AN ADVENTURE!"
-L102 dta d"I DIDN'T LIKE VIOLENCE ANYWAY!"
-L103 dta d"I THOUGHT YOU LIKED ME?"
-L104 dta d"CTO XYEB"
-L105 dta d"I THINK THIS GUY'S A LITTLE CRAZY."
-L106 dta d"SOMEHOW I DON'T FEEL LIKE KILLING ANYMORE."
-L107 dta d"HEY! KILLIN' AIN'T COOL."
-L108 dta d"GEE... THANKS."
-L109 dta d"I'VE FALLEN AND I CAN'T GET UP!"
-L110 dta d"911?"
-L111 dta d"OH NO! HERE I BLOW AGAIN!"
-L112 dta d"I'LL BE BACK..."
-L113 dta d"I'VE GOT LAWYERS!"
-L114 dta d"CALL 1-900-SUE-TANK."
-L115 dta d"YOU BIG DUMMY!"                                    ;(sanford and son)
+    dta d"CYKA BLAT"^
+    dta d"DIE!"^
+    dta d"EAT MY SHORTS!"^
+    dta d"YOU'RE TOAST!"^
+    dta d"BANZAI!"^
+    dta d"FROM HELL'S HEART I STAB AT THEE..."^
+    dta d"DO YOU FEEL LUCKY, TANK?"^
+    dta d"TAKE A HIKE!"^
+    dta d"YOU'RE DEAD MEAT."^
+    dta d"MAKE MY DAY."^
+    dta d"CHARGE!"^
+    dta d"ATTACK!"^
+    dta d"YOU'RE OUTTA HERE."^
+    dta d"WATTSA MATTA YOU?"^
+    dta d"FREEZE, OR I'LL SHOOT!"^
+    dta d"HA HA HA."^
+    dta d"WE COME IN PEACE - SHOOT TO KILL!"^
+    dta d"IN YOUR FACE!"^
+    dta d"DIE COMMIE PIG!"^
+    dta d"I LOVE THE SMELL OF NAPALM IN THE MORNING."^
+    dta d"VICTORY!"^
+    dta d"SHOW SOME RESPECT."^
+    dta d"JUST WHO DO YOU THINK YOU ARE?"^
+    dta d"LOOK OUT BELOW!"^
+    dta d"KNOCK, KNOCK."^
+    dta d"LOOK OVER THERE."^
+    dta d"GUESS WHAT'S COMING FOR DINNER?"^
+    dta d"MERRY CHRISTMAS."^
+    dta d"OPEN WIDE!"^
+    dta d"HERE GOES NOTHING..."^
+    dta d"DON'T WORRY, IT ISN'T A LIVE ROUND."^
+    dta d"BLOOD, PAIN, VIOLENCE!"^
+    dta d"TAKE THIS, SISSY!"^
+    dta d"I SHALL FLATTEN YOU!"^
+    dta d"I SHALL SMASH YOUR UGLY TANK!"^
+    dta d"I WONDER WHAT THIS BUTTON DOES?"^
+    dta d"DON'T TAKE THIS PERSONALLY."^
+    dta d"WOULD THIS MAKE YOU MAD?"^
+    dta d"I TOLD YOU TO LEAVE MY SISTER ALONE!"^
+    dta d"I COULD SPARE YOU, BUT WHY?"^
+    dta d"MY BOMB IS BIGGER THAN YOURS."^
+    dta d"DON'T FORGET ABOUT ME!"^
+    dta d"HASTA LA VISTA, BABY!"^
+    dta d"THIS IS YOUR BRAIN ON SCORCH."^
+    dta d"TAKE THIS!"^
+    dta d"THIS SCREEN AIN'T BIG ENOUGH FOR US."^
+    dta d"DIE, ALIEN SWINE!"^
+    dta d"AWRUK!!!"^
+    dta d"I SHALL OIL MY TURRET WITH YOUR BLOOD."^
+    dta d"DIE, TANK-SCUM!"^
+    dta d"I'M GONNA BREAK YOUR FACE!"^
+    dta d"MAMA SAID KNOCK YOU OUT!"^
+    dta d"I HOPE YOU ENJOY PAIN!"^
+    dta d"HOW'D YOU LIKE ONE ACROSS YOUR LIPS?"^           ;(sanford and son)
+;----------------------------
+    dta d"PARTING IS SUCH SWEET SORROW... NOT!"^
+    dta d"UGH!"^
+    dta d"AARGH!"^
+    dta d"AAAGGHHH!"^
+    dta d"I'M MELTING!"^
+    dta d"OOF.."^
+    dta d"OH!"^
+    dta d"EEEK!"^
+    dta d"AACCH!"^
+    dta d"I HATE IT WHEN THAT HAPPENS."^
+    dta d"ONE HIT CAN RUIN YOUR WHOLE DAY."^
+    dta d"OH NO!"^
+    dta d"NOT ME!"^
+    dta d"OUCH."^
+    dta d"OH NO, NOT AGAIN."^
+    dta d"ANOTHER ONE BITES THE DUST."^
+    dta d"GOODBYE."^
+    dta d"HELP ME!"^
+    dta d"FAREWELL, CRUEL WORLD."^
+    dta d"REMEMBER THE ALAMO!"^
+    dta d"OH MAN!"^
+    dta d"DOOUGH!"^
+    dta d"NEW DAY, NEW BOMB."^
+    dta d"THIS IS THE END, MY ONLY FRIEND."^
+    dta d"VERY FUNNY."^
+    dta d"THE FAT LADY SANG."^
+    dta d"WHY DOES HAPPEN TO ME?"^
+    dta d"I'M GOING DOWN."^
+    dta d"I'VE GOT A BAD FEELING."^
+    dta d"CRAPOLA."^
+    dta d"POW!"^
+    dta d"BIF!"^
+    dta d"BAM!"^
+    dta d"ZONK!"^
+    dta d"I SHOULD'VE LISTENED TO MY MOM."^
+    dta d"I WALK THROUGH THE VALLEY OF THE SHADOW..."^
+    dta d"WHAT WAS THAT NOISE?"^
+    dta d"MAMA SAID THERE'D BE DAYS LIKE THIS."^
+    dta d"IT'S JUST ONE OF THOSE DAYS..."^
+    dta d"I SEE A BRIGHT LIGHT..."^
+    dta d"MOMMY? IS THAT YOU?"^
+    dta d"I LET YOU HIT ME!"^
+    dta d"SUCKER SHOT!"^
+    dta d"I DIDN'T WANT TO LIVE ANYWAY."^
+    dta d"-<SOB>-"^
+    dta d"WAS THAT AS CLOSE AS I THINK IT WAS?"^
+    dta d"JOIN THE ARMY, SEE THE WORLD THEY SAID."^
+    dta d"IT WASN'T JUST A JOB, IT WAS AN ADVENTURE!"^
+    dta d"I DIDN'T LIKE VIOLENCE ANYWAY!"^
+    dta d"I THOUGHT YOU LIKED ME?"^
+    dta d"CTO XYEB"^
+    dta d"I THINK THIS GUY'S A LITTLE CRAZY."^
+    dta d"SOMEHOW I DON'T FEEL LIKE KILLING ANYMORE."^
+    dta d"HEY! KILLIN' AIN'T COOL."^
+    dta d"GEE... THANKS."^
+    dta d"I'VE FALLEN AND I CAN'T GET UP!"^
+    dta d"911?"^
+    dta d"OH NO! HERE I BLOW AGAIN!"^
+    dta d"I'LL BE BACK..."^
+    dta d"I'VE GOT LAWYERS!"^
+    dta d"CALL 1-900-SUE-TANK."^
+    dta d"YOU BIG DUMMY!"^                 ;(sanford and son)
 LEND
-OffensiveTextTableL
-    dta <L0,<L1,<L2,<L3,<L4,<L5,<L6,<L7,<L8,<L9,<L10,<L11,<L12,<L13,<L14,<L15,<L16,<L17,<L18,<L19,<L20,<L21,<L22,<L23,<L24,<L25,<L26,<L27,<L28,<L29,<L30,<L31,<L32,<L33,<L34,<L35,<L36,<L37,<L38,<L39,<L40,<L41,<L42,<L43,<L44,<L45,<L46,<L47,<L48,<L49,<L50,<L51,<L52,<L53
-    dta <L54,<L55,<L56,<L57,<L58,<L59,<L60,<L61,<L62,<L63,<L64,<L65,<L66,<L67,<L68,<L69,<L70,<L71,<L72,<L73,<L74,<L75,<L76,<L77,<L78,<L79,<L80,<L81,<L82,<L83,<L84,<L85,<L86,<L87,<L88,<L89,<L90,<L91,<L92,<L93,<L94,<L95,<L96,<L97,<L98,<L99,<L100,<L101,<L102,<L103,<L104,<L105,<L106,<L107,<L108,<L109,<L110,<L111,<L112,<L113,<L114,<L115
-    dta <LEND
-OffensiveTextTableH
-    dta >L0,>L1,>L2,>L3,>L4,>L5,>L6,>L7,>L8,>L9,>L10,>L11,>L12,>L13,>L14,>L15,>L16,>L17,>L18,>L19,>L20,>L21,>L22,>L23,>L24,>L25,>L26,>L27,>L28,>L29,>L30,>L31,>L32,>L33,>L34,>L35,>L36,>L37,>L38,>L39,>L40,>L41,>L42,>L43,>L44,>L45,>L46,>L47,>L48,>L49,>L50,>L51,>L52,>L53
-    dta >L54,>L55,>L56,>L57,>L58,>L59,>L60,>L61,>L62,>L63,>L64,>L65,>L66,>L67,>L68,>L69,>L70,>L71,>L72,>L73,>L74,>L75,>L76,>L77,>L78,>L79,>L80,>L81,>L82,>L83,>L84,>L85,>L86,>L87,>L88,>L89,>L90,>L91,>L92,>L93,>L94,>L95,>L96,>L97,>L98,>L99,>L100,>L101,>L102,>L103,>L104,>L105,>L106,>L107,>L108,>L109,>L110,>L111,>L112,>L113,>L114,>L115
-    dta >LEND
 NumberOfOffensiveTexts=54
 NumberOfDeffensiveTexts=62
 .endp
-hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"
+hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"^
 hoverFullEnd
-hoverEmpty dta d"RUNNING OUT OF EELS"
+hoverEmpty dta d"RUNNING OUT OF EELS"^
 hoverEmptyEnd
