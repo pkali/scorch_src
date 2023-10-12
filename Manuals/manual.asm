@@ -1,5 +1,6 @@
     icl '../Atari/lib/ATARISYS.ASM'
     icl '../Atari/lib/MACRO.ASM'
+    icl '../Atari/lib/cartloader_vectors.inc'
 
 .IFNDEF LANG
     .def LANG = "PL"
@@ -87,14 +88,11 @@ main_loop
     sta escflag
     jsr WaitOneFrame
     ; exit to cart loader
-    XSRC   = $7FE ; -$7FF) - adres początku pliku do załadowania z carta (zakres $a000-$bffff)
-    XBANK  = $7FD ;) - bank w którym sie znajduje powyższy początek
-    XCLEAR = $7FC ;) - numer strony od której czyścimy pamięć (jak jest zero to nie czyścimy) czyszczenie zatrzymuje sie na $cfff
     
-    mva #0 XBANK
-    mwa #$a000 XSRC
-    mva #$10 XCLEAR
-    jmp $700
+    mva #0 X_BANK
+    mwa #$a000 X_SRC
+    mva #$10 X_CLRSTART
+    jmp X_LOADER_START
 NoEscape    
     jsr MakeScreenCopy
     ; save the current end of the printed text source

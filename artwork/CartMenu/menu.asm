@@ -1,7 +1,7 @@
 
-      icl '../../Atari/lib/ATARISYS.ASM'
-      icl '../../Atari/lib/MACRO.ASM'
-
+    icl '../../Atari/lib/ATARISYS.ASM'
+    icl '../../Atari/lib/MACRO.ASM'
+    icl '../../Atari/lib/cartloader_vectors.inc'
     icl 'cart_reset.asm'
 
     .zpvar dliCounter        .byte = $80
@@ -10,10 +10,7 @@
 
 ; ------- constans --------
 ; start addr of loader
-Loader_Start    =   $0700
-Clear_Set    = $07fc
-Bank_Set    = $07Fd 
-Addr_Set    = $07fe
+
 ; cart banks numbers
 LoaderBank  = 0
 ScorchBank  = 1
@@ -59,19 +56,19 @@ WaitForKey
     jsr GetKey
     cmp #@kbcode._space
     bne @+
-    mva #ScorchBank Bank_Set
+    mva #ScorchBank X_BANK
     bne GoLoader
 @   cmp #@kbcode._E
     bne @+
-    mva #MenuENBank Bank_Set
+    mva #MenuENBank X_BANK
     bne GoLoader
 @   cmp #@kbcode._P
     bne @+
-    mva #MenuPLBank Bank_Set
+    mva #MenuPLBank X_BANK
     bne GoLoader
 @   cmp #@kbcode._T
     bne WaitForKey
-    mva #TetryxBank Bank_Set
+    mva #TetryxBank X_BANK
     bne GoLoader
 
 GoLoader
@@ -83,11 +80,11 @@ GoLoader
     lda #0 ; DL off, P/M off
     sta dmactls
     jsr WaitOneFrame
-    mwa #$a000 Addr_Set
-    mva #$10 Clear_Set
+    mwa #$a000 X_SRC
+    mva #$10 X_CLRSTART
     ;cli
     ;jmp main
-    jmp Loader_Start
+    jmp X_LOADER_START
 stop
     jmp stop
 

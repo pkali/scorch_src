@@ -1,14 +1,14 @@
 
-BankNr = $D500
+Bank0 = $D500
 ; ---	
 	org $0100
 reset_proc
     ; set cartridge bank to 0
-    mva #$0 BankNr
+    sta Bank0
     ; and reset
-    jmp ($fffd)
+    jmp ($fffc)
 initialization
-    mwa #reset_proc $0A ; set DOSVEC
+    mwa #reset_proc $0C ; set DOSINI
     mva #$01 $09
     rts
 ;    
