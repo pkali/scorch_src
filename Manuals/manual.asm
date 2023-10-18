@@ -105,7 +105,11 @@ NoEscape
     beq scroll_up
     cmp #@kbcode._left
     beq prev_chapter
+    cmp #@kbcode._del
+    beq prev_chapter
     cmp #@kbcode._right
+    jeq next_chapter
+    cmp #@kbcode._space
     jeq next_chapter
     jmp main_loop
   
