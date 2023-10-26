@@ -1194,8 +1194,18 @@ SetRandomWalls
     rts
 .endp
 ; --------------------------------------
-; Sets the appropriate variables based on the options table
+; Sets the appropriate variables based on the 'OptionsTable'
 ;
+; this function returns:
+; - 'NumberOfPlayers'
+; - 'moneyL' and 'moneyH' (in arrays) for each player
+; - 'gravity'
+; - 'MaxWind'
+; - 'RoundsInTheGame'
+; - 'flyDelay'
+; - 'seppukuVal'
+; - 'mountainDeltaL' and 'mountainDeltaH'
+
 .proc SetVariablesFromOptions
     ;first option
     ldy OptionsTable

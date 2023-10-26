@@ -12,9 +12,16 @@
 ;--------------------------------------------------
 ; start-up screen - options, etc.
 ; this function returns:
-; - number of players (NumberOfPlayers)
-; - money each player has on the beginning of the game (moneyL i moneyH)
-; - and I am sure maxwind, gravity, no_of_rounds in a game, speed of shell flight
+; - 9 values in 'OptionTable' denoting options selected in menu.
+; According to contents of this table, corresponding variables are then set.
+; Setting of these variables is handled by procedure 'SetVariablesFromOptions'.
+; This function also returns additional options by setting variables:
+; - 'RandomMountains' -  mountains type change after each (0 - round only, >0 - each turn)
+; - 'WindChangeInRound' - wind change after each turn (0 - round only, >0 - each turn)
+; - 'GradientNr'
+; - 'BlackHole' -  0 - standard, >0 - fast
+; - 'FastSoilDown' - 0 - no, >0 - yes
+; -----------------------------------------------------
 
    ; we only need to clear last 60 lines (faster)
     ldy #<(display+40*140)
@@ -1071,13 +1078,16 @@ loop  sta (temp2),y
 .endp
 ; -----------------------------------------------------
 .proc EnterPlayerName
-; in: TankNr
-; Out: TanksNames, SkillTable
-
 ; this little thing is for choosing Player's skill (if computer)
 ; and entering his name
-; If no name entered, there should be name "1st Tank", etc.
-; Default tanks names are in table TanksNamesDefault
+; If no name entered, there should be default.
+; Default tank names are taken from difficulty level names on the screen.
+;
+; in: TankNr
+; this function returns:
+; - 'skilltable' (in array) for this tank
+; - 'TankShape' (in array) for this tank
+; - 'TanksNames' (in array) for this tank
 ; -----------------------------------------------------
 
     jsr PMoutofScreen
