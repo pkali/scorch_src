@@ -253,8 +253,18 @@ StartAfterSplash
 ; result: A=keycode
 ;--------------------------------------------------
     jsr WaitForKeyRelease
-    lda #0
-    sta escFlag
+    jsr GetKeyFast
+    ldy #0
+    sty escFlag
+    rts
+.endp
+
+;--------------------------------------------------
+.proc GetKeyFast
+; returns pressed value in A - no wait for press
+; when [ESC] is pressed, escFlag is set
+; result: A=keycode 
+;--------------------------------------------------
     lda #$ff
     rts
 .endp

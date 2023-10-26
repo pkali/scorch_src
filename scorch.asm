@@ -54,9 +54,8 @@ AdditionalZPvariables = $20
     .zpvar MeteorsRound     .byte  ; set 7th bit - block meteors in round
     
 
-FirstZpageVariable = $4f
+FirstZpageVariable = $50
     .zpvar DliColorBack     .byte = FirstZpageVariable
-    .zpvar FastKeyRead      .byte ; 0 - GetKey wait for any key (and generates SFX), $ff - fast GetKey
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte  ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr       .byte
@@ -405,7 +404,7 @@ NoRMT_PALchange
     sta JoystickNumber
     .IF TARGET = 800           ; second joy button state update only on A800
       jsr WaitOneFrame         ; is necessary for update shadow registers (PADDL0) in VBI
-      jmp GetKey.Check2button  ; update state second joy button
+      jmp GetKeyFast.Check2button  ; update state second joy button
     .ELSE
       rts
     .ENDIF
@@ -419,6 +418,21 @@ NoRMT_PALchange
 ;--------------------------------------------------
     jsr WaitForKeyRelease
 getKeyAfterWait
+    jsr GetKeyFast
+    cmp #@kbcode._none
+    beq getKeyAfterWait
+    ldy #0
+    sty ATRACT                 ; reset atract mode
+    mvy #sfx_keyclick sfx_effect
+    rts
+.endp
+
+;--------------------------------------------------
+.proc GetKeyFast
+; returns pressed value in A - no waits for press
+; when [ESC] is pressed, escFlag is set
+; result: A=keycode ($ff - no key pressed)
+;--------------------------------------------------
     .IF TARGET = 800
       lda SKSTAT
       cmp #$ff
@@ -471,8 +485,6 @@ checkSelectKey
       lda CONSOL
       and #%00000100           ; Option
     .ENDIF
-    bit FastKeyRead
-    bpl getKeyAfterWait
     lda #@kbcode._none
     bne getkeyend
 OptionPressed
@@ -485,12 +497,8 @@ SelectPressed
 JoyButton
     lda #@kbcode._ret          ; Return key
 getkeyend
-    ldy #0
-    sty ATRACT                 ; reset atract mode
-    bit FastKeyRead
-    bmi @+
-    mvy #sfx_keyclick sfx_effect
-@   rts
+    rts
+; ----
     .IF TARGET = 800           ; Second joy button only on A800
 Check2button
     lda PADDL0

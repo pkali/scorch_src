@@ -402,7 +402,6 @@ ManualShooting
     lda #%00000000
     sta TestFlightFlag    ; set "Test Fight" off
     jsr BeforeFire
-    mva #$00 FastKeyRead
     bit escFlag
     spl:rts        ; keys Esc or O
 
