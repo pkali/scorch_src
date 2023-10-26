@@ -432,10 +432,15 @@ getKeyAfterWait
     lda kbcode
     cmp #@kbcode._none
     beq checkJoyGetKey
+    pha
     and #$3f                   ; CTRL and SHIFT ellimination
     cmp #@kbcode._esc          ; 28  ; ESC
-    bne getkeyend
-      mvy #$80 escFlag
+    beq EscPressed
+    pla
+    jmp getkeyend
+EscPressed
+    pla
+    mvy #$80 escFlag
     bne getkeyend
 
 checkJoyGetKey

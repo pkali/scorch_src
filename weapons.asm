@@ -1232,13 +1232,7 @@ notpressed
     tya
     and #%00000010
     jeq pressedTAB    ; Select key
-    lda SKSTAT
-    cmp #$ff
-    jeq checkJoy
-    cmp #$f7  ; SHIFT
-    jeq checkJoy
-
-    lda kbcode
+    jsr GetKey.getKeyAfterWait
     and #%10111111 ; SHIFT elimination
     
     cmp #@kbcode._A  ; $3f  ; A
@@ -1328,29 +1322,6 @@ NoVdebugSwitch
     .ENDIF
 EndKeys
     jmp notpressed
-checkJoy
-    ;------------JOY-------------
-    ;happy happy joy joy
-    ;check for joystick now
-    lda STICK0
-    and #$0f
-    cmp #$0f
-    beq notpressedJoy
-    tay
-    mva #0 ATRACT    ; reset atract mode
-    lda joyToKeyTable,y
-    jmp jumpFromStick
-notpressedJoy
-    .IF TARGET = 800
-    ;second fire only Atari 800
-    jsr GetKey.Check2button
-    jcc pressedTAB
-    .ENDIF
-    ;fire
-    lda STRIG0
-    jeq pressedSpace
-    mva #$ff pressTimer  ; stop counting frames
-   jmp notpressed
 
 ;
 pressedUp
@@ -2754,16 +2725,7 @@ notpressed
     jsr DrawTankEngine
     ; enimation ends
 
-    lda SKSTAT
-    cmp #$ff
-    jeq checkJoy
-    cmp #$f7  ; SHIFT
-    jeq checkJoy
-
-    lda kbcode
-    and #%00111111 ; CTRL and SHIFT elimination
-
-jumpFromStick
+    jsr GetKey.getKeyAfterWait
     cmp #@kbcode._left  ; $6
     jeq pressedLeft
     cmp #@kbcode._right  ; $7
@@ -2771,23 +2733,6 @@ jumpFromStick
     cmp #@kbcode._space  ; $21
     jeq pressedSpace
     jmp notpressed
-checkJoy
-    ;------------JOY-------------
-    ;happy happy joy joy
-    ;check for joystick now
-    lda STICK0
-    and #$0f
-    cmp #$0f
-    beq notpressedJoy
-    tay
-    lda joyToKeyTable,y
-    jmp jumpFromStick
-notpressedJoy
-    ;fire
-    lda STRIG0
-    jeq pressedSpace
-    jmp notpressed
-
 
 pressedRight
     lda ShieldEnergy,x
