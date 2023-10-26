@@ -1270,12 +1270,12 @@ NoSpyHard
     mva #0 escFlag
     jmp ReleaseAndLoop
 @
-    cmp #$80|@kbcode._up
+/*     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
     cmp #$80|@kbcode._down
     jeq CTRLPressedDown
     cmp #$80|@kbcode._tab
-    jeq CTRLPressedTAB
+    jeq CTRLPressedTAB */
 
 jumpFromStick
     .IF TARGET = 800
@@ -1321,6 +1321,7 @@ NoVdebugSwitch
       jmp ReleaseAndLoop
     .ENDIF
 EndKeys
+    mva #$80 pressTimer
     jmp notpressed
 
 ;
@@ -1515,6 +1516,7 @@ pressedS
     eor:sta noSfx
 ReleaseAndLoop
     jsr WaitForKeyRelease
+    mva #$80 pressTimer
     jmp BeforeFire
 
 pressedSpace

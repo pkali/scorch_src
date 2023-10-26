@@ -401,7 +401,9 @@ ManualShooting
     jsr WaitForKeyRelease
     lda #%00000000
     sta TestFlightFlag    ; set "Test Fight" off
+    mva #$ff FastKeyRead
     jsr BeforeFire
+    mva #$00 FastKeyRead
     bit escFlag
     spl:rts        ; keys Esc or O
 

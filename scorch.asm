@@ -54,8 +54,9 @@ AdditionalZPvariables = $20
     .zpvar MeteorsRound     .byte  ; set 7th bit - block meteors in round
     
 
-FirstZpageVariable = $50
+FirstZpageVariable = $4f
     .zpvar DliColorBack     .byte = FirstZpageVariable
+    .zpvar FastKeyRead      .byte ; 0 - GetKey wait for any key (and generates SFX), $ff - fast GetKey
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte  ; old state 2nd button for 2 buttons joysticks
     .zpvar GradientNr       .byte
@@ -470,7 +471,10 @@ checkSelectKey
       lda CONSOL
       and #%00000100           ; Option
     .ENDIF
-    bne getKeyAfterWait
+    bit FastKeyRead
+    bpl getKeyAfterWait
+    lda #@kbcode._none
+    bne getkeyend
 OptionPressed
     lda #@kbcode._atari        ; Option key
     bne getkeyend
@@ -483,8 +487,10 @@ JoyButton
 getkeyend
     ldy #0
     sty ATRACT                 ; reset atract mode
+    bit FastKeyRead
+    bmi @+
     mvy #sfx_keyclick sfx_effect
-    rts
+@   rts
     .IF TARGET = 800           ; Second joy button only on A800
 Check2button
     lda PADDL0
