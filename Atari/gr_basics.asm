@@ -463,20 +463,21 @@ Fast    ; Put char without coordinates check!
 
     ; and 8 bytes to the table
     ldy #7
+    ldx #$ff ; otimization - thanks @Irgendwer
 CopyChar
+    txa ; $ff
+    sta char2,y
     lda (fontind),y
     eor #$ff
     sta char1,y
-    lda #$ff
-    sta char2,y
     dey
     bpl CopyChar
     ; and 8 subsequent bytes as a mask
     adw fontind #8
     ldy #7
 CopyMask
-    lda (fontind),y
-    eor #$ff
+    txa ; $ff
+    eor (fontind),y
     sta mask1,y
     lda #$00
     sta mask2,y

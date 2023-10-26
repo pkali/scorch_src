@@ -584,11 +584,14 @@ UnequalTanks
 ;-------------------------------------------------
 .proc ClearTanks
     jsr PMoutofScreen
-    mva #1 Erase    ; erase tanks flag
+    lda #1     ; erase tanks flag
+    bne drawtanks.era
 .endp
 ;-------------------------------------------------
 .proc drawtanks
 ;-------------------------------------------------
+    lda #0    ; no erase tanks flag
+era sta Erase
     lda TankNr
     pha
     ldx #$00
@@ -604,7 +607,6 @@ DrawNextTank
     pla
     sta TankNr
 
-    mva #0 Erase    ; no erase tanks flag
     rts
 .endp
 ;---------
