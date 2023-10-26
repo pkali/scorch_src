@@ -1313,6 +1313,8 @@ NoVdebugSwitch
     jeq pressedRight
     cmp #@kbcode._space  ; $21
     jeq pressedSpace
+    cmp #@kbcode._ret  ; Fire (Joy)
+    jeq pressedSpace
     cmp #@kbcode._tab  ; $2c
     jeq pressedTAB
     cmp #@kbcode._M  ; $25  ; M
@@ -2738,6 +2740,8 @@ notpressed
     cmp #@kbcode._right  ; $7
     jeq pressedRight
     cmp #@kbcode._space  ; $21
+    jeq pressedSpace
+    cmp #@kbcode._ret  ; Fire (Joy)
     jeq pressedSpace
     jmp notpressed
 
