@@ -594,15 +594,15 @@ UnequalTanks
 era sta Erase
     lda TankNr
     pha
-    ldx #$00
+    ldx NumberOfPlayers
+    dex
     stx TankNr
 
 DrawNextTank
     jsr drawtanknr
-    inc TankNr
+    dec TankNr
     ldx TankNr
-    Cpx NumberOfPlayers
-    bne DrawNextTank
+    bpl DrawNextTank
 
     pla
     sta TankNr
@@ -611,10 +611,11 @@ DrawNextTank
 .endp
 ;---------
 ClearTankNr
-    mva #1 Erase
-    bne DrawTankNr
+    lda #1     ; erase tank flag
+    bne @er
 PutTankNr
-    mva #0 Erase
+    lda #0    ; no erase tank flag
+@er sta Erase
 .proc DrawTankNr
     ldx tankNr
     ; let's check the energy
