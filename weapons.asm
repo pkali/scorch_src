@@ -1220,9 +1220,12 @@ ContinueToCheckMaxForce2
 ;  $f3 - shift+key
 
 notpressed
+    mva #$00 FastKeyRead
+
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
 
+    mva #$ff FastKeyRead
     ldx TankNr    ; for optimize
     ; Select and Option
     lda CONSOL
@@ -1240,6 +1243,7 @@ notpressed
 callActivation
     ; Hide all tanks - after inventory they may have other shapes
     jsr ClearTanks
+    mva #$00 FastKeyRead
     jsr DefensivesActivate
     jmp afterInventory
 
@@ -1251,6 +1255,7 @@ callInventory
     jsr ClearTanks
     ;
     mva #$ff isInventory
+    mva #$00 FastKeyRead
     jsr Purchase
 afterInventory
     jsr MakeDarkScreen
@@ -1270,7 +1275,7 @@ NoSpyHard
     mva #0 escFlag
     jmp ReleaseAndLoop
 @
-/*     cmp #$80|@kbcode._up
+/*o     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
     cmp #$80|@kbcode._down
     jeq CTRLPressedDown
