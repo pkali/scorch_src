@@ -1297,6 +1297,7 @@ jumpFromStick
       jmp ReleaseAndLoop
 NoVdebugSwitch
 
+    mvy #1 Erase    ; optimization
     and #$3f ;CTRL and SHIFT ellimination
     cmp #@kbcode._up  ; $e
     jeq pressedUp
@@ -1376,8 +1377,6 @@ pressedDown
     cmp #25  ; 1/2s
     bcs CTRLPressedDown
 
-    mva #sfx_set_power_1 sfx_effect
-
     ;ldx TankNr        ; optimized
     dec ForceTableL,x
     lda ForceTableL,x
@@ -1390,6 +1389,7 @@ ForceGoesZero
       sta ForceTableH,x
       sta ForceTableL,x
 @
+    mva #sfx_set_power_1 sfx_effect
     jmp BeforeFire
 
 CTRLPressedDown
@@ -1403,7 +1403,7 @@ CTRLPressedDown
     jcs BeforeFire
     dec ForceTableH,x
     bmi ForceGoesZero
-    jmp BeforeFire
+    bpl @-
 
 pressedRight
     ;ldx TankNr        ; optimized
@@ -1412,30 +1412,30 @@ pressedRight
     cmp #25  ; 1/2s
     bcs CTRLPressedRight
 
-    mva #sfx_set_power_2 sfx_effect
-    mva #1 Erase
+;    mva #1 Erase
     jsr DrawTankNr.BarrelChange
     dec:lda AngleTable,x
     cmp #255  ; -1
-    jne BeforeFire
+    bne @+
     lda #180
     sta AngleTable,x
+@
+    mva #sfx_set_power_2 sfx_effect
     jmp BeforeFire
 
 CTRLPressedRight
     ;ldx TankNr        ; optimized
-    mva #sfx_set_power_2 sfx_effect
-    mva #1 Erase
+;    mva #1 Erase
     jsr DrawTankNr.BarrelChange
     lda AngleTable,x
     sec
     sbc #4
     sta AngleTable,x
     cmp #4  ; smallest angle for speed rotating
-    jcs BeforeFire
+    bcs @-
     lda #180
     sta AngleTable,x
-    jmp BeforeFire
+    bne @-
 
 
 pressedLeft
@@ -1445,31 +1445,31 @@ pressedLeft
     cmp #25  ; 1/2s
     bcs CTRLPressedLeft
 
-    mva #sfx_set_power_2 sfx_effect
-    mva #1 Erase
+;    mva #1 Erase
     jsr DrawTankNr.BarrelChange
     INC AngleTable,x
     lda AngleTable,x
     cmp #180
-    jcc BeforeFire
+    bcc @+
     lda #0
     sta AngleTable,x
+@
+    mva #sfx_set_power_2 sfx_effect
     jmp BeforeFire
 
 CTRLPressedLeft
     ;ldx TankNr        ; optimized
-    mva #sfx_set_power_2 sfx_effect
-    mva #1 Erase
+;    mva #1 Erase
     jsr DrawTankNr.BarrelChange
     lda AngleTable,x
     clc
     adc #4
     sta AngleTable,x
     cmp #180-4
-    jcc BeforeFire
+    bcc @-
     lda #0
     sta AngleTable,x
-    jmp BeforeFire
+    beq @-
 
 pressedTAB
     mva #sfx_purchase sfx_effect
