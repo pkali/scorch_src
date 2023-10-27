@@ -1039,10 +1039,9 @@ LimitForce
 ;----------------------------------------------
     mva #1 Erase
     jsr DrawTankNr.BarrelChange
-    mva #0 Erase
 MoveBarrel
     mva #sfx_set_power_2 sfx_effect
-    jsr DrawTankNr
+    jsr PutTankNr   ; and Erase = 0
     jsr DisplayStatus.displayAngle
     ;
     jsr CheckExitKeys
@@ -1055,7 +1054,6 @@ MoveBarrel
     jsr WaitOneFrame
 AIaim
     jsr DrawTankNr.BarrelChange
-    mva #0 Erase
     lda NewAngle
     cmp AngleTable,x
     beq BarrelPositionIsFine
@@ -1067,7 +1065,7 @@ rotateLeft            ; older is bigger
     dec angleTable,x
     jmp MoveBarrel
 BarrelPositionIsFine
-    jmp DrawTankNr
+    jmp PutTankNr   ; and Erase = 0
     ; rts
 
 .endp
