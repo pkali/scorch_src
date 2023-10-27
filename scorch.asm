@@ -484,6 +484,7 @@ checkSelectKey
       beq SelectPressed
       lda CONSOL
       and #%00000100           ; Option
+      beq OptionPressed
     .ENDIF
     lda #@kbcode._none
     bne getkeyend

@@ -1224,17 +1224,11 @@ notpressed
     spl:rts ; exit if pressed 'Exit keys'
 
     ldx TankNr    ; for optimize
-    ; Select and Option
-    lda CONSOL
-    tay
-    and #%00000100
-    beq callActivation    ; Option key
-    tya
-    and #%00000010
-    jeq pressedTAB    ; Select key
     jsr GetKeyFast
     and #%10111111 ; SHIFT elimination
     
+    cmp #@kbcode._atari        ; Option key
+    beq callActivation
     cmp #@kbcode._A  ; $3f  ; A
     bne @+
 callActivation
