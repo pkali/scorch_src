@@ -321,7 +321,8 @@ MakeDarkScreen
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-    wait    ; or waitRTC ?
+    jsr CheckStartKey             ; START KEY
+    seq:wait                   ; or waitRTC ?
     rts
 .endp
 
@@ -338,6 +339,12 @@ MakeDarkScreen
 .endp
 
 ;--------------------------------------------------
+.proc CheckStartKey
+;--------------------------------------------------
+    lda #%00000001 ; START KEY not pressed
+    rts
+.endp
+;--------------------------------------------------
 .proc CheckExitKeys
 ;--------------------------------------------------
 ; Checks keyboard and sets appropriate flags for exit procedures
@@ -352,7 +359,8 @@ MakeDarkScreen
 ;--------------------------------------------------
 .proc ShellDelay
     ldy flyDelay
-Y
+Y   jsr CheckStartKey             ; START KEY
+    beq noShellDelay
 DelayLoop
       lda $d012
 @     cmp $d012

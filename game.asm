@@ -16,8 +16,7 @@ START
     jsr MakeDarkScreen
     bit escFlag
     bpl @+
-    lda CONSOL
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     bne START
     jmp StartAfterSplash    ; reset all game option if Start key pressed (and Esc)
 @
@@ -385,11 +384,7 @@ RoboTanks
     ;ldx TankNr
     jsr DisplayStatus    ; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
-    lda kbcode
-    cmp #@kbcode._esc ; 28  ; ESC
-    bne @+
-    jsr AreYouSure
-@    bit escFlag
+    jsr CheckExitKeys
     spl:rts        ; keys Esc or O
 
 

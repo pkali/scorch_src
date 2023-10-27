@@ -787,8 +787,7 @@ SetStartAndFlight    ; set start point (virtual barrel end :) ) and make test fl
     sta ytraj+1
     mva #0 ytraj+2
     mva NewAngle Angle
-    lda CONSOL
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     beq @speedup
     jsr MoveBarrelToNewPosition
     bit escFlag

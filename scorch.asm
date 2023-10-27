@@ -597,8 +597,7 @@ MakeDarkScreen
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-    lda CONSOL
-    and #%00000001             ; START KEY
+    jsr CheckStartKey             ; START KEY
     seq:wait                   ; or waitRTC ?
     rts
 .endp
@@ -615,6 +614,13 @@ MakeDarkScreen
     rts
 .endp
 
+;--------------------------------------------------
+.proc CheckStartKey
+;--------------------------------------------------
+    lda CONSOL  ; turbo mode
+    and #%00000001 ; START KEY
+    rts
+.endp
 ;--------------------------------------------------
 .proc CheckExitKeys
 ;--------------------------------------------------
@@ -661,8 +667,7 @@ nokeys
 .proc ShellDelay
 ;--------------------------------------------------
     ldy flyDelay
-Y   lda CONSOL
-    and #%00000001             ; START KEY
+Y   jsr CheckStartKey             ; START KEY
     beq noShellDelay
 DelayLoop
       lda VCOUNT

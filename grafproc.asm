@@ -800,8 +800,7 @@ DoNotDrawTankNr
 ; number of blinking tank in TankNr
     mva #18 fs  ; temp, how many times flash the tank
 tankflash_loop
-    lda CONSOL  ; turbo mode
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     sne:mva #1 fs  ; finish it
     mva #1 Erase
     ldx TankNr
@@ -1313,8 +1312,7 @@ NoClearTanks
 .IF TARGET >= 800
     lda FastSoilDown
     bne GoFast
-    lda CONSOL
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     bne @+
 GoFast
     jmp SoilDownTurbo.NoClearTanks
@@ -1363,8 +1361,7 @@ FoundPeek1
 ; main loop starts here
 MainFallout2
 .IF TARGET >= 800
-    lda CONSOL
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     bne NoFastDown
     jmp SoilDownTurbo.NoClearTanks
 NoFastDown
@@ -1873,8 +1870,7 @@ quit_areyousure
 
     mva #20 fs  ; temp, how many times blink the billboard
 seppuku_loop
-      lda CONSOL  ; turbo mode
-      and #%00000001 ; START KEY
+      jsr CheckStartKey ; START KEY
       sne:mva #1 fs  ; finish it
 
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen
