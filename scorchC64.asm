@@ -247,73 +247,6 @@ StartAfterSplash
 .endp
 
 ;--------------------------------------------------
-.proc GetKey
-; waits for pressing a key and returns pressed value in A
-; when [ESC] is pressed, escFlag is set
-; result: A=keycode
-;--------------------------------------------------
-    jsr WaitForKeyRelease
-    jsr GetKeyFast
-    ldy #0
-    sty escFlag
-    rts
-.endp
-
-;--------------------------------------------------
-.proc GetKeyFast
-; returns pressed value in A - no wait for press
-; when [ESC] is pressed, escFlag is set
-; result: A=keycode 
-;--------------------------------------------------
-    lda #$ff
-    rts
-.endp
-
-;--------------------------------------------------
-.proc getkeynowait
-;--------------------------------------------------
-    jsr WaitForKeyRelease
-    lda kbcode
-    and #$3f ;CTRL and SHIFT ellimination
-    rts
-.endp
-
-;--------------------------------------------------
-.proc WaitForKeyRelease
-;--------------------------------------------------
-StillWait
-      rts
-.endp
-;--------------------------------------------------
-.proc IsKeyPressed
-; result: A=0 - yes , A>0 - no
-;--------------------------------------------------
-    lda #1
-    rts
-.endp
-;--------------------------------------------------
-.proc DemoModeOrKey
-; Waits for the key pressed if at least one human is playing.
-; Otherwise, waits 3 seconds (demo mode).
-;--------------------------------------------------
-    ;check demo mode
-    ldx numberOfPlayers
-    dex
-checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
-    lda skillTable,x
-    beq peopleAreHere
-    dex
-    bpl checkForHuman
-    ; no people, just wait a bit
-    ;pause 150
-    ldy #75
-    jmp PauseYFrames
-    ; rts
-peopleAreHere
-    jmp getkey  ; jsr:rts
-.endp
-
-;--------------------------------------------------
 MakeDarkScreen
 ;--------------------------------------------------
 ;    mva #0 dmactls        ; dark screen
@@ -338,24 +271,6 @@ MakeDarkScreen
     rts
 .endp
 
-;--------------------------------------------------
-.proc CheckStartKey
-;--------------------------------------------------
-    lda #%00000001 ; START KEY not pressed
-    rts
-.endp
-;--------------------------------------------------
-.proc CheckExitKeys
-;--------------------------------------------------
-; Checks keyboard and sets appropriate flags for exit procedures
-; If START+OPTION is pressed - exit to GameOver screen
-; If 'O' key is pressed - displays "Are you sure?" and - exit to GameOver screen
-; If 'Esc' key is pressed - displays "Are you sure?" and - exit to Menu screen
-; Just setting the right flags!!!
-
-    rts
-;
-.endp
 ;--------------------------------------------------
 .proc ShellDelay
     ldy flyDelay
@@ -382,6 +297,8 @@ noShellDelay
 .proc CopyFromRom
     rts
 .endp
+;--------------------------------------------------
+    icl 'C64/inputs.asm'
 ;--------------------------------------------------
     icl 'C64/interrupts.asm'
 ;----------------------------------------------

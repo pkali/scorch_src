@@ -1070,6 +1070,27 @@ BarrelPositionIsFine
 
 .endp
 
+;--------------------------------------------------
+.proc DemoModeOrKey
+; Waits for the key pressed if at least one human is playing.
+; Otherwise, waits 3 seconds (demo mode).
+;--------------------------------------------------
+    ;check demo mode
+    ldx numberOfPlayers
+    dex
+checkForHuman                  ; if all in skillTable other than 0 then switch to DEMO MODE
+    lda skillTable,x
+    beq peopleAreHere
+    dex
+    bpl checkForHuman
+    ; no people, just wait a bit
+    ldy #75
+    jmp PauseYFrames
+    ; rts
+peopleAreHere
+    jmp getkey  ; jsr:rts
+.endp
+
 ;----------------------------------------------
 .proc SortSequence ;
 ;----------------------------------------------
