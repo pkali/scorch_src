@@ -15,6 +15,8 @@
     .def TARGET = 800 ; 5200
 .ENDIF
 ;---------------------------------------------------
+.def SPLASH = 0
+; if 0 - no splash screens
 .def CART_VERSION = 0
 ; if 1 - dual splash screen
 .def METEORS = 1
@@ -186,9 +188,21 @@ FirstZpageVariable = $50
     .IF TARGET = 800
       icl 'Atari/lib/ATARISYS.ASM'
       icl 'Atari/lib/MACRO.ASM'
+    .IF SPLASH = 1
       icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
-    .IF CART_VERSION
+    .IF CART_VERSION = 1
       icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
+    .ENDIF
+    .ELSE
+      ; no splash.... dark screean and BASIC off
+      ORG $2000
+      mva #0 dmactls             ; dark screen
+      mva #$ff portb
+      ; and wait one frame :)
+      seq:wait                   ; or waitRTC ?
+      mva #$ff portb        ; BASIC off
+      rts
+      ini $2000
     .ENDIF
 ;      icl 'Atari/Manual/manual.asm'     ; manuals display
     .ELIF TARGET = 5200

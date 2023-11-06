@@ -101,6 +101,8 @@ EndOfUnPlot
 .proc plot  ;plot (xdraw, ydraw, color)
 ; color == 1 --> put pixel
 ; color == 0 --> erase pixel
+; xdraw (word) - X coordinate
+; ydraw (word) - Y coordinate
 ; this is one of the most important routines in the whole
 ; game. If you are going to speed up the game, start with
 ; plot - it is used by every single effect starting from explosions
@@ -154,8 +156,10 @@ ClearPlot
 ; -----------------------------------------
 .proc point_plot
 ; -----------------------------------------
-    ; checks state of the pixel (coordinates in xdraw and ydraw)
-    ; result is in A (zero or appropriate bit is set)
+; checks state of the pixel (coordinates in xdraw and ydraw)
+; xdraw (word) - X coordinate
+; ydraw (word) - Y coordinate
+; result is in A (zero or appropriate bit is set)
 
     ; let's calculate coordinates from xdraw and ydraw
 
@@ -185,6 +189,7 @@ ClearPlot
 ;--------------------------------------------------
 .proc drawmountains
 ;--------------------------------------------------
+; draw mountains from mountaintable
     mwa #0 xdraw
     mwa #mountaintable modify
     mva #1 color
@@ -305,10 +310,10 @@ NoMountain
 ;--------------------------------------------------
 .proc SoilDownTurbo
 ;--------------------------------------------------
-; fast SoilDown froc - test
+; fast SoilDown proc
     jsr ClearTanks
 NoClearTanks
-;    jsr CalcAndDrawMountains
+;    jsr CalcAndDrawMountains - to do  (now Atari only)
     jmp DrawTanks
     ;rts
 .endp
