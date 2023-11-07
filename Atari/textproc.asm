@@ -872,13 +872,14 @@ NotBarrel
     bne NotWhiteFlag
     cmp ActiveDefenceWeapon,x
     bne NoDeactivateWhiteFlag
-    mva #sfx_white_flag sfx_effect
     lda #$00    ; if try to activate activated White Flag then deactivate Defence
+NoDeactivateWhiteFlag
+    ; Activate White Flag (or deactivate if A=0)
     sta ActiveDefenceWeapon,x
     sta ShieldEnergy,x
-    beq DefActivationEnd
+    mva #sfx_white_flag sfx_effect
+    bne DefActivationEnd
 NotWhiteFlag
-NoDeactivateWhiteFlag
     ; activate new defensive
     sta ActiveDefenceWeapon,x
     ; set defensive energy

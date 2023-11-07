@@ -246,6 +246,7 @@ LowBatteries
     jsr ClearTankNr    ; we must hide tank to erase shields (issue #138)
     lda #ind_White_Flag
     sta ActiveDefenceWeapon,x
+    mva #sfx_white_flag sfx_effect
     jsr PutTankNr    ; and draw tank witch Flag
 EnoughEnergy
 ;    jsr DisplayStatus.DisplayEnergy ; not necessary - status update after othher defensives
