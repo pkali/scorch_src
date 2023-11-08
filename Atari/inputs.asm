@@ -109,6 +109,17 @@ Check2button
 .endp
 
 ;--------------------------------------------------
+.proc WaitForLongPress
+;--------------------------------------------------
+    lda #0
+    sta pressTimer ; reset
+    jsr WaitForKeyRelease.StillWait
+    lda pressTimer
+    cmp #25  ; 1/2s
+    rts ; if CARRY is set then long press
+.endp
+
+;--------------------------------------------------
 .proc WaitForKeyRelease
 ;--------------------------------------------------
     lda #128-KeyRepeatSpeed    ; tricky

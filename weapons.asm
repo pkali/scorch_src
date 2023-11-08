@@ -1520,12 +1520,9 @@ pressedSpace
     ;we shoot here!!!
     lda #0
     sta ATRACT    ; reset atract mode
-    sta pressTimer ; reset
-    jsr WaitForKeyRelease.StillWait
-    lda pressTimer
-    cmp #25  ; 1/2s
-    bcc fire
-    jmp callInventory
+    jsr WaitForLongPress
+    bcc fire    ; short press
+    jmp callInventory   ; long press
 fire
     RTS
 .endp

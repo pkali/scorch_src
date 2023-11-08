@@ -78,7 +78,7 @@
 OptionsMainLoop
 
     jsr OptionsInversion
-    jsr getkey
+    jsr GetKey
     bit escFlag
     spl:rts
 
@@ -124,11 +124,16 @@ OptionsNoLeft
 OptionsNoRight
     cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
+    ; wait for long press
+    jsr WaitForLongPress
+    bcs TabPressed  ; if long press (fire or Return)
+EndOfOptions
     rts        ; options selected
 
 OptionsNoReturn
     cmp #@kbcode._tab    ; Tab key
     bne OptionsNoTab
+TabPressed
     jsr SelectNextGradient
 OptionsNoTab
     jmp OptionsMainLoop
@@ -409,7 +414,13 @@ ChoosingItemForPurchase
     cmp #@kbcode._left  ; $06  ; cursor left
     jeq ListChange
     cmp #@kbcode._ret  ; $0c ; Return
-    sne:rts
+    bne NoReturn
+    jsr WaitForLongPress
+    bcc exitthismenu    ; short press
+    jmp PurchaseWeaponNow   ; long press
+exitthismenu
+    rts
+NoReturn
     cmp #@kbcode._up  ; $e
     beq PurchaseKeyUp
     cmp #@kbcode._down  ;  $f
