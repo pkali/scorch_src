@@ -211,7 +211,7 @@ YHit  .DS 2
 ;radius .DS 1
 ;xcircle .DS 2
 ;ycircle .DS 2
-tempcir .DS 2
+;tempcir .DS 2
 ;TankFalls
 FallingSoundBit .DS 1
 PreviousFall  .DS 1

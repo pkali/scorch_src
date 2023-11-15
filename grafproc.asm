@@ -362,11 +362,12 @@ not_endcircleloop
     lda ycircle
     adc YC
     sta ydraw
-    sta tempcir
+    sta ytempDRAW
     lda ycircle+1
     adc #$00
     sta ydraw+1
-    sta tempcir+1
+    sta ytempDRAW+1
+    ; plot xcircle+XC,ycircle+YC
     jsr plot
 
     sec
@@ -376,6 +377,7 @@ not_endcircleloop
     lda ycircle+1
     sbc #$00
     sta ydraw+1
+    ; plot xcircle+XC,ycircle-YC
     jsr plot
 
     sec
@@ -385,54 +387,60 @@ not_endcircleloop
     lda xcircle+1
     sbc #0
     sta xdraw+1
+    ; plot xcircle-XC,ycircle-YC
     jsr plot
 
-    lda tempcir
+    lda ytempDRAW
     sta ydraw
-    lda tempcir+1
+    lda ytempDRAW+1
     sta ydraw+1
+    ; plot xcircle-XC,ycircle+YC
     jsr plot
 ;---
     clc
     lda xcircle
-    adc yC
+    adc YC
     sta xdraw
     lda xcircle+1
     adc #0
     sta xdraw+1
     ;clc
     lda ycircle
-    adc xC
+    adc XC
     sta ydraw
-    sta tempcir
+    sta ytempDRAW
     lda ycircle+1
     adc #$00
     sta ydraw+1
-    sta tempcir+1
+    sta ytempDRAW+1
+    ; plot xcircle+YC,ycircle+XC
     jsr plot
 
     sec
     lda ycircle
-    sbc xC
+    sbc XC
     sta ydraw
     lda ycircle+1
     sbc #$00
     sta ydraw+1
+    ; plot xcircle+YC,ycircle-XC
     jsr plot
 
     sec
     lda xcircle
-    sbc yC
+    sbc YC
     sta xdraw
     lda xcircle+1
     sbc #0
     sta xdraw+1
+    ; plot xcircle-YC,ycircle-XC
     jsr plot
 
-    lda tempcir
+    lda ytempDRAW
     sta ydraw
-    lda tempcir+1
+    lda ytempDRAW+1
     sta ydraw+1
+    ; plot xcircle-YC,ycircle+XC
     jsr plot
 ;-----
 
@@ -450,7 +458,7 @@ not_endcircleloop
     sbc FX
     sbc #4
     sta FS
-    jmp endif01
+    jmp circleloop ; endif01
 else01
     dec YC
     sec
@@ -468,7 +476,7 @@ else01
 endif01
     jmp circleloop
 .endp
-;-------------------------------*------------------
+;--------------------------------------------------
 .proc placetanks
 ;--------------------------------------------------
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
