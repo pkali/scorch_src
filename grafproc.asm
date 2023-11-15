@@ -1074,7 +1074,7 @@ DoNotClearParachute
     sta temp  ; Loop Counter
 ByteBelowTank
     jsr point_plot
-    beq EmptyPoint2
+    bne EmptyPoint2
     sec
     ror UnderTank2
     sec
@@ -1340,7 +1340,7 @@ NextColumn1
     mwa #0 ydraw
 NextPoint1
     jsr point_plot
-    bne FoundFirstPoint
+    beq FoundFirstPoint
 StillNothing
     inc ydraw
     lda ydraw
@@ -1392,7 +1392,7 @@ FalloutOfLine
     ; and checking if there is a pixel there
     sta ydraw
     jsr point_plot
-    bne ThereIsPixelHere
+    beq ThereIsPixelHere
     ; if no pixel we plot it
     mva #1 color
     jsr plot.MakePlot

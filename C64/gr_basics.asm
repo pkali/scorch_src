@@ -159,7 +159,7 @@ ClearPlot
 ; checks state of the pixel (coordinates in xdraw and ydraw)
 ; xdraw (word) - X coordinate
 ; ydraw (word) - Y coordinate
-; result is in A (zero or appropriate bit is set)
+; result is in A (0 - point is set;  appropriate bit is set - point is clear) INVERTED!
 
     ; let's calculate coordinates from xdraw and ydraw
 
@@ -182,7 +182,6 @@ ClearPlot
 
     ldy #0
     lda (xbyte),y
-    eor #$ff
     and bittable1_long,x
     rts
 .endp
