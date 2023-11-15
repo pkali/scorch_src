@@ -1340,18 +1340,14 @@ NextColumn1
     mwa #0 ydraw
 NextPoint1
     jsr point_plot
-    beq StillNothing
-    ldy #0
-    lda ydraw
-    sta (tempor2),y
-    sta (temp),y
-    jmp FoundPeek1
+    bne FoundFirstPoint
 StillNothing
     inc ydraw
     lda ydraw
     cmp #screenheight
     bne NextPoint1
     ; no pixels on whole column !!!
+FoundFirstPoint
     ldy #0
     lda ydraw
     sta (tempor2),y
@@ -1361,9 +1357,8 @@ FoundPeek1
     inw temp
     inw xdraw
     ;vcmp xdraw,screenwidth,NextColumn1
-    cpw xdraw RangeRight
-    bcc NextColumn1
-    beq NextColumn1
+    cpw RangeRight xdraw
+    bcs NextColumn1
 ; we have both tables filled with starting values
 
 ; main loop starts here
@@ -1418,9 +1413,8 @@ ColumnIsReady
     inw tempor2
     inw xdraw
     ;vcmp xdraw,screenwidth,FalloutOfLine
-    cpw xdraw RangeRight
-    bcc FalloutOfLine
-    beq FalloutOfLine
+    cpw RangeRight xdraw
+    bcs FalloutOfLine
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
 
@@ -1429,7 +1423,7 @@ ColumnIsReady
 ; level of the mountains
     jeq MainFallout2
 ; now correct heights are in the mountaintable
-    sta color    ; Pozor! :)  we know - now A=1
+    ;sta color    ; Pozor! :)  we know - now A=1 ... but DrawTanks set color to 1
 NothingToFall
     jmp DrawTanks
     ; rts
