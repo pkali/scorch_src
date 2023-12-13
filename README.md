@@ -7,6 +7,9 @@ by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022, 2023
 
+[Game manual in PDF (layout by Bocianu)](Manuals/scorch_manual_en.pdf)
+
+
 Contributors:
 - Miker ([mikerro](https://github.com/mikerro)) - in-game music and sfx, ideas, QA
 - Kaz - original splash screen, SV Atari 50 splash screen, ideas
@@ -14,7 +17,7 @@ Contributors:
 - Bocianu ([bocianu](https://github.com/bocianu)) - important ideas, FujiNet implementation, QA, DTP
 - Emkay - splash screen music
 - Fox ([pfusik](https://github.com/pfusik)) - plot and point optimization
-- xorcerer ([xauberer](https://github.com/xauberer)) - AI generated splash and sticker
+- xorcerer ([xauberer](https://github.com/xauberer)) - AI generated splash screen
 
 
 QA: Probabilitydragon, EnderDude, Dracon, Beeblebrox, KrzysRog, lopezpb,
@@ -27,7 +30,7 @@ You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https:/
 
 This source code was originally compiled with [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
 
-Compilation: (requires mads newer than 2023-06-03)
+Compilation: (requires mads newer than 2023-09-13)
 - `mads scorch.asm -o:scorch.xex -d:TARGET=800` for Atari800 version
 - `mads scorch.asm -o:scorch.bin -d:TARGET=5200` for Atari 5200 version
 - `mads scorchC64.asm -o:scorchC64.prg` for C64 version (WIP, not playable yet)
