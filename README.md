@@ -68,7 +68,9 @@ The most important changes:
 - Massive code and data optimizations making this dense mo********er of a code even denser. Circa 1KiB gained and reused for fixes and improvements listed below.
 - New weapon - "Punch". Push the enemies to their oblivion!
 - Black Hole option! Tanks can fall out of the screen. Press TAB when in the "Walls" main menu section to activate this option, indicated by "↓".
+
 ![Black hole](Manuals/images/black_hole.png)
+
 - Second fire in Joy 2B+ standard fully supported. Different joystick types can be used simultaneously.
 - New option - random mountain heights for each round! Press TAB when in "Mountain" section of the main menu, indicated by "?".
 - Meteors cross the night sky!
