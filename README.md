@@ -65,13 +65,17 @@ We are extremely pleased to inform you that our humble game was released on a ph
 
 The most important changes:
 
-- Massive code and data optimizations making this dense mo********er of code even denser. Circa 1KiB gained and reused for fixes and improvements.
-- New weapon - "Punch". Push the enemies to oblivion!
+- Massive code and data optimizations making this dense mo********er of a code even denser. Circa 1KiB gained and reused for fixes and improvements listed below.
+- New weapon - "Punch". Push the enemies to their oblivion!
+- Black Hole option! Tanks can fall out of the screen. Press TAB when in the "Walls" main menu section to activate this option, indicated by "↓". ![Black hole](Manuals/images/black_hole.png).
+- Second fire in Joy 2B+ standard fully supported. Different joystick types can be used simultaneously.
+- New option - random mountain heights for each round! Press TAB when in "Mountain" section of the main menu, indicated by "?".
+- Meteors cross the night sky!
+- English and Polish language executable manuals for use in a cart.
 - Significant acceleration of mountain drawing.
 - Default tank names based on their AI levels.
 - MaxForce fix (starts from 990 as it should).
 - Hovercraft landing fix.
-- Second fire in Joy 2B+ standard fully supported. Different joystick types can be used simultaneously.
 - Speedup of main menu display.
 - "Stomp" weapon radius depents on Force.
 - Super fast dirt fall with SFX, available by pressing [START] or in menu.
@@ -80,7 +84,21 @@ The most important changes:
 - Flicker in inventory and store eliminated.
 - Cyborg and Spoiler aim better, added barrel animation and sound to AI aiming.
 - Ancient "Digger" bug fixed.
-- Revamp of status 
+- Revamp of status bar, multiple fixes. additional and faster updates.
+- Faster plot and point operations with some generated tables.
+- Faster circle drawing, faster draw routine.
+- Cyborg's battery optimization and SFX, other AI defensives SFX added.
+- Fix of Autodefense bug, SFX added.
+- Tank names sometimes disappear when using Lazy Darwin - fixed.
+- Better "Laser" visualization in Lazy Darwin.
+- Cart startup menu with a hidden easter egg.
+- Turbo mode added to 5200 version (press and hold [START] key for a speed up).
+- "Visual debug" mode available in 5200 as well (long press of [#] toggles this mode).
+- AI searches for a weakest link much faster now.
+- Improved attack tactic of Poolshark, Tosser and Shooter.
+- Miraculous powers of "Long Schlong"!!!
+- Exit from AI aiming bug fixed.
+- Chooser, Spoiler and Cyborg better calculate distances from explosions.
 
 
 ###### Version 1.30
