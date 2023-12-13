@@ -199,10 +199,11 @@ sintable
 ;linetableH
 ;    :screenheight+1 .by >(display+screenBytes*#)
 ;----------------------------
-bittable
-    .by $80,$40,$20,$10,$08,$04,$02,$01
-bittable2
-    .by $7f,$bf,$df,$ef,$f7,$fb,$fd,$fe
+; now long (256 bytes) bittables are generated in RAM based on one bittable:
+;bittable
+;    .by $80,$40,$20,$10,$08,$04,$02,$01
+;bittable2
+;    .by $7f,$bf,$df,$ef,$f7,$fb,$fd,$fe
 ;----------------------------
 disktance ;tanks distance
     .by 0,0
@@ -223,14 +224,6 @@ SlideLeftTable
     .BY %00000111
 ;    .BY %00001100
 SlideLeftTableLen = *-SlideLeftTable
-;-------------------------------------------------
-TanksNamesDefault
-    dta d"1st.Tank"
-    dta d"2nd.Tank"
-    dta d"3rd.Tank"
-.REPT MaxPlayers-3, #+4
-    dta d":1th.Tank"
-.ENDR
 ;-------------------------------------------------
 TankShapesTable         .BYTE char_tank1
                         .BYTE char_tank2
@@ -260,7 +253,6 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Baby_Digger
   .by >price_Digger
   .by >price_Heavy_Digger
-  .by >price_Baby_Sandhog
   .by >price_Sandhog
   .by >price_Heavy_Sandhog
   .by >price_Dirt_Clod
@@ -268,6 +260,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Ton_of_Dirt
   .by >price_Liquid_Dirt
   .by >price_Dirt_Charge
+  .by >price_Punch
   .by >price_Buy_me
   .by >price_Laser
   .by >price_White_Flag
@@ -309,7 +302,6 @@ WeaponPriceL
   .by <price_Baby_Digger
   .by <price_Digger
   .by <price_Heavy_Digger
-  .by <price_Baby_Sandhog
   .by <price_Sandhog
   .by <price_Heavy_Sandhog
   .by <price_Dirt_Clod
@@ -317,6 +309,7 @@ WeaponPriceL
   .by <price_Ton_of_Dirt
   .by <price_Liquid_Dirt
   .by <price_Dirt_Charge
+  .by <price_Punch
   .by <price_Buy_me
   .by <price_Laser
   .by <price_White_Flag
@@ -365,14 +358,14 @@ WeaponUnits
   .by 10 ;Baby_Digger    ;_19
   .by 5  ;Digger         ;_20
   .by 2  ;Heavy_Digger   ;_21
-  .by 10 ;Baby_Sandhog   ;_22
-  .by 5  ;Sandhog        ;_23
-  .by 2  ;Heavy_Sandhog  ;_24
-  .by 5  ;Dirt_Clod      ;_25
-  .by 3  ;Dirt_Ball      ;_26
-  .by 1  ;Ton_of_Dirt    ;_27
-  .by 4  ;Liquid_Dirt    ;_28
-  .by 2  ;Dirt_Charge    ;_29
+  .by 5  ;Sandhog        ;_22
+  .by 2  ;Heavy_Sandhog  ;_23
+  .by 5  ;Dirt_Clod      ;_24
+  .by 3  ;Dirt_Ball      ;_25
+  .by 1  ;Ton_of_Dirt    ;_26
+  .by 4  ;Liquid_Dirt    ;_27
+  .by 2  ;Dirt_Charge    ;_28
+  .by 2  ;Punch          ;_29
   .by 1  ;Buy_me         ;_30
   .by 5  ;Laser          ;_31
   .by 1  ;White_Flag     ;_32
@@ -401,10 +394,10 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
     .by %11001110
     ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
-    ; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+    ; "Digger          ","Heavy Digger    ","Sandhog         ","Heavy Sandhog   "
     .by %00000000
-    ; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-    ; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Laser           "
+    ; "Dirt Clod       ","Dirt Ball       ","Ton of Dirt     ","Liquid Dirt     "
+    ; "Dirt Charge     ","Punch           ","Buy me!         ","Laser           "
     .by %00000000
     ; "White Flag      ","Battery         ","Hovercraft      ","Parachute       "
     ; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
@@ -422,10 +415,10 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
     ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
     .by %01000000
     ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
-    ; "Digger          ","Heavy Digger    ","Baby Sandhog    ","Sandhog         "
+    ; "Digger          ","Heavy Digger    ","Sandhog         ","Heavy Sandhog   "
     .by %00000000
-    ; "Heavy Sandhog   ","Dirt Clod       ","Dirt Ball       ","Ton of Dirt     "
-    ; "Liquid Dirt     ","Dirt Charge     ","Buy me!         ","Laser           "
+    ; "Dirt Clod       ","Dirt Ball       ","Ton of Dirt     ","Liquid Dirt     "
+    ; "Dirt Charge     ","Punch           ","Buy me!         ","Laser           "
     .by %00000000
     ; "White Flag      ","Battery         ","Hovercraft      ","Parachute       "
     ; "Strong Parachute","Mag Deflector   ","Shield          ","Heavy Shield    "
@@ -459,14 +452,14 @@ WeaponSymbols
     .by $53 ;ind_Baby_Digger     ;_19
     .by $54 ;ind_Digger          ;_20
     .by $55 ;ind_Heavy_Digger    ;_21
-    .by $56 ;ind_Baby_Sandhog    ;_22
-    .by $57 ;ind_Sandhog         ;_23
-    .by $58 ;ind_Heavy_Sandhog   ;_24
-    .by $59 ;ind_Dirt_Clod       ;_25
-    .by $5a ;ind_Dirt_Ball       ;_26
-    .by $5b ;ind_Ton_of_Dirt     ;_27
-    .by $60 ;ind_Liquid_Dirt     ;_28
-    .by $7b ;ind_Dirt_Charge     ;_29
+    .by $57 ;ind_Sandhog         ;_22
+    .by $58 ;ind_Heavy_Sandhog   ;_23
+    .by $59 ;ind_Dirt_Clod       ;_24
+    .by $5a ;ind_Dirt_Ball       ;_25
+    .by $5b ;ind_Ton_of_Dirt     ;_26
+    .by $60 ;ind_Liquid_Dirt     ;_27
+    .by $7b ;ind_Dirt_Charge     ;_28
+    .by $56 ;ind_Punch           ;_29
     .by $1f ;ind_Buy_me          ;_30
     .by $20 ;ind_Laser           ;_31
     .by $5f ;ind_White_Flag      ;_32
@@ -486,62 +479,62 @@ WeaponSymbols
     .by $5e ;ind_Auto_Defense    ;_46
     .by $7c ;ind_Spy_Hard        ;_47
 
-; Names of weapons (16 chars long)
+; Names of weapons (max 16 chars long)
 NamesOfWeapons ;the comment is an index in the tables
-    dta d"Baby Missile    " ; 0
-    dta d"Missile         " ; 1
-    dta d"Baby Nuke       " ; 2
-    dta d"Nuke            " ; 3
-    dta d"LeapFrog        " ; 4
-    dta d"Funky Bomb      " ; 5
-    dta d"MIRV            " ; 6
-    dta d"Death's Head    " ; 7
-    dta d"Napalm          " ; 8
-    dta d"Hot Napalm      " ; 9
-    dta d"Tracer          " ; 10
-    dta d"Smoke Tracer    " ; 11
-    dta d"Baby Roller     " ; 12
-    dta d"Roller          " ; 13
-    dta d"Heavy Roller    " ; 14
-    dta d"Riot Charge     " ; 15
-    dta d"Riot Blast      " ; 16
-    dta d"Riot Bomb       " ; 17
-    dta d"Heavy Riot Bomb " ; 18
-    dta d"Baby Digger     " ; 19
-    dta d"Digger          " ; 20
-    dta d"Heavy Digger    " ; 21
-    dta d"Baby Sandhog    " ; 22
-    dta d"Sandhog         " ; 23
-    dta d"Heavy Sandhog   " ; 24
-    dta d"Dirt Clod       " ; 25
-    dta d"Dirt Ball       " ; 26
-    dta d"Ton of Dirt     " ; 27
-    dta d"Liquid Dirt     " ; 28
-    dta d"Dirt Charge     " ; 29
-    dta d"Best F...g Gifts" ; 30
-    dta d"Laser           " ; 31
+    dta d"Baby Missile"^     ; 0
+    dta d"Missile"^          ; 1
+    dta d"Baby Nuke"^        ; 2
+    dta d"Nuke"^             ; 3
+    dta d"LeapFrog"^         ; 4
+    dta d"Funky Bomb"^       ; 5
+    dta d"MIRV"^             ; 6
+    dta d"Death's Head"^     ; 7
+    dta d"Napalm"^           ; 8
+    dta d"Hot Napalm"^       ; 9
+    dta d"Tracer"^           ; 10
+    dta d"Smoke Tracer"^     ; 11
+    dta d"Baby Roller"^      ; 12
+    dta d"Roller"^           ; 13
+    dta d"Heavy Roller"^     ; 14
+    dta d"Riot Charge"^      ; 15
+    dta d"Riot Blast"^       ; 16
+    dta d"Riot Bomb"^        ; 17
+    dta d"Heavy Riot Bomb"^  ; 18
+    dta d"Baby Digger"^      ; 19
+    dta d"Digger"^           ; 20
+    dta d"Heavy Digger"^     ; 21
+    dta d"Sandhog"^          ; 22
+    dta d"Heavy Sandhog"^    ; 23
+    dta d"Dirt Clod"^        ; 24
+    dta d"Dirt Ball"^        ; 25
+    dta d"Ton of Dirt"^      ; 26
+    dta d"Liquid Dirt"^      ; 27
+    dta d"Dirt Charge"^      ; 28
+    dta d"Stomp"^            ; 29
+    dta d"Best F...g Gifts"^ ; 30
+    dta d"Laser"^            ; 31
 ;------defensives
-    dta d"White Flag      " ; 32
-    dta d"Battery         " ; 33
-    dta d"Hovercraft      " ; 34
-    dta d"Parachute       " ; 35    - no energy
-    dta d"Strong Parachute" ; 36    - with energy  (earlier Battery)
-    dta d"Mag Deflector   " ; 37    - with shield and energy
-    dta d"Shield          " ; 38    - shield for one shot - no energy
-    dta d"Heavy Shield    " ; 39    - shield with energy
-    dta d"Force Shield    " ; 40    - shield with energy and parachute
-    dta d"Bouncy Castle   " ; 41    - with shield and energy
-    dta d"Long Schlong    " ; 42
-    dta d"Nuclear Winter  " ; 43
-    dta d"Lazy Boy        " ; 44
-    dta d"Lazy Darwin     " ; 45
-    dta d"Auto Defense    " ; 46
-    dta d"Spy Hard        " ; 47
+    dta d"White Flag"^       ; 32
+    dta d"Battery"^          ; 33
+    dta d"Hovercraft"^       ; 34
+    dta d"Parachute"^        ; 35    - no energy
+    dta d"Strong Parachute"^ ; 36    - with energy  (earlier Battery)
+    dta d"Mag Deflector"^    ; 37    - with shield and energy
+    dta d"Shield"^           ; 38    - shield for one shot - no energy
+    dta d"Heavy Shield"^     ; 39    - shield with energy
+    dta d"Force Shield"^     ; 40    - shield with energy and parachute
+    dta d"Bouncy Castle"^    ; 41    - with shield and energy
+    dta d"Long Schlong"^     ; 42
+    dta d"Nuclear Winter"^   ; 43
+    dta d"Lazy Boy"^         ; 44
+    dta d"Lazy Darwin"^      ; 45
+    dta d"Auto Defense"^     ; 46
+    dta d"Spy Hard"^         ; 47
 
-DefensiveEnergy = *-(last_offensive - first_offensive +1)  ; to fake the table for ALL weapons
+DefensiveEnergy = *-number_of_offensives  ; to fake the table for ALL weapons
     .by 00  ; White Flag
-    .by 00  ; Heat Guidance
-    .by 98  ; Let's go!
+    .by 00  ; Battery
+    .by 98  ; Hovercraft
     .by 00  ; Parachute
     .by 99  ; Strong Parachute
     .by 99  ; Mag Deflector
@@ -566,7 +559,6 @@ weaponsOfDeath  ; weapons used in tank death animations
     dta ind_Baby_Digger
     dta ind_Digger
     dta ind_Heavy_Digger
-    dta ind_Baby_Sandhog
     dta ind_Sandhog
     dta ind_Heavy_Sandhog
     dta ind_Dirt_Clod
@@ -619,61 +611,68 @@ gameOverSpritesTop
 ;------credits
 CreditsStart
     dta   d"         "*
-    dta   d"You were playin",d"g"*
-    dta   d"Scorc",d"h"*
-    dta   d"Warsaw, Miam",d"i"*
-    dta   d"2000-202",d"3"*
+    dta   d"You were playing"^
+    dta   d"Scorch"^
+    dta   d"Warsaw, Miami"^
+    dta   d"2000-2023"^
     dta   d" "*
-    dta   d"Programmin",d"g"*
-    dta   d"Tomasz 'Pecus' Peck",d"o"*
-    dta   d"Pawel 'pirx' Kalinowsk",d"i"*
+    dta   d"Programming"^
+    dta   d"Tomasz 'Pecus' Pecko"^
+    dta   d"Pawel 'pirx' Kalinowski"^
     dta   d" "*
-    dta   d"SFX, Music and Suppor",d"t"*
-    dta   d"Michal 'Miker' Szpilowsk",d"i"*
+    dta   d"SFX, Music and Support"^
+    dta   d"Michal 'Miker' Szpilowski"^
     dta   d" "*
     .IF TARGET = 800
-      dta d"Additional Musi",d"c"*
-      dta d"Mario 'Emkay' Kri",d"x"*
+      dta d"Additional Music"^
+      dta d"Mario 'Emkay' Krix"^
       dta d" "*
     .ENDIF
-    dta   d"Code Optimizatio",d"n"*
-    dta   d"Piotr '0xF' Fusi",d"k"*
-    dta   d" "*
-    dta   d"Ar",d"t"*
-    dta   d"Adam Wachowsk",d"i"*
+    dta   d"Art"^
+    dta   d"Adam Wachowski"^
     .IF TARGET = 800
-      dta d"Roman 'xorcerer' Fierfa",d"s"*
+      .IF CART_VERSION
+      dta   d"Krzysztof 'Kaz' Ziembik"^
+      .ENDIF
+      dta d"Roman 'xorcerer' Fierfas"^
     .ENDIF
     dta   d" "*
-    dta   d"Ideas, help and Q",d"A"*
-    dta   d"Bocianu, Probabilitydragon",d","*
-    dta   d"EnderDude, Dracon",d","*
-    dta   d"Beeblebrox, KrzysRog, lopezpb",d","*
-    dta   d"brad-colbert, archon800, nowy80",d","*
-    dta   d"Shaggy the Atarian, RetroBorsuk, ZPH"
+    dta   d"Ideas, help and QA"^
+    dta   d"Piotr '0xF' Fusik, Shanti, Jakub Husak"^
+    dta   d"Bocianu, Probabilitydragon, lopezpb,"^
+    dta   d"ZPH, KrzysRog, EnderDude, Dracon, TDC,"^
+    dta   d"Beeblebrox, brad-colbert, archon800,"^
+    dta   d"nowy80, Irgendwer, Eyvind,"^
+    dta   d"ascrnet, Bobo Cujo, RetroBorsuk"
     .IF TARGET = 800
+      .IF CART_VERSION = 0
+      dta   d","*
+      dta   d"Krzysztof 'Kaz' Ziembik"^
+      .ELSE
       dta d" "*
+      .ENDIF
     .ELIF TARGET = 5200
       dta d","*
-      dta d"x-usr(1536), Aking, JAC!, phaeron",d","*
-      dta d"RB520",d"0"*
+      dta d"x-usr(1536), Aking, JAC!, phaeron,"^
+      dta d"RB5200, Krzysztof 'Kaz' Ziembik"^
     .ENDIF
     dta   d" "*
-    dta   d"Additional testin",d"g"*
-    dta   d"Arek and Alex Peck",d"o"*
+    dta   d"Additional testing"^
+    dta   d"Arek and Alex Pecko"^
     dta   d" "*
-    dta   d"Special thank",d"s"*
-    dta   d"Krzysztof 'Kaz' Ziembi",d"k"*
+    dta   d"Special thanks"^
+    dta   d"Wendell Hicken"^
+    dta   d"for Scorched Earth PC game"^
     .IF TARGET = 800
       dta d"  "*
-      dta d"Stay tuned for the FujiNet version",d"!"*
+      dta d"Stay tuned for the FujiNet version!"^
     .ENDIF
-    dta d"         "*
+    dta d"       "*
 CreditsEnd
 .IF TARGET = 800
-  CreditsLines=40 + 7  ; add 7 for scrollout
+  CreditsLines=39 + 7  ; add 7 for scrollout
 .ELIF TARGET = 5200
-  CreditsLines=34 + 7; add 7 for scrollout
+  CreditsLines=33 + 7; add 7 for scrollout
 .ENDIF
 
 .IF TARGET = 5200

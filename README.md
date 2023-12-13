@@ -7,14 +7,17 @@ by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 
 Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022, 2023
 
+[Game manual in PDF (layout by Bocianu)](Manuals/scorch_manual_en.pdf)
+
+
 Contributors:
 - Miker ([mikerro](https://github.com/mikerro)) - in-game music and sfx, ideas, QA
 - Kaz - original splash screen, SV Atari 50 splash screen, ideas
 - Adam ([6502adam](https://github.com/6502adam)) - font, design, QA
-- Bocianu ([bocianu](https://github.com/bocianu)) - important ideas, FujiNet implementation, QA
+- Bocianu ([bocianu](https://github.com/bocianu)) - important ideas, FujiNet implementation, QA, DTP
 - Emkay - splash screen music
 - Fox ([pfusik](https://github.com/pfusik)) - plot and point optimization
-- xorcerer ([xauberer](https://github.com/xauberer)) - AI generated splash and sticker
+- xorcerer ([xauberer](https://github.com/xauberer)) - AI generated splash screen
 
 
 QA: Probabilitydragon, EnderDude, Dracon, Beeblebrox, KrzysRog, lopezpb,
@@ -27,7 +30,7 @@ You can contact us via [AtariAge](https://atariage.com) or [AtariOnLine](https:/
 
 This source code was originally compiled with [OMC65 crossassembler](https://github.com/pkali/omc65) and on 2012-06-21 translated to [mads](https://github.com/tebe6502/Mad-Assembler).
 
-Compilation: 
+Compilation: (requires mads newer than 2023-09-13)
 - `mads scorch.asm -o:scorch.xex -d:TARGET=800` for Atari800 version
 - `mads scorch.asm -o:scorch.bin -d:TARGET=5200` for Atari 5200 version
 - `mads scorchC64.asm -o:scorchC64.prg` for C64 version (WIP, not playable yet)
@@ -54,6 +57,55 @@ Originally, most variables were in Polish, and comments were sparse. However, we
 With the advent of [fujinet](https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changelog:
+
+###### Version 1.43
+2023-12-07
+
+Physical release version.
+We are extremely pleased to inform you that our humble game was released on a physical media by [Mq](mailto:mq666xx@gmail.com) (Atari 8-bit version) and 5200 [atariage.com](https://atariage.com).
+
+![Scorch physical release](Manuals/images/scorch_physical.jpg)
+
+The most important changes:
+
+- Massive code and data optimizations making this dense mo********er of a code even denser. Circa 1KiB gained and reused for fixes and improvements listed below.
+- New weapon - "Punch". Push the enemies to their oblivion!
+- Black Hole option! Tanks can fall out of the screen. Press TAB when in the "Walls" main menu section to activate this option, indicated by "↓".
+
+![Black hole](Manuals/images/black_hole.png)
+
+- Second fire in Joy 2B+ standard fully supported. Different joystick types can be used simultaneously.
+- New option - random mountain heights for each round! Press TAB when in "Mountain" section of the main menu, indicated by "?".
+- Meteors cross the night sky!
+- English and Polish language executable manuals for use in a cart.
+- Significant acceleration of mountain drawing.
+- Default tank names based on their AI levels.
+- MaxForce fix (starts from 990 as it should).
+- Hovercraft landing fix.
+- Speedup of main menu display.
+- "Stomp" weapon radius depents on Force.
+- Super fast dirt fall with SFX, available by pressing [START] or in menu.
+- Speed-up of screen clearing, text operations, "Napalm" and "Diggers".
+- Unnecessary clearing of offensive texts removed.
+- Flicker in inventory and store eliminated.
+- Cyborg and Spoiler aim better, added barrel animation and sound to AI aiming.
+- Ancient "Digger" bug fixed.
+- Revamp of status bar, multiple fixes. additional and faster updates.
+- Faster plot and point operations with some generated tables.
+- Faster circle drawing, faster draw routine.
+- Cyborg's battery optimization and SFX, other AI defensives SFX added.
+- Fix of Autodefense bug, SFX added.
+- Tank names sometimes disappear when using Lazy Darwin - fixed.
+- Better "Laser" visualization in Lazy Darwin.
+- Cart startup menu with a hidden easter egg.
+- Turbo mode added to 5200 version (press and hold [START] key for a speed up).
+- "Visual debug" mode available in 5200 as well (long press of [#] toggles this mode).
+- AI searches for a weakest link much faster now.
+- Improved attack tactic of Poolshark, Tosser and Shooter.
+- Miraculous powers of "Long Schlong"!!!
+- Exit from AI aiming bug fixed.
+- Chooser, Spoiler and Cyborg better calculate distances from explosions.
+
 
 ###### Version 1.30
 2023-05-21

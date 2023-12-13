@@ -19,12 +19,30 @@ OptionsScreen
    dta                                        d" "
    dta d"        Press "
    dta               d"Return"*
-   dta                     d" to proceed         "
+   dta                     d" to proceed  " ; this text has common part with OptionsSubTitle (7bytes) :)
 .ELIF TARGET = 5200
    dta d" Please select option with joystick one "
-   dta d"       and press FIRE to proceed        "
+   dta d"       and press FIRE to proceed " ; this text has common part with OptionsSubTitle (7bytes) :)
 .ENDIF
      ; 0123456789012345678901234567890123456789
+;-----------------------------------------------
+OptionsSubTitle
+ dta d"       Unknown Father of All Games"
+;-----------------------------------------------
+MoreUp
+ dta d"         "   ; common part of this text and OptionsSubTitle :)
+ dta 92,92,92
+ dta d"  more  "
+ dta 92,92,92
+; dta d"         "
+MoreDown
+ dta d"         "   ; common part of both texts
+ dta 93,93,93
+ dta d"  more  "
+ dta 93,93,93
+; dta d"         "  ; common part of text and empty line :)
+EmptyLine
+ dta d"                                        "
 ;-----------------------------------------------
 NameScreen
 .IF TARGET = 800
@@ -46,7 +64,7 @@ NameScreen5
    dta   d"INV"*
    dta      d" - Shape "
    dta               d"Return"*
-   dta                     d" - Proceed  "
+   dta                     d" - Proceed"    ; two spaces in nex text
 .ELIF TARGET = 5200
    dta d" "
    dta  d"(5)"*
@@ -55,58 +73,51 @@ NameScreen5
    dta                      d" - Diffic. "
    dta d"        "
    dta        d"FIRE"*
-   dta             d" - Proceed          "
+   dta             d" - Proceed        "    ; two spaces in nex text
 .ENDIF
-;-----------------------------------------------
-MoreUp
- dta d"         "
- dta 92,92,92
- dta d"  more  "
- dta 92,92,92
- dta d"         "
-MoreDown
- dta d"         "
- dta 93,93,93
- dta d"  more  "
- dta 93,93,93
- dta d"         "
 WeaponsDescription
      ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
-   dta d"Tab"*
-   dta d   ": Defensive/Offensive weapon "
+   dta d"  "   ; common part of this and previous text
+   dta $fe  ; left arrow symbol
+   dta    d"/"
+   dta     d"Tab"*
+   dta d       ": Defensives/Offensives  "
 .ELIF TARGET = 5200
-   dta d"Left"*
-   dta d    ": Defensive/Offensive weapon"
+   dta d"  "
+   dta   d"Left"*
+   dta d      ":  Defensives/Offensives  "
 .ENDIF
 PurchaseDescription
-     ; 0123456789012345678901234567890123456789
+       ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
-   dta d"Space"*
-   dta      d": Purchase  "
-   dta                  d"Return"*
-   dta                        d": Finish "
+   dta $ff  ; right arrow symbol
+   dta d"/"
+   dta   d"Space"*
+   dta        d": Purchase   "
+   dta                     d"Return"*
+   dta                           d": Next"
 .ELIF TARGET = 5200
    dta d"Right"*
-   dta      d": Purchase    "
-   dta                    d"FIRE"*
-   dta                        d": Finish "
+   dta      d": Purchase      "
+   dta                      d"FIRE"*
+   dta                          d": Next "
 .ENDIF
 ActivateDescription
-     ; 0123456789012345678901234567890123456789
+       ; 0123456789012345678901234567890123456789
  .IF TARGET = 800
-   dta d"Space"*
-   dta      d": Activate  "
-   dta                  d"Return"*
-   dta                        d": Finish "
+   dta $ff  ; right arrow symbol
+   dta  d"/"
+   dta   d"Space"*
+   dta        d": Activate   "
+   dta                   d"Return"*
+   dta                         d": Exit"
 .ELIF TARGET = 5200
    dta d"Right"*
-   dta      d": Activate    "
-   dta                    d"FIRE"*
-   dta                        d": Finish "
+   dta      d": Activate      "
+   dta                      d"FIRE"*
+   dta                          d": Exit "
 .ENDIF
-EmptyLine
- dta d"                                        "
 ;---------------------------------------------------
 OptionsTitle
 .IF TARGET = 800
@@ -115,13 +126,13 @@ OptionsTitle
    dta d" scorch supersystem "*
 .ENDIF
 DifficultyTitle
- dta d"   difficulty   "*
+ dta d"   difficulty"* ; "   " 3 bytes - common part of 2 texts
+GameOverTitle
+ dta d"     game  over     "*
 PurchaseTitle
  dta d"purchase weapons"
 InventoryTitle
  dta d"activate weapons"*
-GameOverTitle
- dta d"     game  over     "*
 GameOverTitle2
  dta d"   Player   Points  Hits   Earned Money "
 ;-----------------------------------------------------
@@ -169,7 +180,8 @@ dl ; MAIN game display list
         .by $0f+$80 ; DLI
         :2 .by $0f                      ;2
         .by $0f+$80 ; DLI (black to end);1
-       :38 .byte $0f                    ;35 ..... = 200
+       :37 .byte $0f                    ;34 ..... = 199
+        .by $0f+$80 ; DLI - Black Hole
         .by $4f
         .wo EmptyLine   ; additional line of ground
         .byte $41
@@ -193,6 +205,9 @@ OptionsDL
         .byte $4f
         .word (display+140*40)
         :21 .by $0f                     ;76
+        .byte $70+$80
+        .byte $42
+        .word OptionsSubTitle
         .byte $41
         .word OptionsDL
 ;------------------------

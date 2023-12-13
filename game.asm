@@ -15,8 +15,12 @@ START
     jsr SetVariablesFromOptions
     jsr MakeDarkScreen
     bit escFlag
-    bmi START
-
+    bpl @+
+    lda CONSOL
+    and #%00000001 ; START KEY
+    bne START
+    jmp StartAfterSplash    ; reset all game option if Start key pressed (and Esc)
+@
     jsr EnterPlayerNames
     jsr MakeDarkScreen
     bit escFlag
@@ -42,6 +46,7 @@ MainGameLoop
     jsr RoundInit
 
     jsr MainRoundLoop
+    mva #$ff MeteorsFlag
     bit escFlag
     jvs GoGameOver
     bmi START
@@ -52,7 +57,7 @@ MainGameLoop
 
     mva #0 TankNr  ;
     sta COLBAKS        ; set background color to black
-    sta JoystickNumber    ; set joystick port for player
+    jsr SetJoystickPort    ; set joystick port for player
 
     ; Hide all (easier than hide last ;) ) tanks
     jsr cleartanks    ; A=0
@@ -186,7 +191,7 @@ eskipzeroing
 
     RmtSong song_ingame
 
-    jsr SetPMWidth    ; A=0
+    jsr SetPMWidthAndColors    ; A=0
     lda #0
     sta AfterBFGflag    ; reset BFG flag
     sta COLOR2    ; status line "off"
@@ -211,10 +216,7 @@ SettingEnergies
       sta LASTeXistenZ,x
       ; anything in eXistenZ table means that this tank exist
       ; in the given round
-      lda #<1000
-      sta MaxForceTableL,x
-      lda #>1000
-      sta MaxForceTableH,x
+      jsr MaxForceCalculate
       lda #<350
       sta ForceTableL,x
       lda #>350
@@ -231,6 +233,15 @@ SettingEnergies
       dex
     bpl SettingEnergies
 
+; set mountain type if ...
+    lda RandomMountains
+    beq noRandomMountains
+@   ldy RANDOM
+    cpy #5
+    bcs @-
+    jsr SetVariablesFromOptions.setMountainsType
+noRandomMountains
+
 ;generating the new landscape
     jsr PMoutofScreen ;let P/M disappear
     jsr clearscreen   ;let the screen be clean
@@ -246,12 +257,15 @@ SettingEnergies
     jsr CopyFromROM
 
     jsr SetMainScreen
-    jsr ColorsOfSprites
 
     jsr drawmountains ;draw them
     jsr drawtanks     ;finally draw tanks
 
     mva #$00 TankSequencePointer
+    
+    lda random
+    ;lda #$00    ; allways
+    sta MeteorsRound    ; Turns meteors on or off during the next round.
 
 ;---------round screen is ready---------
     mva #TextForegroundColor COLOR1    ; status line "on"
@@ -351,9 +365,15 @@ CheckNextTankAD
     ldx tankNr
     lda TankStatusColoursTable,x
     sta COLOR2  ; set color of status line
+    jsr RandomizeForce.LimitForce
     jsr PutTankNameOnScreen
 ;    jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
-
+   
+    lda MeteorsRound
+    bmi @+
+    ; A = 0
+    sta MeteorsFlag
+@    
     lda SkillTable,x
     beq ManualShooting
 
@@ -361,8 +381,8 @@ RoboTanks
     ; robotanks shoot here
     ; TankNr still in X
     jsr ArtificialIntelligence
-    ;pause 30
-    ldx TankNr
+    ; after calliing AI we allways have TankNr in X
+    ;ldx TankNr
     jsr DisplayStatus    ; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
     lda kbcode
@@ -377,7 +397,7 @@ RoboTanks
 
 ManualShooting
     lda JoyNumber,x
-    sta JoystickNumber    ; set joystick port for player
+    jsr SetJoystickPort    ; set joystick port for player
     jsr WaitForKeyRelease
     lda #%00000000
     sta TestFlightFlag    ; set "Test Fight" off
@@ -386,7 +406,10 @@ ManualShooting
     spl:rts        ; keys Esc or O
 
 AfterManualShooting
-    mva #$00 plot4x4color
+    ldy #$00
+    sty plot4x4color
+    dey
+    sty MeteorsFlag ; $ff
     jsr DisplayTankNameAbove
     ; defensive weapons without flight handling
     ldx TankNr
@@ -423,24 +446,36 @@ StandardShoot
     dec Energy,x   ; lower energy to eventually let tanks commit suicide
 
 ShootNow
-    jsr Shoot
-    ;here we clear offensive text (after a shoot)
-    ldy TankNr
-    mva #$00 plot4x4color
-    jsr DisplayOffensiveTextNr
+    lda ActiveWeapon,x
+    cmp #ind_Buy_me ; BFG
+    beq WeponNoFlight   ; but with explosion 
+    cmp #ind_Punch   ; Punch
+    beq WeponNoFlight   ; but with explosion 
+    
+    lda MeteorsRound
+    bmi @+
+    ; A = 0
+    sta MeteorsFlag
+@    
+    jsr Shoot   ; bullet flight
+    mva #$ff MeteorsFlag
 
     bit escFlag
     spl:rts        ; keys Esc or O
 
     lda HitFlag ;0 if missed
     beq missed
-
+    bne GoExplosion
+WeponNoFlight
+    jsr NoShoot ; no bullet flight
+GoExplosion
     jsr Explosion
 
 continueMainRoundLoopAfterSeppuku
+    mva #sfx_silencer sfx_effect
 
 AfterExplode
-    jsr SoilDown2    ; allways
+    jsr SoilDown    ; allways
 NoFallDown2
     ;here tanks are falling down
     mva tankNr tempor2
@@ -464,10 +499,9 @@ missed
       sta ActiveWeapon,x
 @
 
-    ;here we clear offensive text (after a shoot)
-    ldy TankNr
-    mva #$00 plot4x4color
-    jsr DisplayOffensiveTextNr
+    ;here we clear offensive text (after a shoot) - is cleared !! :)
+   ; ldy TankNr
+   ; jsr DisplayOffensiveTextNr
 
 NextPlayerShoots
     ;before it shoots, the eXistenZ table must be updated
@@ -567,8 +601,8 @@ TextAfterBFG
     sta TextNumberOff
     inc CurrentResult    ; ... but increase result of winner (BFG)
     ldy TankTempY
-    mva #$ff plot4x4color
-    jsr DisplayOffensiveTextNr
+    lda #$ff
+    jsr DisplayOffensiveTextNr.notZero
     ; tank flash
     ldy TankTempY
     mva TankNr temp2 ; not elegant, and probably unnecessary
@@ -579,7 +613,6 @@ TextAfterBFG
     ;Deffensive text cleanup
     ;here we clear Deffensive text (after a shoot)
     ldy TankTempY
-    mva #$00 plot4x4color
     jsr DisplayOffensiveTextNr
 
     ; calculate position of the explosion (the post-death one)
@@ -599,9 +632,7 @@ TextAfterBFG
     sta ydraw+1   ; there is 0 left in A, so... TODO: bad code above. revisit
 
     ;cleanup of the soil fall down ranges (left and right)
-    sta RangeRight
-    sta RangeRight+1
-    mwa #screenwidth RangeLeft
+    jsr ClearScreenSoilRange
 
     ; We are randomizing the weapon now.
     ; jumping into the middle of the explosion
@@ -649,17 +680,14 @@ NotShooter
     clc
     adc EnergyDecrease
     sta loseL,x
-    lda loseH,x
-    adc #$00
-    sta loseH,x
+    scc
+    inc loseH,x
     ; Energy now, not less than 0
+    sec
     lda Energy,x
-    cmp EnergyDecrease
-    bcc ldahashzero
-    ;sec
     sbc EnergyDecrease
-    bpl NotNegativeEnergy
-ldahashzero
+    bcs NotNegativeEnergy
+    ; if less than 0 then 0
     lda #0
 NotNegativeEnergy
     sta Energy,x
@@ -670,7 +698,7 @@ NotNegativeEnergy
     adc EnergyDecrease
     sta gainL,y
     lda gainH,y
-    adc #$00
+    adc #0
     sta gainH,y
     rts
 .endp
@@ -684,18 +712,16 @@ NotNegativeEnergy
     sty EnergyDecrease
     ldy #0    ; if Shield survive then no decrease tank anergy
     ; Energy cannot be less than 0
+    sec
     lda ShieldEnergy,x
-    cmp EnergyDecrease
-    bcc UseAllShieldEnergy
-    ;sec
     sbc EnergyDecrease
-    bpl NotNegativeShieldEnergy    ; jump allways
-UseAllShieldEnergy
+    bcs NotNegativeShieldEnergy
     ; now calculate rest of energy for future tank energy decrease
     sec
     lda EnergyDecrease
     sbc ShieldEnergy,x
     tay
+    ; ShieldEnargy less than 0 then .. 0
     lda #0
 NotNegativeShieldEnergy
     sta ShieldEnergy,x
@@ -736,8 +762,7 @@ NotNegativeShieldEnergy
     :4 aslw Wind
     ; decide the direction
     lda random
-    and #$01
-    beq @+
+    bmi @+
       sec  ; Wind = -Wind
       .rept 4
         lda #$00
@@ -807,14 +832,15 @@ deletePtr = temp
     ; clean variables
     lda #0
     sta escFlag
-    sta JoystickNumber
     tay
     mwa #variablesStart deletePtr
 @     tya
       sta (deletePtr),y
       inw deletePtr
-      cpw deletePtr #variablesEnd
+      cpw deletePtr #ClearedvariablesEnd
     bne @-
+    tya
+    jsr SetJoystickPort
 
         ; ser initial shapes for each tank (tanks 0-5 has shape 0 now)
     ldy #1
@@ -854,7 +880,7 @@ SetunPlots
     sta pmbase
     lda #$03    ; P/M on
     sta GRACTL
-    jsr SetPMWidth
+    jsr SetPMWidthAndColors
     lda #%00100001 ; P/M priorities (multicolor players on) - prior=1
     sta GPRIOR
     jsr PMoutofScreen
@@ -1029,7 +1055,10 @@ MoveBarrel
     ldx TankNr
     ;
     mva #1 Erase
+    bit TestFlightFlag
+    bmi AIaim
     jsr WaitOneFrame
+AIaim
     jsr DrawTankNr.BarrelChange
     mva #0 Erase
     lda NewAngle
@@ -1165,8 +1194,18 @@ SetRandomWalls
     rts
 .endp
 ; --------------------------------------
-; Sets the appropriate variables based on the options table
+; Sets the appropriate variables based on the 'OptionsTable'
 ;
+; this function returns:
+; - 'NumberOfPlayers'
+; - 'moneyL' and 'moneyH' (in arrays) for each player
+; - 'gravity'
+; - 'MaxWind'
+; - 'RoundsInTheGame'
+; - 'flyDelay'
+; - 'seppukuVal'
+; - 'mountainDeltaL' and 'mountainDeltaH'
+
 .proc SetVariablesFromOptions
     ;first option
     ldy OptionsTable
@@ -1214,6 +1253,7 @@ SetRandomWalls
 
     ;8th option (how aggressive are mountains)
     ldy OptionsTable+7
+setMountainsType
     lda mountainsDeltaTableH,y
     sta mountainDeltaH
     lda mountainsDeltaTableL,y
@@ -1247,8 +1287,8 @@ SetRandomWalls
     cmp RoundsInTheGame
     beq GameOver4x4
 
-    sta decimal
-    mwa #RoundNrDisplay displayposition
+    ;sta decimal
+    mwx #RoundNrDisplay displayposition
     jsr displaybyte ;decimal (byte), displayposition  (word)
 
     mwa #LineHeader1 LineAddress4x4
