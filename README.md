@@ -59,7 +59,7 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 2023-12-07
 
 Physical release version.
-We are extremely pleased to inform you that our humble game was released on a physical media by Mq (Atari 8-bit version) and 5200 (atariage.com).
+We are extremely pleased to inform you that our humble game was released on a physical media by [Mq](mailto:mq666xx@gmail.com) (Atari 8-bit version) and 5200 [atariage.com](https://atariage.com).
 
 ![Scorch physical release](Manuals/images/scorch_physical.jpg)
 
