@@ -123,23 +123,22 @@ CalculateGainsLoop
     ; if lose is greater than money then zero money
     lda moneyH,x
     cmp loseH,x
-    bcc zeromoney
-    bne substractlose
+    bne @+
     lda moneyL,x
     cmp loseL,x
-    bcc zeromoney
+@   bcs substractlose
+zeromoney
+    lda #0
+    sta moneyL,x
+    sta moneyH,x
+    beq skipzeroing
 substractlose
-    sec
+;    sec    ; C is allways set at this point
     lda moneyL,x
     sbc loseL,x
     sta moneyL,x
     lda moneyH,x
     sbc loseH,x
-    sta moneyH,x
-    jmp skipzeroing
-zeromoney
-    lda #0
-    sta moneyL,x
     sta moneyH,x
 skipzeroing
 ; and earned money for summary
@@ -154,23 +153,22 @@ skipzeroing
     ; if lose is greater than money then zero money
     lda EarnedMoneyH,x
     cmp loseH,x
-    bcc ezeromoney
-    bne esubstractlose
+    bne @+
     lda EarnedMoneyL,x
     cmp loseL,x
-    bcc ezeromoney
+@   bcs esubstractlose
+ezeromoney
+    lda #0
+    sta EarnedMoneyL,x
+    sta EarnedMoneyH,x
+    beq eskipzeroing
 esubstractlose
-    sec
+;    sec    ; C is allways set at this point
     lda EarnedMoneyL,x
     sbc loseL,x
     sta EarnedMoneyL,x
     lda EarnedMoneyH,x
     sbc loseH,x
-    sta EarnedMoneyH,x
-    jmp eskipzeroing
-ezeromoney
-    lda #0
-    sta EarnedMoneyL,x
     sta EarnedMoneyH,x
 eskipzeroing
 
