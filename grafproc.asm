@@ -1648,8 +1648,10 @@ notZero
     sta temp
     lda xtankstableH,y
     sta temp+1
-    ;now we should substract length of the text-1
-    ;temp2 = (fx-1)*2
+AboveTemp
+    ; we have X coordinate of center of text in temp
+    ; now we should substract length of the text-1
+    ; temp2 = (fx-1)*2
     ldy fx
     dey
     tya

@@ -41,7 +41,7 @@ ExplosionRoutines
     .word riotblast-1                ;Riot_Blast     ;_16
     .word riotbomb-1                 ;Riot_Bomb      ;_17
     .word heavyriotbomb-1            ;Heavy_Riot_Bomb;_18
-    .word babydigger-1               ;Baby_Digger    ;_19
+    .word propaganda-1               ;Baby_Digger    ;_19
     .word digger-1                   ;Digger         ;_20
     .word heavydigger-1              ;Heavy_Digger   ;_21
     .word sandhog-1                  ;Sandhog        ;_22
@@ -380,9 +380,43 @@ GoRiotBomb
 ;    jmp xriotbomb
 .endp
 ; ------------------------
-.proc babydigger
-    lda #1  ; diggery  ; how many branches (-1)
-GoBabydiggerSFX
+.proc propaganda
+    ; propaganda
+    jsr SetFullScreenSoilRange  ; to change
+    mwa xdraw tempXROLLER ; save X coordinate of texts
+    ; all text start from `talk` and end with an inverse.
+    ; we go through the `talk`, count number of inverses.
+    ; if equal to TextNumberOff, it is our text, printit
+
+    mva #5 TempXfill ; number of text to display
+nexttext
+@   lda random
+    cmp #talk.NumberOfOffensiveTexts
+    bcs @-
+
+    sta TextNumberOff
+    lda #$ff
+    sta plot4x4color
+    mwa #talk LineAddress4x4
+    jsr _calc_inverse_display   
+    ; now find length of the text
+@   iny
+    lda (LineAddress4x4),y
+    bpl @-
+    iny
+    sty fx
+    mwa tempXROLLER temp
+
+    jsr Display4x4AboveTank.AboveTemp
+    
+    dec TempXfill
+    bne nexttext
+    rts
+.endp
+; ------------------------
+.proc digger ;
+    lda #3  ;   diggery  ; how many branches (-1)
+GoDiggerSFX
     sta diggery
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
@@ -390,14 +424,9 @@ GoBabydiggerSFX
     bne xdigger
 .endp
 ; ------------------------
-.proc digger ;
-    lda #3  ;   diggery  ; how many branches (-1)
-    bne babydigger.GoBabydiggerSFX
-.endp
-; ------------------------
 .proc heavydigger
     lda #7  ; diggery  ; how many branches  (-1)
-    bne babydigger.GoBabydiggerSFX
+    bne digger.GoDiggerSFX
 .endp
 ; ------------------------
 .proc babysandhog

@@ -500,7 +500,7 @@ NamesOfWeapons ;the comment is an index in the tables
     dta d"Riot Blast"^       ; 16
     dta d"Riot Bomb"^        ; 17
     dta d"Heavy Riot Bomb"^  ; 18
-    dta d"Baby Digger"^      ; 19
+    dta d"Propaganda"^       ; 19
     dta d"Digger"^           ; 20
     dta d"Heavy Digger"^     ; 21
     dta d"Sandhog"^          ; 22
