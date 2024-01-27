@@ -382,7 +382,8 @@ GoRiotBomb
 ; ------------------------
 .proc propaganda
     ; propaganda
-    lda #36 ; (max propaganda text lenght [17+1] * 4 pixels) / 2
+;    lda #41 ; ((max propaganda text lenght [17+1] * 4 pixels) / 2) + 5 pixels for random X
+    lda #80 ; test only
     sta ExplosionRadius
     jsr CalculateExplosionRange  
     
@@ -391,7 +392,7 @@ GoRiotBomb
     ; we go through the `talk`, count number of inverses.
     ; if equal to TextNumberOff, it is our text, printit
 
-    mva #15 TempXfill ; number of text to display
+    mva #11 TempXfill ; number of text to display
 nexttext
     mva #sfx_digger sfx_effect
 @   lda random
@@ -417,9 +418,23 @@ nexttext
     adc LineYdraw
     sbc #16
     sta LineYdraw
+    
+    lda random
+    and #%00000111
+    clc
+    adc LineXdraw
+    sta LineXdraw
+    bcc @+
+    inc LineXdraw+1
+@   sec
+    sbc #4
+    sta LineXdraw
+    bcs @+
+    dec LineXdraw+1
+@   
     jsr TypeLine4x4.noLengthNoColor
 
-    ldy #5
+    ldy #7
     jsr PauseYFrames
     
     dec TempXfill
