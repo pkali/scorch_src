@@ -4,7 +4,7 @@
     dta d"YOU'RE DEAD MEAT."^
     dta d"DIE COMMIE PIG!"^
     dta d"VICTORY!"^
-    dta d"DIE, ALIEN SWINE!"^
+    dta d"FUR DEUTSCHLAND!"^
     dta d"AWRUK!!!"^
     dta d"CYKA BLAT"^
     dta d"TAKE THIS!"^
