@@ -21,6 +21,7 @@
     dta d"TAKE A HIKE!"^
     dta d"MAKE MY DAY."^
     dta d"KNOCK, KNOCK."^
+; end of Propaganda :)
     dta d"FROM HELL'S HEART I STAB AT THEE..."^
     dta d"DO YOU FEEL LUCKY, TANK?"^
     dta d"YOU'RE OUTTA HERE."^

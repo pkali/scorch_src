@@ -1648,7 +1648,12 @@ notZero
     sta temp
     lda xtankstableH,y
     sta temp+1
-AboveTemp
+    jsr Calculate4x4TextPosition
+    jmp TypeLine4x4.noLengthNoColor  ; rts
+
+.endp
+;--------------------------------------------------------
+.proc Calculate4x4TextPosition
     ; we have X coordinate of center of text in temp
     ; now we should substract length of the text-1
     ; temp2 = (fx-1)*2
@@ -1746,11 +1751,8 @@ DOTOldLowestValue
     lda temp2
     sbc #(4+9) ;9 pixels above ground (and tanks...)
     sta LineYdraw
-
-    jmp TypeLine4x4.noLengthNoColor  ; rts
-
+    rts
 .endp
-
 ;--------------------------------------------------------
 .proc DisplayTankNameAbove ; TankNr in X
     txa ; TankNr

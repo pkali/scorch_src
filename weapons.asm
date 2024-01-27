@@ -382,7 +382,10 @@ GoRiotBomb
 ; ------------------------
 .proc propaganda
     ; propaganda
-    jsr SetFullScreenSoilRange  ; to change
+    lda #36 ; (max propaganda text lenght [17+1] * 4 pixels) / 2
+    sta ExplosionRadius
+    jsr CalculateExplosionRange  
+    
     mwa xdraw tempXROLLER ; save X coordinate of texts
     ; all text start from `talk` and end with an inverse.
     ; we go through the `talk`, count number of inverses.
@@ -408,7 +411,14 @@ nexttext
     sty fx
     mwa tempXROLLER temp
 
-    jsr Display4x4AboveTank.AboveTemp
+    jsr Calculate4x4TextPosition
+    lda random
+    and #%00001111
+    adc LineYdraw
+    sbc #8
+    sta LineYdraw
+    jsr TypeLine4x4.noLengthNoColor
+
     ldy #15
     jsr PauseYFrames
     
