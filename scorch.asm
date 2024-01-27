@@ -6,26 +6,34 @@
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
 ;Miami & Warsaw 2022, 2023
 
-;WARNING! requires mads compiled on 2023-09-13 or later
+;WUDSN run settings:
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
+
+
+;WARNING! requires mads compiled on 2023-09-13 or later
+;compilation:
+;mads scorch.asm -o:scorch.bin -d:TARGET=5200
+;mads scorch.asm -o:scorch.xex -d:TARGET=800
+;mads scorch.asm -o:scorch.xex -d:TARGET=800 -d:SPLASH=1  #xex version with splash
+;mads scorch.asm -o:scorch.xex -d:TARGET=800 -d:SPLASH=1 -d:CART_VERSION=1 #xex version for cart
+
 
 ;---------------------------------------------------
 .IFNDEF TARGET
     .def TARGET = 800 ; 5200
 .ENDIF
 ;---------------------------------------------------
-.def SPLASH = 0
-; if 0 - no splash screens
-.def CART_VERSION = 0
-; if 1 - dual splash screen
-.def METEORS = 1
-; if 1 - meteors on game
-.def XCORRECTION_FOR_PM = 0
-; if 1 - active x position of tanks correction fo PMG
-.def FASTER_GRAF_PROCS = 1
-; if 1 - activates faster graphics routines
-;        (direct writes to screen memory - atari only :) )
+.ifndef SPLASH
+    .def SPLASH = 0          ; if 0 - no splash screens
+.endif
+.ifndef CART_VERSION
+    .def CART_VERSION = 0    ; if 1 - dual splash screen
+.endif
+.def METEORS = 1             ; if 1 - meteors on game
+.def XCORRECTION_FOR_PM = 0  ; if 1 - active x position of tanks correction fo PMG
+.def FASTER_GRAF_PROCS = 1   ; if 1 - activates faster graphics routines
+                             ; (direct writes to screen memory - atari only :) )
 ;---------------------------------------------------
 
          OPT r+  ; saves 10 bytes, and probably works :) https://github.com/tebe6502/Mad-Assembler/issues/10

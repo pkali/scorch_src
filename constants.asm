@@ -250,7 +250,7 @@ WeaponPriceH ; weapons prices (tables with prices of weapons)
   .by >price_Riot_Blast
   .by >price_Riot_Bomb
   .by >price_Heavy_Riot_Bomb
-  .by >price_Baby_Digger
+  .by >price_Propaganda
   .by >price_Digger
   .by >price_Heavy_Digger
   .by >price_Sandhog
@@ -299,7 +299,7 @@ WeaponPriceL
   .by <price_Riot_Blast
   .by <price_Riot_Bomb
   .by <price_Heavy_Riot_Bomb
-  .by <price_Baby_Digger
+  .by <price_Propaganda
   .by <price_Digger
   .by <price_Heavy_Digger
   .by <price_Sandhog
@@ -355,7 +355,7 @@ WeaponUnits
   .by 2  ;Riot_Blast     ;_16
   .by 5  ;Riot_Bomb      ;_17
   .by 2  ;Heavy_Riot_Bomb;_18
-  .by 10 ;Baby_Digger    ;_19
+  .by 4  ;Propaganda     ;_19
   .by 5  ;Digger         ;_20
   .by 2  ;Heavy_Digger   ;_21
   .by 5  ;Sandhog        ;_22
@@ -393,7 +393,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     ; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
     ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
     .by %11001110
-    ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
+    ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Propaganda      "
     ; "Digger          ","Heavy Digger    ","Sandhog         ","Heavy Sandhog   "
     .by %00000000
     ; "Dirt Clod       ","Dirt Ball       ","Ton of Dirt     ","Liquid Dirt     "
@@ -414,7 +414,7 @@ PurchaseMeTable2 ;weapons good to be purchased by the robot (Cyborg)
     ; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
     ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
     .by %01000000
-    ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Baby Digger     "
+    ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Propaganda      "
     ; "Digger          ","Heavy Digger    ","Sandhog         ","Heavy Sandhog   "
     .by %00000000
     ; "Dirt Clod       ","Dirt Ball       ","Ton of Dirt     ","Liquid Dirt     "
@@ -449,7 +449,7 @@ WeaponSymbols
     .by $50 ;ind_Riot_Blast      ;_16
     .by $51 ;ind_Riot_Bomb       ;_17
     .by $52 ;ind_Heavy_Riot_Bomb ;_18
-    .by $53 ;ind_Baby_Digger     ;_19
+    .by $53 ;ind_Propaganda      ;_19
     .by $54 ;ind_Digger          ;_20
     .by $55 ;ind_Heavy_Digger    ;_21
     .by $57 ;ind_Sandhog         ;_22
@@ -556,7 +556,7 @@ weaponsOfDeath  ; weapons used in tank death animations
     dta ind_Hot_Napalm      ; why not?
     dta ind_Riot_Bomb
     dta ind_Heavy_Riot_Bomb
-    dta ind_Baby_Digger
+    dta ind_Propaganda
     dta ind_Digger
     dta ind_Heavy_Digger
     dta ind_Sandhog
@@ -672,7 +672,7 @@ CreditsEnd
 .IF TARGET = 800
   CreditsLines=39 + 7  ; add 7 for scrollout
 .ELIF TARGET = 5200
-  CreditsLines=33 + 7; add 7 for scrollout
+  CreditsLines=33 + 7  ; add 7 for scrollout
 .ENDIF
 
 .IF TARGET = 5200

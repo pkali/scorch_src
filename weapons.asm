@@ -41,7 +41,7 @@ ExplosionRoutines
     .word riotblast-1                ;Riot_Blast     ;_16
     .word riotbomb-1                 ;Riot_Bomb      ;_17
     .word heavyriotbomb-1            ;Heavy_Riot_Bomb;_18
-    .word propaganda-1               ;Baby_Digger    ;_19
+    .word propaganda-1               ;Propaganda     ;_19
     .word digger-1                   ;Digger         ;_20
     .word heavydigger-1              ;Heavy_Digger   ;_21
     .word sandhog-1                  ;Sandhog        ;_22
