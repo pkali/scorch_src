@@ -392,7 +392,7 @@ GoRiotBomb
 nexttext
     mva #sfx_digger sfx_effect
 @   lda random
-    cmp #talk.NumberOfOffensiveTexts
+    cmp #talk.NumberOfPropagandaTexts
     bcs @-
 
     sta TextNumberOff

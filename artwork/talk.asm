@@ -1,6 +1,7 @@
 .proc talk
 ; Maximum text length is 63 characters!!!
     dta d"DIE!"^
+    dta d"FUR DEUTSCHLAND!"^
     dta d"YOU'RE DEAD MEAT."^
     dta d"DIE COMMIE PIG!"^
     dta d"VICTORY!"^
@@ -118,8 +119,10 @@
     dta d"CALL 1-900-SUE-TANK."^
     dta d"YOU BIG DUMMY!"^                 ;(sanford and son)
 LEND
-NumberOfOffensiveTexts=54
+NumberOfOffensiveTexts=55
 NumberOfDeffensiveTexts=62
+NumberOfPropagandaTexts=21
+VeryFunnyText=79
 .endp
 hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"^
 hoverFullEnd
