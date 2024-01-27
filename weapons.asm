@@ -391,7 +391,7 @@ GoRiotBomb
     ; we go through the `talk`, count number of inverses.
     ; if equal to TextNumberOff, it is our text, printit
 
-    mva #5 TempXfill ; number of text to display
+    mva #15 TempXfill ; number of text to display
 nexttext
     mva #sfx_digger sfx_effect
 @   lda random
@@ -413,13 +413,13 @@ nexttext
 
     jsr Calculate4x4TextPosition
     lda random
-    and #%00001111
+    and #%00011111
     adc LineYdraw
-    sbc #8
+    sbc #16
     sta LineYdraw
     jsr TypeLine4x4.noLengthNoColor
 
-    ldy #15
+    ldy #5
     jsr PauseYFrames
     
     dec TempXfill
