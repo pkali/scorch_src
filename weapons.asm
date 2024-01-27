@@ -390,6 +390,7 @@ GoRiotBomb
 
     mva #5 TempXfill ; number of text to display
 nexttext
+    mva #sfx_digger sfx_effect
 @   lda random
     cmp #talk.NumberOfOffensiveTexts
     bcs @-
@@ -408,6 +409,8 @@ nexttext
     mwa tempXROLLER temp
 
     jsr Display4x4AboveTank.AboveTemp
+    ldy #15
+    jsr PauseYFrames
     
     dec TempXfill
     bne nexttext
