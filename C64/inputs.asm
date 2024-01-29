@@ -68,7 +68,7 @@ StillWait
 ; If 'O' key is pressed - displays "Are you sure?" and - exit to GameOver screen
 ; If 'Esc' key is pressed - displays "Are you sure?" and - exit to Menu screen
 ; Just setting the right flags!!!
-
+    mva #$00 escFlag           ; flag cleared
     rts
 ;
 .endp
