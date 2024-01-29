@@ -614,7 +614,7 @@ CreditsStart
     dta   d"You were playing"^
     dta   d"Scorch"^
     dta   d"Warsaw, Miami"^
-    dta   d"2000-2023"^
+    dta   d"2000-2024"^
     dta   d" "*
     dta   d"Programming"^
     dta   d"Tomasz 'Pecus' Pecko"^
@@ -678,7 +678,7 @@ CreditsEnd
 .IF TARGET = 5200
   ; Atari 5200 splash
   NewSplashText=*
-    dta d" 2023  atariage", $4e, "com "  ; $4e - non blinking dot
+    dta d" 2024  atariage", $4e, "com "  ; $4e - non blinking dot
 .ENDIF
 
 .endif  ; .IF *>0

@@ -4,7 +4,7 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
-;Miami & Warsaw 2022, 2023
+;Miami & Warsaw 2022, 2023, 2024
 
 ;WUDSN run settings:
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4

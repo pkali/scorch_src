@@ -3,7 +3,7 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
-;Miami & Warsaw 2022, 2023
+;Miami & Warsaw 2022, 2023, 2024
 
 ;---------------------------------------------------
 .def TARGET = 64 ; :)
@@ -24,7 +24,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.45" ; number of this build (4 bytes)
+    dta d"1.46" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
