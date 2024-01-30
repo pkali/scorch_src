@@ -41,16 +41,16 @@ ExplosionRoutines
     .word riotblast-1                ;Riot_Blast     ;_16
     .word riotbomb-1                 ;Riot_Bomb      ;_17
     .word heavyriotbomb-1            ;Heavy_Riot_Bomb;_18
-    .word propaganda-1               ;Propaganda     ;_19
-    .word digger-1                   ;Digger         ;_20
-    .word heavydigger-1              ;Heavy_Digger   ;_21
-    .word sandhog-1                  ;Sandhog        ;_22
-    .word heavysandhog-1             ;Heavy_Sandhog  ;_23
-    .word dirtclod-1                 ;Dirt_Clod      ;_24
-    .word dirtball-1                 ;Dirt_Ball      ;_25
-    .word tonofdirt-1                ;Ton_of_Dirt    ;_26
-    .word liquiddirt-1               ;Liquid_Dirt    ;_27
-    .word dirtcharge-1               ;Dirt_Charge    ;_28
+    .word digger-1                   ;Digger         ;_19
+    .word heavydigger-1              ;Heavy_Digger   ;_20
+    .word sandhog-1                  ;Sandhog        ;_21
+    .word heavysandhog-1             ;Heavy_Sandhog  ;_22
+    .word dirtclod-1                 ;Dirt_Clod      ;_23
+    .word dirtball-1                 ;Dirt_Ball      ;_24
+    .word tonofdirt-1                ;Ton_of_Dirt    ;_25
+    .word liquiddirt-1               ;Liquid_Dirt    ;_26
+    .word dirtcharge-1               ;Dirt_Charge    ;_27
+    .word propaganda-1               ;Propaganda     ;_28
     .word punch-1                    ;Baby_Sandhog   ;_29
     .word BFG-1                      ;Buy_me         ;_30
     .word laser-1                    ;Laser          ;_31
