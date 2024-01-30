@@ -381,25 +381,25 @@ GoRiotBomb
 .endp
 ; ------------------------
 .proc propaganda
-    ; propaganda
-;    lda #41 ; ((max propaganda text lenght [17+1] * 4 pixels) / 2) + 5 pixels for random X
-    lda #80 ; test only
-    sta ExplosionRadius
+    ; It floods the target with propaganda texts.
+    lda #80 ; max text width with additional margins (left/right edges of the screen)
+    sta ExplosionRadius ; set soildown range
     jsr CalculateExplosionRange  
     
-    mwa xdraw tempXROLLER ; save X coordinate of texts
-    ; all text start from `talk` and end with an inverse.
-    ; we go through the `talk`, count number of inverses.
-    ; if equal to TextNumberOff, it is our text, printit
-
+    mwa xdraw tempXROLLER ; save X coordinate of hitpoint
+    
     mva #11 TempXfill ; number of text to display
 nexttext
+    ; play SFX
     mva #sfx_digger sfx_effect
-@   lda random
+@   lda random  ; randomize propaganda messege
     cmp #talk.NumberOfPropagandaTexts
     bcs @-
 
     sta TextNumberOff
+    ; all text start from `talk` and end with an inverse.
+    ; we go through the `talk`, count number of inverses.
+    ; if equal to TextNumberOff, it is our text, printit
     lda #$ff
     sta plot4x4color
     mwa #talk LineAddress4x4
@@ -410,15 +410,16 @@ nexttext
     bpl @-
     iny
     sty fx
-    mwa tempXROLLER temp
-
+    mwa tempXROLLER temp    ; X coordinate of hitpoint
+    ; calculate position of message 
     jsr Calculate4x4TextPosition
+    ; and randomize Y coordinate (+/- 16pixels)
     lda random
     and #%00011111
     adc LineYdraw
     sbc #16
     sta LineYdraw
-    
+    ; randomize X coordinate (+/- 8 pixels)    
     lda random
     and #%00000111
     clc
@@ -429,9 +430,10 @@ nexttext
 @   sec
     sbc #4
     sta LineXdraw
-    bcs @+
+    bcs DisplayMessage
     dec LineXdraw+1
-@   
+DisplayMessage
+    ; display propaganda message
     jsr TypeLine4x4.noLengthNoColor
 
     ldy #7
