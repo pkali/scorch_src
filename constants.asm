@@ -392,7 +392,7 @@ PurchaseMeTable ;weapons good to be purchased by the robot
     .by %01111111
     ; "Napalm          ","Hot Napalm      ","Tracer          ","Smoke Tracer    "
     ; "Baby Roller     ","Roller          ","Heavy Roller    ","Riot Charge     "
-    .by %11011100
+    .by %11001110
     ; "Riot Blast      ","Riot Bomb       ","Heavy Riot Bomb ","Digger          "
     ; "Heavy Digger    ","Sandhog         ","Heavy Sandhog   ","Dirt Clod       "
     .by %00000000
