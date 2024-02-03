@@ -196,23 +196,22 @@ FirstZpageVariable = $50
     .IF TARGET = 800
       icl 'Atari/lib/ATARISYS.ASM'
       icl 'Atari/lib/MACRO.ASM'
-    .IF SPLASH = 1
-      icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
-    .IF CART_VERSION = 1
-      icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
-    .ENDIF
-    .ELSE
-      ; no splash.... dark screean and BASIC off
-      ORG $2000
-      mva #0 dmactls             ; dark screen
-      mva #$ff portb
-      ; and wait one frame :)
-      seq:wait                   ; or waitRTC ?
-      mva #$ff portb        ; BASIC off
-      rts
-      ini $2000
-    .ENDIF
-;      icl 'Atari/Manual/manual.asm'     ; manuals display
+      .IF SPLASH = 1
+        icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
+        .IF CART_VERSION = 1
+          icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
+        .ENDIF
+      .ELSE
+        ; no splash.... dark screean and BASIC off
+        ORG $2000
+        mva #0 dmactls             ; dark screen
+        mva #$ff portb
+        ; and wait one frame :)
+        seq:wait                   ; or waitRTC ?
+        mva #$ff portb        ; BASIC off
+        rts
+        ini $2000
+      .ENDIF
     .ELIF TARGET = 5200
       OPT h-f+  ; no headers, single block --> cart bin file
       icl 'Atari/lib/5200SYS.ASM'
@@ -358,7 +357,11 @@ StartAfterSplash
     .IF CART_VERSION = 1
        mva #$ff GradientNr  ; #1 to set gradient number 2 :) (next one) - 0 (B/W)
     .ELSE
-       mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one) - 1 (polish rainbow)
+       .IF TARGET=5200
+         mva #1 GradientNr
+       .ELSE
+         mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one) - 1 (polish rainbow)
+       .ENDIF
     .ENDIF
     jsr SelectNextGradient.NotWind
 
