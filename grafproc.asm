@@ -985,27 +985,25 @@ ToHighToParachute
 ;
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
+    lda XtankstableL,x
+    sta xdraw
+    lda XtankstableH,x
+    sta xdraw+1
     ; one pixel under tank
     clc
     lda Ytankstable,x
     adc #1
     sta ydraw
     mva #0 ydraw+1
-    lda XtankstableL,x
-    sta xdraw
-    lda XtankstableH,x
-    sta xdraw+1
+    ; plot one (first - clear) and 6 random color pixels
+    mvy #7 temp
     ; clear first pixel under tank
-    mva #0 color
-    jsr plot
-    inw xdraw
-    ; plot 6 random color pixels
-    mva #6 temp
+    bne @pl   ; A=0
 @   lda Erase
       eor #%00000001
       and random
       and #%00000001
-      sta color
+@pl   sta color
       jsr plot
       inw xdraw
       dec temp
