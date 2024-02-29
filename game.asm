@@ -927,26 +927,22 @@ MakeTanksVisible
 ;      repeat untill NumberOfPlayers
 
     ldx #0
-GetRandomAgain0
-    lda RANDOM
-    and #$07 ;NumberOfPlayers < 7
-    cmp NumberOfPlayers
-    bcs GetRandomAgain0
-    sta TankSequence,x
-    ;now first slot is ready, nexts slots are handled
-    ;in a more complicated way
 
 GetRandomAgainX
+    txa ; destroy A!
+    tay
+    dey
     lda RANDOM
-    and #$07 ;NumberOfPlayers < 7
     cmp NumberOfPlayers
     bcs GetRandomAgainX
-
+    cpx #0
+    bne NotFirstSlot
+    sta TankSequence,x ;now first slot is ready
+    inx
+    bne GetRandomAgainX
+NotFirstSlot
     ;now we have to check if the value was not used
     ;in previous slots
-
-    stx temp
-    ldy temp
 UsageLoop
       cmp TankSequence,y
       beq GetRandomAgainX ;apparently we have already used this value
@@ -954,14 +950,11 @@ UsageLoop
     bpl UsageLoop
 
     ;well, looks like this value is new!
-    inx
     sta TankSequence,x
+    inx
 
-    stx temp
-    inc:lda temp ;x+1
-
-    cmp NumberOfPlayers
-    bne GetRandomAgainX
+    cpx NumberOfPlayers
+    bcc GetRandomAgainX
     rts
 .endp
 ;----------------------------------------------
@@ -972,9 +965,7 @@ UsageLoop
 ;----------------------------------------------
 
     ; lets randomize someting between 0 and 180
-    lda RANDOM
-    cmp #180
-    bcs RandomizeAngle
+    randomize 0 180
     rts
 .endp
 ;----------------------------------------------
