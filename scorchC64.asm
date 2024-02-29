@@ -35,8 +35,9 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $52 ; $57
+FirstZpageVariable = $51 ; $57
     .zpvar DliColorBack        .byte = FirstZpageVariable
+    .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar MeteorsFlag  .byte   ; set 7th bit - block meteors
     .zpvar MeteorsRound .byte   ; set 7th bit - block meteors in round
     .zpvar GradientNr        .byte

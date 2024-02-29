@@ -189,6 +189,7 @@ ClearPlot
 .proc drawmountains
 ;--------------------------------------------------
 ; draw mountains from mountaintable
+; ClearSky - $ff Crear sky during drawmountains, 0 - no clear sky
     mwa #0 xdraw
     mwa #mountaintable modify
     mva #1 color
@@ -216,6 +217,29 @@ NotLower
     bpl @-
     sta temp2
     inc temp2	; this is our minimum
+    bit ClearSky
+    bpl NoClearSky
+    ; Clear Sky
+    mwa #0 ydraw
+    jsr plot.MakePlot  ; after plot we have: (xbyte),y - addres of screen byte  
+@   lda #$ff
+    sta (xbyte),y
+    adw xbyte #screenBytes  ; next line
+    inc ydraw
+    lda xdraw
+    ldy ydraw
+    clc
+    adc linetableL,y
+    sta xbyte
+    lda linetableH,y
+    adc xdraw+1
+    sta xbyte+1
+    tya
+    cmp #screenheight
+    beq NoClearSky
+    cmp temp2   ; our minimum height od sky 
+    bne @-   
+NoClearSky
 MinCalculated
     ldy #0
     lda (modify),y
@@ -288,6 +312,22 @@ MinCalculated
     bne @-   
 NotFillBytes
 .ELSE
+    bit ClearSky
+    bpl NoClearSky
+    ; Clear Sky
+    ldy #0
+    lda (modify),y
+    sta ydraw
+    sty ydraw+1
+    sty color
+clearline
+    jsr plot.MakePlot
+    dec ydraw
+    lda ydraw
+    cmp #$ff
+    bne clearline
+    mva #1 color
+NoClearSky
     ldy #0
     lda (modify),y
     cmp #screenheight
