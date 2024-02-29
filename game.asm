@@ -725,7 +725,6 @@ NotNegativeShieldEnergy
 .proc Seppuku
 ;---------------------------------
     lda #0
-    sta ydraw+1
     ; get position of the tank
     ldx TankNr
 ;    lda #0  ; turn off defense weapons when hara-kiring
@@ -929,8 +928,7 @@ MakeTanksVisible
     ldx #0
 
 GetRandomAgainX
-    txa ; destroy A!
-    tay
+    txy ; destroy A!
     dey
     lda RANDOM
     cmp NumberOfPlayers
