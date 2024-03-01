@@ -30,7 +30,7 @@
 .ifndef CART_VERSION
     .def CART_VERSION = 0    ; if 1 - dual splash screen
 .endif
-.def METEORS = 0             ; if 1 - meteors on game
+.def METEORS = 1             ; if 1 - meteors on game
 .def VU_METER = 1             ; if 1 - VU Meter on game
 .def XCORRECTION_FOR_PM = 0  ; if 1 - active x position of tanks correction fo PMG
 .def FASTER_GRAF_PROCS = 1   ; if 1 - activates faster graphics routines

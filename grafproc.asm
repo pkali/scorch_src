@@ -1433,7 +1433,7 @@ NothingToFall
     mwa #0 xdraw
 
 ; starting point
-getrandomY   ;getting random Y coordinate
+/* getrandomY   ;getting random Y coordinate
 ;    sec  ; ???
     lda random
     cmp #screenheight-(margin*4) ;it means that max line=199
@@ -1441,8 +1441,8 @@ getrandomY   ;getting random Y coordinate
 ;    clc    ; C is clear
     adc #(margin*2)
     sta ydraw
-    sta yfloat+1
-    mva #0 yfloat ;yfloat equals to e.g. 140.0
+    sta yfloat+1 */
+    sta yfloat ;yfloat equals to e.g. 140.0 (A=0)
     mva #screenheight-margin-5 yfloat+1
     sta ydraw
 
@@ -1460,23 +1460,21 @@ NextPart
     sta delta+1 ; before the dot (delta+1.delta)
 
     lda random
-    and #$01 ;random sign (+/- or up/down)
+;    and #$01 ;random sign (+/- or up/down)
     sta UpNdown
 
     ; theoretically we have here ready
     ; fixed-point delta value
-    ; (-1*(UpNdown))*(delta+1.delta)
+    ; (-1*(UpNdown.7th.bit))*(delta+1.delta)
 
     ;loop drawing one line
 
 ChangingDirection
     lda random ;length of the line
     and #$0f   ;max line length
-    tax
-    inx
-    inx
-    inx
-    stx deltaX
+    clc
+    adc #3
+    sta deltaX
 
 OnePart
     jsr placeTanks.CheckTank
@@ -1493,8 +1491,8 @@ OnePart
     sta (modify),y
 
     ; Up or Down
-    lda UpNdown
-    beq ToBottom
+    bit UpNdown
+    bpl ToBottom
 
 ToTop  ;it means substracting
     ;sbw yfloat delta
@@ -1509,8 +1507,8 @@ ToTop  ;it means substracting
     cmp #margin
     bcs @+
       ; if smaller than 10
-      ldx #$00
-      stx UpNdown
+;      ldy #$00
+      sty UpNdown   ;   Y=0
       jmp @+
 
 ToBottom
@@ -1526,8 +1524,8 @@ ToBottom
       cmp #screenheight-margin
       bcc @+
         ; if higher than screen
-        ldx #$01
-        stx UpNdown
+        dey ; Y=0
+        sty UpNdown ; Y=$ff
 @
     sta ydraw
 

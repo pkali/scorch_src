@@ -731,7 +731,7 @@ NotNegativeShieldEnergy
     sta ActiveDefenceWeapon,x
     sta ShieldEnergy,x
     jsr SetupXYdraw
-    lda #1  ; Missile
+    lda #ind_Missile  ; Missile
     jsr ExplosionDirect
     jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
 .endp
@@ -756,11 +756,14 @@ NotNegativeShieldEnergy
     lda random
     bmi @+
       sec  ; Wind = -Wind
-      .rept 4
+      .rept 2
         lda #$00
         sbc Wind+#
         sta Wind+#
       .endr
+        lda #$ff
+        sta Wind+2
+        sta Wind+3
 @   rts
 .endp
 ;--------------------------------------------------
@@ -769,25 +772,16 @@ NotNegativeShieldEnergy
 ; Energy of tank X in A
 ;--------------------------------------------------
     sta L1
-
-    ;DATA L1,L2
-    ;Multiplication 8bit*8bit,
-    ;result 16bit
-    ;this algiorithm is a little longer than one in Ruszczyc 6502 book
-    ;but it is faster
-
-    ldy #8
     lda #0
+    ldy #9
     clc
-LP0 ror
+CYK ror
     ror L1
-    bcc B0
+    bcc NIE
     clc
-    adc #10 ; (L2) multiplication by 10
-B0  dey
-    bne LP0
-    ror
-    ror L1
+    adc #10 ; multiplication by 10
+NIE dey
+    bne CYK
     sta MaxForceTableH,x
     lda L1
     sta MaxForceTableL,x
@@ -1439,7 +1433,7 @@ FinishResultDisplay
     ; check timer
     lda RTCLOK
     cmp #VuMeterTime
-    bne EndMeter
+    bcc EndMeter
     ; store all angles
     ldx NumberOfPlayers
 @   lda AngleTable,x
@@ -1471,8 +1465,8 @@ Meter
     jsr drawtanknr
 EndMeterAndReset
     lda #0
-    sta RTCLOK+1
-    sta RTCLOK
+;    sta RTCLOK+1
+    sta RTCLOK  ; only older byte
 EndMeter
     rts
 .endp

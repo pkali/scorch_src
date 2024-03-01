@@ -1739,8 +1739,9 @@ FastTank
 ;    ldx TankNr
     dex
     bpl AllTanksFloatingDown
-    jsr IsKeyPressed
-    bne MainTanksFloatingLoop   ; neverending loop
+    jsr GetKeyFast
+    cmp #@kbcode._none
+    beq MainTanksFloatingLoop   ; neverending loop
     mva #$00 ScrollFlag    ; credits scroll off
     jmp MakeDarkScreen
 ;    jsr GameOverResultsClear

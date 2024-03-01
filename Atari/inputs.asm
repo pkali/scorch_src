@@ -155,17 +155,16 @@ KeyAutoReleased                ; autorepeat
       mva #0 FirstKeypressDelay
       rts
 .endp
-;--------------------------------------------------
+/* ;--------------------------------------------------
 .proc IsKeyPressed
 ; result: A=0 - yes , A>0 - no
 ;--------------------------------------------------
     lda SKSTAT
     and #%00000100
     beq @+
-    lda #1
-@   and STRIG0
-    rts
-.endp
+    lda STRIG0
+@   rts
+.endp */
 ;--------------------------------------------------
 .proc CheckStartKey
 ;--------------------------------------------------
