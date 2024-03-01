@@ -140,6 +140,16 @@
       tay
     .endm
 ;-------------------------------------
+    .macro txy
+      txa
+      tay
+    .endm
+;-------------------------------------
+    .macro tyx
+      tya
+      tax
+    .endm
+;-------------------------------------
     .macro pause
       ;waits :1 number (byte) of frames
       ldx #:1

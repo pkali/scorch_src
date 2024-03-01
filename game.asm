@@ -1430,4 +1430,53 @@ FinishResultDisplay
     jmp TypeLine4x4  ; jsr:rts
 .endp
 
+.IF VU_METER = 1
+.proc VUMeter
+    ; No VUMeter if key pressed
+    jsr GetKeyFast
+    cmp #@kbcode._none
+    bne EndMeter
+    ; check timer
+    lda RTCLOK
+    cmp #VuMeterTime
+    bne EndMeter
+    ; store all angles
+    ldx NumberOfPlayers
+@   lda AngleTable,x
+    sta previousAngle,x
+    dex
+    bpl @-
+    ; let's go!
+Meter
+    jsr ClearTanks
+    ldx NumberOfPlayers
+@   lda trackn_audc+2
+    :4 asl
+    sta AngleTable,x
+    dex
+    bpl @-
+    jsr drawtanks
+    jsr WaitOneFrame
+    jsr GetKeyFast
+    cmp #@kbcode._none
+    beq Meter
+    ; restore all angles
+    jsr ClearTanks
+    ldx NumberOfPlayers
+@   lda previousAngle,x
+    sta AngleTable,x
+    dex
+    bpl @-
+    jsr drawtanks
+    jsr drawtanknr
+EndMeterAndReset
+    lda #0
+    sta RTCLOK+1
+    sta RTCLOK
+EndMeter
+    rts
+.endp
+.ENDIF
+
+
 .ENDIF

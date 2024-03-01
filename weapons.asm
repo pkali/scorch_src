@@ -1277,11 +1277,15 @@ ContinueToCheckMaxForce2
 ;  $FB - any key
 ;  $f7 - shift
 ;  $f3 - shift+key
-
+.IF VU_METER = 1
+    jsr VUMeter.EndMeterAndReset
+.ENDIF
 notpressed
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
-
+.IF VU_METER = 1
+    jsr VUMeter
+.ENDIF
     ldx TankNr    ; for optimize
     jsr GetKeyFast
     and #%10111111 ; SHIFT elimination
