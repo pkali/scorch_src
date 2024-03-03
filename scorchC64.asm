@@ -14,6 +14,7 @@
 ; if 1 - activates faster graphics routines
 ;        (direct writes to screen memory - C64 only :) )
 ;---------------------------------------------------
+.def VU_METER = 0             ; allways 0! (works only on Atari)
 
 
     opt h-f+

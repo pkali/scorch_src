@@ -1288,6 +1288,7 @@ notpressed
 .ENDIF
     ldx TankNr    ; for optimize
     jsr GetKeyFast
+    mvy #00 EscFlag     ; prevent for set EscFalg in GetKey! we checking this in CheckExitKeys!
     and #%10111111 ; SHIFT elimination
     
     cmp #@kbcode._atari        ; Option key
@@ -1341,10 +1342,7 @@ jumpFromStick
     .ELSE
       cmp #@kbcode._help    ; Help (# in A5200)
       bne NoVdebugSwitch
-      sta pressTimer ; reset 0+@kbcode._help (tricky)
-      jsr WaitForKeyRelease.StillWait
-      lda pressTimer
-      cmp #(25+@kbcode._help)  ; 1/2s - long press only
+      jsr WaitForLongPress
       bcc NoVdebugSwitch
     .ENDIF
       lda Vdebug
@@ -1575,7 +1573,7 @@ pressedS
     eor:sta noSfx
 ReleaseAndLoop
     jsr WaitForKeyRelease
-    mva #$80 pressTimer
+;    mva #$80 pressTimer
     jmp BeforeFire
 
 pressedSpace

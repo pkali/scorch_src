@@ -234,7 +234,7 @@ FirstZpageVariable = $50
         _M     = $0d
         _S     = $0e
         _atari = $fd  ; not used in 5200
-        _ret   = $fd  ; not used in 5200
+        _ret   = $0c  ; fire in 5200
         _none  = $0f
       .ende
     .ENDIF
