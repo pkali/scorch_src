@@ -302,7 +302,7 @@ Remarks:
 
 * **Nuclear Winter** - adds nothing, takes nothing away :) - in fact, it is not so much a defensive weapon as a double-edged one. It floods the area with "radioactive" fallout, which is ordinary soil. If you do not have at hand any weapon that digs up the terrain, and for that a shield (preferably disposable), then after such "fallout" you will have to shoot yourself - because being underground is otherwise impossible. Alternatively, **White Flag** always remains.
 
-* **Long Schlong** - a special weapon :) - Costs a lot, doesn't help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated).
+* **Long Schlong** - a special weapon :) - Costs a lot, doesn't help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated). This weapon has a depressing effect on computer-controlled opponents at **Poolshark** level and above.
 
 * **Lazy Boy** - it is not a defensive weapon. It is an aiming aid. When it is activated, the tank tries to aim at the nearest enemy and automatically adjusts the power of the shot and angle. If it has too little energy, it can sometimes aim wrong (it uses a method like **Cyborg** to aim). Like **Battery**, it does not deactivate other defensive weapons when used. Note: There is no point in activating this weapon before the round, targeting will not take place because there is nothing to target yet.
 
@@ -397,9 +397,9 @@ In a hopeless situation, self-destruction might be a better option than waving t
 
 **Long Schlong** has got serious intimidating power. Become the alpha tank and fear not.
 
-As a last resort, you can always become a Terminator (the standard model, not T-1000 :) ).
-
 Robo-tanks do not possess **Autodefense**, so their defenses activate only directly before their shot. A concentrated attack by several players on one robo tank guarantees success.
+
+As a last resort, you can always become a Terminator (the standard model, not T-1000 :) ).
 
 Break a barrel or two.
 

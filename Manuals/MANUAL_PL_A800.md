@@ -304,7 +304,7 @@ Uwagi:
 
 * **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broń nie tyle defensywna, co obosieczna. Zasypuje teren opadem "radioaktywnym", który jest zwyczajną glebą. Jeśli nie mamy pod ręką żadnej broni odkopującej teren i do tego osłony (najlepiej jednorazowej), to po takim "opadzie" będzie trzeba strzelić do siebie - bo będąc pod ziemią inaczej się nie da. Ewentualnie pozostaje zawsze White Flag.
 
-* **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się - tylko przy niewielkim przysypaniu - ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej dezaktywować).
+* **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się - tylko przy niewielkim przysypaniu - ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej dezaktywować). Broń ta działa deprymująco na przeciwników sterowanych przez komputer na poziomie **Poolshark** i wyższych.
 
 * **Lazy Boy** - nie jest to właściwie broń defensywna. Jest to wspomaganie celowania. Po jej aktywacji czołg stara się wycelować w najbliższego przeciwnika i automatycznie ustawia siłę strzału oraz kąt. W przypadku posiadania zbyt małej ilości energii może czasem wycelować źle (do celowania stosuje metodę taką jak **Cyborg**). Tak jak **Battery** nie dezaktywuje innych broni defensywnych w przypadku jej użycia. Uwaga! Nie ma sensu aktywacja tej broni przed rundą, celowanie nie odbędzie się, bo nie ma jeszcze do czego celować.
 
@@ -400,8 +400,8 @@ W sytuacji beznadziejnej smobójstwo może być lepsze od **White Flag**. Jeśli
 
 **Long Schlong** potrafi znacząco onieśmielić przeciwników. Bądź alfa-czołgiem i porzuć wszelkie lęki.
 
-W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
-
 Roboczołgi nie mają **Autodefense**, więc defensywy aktywują tylko bezpośrednio przed swoim strzałem. Zmasowany atak kilku graczy na jednego roboczołga gwarantuje sukces.
+
+W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
 
 Połamania luf życzą autorzy.
