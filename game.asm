@@ -1431,7 +1431,12 @@ FinishResultDisplay
     cmp #@kbcode._none
     bne EndMeter
     ; check timer
+    ; Atari 800 has 3 bytes clock, but 5200 only 2 bytes
+    .IF TARGET = 800
+    LDA RTCLOK+1
+    .ELIF TARGET = 5200
     lda RTCLOK
+    .ENDIF
     cmp #VuMeterTime
     bcc EndMeter
     ; store all angles
@@ -1465,8 +1470,12 @@ Meter
     jsr drawtanknr
 EndMeterAndReset
     lda #0
-;    sta RTCLOK+1
-    sta RTCLOK  ; only older byte
+    ; only older byte
+    .IF TARGET = 800
+    sta RTCLOK+1
+    .ELIF TARGET = 5200
+    sta RTCLOK
+    .ENDIF
 EndMeter
     rts
 .endp
