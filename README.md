@@ -47,6 +47,7 @@ Game source code is split into several parts:
 - `ai.asm` - artificial stupidity of computer opponents
 - `weapons.asm` - general arsenal of tankies
 - `definitions.asm` - label definitions, moved to make it work better with Altirra debug (it doesn't).
+
 Hardware dependent code (In the corresponding folders - 'Atari', 'C64', ...):
 - `display_*.asm` - display lists and text screen definitions
 - `gr_basic.asm` - graphics primitives (plot, point, soildown, drawmountains, etc.) for faster drawing
