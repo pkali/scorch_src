@@ -450,6 +450,7 @@ ItIsHuman
     beq lowestIsEqual
     bcc lowestIsHigher
     ; if lower
+    bcs lowestIsLower
 lowestIsEqual
     ; if equal then select random (of two tanks)
     bit RANDOM

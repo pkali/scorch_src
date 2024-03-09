@@ -220,6 +220,7 @@ EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 ;FloatingAlt    .DS 1    ; floating tank altitude
 FunkyWallFlag = FloatingAlt    ; reuse this variable in different weapon (Funky Bomb)!
 PreferHumansFlag = FloatingAlt ; second reuse in AI Aim proc
+;PreferHumansFlag .DS 1
 ;----------------------------------------------------
 ;Flight
 ;variables for 5 missiles (used for mirv)
