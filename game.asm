@@ -1449,7 +1449,10 @@ FinishResultDisplay
 Meter
     jsr ClearTanks
     ldx NumberOfPlayers
-@   lda trackn_audc+2
+@   txa
+    and #%00000001
+    tay
+    lda trackn_audc+2,y
     :4 asl
     sta AngleTable,x
     dex
