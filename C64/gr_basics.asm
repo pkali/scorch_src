@@ -101,6 +101,8 @@ EndOfUnPlot
 .proc plot  ;plot (xdraw, ydraw, color)
 ; color == 1 --> put pixel
 ; color == 0 --> erase pixel
+; xdraw (word) - X coordinate
+; ydraw (word) - Y coordinate
 ; this is one of the most important routines in the whole
 ; game. If you are going to speed up the game, start with
 ; plot - it is used by every single effect starting from explosions
@@ -154,8 +156,10 @@ ClearPlot
 ; -----------------------------------------
 .proc point_plot
 ; -----------------------------------------
-    ; checks state of the pixel (coordinates in xdraw and ydraw)
-    ; result is in A (zero or appropriate bit is set)
+; checks state of the pixel (coordinates in xdraw and ydraw)
+; xdraw (word) - X coordinate
+; ydraw (word) - Y coordinate
+; result is in A (0 - point is set;  appropriate bit is set - point is clear) INVERTED!
 
     ; let's calculate coordinates from xdraw and ydraw
 
@@ -178,13 +182,14 @@ ClearPlot
 
     ldy #0
     lda (xbyte),y
-    eor #$ff
     and bittable1_long,x
     rts
 .endp
 ;--------------------------------------------------
 .proc drawmountains
 ;--------------------------------------------------
+; draw mountains from mountaintable
+; ClearSky - $ff Crear sky during drawmountains, 0 - no clear sky
     mwa #0 xdraw
     mwa #mountaintable modify
     mva #1 color
@@ -212,6 +217,29 @@ NotLower
     bpl @-
     sta temp2
     inc temp2	; this is our minimum
+    bit ClearSky
+    bpl NoClearSky
+    ; Clear Sky
+    mwa #0 ydraw
+    jsr plot.MakePlot  ; after plot we have: (xbyte),y - addres of screen byte  
+@   lda #$ff
+    sta (xbyte),y
+    adw xbyte #screenBytes  ; next line
+    inc ydraw
+    lda xdraw
+    ldy ydraw
+    clc
+    adc linetableL,y
+    sta xbyte
+    lda linetableH,y
+    adc xdraw+1
+    sta xbyte+1
+    tya
+    cmp #screenheight
+    beq NoClearSky
+    cmp temp2   ; our minimum height od sky 
+    bne @-   
+NoClearSky
 MinCalculated
     ldy #0
     lda (modify),y
@@ -284,6 +312,22 @@ MinCalculated
     bne @-   
 NotFillBytes
 .ELSE
+    bit ClearSky
+    bpl NoClearSky
+    ; Clear Sky
+    ldy #0
+    lda (modify),y
+    sta ydraw
+    sty ydraw+1
+    sty color
+clearline
+    jsr plot.MakePlot
+    dec ydraw
+    lda ydraw
+    cmp #$ff
+    bne clearline
+    mva #1 color
+NoClearSky
     ldy #0
     lda (modify),y
     cmp #screenheight
@@ -305,10 +349,10 @@ NoMountain
 ;--------------------------------------------------
 .proc SoilDownTurbo
 ;--------------------------------------------------
-; fast SoilDown froc - test
+; fast SoilDown proc
     jsr ClearTanks
 NoClearTanks
-;    jsr CalcAndDrawMountains
+;    jsr CalcAndDrawMountains - to do  (now Atari only)
     jmp DrawTanks
     ;rts
 .endp
@@ -344,20 +388,21 @@ Fast    ; Put char without coordinates check!
 
     ; and 8 bytes to the table
     ldy #7
+    ldx #$ff ; otimization - thanks @Irgendwer
 CopyChar
+    txa ; $ff
+    sta char2,y
     lda (fontind),y
     eor #$ff
     sta char1,y
-    lda #$ff
-    sta char2,y
     dey
     bpl CopyChar
     ; and 8 subsequent bytes as a mask
     adw fontind #8
     ldy #7
 CopyMask
-    lda (fontind),y
-    eor #$ff
+    txa ; $ff
+    eor (fontind),y
     sta mask1,y
     lda #$00
     sta mask2,y

@@ -109,6 +109,8 @@ EndOfUnPlot
 .proc plot  ;plot (xdraw, ydraw, color)
 ; color == 1 --> put pixel
 ; color == 0 --> erase pixel
+; xdraw (word) - X coordinate
+; ydraw (word) - Y coordinate
 ; this is one of the most important routines in the whole
 ; game. If you are going to speed up the game, start with
 ; plot - it is used by every single effect starting from explosions
@@ -165,9 +167,11 @@ ClearPlot
 .proc ExPlot  ;ExPlot (EplotX, EplotY)
 ; EOR plot:
 ; Inverts color of a pixel
+; EplotX (word) - X coordinate
+; EplotY (byte) - Y coordinate
 ; Note: No coordinate control!!!
 ;       With off-screen coordinates, it can damage main program.
-; only for ingame meteors
+; only for ingame meteors - for Atari only
 ; -----------------------------------------
     ; let's calculate coordinates from xdraw and ydraw
     ;xbyte = xbyte/8
@@ -195,8 +199,10 @@ ClearPlot
 ; -----------------------------------------
 .proc point_plot
 ; -----------------------------------------
-    ; checks state of the pixel (coordinates in xdraw and ydraw)
-    ; result is in A (zero or appropriate bit is set)
+; checks state of the pixel (coordinates in xdraw and ydraw)
+; xdraw (word) - X coordinate
+; ydraw (word) - Y coordinate
+; result is in A (0 - point is set;  appropriate bit is set - point is clear) INVERTED!
 
     ; let's calculate coordinates from xdraw and ydraw
 
@@ -220,13 +226,15 @@ ClearPlot
     ldx xdraw   ; optimization (256 bytes long bittable)
 
     lda (xbyte),y
-    eor #$ff
     and bittable1_long,x
     rts
 .endp
 ;--------------------------------------------------
 .proc drawmountains
 ;--------------------------------------------------
+; draw mountains from mountaintable
+; ClearSky - $ff Crear sky during drawmountains, 0 - no clear sky
+
     mwa #0 xdraw
     mwa #mountaintable modify   ; mountaintable pointer
     mva #1 color
@@ -424,7 +432,7 @@ NothingToFall
 ;--------------------------------------------------
 .proc SoilDownTurbo
 ;--------------------------------------------------
-; fast SoilDown froc - test
+; fast SoilDown proc
     jsr ClearTanks
 NoClearTanks
     jsr CalcAndDrawMountains
@@ -463,20 +471,21 @@ Fast    ; Put char without coordinates check!
 
     ; and 8 bytes to the table
     ldy #7
+    ldx #$ff ; otimization - thanks @Irgendwer
 CopyChar
+    txa ; $ff
+    sta char2,y
     lda (fontind),y
     eor #$ff
     sta char1,y
-    lda #$ff
-    sta char2,y
     dey
     bpl CopyChar
     ; and 8 subsequent bytes as a mask
     adw fontind #8
     ldy #7
 CopyMask
-    lda (fontind),y
-    eor #$ff
+    txa ; $ff
+    eor (fontind),y
     sta mask1,y
     lda #$00
     sta mask2,y

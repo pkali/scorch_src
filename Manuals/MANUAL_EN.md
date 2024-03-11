@@ -39,7 +39,7 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
-The **TAB**, **SELECT**, or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key changes the color of the mountains (3 versions to choose from).  
+The **TAB**, **SELECT**, long press of first joystick button or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key changes the color of the mountains (3 versions to choose from).  
 
 If the cursor indicates the wind strength selection option **Wind**, pressing **TAB** changes the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the **?** sign next to the word **Wind**.  
 
@@ -71,7 +71,7 @@ If a name is not entered, it will be supplemented with the default one.
 ## 3. Shopping screen (before each round)
 ![Shopping offensives screen.](images/PurOffensive.png)
 ![Shopping defensives screen.](images/PurDefensive.png)
-On this screen, you can make purchases of offensive and defensive weapons. Only those weapons that the player can afford are visible, along with information about the price and the number of units of a given weapon that will be obtained for that price. You move through the lists with the cursor keys (up and down) or with the joystick, the **TAB** key or the left arrow, the left joystick tilt or second joystick button changes the screen to defensive or offensive weapons, the **SPACE** key or the right arrow and also the joystick to the right does the purchase of the indicated weapon.
+On this screen, you can make purchases of offensive and defensive weapons. Only those weapons that the player can afford are visible, along with information about the price and the number of units of a given weapon that will be obtained for that price. You move through the lists with the cursor keys (up and down) or with the joystick, the **TAB** key or the left arrow, the left joystick tilt or second joystick button changes the screen to defensive or offensive weapons, the **SPACE** key, the right arrow, long press of first joystick button and also the joystick to the right does the purchase of the indicated weapon.
 
 The **RETURN** key or the joystick button press switches to the defensive weapon activation screen. Here you can activate previously bought defensive (or offensive after switching with **TAB**, etc) weapons. 
 
@@ -231,7 +231,6 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Riot Blast       | 0       (↓) |
 | Riot Bomb        | 0       (↓) |
 | Heavy Riot Bomb  | 0       (↓) |
-| Baby Digger      | 0       (↓) |
 | Digger           | 0       (↓) |
 | Heavy Digger     | 0       (↓) |
 | Sandhog          | 0       (↓) |
@@ -241,6 +240,7 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Ton of Dirt      | 0       (↓) |
 | Liquid Dirt      | 0       (↓) |
 | Dirt Charge      | 0       (↓) |
+| Propaganda       | 0       (↓) |
 | Stomp            | 0       (↓) |
 | Laser            | 100     (↓) |
 
@@ -257,11 +257,9 @@ Remarks:
 
 * **Heavy Riot Bomb** as in **Riot Bomb**, but the explosion radius is 29 pixels from the point of impact - as in the case of **Nuke**
 
-* **Baby Digger** - no energy is subtracted, but a portion of the soil is dug in a radius of 60 pixels from the point of impact.
+* **Digger** - no energy is subtracted, but a portion of the soil is dug in a radius of 60 pixels from the point of impact.
 
-* **Digger** - as above - more digging.
-
-* **Heavy Digger** - as above - even more digging.
+* **Heavy Digger** - as above - more digging.
 
 * **Sandhog** - as above - another way of digging
 
@@ -274,6 +272,8 @@ Remarks:
 * **Ton of Dirt** - as above, but the radius of the ball is 31 pixels.
 
 * **Liquid Dirt** - (floods the ground at the point of hit with liquid soil, filling in the depressions.
+
+* **Propaganda** - no energy is subtracted, but the point of the hit is covered with propaganda texts.
 
 * **Stomp** - no energy is subtracted, but all tanks within a radius depending on the force of the shot are pushed back, and after being pushed back they may fall or be buried. With a maximum force of 990 units, the radius of action is about 60 pixels.
 
@@ -302,7 +302,7 @@ Remarks:
 
 * **Nuclear Winter** - adds nothing, takes nothing away :) - in fact, it is not so much a defensive weapon as a double-edged one. It floods the area with "radioactive" fallout, which is ordinary soil. If you do not have at hand any weapon that digs up the terrain, and for that a shield (preferably disposable), then after such "fallout" you will have to shoot yourself - because being underground is otherwise impossible. Alternatively, **White Flag** always remains.
 
-* **Long Schlong** - a special weapon :) - Costs a lot, doesn't help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated).
+* **Long Schlong** - a special weapon :) - Costs a lot, doesn't help with anything (except possibly digging yourself out but only when slightly buried but it has a cool name and looks cool :) - It can be activated independently of other defensive weapons and remains active until the end of the round (it cannot be deactivated). This weapon has a depressing effect on computer-controlled opponents at **Poolshark** level and above.
 
 * **Lazy Boy** - it is not a defensive weapon. It is an aiming aid. When it is activated, the tank tries to aim at the nearest enemy and automatically adjusts the power of the shot and angle. If it has too little energy, it can sometimes aim wrong (it uses a method like **Cyborg** to aim). Like **Battery**, it does not deactivate other defensive weapons when used. Note: There is no point in activating this weapon before the round, targeting will not take place because there is nothing to target yet.
 
@@ -397,9 +397,9 @@ In a hopeless situation, self-destruction might be a better option than waving t
 
 **Long Schlong** has got serious intimidating power. Become the alpha tank and fear not.
 
-As a last resort, you can always become a Terminator (the standard model, not T-1000 :) ).
-
 Robo-tanks do not possess **Autodefense**, so their defenses activate only directly before their shot. A concentrated attack by several players on one robo tank guarantees success.
+
+As a last resort, you can always become a Terminator (the standard model, not T-1000 :) ).
 
 Break a barrel or two.
 

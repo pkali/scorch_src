@@ -67,12 +67,12 @@ PHINIV	EQU	$E48C	;UPLOADED HANDLER INIT
 ;
 ; COMMAND CODES FOR IOCBS
 ;
-OPEN  	EQU	$03	;OPEN FOR I/O
+_OPEN  	EQU	$03	;OPEN FOR I/O
 GETREC	EQU	$05	;GET RECORD (TEXT)
 GETCHR	EQU	$07	;GET CHARACTER(S)
 PUTREC	EQU	$09	;PUT RECORD (TEXT)
 PUTCHR	EQU	$0B	;PUT CHARACTER(S)
-CLOSE 	EQU	$0C	;CLOSE DEVICE
+_CLOSE 	EQU	$0C	;CLOSE DEVICE
 STATIS	EQU	$0D	;STATUS REQUEST
 SPECIL	EQU	$0E	;SPECIAL ENTRY COMMAND
 ;
@@ -135,6 +135,7 @@ DERRER	EQU	$90	;PERIPHRAL DEVICE ERR
 BADMOD	EQU	$91	;BAD SCREEN MODE #
 FNCNOT	EQU	$92	;NONEXISTANT FUNCTION
 SCRMEM	EQU	$93	;SCREEN MEM TOO SMALL
+FILENF  EQU $AA ;FILE NOT FOUND
 ;
 ; PAGE ZERO RAM ASSIGNMENTS
 ;
@@ -376,7 +377,7 @@ CBAUDL	EQU	$02EE	;CASSETTE BAUD RATE
 CBAUDH	EQU	$02EF
 CRSINH	EQU	$02F0	;CURSOR INHIBIT 0=ON
 KEYDEL	EQU	$02F1	;KEY DELAY
-CH1	EQU	$02F2	;PRIOR KB CHAR CODE
+CH1	    EQU	$02F2	;PRIOR KB CHAR CODE
 CHACT 	EQU	$02F3	;CHACTL REGISTER RAM
 CHBAS 	EQU	$02F4	;CHBAS REGISTER RAM
 NEWROW	EQU	$02F5	;POINT DRAW GOES TO
@@ -593,11 +594,11 @@ PBCTL 	EQU	PIA+3
 ; ---------------------------------------------------------------------------
 ;
 JUMP	EQU	$01	; display list jump instruction (3 byte)
-JVB	EQU	$41	; display list jump and wait for vblank instruction (3)
+JVB	    EQU	$41	; display list jump and wait for vblank instruction (3)
 ;
-SCH	EQU	$10	; display list horizontal scrolling
-SCV	EQU	$20	; display list vertical scrolling
-LMS	EQU	$40	; display list load memory scan instruction (3 byte)
+SCH	    EQU	$10	; display list horizontal scrolling
+SCV	    EQU	$20	; display list vertical scrolling
+LMS	    EQU	$40	; display list load memory scan instruction (3 byte)
 DLII	EQU	$80	; display list interrupt instruction
 ;
 SKIP1	EQU	$00	; display list skip 1 scan line instruction
@@ -656,67 +657,68 @@ scr32   = @dmactl(narrow|dma|players|missiles|lineX1)
 ; KBCODEs
 ; ---------------------------------------------------------------------------
 .enum @kbcode
-    _none = 255
-    _esc = 28
-    _1 = 31
-    _2 = 30
-    _3 = 26
-    _4 = 24
-    _5 = 29
-    _6 = 27
-    _7 = 51
-    _8 = 53
-    _9 = 48
-    _0 = 50
-    _lt = 54
-    _gt = 55
-    _del = 52
-    _tab = 44
-    _Q = 47
-    _W = 46
-    _E = 42
-    _R = 40
-    _T = 45
-    _Y = 43
-    _U = 11
-    _I = 13
-    _O = 8
-    _P = 10
-    _min = 14
-    _up =  14  ; cursor function 
-    _eq = 15
-    _down = 15 ; cursor function
-    _ret = 12
-    _A = 63
-    _S = 62
-    _D = 58
-    _F = 56
-    _G = 61
-    _H = 57
-    _J = 1
-    _K = 5
-    _L = 0
+    _none  = 255
+    _esc   = 28
+    _1     = 31
+    _2     = 30
+    _3     = 26
+    _4     = 24
+    _5     = 29
+    _6     = 27
+    _7     = 51
+    _8     = 53
+    _9     = 48
+    _0     = 50
+    _lt    = 54
+    _gt    = 55
+    _del   = 52
+    _tab   = 44
+    _Q     = 47
+    _W     = 46
+    _E     = 42
+    _R     = 40
+    _T     = 45
+    _Y     = 43
+    _U     = 11
+    _I     = 13
+    _O     = 8
+    _P     = 10
+    _min   = 14
+    _up    =  14  ; cursor function 
+    _eq    = 15
+    _down  = 15 ; cursor function
+    _ret   = 12
+    _A     = 63
+    _S     = 62
+    _D     = 58
+    _F     = 56
+    _G     = 61
+    _H     = 57
+    _J     = 1
+    _K     = 5
+    _L     = 0
     _semicolon = 2
-    _plus = 6
-    _left = 6  ; cursor function
+    _plus  = 6
+    _left  = 6  ; cursor function
     _asterisk = 7
     _right = 7 ; cursor function
-    _caps = 60
-    _Z = 23
-    _X = 22
-    _C = 18
-    _V = 16
-    _B = 21
-    _N = 36
-    _M = 37
+    _caps  = 60
+    _Z     = 23
+    _X     = 22
+    _C     = 18
+    _V     = 16
+    _B     = 21
+    _N     = 36
+    _M     = 37
     _comma = 32
-    _dot = 34
+    _dot   = 34
     _slash = 38
     _atari = 39
-    _help = 17
-    _F1 = 3
-    _F2 = 4
-    _F3 = 19
-    _F4 = 20
+    _help  = 17
+    _F1    = 3
+    _F2    = 4
+    _F3    = 19
+    _F4    = 20
     _space = 33
 .ende
+EOL = $9b

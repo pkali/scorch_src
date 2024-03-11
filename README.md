@@ -38,15 +38,23 @@ Compilation: (requires mads newer than 2023-09-13)
 
 Game source code is split into several parts:
 - `scorch.asm` is the main game startup code
+- `scorchC64.asm` is the main game startup code for Commodore 64
 - `game.asm` - it all happens here
 - `grafproc.asm` - graphics routines like line or circle
 - `textproc.asm` - text routines like list of weapons and shop
 - `variables.asm` - all non-zero page variables
-- `constants.asm` - various tables of constants 
-- `display_*.asm` - display lists and text screen definitions
+- `constants.asm` and `constants_top.asm` - various tables of constants 
 - `ai.asm` - artificial stupidity of computer opponents
 - `weapons.asm` - general arsenal of tankies
 - `definitions.asm` - label definitions, moved to make it work better with Altirra debug (it doesn't).
+
+Hardware dependent code (In the corresponding folders - 'Atari', 'C64', ...):
+- `display_*.asm` - display lists and text screen definitions
+- `gr_basic.asm` - graphics primitives (plot, point, soildown, drawmountains, etc.) for faster drawing
+- `inputs.asm` - keyboard and joystick routines
+- `interrupts.asm` - interrupts routines (DLI on Atari, music and SFX, timers)
+- `textproc.asm` - text routines for menus and shop
+
 
 We were trying to use macros, pseudo-ops, and simple graphics primitives as much as possible. This way, it should be relatively easy to port this code to, for example, the C64.
 
@@ -62,7 +70,7 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 2023-12-07
 
 Physical release version.
-We are extremely pleased to inform you that our humble game was released on a physical media by [Mq](mailto:mq666xx@gmail.com) (Atari 8-bit version) and 5200 [atariage.com](https://atariage.com).
+We are extremely pleased to inform you that our humble game was released on a physical media by [Mq](mailto:mq666xx@gmail.com) (Atari 8-bit version) and 5200 [atariage.com](https://atariage.com/store/index.php?l=product_detail&p=1305).
 
 ![Scorch physical release](Manuals/images/scorch_physical.jpg)
 

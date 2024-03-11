@@ -4,33 +4,44 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
-;Miami & Warsaw 2022, 2023
+;Miami & Warsaw 2022, 2023, 2024
 
-;WARNING! requires mads compiled on 2023-09-13 or later
+;WUDSN run settings:
 ;atari800  -5200 -cart ${outputFilePath} -cart-type 4
 ;atari800  -run ${outputFilePath}
+
+
+;WARNING! requires mads compiled on 2023-09-13 or later
+;compilation:
+;mads scorch.asm -o:scorch.bin -d:TARGET=5200
+;mads scorch.asm -o:scorch.xex -d:TARGET=800
+;mads scorch.asm -o:scorch.xex -d:TARGET=800 -d:SPLASH=1  #xex version with splash
+;mads scorch.asm -o:scorch.xex -d:TARGET=800 -d:SPLASH=1 -d:CART_VERSION=1 #xex version for cart
+
 
 ;---------------------------------------------------
 .IFNDEF TARGET
     .def TARGET = 800 ; 5200
 .ENDIF
 ;---------------------------------------------------
-.def CART_VERSION = 0
-; if 1 - dual splash screen
-.def METEORS = 1
-; if 1 - meteors on game
-.def XCORRECTION_FOR_PM = 0
-; if 1 - active x position of tanks correction fo PMG
-.def FASTER_GRAF_PROCS = 1
-; if 1 - activates faster graphics routines
-;        (direct writes to screen memory - atari only :) )
+.ifndef SPLASH
+    .def SPLASH = 0          ; if 0 - no splash screens
+.endif
+.ifndef CART_VERSION
+    .def CART_VERSION = 0    ; if 1 - dual splash screen
+.endif
+.def METEORS = 1             ; if 1 - meteors on game
+.def VU_METER = 1             ; if 1 - VU Meter on game
+.def XCORRECTION_FOR_PM = 0  ; if 1 - active x position of tanks correction fo PMG
+.def FASTER_GRAF_PROCS = 1   ; if 1 - activates faster graphics routines
+                             ; (direct writes to screen memory - atari only :) )
 ;---------------------------------------------------
 
          OPT r+  ; saves 10 bytes, and probably works :) https://github.com/tebe6502/Mad-Assembler/issues/10
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.43" ; number of this build (4 bytes)
+    dta d"1.48" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -186,11 +197,22 @@ FirstZpageVariable = $50
     .IF TARGET = 800
       icl 'Atari/lib/ATARISYS.ASM'
       icl 'Atari/lib/MACRO.ASM'
-      icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
-    .IF CART_VERSION
-      icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
-    .ENDIF
-;      icl 'Atari/Manual/manual.asm'     ; manuals display
+      .IF SPLASH = 1
+        icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
+        .IF CART_VERSION = 1
+          icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
+        .ENDIF
+      .ELSE
+        ; no splash.... dark screean and BASIC off
+        ORG $2000
+        mva #0 dmactls             ; dark screen
+        mva #$ff portb
+        ; and wait one frame :)
+        seq:wait                   ; or waitRTC ?
+        mva #$ff portb        ; BASIC off
+        rts
+        ini $2000
+      .ENDIF
     .ELIF TARGET = 5200
       OPT h-f+  ; no headers, single block --> cart bin file
       icl 'Atari/lib/5200SYS.ASM'
@@ -212,7 +234,7 @@ FirstZpageVariable = $50
         _M     = $0d
         _S     = $0e
         _atari = $fd  ; not used in 5200
-        _ret   = $fd  ; not used in 5200
+        _ret   = $0c  ; fire in 5200
         _none  = $0f
       .ende
     .ENDIF
@@ -336,7 +358,11 @@ StartAfterSplash
     .IF CART_VERSION = 1
        mva #$ff GradientNr  ; #1 to set gradient number 2 :) (next one) - 0 (B/W)
     .ELSE
-       mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one) - 1 (polish rainbow)
+       .IF TARGET=5200
+         mva #1 GradientNr
+       .ELSE
+         mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one) - 1 (polish rainbow)
+       .ENDIF
     .ENDIF
     jsr SelectNextGradient.NotWind
 
@@ -404,169 +430,12 @@ NoRMT_PALchange
     sta JoystickNumber
     .IF TARGET = 800           ; second joy button state update only on A800
       jsr WaitOneFrame         ; is necessary for update shadow registers (PADDL0) in VBI
-      jmp GetKey.Check2button  ; update state second joy button
+      jmp GetKeyFast.Check2button  ; update state second joy button
     .ELSE
       rts
     .ENDIF
 .endp
 
-;--------------------------------------------------
-.proc GetKey
-; waits for pressing a key and returns pressed value in A
-; when [ESC] is pressed, escFlag is set
-; result: A=keycode
-;--------------------------------------------------
-    jsr WaitForKeyRelease
-getKeyAfterWait
-    .IF TARGET = 800
-      lda SKSTAT
-      cmp #$ff
-      beq checkJoyGetKey       ; key not pressed, check Joy
-      cmp #$f7                 ; SHIFT
-      beq checkJoyGetKey
-    .ELIF TARGET = 5200
-      lda SkStatSimulator
-      and #%11111110
-      bne checkJoyGetKey       ; key not pressed, check Joy
-    .ENDIF
-    lda kbcode
-    cmp #@kbcode._none
-    beq checkJoyGetKey
-    and #$3f                   ; CTRL and SHIFT ellimination
-    cmp #@kbcode._esc          ; 28  ; ESC
-    bne getkeyend
-      mvy #$80 escFlag
-    bne getkeyend
-
-checkJoyGetKey
-      ;------------JOY-------------
-      ;happy happy joy joy
-      ;check for joystick now
-      lda STICK0
-      and #$0f
-      cmp #$0f
-      beq notpressedJoyGetKey
-      tay
-      lda joyToKeyTable,y
-      bne getkeyend
-
-notpressedJoyGetKey
-    ;fire
-    lda STRIG0
-    beq JoyButton
-    .IF TARGET = 800           ; Second joy button , Select and Option key only on A800
-      jsr Check2button
-      bcc SecondButton
-      bne checkSelectKey
-checkSelectKey
-      lda CONSOL
-      and #%00000010           ; Select
-      beq SelectPressed
-      lda CONSOL
-      and #%00000100           ; Option
-    .ENDIF
-    bne getKeyAfterWait
-OptionPressed
-    lda #@kbcode._atari        ; Option key
-    bne getkeyend
-SecondButton
-SelectPressed
-    lda #@kbcode._tab          ; Select key
-    bne getkeyend
-JoyButton
-    lda #@kbcode._ret          ; Return key
-getkeyend
-    ldy #0
-    sty ATRACT                 ; reset atract mode
-    mvy #sfx_keyclick sfx_effect
-    rts
-    .IF TARGET = 800           ; Second joy button only on A800
-Check2button
-    lda PADDL0
-    and #$c0
-    eor #$C0
-    cmp PaddleState
-    sta PaddleState
-    rts
-    .ENDIF
-.endp
-
-;--------------------------------------------------
-.proc getkeynowait
-;--------------------------------------------------
-    jsr WaitForKeyRelease
-    lda kbcode
-    and #$3f                   ; CTRL and SHIFT ellimination
-    rts
-.endp
-
-;--------------------------------------------------
-.proc WaitForKeyRelease
-;--------------------------------------------------
-    lda #128-KeyRepeatSpeed    ; tricky
-    sec
-    sbc FirstKeypressDelay     ; tricky 2 :)
-    sta pressTimer
-StillWait
-    bit pressTimer
-    bmi KeyAutoReleased
-      lda STICK0
-      and #$0f
-      cmp #$0f
-      bne StillWait
-      lda STRIG0
-      beq StillWait
-    .IF TARGET = 800
-      lda SKSTAT
-      cmp #$ff
-      bne StillWait
-      lda CONSOL
-      and #%00000110           ; Select and Option only
-      cmp #%00000110
-      bne StillWait
-    .ELIF TARGET = 5200
-      lda SkStatSimulator
-      and #%11111110
-      beq StillWait
-    .ENDIF
-KeyReleased
-      mva #FirstKeySpeed FirstKeypressDelay
-      rts
-KeyAutoReleased                ; autorepeat
-      mva #0 FirstKeypressDelay
-      rts
-.endp
-;--------------------------------------------------
-.proc IsKeyPressed
-; result: A=0 - yes , A>0 - no
-;--------------------------------------------------
-    lda SKSTAT
-    and #%00000100
-    beq @+
-    lda #1
-@   and STRIG0
-    rts
-.endp
-;--------------------------------------------------
-.proc DemoModeOrKey
-; Waits for the key pressed if at least one human is playing.
-; Otherwise, waits 3 seconds (demo mode).
-;--------------------------------------------------
-    ;check demo mode
-    ldx numberOfPlayers
-    dex
-checkForHuman                  ; if all in skillTable other than 0 then switch to DEMO MODE
-    lda skillTable,x
-    beq peopleAreHere
-    dex
-    bpl checkForHuman
-    ; no people, just wait a bit
-    ldy #75
-    jmp PauseYFrames
-    ; rts
-peopleAreHere
-    jmp getkey  ; jsr:rts
-.endp
 
 ;--------------------------------------------------
 MakeDarkScreen
@@ -577,8 +446,7 @@ MakeDarkScreen
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-    lda CONSOL
-    and #%00000001             ; START KEY
+    jsr CheckStartKey             ; START KEY
     seq:wait                   ; or waitRTC ?
     rts
 .endp
@@ -596,53 +464,10 @@ MakeDarkScreen
 .endp
 
 ;--------------------------------------------------
-.proc CheckExitKeys
-;--------------------------------------------------
-; Checks keyboard and sets appropriate flags for exit procedures
-; If START+OPTION is pressed - exit to GameOver screen
-; If 'O' key is pressed - displays "Are you sure?" and - exit to GameOver screen
-; If 'Esc' key is pressed - displays "Are you sure?" and - exit to Menu screen
-; Just setting the right flags!!!
-
-    ; Select and Option
-    lda CONSOL
-    and #%00000101             ; Start + Option
-    beq QuitToGameover
-    lda SKSTAT
-    cmp #$ff
-    jeq nokeys
-    cmp #$f7                   ; SHIFT
-    jeq nokeys
-
-    lda kbcode
-    and #%10111111             ; SHIFT elimination
-
-    cmp #@kbcode._O            ; $08  ; O
-    bne CheckEsc
-    jsr AreYouSure
-    bit escFlag
-    bpl nokeys
-    ;---O pressed-quit game to game over screen---
-QuitToGameover
-    mva #$C0 escFlag           ; bits 7 and 6 set
-    rts
-CheckEsc
-    cmp #@kbcode._esc          ; 28  ; ESC
-    bne nokeys
-DisplayAreYouSure
-    jsr AreYouSure
-    ;---esc pressed-quit game---
-nokeys
-    bit escFlag
-    rts
-;
-.endp
-;--------------------------------------------------
 .proc ShellDelay
 ;--------------------------------------------------
     ldy flyDelay
-Y   lda CONSOL
-    and #%00000001             ; START KEY
+Y   jsr CheckStartKey             ; START KEY
     beq noShellDelay
 DelayLoop
       lda VCOUNT
@@ -693,6 +518,8 @@ noingame
     bne @-
     rts
 .endp
+;--------------------------------------------------
+    icl 'Atari/inputs.asm'
 ;--------------------------------------------------
     icl 'Atari/interrupts.asm'
 ;----------------------------------------------

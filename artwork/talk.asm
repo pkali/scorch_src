@@ -1,34 +1,40 @@
 .proc talk
 ; Maximum text length is 63 characters!!!
-    dta d"CYKA BLAT"^
     dta d"DIE!"^
+    dta d"FUR DEUTSCHLAND!"^
+    dta d"YOU'RE DEAD MEAT."^
+    dta d"DIE COMMIE PIG!"^
+    dta d"VICTORY!"^
+    dta d"DIE, ALIEN SWINE!"^
+    dta d"AWRUK!!!"^
+    dta d"CYKA BLAT"^
+    dta d"TAKE THIS!"^
     dta d"EAT MY SHORTS!"^
     dta d"YOU'RE TOAST!"^
     dta d"BANZAI!"^
-    dta d"FROM HELL'S HEART I STAB AT THEE..."^
-    dta d"DO YOU FEEL LUCKY, TANK?"^
-    dta d"TAKE A HIKE!"^
-    dta d"YOU'RE DEAD MEAT."^
-    dta d"MAKE MY DAY."^
+    dta d"OPEN WIDE!"^
+    dta d"HA HA HA."^
     dta d"CHARGE!"^
     dta d"ATTACK!"^
+    dta d"DIE, TANK-SCUM!"^
+    dta d"IN YOUR FACE!"^
+    dta d"TAKE A HIKE!"^
+    dta d"MAKE MY DAY."^
+    dta d"KNOCK, KNOCK."^
+; end of Propaganda :)
+    dta d"FROM HELL'S HEART I STAB AT THEE..."^
+    dta d"DO YOU FEEL LUCKY, TANK?"^
     dta d"YOU'RE OUTTA HERE."^
     dta d"WATTSA MATTA YOU?"^
     dta d"FREEZE, OR I'LL SHOOT!"^
-    dta d"HA HA HA."^
     dta d"WE COME IN PEACE - SHOOT TO KILL!"^
-    dta d"IN YOUR FACE!"^
-    dta d"DIE COMMIE PIG!"^
     dta d"I LOVE THE SMELL OF NAPALM IN THE MORNING."^
-    dta d"VICTORY!"^
     dta d"SHOW SOME RESPECT."^
     dta d"JUST WHO DO YOU THINK YOU ARE?"^
     dta d"LOOK OUT BELOW!"^
-    dta d"KNOCK, KNOCK."^
     dta d"LOOK OVER THERE."^
     dta d"GUESS WHAT'S COMING FOR DINNER?"^
     dta d"MERRY CHRISTMAS."^
-    dta d"OPEN WIDE!"^
     dta d"HERE GOES NOTHING..."^
     dta d"DON'T WORRY, IT ISN'T A LIVE ROUND."^
     dta d"BLOOD, PAIN, VIOLENCE!"^
@@ -44,12 +50,8 @@
     dta d"DON'T FORGET ABOUT ME!"^
     dta d"HASTA LA VISTA, BABY!"^
     dta d"THIS IS YOUR BRAIN ON SCORCH."^
-    dta d"TAKE THIS!"^
     dta d"THIS SCREEN AIN'T BIG ENOUGH FOR US."^
-    dta d"DIE, ALIEN SWINE!"^
-    dta d"AWRUK!!!"^
     dta d"I SHALL OIL MY TURRET WITH YOUR BLOOD."^
-    dta d"DIE, TANK-SCUM!"^
     dta d"I'M GONNA BREAK YOUR FACE!"^
     dta d"MAMA SAID KNOCK YOU OUT!"^
     dta d"I HOPE YOU ENJOY PAIN!"^
@@ -118,8 +120,10 @@
     dta d"CALL 1-900-SUE-TANK."^
     dta d"YOU BIG DUMMY!"^                 ;(sanford and son)
 LEND
-NumberOfOffensiveTexts=54
+NumberOfOffensiveTexts=55
 NumberOfDeffensiveTexts=62
+NumberOfPropagandaTexts=21
+VeryFunnyText=79
 .endp
 hoverFull dta d"MY HOVERCRAFT IS FULL OF EELS!"^
 hoverFullEnd

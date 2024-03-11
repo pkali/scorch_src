@@ -39,7 +39,7 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz **TAB**, **SELECT** lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny) zmieniają kolor gór (3 wersje do wyboru).  
+Klawisz **TAB**, **SELECT**, dłuższe przytrzymanie pierwszego przycisku joysticka lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny) zmieniają kolor gór (3 wersje do wyboru).  
 
 Jeśli kursor wskazuje opcję wyboru siły wiatru **Wind**, wciśnięcie **TAB** zmienia sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie **Wind**.  
 
@@ -72,7 +72,7 @@ Jeśli nazwa nie zostanie wpisana, to zostanie uzupełniona nazwą domyślną.
 ## 3. Ekran zakupów (przed każdą rundą).
 ![Ekran zakupów broni ofensywnych.](images/PurOffensive.png)
 ![Ekran zakupów broni defensywnych.](images/PurDefensive.png)
-Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie, na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za tę cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz **TAB** lub strzałka w lewo, czy też ruch joystickiem w lewo lub drugi przycisk joysticka zmieniają ekran na bronie defensywne lub ofensywne, klawisz **SPACJA** lub strzałka w prawo, a także joystick w prawo realizują zakup wskazanej broni.
+Na tym ekranie można dokonywać zakupów broni ofensywnych i defensywnych. Widoczne są tylko te bronie, na które gracza stać wraz z informacją o cenie i ilości jednostek danej broni, którą za tę cenę otrzymamy. Informacje na ekranie nie wymagają chyba więcej opisu. Po listach poruszamy się klawiszami kursora (góra i dół) lub joystickiem, klawisz **TAB** lub strzałka w lewo, czy też ruch joystickiem w lewo lub drugi przycisk joysticka zmieniają ekran na bronie defensywne lub ofensywne, klawisz **SPACJA** , strzałka w prawo, dłuższe przytrzymanie przycisku joysticka, a także joystick w prawo realizują zakup wskazanej broni.
 
 Klawisz **RETURN** lub przycisk joysticka przechodzi do ekranu aktywacji broni defensywnych.
 
@@ -229,7 +229,6 @@ A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli br
 | Riot Blast      | 0         (↓)|
 | Riot Bomb       | 0         (↓)|
 | Heavy Riot Bomb | 0         (↓)|
-| Baby Digger     | 0         (↓)|
 | Digger          | 0         (↓)|
 | Heavy Digger    | 0         (↓)|
 | Sandhog         | 0         (↓)|
@@ -239,6 +238,7 @@ A oto wartości maksymalnego ubytku energii dla poszczególnych broni. Jeśli br
 | Ton of Dirt     | 0         (↓)|
 | Liquid Dirt     | 0         (↓)|
 | Dirt Charge     | 0         (↓)|
+| Propaganda      | 0         (↓)|
 | Stomp           | 0         (↓)|
 | Laser           | 100       (↓)|
 
@@ -255,11 +255,9 @@ Uwagi:
 
 * **Heavy Riot Bomb** - jak w Riot Bomb, ale promień eksplozji to 29 pikseli od punktu trafienia - tak jak w wypadku **Nuke**.
 
-* **Baby Digger** - nie jest odejmowana energia, ale podkopywana jest część gruntu promieniu 60 pikseli od punktu trafienia.
+* **Digger** - nie jest odejmowana energia, ale podkopywana jest część gruntu promieniu 60 pikseli od punktu trafienia.
 
-* **Digger** - jak wyżej - większy podkop.
-
-* **Heavy Digger** - jak wyżej - największy podkop.
+* **Heavy Digger** - jak wyżej - większy podkop.
 
 * **Sandhog** - jak wyżej - inny sposób podkopywania.
 
@@ -274,6 +272,8 @@ Uwagi:
 * **Liquid Dirt** - zalewa grunt w punkcie trafienia płynną glebą, wypełniając zagłębienia.
 
 * **Dirt Charge** - nie jest odejmowana energia, ale usypywany jest dodatkowy grunt w górę od punktu trafienia w promieniu 61 pikseli. Broń przydatna do zakopywania przeciwnika.
+
+* **Propaganda** - nie jest odejmowana energia, miejsce trafienia zostaje zasypane propagandowymi tekstami.
 
 * **Stomp** - nie jest odejmowana energia, ale wszystkie czołgi w promieniu zależnym od siły strzału zostają odepchnięte, a po odepchnięciu mogą spaść lub zostać zasypane. Przy maksymalnej sile 990 jednostek promień działania to około 60 pikseli.
 
@@ -304,7 +304,7 @@ Uwagi:
 
 * **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broń nie tyle defensywna, co obosieczna. Zasypuje teren opadem "radioaktywnym", który jest zwyczajną glebą. Jeśli nie mamy pod ręką żadnej broni odkopującej teren i do tego osłony (najlepiej jednorazowej), to po takim "opadzie" będzie trzeba strzelić do siebie - bo będąc pod ziemią inaczej się nie da. Ewentualnie pozostaje zawsze White Flag.
 
-* **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się - tylko przy niewielkim przysypaniu - ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej dezaktywować).
+* **Long Schlong** - broń specjalna :) - kosztuje dużo, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem się - tylko przy niewielkim przysypaniu - ale fajnie się nazywa i wygląda :) - Można ją aktywować niezależnie od innych broni defensywnych i pozostaje aktywna do końca rundy (nie da się jej dezaktywować). Broń ta działa deprymująco na przeciwników sterowanych przez komputer na poziomie **Poolshark** i wyższych.
 
 * **Lazy Boy** - nie jest to właściwie broń defensywna. Jest to wspomaganie celowania. Po jej aktywacji czołg stara się wycelować w najbliższego przeciwnika i automatycznie ustawia siłę strzału oraz kąt. W przypadku posiadania zbyt małej ilości energii może czasem wycelować źle (do celowania stosuje metodę taką jak **Cyborg**). Tak jak **Battery** nie dezaktywuje innych broni defensywnych w przypadku jej użycia. Uwaga! Nie ma sensu aktywacja tej broni przed rundą, celowanie nie odbędzie się, bo nie ma jeszcze do czego celować.
 
@@ -400,8 +400,8 @@ W sytuacji beznadziejnej smobójstwo może być lepsze od **White Flag**. Jeśli
 
 **Long Schlong** potrafi znacząco onieśmielić przeciwników. Bądź alfa-czołgiem i porzuć wszelkie lęki.
 
-W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
-
 Roboczołgi nie mają **Autodefense**, więc defensywy aktywują tylko bezpośrednio przed swoim strzałem. Zmasowany atak kilku graczy na jednego roboczołga gwarantuje sukces.
+
+W ostateczności możesz zostać Terminatorem (model standardowy, nie T-1000 :) )
 
 Połamania luf życzą autorzy.

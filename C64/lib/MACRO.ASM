@@ -279,6 +279,16 @@ upstartEnd
       tay
     .endm
 ;-------------------------------------
+    .macro txy
+      txa
+      tay
+    .endm
+;-------------------------------------
+    .macro tyx
+      tya
+      tax
+    .endm
+;-------------------------------------
 	.MACRO WAIT
 ;	WAIT
 ;	waits one frame (1/50 s(PAL) or 1/60s(NTSC))

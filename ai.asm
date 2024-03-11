@@ -246,6 +246,7 @@ LowBatteries
     jsr ClearTankNr    ; we must hide tank to erase shields (issue #138)
     lda #ind_White_Flag
     sta ActiveDefenceWeapon,x
+    mva #sfx_white_flag sfx_effect
     jsr PutTankNr    ; and draw tank witch Flag
 EnoughEnergy
 ;    jsr DisplayStatus.DisplayEnergy ; not necessary - status update after othher defensives
@@ -449,6 +450,7 @@ ItIsHuman
     beq lowestIsEqual
     bcc lowestIsHigher
     ; if lower
+    bcs lowestIsLower
 lowestIsEqual
     ; if equal then select random (of two tanks)
     bit RANDOM
@@ -787,8 +789,7 @@ SetStartAndFlight    ; set start point (virtual barrel end :) ) and make test fl
     sta ytraj+1
     mva #0 ytraj+2
     mva NewAngle Angle
-    lda CONSOL
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     beq @speedup
     jsr MoveBarrelToNewPosition
     bit escFlag

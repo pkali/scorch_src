@@ -362,11 +362,12 @@ not_endcircleloop
     lda ycircle
     adc YC
     sta ydraw
-    sta tempcir
+    sta ytempDRAW
     lda ycircle+1
     adc #$00
     sta ydraw+1
-    sta tempcir+1
+    sta ytempDRAW+1
+    ; plot xcircle+XC,ycircle+YC
     jsr plot
 
     sec
@@ -376,6 +377,7 @@ not_endcircleloop
     lda ycircle+1
     sbc #$00
     sta ydraw+1
+    ; plot xcircle+XC,ycircle-YC
     jsr plot
 
     sec
@@ -385,54 +387,60 @@ not_endcircleloop
     lda xcircle+1
     sbc #0
     sta xdraw+1
+    ; plot xcircle-XC,ycircle-YC
     jsr plot
 
-    lda tempcir
+    lda ytempDRAW
     sta ydraw
-    lda tempcir+1
+    lda ytempDRAW+1
     sta ydraw+1
+    ; plot xcircle-XC,ycircle+YC
     jsr plot
 ;---
     clc
     lda xcircle
-    adc yC
+    adc YC
     sta xdraw
     lda xcircle+1
     adc #0
     sta xdraw+1
     ;clc
     lda ycircle
-    adc xC
+    adc XC
     sta ydraw
-    sta tempcir
+    sta ytempDRAW
     lda ycircle+1
     adc #$00
     sta ydraw+1
-    sta tempcir+1
+    sta ytempDRAW+1
+    ; plot xcircle+YC,ycircle+XC
     jsr plot
 
     sec
     lda ycircle
-    sbc xC
+    sbc XC
     sta ydraw
     lda ycircle+1
     sbc #$00
     sta ydraw+1
+    ; plot xcircle+YC,ycircle-XC
     jsr plot
 
     sec
     lda xcircle
-    sbc yC
+    sbc YC
     sta xdraw
     lda xcircle+1
     sbc #0
     sta xdraw+1
+    ; plot xcircle-YC,ycircle-XC
     jsr plot
 
-    lda tempcir
+    lda ytempDRAW
     sta ydraw
-    lda tempcir+1
+    lda ytempDRAW+1
     sta ydraw+1
+    ; plot xcircle-YC,ycircle+XC
     jsr plot
 ;-----
 
@@ -450,7 +458,7 @@ not_endcircleloop
     sbc FX
     sbc #4
     sta FS
-    jmp endif01
+    jmp circleloop ; endif01
 else01
     dec YC
     sec
@@ -468,7 +476,7 @@ else01
 endif01
     jmp circleloop
 .endp
-;-------------------------------*------------------
+;--------------------------------------------------
 .proc placetanks
 ;--------------------------------------------------
     ldx #(MaxPlayers-1)   ;maxNumberOfPlayers-1
@@ -584,35 +592,38 @@ UnequalTanks
 ;-------------------------------------------------
 .proc ClearTanks
     jsr PMoutofScreen
-    mva #1 Erase    ; erase tanks flag
+    lda #1     ; erase tanks flag
+    bne drawtanks.era
 .endp
 ;-------------------------------------------------
 .proc drawtanks
 ;-------------------------------------------------
+    lda #0    ; no erase tanks flag
+era sta Erase
     lda TankNr
     pha
-    ldx #$00
+    ldx NumberOfPlayers
+    dex
     stx TankNr
 
 DrawNextTank
     jsr drawtanknr
-    inc TankNr
+    dec TankNr
     ldx TankNr
-    Cpx NumberOfPlayers
-    bne DrawNextTank
+    bpl DrawNextTank
 
     pla
     sta TankNr
 
-    mva #0 Erase    ; no erase tanks flag
     rts
 .endp
 ;---------
 ClearTankNr
-    mva #1 Erase
-    bne DrawTankNr
+    lda #1     ; erase tank flag
+    bne @er
 PutTankNr
-    mva #0 Erase
+    lda #0    ; no erase tank flag
+@er sta Erase
 .proc DrawTankNr
     ldx tankNr
     ; let's check the energy
@@ -797,8 +808,7 @@ DoNotDrawTankNr
 ; number of blinking tank in TankNr
     mva #18 fs  ; temp, how many times flash the tank
 tankflash_loop
-    lda CONSOL  ; turbo mode
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     sne:mva #1 fs  ; finish it
     mva #1 Erase
     ldx TankNr
@@ -975,27 +985,25 @@ ToHighToParachute
 ;
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
+    lda XtankstableL,x
+    sta xdraw
+    lda XtankstableH,x
+    sta xdraw+1
     ; one pixel under tank
     clc
     lda Ytankstable,x
     adc #1
     sta ydraw
     mva #0 ydraw+1
-    lda XtankstableL,x
-    sta xdraw
-    lda XtankstableH,x
-    sta xdraw+1
+    ; plot one (first - clear) and 6 random color pixels
+    mvy #7 temp
     ; clear first pixel under tank
-    mva #0 color
-    jsr plot
-    inw xdraw
-    ; plot 6 random color pixels
-    mva #6 temp
+    bne @pl   ; A=0
 @   lda Erase
       eor #%00000001
       and random
       and #%00000001
-      sta color
+@pl   sta color
       jsr plot
       inw xdraw
       dec temp
@@ -1064,7 +1072,7 @@ DoNotClearParachute
     sta temp  ; Loop Counter
 ByteBelowTank
     jsr point_plot
-    beq EmptyPoint2
+    bne EmptyPoint2
     sec
     ror UnderTank2
     sec
@@ -1310,8 +1318,7 @@ NoClearTanks
 .IF TARGET >= 800
     lda FastSoilDown
     bne GoFast
-    lda CONSOL
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     bne @+
 GoFast
     jmp SoilDownTurbo.NoClearTanks
@@ -1331,18 +1338,14 @@ NextColumn1
     mwa #0 ydraw
 NextPoint1
     jsr point_plot
-    beq StillNothing
-    ldy #0
-    lda ydraw
-    sta (tempor2),y
-    sta (temp),y
-    jmp FoundPeek1
+    beq FoundFirstPoint
 StillNothing
     inc ydraw
     lda ydraw
     cmp #screenheight
     bne NextPoint1
     ; no pixels on whole column !!!
+FoundFirstPoint
     ldy #0
     lda ydraw
     sta (tempor2),y
@@ -1352,16 +1355,14 @@ FoundPeek1
     inw temp
     inw xdraw
     ;vcmp xdraw,screenwidth,NextColumn1
-    cpw xdraw RangeRight
-    bcc NextColumn1
-    beq NextColumn1
+    cpw RangeRight xdraw
+    bcs NextColumn1
 ; we have both tables filled with starting values
 
 ; main loop starts here
 MainFallout2
 .IF TARGET >= 800
-    lda CONSOL
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     bne NoFastDown
     jmp SoilDownTurbo.NoClearTanks
 NoFastDown
@@ -1389,7 +1390,7 @@ FalloutOfLine
     ; and checking if there is a pixel there
     sta ydraw
     jsr point_plot
-    bne ThereIsPixelHere
+    beq ThereIsPixelHere
     ; if no pixel we plot it
     mva #1 color
     jsr plot.MakePlot
@@ -1410,9 +1411,8 @@ ColumnIsReady
     inw tempor2
     inw xdraw
     ;vcmp xdraw,screenwidth,FalloutOfLine
-    cpw xdraw RangeRight
-    bcc FalloutOfLine
-    beq FalloutOfLine
+    cpw RangeRight xdraw
+    bcs FalloutOfLine
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
 
@@ -1421,7 +1421,7 @@ ColumnIsReady
 ; level of the mountains
     jeq MainFallout2
 ; now correct heights are in the mountaintable
-    sta color    ; Pozor! :)  we know - now A=1
+    ;sta color    ; Pozor! :)  we know - now A=1 ... but DrawTanks set color to 1
 NothingToFall
     jmp DrawTanks
     ; rts
@@ -1433,7 +1433,7 @@ NothingToFall
     mwa #0 xdraw
 
 ; starting point
-getrandomY   ;getting random Y coordinate
+/* getrandomY   ;getting random Y coordinate
 ;    sec  ; ???
     lda random
     cmp #screenheight-(margin*4) ;it means that max line=199
@@ -1441,8 +1441,8 @@ getrandomY   ;getting random Y coordinate
 ;    clc    ; C is clear
     adc #(margin*2)
     sta ydraw
-    sta yfloat+1
-    mva #0 yfloat ;yfloat equals to e.g. 140.0
+    sta yfloat+1 */
+    sta yfloat ;yfloat equals to e.g. 140.0 (A=0)
     mva #screenheight-margin-5 yfloat+1
     sta ydraw
 
@@ -1460,23 +1460,21 @@ NextPart
     sta delta+1 ; before the dot (delta+1.delta)
 
     lda random
-    and #$01 ;random sign (+/- or up/down)
+;    and #$01 ;random sign (+/- or up/down)
     sta UpNdown
 
     ; theoretically we have here ready
     ; fixed-point delta value
-    ; (-1*(UpNdown))*(delta+1.delta)
+    ; (-1*(UpNdown.7th.bit))*(delta+1.delta)
 
     ;loop drawing one line
 
 ChangingDirection
     lda random ;length of the line
     and #$0f   ;max line length
-    tax
-    inx
-    inx
-    inx
-    stx deltaX
+    clc
+    adc #3
+    sta deltaX
 
 OnePart
     jsr placeTanks.CheckTank
@@ -1493,8 +1491,8 @@ OnePart
     sta (modify),y
 
     ; Up or Down
-    lda UpNdown
-    beq ToBottom
+    bit UpNdown
+    bpl ToBottom
 
 ToTop  ;it means substracting
     ;sbw yfloat delta
@@ -1509,8 +1507,8 @@ ToTop  ;it means substracting
     cmp #margin
     bcs @+
       ; if smaller than 10
-      ldx #$00
-      stx UpNdown
+;      ldy #$00
+      sty UpNdown   ;   Y=0
       jmp @+
 
 ToBottom
@@ -1526,8 +1524,8 @@ ToBottom
       cmp #screenheight-margin
       bcc @+
         ; if higher than screen
-        ldx #$01
-        stx UpNdown
+        dey ; Y=0
+        sty UpNdown ; Y=$ff
 @
     sta ydraw
 
@@ -1646,8 +1644,15 @@ notZero
     sta temp
     lda xtankstableH,y
     sta temp+1
-    ;now we should substract length of the text-1
-    ;temp2 = (fx-1)*2
+    jsr Calculate4x4TextPosition
+    jmp TypeLine4x4.noLengthNoColor  ; rts
+
+.endp
+;--------------------------------------------------------
+.proc Calculate4x4TextPosition
+    ; we have X coordinate of center of text in temp
+    ; now we should substract length of the text-1
+    ; temp2 = (fx-1)*2
     ldy fx
     dey
     tya
@@ -1742,11 +1747,8 @@ DOTOldLowestValue
     lda temp2
     sbc #(4+9) ;9 pixels above ground (and tanks...)
     sta LineYdraw
-
-    jmp TypeLine4x4.noLengthNoColor  ; rts
-
+    rts
 .endp
-
 ;--------------------------------------------------------
 .proc DisplayTankNameAbove ; TankNr in X
     txa ; TankNr
@@ -1870,8 +1872,7 @@ quit_areyousure
 
     mva #20 fs  ; temp, how many times blink the billboard
 seppuku_loop
-      lda CONSOL  ; turbo mode
-      and #%00000001 ; START KEY
+      jsr CheckStartKey ; START KEY
       sne:mva #1 fs  ; finish it
 
       mva #4 ResultY  ; where seppuku text starts Y-wise on the screen

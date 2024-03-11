@@ -8,7 +8,7 @@
 
 screen_height = 26
 screen_width = 40
-screen = $1000 ; start - 40*screen_height
+screen = $0900 ; start - 40*screen_height
 KeyRepeatSpeed = 15 ; (max 127 !!!)
 
 
@@ -414,9 +414,6 @@ NTSC
     rts
 .endp
 
-    icl "music/rmtplayr.a65"  
-
-
 dl
     :2 .byte SKIP8
     .byte LMS+MODE2
@@ -451,6 +448,8 @@ ticksPerSecond .byte 0
 fake_pokey  :9 .byte 0
 pressTimer  .byte 0
 
+    icl "music/rmtplayr.a65"  
+
 
 man_text
     .if LANG = "PL"
@@ -460,6 +459,7 @@ man_text
     .endif
 man_text_end
     .by $ff, $ff
+    .ECHO *
 
        opt h-                       ;RMT module is standard Atari binary file already
     ins "music/czytaczu1_stripped.rmt"             ;include music RMT module

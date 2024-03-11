@@ -16,8 +16,7 @@ START
     jsr MakeDarkScreen
     bit escFlag
     bpl @+
-    lda CONSOL
-    and #%00000001 ; START KEY
+    jsr CheckStartKey ; START KEY
     bne START
     jmp StartAfterSplash    ; reset all game option if Start key pressed (and Esc)
 @
@@ -124,23 +123,22 @@ CalculateGainsLoop
     ; if lose is greater than money then zero money
     lda moneyH,x
     cmp loseH,x
-    bcc zeromoney
-    bne substractlose
+    bne @+
     lda moneyL,x
     cmp loseL,x
-    bcc zeromoney
+@   bcs substractlose
+zeromoney
+    lda #0
+    sta moneyL,x
+    sta moneyH,x
+    beq skipzeroing
 substractlose
-    sec
+;    sec    ; C is allways set at this point
     lda moneyL,x
     sbc loseL,x
     sta moneyL,x
     lda moneyH,x
     sbc loseH,x
-    sta moneyH,x
-    jmp skipzeroing
-zeromoney
-    lda #0
-    sta moneyL,x
     sta moneyH,x
 skipzeroing
 ; and earned money for summary
@@ -155,23 +153,22 @@ skipzeroing
     ; if lose is greater than money then zero money
     lda EarnedMoneyH,x
     cmp loseH,x
-    bcc ezeromoney
-    bne esubstractlose
+    bne @+
     lda EarnedMoneyL,x
     cmp loseL,x
-    bcc ezeromoney
+@   bcs esubstractlose
+ezeromoney
+    lda #0
+    sta EarnedMoneyL,x
+    sta EarnedMoneyH,x
+    beq eskipzeroing
 esubstractlose
-    sec
+;    sec    ; C is allways set at this point
     lda EarnedMoneyL,x
     sbc loseL,x
     sta EarnedMoneyL,x
     lda EarnedMoneyH,x
     sbc loseH,x
-    sta EarnedMoneyH,x
-    jmp eskipzeroing
-ezeromoney
-    lda #0
-    sta EarnedMoneyL,x
     sta EarnedMoneyH,x
 eskipzeroing
 
@@ -385,11 +382,7 @@ RoboTanks
     ;ldx TankNr
     jsr DisplayStatus    ; to make visible AI selected defensive (and offensive :) )
     jsr MoveBarrelToNewPosition
-    lda kbcode
-    cmp #@kbcode._esc ; 28  ; ESC
-    bne @+
-    jsr AreYouSure
-@    bit escFlag
+    jsr CheckExitKeys
     spl:rts        ; keys Esc or O
 
 
@@ -585,7 +578,7 @@ NotLastPlayerInRound
 
     ; in X there is a number of tank that died
 
-    lda #78    ; mumber of defensive text after BFG! ("VERY FUNNY.")
+    lda #talk.VeryFunnyText    ; mumber of defensive text after BFG! ("VERY FUNNY.")
     bit AfterBFGflag    ; check BFG flag
     bmi TextAfterBFG
     ; if BFG then no points for dead tanks ...
@@ -732,14 +725,13 @@ NotNegativeShieldEnergy
 .proc Seppuku
 ;---------------------------------
     lda #0
-    sta ydraw+1
     ; get position of the tank
     ldx TankNr
 ;    lda #0  ; turn off defense weapons when hara-kiring
     sta ActiveDefenceWeapon,x
     sta ShieldEnergy,x
     jsr SetupXYdraw
-    lda #1  ; Missile
+    lda #ind_Missile  ; Missile
     jsr ExplosionDirect
     jmp MainRoundLoop.continueMainRoundLoopAfterSeppuku
 .endp
@@ -764,11 +756,14 @@ NotNegativeShieldEnergy
     lda random
     bmi @+
       sec  ; Wind = -Wind
-      .rept 4
+      .rept 2
         lda #$00
         sbc Wind+#
         sta Wind+#
       .endr
+        lda #$ff
+        sta Wind+2
+        sta Wind+3
 @   rts
 .endp
 ;--------------------------------------------------
@@ -777,25 +772,16 @@ NotNegativeShieldEnergy
 ; Energy of tank X in A
 ;--------------------------------------------------
     sta L1
-
-    ;DATA L1,L2
-    ;Multiplication 8bit*8bit,
-    ;result 16bit
-    ;this algiorithm is a little longer than one in Ruszczyc 6502 book
-    ;but it is faster
-
-    ldy #8
     lda #0
+    ldy #9
     clc
-LP0 ror
+CYK ror
     ror L1
-    bcc B0
+    bcc NIE
     clc
-    adc #10 ; (L2) multiplication by 10
-B0  dey
-    bne LP0
-    ror
-    ror L1
+    adc #10 ; multiplication by 10
+NIE dey
+    bne CYK
     sta MaxForceTableH,x
     lda L1
     sta MaxForceTableL,x
@@ -934,26 +920,21 @@ MakeTanksVisible
 ;      repeat untill NumberOfPlayers
 
     ldx #0
-GetRandomAgain0
-    lda RANDOM
-    and #$07 ;NumberOfPlayers < 7
-    cmp NumberOfPlayers
-    bcs GetRandomAgain0
-    sta TankSequence,x
-    ;now first slot is ready, nexts slots are handled
-    ;in a more complicated way
 
 GetRandomAgainX
+    txy ; destroy A!
+    dey
     lda RANDOM
-    and #$07 ;NumberOfPlayers < 7
     cmp NumberOfPlayers
     bcs GetRandomAgainX
-
+    cpx #0
+    bne NotFirstSlot
+    sta TankSequence,x ;now first slot is ready
+    inx
+    bne GetRandomAgainX
+NotFirstSlot
     ;now we have to check if the value was not used
     ;in previous slots
-
-    stx temp
-    ldy temp
 UsageLoop
       cmp TankSequence,y
       beq GetRandomAgainX ;apparently we have already used this value
@@ -961,14 +942,11 @@ UsageLoop
     bpl UsageLoop
 
     ;well, looks like this value is new!
-    inx
     sta TankSequence,x
+    inx
 
-    stx temp
-    inc:lda temp ;x+1
-
-    cmp NumberOfPlayers
-    bne GetRandomAgainX
+    cpx NumberOfPlayers
+    bcc GetRandomAgainX
     rts
 .endp
 ;----------------------------------------------
@@ -979,9 +957,7 @@ UsageLoop
 ;----------------------------------------------
 
     ; lets randomize someting between 0 and 180
-    lda RANDOM
-    cmp #180
-    bcs RandomizeAngle
+    randomize 0 180
     rts
 .endp
 ;----------------------------------------------
@@ -1044,10 +1020,9 @@ LimitForce
 ;----------------------------------------------
     mva #1 Erase
     jsr DrawTankNr.BarrelChange
-    mva #0 Erase
 MoveBarrel
     mva #sfx_set_power_2 sfx_effect
-    jsr DrawTankNr
+    jsr PutTankNr   ; and Erase = 0
     jsr DisplayStatus.displayAngle
     ;
     jsr CheckExitKeys
@@ -1060,7 +1035,6 @@ MoveBarrel
     jsr WaitOneFrame
 AIaim
     jsr DrawTankNr.BarrelChange
-    mva #0 Erase
     lda NewAngle
     cmp AngleTable,x
     beq BarrelPositionIsFine
@@ -1072,9 +1046,30 @@ rotateLeft            ; older is bigger
     dec angleTable,x
     jmp MoveBarrel
 BarrelPositionIsFine
-    jmp DrawTankNr
+    jmp PutTankNr   ; and Erase = 0
     ; rts
 
+.endp
+
+;--------------------------------------------------
+.proc DemoModeOrKey
+; Waits for the key pressed if at least one human is playing.
+; Otherwise, waits 3 seconds (demo mode).
+;--------------------------------------------------
+    ;check demo mode
+    ldx numberOfPlayers
+    dex
+checkForHuman                  ; if all in skillTable other than 0 then switch to DEMO MODE
+    lda skillTable,x
+    beq peopleAreHere
+    dex
+    bpl checkForHuman
+    ; no people, just wait a bit
+    ldy #75
+    jmp PauseYFrames
+    ; rts
+peopleAreHere
+    jmp getkey  ; jsr:rts
 .endp
 
 ;----------------------------------------------
@@ -1428,5 +1423,66 @@ FinishResultDisplay
     mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     jmp TypeLine4x4  ; jsr:rts
 .endp
+
+.IF VU_METER = 1
+.proc VUMeter
+    ; No VUMeter if key pressed
+    jsr GetKeyFast
+    cmp #@kbcode._none
+    bne EndMeter
+    ; check timer
+    ; Atari 800 has 3 bytes clock, but 5200 only 2 bytes
+    .IF TARGET = 800
+    LDA RTCLOK+1
+    .ELIF TARGET = 5200
+    lda RTCLOK
+    .ENDIF
+    cmp #VuMeterTime
+    bcc EndMeter
+    ; store all angles
+    ldx NumberOfPlayers
+@   lda AngleTable,x
+    sta previousAngle,x
+    dex
+    bpl @-
+    ; let's go!
+Meter
+    jsr ClearTanks
+    ldx NumberOfPlayers
+@   txa
+    and #%00000001
+    tay
+    lda trackn_audc+2,y
+    :4 asl
+    sta AngleTable,x
+    dex
+    bpl @-
+    jsr drawtanks
+    jsr WaitOneFrame
+    jsr GetKeyFast
+    cmp #@kbcode._none
+    beq Meter
+    ; restore all angles
+    jsr ClearTanks
+    ldx NumberOfPlayers
+@   lda previousAngle,x
+    sta AngleTable,x
+    dex
+    bpl @-
+    jsr drawtanks
+    jsr drawtanknr
+EndMeterAndReset
+    lda #0
+    ; only older byte
+    .IF TARGET = 800
+    sta RTCLOK+1
+    .ELIF TARGET = 5200
+    sta RTCLOK
+    .ENDIF
+EndMeter
+    rts
+.endp
+.ENDIF
+
 
 .ENDIF

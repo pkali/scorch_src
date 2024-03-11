@@ -3,7 +3,7 @@
 ;---------------------------------------------------
 ;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
 ;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
-;Miami & Warsaw 2022, 2023
+;Miami & Warsaw 2022, 2023, 2024
 
 ;---------------------------------------------------
 .def TARGET = 64 ; :)
@@ -14,6 +14,7 @@
 ; if 1 - activates faster graphics routines
 ;        (direct writes to screen memory - C64 only :) )
 ;---------------------------------------------------
+.def VU_METER = 0             ; allways 0! (works only on Atari)
 
 
     opt h-f+
@@ -24,7 +25,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.43" ; number of this build (4 bytes)
+    dta d"1.48" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -35,8 +36,9 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $52 ; $57
+FirstZpageVariable = $51 ; $57
     .zpvar DliColorBack        .byte = FirstZpageVariable
+    .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar MeteorsFlag  .byte   ; set 7th bit - block meteors
     .zpvar MeteorsRound .byte   ; set 7th bit - block meteors in round
     .zpvar GradientNr        .byte
@@ -247,63 +249,6 @@ StartAfterSplash
 .endp
 
 ;--------------------------------------------------
-.proc GetKey
-; waits for pressing a key and returns pressed value in A
-; when [ESC] is pressed, escFlag is set
-; result: A=keycode
-;--------------------------------------------------
-    jsr WaitForKeyRelease
-    lda #0
-    sta escFlag
-    lda #$ff
-    rts
-.endp
-
-;--------------------------------------------------
-.proc getkeynowait
-;--------------------------------------------------
-    jsr WaitForKeyRelease
-    lda kbcode
-    and #$3f ;CTRL and SHIFT ellimination
-    rts
-.endp
-
-;--------------------------------------------------
-.proc WaitForKeyRelease
-;--------------------------------------------------
-StillWait
-      rts
-.endp
-;--------------------------------------------------
-.proc IsKeyPressed
-; result: A=0 - yes , A>0 - no
-;--------------------------------------------------
-    lda #1
-    rts
-.endp
-;--------------------------------------------------
-.proc DemoModeOrKey
-; Waits for the key pressed if at least one human is playing.
-; Otherwise, waits 3 seconds (demo mode).
-;--------------------------------------------------
-    ;check demo mode
-    ldx numberOfPlayers
-    dex
-checkForHuman ; if all in skillTable other than 0 then switch to DEMO MODE
-    lda skillTable,x
-    beq peopleAreHere
-    dex
-    bpl checkForHuman
-    ; no people, just wait a bit
-    ;pause 150
-    ldy #75
-    jmp PauseYFrames
-    ; rts
-peopleAreHere
-    jmp getkey  ; jsr:rts
-.endp
-
-;--------------------------------------------------
 MakeDarkScreen
 ;--------------------------------------------------
 ;    mva #0 dmactls        ; dark screen
@@ -311,7 +256,8 @@ MakeDarkScreen
 ;--------------------------------------------------
 .proc WaitOneFrame
 ;--------------------------------------------------
-    wait    ; or waitRTC ?
+    jsr CheckStartKey             ; START KEY
+    seq:wait                   ; or waitRTC ?
     rts
 .endp
 
@@ -328,21 +274,10 @@ MakeDarkScreen
 .endp
 
 ;--------------------------------------------------
-.proc CheckExitKeys
-;--------------------------------------------------
-; Checks keyboard and sets appropriate flags for exit procedures
-; If START+OPTION is pressed - exit to GameOver screen
-; If 'O' key is pressed - displays "Are you sure?" and - exit to GameOver screen
-; If 'Esc' key is pressed - displays "Are you sure?" and - exit to Menu screen
-; Just setting the right flags!!!
-
-    rts
-;
-.endp
-;--------------------------------------------------
 .proc ShellDelay
     ldy flyDelay
-Y
+Y   jsr CheckStartKey             ; START KEY
+    beq noShellDelay
 DelayLoop
       lda $d012
 @     cmp $d012
@@ -364,6 +299,8 @@ noShellDelay
 .proc CopyFromRom
     rts
 .endp
+;--------------------------------------------------
+    icl 'C64/inputs.asm'
 ;--------------------------------------------------
     icl 'C64/interrupts.asm'
 ;----------------------------------------------

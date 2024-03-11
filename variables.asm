@@ -28,6 +28,9 @@ TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS MaxPlayers
 ;----------------------------------------------------
+JoyNumber    ; Joystick port number (from 0 to 3)
+    .DS MaxPlayers
+;----------------------------------------------------
 variablesToInitialize
 ;Options DO NOT ZERO ON RESTART GAME - ticket #27
 OptionsTable .ds maxOptions ;.by 0,1,2,2,0,1,3,2,0
@@ -155,10 +158,6 @@ ytankstable ;Y positions of tanks (lower left point)
     .DS MaxPlayers
 LowResDistances ; coarse tank positions divided by 4 (to be in just one byte)
     .DS MaxPlayers
-JoyNumber    ; Joystick port number (from 0 to 3)
-    .DS MaxPlayers
-TankShape    ; Tank shape number (from 0 to 2)
-    .DS MaxPlayers
 ;----------------------------------------------------
 TargetTankNr    ; Target tank index (for AI routines)
     .DS 1
@@ -170,6 +169,8 @@ SecondTryFlag    ; For precise AI aiming
 ;Erase    .DS 1 ; if 1 only mask of the character is printed
                ; on the graphics screen. if 0 character is printed normally
 
+TankShape    ; Tank shape number (from 0 to 2)
+    .DS MaxPlayers
 ;----------------------------------------------------
 ;RangeLeft  .DS 2 ;range of the soil to be fallen down
 ;RangeRight .DS 2 ;it is being set by all Explosions
@@ -210,7 +211,7 @@ YHit  .DS 2
 ;radius .DS 1
 ;xcircle .DS 2
 ;ycircle .DS 2
-tempcir .DS 2
+;tempcir .DS 2
 ;TankFalls
 FallingSoundBit .DS 1
 PreviousFall  .DS 1
@@ -219,6 +220,7 @@ EndOfTheFallFlag  .DS 1   ; in case of the infinite fall
 ;FloatingAlt    .DS 1    ; floating tank altitude
 FunkyWallFlag = FloatingAlt    ; reuse this variable in different weapon (Funky Bomb)!
 PreferHumansFlag = FloatingAlt ; second reuse in AI Aim proc
+;PreferHumansFlag .DS 1
 ;----------------------------------------------------
 ;Flight
 ;variables for 5 missiles (used for mirv)

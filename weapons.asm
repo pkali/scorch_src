@@ -41,16 +41,16 @@ ExplosionRoutines
     .word riotblast-1                ;Riot_Blast     ;_16
     .word riotbomb-1                 ;Riot_Bomb      ;_17
     .word heavyriotbomb-1            ;Heavy_Riot_Bomb;_18
-    .word babydigger-1               ;Baby_Digger    ;_19
-    .word digger-1                   ;Digger         ;_20
-    .word heavydigger-1              ;Heavy_Digger   ;_21
-    .word sandhog-1                  ;Sandhog        ;_22
-    .word heavysandhog-1             ;Heavy_Sandhog  ;_23
-    .word dirtclod-1                 ;Dirt_Clod      ;_24
-    .word dirtball-1                 ;Dirt_Ball      ;_25
-    .word tonofdirt-1                ;Ton_of_Dirt    ;_26
-    .word liquiddirt-1               ;Liquid_Dirt    ;_27
-    .word dirtcharge-1               ;Dirt_Charge    ;_28
+    .word digger-1                   ;Digger         ;_19
+    .word heavydigger-1              ;Heavy_Digger   ;_20
+    .word sandhog-1                  ;Sandhog        ;_21
+    .word heavysandhog-1             ;Heavy_Sandhog  ;_22
+    .word dirtclod-1                 ;Dirt_Clod      ;_23
+    .word dirtball-1                 ;Dirt_Ball      ;_24
+    .word tonofdirt-1                ;Ton_of_Dirt    ;_25
+    .word liquiddirt-1               ;Liquid_Dirt    ;_26
+    .word dirtcharge-1               ;Dirt_Charge    ;_27
+    .word propaganda-1               ;Propaganda     ;_28
     .word punch-1                    ;Baby_Sandhog   ;_29
     .word BFG-1                      ;Buy_me         ;_30
     .word laser-1                    ;Laser          ;_31
@@ -380,9 +380,73 @@ GoRiotBomb
 ;    jmp xriotbomb
 .endp
 ; ------------------------
-.proc babydigger
-    lda #1  ; diggery  ; how many branches (-1)
-GoBabydiggerSFX
+.proc propaganda
+    ; It floods the target with propaganda texts.
+    lda #80 ; max text width with additional margins (left/right edges of the screen)
+    sta ExplosionRadius ; set soildown range
+    jsr CalculateExplosionRange  
+    
+    mwa xdraw tempXROLLER ; save X coordinate of hitpoint
+    
+    mva #11 TempXfill ; number of text to display
+nexttext
+    ; play SFX
+    mva #sfx_digger sfx_effect
+@   lda random  ; randomize propaganda messege
+    cmp #talk.NumberOfPropagandaTexts
+    bcs @-
+
+    sta TextNumberOff
+    ; all text start from `talk` and end with an inverse.
+    ; we go through the `talk`, count number of inverses.
+    ; if equal to TextNumberOff, it is our text, printit
+    lda #$ff
+    sta plot4x4color
+    mwa #talk LineAddress4x4
+    jsr _calc_inverse_display   
+    ; now find length of the text
+@   iny
+    lda (LineAddress4x4),y
+    bpl @-
+    iny
+    sty fx
+    mwa tempXROLLER temp    ; X coordinate of hitpoint
+    ; calculate position of message 
+    jsr Calculate4x4TextPosition
+    ; and randomize Y coordinate (+/- 16pixels)
+    lda random
+    and #%00011111
+    adc LineYdraw
+    sbc #16
+    sta LineYdraw
+    ; randomize X coordinate (+/- 8 pixels)    
+    lda random
+    and #%00000111
+    clc
+    adc LineXdraw
+    sta LineXdraw
+    bcc @+
+    inc LineXdraw+1
+@   sec
+    sbc #4
+    sta LineXdraw
+    bcs DisplayMessage
+    dec LineXdraw+1
+DisplayMessage
+    ; display propaganda message
+    jsr TypeLine4x4.noLengthNoColor
+
+    ldy #7
+    jsr PauseYFrames
+    
+    dec TempXfill
+    bne nexttext
+    rts
+.endp
+; ------------------------
+.proc digger ;
+    lda #3  ;   diggery  ; how many branches (-1)
+GoDiggerSFX
     sta diggery
     mva #sfx_digger sfx_effect
     mva #0 sandhogflag
@@ -390,14 +454,9 @@ GoBabydiggerSFX
     bne xdigger
 .endp
 ; ------------------------
-.proc digger ;
-    lda #3  ;   diggery  ; how many branches (-1)
-    bne babydigger.GoBabydiggerSFX
-.endp
-; ------------------------
 .proc heavydigger
     lda #7  ; diggery  ; how many branches  (-1)
-    bne babydigger.GoBabydiggerSFX
+    bne digger.GoDiggerSFX
 .endp
 ; ------------------------
 .proc babysandhog
@@ -1218,29 +1277,22 @@ ContinueToCheckMaxForce2
 ;  $FB - any key
 ;  $f7 - shift
 ;  $f3 - shift+key
-
+.IF VU_METER = 1
+    jsr VUMeter.EndMeterAndReset
+.ENDIF
 notpressed
     jsr CheckExitKeys    ; Check for O, Esc or Start+Option keys
     spl:rts ; exit if pressed 'Exit keys'
-
+.IF VU_METER = 1
+    jsr VUMeter
+.ENDIF
     ldx TankNr    ; for optimize
-    ; Select and Option
-    lda CONSOL
-    tay
-    and #%00000100
-    beq callActivation    ; Option key
-    tya
-    and #%00000010
-    jeq pressedTAB    ; Select key
-    lda SKSTAT
-    cmp #$ff
-    jeq checkJoy
-    cmp #$f7  ; SHIFT
-    jeq checkJoy
-
-    lda kbcode
+    jsr GetKeyFast
+    mvy #00 EscFlag     ; prevent for set EscFalg in GetKey! we checking this in CheckExitKeys!
     and #%10111111 ; SHIFT elimination
     
+    cmp #@kbcode._atari        ; Option key
+    beq callActivation
     cmp #@kbcode._A  ; $3f  ; A
     bne @+
 callActivation
@@ -1276,12 +1328,12 @@ NoSpyHard
     mva #0 escFlag
     jmp ReleaseAndLoop
 @
-    cmp #$80|@kbcode._up
+/*o     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
     cmp #$80|@kbcode._down
     jeq CTRLPressedDown
     cmp #$80|@kbcode._tab
-    jeq CTRLPressedTAB
+    jeq CTRLPressedTAB */
 
 jumpFromStick
     .IF TARGET = 800
@@ -1290,10 +1342,7 @@ jumpFromStick
     .ELSE
       cmp #@kbcode._help    ; Help (# in A5200)
       bne NoVdebugSwitch
-      sta pressTimer ; reset 0+@kbcode._help (tricky)
-      jsr WaitForKeyRelease.StillWait
-      lda pressTimer
-      cmp #(25+@kbcode._help)  ; 1/2s - long press only
+      jsr WaitForLongPress
       bcc NoVdebugSwitch
     .ENDIF
       lda Vdebug
@@ -1303,6 +1352,7 @@ jumpFromStick
       jmp ReleaseAndLoop
 NoVdebugSwitch
 
+    mvy #1 Erase    ; optimization
     and #$3f ;CTRL and SHIFT ellimination
     cmp #@kbcode._up  ; $e
     jeq pressedUp
@@ -1313,6 +1363,8 @@ NoVdebugSwitch
     cmp #@kbcode._right  ; $7
     jeq pressedRight
     cmp #@kbcode._space  ; $21
+    jeq pressedSpace
+    cmp #@kbcode._ret  ; Fire (Joy)
     jeq pressedSpace
     cmp #@kbcode._tab  ; $2c
     jeq pressedTAB
@@ -1327,30 +1379,8 @@ NoVdebugSwitch
       jmp ReleaseAndLoop
     .ENDIF
 EndKeys
+    mva #$80 pressTimer
     jmp notpressed
-checkJoy
-    ;------------JOY-------------
-    ;happy happy joy joy
-    ;check for joystick now
-    lda STICK0
-    and #$0f
-    cmp #$0f
-    beq notpressedJoy
-    tay
-    mva #0 ATRACT    ; reset atract mode
-    lda joyToKeyTable,y
-    jmp jumpFromStick
-notpressedJoy
-    .IF TARGET = 800
-    ;second fire only Atari 800
-    jsr GetKey.Check2button
-    jcc pressedTAB
-    .ENDIF
-    ;fire
-    lda STRIG0
-    jeq pressedSpace
-    mva #$ff pressTimer  ; stop counting frames
-   jmp notpressed
 
 ;
 pressedUp
@@ -1402,8 +1432,6 @@ pressedDown
     cmp #25  ; 1/2s
     bcs CTRLPressedDown
 
-    mva #sfx_set_power_1 sfx_effect
-
     ;ldx TankNr        ; optimized
     dec ForceTableL,x
     lda ForceTableL,x
@@ -1416,6 +1444,7 @@ ForceGoesZero
       sta ForceTableH,x
       sta ForceTableL,x
 @
+    mva #sfx_set_power_1 sfx_effect
     jmp BeforeFire
 
 CTRLPressedDown
@@ -1429,7 +1458,7 @@ CTRLPressedDown
     jcs BeforeFire
     dec ForceTableH,x
     bmi ForceGoesZero
-    jmp BeforeFire
+    bpl @-
 
 pressedRight
     ;ldx TankNr        ; optimized
@@ -1438,30 +1467,30 @@ pressedRight
     cmp #25  ; 1/2s
     bcs CTRLPressedRight
 
-    mva #sfx_set_power_2 sfx_effect
-    mva #1 Erase
+;    mva #1 Erase
     jsr DrawTankNr.BarrelChange
     dec:lda AngleTable,x
     cmp #255  ; -1
-    jne BeforeFire
+    bne @+
     lda #180
     sta AngleTable,x
+@
+    mva #sfx_set_power_2 sfx_effect
     jmp BeforeFire
 
 CTRLPressedRight
     ;ldx TankNr        ; optimized
-    mva #sfx_set_power_2 sfx_effect
-    mva #1 Erase
+;    mva #1 Erase
     jsr DrawTankNr.BarrelChange
     lda AngleTable,x
     sec
     sbc #4
     sta AngleTable,x
     cmp #4  ; smallest angle for speed rotating
-    jcs BeforeFire
+    bcs @-
     lda #180
     sta AngleTable,x
-    jmp BeforeFire
+    bne @-
 
 
 pressedLeft
@@ -1471,31 +1500,31 @@ pressedLeft
     cmp #25  ; 1/2s
     bcs CTRLPressedLeft
 
-    mva #sfx_set_power_2 sfx_effect
-    mva #1 Erase
+;    mva #1 Erase
     jsr DrawTankNr.BarrelChange
     INC AngleTable,x
     lda AngleTable,x
     cmp #180
-    jcc BeforeFire
+    bcc @+
     lda #0
     sta AngleTable,x
+@
+    mva #sfx_set_power_2 sfx_effect
     jmp BeforeFire
 
 CTRLPressedLeft
     ;ldx TankNr        ; optimized
-    mva #sfx_set_power_2 sfx_effect
-    mva #1 Erase
+;    mva #1 Erase
     jsr DrawTankNr.BarrelChange
     lda AngleTable,x
     clc
     adc #4
     sta AngleTable,x
     cmp #180-4
-    jcc BeforeFire
+    bcc @-
     lda #0
     sta AngleTable,x
-    jmp BeforeFire
+    beq @-
 
 pressedTAB
     mva #sfx_purchase sfx_effect
@@ -1544,6 +1573,7 @@ pressedS
     eor:sta noSfx
 ReleaseAndLoop
     jsr WaitForKeyRelease
+;    mva #$80 pressTimer
     jmp BeforeFire
 
 pressedSpace
@@ -1551,12 +1581,9 @@ pressedSpace
     ;we shoot here!!!
     lda #0
     sta ATRACT    ; reset atract mode
-    sta pressTimer ; reset
-    jsr WaitForKeyRelease.StillWait
-    lda pressTimer
-    cmp #25  ; 1/2s
-    bcc fire
-    jmp callInventory
+    jsr WaitForLongPress
+    bcc fire    ; short press
+    jmp callInventory   ; long press
 fire
     RTS
 .endp
@@ -2754,40 +2781,16 @@ notpressed
     jsr DrawTankEngine
     ; enimation ends
 
-    lda SKSTAT
-    cmp #$ff
-    jeq checkJoy
-    cmp #$f7  ; SHIFT
-    jeq checkJoy
-
-    lda kbcode
-    and #%00111111 ; CTRL and SHIFT elimination
-
-jumpFromStick
+    jsr GetKeyFast
     cmp #@kbcode._left  ; $6
     jeq pressedLeft
     cmp #@kbcode._right  ; $7
     jeq pressedRight
     cmp #@kbcode._space  ; $21
     jeq pressedSpace
-    jmp notpressed
-checkJoy
-    ;------------JOY-------------
-    ;happy happy joy joy
-    ;check for joystick now
-    lda STICK0
-    and #$0f
-    cmp #$0f
-    beq notpressedJoy
-    tay
-    lda joyToKeyTable,y
-    jmp jumpFromStick
-notpressedJoy
-    ;fire
-    lda STRIG0
+    cmp #@kbcode._ret  ; Fire (Joy)
     jeq pressedSpace
     jmp notpressed
-
 
 pressedRight
     lda ShieldEnergy,x

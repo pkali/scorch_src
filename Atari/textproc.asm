@@ -78,7 +78,7 @@
 OptionsMainLoop
 
     jsr OptionsInversion
-    jsr getkey
+    jsr GetKey
     bit escFlag
     spl:rts
 
@@ -124,11 +124,16 @@ OptionsNoLeft
 OptionsNoRight
     cmp #@kbcode._ret  ; $c ;Return key
     bne OptionsNoReturn
+    ; wait for long press
+    jsr WaitForLongPress
+    bcs TabPressed  ; if long press (fire or Return)
+EndOfOptions
     rts        ; options selected
 
 OptionsNoReturn
     cmp #@kbcode._tab    ; Tab key
     bne OptionsNoTab
+TabPressed
     jsr SelectNextGradient
 OptionsNoTab
     jmp OptionsMainLoop
@@ -409,7 +414,13 @@ ChoosingItemForPurchase
     cmp #@kbcode._left  ; $06  ; cursor left
     jeq ListChange
     cmp #@kbcode._ret  ; $0c ; Return
-    sne:rts
+    bne NoReturn
+    jsr WaitForLongPress
+    bcc exitthismenu    ; short press
+    jmp PurchaseWeaponNow   ; long press
+exitthismenu
+    rts
+NoReturn
     cmp #@kbcode._up  ; $e
     beq PurchaseKeyUp
     cmp #@kbcode._down  ;  $f
@@ -872,13 +883,14 @@ NotBarrel
     bne NotWhiteFlag
     cmp ActiveDefenceWeapon,x
     bne NoDeactivateWhiteFlag
-    mva #sfx_white_flag sfx_effect
     lda #$00    ; if try to activate activated White Flag then deactivate Defence
+NoDeactivateWhiteFlag
+    ; Activate White Flag (or deactivate if A=0)
     sta ActiveDefenceWeapon,x
     sta ShieldEnergy,x
-    beq DefActivationEnd
+    mva #sfx_white_flag sfx_effect
+    bne DefActivationEnd
 NotWhiteFlag
-NoDeactivateWhiteFlag
     ; activate new defensive
     sta ActiveDefenceWeapon,x
     ; set defensive energy
@@ -1727,8 +1739,9 @@ FastTank
 ;    ldx TankNr
     dex
     bpl AllTanksFloatingDown
-    jsr IsKeyPressed
-    bne MainTanksFloatingLoop   ; neverending loop
+    jsr GetKeyFast
+    cmp #@kbcode._none
+    beq MainTanksFloatingLoop   ; neverending loop
     mva #$00 ScrollFlag    ; credits scroll off
     jmp MakeDarkScreen
 ;    jsr GameOverResultsClear
