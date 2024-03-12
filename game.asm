@@ -1441,6 +1441,7 @@ FinishResultDisplay
     bcc EndMeter
     ; store all angles
     ldx NumberOfPlayers
+    dex
 @   lda AngleTable,x
     sta previousAngle,x
     dex
@@ -1465,6 +1466,7 @@ Meter
     ; restore all angles
     jsr ClearTanks
     ldx NumberOfPlayers
+    dex
 @   lda previousAngle,x
     sta AngleTable,x
     dex

@@ -1248,19 +1248,9 @@ DeadTank
 
     ldx TankNr
 
-    ;Checking the maximal force
-    lda MaxForceTableH,x
-    cmp ForceTableH,x
-    bne ContinueToCheckMaxForce2
-    lda MaxForceTableL,x
-    cmp ForceTableL,x
-ContinueToCheckMaxForce2
-    bcs @+
-      lda MaxForceTableH,x
-      sta ForceTableH,x
-      lda MaxForceTableL,x
-      sta ForceTableL,x
-@
+    ;Check and set the maximal force
+    jsr RandomizeForce.LimitForce   ; only limit (no randomize)
+
     jsr PutTankNameOnScreen
 ;    jsr DisplayStatus    ; There is no need anymore, it is always after PutTankNameOnScreen
 
@@ -1272,13 +1262,8 @@ ContinueToCheckMaxForce2
     bpl @+
     jsr Shoot.AfterOffensiveText    ; Lazy Darwin - aiming visualisation
 @
-;keyboard reading
-; KBCODE keeps code of last keybi
-; SKSTAT  $ff - nothing pressed
-;  $FB - any key
-;  $f7 - shift
-;  $f3 - shift+key
 .IF VU_METER = 1
+    ; VU meter timer reset
     jsr VUMeter.EndMeterAndReset
 .ENDIF
 notpressed
@@ -1287,6 +1272,12 @@ notpressed
 .IF VU_METER = 1
     jsr VUMeter
 .ENDIF
+;keyboard reading
+; KBCODE keeps code of last keybi
+; SKSTAT  $ff - nothing pressed
+;  $FB - any key
+;  $f7 - shift
+;  $f3 - shift+key
     ldx TankNr    ; for optimize
     jsr GetKeyFast
     mvy #00 EscFlag     ; prevent for set EscFalg in GetKey! we checking this in CheckExitKeys!
@@ -1400,20 +1391,7 @@ pressedUp
 CheckingMaxForce
 
     mva #sfx_set_power_1 sfx_effect
-
-    lda MaxForceTableH,x
-    cmp ForceTableH,x
-    bne FurtherCheckMaxForce
-    lda MaxForceTableL,x
-    cmp ForceTableL,x
-FurtherCheckMaxForce
-    jcs BeforeFire
-
-    lda MaxForceTableH,x
-    sta ForceTableH,x
-    lda MaxForceTableL,x
-    sta ForceTableL,x
-
+    ; checking is at the beginning of the procedure !!
     jmp BeforeFire
 
 CTRLPressedUp
