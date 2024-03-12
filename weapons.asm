@@ -261,6 +261,7 @@ RepeatNapalm    ; external loop (for fire animation)
     mwa xcircle xdraw
     sbw xdraw #(napalmRadius)  ; 10 pixels on left side hit point
     ldy #0
+    sty Erase   ; becouse Erase flag is set!
     sty magic+1
 RepeatFlame        ; internal loop (draw flames)
     ldy #0
