@@ -5,7 +5,7 @@ Scorch is a multi-player, turn-based, artillery video game. Tanks do turn-based 
 
 by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 
-Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022, 2023
+Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022, 2023, 2024
 
 [Game manual in PDF (layout by Bocianu)](Manuals/scorch_manual_en.pdf)
 
@@ -65,6 +65,23 @@ Originally, most variables were in Polish, and comments were sparse. However, we
 With the advent of [fujinet](https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changelog:
+
+###### Version 1.48
+2024-03-11
+
+New cart image, bugfixes and easter eggs.
+
+In preparation for the festive season we have squeezed the code a bit more, fixed some buggies and added an easter egg or two :)
+
+Most important changes:
+- Cyborgs prefer attacking human players again! Due to unforeseen circumstances Cyborgs were a bit shy and not as vicious as planned. Fixed.
+- A new weapon "Propaganda". In the spirit of a ["Phoney War"](https://en.wikipedia.org/wiki/Phoney_War) instead of dropping bombs we drop a bunch of leaflets. This will show them!
+- Robotanks were making suboptimal purchase decisions. Fixed.
+- Updated binary manuals.
+- ... _redacted_
+- ... _redacted for egg season_
+- A new physical cart image - you can update carts and have even more fun now!
+
 
 ###### Version 1.43
 2023-12-07
