@@ -1439,16 +1439,22 @@ FinishResultDisplay
     .ENDIF
     cmp #VuMeterTime
     bcc EndMeter
+    ; Let's go!
+    jsr ClearTanks
     ; store all angles
     ldx NumberOfPlayers
     dex
 @   lda AngleTable,x
     sta previousAngle,x
+    lda #0
+    sta AngleTable,x
     dex
     bpl @-
+    jsr DrawTanks
     ; let's go!
 Meter
-    jsr ClearTanks
+    mva #1 Erase
+    jsr drawbarrels     ; clear barrels
     ldx NumberOfPlayers
 @   txa
     and #%00000001
@@ -1458,7 +1464,8 @@ Meter
     sta AngleTable,x
     dex
     bpl @-
-    jsr drawtanks
+    mva #0 Erase
+    jsr drawbarrels     ; draw barrels
     jsr WaitOneFrame
     jsr GetKeyFast
     cmp #@kbcode._none
@@ -1482,6 +1489,21 @@ EndMeterAndReset
     sta RTCLOK
     .ENDIF
 EndMeter
+    rts
+;-----------
+drawbarrels
+    lda TankNr
+    pha
+    ldx NumberOfPlayers
+    dex
+    stx TankNr
+DrawNextTank
+    jsr drawtanknr.BarrelChange
+    dec TankNr
+    ldx TankNr
+    bpl DrawNextTank
+    pla
+    sta TankNr
     rts
 .endp
 .ENDIF
