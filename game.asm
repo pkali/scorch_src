@@ -742,19 +742,20 @@ NotNegativeShieldEnergy
 ;out: Wind (word)
 ;uses: _
 ;--------------------------------------------------
+    mva #$00 Wind+1
+    sta Wind+2
+    sta Wind+3
     lda random
     cmp MaxWind
     bcs GetRandomWind ; if more than MaxWind then randomize again
     sta Wind
-    mva #$00 Wind+1
-    sta Wind+2
-    sta Wind+3
+    beq noWind
     ; multiply Wind by 16
     ; two bytes of Wind are treated as a decimal part of vx variable
     :4 aslw Wind
     ; decide the direction
     lda random
-    bmi @+
+    bmi noWindDirectionChange
       sec  ; Wind = -Wind
       .rept 2
         lda #$00
@@ -764,7 +765,9 @@ NotNegativeShieldEnergy
         lda #$ff
         sta Wind+2
         sta Wind+3
-@   rts
+noWind
+noWindDirectionChange
+    rts
 .endp
 ;--------------------------------------------------
 .proc MaxForceCalculate
