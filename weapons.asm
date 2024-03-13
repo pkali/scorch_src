@@ -1320,12 +1320,13 @@ NoSpyHard
     mva #0 escFlag
     jmp ReleaseAndLoop
 @
-/*o     cmp #$80|@kbcode._up
+/*     cmp #$80|@kbcode._up
     jeq CTRLPressedUp
     cmp #$80|@kbcode._down
-    jeq CTRLPressedDown
+    jeq CTRLPressedDown */
+    
     cmp #$80|@kbcode._tab
-    jeq CTRLPressedTAB */
+    jeq CTRLPressedTAB
 
 jumpFromStick
     .IF TARGET = 800
