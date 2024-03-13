@@ -1498,7 +1498,10 @@ drawbarrels
     dex
     stx TankNr
 DrawNextTank
+    lda eXistenZ,x
+    beq nobarrel ; if energy=0 then no tank
     jsr drawtanknr.BarrelChange
+nobarrel
     dec TankNr
     ldx TankNr
     bpl DrawNextTank
