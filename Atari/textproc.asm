@@ -1966,27 +1966,24 @@ NoShieldEnergy
     ;=========================
     mwa Wind temp
     lda #space
-    bit Wind+3 ; highest byte of 4 byte wind
-    bmi DisplayLeftWind
     sta statusBuffer+80+17    ; (space) char
-    lda #char_TAB  ; (tab) char
-    sta statusBuffer+80+20
-    bne DisplayWindValue
-DisplayLeftWind
     sta statusBuffer+80+20    ; (space) char
+    :4 lsrw temp ;divide by 16 to have a nice value on a screen
+    lda temp
+    beq DisplayWindValuex
+    bit Wind+3 ; highest byte of 4 byte wind
+    bmi DisplayLeftWindx
+    ldx #char_TAB  ; (tab) char
+    stx statusBuffer+80+20
+    bne DisplayWindValuex
+DisplayLeftWindx
     lda #char_DEL  ;(del) char
     sta statusBuffer+80+17
       sec  ; Wind = -Wind
       lda #$00
       sbc temp
       sta temp
-      lda #$00
-      sbc temp+1
-      sta temp+1
-DisplayWindValue
-    :4 lsrw temp ;divide by 16 to have a nice value on a screen
-    lda temp
-    ;sta decimal
+DisplayWindValuex
     mwx #statusBuffer+80+18 displayposition
     jsr displaybyte
 

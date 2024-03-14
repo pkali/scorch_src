@@ -745,11 +745,11 @@ NotNegativeShieldEnergy
     mva #$00 Wind+1
     sta Wind+2
     sta Wind+3
-    lda random
-    cmp MaxWind
-    bcs GetRandomWind ; if more than MaxWind then randomize again
+@   lda random
     sta Wind
-    beq noWind
+    beq noWind    ; if 0 then nothing to do
+    cmp MaxWind
+    bcs @- ; if more than MaxWind then randomize again
     ; multiply Wind by 16
     ; two bytes of Wind are treated as a decimal part of vx variable
     :4 aslw Wind
