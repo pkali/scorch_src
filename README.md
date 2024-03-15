@@ -35,6 +35,16 @@ Compilation: (requires mads newer than 2023-09-13)
 - `mads scorch.asm -o:scorch.bin -d:TARGET=5200` for Atari 5200 version
 - `mads scorchC64.asm -o:scorchC64.prg` for C64 version (WIP, not playable yet)
 
+Update of the official Atari 8-bit cartridge from Mq:
+- boot `scorch_fl.atr` from e.g. SIO2SD, SIO2PC or a large floppy
+- insert the cartridge
+- do what the flasher application says on the screen.
+- do not despair if something goes wrong, just reboot, the reinsert cart, etc.
+- it is smoother with QMeg OS, because there you can insert the cart, turn on your Atari, jump to the QMeg menu and boot the `scorch_fl.atr` from there. No need to insert the cart to the running Atari.
+
+WARNING | ADVERTENCIA |警告 | AVERTISSEMENT | चेतावनी  | WARNUNG | ПРЕДУПРЕЖДЕНИЕ | UWAGA | POZOR !!!
+This is not an official cart manufacturer's (Mq) flasher, it is a collective and separate community effort. Be responsible, don't drink and flash your car(t). Better yet, do not flash it at all. In fact, to preserve the historical value of the artifact we strongly discourage from opening the game box and inserting the cartridge anywhere, especially into unauthorized orifices.
+
 
 Game source code is split into several parts:
 - `scorch.asm` is the main game startup code
@@ -72,7 +82,6 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 Atari 8-bit cart flasher and bug fixes!
 
 @RB5200 provided us with a very good bug reports so the new version was inevitable. Additionally, we have used [cart flasher](https://github.com/jhusak/jataricart/tree/master/various_flashers/1MBscorch) from @jhusak to prepare the .atr with flasher.
-IMPORTANT! This is not an official cart manufacturer's (Mq) flasher, it is a collective and separate community effort. Be responsible, don't drink and flash your car(t).
 
 Fixes and changes:
 - Napalm and Hot Napalm animations were not playing.
