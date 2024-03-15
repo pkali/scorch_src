@@ -25,7 +25,7 @@
 .ENDIF
 ;---------------------------------------------------
 .ifndef SPLASH
-    .def SPLASH = 0          ; if 0 - no splash screens
+    .def SPLASH = 0         ; if 0 - no splash screens
 .endif
 .ifndef CART_VERSION
     .def CART_VERSION = 0    ; if 1 - dual splash screen
@@ -41,7 +41,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.48" ; number of this build (4 bytes)
+    dta d"1.50" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong

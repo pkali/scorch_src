@@ -1,3 +1,5 @@
+;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
+
 .IF *>0 ;this is a trick that prevents compiling this file alone
 
 ; All main procedures of the game not dependent on hardware (I hope) :)
@@ -742,19 +744,20 @@ NotNegativeShieldEnergy
 ;out: Wind (word)
 ;uses: _
 ;--------------------------------------------------
-    lda random
-    cmp MaxWind
-    bcs GetRandomWind ; if more than MaxWind then randomize again
-    sta Wind
     mva #$00 Wind+1
     sta Wind+2
     sta Wind+3
+@   lda random
+    sta Wind
+    beq noWind    ; if 0 then nothing to do
+    cmp MaxWind
+    bcs @- ; if more than MaxWind then randomize again
     ; multiply Wind by 16
     ; two bytes of Wind are treated as a decimal part of vx variable
     :4 aslw Wind
     ; decide the direction
     lda random
-    bmi @+
+    bmi noWindDirectionChange
       sec  ; Wind = -Wind
       .rept 2
         lda #$00
@@ -764,7 +767,9 @@ NotNegativeShieldEnergy
         lda #$ff
         sta Wind+2
         sta Wind+3
-@   rts
+noWind
+noWindDirectionChange
+    rts
 .endp
 ;--------------------------------------------------
 .proc MaxForceCalculate
@@ -1439,15 +1444,22 @@ FinishResultDisplay
     .ENDIF
     cmp #VuMeterTime
     bcc EndMeter
+    ; Let's go!
+    jsr ClearTanks
     ; store all angles
     ldx NumberOfPlayers
+    dex
 @   lda AngleTable,x
     sta previousAngle,x
+    lda #0
+    sta AngleTable,x
     dex
     bpl @-
+    jsr DrawTanks
     ; let's go!
 Meter
-    jsr ClearTanks
+    mva #1 Erase
+    jsr drawbarrels     ; clear barrels
     ldx NumberOfPlayers
 @   txa
     and #%00000001
@@ -1457,7 +1469,8 @@ Meter
     sta AngleTable,x
     dex
     bpl @-
-    jsr drawtanks
+    mva #0 Erase
+    jsr drawbarrels     ; draw barrels
     jsr WaitOneFrame
     jsr GetKeyFast
     cmp #@kbcode._none
@@ -1465,6 +1478,7 @@ Meter
     ; restore all angles
     jsr ClearTanks
     ldx NumberOfPlayers
+    dex
 @   lda previousAngle,x
     sta AngleTable,x
     dex
@@ -1480,6 +1494,24 @@ EndMeterAndReset
     sta RTCLOK
     .ENDIF
 EndMeter
+    rts
+;-----------
+drawbarrels
+    lda TankNr
+    pha
+    ldx NumberOfPlayers
+    dex
+    stx TankNr
+DrawNextTank
+    lda eXistenZ,x
+    beq nobarrel ; if energy=0 then no tank
+    jsr drawtanknr.BarrelChange
+nobarrel
+    dec TankNr
+    ldx TankNr
+    bpl DrawNextTank
+    pla
+    sta TankNr
     rts
 .endp
 .ENDIF

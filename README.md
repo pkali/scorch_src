@@ -5,7 +5,7 @@ Scorch is a multi-player, turn-based, artillery video game. Tanks do turn-based 
 
 by Tomasz 'Pecus' Pecko and Pawel 'pirx' Kalinowski
 
-Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022, 2023
+Warsaw, Miami 2000, 2001, 2002, 2003, 2009, 2012, 2013, 2022, 2023, 2024
 
 [Game manual in PDF (layout by Bocianu)](Manuals/scorch_manual_en.pdf)
 
@@ -34,6 +34,16 @@ Compilation: (requires mads newer than 2023-09-13)
 - `mads scorch.asm -o:scorch.xex -d:TARGET=800` for Atari800 version
 - `mads scorch.asm -o:scorch.bin -d:TARGET=5200` for Atari 5200 version
 - `mads scorchC64.asm -o:scorchC64.prg` for C64 version (WIP, not playable yet)
+
+Update of the official Atari 8-bit cartridge from Mq:
+- boot `scorch_fl.atr` from e.g. SIO2SD, SIO2PC or a large floppy
+- insert the cartridge
+- do what the flasher application says on the screen.
+- do not despair if something goes wrong, just reboot, the reinsert cart, etc.
+- it is smoother with QMeg OS, because there you can insert the cart, turn on your Atari, jump to the QMeg menu and boot the `scorch_fl.atr` from there. No need to insert the cart to the running Atari.
+
+WARNING | ADVERTENCIA |警告 | AVERTISSEMENT | चेतावनी  | WARNUNG | ПРЕДУПРЕЖДЕНИЕ | UWAGA | POZOR !!!
+This is not an official cart manufacturer's (Mq) flasher, it is a collective and separate community effort. Be responsible, don't drink and flash your car(t). Better yet, do not flash it at all. In fact, to preserve the historical value of the artifact we strongly discourage from opening the game box and inserting the cartridge anywhere, especially into unauthorized orifices.
 
 
 Game source code is split into several parts:
@@ -65,6 +75,38 @@ Originally, most variables were in Polish, and comments were sparse. However, we
 With the advent of [fujinet](https://fujinet.online/) we are thinking about making the game interplanetary, err, with multiplayer over the net. We'll see.
 
 ## Changelog:
+
+###### Version 1.50
+2024-03-15
+
+Atari 8-bit cart flasher and bug fixes!
+
+@RB5200 provided us with a very good bug reports so the new version was inevitable. Additionally, we have used [cart flasher](https://github.com/jhusak/jataricart/tree/master/various_flashers/1MBscorch) from @jhusak to prepare the .atr with flasher.
+
+Fixes and changes:
+- Napalm and Hot Napalm animations were not playing.
+- Wind of force 0 and left direction was wrapping arithmetic and caused very strong left shoots.
+- Now 0 force wind has got no direction (no negative zeroes anymore!)
+- CTRL+Tab was non functional for some time, returned
+- Much nicer easter egg visualization.
+
+
+###### Version 1.48
+2024-03-11
+
+New cart image, bugfixes and easter eggs.
+
+In preparation for the festive season we have squeezed the code a bit more, fixed some buggies and added an easter egg or two :)
+
+Most important changes:
+- Cyborgs prefer attacking human players again! Due to unforeseen circumstances Cyborgs were a bit shy and not as vicious as planned. Fixed.
+- A new weapon "Propaganda". In the spirit of a ["Phoney War"](https://en.wikipedia.org/wiki/Phoney_War) instead of dropping bombs we drop a bunch of leaflets. This will show them!
+- Robotanks were making suboptimal purchase decisions. Fixed.
+- Updated binary manuals.
+- ... _redacted_
+- ... _redacted for egg season_
+- A new physical cart image - you can update carts and have even more fun now!
+
 
 ###### Version 1.43
 2023-12-07
