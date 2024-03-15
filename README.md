@@ -66,6 +66,22 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.50
+2024-03-15
+
+Atari 8-bit cart flasher and bug fixes!
+
+@RB5200 provided us with a very good bug reports so the new version was inevitable. Additionally, we have used [cart flasher](https://github.com/jhusak/jataricart/tree/master/various_flashers/1MBscorch) from @jhusak to prepare the .atr with flasher.
+IMPORTANT! This is not an official cart manufacturer's (Mq) flasher, it is a collective and separate community effort. Be responsible, don't drink and flash your car(t).
+
+Fixes and changes:
+- Napalm and Hot Napalm animations were not playing.
+- Wind of force 0 and left direction was wrapping arithmetic and caused very strong left shoots.
+- Now 0 force wind has got no direction (no negative zeroes anymore!)
+- CTRL+Tab was non functional for some time, returned
+- Much nicer easter egg visualization.
+
+
 ###### Version 1.48
 2024-03-11
 
