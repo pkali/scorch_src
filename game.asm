@@ -1,3 +1,5 @@
+;   @com.wudsn.ide.asm.mainsourcefile=scorch.asm
+
 .IF *>0 ;this is a trick that prevents compiling this file alone
 
 ; All main procedures of the game not dependent on hardware (I hope) :)
