@@ -51,7 +51,6 @@ Game source code is split into several parts:
 - `scorchC64.asm` is the main game startup code for Commodore 64
 - `game.asm` - it all happens here
 - `grafproc.asm` - graphics routines like line or circle
-- `textproc.asm` - text routines like list of weapons and shop
 - `variables.asm` - all non-zero page variables
 - `constants.asm` and `constants_top.asm` - various tables of constants 
 - `ai.asm` - artificial stupidity of computer opponents
