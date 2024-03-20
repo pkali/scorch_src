@@ -1858,9 +1858,8 @@ quit_areyousure
 .endp
 
 .proc _sep_opty
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
-      jsr TypeLine4x4
+      jsr TL4x4_empty.go    ; center and type line
       adb ResultY  #4 ;next line
     rts
 .endp

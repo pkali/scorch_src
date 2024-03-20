@@ -1292,17 +1292,15 @@ setMountainsType
     jsr displaybyte ;decimal (byte), displayposition  (word)
 
     mwa #LineHeader1 LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    jsr TypeLine4x4
+    jsr TL4x4_empty.go    ; center and type line
     beq @+ ;unconditional jump, because TypeLine4x4 ends with beq
 
 GameOver4x4
     RmtSong song_round_over
     mwa #LineGameOver LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    jsr TypeLine4x4
+    jsr TL4x4_empty.go    ; center and type line
     mva #1 GameIsOver
 
 @
@@ -1317,9 +1315,8 @@ GameOver4x4
 
     ;Header2
     mwa #LineHeader2 LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    jsr TypeLine4x4
+    jsr TL4x4_empty.go    ; center and type line
 
     adb ResultY  #4 ;next line
 
@@ -1386,9 +1383,8 @@ TankNameCopyLoop
 
     ;result line display
     mwa #ResultLineBuffer LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
     mva ResultY LineYdraw
-    jsr TypeLine4x4
+    jsr TL4x4_empty.go    ; center and type line
 
     adb ResultY  #4 ;next line
 
@@ -1411,21 +1407,19 @@ FinishResultDisplay
 .proc TL4x4_bottom
     ;bottom of the frame
     mwa #LineBottom LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
-    jmp TypeLine4x4  ; jsr:rts
+    jmp TL4x4_empty.go    ; center and type line
 .endp
 
 .proc TL4x4_top
     ;bottom of the frame
     mwa #LineTop LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
-    jmp TypeLine4x4  ; jsr:rts
+    jmp TL4x4_empty.go    ; center and type line
 .endp
 
 .proc TL4x4_empty
     ;empty frame
     mwa #LineEmpty LineAddress4x4
-    mwa #((ScreenWidth/2)-(8*4)) LineXdraw
+go  mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; center and type line
     jmp TypeLine4x4  ; jsr:rts
 .endp
 
