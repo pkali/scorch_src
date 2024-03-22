@@ -1941,18 +1941,14 @@ X   lda XtanksTableL,x
   ;  mva #1 color
     ldx TankNr
     jsr SetupXYdraw
+    sbw ydraw #3 ydraw  ; barell start (Y coordinate)
+    mva #0 goleft
     lda BarrelLength,x
     sta yc    ; current tank barrel length
     lda angleTable,x
     sta Angle
-    ; jmp DrawBarrelTech    ; POZOR !
-    ; rts
-.endp
-
-.proc DrawBarrelTech
     ; angle in Angle and A
 
-    mvx #0 goleft
     cmp #91
     bcc angleUnder90
 
@@ -1961,9 +1957,9 @@ X   lda XtanksTableL,x
     sbc #90
     tax
     ; barrel start offset over 90deg
-    adw xdraw #4 xdraw
-    mva #1 goleft
-    bpl @+  ; jmp @+
+    adw xdraw #4 xdraw   ; barell start (X coordinate)
+    dec goleft  ; $00 -> $ff
+    bmi @+  ; jmp @+
 
 angleUnder90
     sec             ; X = 90-Angle
@@ -1971,10 +1967,9 @@ angleUnder90
     sbc Angle
     tax
     ; barrel start offset under 90deg
-    adw xdraw #3 xdraw
+    adw xdraw #3 xdraw  ; barell start (X coordinate)
 
 @
-    sbw ydraw #3 ydraw
     lda sintable,x  ; cos(X)
     sta vx
 
@@ -2011,8 +2006,8 @@ YangleUnder90
  ;   mva #6 yc  ; barrel length
 barrelLoop
 
-    lda goleft
-    bne goright
+    bit goleft
+    bmi goright
     clc
     lda fx
     adc vx
