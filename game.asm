@@ -1438,6 +1438,8 @@ go  mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; center and type line
     .ENDIF
     cmp #VuMeterTime
     bcc EndMeter
+    bit noMusic ; if no music - no VuMeters
+    bmi EndMeter
     ; Let's go!
     jsr ClearTanks
     ; store all angles
