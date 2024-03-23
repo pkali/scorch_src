@@ -985,10 +985,7 @@ ToHighToParachute
 ;
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
-    lda XtankstableL,x
-    sta xdraw
-    lda XtankstableH,x
-    sta xdraw+1
+    jsr SetupXYdraw.X
     ; one pixel under tank
     clc
     lda Ytankstable,x
