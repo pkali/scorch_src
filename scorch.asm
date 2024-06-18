@@ -41,7 +41,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.50" ; number of this build (4 bytes)
+    dta d"S.50" ; number of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -534,7 +534,7 @@ noingame
 ;----------------------------------------------
     icl 'ai.asm'
 ;----------------------------------------------
-    icl 'artwork/talk.asm'
+    icl 'artwork/scorch-spanish-talk.asm'
 ;----------------------------------------------
 TankFont
     ins 'artwork/tanksv4.fnt',+0,384   ; 48 characters only
