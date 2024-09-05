@@ -140,7 +140,13 @@ OptionsNoTab
 .endp
 
 .proc SelectNextGradient
-    lda OptionsY    ; if "Wind" option selected
+    lda OptionsY    ; if "Players" option selected
+    bne NoTeams
+    lda TeamsGame
+    eor #"T"
+    sta TeamsGame
+    rts
+NoTeams
     cmp #$03
     bne NotWind
     lda WindChangeInRound    ; wind change after each turn (not round only) flag
@@ -197,6 +203,8 @@ NoGradientLoop
     sta OptionsHere+128
     lda FastSoilDown
     sta OptionsHere+88
+    lda TeamsGame
+    sta OptionsHere+8
 
 YPos = temp2
 XPos = temp2+1

@@ -30,7 +30,7 @@
 .ifndef CART_VERSION
     .def CART_VERSION = 0    ; if 1 - dual splash screen
 .endif
-.def METEORS = 1             ; if 1 - meteors on game
+.def METEORS = 0             ; if 1 - meteors on game
 .def VU_METER = 1             ; if 1 - VU Meter on game
 .def XCORRECTION_FOR_PM = 0  ; if 1 - active x position of tanks correction fo PMG
 .def FASTER_GRAF_PROCS = 1   ; if 1 - activates faster graphics routines
@@ -65,7 +65,7 @@ AdditionalZPvariables = $20
     .zpvar MeteorsRound     .byte  ; set 7th bit - block meteors in round
     
 
-FirstZpageVariable = $50
+FirstZpageVariable = $4f
     .zpvar DliColorBack     .byte = FirstZpageVariable
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte  ; old state 2nd button for 2 buttons joysticks
@@ -150,6 +150,7 @@ FirstZpageVariable = $50
     .zpvar FirstKeypressDelay  .byte
     .zpvar IsEndOfTheFallFlag  .byte ;for small speedup ground falling
     .zpvar TankSequencePointer .byte
+    .zpvar TeamsGame        .byte ; Teams flag (0 - normal game, >0 - teams game)
     .zpvar WindChangeInRound   .byte ; wind change after each turn (not round only) flag
                                      ; (0 - round only, >0 - each turn)
     .zpvar RandomMountains  .byte  ; mountains type change after each turn flag
