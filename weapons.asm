@@ -781,6 +781,8 @@ LaserMisses
 .proc plasmablast
 ; -----------------
 ; idea only ....
+    mva #sfx_plasma_1_2 sfx_effect
+    mva #0 drawFunction
     lda #60
     sta yc  ;  blink counter 60
 @
