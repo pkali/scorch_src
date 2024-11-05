@@ -564,6 +564,7 @@ weaponsOfDeath  ; weapons used in tank death animations
     dta ind_Dirt_Clod
     dta ind_Dirt_Ball
     dta ind_Ton_of_Dirt
+    ;dta 32  ; plasma blast!
 weaponsOfDeathEnd
 joyToKeyTable
     .by $ff             ;00

@@ -332,7 +332,7 @@ CurrentRoundNr .DS 1
 ;leapfrog
 LeapFrogAngle  .DS 1
 ;laser
-LaserCoordinate .DS 8 ; 2,2,2,2
+LaserCoordinate .DS 4 ; 2,2
 ;----------------------------------------------------
 ; Here go tables with weapons possesed by a given tank
 ; Index in the table means weapon type
