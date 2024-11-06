@@ -639,7 +639,7 @@ MetodOfDeath
     bcs MetodOfDeath
     tay
     lda weaponsOfDeath,y
-    ;lda #32    ; plama blast only
+    ;lda #32    ; plasma blast only
     jsr ExplosionDirect
     mva #sfx_silencer sfx_effect
 
