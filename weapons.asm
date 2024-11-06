@@ -783,19 +783,36 @@ LaserMisses
 ; idea only ....
     mva #sfx_plasma_1_2 sfx_effect
     mva #0 drawFunction
-    lda #60
+    mva #$04 ExplosionRadius
+    jmp CalculateExplosionRange
+    adw ydraw #4
+    sbw xdraw #4
+    
+    lda ydraw
+    lsr
+    lsr
+    lsr
+    sta yc
+    lda #30
+    sbc yc
     sta yc  ;  blink counter 60
-@
+columnloop
+      mva #8 fs  ;lines counter
+linesloop
       lda yc
-      and #$01
-      eor #$01
+      beq @+
+      lda random
+@     and #$01
       sta color
         mwa xdraw xbyte
         mwa #0 ybyte
       jsr draw
-
+      inw xdraw
+      dec fs
+      bne linesloop
+      sbw xdraw #8
     dec yc
-    bne @-
+    bpl columnloop
 
     ; at this point color allways = 0
     inc color ;   set color to 1
