@@ -783,7 +783,7 @@ LaserMisses
 ; idea only ....
     mva #sfx_plasma_1_2 sfx_effect
     mva #0 drawFunction
-    mva #$04 ExplosionRadius
+    mva #$07 ExplosionRadius
     jsr CalculateExplosionRange
     adw ydraw #4
     sbw xdraw #4
