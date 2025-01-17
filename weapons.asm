@@ -54,6 +54,7 @@ ExplosionRoutines
     .word punch-1                    ;Baby_Sandhog   ;_29
     .word BFG-1                      ;Buy_me         ;_30
     .word laser-1                    ;Laser          ;_31
+    .word plasmablast-1 ; additional "weapon" only for tanks death
 .endp
 
 .proc BFG
@@ -728,10 +729,10 @@ ToHighFill
     mva #0 ybyte+1
     sta LaserFlag    ; turn on gravity and wind after shot :)
 
-    mwa xdraw LaserCoordinate
-    mwa ydraw LaserCoordinate+2
-    mwa xbyte LaserCoordinate+4
-    mwa ybyte LaserCoordinate+6
+    ;mwa xdraw LaserCoordinate
+    ;mwa ydraw LaserCoordinate+2
+    mwa xbyte LaserCoordinate
+    mwa ybyte LaserCoordinate+2
 
     mva #sfx_lightning sfx_effect
 
@@ -752,19 +753,20 @@ ToHighFill
       and #$01
       eor #$01
       sta color
-        mwa LaserCoordinate xdraw
-        mwa LaserCoordinate+2 ydraw
-        mwa LaserCoordinate+4 xbyte
-        mwa LaserCoordinate+6 ybyte
+        ;mwa LaserCoordinate xdraw
+        ;mwa LaserCoordinate+2 ydraw
+        mwa LaserCoordinate xbyte
+        mwa LaserCoordinate+2 ybyte
         mva #sfx_lightning sfx_effect
       jsr draw
 
     dec yc
     bne @-
 
-    mva #1 color
-    mwa LaserCoordinate xdraw
-    mwa LaserCoordinate+2 ydraw
+    ; at this point color allways = 0
+    inc color ;   set color to 1
+    ;mwa LaserCoordinate xdraw  ; draw does not change xdraw and ydraw
+    ;mwa LaserCoordinate+2 ydraw
     mva #0 HitFlag
     jsr CheckCollisionWithTank
     lda HitFlag
@@ -773,6 +775,48 @@ ToHighFill
     ldy #100
     jsr DecreaseEnergyX
 LaserMisses
+    rts
+.endp
+; -----------------
+.proc plasmablast
+; -----------------
+; idea only ....
+    mva #sfx_plasma_1_2 sfx_effect
+    mva #0 drawFunction
+    mva #$07 ExplosionRadius
+    jsr CalculateExplosionRange
+    adw ydraw #4
+    sbw xdraw #4
+    
+    lda ydraw
+    lsr
+    lsr
+    lsr
+    sta yc
+    lda #30
+    sbc yc
+    sta yc  ;  blink counter 60
+columnloop
+      mva #8 fs  ;lines counter
+linesloop
+      lda yc
+      beq @+
+      lda random
+@     and #$01
+      sta color
+        mwa xdraw xbyte
+        mwa #0 ybyte
+      jsr draw
+      inw xdraw
+      dec fs
+      bne linesloop
+      sbw xdraw #8
+    dec yc
+    bpl columnloop
+
+    ; at this point color allways = 0
+    inc color ;   set color to 1
+
     rts
 .endp
 ; -----------------

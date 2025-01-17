@@ -1,22 +1,7 @@
-;    @com.wudsn.ide.lng.mainsourcefile=scorch.asm
+;    @com.wudsn.ide.lng.mainsourcefile=RANDOM_test.asm
 
-;Atari 8-bit Scorch source code
-;---------------------------------------------------
-;by Tomasz 'pecus' Pecko and Pawel 'pirx' Kalinowski
-;Warsaw 2000, 2001, 2002, 2003, 2009, 2012, 2013
-;Miami & Warsaw 2022, 2023, 2024
-
-;WUDSN run settings:
-;atari800  -5200 -cart ${outputFilePath} -cart-type 4
-;atari800  -run ${outputFilePath}
-
-
-;WARNING! requires mads compiled on 2023-09-13 or later
-;compilation:
-;mads scorch.asm -o:scorch.bin -d:TARGET=5200
-;mads scorch.asm -o:scorch.xex -d:TARGET=800
-;mads scorch.asm -o:scorch.xex -d:TARGET=800 -d:SPLASH=1  #xex version with splash
-;mads scorch.asm -o:scorch.xex -d:TARGET=800 -d:SPLASH=1 -d:CART_VERSION=1 #xex version for cart
+;mads RANDOM_test.asm -o:RANDOM_test.bin -d:TARGET=5200
+;mads RANDOM_test.asm -o:RANDOM_test.xex -d:TARGET=800
 
 
 ;---------------------------------------------------
@@ -24,47 +9,12 @@
     .def TARGET = 800 ; 5200
 .ENDIF
 ;---------------------------------------------------
-.ifndef SPLASH
-    .def SPLASH = 0         ; if 0 - no splash screens
-.endif
-.ifndef CART_VERSION
-    .def CART_VERSION = 0    ; if 1 - dual splash screen
-.endif
-.def METEORS = 1             ; if 1 - meteors on game
-.def VU_METER = 1             ; if 1 - VU Meter on game
-.def XCORRECTION_FOR_PM = 0  ; if 1 - active x position of tanks correction fo PMG
-.def FASTER_GRAF_PROCS = 1   ; if 1 - activates faster graphics routines
-                             ; (direct writes to screen memory - atari only :) )
-;---------------------------------------------------
-
          OPT r+  ; saves 10 bytes, and probably works :) https://github.com/tebe6502/Mad-Assembler/issues/10
 
 ;---------------------------------------------------
-.macro build
-    dta d"1.51" ; number of this build (4 bytes)
-.endm
-
-.macro RMTSong
-      lda #:1
-      jsr RMTSongSelect
-.endm
 
 ;---------------------------------------------------
-    icl 'definitions.asm'
 ;---------------------------------------------------
-AdditionalZPvariables = $20
-    .zpvar EplotX           .word = AdditionalZPvariables
-    .zpvar EplotByte        .word
-    .zpvar EplotY           .byte
-    .zpvar Mpoint1X         .word  ; meteor first point X position
-    .zpvar Mpoint2X         .word  ; meteor last point X position
-    .zpvar Mpoint1Y         .byte  ; meteor first point Y position
-    .zpvar Mcounter         .byte  ; meteor length counter ( $ff - no meteor on sky )
-    .zpvar Mpoint2Y         .byte  ; meteor last point Y position
-    .zpvar MeteorsFlag      .byte  ; set 7th bit - block meteors
-    .zpvar MeteorsRound     .byte  ; set 7th bit - block meteors in round
-    
-
 FirstZpageVariable = $50
     .zpvar DliColorBack     .byte = FirstZpageVariable
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
@@ -191,28 +141,15 @@ FirstZpageVariable = $50
     LineAddress4x4 = xcircle
     ;* RMT ZeroPage addresses in artwork/sfx/scorch_str9-NTSC.rmt
 
+DISPLAY = $1000
+SCREENHEIGHT = 256
+screenwidth = 32
 ;-----------------------------------------------
 ; libraries
 ;-----------------------------------------------
     .IF TARGET = 800
       icl 'Atari/lib/ATARISYS.ASM'
       icl 'Atari/lib/MACRO.ASM'
-      .IF SPLASH = 1
-        icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
-        .IF CART_VERSION = 1
-          icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
-        .ENDIF
-      .ELSE
-        ; no splash.... dark screean and BASIC off
-        ORG $2000
-        mva #0 dmactls             ; dark screen
-        mva #$ff portb
-        ; and wait one frame :)
-        seq:wait                   ; or waitRTC ?
-        mva #$ff portb        ; BASIC off
-        rts
-        ini $2000
-      .ENDIF
     .ELIF TARGET = 5200
       OPT h-f+  ; no headers, single block --> cart bin file
       icl 'Atari/lib/5200SYS.ASM'
@@ -242,41 +179,20 @@ FirstZpageVariable = $50
 ;-----------------------------------------------
 ; variable declarations in RAM (no code)
 ;-----------------------------------------------
-    ORG PMGraph + $0300 - (variablesEnd - OneTimeZeroVariables)
-    icl 'variables.asm'
+    ORG $3000
+    ; These tebles are at the beginning of memory pages becouse ....
+bittable1_long
+    .ds $100
+bittable2_long
+    .ds $100
+linetableL
+    .ds (screenHeight)
+linetableH
+    .ds (screenHeight)
+    
 
-    ; Game loading address
+    ; loading address
     ORG $4000
-
-WeaponFont
-    ins 'artwork/weapons_AW6_mod.fnt'  ; 'artwork/weapons.fnt'
-
-;-----------------------------------------------
-;Screen displays go here to avoid crossing 4kb barrier
-;-----------------------------------------------
-    DisplayCopyRom = *
-    org display, DisplayCopyRom
-DisplayCopyStart
-    icl 'Atari/display_main_menu.asm'
-DisplayCopyEnd
-    org DisplayCopyRom + (DisplayCopyEnd - DisplayCopyStart)
-
-    DisplayCopyPurchaseDlROM = *
-    org DisplayCopyPurchase, DisplayCopyPurchaseDlROM
-DisplayCopyPurchaseStart
-    icl 'Atari/display_purchasedl.asm'
-DisplayCopyPurchaseEnd
-    org DisplayCopyPurchaseDlROM + (DisplayCopyPurchaseEnd - DisplayCopyPurchaseStart)
-
-    StatusBufferROM = *
-    org StatusBufferCopy, StatusBufferROM
-StatusBufferCopyStart
-    icl 'Atari/display_status.asm'
-StatusBufferCopyEnd
-    org StatusBufferROM + (StatusBufferCopyEnd - StatusBufferCopyStart)
-
-
-    icl 'Atari/display_static.asm'
 
 ;--------------------------------------------------
 ; Game Code
@@ -332,39 +248,6 @@ rom2joy
 no5200splash
     .ENDIF
 StartAfterSplash
-    jsr MakeDarkScreen
-    
-    ; one time zero variables in RAM (non zero page)
-    lda #0
-    ldy #OneTimeZeroVariablesCount-1
-@     sta OneTimeZeroVariables,y
-      dey
-    bpl @-
-
-    ; one time zero variables in RAM (zero page)
-    ldy #FirstZpageVariable
-@     sta $0000,y
-      iny
-    bne @-
-
-    ; initialize variables in RAM (non zero page)
-    ldy #initialvaluesCount-1
-@     lda initialvaluesStart,y
-      sta variablesToInitialize,y
-      dey
-    bpl @-
-
-    ; set gradient to the full LGBTIQQAAPP+ flag on start
-    .IF CART_VERSION = 1
-       mva #$ff GradientNr  ; #1 to set gradient number 2 :) (next one) - 0 (B/W)
-    .ELSE
-       .IF TARGET=5200
-         mva #1 GradientNr
-       .ELSE
-         mva #0 GradientNr    ; #1 to set gradient number 2 :) (next one) - 1 (polish rainbow)
-       .ENDIF
-    .ENDIF
-    jsr SelectNextGradient.NotWind
 
     ; generate linetables
     jsr GenerateLineTable
@@ -374,43 +257,10 @@ StartAfterSplash
       lda #3        ; stereo (pseudo)
       sta POKEY+$0f ; stereo
       sta POKEY+$1f ; stereo
-    .IF CART_VERSION = 0
-      sta COLDST    ; Cold start after Reset key
-    .ENDIF
-      lda PAL
-      and #%00001110
-      bne NoRMT_PALchange
-      ;it is PAL here
-      ; Change RMT to PAL version
-      ; 5 values in RMT file
-      ; not elegant :(
-      mva #$06 MODUL-6+$967    ; $07 > $06
-      sta MODUL-6+$bc3    ; $07 > $06
-      sta MODUL-6+$e69    ; $08 > $06
-      sta MODUL-6+$ebc    ; $08 > $06
-      mva #$10 MODUL-6+$a69    ; $12 > $10
-      mva #$04 MODUL-6+$bf8    ; $05 > $04
-      mva #$08 MODUL-6+$e3d    ; $0a > $08
-  
-      ; and mountains colors table address
-      mva #<dliColorsFore2PAL GradientAddrL+2
-      mva #>dliColorsFore2PAL GradientAddrH+2
-NoRMT_PALchange
     .ELIF TARGET = 5200
       mva #$7f SkStatSimulator
     .ENDIF
 
-
-    ; RMT INIT
-    lda #$f0                   ; initial value
-    sta RMTSFXVOLUME           ; sfx note volume * 16 (0,16,32,...,240)
-
-    lda #$ff                   ; initial value
-    sta sfx_effect
-    sta Mcounter
-    sta MeteorsFlag
-    
-    RMTSong 0
 
     .IF TARGET = 5200
       mva #$0f STICK0
@@ -421,26 +271,113 @@ NoRMT_PALchange
 
     mva #2 chactl              ; necessary for 5200
 
-;--------------------------------------------------
-; Main program of the game
-    icl 'game.asm'
-;--------------------------------------------------
+        mwa #dl dlptrs  ; issue #72 (glitches when switches)
+    mva #@dmactl(narrow|dma) dmactls
+    
+@    
+    mva random xdraw
 
-.proc SetJoystickPort
-    sta JoystickNumber
-    .IF TARGET = 800           ; second joy button state update only on A800
-      jsr WaitOneFrame         ; is necessary for update shadow registers (PADDL0) in VBI
-      jmp GetKeyFast.Check2button  ; update state second joy button
-    .ELSE
-      rts
-    .ENDIF
+    ;mva random ydraw
+    lda random
+    ;and #%00111111
+    sta ydraw
+    
+    ; let's calculate coordinates from xdraw and ydraw
+
+    ;xbyte = xbyte/8
+    lda xdraw
+    :3 lsr
+    sta xbyte
+    ;---
+    ldx ydraw
+    ldy linetableL,x
+    lda linetableH,x
+    sta xbyte+1
+
+    ldx xdraw   ; optimization (256 bytes long bittable)
+    
+    lda (xbyte),y
+    ora bittable1_long,x
+    sta (xbyte),y
+
+    
+    jmp @-
+    
+dl
+    .byte SKIP8, SKIP8, SKIP8
+    .byte LMS|MODEF
+    .word DISPLAY
+    :127 .byte MODEF
+    .byte JVB
+    .word dl
+    
+;--------------------------------------------------
+.proc GenerateLineTable
+
+    mwa #display temp
+    mwa #linetableL temp2
+    mwa #linetableH modify
+    ldy #0
+@     lda temp
+      sta (temp2),y
+      lda temp+1
+      sta (modify),y
+      adw temp #screenwidth
+      iny
+      cpy #0  ;#screenheight+1
+    bne @-
+    ; and bittables for fastest plot and point (thanks @jhusak)
+    ldy #0
+    lda #$40
+@   asl
+    adc #0
+    sta bittable1_long,y
+    tax
+    eor #%11111111
+    sta bittable2_long,y
+    txa
+    dey
+    bne @-
+endof
+    rts
 .endp
+; -----------------------------------------
+.proc plot  ;plot (xdraw, ydraw, color)
+; color == 1 --> put pixel
+; color == 0 --> erase pixel
+; xdraw (word) - X coordinate
+; ydraw (word) - Y coordinate
+; this is one of the most important routines in the whole
+; game. If you are going to speed up the game, start with
+; plot - it is used by every single effect starting from explosions
+; through line drawing and small text output!!!
+;
+; Optimized by 0xF (Fox) THXXXX!!!
 
+; -----------------------------------------
+MakePlot
+    ; let's calculate coordinates from xdraw and ydraw
 
+    ;xbyte = xbyte/8
+    lda xdraw
+    :3 lsr
+    sta xbyte
+    ;---
+    ldx ydraw
+    ldy linetableL,x
+    lda linetableH,x
+    sta xbyte+1
+
+    ldx xdraw   ; optimization (256 bytes long bittable)
+    
+    lda (xbyte),y
+    ora bittable1_long,x
+    sta (xbyte),y
+    rts
+.endp
 ;--------------------------------------------------
 MakeDarkScreen
 ;--------------------------------------------------
-    jsr PMoutofScreen          ; hide P/M
     mva #0 dmactls             ; dark screen
     ; and wait one frame :)
 ;--------------------------------------------------
@@ -463,38 +400,6 @@ MakeDarkScreen
     rts
 .endp
 
-;--------------------------------------------------
-.proc ShellDelay
-;--------------------------------------------------
-    ldy flyDelay
-Y   jsr CheckStartKey             ; START KEY
-    beq noShellDelay
-DelayLoop
-      lda VCOUNT
-@     cmp VCOUNT
-      beq @-
-      dey
-    bne DelayLoop
-noShellDelay
-    rts
-.endp
-
-;--------------------------------------------------
-.proc RmtSongSelect
-;  starting song line 0-255 to A reg
-;--------------------------------------------------
-    cmp #song_main_menu
-    beq noingame               ; noMusic blocks only ingame songs
-    bit noMusic
-    spl:lda #song_silencio
-noingame
-    mvx #$ff RMT_blocked
-    ldx #<MODUL                ; low byte of RMT module to X reg
-    ldy #>MODUL                ; hi byte of RMT module to Y reg
-    jsr RASTERMUSICTRACKER     ; Init
-    mva #0 RMT_blocked
-    rts
-.endp
 ;-------------------------------------------------
 .proc CopyFromROM
 ;-------------------------------------------------
@@ -518,118 +423,129 @@ noingame
     bne @-
     rts
 .endp
+
 ;--------------------------------------------------
-    icl 'Atari/inputs.asm'
-;--------------------------------------------------
-    icl 'Atari/interrupts.asm'
-;----------------------------------------------
-    icl 'constants.asm'
-;----------------------------------------------
-    icl 'Atari/textproc.asm'
-;----------------------------------------------
-    icl 'grafproc.asm'
-    icl 'Atari/gr_basics.asm'
-;----------------------------------------------
-    icl 'weapons.asm'
-;----------------------------------------------
-    icl 'ai.asm'
-;----------------------------------------------
-    icl 'artwork/talk.asm'
-;----------------------------------------------
-TankFont
-    ins 'artwork/tanksv4.fnt',+0,384   ; 48 characters only
-;----------------------------------------------
-font4x4
-    ins 'artwork/font4x4s.bmp',+62
-;----------------------------------------------
-;RMT PLAYER loading shenaningans
-    icl 'artwork/sfx/rmtplayr_modified.asm'
-;-------------------------------------------------
-.proc CheckTankCheat
-    ldy #$07
-    lda TankNr
-    asl
-    asl
-    asl                        ; 8 chars per name
-    tax
-@     lda CheatName,y
-      sec
-      sbc tanksnames,x
-      cmp #$27
-      bne NoCheat
-      inx
-      dey
-    bpl @-
-YesCheat
-    ldx TankNr
-    lda TanksWeaponsTableL,x
-    sta temp
-    lda TanksWeaponsTableH,x
-    sta temp+1
-    lda #99
-@     iny
-      sta (temp),y
-      cpy #(number_of_weapons - 1)
-    bne @-
-NoCheat
-    rts
-.endp
-CheatName
-    dta d"   008.T"+$27
-;----------------------------------------------
-.proc DLIinterruptBFG
-    pha
-    lda dliCounter
-    bne EndofBFGDLI
-    lda dliColorsFore
-    bit random
-    smi:lda DliColorBack
-    sta COLPF2
-    lda dliColorsFore
-    bit random
-    smi:lda DliColorBack
-    sta COLPF1
-EndofBFGDLI
-    inc dliCounter
-    pla
-    rti
-.endp
-; ------------------------
-.proc BFGblink
-    SetDLI DLIinterruptBFG     ; blinking on
-    ldy #50
-    jsr PauseYFrames
-    SetDLI DLIinterruptGraph   ; blinking off
-    rts
-.endp
-;--------------------------------------------------
-    .IF * > MODUL-1
-      .ECHO *
-      .ERROR 'Code and data too long'
+.proc VBLinterrupt
+    mva #0 dliCounter
+    mva #$02 DliColorBack
+
+    lda PAL
+    and #%00001110
+    beq itsPAL
+    ;it is NTSC here
+    dec NTSCcounter
+    bne itsPAL
+    mva #6 NTSCcounter
+    bne SkippedIfNTSC ; skip doing VBL things each 6 frames in Amerika, Amerika
+                ; We're all living in Amerika, Coca Cola, Wonderbra
+
+itsPAL
+    ; pressTimer is trigger tick counter. always 50 ticks / s
+    bit:smi:inc pressTimer ; timer halted if >127. max time measured 2.5 s
+
+SkippedIfNTSC
+
+    .IF TARGET = 800
+        ; support for joysticks :)
+        ldx JoystickNumber
+        lda STICK0,x
+        sta STICK0
+        lda STRIG0,x
+        sta STRIG0
+        ; and PADDLES (2 and 3 joystick button)
+        txa
+        asl
+        tax
+        lda PADDL0,x
+        sta PADDL0
+        jmp XITVBV
+    .ELIF TARGET = 5200
+        lda SkStatSimulator
+        smi:inc SkStatSimulator
+        
+        lda JoystickNumber        ; select port
+        ora #%00000100          ; Speaker off, Pots enabled
+        sta CONSOL5200
+
+        center = 114            ;Read analog stick and make it look like a digital stick
+        threshold = 60
+
+        lda JoystickNumber
+        asl
+        tax
+        lda paddl0,x            ;Read POT0 value (horizontal position)
+        cmp #center+threshold       ;Compare with right threshold
+        rol stick0          ;Feed carry into digital stick value
+        cmp #center-threshold       ;Compare with left threshold
+        rol stick0          ;Feed carry into digital stick value
+
+        lda paddl1,x            ;Read POT1 value (vertical position)
+        cmp #center+threshold       ;Compare with down threshold
+        rol stick0          ;Feed carry into digital stick value
+        cmp #center-threshold       ;Compare with down threshold
+        rol stick0          ;Feed carry into digital stick value
+
+        lda stick0          ;0 indicates a press so the right/down values need to be inverted
+        eor #2+8
+        and #$0f
+        sta stick0
+
+        ldx JoystickNumber
+        ; check shift key (5200 second fire button)
+        lda SKSTAT
+        :3 lsr        ; third bit
+        and trig0,x    ; and first button
+        ;lda trig0,x
+        sta strig0        ;Move hardware to shadow
+
+        mva chbas chbase
+
+        lda skstat          ;Reset consol key shadow is no key is pressed anymore
+        and #4
+        beq @+
+          mva #consol_reset consol
+          mva #@kbcode._none kbcode
+@
+exit
+        pla
+        tay
+        pla
+        tax
+        pla
+        rti
     .ENDIF
-    .ECHO "Bytes left: ",$b000-*
+.endp
+    .IF TARGET = 5200
+.proc kb_continue
+    cmp #$0c    ; START key on 5200 keypad
+    beq StartPressed
+    sta kbcode          ;Store key code in shadow.
+    mva #0 SkStatSimulator
+    beq VBLinterrupt.exit
+StartPressed
+    mvx #%00000110 CONSOL   ; virtual CONSOL Start key pressed
+    bne VBLinterrupt.exit
+.endp
+    .ENDIF
 
-
-    org $b000  ; address of RMT module
-MODUL
-               ; RMT module is standard Atari binary file already
-               ; include music RMT module:
-      ins "artwork/sfx/scorch_str9-NTSC.rmt",+6
-MODULEND
-;----------------------------------------------
-    icl 'constants_top.asm'
-;----------------------------------------------
-
+;--------------------------------------------------
+.proc CheckStartKey
+;--------------------------------------------------
+    lda CONSOL  ; turbo mode
+    and #%00000001 ; START KEY
+    rts
+.endp
+;-------------------------------------------------
   .ECHO "Bytes on top left: ",$bfe8-* ; ROM_SETTINGS-*
   .IF TARGET = 800
      run FirstSTART
   .ELIF TARGET = 5200
     .IF * > ROM_SETTINGS-1
-      .ERROR 'Code and RMT song too long to fit in 5200'
+      .ERROR 'Code too long to fit in 5200'
     .ENDIF
     org ROM_SETTINGS             ; 5200 ROM settings address $bfe8
     ;     "01234567890123456789"
-    .byte " scorch supersystem " ; 20 characters title
+    .byte " pokey random test  " ; 20 characters title
     .byte " ", $ff               ; $BFFD == $ff means diagnostic cart, no splash screen
     .word FirstSTART
   .ENDIF

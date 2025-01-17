@@ -289,193 +289,9 @@ EndOfDraw
     rts
 .endp
 
-;--------------------------------------------------
-.proc circle ;fxxxing good circle drawing :)
-; xdraw,ydraw (word) - coordinates of circle center
-; radius (byte) - radius of circle
-;--------------------------------------------------
-;Turbo Basic source
-; R=30
-; XC=0:YC=R
-; FX=0:FY=8*R:FS=4*R+3
-; WHILE FX<FY
-;   splot8    //splot8 are eight plotz around the circle
-;   XC=XC+1
-;   FX=FX+8
-;   IF FS>0
-;     FS=FS-FX-4
-;   ELSE
-;     YC=YC-1
-;     FY=FY-8
-;     FS=FS-FX-4+FY
-;   ENDIF
-; WEND
-; splot8
+; Circle is now in external file
+    icl 'circle2.asm'
 
-    mwa xdraw xcircle
-    mwa ydraw ycircle
-
-    mwa #0 xc
-    mva radius yc
-    mva #0 fx
-    mva radius fy
-    asl FY
-    asl FY
-    mva FY FS
-    asl FY
-    ; A = FS and C = 0
-    ;clc
-    ;lda FS
-    adc #3
-    sta FS
-
-circleloop
-    lda FX
-    cmp FY
-    bcc not_endcircleloop
-endcircleloop
-    mwa xcircle xdraw
-    mwa ycircle ydraw
-    rts
-not_endcircleloop
-;    jsr splot8
-;----
-; splot8
-; plot xcircle+XC,ycircle+YC
-; plot xcircle+XC,ycircle-YC
-; plot xcircle-XC,ycircle-YC
-; plot xcircle-XC,ycircle+YC
-
-; plot xcircle+YC,ycircle+XC
-; plot xcircle+YC,ycircle-XC
-; plot xcircle-YC,ycircle-XC
-; plot xcircle-YC,ycircle+XC
-
-    ;clc - allways after BCC
-    lda xcircle
-    adc XC
-    sta xdraw
-    lda xcircle+1
-    adc #0
-    sta xdraw+1
-    ;clc
-    lda ycircle
-    adc YC
-    sta ydraw
-    sta ytempDRAW
-    lda ycircle+1
-    adc #$00
-    sta ydraw+1
-    sta ytempDRAW+1
-    ; plot xcircle+XC,ycircle+YC
-    jsr plot
-
-    sec
-    lda ycircle
-    sbc YC
-    sta ydraw
-    lda ycircle+1
-    sbc #$00
-    sta ydraw+1
-    ; plot xcircle+XC,ycircle-YC
-    jsr plot
-
-    sec
-    lda xcircle
-    sbc XC
-    sta xdraw
-    lda xcircle+1
-    sbc #0
-    sta xdraw+1
-    ; plot xcircle-XC,ycircle-YC
-    jsr plot
-
-    lda ytempDRAW
-    sta ydraw
-    lda ytempDRAW+1
-    sta ydraw+1
-    ; plot xcircle-XC,ycircle+YC
-    jsr plot
-;---
-    clc
-    lda xcircle
-    adc YC
-    sta xdraw
-    lda xcircle+1
-    adc #0
-    sta xdraw+1
-    ;clc
-    lda ycircle
-    adc XC
-    sta ydraw
-    sta ytempDRAW
-    lda ycircle+1
-    adc #$00
-    sta ydraw+1
-    sta ytempDRAW+1
-    ; plot xcircle+YC,ycircle+XC
-    jsr plot
-
-    sec
-    lda ycircle
-    sbc XC
-    sta ydraw
-    lda ycircle+1
-    sbc #$00
-    sta ydraw+1
-    ; plot xcircle+YC,ycircle-XC
-    jsr plot
-
-    sec
-    lda xcircle
-    sbc YC
-    sta xdraw
-    lda xcircle+1
-    sbc #0
-    sta xdraw+1
-    ; plot xcircle-YC,ycircle-XC
-    jsr plot
-
-    lda ytempDRAW
-    sta ydraw
-    lda ytempDRAW+1
-    sta ydraw+1
-    ; plot xcircle-YC,ycircle+XC
-    jsr plot
-;-----
-
-    inc XC
-
-    clc
-    lda FX
-    adc #8
-    sta FX
-
-    lda FS
-    beq else01
-    bmi else01
-    sec
-    sbc FX
-    sbc #4
-    sta FS
-    jmp circleloop ; endif01
-else01
-    dec YC
-    sec
-    lda FY
-    sbc #8
-    sta FY
-
-    lda FS
-    sec
-    sbc FX
-    sbc #4
-    clc
-    adc FY
-    sta FS
-endif01
-    jmp circleloop
-.endp
 ;--------------------------------------------------
 .proc placetanks
 ;--------------------------------------------------
@@ -985,10 +801,7 @@ ToHighToParachute
 ;
 ; this proc change xdraw, ydraw  and temp!
 ;--------------------------------------------------
-    lda XtankstableL,x
-    sta xdraw
-    lda XtankstableH,x
-    sta xdraw+1
+    jsr SetupXYdraw.X
     ; one pixel under tank
     clc
     lda Ytankstable,x
@@ -1858,9 +1671,8 @@ quit_areyousure
 .endp
 
 .proc _sep_opty
-      mwa #((ScreenWidth/2)-(8*4)) LineXdraw  ; centering
       mva ResultY LineYdraw
-      jsr TypeLine4x4
+      jsr TL4x4_empty.go    ; center and type line
       adb ResultY  #4 ;next line
     rts
 .endp
@@ -1942,18 +1754,14 @@ X   lda XtanksTableL,x
   ;  mva #1 color
     ldx TankNr
     jsr SetupXYdraw
+    sbw ydraw #3 ydraw  ; barell start (Y coordinate)
+    mva #0 goleft
     lda BarrelLength,x
     sta yc    ; current tank barrel length
     lda angleTable,x
     sta Angle
-    ; jmp DrawBarrelTech    ; POZOR !
-    ; rts
-.endp
-
-.proc DrawBarrelTech
     ; angle in Angle and A
 
-    mvx #0 goleft
     cmp #91
     bcc angleUnder90
 
@@ -1962,9 +1770,9 @@ X   lda XtanksTableL,x
     sbc #90
     tax
     ; barrel start offset over 90deg
-    adw xdraw #4 xdraw
-    mva #1 goleft
-    bpl @+  ; jmp @+
+    adw xdraw #4 xdraw   ; barell start (X coordinate)
+    dec goleft  ; $00 -> $ff
+    bmi @+  ; jmp @+
 
 angleUnder90
     sec             ; X = 90-Angle
@@ -1972,10 +1780,9 @@ angleUnder90
     sbc Angle
     tax
     ; barrel start offset under 90deg
-    adw xdraw #3 xdraw
+    adw xdraw #3 xdraw  ; barell start (X coordinate)
 
 @
-    sbw ydraw #3 ydraw
     lda sintable,x  ; cos(X)
     sta vx
 
@@ -2012,8 +1819,8 @@ YangleUnder90
  ;   mva #6 yc  ; barrel length
 barrelLoop
 
-    lda goleft
-    bne goright
+    bit goleft
+    bmi goright
     clc
     lda fx
     adc vx
