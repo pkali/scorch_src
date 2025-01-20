@@ -9,7 +9,7 @@
 OptionsScreen
  dta d"Welcome to Scorch v. "
  build  ; 4 bytes from scorch.asm (fancy method) :)
- dta                          d"  (un)2000-2024"
+ dta                          d"  (un)2000-2025"
 
 .IF TARGET = 800
    dta d" Please select option with "

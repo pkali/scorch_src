@@ -77,6 +77,16 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.52
+2025-01-20
+
+Fixes for extremely rare bugs.
+
+1. Better keyboard handling (thanks Gorgh).
+
+2. Very rare interrupts problem fixed.
+
+
 ###### Version 1.51
 2025-01-15
 
