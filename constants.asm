@@ -679,7 +679,7 @@ CreditsEnd
 .IF TARGET = 5200
   ; Atari 5200 splash
   NewSplashText=*
-    dta d" 2024  atariage", $4e, "com "  ; $4e - non blinking dot
+    dta d" 2025  atariage", $4e, "com "  ; $4e - non blinking dot
 .ENDIF
 
 .endif  ; .IF *>0
