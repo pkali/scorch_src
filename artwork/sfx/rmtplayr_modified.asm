@@ -156,20 +156,11 @@ rmt_init
     stx ns
     sty ns+1
     pha
-;    IFT track_endvariables-track_variables>255
-;    ldy #0
-;    tya
-;ri0    sta track_variables,y
-;    sta track_endvariables-$100,y
-;    iny
-;    bne ri0
-;    ELS
     ldy #track_endvariables-track_variables
     lda #0
 ri0    sta track_variables-1,y
     dey
     bne ri0
-;    EIF
     ldy #4
     lda (ns),y
     sta v_maxtracklen
@@ -202,10 +193,13 @@ ri1    lda (ns),y
 rmt_silence
     lda #0
     sta $d208
+    sta $d208+$10
     ldy #3
     sty $d20f
+    sty $d20f+$10
     ldy #8
 si1    sta $d200,y
+        sta $d200+$10,y
     dey
     bpl si1
     lda #FEAT_INSTRSPEED
@@ -611,9 +605,9 @@ qq2a
     ora #2
     tax
 qq3
-    cpx v_audctl
-    bne qq5
-qq5
+;    cpx v_audctl
+;    bne qq5
+;qq5
     stx v_audctl
 rmt_p5
 ;    lda v_ainstrspeed
