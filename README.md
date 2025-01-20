@@ -88,6 +88,10 @@ We are done.
 
 3. Plasma Blast! (only as one of the tank destruction visual effects).
 
+4. Better keyboard handling (thanks Gorgh).
+
+5. Very rare interrupts problem fixed.
+
 
 ###### Version 1.50
 2024-03-15
