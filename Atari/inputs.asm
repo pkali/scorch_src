@@ -23,10 +23,8 @@ getKeyAfterWait
 ;--------------------------------------------------
     .IF TARGET = 800
       lda SKSTAT
-      cmp #$ff
-      beq checkJoyGetKey       ; key not pressed, check Joy
-      cmp #$f7                 ; SHIFT
-      beq checkJoyGetKey
+      and #%00000100  ;  any key  
+      bne checkJoyGetKey       ; key not pressed, check Joy
     .ELIF TARGET = 5200
       lda SkStatSimulator
       and #%11111110
@@ -137,8 +135,8 @@ StillWait
       beq StillWait
     .IF TARGET = 800
       lda SKSTAT
-      cmp #$ff
-      bne StillWait
+      and #%00000100  ;  any key  
+      beq StillWait
       lda CONSOL
       and #%00000110           ; Select and Option only
       cmp #%00000110
@@ -186,10 +184,8 @@ KeyAutoReleased                ; autorepeat
     and #%00000101             ; Start + Option
     beq QuitToGameover
     lda SKSTAT
-    cmp #$ff
-    jeq nokeys
-    cmp #$f7                   ; SHIFT
-    jeq nokeys
+    and #%00000100  ;  any key  
+    jne nokeys
 
     lda kbcode
     and #%10111111             ; SHIFT elimination
