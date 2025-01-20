@@ -336,6 +336,8 @@ StartPressed
          jsr _SetDLIproc
 .endm
 .proc _SetDLIproc
+    LDA #$00
+    STA NMIEN
     LDA #$C0
     STY VDSLST
     STX VDSLST+1

@@ -44,9 +44,11 @@
          .MACRO VDLI
 ;	VDLI #WORD
 ;	Initialises Display List Interrupts
+         LDA #$00
+         STA NMIEN
+         LDA #$C0
          LDY # <:1
          LDX # >:1
-         LDA #$C0
          STY $0200
          STX $0201
          STA NMIEN
