@@ -615,7 +615,7 @@ CreditsStart
     dta   d"You were playing"^
     dta   d"Scorch"^
     dta   d"Warsaw, Miami"^
-    dta   d"2000-2024"^
+    dta   d"2000-2025"^
     dta   d" "*
     dta   d"Programming"^
     dta   d"Tomasz 'Pecus' Pecko"^
