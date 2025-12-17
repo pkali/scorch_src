@@ -140,8 +140,14 @@ OptionsNoTab
 .endp
 
 .proc SelectNextGradient
-    lda OptionsY    ; if "Wind" option selected
-    cmp #$03
+    lda OptionsY
+    bne NoTeamGame
+    lda TeamGame
+    eor #$34    ; 'T' character
+    sta TeamGame
+    rts
+NoTeamGame
+    cmp #$03    ; if "Wind" option selected
     bne NotWind
     lda WindChangeInRound    ; wind change after each turn (not round only) flag
     eor #$1f    ; '?' character
@@ -168,7 +174,7 @@ NoMountains
     eor #$5d    ; cursor down character
     sta BlackHole
     rts
-NoBlackHole    
+NoBlackHole
     ldy GradientNr
     iny
     cpy #$03
@@ -197,6 +203,8 @@ NoGradientLoop
     sta OptionsHere+128
     lda FastSoilDown
     sta OptionsHere+88
+    lda TeamGame
+    sta OptionsHere+8
 
 YPos = temp2
 XPos = temp2+1

@@ -65,7 +65,7 @@ AdditionalZPvariables = $20
     .zpvar MeteorsRound     .byte  ; set 7th bit - block meteors in round
     
 
-FirstZpageVariable = $50
+FirstZpageVariable = $4f
     .zpvar DliColorBack     .byte = FirstZpageVariable
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte  ; old state 2nd button for 2 buttons joysticks
@@ -156,6 +156,7 @@ FirstZpageVariable = $50
                                    ; (0 - round only, >0 - each turn)
     .zpvar FastSoilDown     .byte  ; 0 - standard, >0 - fast
     .zpvar BlackHole        .byte  ; 0 - no, >0 - yes
+    .zpvar TeamGame         .byte  ; 0 - no, >0 - Teams
     .zpvar XHit             .word
     .zpvar delta            .word
     .zpvar HowMuchToFall    .byte
