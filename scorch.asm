@@ -190,7 +190,7 @@ FirstZpageVariable = $4f
     HotNapalmFlag = FunkyBombCounter  ; variable reuse!
     displayposition = modify
     LineAddress4x4 = xcircle
-    ;* RMT ZeroPage addresses in artwork/sfx/scorch_str9-NTSC.rmt
+    ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr_modified.asm
 
 ;-----------------------------------------------
 ; libraries

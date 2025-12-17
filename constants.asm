@@ -64,9 +64,14 @@ areYouSureText
     .ELIF TARGET = 5200
         dta d"#END? Y-1/N-0#"
     .ENDIF
-
 lineClear
     dta d"              "
+
+; Additional texts - Teams
+Player_Header
+    dta d"Player"
+Team_Header
+    dta d"A-Team" ; :)
 
 TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
 ;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4  ; standard order
