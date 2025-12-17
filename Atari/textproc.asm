@@ -103,6 +103,9 @@ OptionsNoUp
     cmp #@kbcode._left  ; $6 ;cursor left
     bne OptionsNoLeft
     ldx OptionsY
+    bne NoPlayersOptL
+    jsr SelectNextGradient.TeamOff
+NoPlayersOptL    
     dec OptionsTable,X
     lda OptionsTable,X
     bpl OptionsMainLoop
@@ -112,8 +115,10 @@ OptionsNoUp
 OptionsNoLeft
     cmp #@kbcode._right  ; $7 ;cursor right
     bne OptionsNoRight
-
     ldx OptionsY
+    bne NoPlayersOptR
+    jsr SelectNextGradient.TeamOff
+NoPlayersOptR
     inc OptionsTable,X
     lda OptionsTable,X
     cmp #5  ; number of columns in options
@@ -142,8 +147,18 @@ OptionsNoTab
 .proc SelectNextGradient
     lda OptionsY
     bne NoTeamGame
+    lda OptionsTable  ; OptionsY=0
+    cmp #$02    ; 4 players
+    beq TeamCorrect
+    cmp #$04    ; 6 players
+    beq TeamCorrect
+TeamOff
+    lda #0
+    beq NoTeam
+TeamCorrect
     lda TeamGame
     eor #$34    ; 'T' character
+NoTeam
     sta TeamGame
     rts
 NoTeamGame
