@@ -2157,5 +2157,83 @@ zeroth_talk
     ldy #0
     rts
 .endp
+
+;-------------------------------------------------
+.proc _calc_packed_display
+; Find Nth packed string inside a [len][packed-bytes] stream.
+;
+; in:
+;   TextNumberOff = index (0..)
+;   LineAddress4x4 = base address of the packed stream (points to first len byte)
+; out:
+;   LineAddress4x4 = address of selected record (points to its len byte)
+; trashes: A, X, Y, temp, temp2
+;
+; Record size in bytes = 1 + ceil(len*5/8)
+; where `len` is the 1-byte character count (max 63).
+;-------------------------------------------------
+@idx = temp+1
+    lda TextNumberOff
+    sta @idx
+    beq done
+
+next_record
+    ldy #0
+    lda (LineAddress4x4),y
+    sta temp            ; len (low byte)
+
+    ; advance past len byte
+    inw LineAddress4x4
+
+    ; temp2 = len*5 + 7
+    lda temp
+    sta temp2
+    lda #0
+    sta temp2+1
+
+    ; temp2 = len*4
+    asl temp2
+    rol temp2+1
+    asl temp2
+    rol temp2+1
+    ; temp2 = len*5
+    clc
+    lda temp2
+    adc temp
+    sta temp2
+    lda temp2+1
+    adc #0
+    sta temp2+1
+    ; +7 for ceil
+    clc
+    lda temp2
+    adc #7
+    sta temp2
+    bcc @+
+    inc temp2+1
+@
+    ; >>3 (divide by 8)
+    lsr temp2+1
+    ror temp2
+    lsr temp2+1
+    ror temp2
+    lsr temp2+1
+    ror temp2
+
+    ; LineAddress4x4 += temp2
+    clc
+    lda LineAddress4x4
+    adc temp2
+    sta LineAddress4x4
+    lda LineAddress4x4+1
+    adc temp2+1
+    sta LineAddress4x4+1
+
+    dec @idx
+    bne next_record
+
+done
+    rts
+.endp
     
 .endif

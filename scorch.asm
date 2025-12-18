@@ -535,7 +535,7 @@ noingame
 ;----------------------------------------------
     icl 'ai.asm'
 ;----------------------------------------------
-    icl 'artwork/talk.asm'
+    icl 'artwork/talk_packed.asm'
 ;----------------------------------------------
 TankFont
     ins 'artwork/tanksv4.fnt',+0,384   ; 48 characters only
