@@ -2104,6 +2104,21 @@ AngleDisplay
     rts
 .endp
 ;-------------------------------------------------
+/* .proc SetTeamsOrPlayerHeaders
+    mwa #Player_Header temp
+    ldy #$05 ; 6 characters
+    lda TeamGame
+    beq no_teams
+    mwa #Team_Header temp
+no_teams
+    lda (temp),y
+    sta statusBuffer,y
+    sta purchaseTextBuffer,y
+    dey
+    bpl no_teams
+    rts
+.endp */
+;-------------------------------------------------
 .proc DisplayWeaponName
 ; nr of weapon in A,  address to put in weaponPointer
 @weapon_index = TextNumberOff
