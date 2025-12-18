@@ -157,7 +157,7 @@ TeamOff
     beq NoTeam
 TeamCorrect
     lda TeamGame
-    eor #$34    ; 'T' character
+    eor #$74    ; 't' character
 NoTeam
     sta TeamGame
     rts
