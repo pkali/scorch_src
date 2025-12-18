@@ -36,7 +36,7 @@
     icl 'definitions.asm'
 ;---------------------------------------------------
 
-FirstZpageVariable = $51 ; $57
+FirstZpageVariable = $50 ; $57
     .zpvar DliColorBack        .byte = FirstZpageVariable
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar MeteorsFlag  .byte   ; set 7th bit - block meteors
@@ -47,6 +47,7 @@ FirstZpageVariable = $51 ; $57
     .zpvar RandomMountains  .byte   ; mountains type change after each turn flag - (0 - round only, >0 - each turn)
     .zpvar FastSoilDown     .byte   ; 0 - standard, >0 - fast
     .zpvar BlackHole        .byte  ; 0 - no, >0 - yes
+    .zpvar TeamGame         .byte  ; 0 - no, >0 - Teams
     .zpvar JoystickNumber    .byte
     .zpvar LazyFlag            .byte    ; 7 bit - run Lazy Darwin, 6 bit - run Lazy Boy or Darwin (!) after inventory, 0 - nothing
     .zpvar SpyHardFlag        .byte    ; >$7f - run SpyHard after inventory
