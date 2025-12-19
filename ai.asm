@@ -440,6 +440,8 @@ loop01
     lda BarrelLength,y
     cmp #LongBarrel     ; if target has Long Schlong do not aim
     beq skipThisPlayer
+    jsr CheckTeamMember
+    bcc skipThisPlayer  ; if the same Team
     lda skilltable,y
     beq ItIsHuman
     lda PreferHumansFlag
@@ -502,7 +504,8 @@ loop01
     lda BarrelLength,y
     cmp #LongBarrel     ; if target has Long Schlong do not aim
     beq skipThisPlayer
-
+    jsr CheckTeamMember
+    bcc skipThisPlayer  ; if the same Team
     lda LowResDistances,x
     cmp LowResDistances,y
     bcs EnemyOnTheLeft
@@ -822,6 +825,8 @@ SetNextTarget
     lda BarrelLength,y
     cmp #LongBarrel     ; if target has Long Schlong do not aim
     beq skipThisPlayer
+    jsr CheckTeamMember
+    bcc skipThisPlayer  ; if the same Team
     ; check target direction
     mva #0 tempor2  ; check target direction
     lda LowResDistances,x
@@ -843,6 +848,19 @@ TankHit
     rts
 .endp
 
+;----------------------------------------------
+.proc CheckTeamMember
+; Target tank number in Y
+; result in C bit ; 0 - the same Team ; 1 - another Team
+    sec     ; if there is no team play, then as a member of another team 
+    bit TeamGame    ; if teams game
+    bvc no_teams
+    tya
+    eor TankNr
+    ror     ; check lower bits of tank numbers (team)
+no_teams
+    rts
+.endp
 ;----------------------------------------------
 .proc PurchaseAI ;
 ; A - skill of the TankNr, TankNr in X
