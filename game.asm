@@ -363,6 +363,10 @@ CheckNextTankAD
 
     ldx tankNr
     lda TankStatusColoursTable,x
+    bit TeamGame
+    bvc NoTeamColors
+    lda TankStatusColoursTableT,x
+NoTeamColors    
     sta COLOR2  ; set color of status line
     jsr RandomizeForce.LimitForce
     jsr PutTankNameOnScreen

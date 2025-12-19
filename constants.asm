@@ -74,8 +74,10 @@ Team_Header
     dta d"A-Team" ; :)
 
 TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
+TankColoursTableT       .BYTE $2a,$2a,$7a,$7a,$2a,$7a  ; Teams colors
 ;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4  ; standard order
 TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94   ; Adam's order
+TankStatusColoursTableT .BYTE $24,$74,$24,$74,$24,$74   ; Teams colors
 ;-----------
 GradientAddrL
     .by <dliColorsFore, <dliColorsFore, <dliColorsFore2

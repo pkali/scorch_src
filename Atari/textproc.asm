@@ -361,6 +361,10 @@ GoToActivation
 
     ldx tankNr
     lda TankStatusColoursTable,x
+    bit TeamGame
+    bvc NoTeamColors
+    lda TankStatusColoursTableT,x
+NoTeamColors
     sta COLOR2
 
     ; there is a tank (player) number in tanknr
@@ -1101,16 +1105,20 @@ loop  sta (temp2),y
 
     mva #0 TankNr
     sta COLBAKS    ; set color of background
-@     tax
-      lda TankStatusColoursTable,x
-      sta COLOR2  ; set color of player name line
-      jsr EnterPlayerName
-      bit escFlag
-      spl:rts
-      jsr CheckTankCheat
-      inc TankNr
-      lda TankNr
-      cmp NumberOfPlayers
+@   tax
+    lda TankStatusColoursTable,x
+    bit TeamGame
+    bvc NoTeamColors
+    lda TankStatusColoursTableT,x
+NoTeamColors
+    sta COLOR2  ; set color of player name line
+    jsr EnterPlayerName
+    bit escFlag
+    spl:rts
+    jsr CheckTankCheat
+    inc TankNr
+    lda TankNr
+    cmp NumberOfPlayers
     bne @-
     rts
 .endp

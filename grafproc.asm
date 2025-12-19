@@ -2008,6 +2008,10 @@ ybarrel
 @     lda #$00
       sta sizep0,y ; P0-P3 widths
       lda TankColoursTable,y ; colours of sprites under tanks
+      bit TeamGame
+      bvc no_team
+      lda TankColoursTableT,y ; colours of sprites under tanks for Teams
+no_team
       sta PCOLR0,y    
       dey
     bpl @-
