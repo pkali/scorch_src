@@ -341,6 +341,9 @@ AfterManualPurchase
 GoToActivation
     mva #$ff LastWeapon
     
+    ldx TankNr
+    jsr SetTeamsOrPlayerHeaders
+    
 ; we are clearing list of the weapons    
     jsr ClearLists  ; fast lists clear
 
@@ -1862,6 +1865,7 @@ EndOfCredits
 ;-------------------------------------------------
 .proc PutTankNameOnScreen
 ;-------------------------------------------------
+    jsr SetTeamsOrPlayerHeaders
 ; puts name of the tank on the screen
     ldy #$00
 ;    lda TankNr
@@ -2104,11 +2108,12 @@ AngleDisplay
     rts
 .endp
 ;-------------------------------------------------
-/* .proc SetTeamsOrPlayerHeaders
+.proc SetTeamsOrPlayerHeaders
+    ; TankNr in X register
     mwa #Player_Header temp
     ldy #$05 ; 6 characters
-    lda TeamGame
-    beq no_teams
+    bit TeamGame
+    bvc no_teams
     mwa #Team_Header temp
 no_teams
     lda (temp),y
@@ -2116,8 +2121,18 @@ no_teams
     sta purchaseTextBuffer,y
     dey
     bpl no_teams
+    bit TeamGame
+    bvc no_teams2
+    txa
+    ror
+    bcc A_Team
+B_Team
+    inc statusBuffer
+    inc purchaseTextBuffer
+A_Team
+no_teams2
     rts
-.endp */
+.endp
 ;-------------------------------------------------
 .proc DisplayWeaponName
 ; nr of weapon in A,  address to put in weaponPointer
