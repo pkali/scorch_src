@@ -1360,11 +1360,12 @@ NoSpyHard
     mva #0 escFlag
     jmp ReleaseAndLoop
 @
-/*     cmp #$80|@kbcode._up
-    jeq CTRLPressedUp
-    cmp #$80|@kbcode._down
-    jeq CTRLPressedDown */
-    
+/*     .IF TARGET = 800
+      cmp #$80|@kbcode._up      ; Ctrl + Up or Down only in A800
+      jeq CTRLPressedUp
+      cmp #$80|@kbcode._down
+      jeq CTRLPressedDown
+    .ENDIF */
     cmp #$80|@kbcode._tab
     jeq CTRLPressedTAB
 

@@ -290,35 +290,38 @@ NoEnergy
     bpl CheckingIfRoundIsFinished
 
     cpy #2 ; is it less than 2 tanks have energy >0 ?
-    bcs DoNotFinishTheRound
-
-;points for the last living tank
+    bcc FinishTheRound
+    bit TeamGame
+    bvc NoTeams
+    ; Check if one team is not dead
+    ; check team 1
+    ldx NumberOfPlayers
+    jsr CheckTeamDead
+    beq FinishTheRound
+    ; check team 2
+    ldx NumberOfPlayers
+    dex ; for team 2
+    jsr CheckTeamDead
+    beq FinishTheRound    
+NoTeams
+    jmp DoNotFinishTheRound
+FinishTheRound
+;points for the last living tank(s)
     ldx NumberOfPlayers
     dex
 WhichTankWonLoop
     lda eXistenZ,x
-    bne ThisOneWon
-    dex
-    bpl WhichTankWonLoop
-    ;error was here!!!
-    ; somehow I believed program will be never here
-    ; but it was a bad assumption
-    ; god knows when there is such a situation
-    ; (we've got a SITUATION here, if you know what I mean)
-    ; there are two tanks left.
-    ; one of them is killed by the second tank
-    ; second tank explodes and kills the first one.
-    ; and code lands here...
-    ; looks like no one won!
-    rts
-
-ThisOneWon
+    beq CheckNext
+    ; set winning tanks points
     lda CurrentResult
     clc
     adc ResultsTable,x
     sta ResultsTable,x
-
-    rts  ; this Round is finished
+    inc CurrentResult   ; this is for honesty (in Team game) :)
+CheckNext
+    dex
+    bpl WhichTankWonLoop
+    rts
 
 DoNotFinishTheRound
     ; Seppuku here
@@ -563,6 +566,24 @@ NotLastPlayerInRound
     jmp MainRoundLoop
 .endp
 
+;---------------------------------
+.proc CheckTeamDead
+; Optimalisation procedure
+; Counts alive in Team
+;---------------------------------
+    dex
+    ldy #0  ; in Y - number of tanks with energy greater than zero
+CheckingTeam
+    lda eXistenZ,x
+    beq NoEnergy
+    iny
+NoEnergy
+    dex
+    dex
+    bpl CheckingTeam
+    cpy #0
+    rts
+.endp
 ;---------------------------------
 .proc PlayerXdeath
 ; this tank should not explode anymore:

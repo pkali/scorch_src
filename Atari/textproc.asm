@@ -443,6 +443,7 @@ ChoosingItemForPurchase
 
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
+    and #$3f ;CTRL and SHIFT ellimination
     bit escFlag
     bpl @+
     mva #0 escFlag
@@ -1188,6 +1189,7 @@ CheckKeys
     sta NameScreen2+15    ; display tank shape number
     jsr CursorDisplay
     jsr getkey
+    and #$3f ;CTRL and SHIFT ellimination
     bit escFlag
     spl:rts
 
