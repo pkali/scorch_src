@@ -76,7 +76,10 @@
     mva #0 OptionsY
 
 OptionsMainLoop
-
+    bit TeamGame
+    bvc NoTeamMoreRounds
+    mva #0 OptionsTable+4   ; In Team game only 10 rounds available
+NoTeamMoreRounds
     jsr OptionsInversion
     jsr GetKey
     bit escFlag
