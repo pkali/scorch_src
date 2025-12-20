@@ -140,7 +140,9 @@ EndOfOptions
 OptionsNoReturn
     .IF TARGET = 800
       cmp #@kbcode._G   ; $61 ; G
-      beq TabPressed
+      bne OptionsNoG
+      jsr SelectNextGradient.NextGradient
+OptionsNoG
     .ENDIF
     cmp #@kbcode._tab    ; Tab key
     bne OptionsNoTab
@@ -196,6 +198,7 @@ NoMountains
     sta BlackHole
     rts
 NoBlackHole
+NextGradient
     ldy GradientNr
     iny
     cpy #$03
