@@ -622,8 +622,9 @@ CreditsStart
     dta   d"You were playing"^
     dta   d"Scorch"^
     dta   d"Warsaw, Miami"^
-    dta   d"2000-2025"^
-    dta   d" "*
+    dta   d" 2000-"
+    year ; 4 bytes ftom scorch.asm
+    dta   d"  "*
     dta   d"Programming"^
     dta   d"Tomasz 'Pecus' Pecko"^
     dta   d"Pawel 'pirx' Kalinowski"^
@@ -665,7 +666,7 @@ CreditsStart
       dta d"RB5200, Krzysztof 'Kaz' Ziembik"^
     .ENDIF
     dta   d" "*
-    dta   d"Additional testing"^
+    dta   d"Additional testing and Teams idea"^
     dta   d"Arek and Alex Pecko"^
     dta   d" "*
     dta   d"Special thanks"^
@@ -686,7 +687,9 @@ CreditsEnd
 .IF TARGET = 5200
   ; Atari 5200 splash
   NewSplashText=*
-    dta d" 2025  atariage", $4e, "com "  ; $4e - non blinking dot
+    dta d" "
+    year ; 4 bytes ftom scorch.asm
+    dta d"  atariage", $4e, "com "  ; $4e - non blinking dot
 .ENDIF
 
 .endif  ; .IF *>0

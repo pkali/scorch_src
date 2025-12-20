@@ -43,6 +43,9 @@
 .macro build
     dta d"1.55" ; number of this build (4 bytes)
 .endm
+.macro year
+    dta d"2025" ; year of this build (4 bytes)
+.endm
 
 .macro RMTSong
       lda #:1

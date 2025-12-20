@@ -78,7 +78,9 @@
 OptionsMainLoop
     bit TeamGame
     bvc NoTeamMoreRounds
-    mva #0 OptionsTable+4   ; In Team game only 10 rounds available
+    lda OptionsTable+4   ; In Team game only 10 or 20 rounds available
+    and #%00000001
+    sta OptionsTable+4
 NoTeamMoreRounds
     jsr OptionsInversion
     jsr GetKey
