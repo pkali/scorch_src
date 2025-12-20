@@ -1406,7 +1406,7 @@ NoVdebugSwitch
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
     .IF TARGET = 800
-      cmp #61    ; G
+      cmp #@kbcode._G   ; $61 ; G
       bne EndKeys
       jsr SelectNextGradient.NotWind
       jmp ReleaseAndLoop

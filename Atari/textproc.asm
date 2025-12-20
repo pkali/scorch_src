@@ -82,6 +82,8 @@ OptionsMainLoop
     bit escFlag
     spl:rts
 
+    and #$3f ;CTRL and SHIFT ellimination
+
     cmp #@kbcode._down  ; $f  ;cursor down
     bne OptionsNoDown
     ldx OptionsY
@@ -136,6 +138,10 @@ EndOfOptions
     rts        ; options selected
 
 OptionsNoReturn
+    .IF TARGET = 800
+      cmp #@kbcode._G   ; $61 ; G
+      beq TabPressed
+    .ENDIF
     cmp #@kbcode._tab    ; Tab key
     bne OptionsNoTab
 TabPressed
