@@ -23,7 +23,7 @@ GameOverColoursTable  .ds MaxPlayers; .BYTE $80,$40,$c4,$20,$c0,$e4
 ;----------------------------------------------------
 TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
     ;:6 dta d"        "
-    .ds MaxPlayers*8
+    .ds (MaxPlayers+2)*8    ; +2 for Teams
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS MaxPlayers
@@ -102,13 +102,13 @@ LASTeXistenZ ; eXistenZ before shoot
     .DS MaxPlayers
 
 ResultsTable ;the results in the gameeeeee
-    .DS MaxPlayers
+    .DS MaxPlayers+2    ; +2 for teams
 DirectHits
-    .DS MaxPlayers
+    .DS MaxPlayers+2    ; +2 for teams
 EarnedMoneyH
-    .DS MaxPlayers
+    .DS MaxPlayers+2    ; +2 for teams
 EarnedMoneyL
-    .DS MaxPlayers
+    .DS MaxPlayers+2    ; +2 for teams
 ;----------------------------------------------------
 ForceTableL ;shooting Force of the tank during the round
     .DS MaxPlayers

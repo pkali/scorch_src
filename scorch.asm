@@ -358,6 +358,15 @@ StartAfterSplash
       dey
     bpl @-
 
+    ; set teams names
+    ldy #5
+@   lda Team_Header,y
+    sta TanksNames+(6*8),y
+    sta TanksNames+(7*8),y
+    dey
+    bpl @-
+    inc TanksNames+(7*8) ; B-Team :)
+
     ; set gradient to the full LGBTIQQAAPP+ flag on start
     .IF CART_VERSION = 1
        mva #$ff GradientNr  ; #1 to set gradient number 2 :) (next one) - 0 (B/W)
