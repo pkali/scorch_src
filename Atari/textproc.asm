@@ -1699,10 +1699,10 @@ NextChar
     adw temp #19 displayposition
     jsr displaydec5
     mva #0 displayposition    ; overwrite first digit
+    ldx TankNr
     bit TeamGame
     bvs TeamsNoJoy
     ; put AI symbol or joystick only if no Teams
-    ldx TankNr
     ldy SkillTable,x
     bne ThisIsAI
     ldy JoyNumber,x

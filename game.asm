@@ -1188,8 +1188,28 @@ Bubble
     ldx #0 ;i=x
     stx temp2 ; sortflag=temp2
     inx ; because NumberOfPlayers start from 1 (not 0)
-
 BubbleBobble
+    jsr SortOnePass
+    inx
+    cpx NumberOfPlayers ; if no team game
+    bne BubbleBobble
+    
+    lda temp2   ; sortflag
+    bne Bubble
+
+    ; amd Teams sorting
+    bit TeamGame
+    bvc NoTeamsSort
+    ldx #MaxPlayers+1 ;i=x
+    jsr SortOnePass ; for 2 Teams one pass is sufficient
+NoTeamsSort
+    rts
+.endp
+
+;--------------------------------------------------
+.proc SortOnePass
+; optimalisation for 2 sorting procedures
+;--------------------------------------------------
     ldy TankSequence-1,x    ; x count from 1 to NumberOfPlayers (we need cout from 0 to NumberOfPlayers-1)
     lda ResultsTable,y
     ldy TankSequence,x
@@ -1232,14 +1252,6 @@ swapvalues
     sta TankSequence,x
     inc temp2
 nextishigher
-    inx
-    cpx NumberOfPlayers
-    bne BubbleBobble
-
-    lda temp2
-
-    bne Bubble
-
     rts
 .endp
 ;--------------------------------------------------
