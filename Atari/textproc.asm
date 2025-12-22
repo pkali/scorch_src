@@ -1699,7 +1699,9 @@ NextChar
     adw temp #19 displayposition
     jsr displaydec5
     mva #0 displayposition    ; overwrite first digit
-    ; put AI symbol or joystick
+    bit TeamGame
+    bvs TeamsNoJoy
+    ; put AI symbol or joystick only if no Teams
     ldx TankNr
     ldy SkillTable,x
     bne ThisIsAI
@@ -1717,6 +1719,7 @@ NotAItank
     tya
     ldy #38
     sta (temp),y
+TeamsNoJoy
     ; put earned money on the screen
     lda EarnedMoneyL,x
     sta decimal
