@@ -67,7 +67,7 @@ OptionsY  .ds 1 ;vertical position of cursor on Options screen
 flyDelay .ds 1
 ;--------------
 ;NumberOfPlayers .DS 1  ;current number of players (counted from 1)
-TankSequence .DS MaxPlayers ;sequence of shooting during the Round
+TankSequence .DS MaxPlayers+2 ;sequence of shooting during the Round (+2 for teams)
 GameIsOver .DS 1 ; 1 means it was the last round in the game
 ;----------------------------------------------------
 moneyH ;we place zero at the end of prices and money

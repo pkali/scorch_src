@@ -173,9 +173,45 @@ esubstractlose
     sbc loseH,x
     sta EarnedMoneyH,x
 eskipzeroing
-
     dex
     jpl CalculateGainsLoop
+    ; Team game calculations
+    ; set initial values
+    inx ; now X=0
+    txa
+    inx ; now X=1
+initialTeamsVal
+    sta ResultsTable+MaxPlayers,x
+    sta DirectHits+MaxPlayers,x
+    sta EarnedMoneyH+MaxPlayers,x
+    sta EarnedMoneyL+MaxPlayers,x
+    dex
+    bpl initialTeamsVal
+    ; and now Team scores calculations
+    tax ; now X=0
+    tay
+CalculateTeamsResults
+    clc
+    lda ResultsTable+MaxPlayers,y
+    adc ResultsTable,x
+    sta ResultsTable+MaxPlayers,y
+    clc
+    lda DirectHits+MaxPlayers,y
+    adc DirectHits,x
+    sta DirectHits+MaxPlayers,y
+    clc
+    lda EarnedMoneyL+MaxPlayers,y
+    adc EarnedMoneyL,x
+    sta EarnedMoneyL+MaxPlayers,y
+    lda EarnedMoneyH+MaxPlayers,y
+    adc EarnedMoneyH,x
+    sta EarnedMoneyH+MaxPlayers,y
+    tya
+    eor #$01    ; swap team
+    tay
+    inx
+    cpx NumberOfPlayers
+    bne CalculateTeamsResults
     rts
 .endp
 ;--------------------------------------------------
@@ -978,6 +1014,11 @@ UsageLoop
 
     cpx NumberOfPlayers
     bcc GetRandomAgainX
+    ; and "sequence" for teans
+    ldx #MaxPlayers
+    stx TankSequence+MaxPlayers+1 ; B-Team
+    inx
+    stx TankSequence+MaxPlayers ; A-Team
     rts
 .endp
 ;----------------------------------------------
@@ -1353,6 +1394,10 @@ GameOver4x4
     sbb ResultY  #2 ;next line (was empty)
 
     ldx NumberOfPlayers  ;we start from the highest (best) tank
+    bit TeamGame
+    bvc NoTeamsResults
+    ldx #MaxPlayers+2   ; set pointer to teams results
+NoTeamsResults
     dex   ;and it is the last one
     stx ResultOfTankNr  ;in TankSequence table
 
@@ -1419,7 +1464,10 @@ TankNameCopyLoop
     jsr TL4x4_empty
 
     dec ResultOfTankNr
-    bmi FinishResultDisplay
+    bmi FinishResultDisplay ; check for last player
+    lda ResultOfTankNr
+    cmp #MaxPlayers-1     ; check for last team
+    beq FinishResultDisplay
 
     sbb ResultY  #2 ;distance between lines is smaller
 

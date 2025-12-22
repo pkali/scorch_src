@@ -2098,6 +2098,10 @@ AngleDisplay
 .proc RoundOverSprites
     ; fill sprites with bytes
     ldy numberOfPlayers
+    bit TeamGame
+    bvc NoTeamSprites
+    ldy #2  ; 2 teams
+NoTeamSprites
     dey
     lda gameOverSpritesTop,y
     sta temp
