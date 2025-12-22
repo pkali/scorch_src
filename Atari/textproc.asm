@@ -1638,6 +1638,10 @@ displayloop1
     SetDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
     ; make text and color lines for each tank
     ldx NumberOfPlayers  ;we start from the highest (best) tank
+    bit TeamGame
+    bvc NoTeamsResults
+    ldx #MaxPlayers+2   ; set pointer to teams results
+NoTeamsResults
     dex   ;and it is the last one
     stx ResultOfTankNr  ;in TankSequence table
     ldy #0 ;witch line we are coloring
@@ -1726,7 +1730,11 @@ NotAItank
     ply
     iny
     dec ResultOfTankNr
-    jpl FinalResultOfTheNextPlayer
+    lda ResultOfTankNr
+    bmi MakeBlackLines
+    cmp #MaxPlayers-1     ; check for last team
+    beq MakeBlackLines
+    jmp FinalResultOfTheNextPlayer
 MakeBlackLines
     cpy #$06
     beq AllLinesReady
