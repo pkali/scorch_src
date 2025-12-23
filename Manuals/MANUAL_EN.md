@@ -88,7 +88,7 @@ This makes it possible to activate shields and others before the round starts.
 ![Main game screen.](images/StatusLine.png)
 The status line shows which player is currently allowed to take a shot and a set of other information:
 
-* **Player** - player's name,
+* **Player** - player's name. In the case of a team game, the word **Player** is replaced with the name of the team.
 
 * active joystick number or difficulty level of computer-controlled player (1-**Moron** - 8-**Unknown**),
 
@@ -349,6 +349,8 @@ The game has 8 difficulty levels of computer-controlled opponents. Or 7 differen
 * **Cyborg** - Aims at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. If he is unable to hit his chosen target, he tries to choose another target that he can accurately hit. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser** but if he has more than 2 pieces of **Battery** he uses them if the energy decreases below 60 units. He shops exactly like **Spoiler**.
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
+
+**Poolshark**, **Tosser**, **Chooser**, **Spoiler**, and *Cyborg** never target a member of their own team during team play, even if it puts them at risk.
 
 ### AI goes shopping.
 Buying a weapon (offensive or defensive) works as follows:

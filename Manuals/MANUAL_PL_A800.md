@@ -89,7 +89,7 @@ Klawisz **RETURN** lub przycisk joysticka przechodzi do ekranu zakupów następn
 ![Główny ekran gry.](images/StatusLine.png)
 W linii statusowej widoczna jest informacja o tym, który z graczy aktualnie może oddać strzał oraz zestaw innych informacji:
 
-* **Player** - nazwa czołgu gracza
+* **Player** - nazwa czołgu gracza. W przypadku gry drużynowej słowo **Player** zastępowane jest nazwą drużyny.
 
 * numer aktywnego joysticka lub poziom gracza sterowanego przez komputer (1-**Moron** - 8-**Unknown**),
 
@@ -351,6 +351,8 @@ Gra posiada 8 poziomów trudności przeciwników sterowanych przez komputer. A w
 * **Cyborg** - Obiera sobie za cel najsłabszego przeciwnika (o najmniejszym zasobie energii), lecz preferuje przeciwników sterowanych przez człowieka. Jeśli nie jest w stanie trafić w obrany cel, stara się wybrać inny, w który może precyzyjnie trafić. Celuje bardzo dokładnie i w zdecydowanej większości przypadków trafia za pierwszym strzałem. Strzał oddaje najlepszą posiadaną bronią - chyba że cel jest blisko, wtedy zmienia broń na **Baby Missile**, by unikać trafienia samego siebie. Broni defensywnych używa dokładnie tak jak **Chooser**, ale jeśli ma więcej niź 2 sztuki **Battery**, stosuje je jeśli energia zmniejszy się poniższej 60 jednostek. Zakupy robi dokładnie tak jak **Spoiler**
 
 * **Unknown** - Przed oddaniem każdego strzału losowo wybiera sposób działania od **Poolsharka** do **Cyborga** i stosuje jego taktykę. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
+
+**Poolshark**, **Tosser**, **Chooser**, **Spoiler** i *Cyborg** w czasie gry drużynowej nigdy nie celują w członka własnej drużyny, nawet jeśli grozi to im samym.
 
 ### AI idzie na zakupy
 
