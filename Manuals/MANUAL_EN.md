@@ -350,7 +350,7 @@ The game has 8 difficulty levels of computer-controlled opponents. Or 7 differen
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
 
-**Poolshark**, **Tosser**, **Chooser**, **Spoiler**, and *Cyborg** never target a member of their own team during team play, even if it puts them at risk.
+**Poolshark**, **Tosser**, **Chooser**, **Spoiler**, and **Cyborg** never target a member of their own team during team play, even if it puts them at risk.
 
 ### AI goes shopping.
 Buying a weapon (offensive or defensive) works as follows:

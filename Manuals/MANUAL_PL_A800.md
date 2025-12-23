@@ -352,7 +352,7 @@ Gra posiada 8 poziomów trudności przeciwników sterowanych przez komputer. A w
 
 * **Unknown** - Przed oddaniem każdego strzału losowo wybiera sposób działania od **Poolsharka** do **Cyborga** i stosuje jego taktykę. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
 
-**Poolshark**, **Tosser**, **Chooser**, **Spoiler** i *Cyborg** w czasie gry drużynowej nigdy nie celują w członka własnej drużyny, nawet jeśli grozi to im samym.
+**Poolshark**, **Tosser**, **Chooser**, **Spoiler** i **Cyborg** w czasie gry drużynowej nigdy nie celują w członka własnej drużyny, nawet jeśli grozi to im samym.
 
 ### AI idzie na zakupy
 
