@@ -39,7 +39,9 @@ Na pierwszym ekranie możemy skonfigurować opcje rozgrywki:
 
 Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz **TAB**, **SELECT**, dłuższe przytrzymanie pierwszego przycisku joysticka lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny) zmieniają kolor gór (3 wersje do wyboru).  
+Klawisze **G**, **TAB**, **SELECT**, dłuższe przytrzymanie pierwszego przycisku joysticka lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny) zmieniają kolor gór (3 wersje do wyboru).  
+
+Jeśli kursor wskazuje opcję wyboru ilości graczy i wybranych jest 4 lub 6 graczy, wciśnięcie **TAB** włącza rozgrywkę drużynową. Jest to sygnalizowane literą "t" przy słowie **Players**. Rozgrywka drużynowa jest ograniczona do 4 lub 6 graczy i maksimum 20 rund. Gracze o numerach nieparzystych są przydzielani do Drużyny A, a gracze o numerach parzystych do Drużyny B.
 
 Jeśli kursor wskazuje opcję wyboru siły wiatru **Wind**, wciśnięcie **TAB** zmienia sposób losowania siły wiatru z "co rundę" na "co turę" i odwrotnie. Losowanie co turę jest sygnalizowane znakiem "?" przy słowie **Wind**.  
 

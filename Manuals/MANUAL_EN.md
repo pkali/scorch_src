@@ -39,7 +39,9 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
-The **TAB**, **SELECT**, long press of first joystick button or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key changes the color of the mountains (3 versions to choose from).  
+The **G**, **TAB**, **SELECT**, long press of first joystick button or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key changes the color of the mountains (3 versions to choose from).  
+
+If the cursor indicates the the number of players and 4 or 6 players are selected, pressing **TAB** activates team play. This is indicated by the letter “t” next to the word **Players**. Team play is limited to 4 or 6 players and a maximum of 20 rounds. Players with odd numbers are assigned to A-Team, and players with even numbers are assigned to B-Team.
 
 If the cursor indicates the wind strength selection option **Wind**, pressing **TAB** changes the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the **?** sign next to the word **Wind**.  
 
