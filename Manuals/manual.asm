@@ -3,7 +3,7 @@
     icl '../Atari/lib/cartloader_vectors.inc'
 
 .IFNDEF LANG
-    .def LANG = "PL"
+    .def LANG = "EN"
 .ENDIF
 
 screen_height = 26

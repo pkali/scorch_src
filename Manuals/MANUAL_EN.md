@@ -41,7 +41,7 @@ Select options with cursor keys or a joystick.
 
 The **G**, **TAB**, **SELECT**, long press of first joystick button or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key changes the color of the mountains (3 versions to choose from).  
 
-If the cursor indicates the the number of players and 4 or 6 players are selected, pressing **TAB** activates team play. This is indicated by the letter ‚Äút‚Äù next to the word **Players**. Team play is limited to 4 or 6 players and a maximum of 20 rounds. Players with odd numbers are assigned to A-Team, and players with even numbers are assigned to B-Team.
+If the cursor indicates the the number of players and 4 or 6 players are selected, pressing **TAB** activates team play. This is indicated by the letter **t** next to the word **Players**. Team play is limited to 4 or 6 players and a maximum of 20 rounds. Players with odd numbers are assigned to A-Team, and players with even numbers are assigned to B-Team.
 
 If the cursor indicates the wind strength selection option **Wind**, pressing **TAB** changes the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the **?** sign next to the word **Wind**.  
 
@@ -113,19 +113,19 @@ The keyboard controls cursor keys or joystick: left/right - change the angle of 
 
 | A800         | Function           |
 |--------------|--------------------|
-| **SPACE**/**FIRE**   | shoot       (see ‚Üì)|
-| **TAB**/**SELECT**   | weapon change   (‚Üì)|
-| **I**            | inventory       (‚Üì)|
-| **A**/**OPTION**     | defensives      (‚Üì)|
+| **SPACE**/**FIRE**   | shoot       (see °)|
+| **TAB**/**SELECT**   | weapon change   (°)|
+| **I**            | inventory       (°)|
+| **A**/**OPTION**     | defensives      (°)|
 | **M**            | music on/off       |
 | **S**            | sound on/off       |
-| **START**        | turbo mode      (‚Üì)|
-| **O**            | game over       (‚Üì)|
-| **START**+**OPTION** | immediate quit  (‚Üì)|
-| **G**            | color scheme    (‚Üì)|
-| **ESC**          | return          (‚Üì)|
-| **Y**            | confirm         (‚Üì)|
-| **CTRL**+**HELP**    | visual debug    (‚Üì)|
+| **START**        | turbo mode      (°)|
+| **O**            | game over       (°)|
+| **START**+**OPTION** | immediate quit  (°)|
+| **G**            | color scheme    (°)|
+| **ESC**          | return          (°)|
+| **Y**            | confirm         (°)|
+| **CTRL**+**HELP**    | visual debug    (°)|
 
 * **shoot** or joystick button pressed briefly - firing a shot.
 
@@ -224,27 +224,27 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Funky Bomb       | 168 88 (*5) |
 | MIRV             | 136 (*5)    |
 | Death's Head     | 240 (*5)    |
-| Napalm           | 40  (see ‚Üì) |
-| Hot Napalm       | 80      (‚Üì) |
+| Napalm           | 40  (see °) |
+| Hot Napalm       | 80      (°) |
 | Baby Roller      | 88          |
 | Roller           | 168         |
 | Heavy Roller     | 240         |
-| Riot Charge      | 0       (‚Üì) |
-| Riot Blast       | 0       (‚Üì) |
-| Riot Bomb        | 0       (‚Üì) |
-| Heavy Riot Bomb  | 0       (‚Üì) |
-| Digger           | 0       (‚Üì) |
-| Heavy Digger     | 0       (‚Üì) |
-| Sandhog          | 0       (‚Üì) |
-| Heavy Sandhog    | 0       (‚Üì) |
-| Dirt Clod        | 0       (‚Üì) |
-| Dirt Ball        | 0       (‚Üì) |
-| Ton of Dirt      | 0       (‚Üì) |
-| Liquid Dirt      | 0       (‚Üì) |
-| Dirt Charge      | 0       (‚Üì) |
-| Propaganda       | 0       (‚Üì) |
-| Stomp            | 0       (‚Üì) |
-| Laser            | 100     (‚Üì) |
+| Riot Charge      | 0       (°) |
+| Riot Blast       | 0       (°) |
+| Riot Bomb        | 0       (°) |
+| Heavy Riot Bomb  | 0       (°) |
+| Digger           | 0       (°) |
+| Heavy Digger     | 0       (°) |
+| Sandhog          | 0       (°) |
+| Heavy Sandhog    | 0       (°) |
+| Dirt Clod        | 0       (°) |
+| Dirt Ball        | 0       (°) |
+| Ton of Dirt      | 0       (°) |
+| Liquid Dirt      | 0       (°) |
+| Dirt Charge      | 0       (°) |
+| Propaganda       | 0       (°) |
+| Stomp            | 0       (°) |
+| Laser            | 100     (°) |
 
 Remarks:
 * **Napalm** - this weapon is different and the distance from the center is not determined, simply any tank in the range of the flames loses 40 units of energy.
