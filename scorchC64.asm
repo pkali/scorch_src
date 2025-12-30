@@ -27,6 +27,9 @@
 .macro build
     dta d"1.51" ; number of this build (4 bytes)
 .endm
+.macro year
+    dta d"2026" ; year of this build (4 bytes)
+.endm
 
 .macro RMTSong
       lda #:1     ; do nothing in C64
