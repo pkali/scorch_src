@@ -56,9 +56,10 @@ pmg1	.ds $0300
 
 main1
     lda SplashTypeFlag
-    beq old_splash
-    rts 
-old_splash
+    cmp #200     ; (0 - 100 ; first splash , 101 - 200 ; second splash , 201 - 255 ; KAZ)
+    bcs this_splashK ; KAZ splash
+    rts ; next splash
+this_splashK
     jsr init_song
     
 ;    ; copy system font to $a000

@@ -101,23 +101,23 @@
     dta d"I LET YOU HIT ME!"^
     dta d"SUCKER SHOT!"^
     dta d"I DIDN'T WANT TO LIVE ANYWAY."^
-    dta d"-<SOB>-"^
+    dta d".-SOB-."^
     dta d"WAS THAT AS CLOSE AS I THINK IT WAS?"^
     dta d"JOIN THE ARMY, SEE THE WORLD THEY SAID."^
     dta d"IT WASN'T JUST A JOB, IT WAS AN ADVENTURE!"^
     dta d"I DIDN'T LIKE VIOLENCE ANYWAY!"^
     dta d"I THOUGHT YOU LIKED ME?"^
-    dta d"CTO XYEB"^
+    dta d"RUSH B!"^
     dta d"I THINK THIS GUY'S A LITTLE CRAZY."^
     dta d"SOMEHOW I DON'T FEEL LIKE KILLING ANYMORE."^
     dta d"HEY! KILLIN' AIN'T COOL."^
     dta d"GEE... THANKS."^
     dta d"I'VE FALLEN AND I CAN'T GET UP!"^
-    dta d"911?"^
+    dta d"NINE ONE ONE?"^
     dta d"OH NO! HERE I BLOW AGAIN!"^
     dta d"I'LL BE BACK..."^
     dta d"I'VE GOT LAWYERS!"^
-    dta d"CALL 1-900-SUE-TANK."^
+    dta d"CALL MY LAWYERS!"^
     dta d"YOU BIG DUMMY!"^                 ;(sanford and son)
 LEND
 NumberOfOffensiveTexts=55

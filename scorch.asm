@@ -41,7 +41,10 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.52" ; number of this build (4 bytes)
+    dta d"1.55" ; number of this build (4 bytes)
+.endm
+.macro year
+    dta d"2026" ; year of this build (4 bytes)
 .endm
 
 .macro RMTSong
@@ -65,7 +68,7 @@ AdditionalZPvariables = $20
     .zpvar MeteorsRound     .byte  ; set 7th bit - block meteors in round
     
 
-FirstZpageVariable = $50
+FirstZpageVariable = $4f
     .zpvar DliColorBack     .byte = FirstZpageVariable
     .zpvar ClearSky         .byte  ; $ff - Crear sky during drawmountains, 0 - no clear sky
     .zpvar PaddleState      .byte  ; old state 2nd button for 2 buttons joysticks
@@ -156,6 +159,7 @@ FirstZpageVariable = $50
                                    ; (0 - round only, >0 - each turn)
     .zpvar FastSoilDown     .byte  ; 0 - standard, >0 - fast
     .zpvar BlackHole        .byte  ; 0 - no, >0 - yes
+    .zpvar TeamGame         .byte  ; 0 - no, >0 - Teams
     .zpvar XHit             .word
     .zpvar delta            .word
     .zpvar HowMuchToFall    .byte
@@ -189,7 +193,7 @@ FirstZpageVariable = $50
     HotNapalmFlag = FunkyBombCounter  ; variable reuse!
     displayposition = modify
     LineAddress4x4 = xcircle
-    ;* RMT ZeroPage addresses in artwork/sfx/scorch_str9-NTSC.rmt
+    ;* RMT ZeroPage addresses in artwork/sfx/rmtplayr_modified.asm
 
 ;-----------------------------------------------
 ; libraries
@@ -200,6 +204,7 @@ FirstZpageVariable = $50
       .IF SPLASH = 1
         icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
         .IF CART_VERSION = 1
+          icl 'artwork/splash_v3/splash3.asm'  ; new2 splash screen 
           icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
         .ENDIF
       .ELSE
@@ -353,6 +358,15 @@ StartAfterSplash
       sta variablesToInitialize,y
       dey
     bpl @-
+
+    ; set teams names
+    ldy #5
+@   lda Team_Header,y
+    sta TanksNames+(6*8),y
+    sta TanksNames+(7*8),y
+    dey
+    bpl @-
+    inc TanksNames+(7*8) ; B-Team :)
 
     ; set gradient to the full LGBTIQQAAPP+ flag on start
     .IF CART_VERSION = 1
@@ -534,7 +548,7 @@ noingame
 ;----------------------------------------------
     icl 'ai.asm'
 ;----------------------------------------------
-    icl 'artwork/talk.asm'
+    icl 'artwork/talk_packed.asm'
 ;----------------------------------------------
 TankFont
     ins 'artwork/tanksv4.fnt',+0,384   ; 48 characters only

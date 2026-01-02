@@ -76,11 +76,18 @@
     mva #0 OptionsY
 
 OptionsMainLoop
-
+    bit TeamGame
+    bvc NoTeamMoreRounds
+    lda OptionsTable+4   ; In Team game only 10 or 20 rounds available
+    and #%00000001
+    sta OptionsTable+4
+NoTeamMoreRounds
     jsr OptionsInversion
     jsr GetKey
     bit escFlag
     spl:rts
+
+    and #$3f ;CTRL and SHIFT ellimination
 
     cmp #@kbcode._down  ; $f  ;cursor down
     bne OptionsNoDown
@@ -103,6 +110,9 @@ OptionsNoUp
     cmp #@kbcode._left  ; $6 ;cursor left
     bne OptionsNoLeft
     ldx OptionsY
+    bne NoPlayersOptL
+    jsr SelectNextGradient.TeamOff
+NoPlayersOptL    
     dec OptionsTable,X
     lda OptionsTable,X
     bpl OptionsMainLoop
@@ -112,8 +122,10 @@ OptionsNoUp
 OptionsNoLeft
     cmp #@kbcode._right  ; $7 ;cursor right
     bne OptionsNoRight
-
     ldx OptionsY
+    bne NoPlayersOptR
+    jsr SelectNextGradient.TeamOff
+NoPlayersOptR
     inc OptionsTable,X
     lda OptionsTable,X
     cmp #5  ; number of columns in options
@@ -131,6 +143,12 @@ EndOfOptions
     rts        ; options selected
 
 OptionsNoReturn
+    .IF TARGET = 800
+      cmp #@kbcode._G   ; $61 ; G
+      bne OptionsNoG
+      jsr SelectNextGradient.NextGradient
+OptionsNoG
+    .ENDIF
     cmp #@kbcode._tab    ; Tab key
     bne OptionsNoTab
 TabPressed
@@ -140,8 +158,24 @@ OptionsNoTab
 .endp
 
 .proc SelectNextGradient
-    lda OptionsY    ; if "Wind" option selected
-    cmp #$03
+    lda OptionsY
+    bne NoTeamGame
+    lda OptionsTable  ; OptionsY=0
+    cmp #$02    ; 4 players
+    beq TeamCorrect
+    cmp #$04    ; 6 players
+    beq TeamCorrect
+TeamOff
+    lda #0
+    beq NoTeam
+TeamCorrect
+    lda TeamGame
+    eor #$74    ; 't' character
+NoTeam
+    sta TeamGame
+    rts
+NoTeamGame
+    cmp #$03    ; if "Wind" option selected
     bne NotWind
     lda WindChangeInRound    ; wind change after each turn (not round only) flag
     eor #$1f    ; '?' character
@@ -168,7 +202,8 @@ NoMountains
     eor #$5d    ; cursor down character
     sta BlackHole
     rts
-NoBlackHole    
+NoBlackHole
+NextGradient
     ldy GradientNr
     iny
     cpy #$03
@@ -197,6 +232,8 @@ NoGradientLoop
     sta OptionsHere+128
     lda FastSoilDown
     sta OptionsHere+88
+    lda TeamGame
+    sta OptionsHere+8
 
 YPos = temp2
 XPos = temp2+1
@@ -318,6 +355,9 @@ AfterManualPurchase
 GoToActivation
     mva #$ff LastWeapon
     
+    ldx TankNr
+    jsr SetTeamsOrPlayerHeaders
+    
 ; we are clearing list of the weapons    
     jsr ClearLists  ; fast lists clear
 
@@ -335,6 +375,10 @@ GoToActivation
 
     ldx tankNr
     lda TankStatusColoursTable,x
+    bit TeamGame
+    bvc NoTeamColors
+    lda TankStatusColoursTableT,x
+NoTeamColors
     sta COLOR2
 
     ; there is a tank (player) number in tanknr
@@ -404,6 +448,7 @@ ChoosingItemForPurchase
 
     jsr PutLitteChar ; Places pointer at the right position
     jsr getkey
+    and #$3f ;CTRL and SHIFT ellimination
     bit escFlag
     bpl @+
     mva #0 escFlag
@@ -1075,16 +1120,20 @@ loop  sta (temp2),y
 
     mva #0 TankNr
     sta COLBAKS    ; set color of background
-@     tax
-      lda TankStatusColoursTable,x
-      sta COLOR2  ; set color of player name line
-      jsr EnterPlayerName
-      bit escFlag
-      spl:rts
-      jsr CheckTankCheat
-      inc TankNr
-      lda TankNr
-      cmp NumberOfPlayers
+@   tax
+    lda TankStatusColoursTable,x
+    bit TeamGame
+    bvc NoTeamColors
+    lda TankStatusColoursTableT,x
+NoTeamColors
+    sta COLOR2  ; set color of player name line
+    jsr EnterPlayerName
+    bit escFlag
+    spl:rts
+    jsr CheckTankCheat
+    inc TankNr
+    lda TankNr
+    cmp NumberOfPlayers
     bne @-
     rts
 .endp
@@ -1145,6 +1194,7 @@ CheckKeys
     sta NameScreen2+15    ; display tank shape number
     jsr CursorDisplay
     jsr getkey
+    and #$3f ;CTRL and SHIFT ellimination
     bit escFlag
     spl:rts
 
@@ -1588,6 +1638,10 @@ displayloop1
     SetDLI DLIinterruptGameOver  ; jsr SetDLI for Game Over screen
     ; make text and color lines for each tank
     ldx NumberOfPlayers  ;we start from the highest (best) tank
+    bit TeamGame
+    bvc NoTeamsResults
+    ldx #MaxPlayers+2   ; set pointer to teams results
+NoTeamsResults
     dex   ;and it is the last one
     stx ResultOfTankNr  ;in TankSequence table
     ldy #0 ;witch line we are coloring
@@ -1645,8 +1699,10 @@ NextChar
     adw temp #19 displayposition
     jsr displaydec5
     mva #0 displayposition    ; overwrite first digit
-    ; put AI symbol or joystick
     ldx TankNr
+    bit TeamGame
+    bvs TeamsNoJoy
+    ; put AI symbol or joystick only if no Teams
     ldy SkillTable,x
     bne ThisIsAI
     ldy JoyNumber,x
@@ -1663,6 +1719,7 @@ NotAItank
     tya
     ldy #38
     sta (temp),y
+TeamsNoJoy
     ; put earned money on the screen
     lda EarnedMoneyL,x
     sta decimal
@@ -1676,7 +1733,11 @@ NotAItank
     ply
     iny
     dec ResultOfTankNr
-    jpl FinalResultOfTheNextPlayer
+    lda ResultOfTankNr
+    bmi MakeBlackLines
+    cmp #MaxPlayers-1     ; check for last team
+    beq MakeBlackLines
+    jmp FinalResultOfTheNextPlayer
 MakeBlackLines
     cpy #$06
     beq AllLinesReady
@@ -1839,6 +1900,7 @@ EndOfCredits
 ;-------------------------------------------------
 .proc PutTankNameOnScreen
 ;-------------------------------------------------
+    jsr SetTeamsOrPlayerHeaders
 ; puts name of the tank on the screen
     ldy #$00
 ;    lda TankNr
@@ -2047,6 +2109,10 @@ AngleDisplay
 .proc RoundOverSprites
     ; fill sprites with bytes
     ldy numberOfPlayers
+    bit TeamGame
+    bvc NoTeamSprites
+    ldy #2  ; 2 teams
+NoTeamSprites
     dey
     lda gameOverSpritesTop,y
     sta temp
@@ -2078,6 +2144,32 @@ AngleDisplay
     mva #15 PCOLR0
     sta PCOLR1
 
+    rts
+.endp
+;-------------------------------------------------
+.proc SetTeamsOrPlayerHeaders
+    ; TankNr in X register
+    mwa #Player_Header temp
+    ldy #$05 ; 6 characters
+    bit TeamGame
+    bvc no_teams
+    mwa #Team_Header temp
+no_teams
+    lda (temp),y
+    sta statusBuffer,y
+    sta purchaseTextBuffer,y
+    dey
+    bpl no_teams
+    bit TeamGame
+    bvc no_teams2
+    txa
+    ror
+    bcc A_Team
+B_Team
+    inc statusBuffer
+    inc purchaseTextBuffer
+A_Team
+no_teams2
     rts
 .endp
 ;-------------------------------------------------
@@ -2132,6 +2224,84 @@ lets_talk
 zeroth_talk
     sty LineAddress4x4
     ldy #0
+    rts
+.endp
+
+;-------------------------------------------------
+.proc _calc_packed_display
+; Find Nth packed string inside a [len][packed-bytes] stream.
+;
+; in:
+;   TextNumberOff = index (0..)
+;   LineAddress4x4 = base address of the packed stream (points to first len byte)
+; out:
+;   LineAddress4x4 = address of selected record (points to its len byte)
+; trashes: A, X, Y, temp, temp2
+;
+; Record size in bytes = 1 + ceil(len*5/8)
+; where `len` is the 1-byte character count (max 63).
+;-------------------------------------------------
+@idx = temp+1
+    lda TextNumberOff
+    sta @idx
+    beq done
+
+next_record
+    ldy #0
+    lda (LineAddress4x4),y
+    sta temp            ; len (low byte)
+
+    ; advance past len byte
+    inw LineAddress4x4
+
+    ; temp2 = len*5 + 7
+    lda temp
+    sta temp2
+    lda #0
+    sta temp2+1
+
+    ; temp2 = len*4
+    asl temp2
+    rol temp2+1
+    asl temp2
+    rol temp2+1
+    ; temp2 = len*5
+    clc
+    lda temp2
+    adc temp
+    sta temp2
+    lda temp2+1
+    adc #0
+    sta temp2+1
+    ; +7 for ceil
+    clc
+    lda temp2
+    adc #7
+    sta temp2
+    bcc @+
+    inc temp2+1
+@
+    ; >>3 (divide by 8)
+    lsr temp2+1
+    ror temp2
+    lsr temp2+1
+    ror temp2
+    lsr temp2+1
+    ror temp2
+
+    ; LineAddress4x4 += temp2
+    clc
+    lda LineAddress4x4
+    adc temp2
+    sta LineAddress4x4
+    lda LineAddress4x4+1
+    adc temp2+1
+    sta LineAddress4x4+1
+
+    dec @idx
+    bne next_record
+
+done
     rts
 .endp
     

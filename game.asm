@@ -173,9 +173,45 @@ esubstractlose
     sbc loseH,x
     sta EarnedMoneyH,x
 eskipzeroing
-
     dex
     jpl CalculateGainsLoop
+    ; Team game calculations
+    ; set initial values
+    inx ; now X=0
+    txa
+    inx ; now X=1
+initialTeamsVal
+    sta ResultsTable+MaxPlayers,x
+    sta DirectHits+MaxPlayers,x
+    sta EarnedMoneyH+MaxPlayers,x
+    sta EarnedMoneyL+MaxPlayers,x
+    dex
+    bpl initialTeamsVal
+    ; and now Team scores calculations
+    tax ; now X=0
+    tay
+CalculateTeamsResults
+    clc
+    lda ResultsTable+MaxPlayers,y
+    adc ResultsTable,x
+    sta ResultsTable+MaxPlayers,y
+    clc
+    lda DirectHits+MaxPlayers,y
+    adc DirectHits,x
+    sta DirectHits+MaxPlayers,y
+    clc
+    lda EarnedMoneyL+MaxPlayers,y
+    adc EarnedMoneyL,x
+    sta EarnedMoneyL+MaxPlayers,y
+    lda EarnedMoneyH+MaxPlayers,y
+    adc EarnedMoneyH,x
+    sta EarnedMoneyH+MaxPlayers,y
+    tya
+    eor #$01    ; swap team
+    tay
+    inx
+    cpx NumberOfPlayers
+    bne CalculateTeamsResults
     rts
 .endp
 ;--------------------------------------------------
@@ -290,35 +326,38 @@ NoEnergy
     bpl CheckingIfRoundIsFinished
 
     cpy #2 ; is it less than 2 tanks have energy >0 ?
-    bcs DoNotFinishTheRound
-
-;points for the last living tank
+    bcc FinishTheRound
+    bit TeamGame
+    bvc NoTeams
+    ; Check if one team is not dead
+    ; check team 1
+    ldx NumberOfPlayers
+    jsr CheckTeamDead
+    beq FinishTheRound
+    ; check team 2
+    ldx NumberOfPlayers
+    dex ; for team 2
+    jsr CheckTeamDead
+    beq FinishTheRound    
+NoTeams
+    jmp DoNotFinishTheRound
+FinishTheRound
+;points for the last living tank(s)
     ldx NumberOfPlayers
     dex
 WhichTankWonLoop
     lda eXistenZ,x
-    bne ThisOneWon
-    dex
-    bpl WhichTankWonLoop
-    ;error was here!!!
-    ; somehow I believed program will be never here
-    ; but it was a bad assumption
-    ; god knows when there is such a situation
-    ; (we've got a SITUATION here, if you know what I mean)
-    ; there are two tanks left.
-    ; one of them is killed by the second tank
-    ; second tank explodes and kills the first one.
-    ; and code lands here...
-    ; looks like no one won!
-    rts
-
-ThisOneWon
+    beq CheckNext
+    ; set winning tanks points
     lda CurrentResult
     clc
     adc ResultsTable,x
     sta ResultsTable,x
-
-    rts  ; this Round is finished
+    inc CurrentResult   ; this is for honesty (in Team game) :)
+CheckNext
+    dex
+    bpl WhichTankWonLoop
+    rts
 
 DoNotFinishTheRound
     ; Seppuku here
@@ -363,6 +402,10 @@ CheckNextTankAD
 
     ldx tankNr
     lda TankStatusColoursTable,x
+    bit TeamGame
+    bvc NoTeamColors
+    lda TankStatusColoursTableT,x
+NoTeamColors    
     sta COLOR2  ; set color of status line
     jsr RandomizeForce.LimitForce
     jsr PutTankNameOnScreen
@@ -559,6 +602,24 @@ NotLastPlayerInRound
     jmp MainRoundLoop
 .endp
 
+;---------------------------------
+.proc CheckTeamDead
+; Optimalisation procedure
+; Counts alive in Team
+;---------------------------------
+    dex
+    ldy #0  ; in Y - number of tanks with energy greater than zero
+CheckingTeam
+    lda eXistenZ,x
+    beq NoEnergy
+    iny
+NoEnergy
+    dex
+    dex
+    bpl CheckingTeam
+    cpy #0
+    rts
+.endp
 ;---------------------------------
 .proc PlayerXdeath
 ; this tank should not explode anymore:
@@ -953,6 +1014,11 @@ UsageLoop
 
     cpx NumberOfPlayers
     bcc GetRandomAgainX
+    ; and "sequence" for teans
+    ldx #MaxPlayers
+    stx TankSequence+MaxPlayers+1 ; B-Team
+    inx
+    stx TankSequence+MaxPlayers ; A-Team
     rts
 .endp
 ;----------------------------------------------
@@ -1122,8 +1188,28 @@ Bubble
     ldx #0 ;i=x
     stx temp2 ; sortflag=temp2
     inx ; because NumberOfPlayers start from 1 (not 0)
-
 BubbleBobble
+    jsr SortOnePass
+    inx
+    cpx NumberOfPlayers ; if no team game
+    bne BubbleBobble
+    
+    lda temp2   ; sortflag
+    bne Bubble
+
+    ; amd Teams sorting
+    bit TeamGame
+    bvc NoTeamsSort
+    ldx #MaxPlayers+1 ;i=x
+    jsr SortOnePass ; for 2 Teams one pass is sufficient
+NoTeamsSort
+    rts
+.endp
+
+;--------------------------------------------------
+.proc SortOnePass
+; optimalisation for 2 sorting procedures
+;--------------------------------------------------
     ldy TankSequence-1,x    ; x count from 1 to NumberOfPlayers (we need cout from 0 to NumberOfPlayers-1)
     lda ResultsTable,y
     ldy TankSequence,x
@@ -1166,14 +1252,6 @@ swapvalues
     sta TankSequence,x
     inc temp2
 nextishigher
-    inx
-    cpx NumberOfPlayers
-    bne BubbleBobble
-
-    lda temp2
-
-    bne Bubble
-
     rts
 .endp
 ;--------------------------------------------------
@@ -1328,6 +1406,10 @@ GameOver4x4
     sbb ResultY  #2 ;next line (was empty)
 
     ldx NumberOfPlayers  ;we start from the highest (best) tank
+    bit TeamGame
+    bvc NoTeamsResults
+    ldx #MaxPlayers+2   ; set pointer to teams results
+NoTeamsResults
     dex   ;and it is the last one
     stx ResultOfTankNr  ;in TankSequence table
 
@@ -1394,7 +1476,10 @@ TankNameCopyLoop
     jsr TL4x4_empty
 
     dec ResultOfTankNr
-    bmi FinishResultDisplay
+    bmi FinishResultDisplay ; check for last player
+    lda ResultOfTankNr
+    cmp #MaxPlayers-1     ; check for last team
+    beq FinishResultDisplay
 
     sbb ResultY  #2 ;distance between lines is smaller
 

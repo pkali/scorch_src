@@ -11,11 +11,11 @@
 ; start addr of loader
 
 ; cart banks numbers
-LoaderBank  = 0
-ScorchBank  = 1
-MenuENBank  = 10
-MenuPLBank  = 15
-TetryxBank  = 20
+LoaderBank  = 0     ; offset $00000 (and $FE000)
+ScorchBank  = 1     ; offset $02000
+MenuENBank  = 12    ; offset $18000
+MenuPLBank  = 17    ; offset $22000
+TetryxBank  = 22    ; offset $2c000
     org $2000
 
 WeaponFont

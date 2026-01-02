@@ -1,216 +1,218 @@
 # Podstawowa instrukcja:
 
-GraÄ‡ moÅ¼na przy uÅ¼yciu klawiatury (wszystkie funkcjonalnoÅ›ci) lub joysticka w dowolnym porcie (wszystkie funkcjonalnoÅ›ci niezbÄ™dne w rozgrywce).
+Graæ mo¿na przy u¿yciu klawiatury (wszystkie funkcjonalnoœci) lub joysticka w dowolnym porcie (wszystkie funkcjonalnoœci niezbêdne w rozgrywce).
 
 
-## 1. WybÃ³r opcji gry.
+## 1. Wybór opcji gry.
 ![Ekran wyboru opcji gry.](images/MainMenu.png)
-Na pierwszym ekranie moÅ¼emy skonfigurowaÄ‡ opcje rozgrywki:
+Na pierwszym ekranie mo¿emy skonfigurowaæ opcje rozgrywki:
 
 * **Players** - liczba graczy (2 - 6) obejmuje tak ludzi, jak graczy sterowanych przez komputer
 
-* **Cash** - poczÄ…tkowÄ… iloÅ›Ä‡ gotÃ³wki kaÅ¼dego z graczy (8k to wybrana przez nas wartoÅ›Ä‡ optymalna, lecz przy krÃ³tkich rozgrywkach warto wybraÄ‡ wiÄ™kszÄ… wartoÅ›Ä‡)
+* **Cash** - pocz¹tkow¹ iloœæ gotówki ka¿dego z graczy (8k to wybrana przez nas wartoœæ optymalna, lecz przy krótkich rozgrywkach warto wybraæ wiêksz¹ wartoœæ)
 
-* **Gravity** - siÅ‚a grtawitacji 
+* **Gravity** - si³a grtawitacji 
 
-* **Wind** - maksymalna siÅ‚a wiatru w skali Beauforta (wiatr jest losowany na poczÄ…tku kaÅ¼dej z rund lub w czasie rundy pomiÄ™dzy turami, tu moÅ¼emy wybraÄ‡ jak silny moÅ¼e byÄ‡):
-    * 1B - maksymalna siÅ‚a wiatru: 5
-    * 3B - maksymalna siÅ‚a wiatru: 20
-    * 5B - maksymalna siÅ‚a wiatru: 40
-    * 7B - maksymalna siÅ‚a wiatru: 70
-    * 9B - maksymalna siÅ‚a wiatru: 99
+* **Wind** - maksymalna si³a wiatru w skali Beauforta (wiatr jest losowany na pocz¹tku ka¿dej z rund lub w czasie rundy pomiêdzy turami, tu mo¿emy wybraæ jak silny mo¿e byæ):
+    * 1B - maksymalna si³a wiatru: 5
+    * 3B - maksymalna si³a wiatru: 20
+    * 5B - maksymalna si³a wiatru: 40
+    * 7B - maksymalna si³a wiatru: 70
+    * 9B - maksymalna si³a wiatru: 99
 
 * **Rounds** - liczba rozgrywanych rund
 
-* **Missiles** - szybkoÅ›Ä‡ lotu pociskÃ³w (nie ma wpÅ‚ywu na tor lotu - zmienia jedynie widocznÄ… prÄ™dkoÅ›Ä‡ rysowania - nie zmienia nic w samej rozgrywce)
+* **Missiles** - szybkoœæ lotu pocisków (nie ma wp³ywu na tor lotu - zmienia jedynie widoczn¹ prêdkoœæ rysowania - nie zmienia nic w samej rozgrywce)
 
-* **Seppuku** - czÄ™stotliwoÅ›Ä‡ samobÃ³jstw :) - jeÅ›li przez ileÅ› tur gra nie odnotowaÅ‚a trafieÅ„ (czoÅ‚gi ciÄ…gle strzelajÄ… niecelnie) jeden z takich pudÅ‚ujÄ…cych czoÅ‚gÃ³w popeÅ‚nia samobÃ³jstwo - tu okreÅ›lamy jak dÅ‚ugo mogÄ… "strzelaÄ‡ w prÃ³Å¼niÄ™" :) - jeÅ›li grajÄ… tylko ludzie, optymalne ustawienie to "norm", a w przypadku graczy sterowanych przez komputer... wedle uznania.
+* **Seppuku** - czêstotliwoœæ samobójstw :) - jeœli przez ileœ tur gra nie odnotowa³a trafieñ (czo³gi ci¹gle strzelaj¹ niecelnie) jeden z takich pud³uj¹cych czo³gów pope³nia samobójstwo - tu okreœlamy jak d³ugo mog¹ "strzelaæ w pró¿niê" :) - jeœli graj¹ tylko ludzie, optymalne ustawienie to "norm", a w przypadku graczy sterowanych przez komputer... wedle uznania.
 
-* **Mountain** - wysokoÅ›Ä‡ (i pofaÅ‚dowanie) gÃ³r od prawie pÅ‚askich (NL - KrÃ³lestwo NiderlandÃ³w), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
+* **Mountain** - wysokoœæ (i pofa³dowanie) gór od prawie p³askich (NL - Królestwo Niderlandów), do strzelistych i wysokich (NP - Federalna Demokratyczna Republika Nepalu)
 
-* **Walls** - sposÃ³b dziaÅ‚ania Å›cian (krawÄ™dzi ekranu):
-    * **none** - pociski, ktÃ³re wyleciaÅ‚y poza ekran nie wracajÄ… (czarny kolor ramki ekranu)
-    * **wrap** - ekran "zawija siÄ™" i pociski, ktÃ³re wyleciaÅ‚y w prawo pojawiajÄ… siÄ™ z lewej strony i odwrotnie (fioletowy kolor ramki ekranu)
-    * **bump** - prawa i lewa Å›ciana odbijajÄ… pociski, ktÃ³re chcÄ… przez nie przelecieÄ‡ (granatowy kolor ramki ekranu)
-    * **boxy** - tak jak bump, tyle Å¼e "sufit" takÅ¼e odbija pociski (zielony kolor ramki ekranu)
-    * **rand** - na poczÄ…tku kaÅ¼dej rundy losowany jest jeden z 4 powyÅ¼szych sposobÃ³w dziaÅ‚ania Å›cian
+* **Walls** - sposób dzia³ania œcian (krawêdzi ekranu):
+    * **none** - pociski, które wylecia³y poza ekran nie wracaj¹ (czarny kolor ramki ekranu)
+    * **wrap** - ekran "zawija siê" i pociski, które wylecia³y w prawo pojawiaj¹ siê z lewej strony i odwrotnie (fioletowy kolor ramki ekranu)
+    * **bump** - prawa i lewa œciana odbijaj¹ pociski, które chc¹ przez nie przelecieæ (granatowy kolor ramki ekranu)
+    * **boxy** - tak jak bump, tyle ¿e "sufit" tak¿e odbija pociski (zielony kolor ramki ekranu)
+    * **rand** - na pocz¹tku ka¿dej rundy losowany jest jeden z 4 powy¿szych sposobów dzia³ania œcian
     
-    W trakcie rozgrywki aktualny sposÃ³b dziaÅ‚ania Å›cian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - granatowy, boxy - zielony.
+    W trakcie rozgrywki aktualny sposób dzia³ania œcian reprezentowany jest przez kolor ramki ekranu: none - czarny, wrap - fioletowy, bump - granatowy, boxy - zielony.
 
-WybÃ³r opcji klawiszami kursora lub joystickiem.
+Wybór opcji klawiszami kursora lub joystickiem.
 
-Klawisz **TAB**, **SELECT**, dÅ‚uÅ¼sze przytrzymanie pierwszego przycisku joysticka lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny) zmieniajÄ… kolor gÃ³r (3 wersje do wyboru).  
+Klawisze **G**, **TAB**, **SELECT**, d³u¿sze przytrzymanie pierwszego przycisku joysticka lub drugi przycisk joysticka (wspierany standard Joy 2B+ lub zgodny) zmieniaj¹ kolor gór (3 wersje do wyboru).  
 
-JeÅ›li kursor wskazuje opcjÄ™ wyboru siÅ‚y wiatru **Wind**, wciÅ›niÄ™cie **TAB** zmienia sposÃ³b losowania siÅ‚y wiatru z "co rundÄ™" na "co turÄ™" i odwrotnie. Losowanie co turÄ™ jest sygnalizowane znakiem "?" przy sÅ‚owie **Wind**.  
+Jeœli kursor wskazuje opcjê wyboru iloœci graczy i wybranych jest 4 lub 6 graczy, wciœniêcie **TAB** w³¹cza rozgrywkê dru¿ynow¹. Jest to sygnalizowane liter¹ **t** przy s³owie **Players**. Rozgrywka dru¿ynowa jest ograniczona do 4 lub 6 graczy i maksimum 20 rund. Gracze o numerach nieparzystych s¹ przydzielani do Dru¿yny A, a gracze o numerach parzystych do Dru¿yny B.
 
-JeÅ›li kursor wskazuje opcjÄ™ wyboru siÅ‚y ciÄ…Å¼enia **Gravity**, **TAB** zmienia procedurÄ™ opadania ziemi na mniej efektownÄ…, ale szybszÄ… i odwrotnie. Wybranie szybkiego opadania ziemi sygnalizowane jest literÄ… "f" przy sÅ‚owie **Gravity**.
+Jeœli kursor wskazuje opcjê wyboru si³y wiatru **Wind**, wciœniêcie **TAB** zmienia sposób losowania si³y wiatru z "co rundê" na "co turê" i odwrotnie. Losowanie co turê jest sygnalizowane znakiem "?" przy s³owie **Wind**.  
 
-JeÅ›li kursor wskazuje opcjÄ™ wyboru wysokoÅ›ci gÃ³r **Mountain**, **TAB** przeÅ‚Ä…cza opcjÄ™ zmiennej co rundÄ™ wysokoÅ›ci gÃ³r. Losowanie co rundÄ™ jest sygnalizowane znakiem "?" przy sÅ‚owie **Mountain**.  
+Jeœli kursor wskazuje opcjê wyboru si³y ci¹¿enia **Gravity**, **TAB** zmienia procedurê opadania ziemi na mniej efektown¹, ale szybsz¹ i odwrotnie. Wybranie szybkiego opadania ziemi sygnalizowane jest liter¹ "f" przy s³owie **Gravity**.
 
-Klawisz **RETURN** lub przycisk joysticka przechodzi do nastÄ™pnego ekranu.
+Jeœli kursor wskazuje opcjê wyboru wysokoœci gór **Mountain**, **TAB** prze³¹cza opcjê zmiennej co rundê wysokoœci gór. Losowanie co rundê jest sygnalizowane znakiem "?" przy s³owie **Mountain**.  
 
-
-## 2. Gracze i poziom przeciwnikÃ³w.
-![Ekran wyboru graczy i poziomu trudnoÅ›ci.](images/DiffMenu.png)
-Wprowadzanie nazw graczy i wybÃ³r poziomu graczy sterowanych przez komputer.
-
-Drugi ekran powtarza siÄ™ dla kaÅ¼dego z graczy, moÅ¼na na nim klawiszami kursora lub joystickiem wybraÄ‡ czy danym czoÅ‚giem bÄ™dzie kierowaÅ‚ czÅ‚owiek (opcja HUMAN), czy teÅ¼ komputer (pozostaÅ‚e opcje).  
-
-Klawisz **TAB**, **SELECT** lub drugi przycisk joysticka pozwalajÄ… wybraÄ‡ z ktÃ³rego portu joysticka bÄ™dzie korzystaÅ‚ gracz.  
-
-Klawisz **INVERSE** lub **OPTION** umoÅ¼liwiajÄ… wybÃ³r jednego z 3 dostÄ™pnych ksztaÅ‚tÃ³w czoÅ‚gÃ³w.
-
-JednoczeÅ›nie z klawiatury moÅ¼na wprowadziÄ‡ nazwÄ™ wybranego gracza.  
-
-Po naciÅ›niÄ™ciu klawisza **RETURN** lub krÃ³tkim naciÅ›niÄ™ciu przycisku joysticka ekran przechodzi na nastÄ™pnego gracza aÅ¼ zostanÄ… wybrane poziomy trudnoÅ›ci dla wszystkich.
-
-NazwÄ™ gracza moÅ¼na wprowadzaÄ‡ takÅ¼e przy pomocy joysticka. Po wciÅ›niÄ™ciu i przytrzymaniu przycisku ponad 1s. za pomocÄ… ruchÃ³w gÃ³ra/dÃ³Å‚ moÅ¼na zmieniÄ‡ wprowadzanÄ… literÄ™, a lewo/prawo jej pozycjÄ™ w nazwie. Puszczenie przycisku koÅ„czy wprowadzanie nazwy i wraca do wyboru poziomu.
-
-JeÅ›li nazwa nie zostanie wpisana, to zostanie uzupeÅ‚niona nazwÄ… domyÅ›lnÄ….
+Klawisz **RETURN** lub przycisk joysticka przechodzi do nastêpnego ekranu.
 
 
-## 3. Ekran zakupÃ³w (przed kaÅ¼dÄ… rundÄ…).
-![Ekran zakupÃ³w broni ofensywnych.](images/PurOffensive.png)
-![Ekran zakupÃ³w broni defensywnych.](images/PurDefensive.png)
-Na tym ekranie moÅ¼na dokonywaÄ‡ zakupÃ³w broni ofensywnych i defensywnych. Widoczne sÄ… tylko te bronie, na ktÃ³re gracza staÄ‡ wraz z informacjÄ… o cenie i iloÅ›ci jednostek danej broni, ktÃ³rÄ… za tÄ™ cenÄ™ otrzymamy. Informacje na ekranie nie wymagajÄ… chyba wiÄ™cej opisu. Po listach poruszamy siÄ™ klawiszami kursora (gÃ³ra i dÃ³Å‚) lub joystickiem, klawisz **TAB** lub strzaÅ‚ka w lewo, czy teÅ¼ ruch joystickiem w lewo lub drugi przycisk joysticka zmieniajÄ… ekran na bronie defensywne lub ofensywne, klawisz **SPACJA** , strzaÅ‚ka w prawo, dÅ‚uÅ¼sze przytrzymanie przycisku joysticka, a takÅ¼e joystick w prawo realizujÄ… zakup wskazanej broni.
+## 2. Gracze i poziom przeciwników.
+![Ekran wyboru graczy i poziomu trudnoœci.](images/DiffMenu.png)
+Wprowadzanie nazw graczy i wybór poziomu graczy sterowanych przez komputer.
+
+Drugi ekran powtarza siê dla ka¿dego z graczy, mo¿na na nim klawiszami kursora lub joystickiem wybraæ czy danym czo³giem bêdzie kierowa³ cz³owiek (opcja HUMAN), czy te¿ komputer (pozosta³e opcje).  
+
+Klawisz **TAB**, **SELECT** lub drugi przycisk joysticka pozwalaj¹ wybraæ z którego portu joysticka bêdzie korzysta³ gracz.  
+
+Klawisz **INVERSE** lub **OPTION** umo¿liwiaj¹ wybór jednego z 3 dostêpnych kszta³tów czo³gów.
+
+Jednoczeœnie z klawiatury mo¿na wprowadziæ nazwê wybranego gracza.  
+
+Po naciœniêciu klawisza **RETURN** lub krótkim naciœniêciu przycisku joysticka ekran przechodzi na nastêpnego gracza a¿ zostan¹ wybrane poziomy trudnoœci dla wszystkich.
+
+Nazwê gracza mo¿na wprowadzaæ tak¿e przy pomocy joysticka. Po wciœniêciu i przytrzymaniu przycisku ponad 1s. za pomoc¹ ruchów góra/dó³ mo¿na zmieniæ wprowadzan¹ literê, a lewo/prawo jej pozycjê w nazwie. Puszczenie przycisku koñczy wprowadzanie nazwy i wraca do wyboru poziomu.
+
+Jeœli nazwa nie zostanie wpisana, to zostanie uzupe³niona nazw¹ domyœln¹.
+
+
+## 3. Ekran zakupów (przed ka¿d¹ rund¹).
+![Ekran zakupów broni ofensywnych.](images/PurOffensive.png)
+![Ekran zakupów broni defensywnych.](images/PurDefensive.png)
+Na tym ekranie mo¿na dokonywaæ zakupów broni ofensywnych i defensywnych. Widoczne s¹ tylko te bronie, na które gracza staæ wraz z informacj¹ o cenie i iloœci jednostek danej broni, któr¹ za tê cenê otrzymamy. Informacje na ekranie nie wymagaj¹ chyba wiêcej opisu. Po listach poruszamy siê klawiszami kursora (góra i dó³) lub joystickiem, klawisz **TAB** lub strza³ka w lewo, czy te¿ ruch joystickiem w lewo lub drugi przycisk joysticka zmieniaj¹ ekran na bronie defensywne lub ofensywne, klawisz **SPACJA** , strza³ka w prawo, d³u¿sze przytrzymanie przycisku joysticka, a tak¿e joystick w prawo realizuj¹ zakup wskazanej broni.
 
 Klawisz **RETURN** lub przycisk joysticka przechodzi do ekranu aktywacji broni defensywnych.
 
 ![Ekran aktywacji broni defensywnych.](images/ActDefensive.png)
-Na ekranie tym moÅ¼na aktywowaÄ‡ zakupione wczeÅ›niej bronie defensywne czy teÅ¼ ofensywne. ObsÅ‚ugiwany jest identycznie jak ekran zakupÃ³w, jednak **SPACJA** lub strzaÅ‚ka w prawo, a takÅ¼e joystick w prawo realizujÄ… aktywacje wskazanej broni. UmoÅ¼liwia to aktywowanie osÅ‚on jeszcze przed rozpoczÄ™ciem rundy.
+Na ekranie tym mo¿na aktywowaæ zakupione wczeœniej bronie defensywne czy te¿ ofensywne. Obs³ugiwany jest identycznie jak ekran zakupów, jednak **SPACJA** lub strza³ka w prawo, a tak¿e joystick w prawo realizuj¹ aktywacje wskazanej broni. Umo¿liwia to aktywowanie os³on jeszcze przed rozpoczêciem rundy.
 
-Klawisz **RETURN** lub przycisk joysticka przechodzi do ekranu zakupÃ³w nastÄ™pnego gracza.
-(oczywiÅ›cie dla graczy komputerowych ten ekran siÄ™ nie pojawia)
+Klawisz **RETURN** lub przycisk joysticka przechodzi do ekranu zakupów nastêpnego gracza.
+(oczywiœcie dla graczy komputerowych ten ekran siê nie pojawia)
 
 
-## 4. GÅ‚Ã³wny ekran gry.
-![GÅ‚Ã³wny ekran gry.](images/StatusLine.png)
-W linii statusowej widoczna jest informacja o tym, ktÃ³ry z graczy aktualnie moÅ¼e oddaÄ‡ strzaÅ‚ oraz zestaw innych informacji:
+## 4. G³ówny ekran gry.
+![G³ówny ekran gry.](images/StatusLine.png)
+W linii statusowej widoczna jest informacja o tym, który z graczy aktualnie mo¿e oddaæ strza³ oraz zestaw innych informacji:
 
-* **Player** - nazwa czoÅ‚gu gracza
+* **Player** - nazwa czo³gu gracza. W przypadku gry dru¿ynowej s³owo **Player** zastêpowane jest nazw¹ dru¿yny.
 
 * numer aktywnego joysticka lub poziom gracza sterowanego przez komputer (1-**Moron** - 8-**Unknown**),
 
-* wybrana aktualnie broÅ„ ofensywna (symbol - iloÅ›Ä‡ - nazwa),
+* wybrana aktualnie broñ ofensywna (symbol - iloœæ - nazwa),
 
-* **Energy** - pozostaÅ‚a iloÅ›Ä‡ punktÃ³w energii gracza i jeÅ›li ma on aktywnÄ… broÅ„ defensywnÄ… posiadajÄ…cÄ… swÃ³j zasÃ³b energii - w nawiasie ten zasÃ³b
+* **Energy** - pozosta³a iloœæ punktów energii gracza i jeœli ma on aktywn¹ broñ defensywn¹ posiadaj¹c¹ swój zasób energii - w nawiasie ten zasób
 
-* **Angle** - ustawiony przez gracza kÄ…t nachylenia lufy i kierunek jej nachylenia
+* **Angle** - ustawiony przez gracza k¹t nachylenia lufy i kierunek jej nachylenia
 
-* **Force** - ustawiona przez gracza siÅ‚a strzaÅ‚u (maksymalna siÅ‚a strzaÅ‚u jest ograniczana przez energiÄ™ gracza - nie moÅ¼e przekroczyÄ‡ energii * 10 . Oznacza to, Å¼e majÄ…c maÅ‚Ä… iloÅ›Ä‡ energii moÅ¼emy oddaÄ‡ sÅ‚absze strzaÅ‚y
+* **Force** - ustawiona przez gracza si³a strza³u (maksymalna si³a strza³u jest ograniczana przez energiê gracza - nie mo¿e przekroczyæ energii * 10 . Oznacza to, ¿e maj¹c ma³¹ iloœæ energii mo¿emy oddaæ s³absze strza³y
 
 * **Round** - numer aktualnej rundy rozgrywki
 
-* **Wind** - prÄ™dkoÅ›Ä‡ i kierunek wiatru
+* **Wind** - prêdkoœæ i kierunek wiatru
 
-* symbol "komputera" jeÅ›li aktywna jest **Auto Defense**
+* symbol "komputera" jeœli aktywna jest **Auto Defense**
 
-* w nawiasie nazwa aktywnej broni defensywnej - jeÅ›li jest jakaÅ› aktywowana przez gracza
+* w nawiasie nazwa aktywnej broni defensywnej - jeœli jest jakaœ aktywowana przez gracza
 
-Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana kÄ…ta nachylenia lufy, gÃ³ra/dÃ³Å‚ - zmiana ustawienia siÅ‚y strzaÅ‚u.
+Tutaj klawiszologia jest prosta, klawisze kursora lub joystick: lewo/prawo - zmiana k¹ta nachylenia lufy, góra/dó³ - zmiana ustawienia si³y strza³u.
 
 | A800         | funkcja          |
 |--------------|------------------|
-| **SPACJA**/**FIRE**  | strzaÅ‚   (zob. â†“)|
-| **TAB**/**SELECT**   | zmiana broni  (â†“)|
-| **I**            | inwentarz     (â†“)|
-| **A**/**OPTION**     | defensywa     (â†“)|
-| **M**            | wÅ‚/wyÅ‚ muzyki    |
-| **S**            | wÅ‚/wyÅ‚ dÅºwiÄ™kÃ³w  |
-| **START**        | tryb turbo    (â†“)|
-| **O**            | koniec gry    (â†“)|
-| **START**+**OPTION** | bezw. koniec  (â†“)|
-| **G**            | inne kolory   (â†“)|
-| **ESC**          | powrÃ³t        (â†“)|
-| **Y**            | zatwierdzam   (â†“)|
-| **CTRL**+**HELP**    | visual debug  (â†“)|
+| **SPACJA**/**FIRE**  | strza³   (zob. ¡)|
+| **TAB**/**SELECT**   | zmiana broni  (¡)|
+| **I**            | inwentarz     (¡)|
+| **A**/**OPTION**     | defensywa     (¡)|
+| **M**            | w³/wy³ muzyki    |
+| **S**            | w³/wy³ dŸwiêków  |
+| **START**        | tryb turbo    (¡)|
+| **O**            | koniec gry    (¡)|
+| **START**+**OPTION** | bezw. koniec  (¡)|
+| **G**            | inne kolory   (¡)|
+| **ESC**          | powrót        (¡)|
+| **Y**            | zatwierdzam   (¡)|
+| **CTRL**+**HELP**    | visual debug  (¡)|
 
-* **strzaÅ‚**, przycisk joysticka naciÅ›niÄ™te krÃ³tko - oddanie strzaÅ‚u
+* **strza³**, przycisk joysticka naciœniête krótko - oddanie strza³u
 
-* **zmiana broni**, drugi przycisk joysticka - wybÃ³r broni ofensywnej (ta opcja nie jest dostÄ™pna bezpoÅ›rednio standardowym joystickiem - trzeba wybraÄ‡ Inventory).
+* **zmiana broni**, drugi przycisk joysticka - wybór broni ofensywnej (ta opcja nie jest dostêpna bezpoœrednio standardowym joystickiem - trzeba wybraæ Inventory).
 
-* **inwentarz**, dÅ‚uÅ¼sze przytrzymanie przycisku joysticka - przejÅ›cie do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliÅºniaczo podobny do ekranu zakupÃ³w. Zasady poruszania siÄ™ sÄ… identyczne - z tym, Å¼e tu nie kupujemy broni, ale wybieramy jednÄ… z ofensywnych, ktÃ³rÄ… bÄ™dziemy strzelaÄ‡ lub aktywujemy broÅ„ defensywnÄ….
+* **inwentarz**, d³u¿sze przytrzymanie przycisku joysticka - przejœcie do Inventory (aktywacji broni). Inventory to ekran (a w zasadzie dwa) bliŸniaczo podobny do ekranu zakupów. Zasady poruszania siê s¹ identyczne - z tym, ¿e tu nie kupujemy broni, ale wybieramy jedn¹ z ofensywnych, któr¹ bêdziemy strzelaæ lub aktywujemy broñ defensywn¹.
 
-* **defensywa** - bezpoÅ›rednie przejÅ›cie na ekran Inventory aktywacji broni defensywnych.
+* **defensywa** - bezpoœrednie przejœcie na ekran Inventory aktywacji broni defensywnych.
 
-* **tryb turbo** - przyspiesza/pomija niektÃ³re animacje w grze
+* **tryb turbo** - przyspiesza/pomija niektóre animacje w grze
 
-* **koniec gry** - wymuszenie zakoÅ„czenia gry (Game Over). W podsumowaniu wynikÃ³w nie jest brana pod uwagÄ™ przerwana wÅ‚aÅ›nie runda rozgrywki, a wyÅ‚Ä…cznie rundy zakoÅ„czone wczeÅ›niej. Odpowiada to wciÅ›niÄ™ciu klawisza **ESC** z tÄ… rÃ³Å¼nicÄ…, Å¼e wyÅ›wietlane jest podsumowanie oraz creditsy.
+* **koniec gry** - wymuszenie zakoñczenia gry (Game Over). W podsumowaniu wyników nie jest brana pod uwagê przerwana w³aœnie runda rozgrywki, a wy³¹cznie rundy zakoñczone wczeœniej. Odpowiada to wciœniêciu klawisza **ESC** z t¹ ró¿nic¹, ¿e wyœwietlane jest podsumowanie oraz creditsy.
 
-* **bezw. koniec** - natychmiastowe wymuszenie zakoÅ„czenia gry (Game Over), tak jak **O**, ale bez potwierdzenia.
+* **bezw. koniec** - natychmiastowe wymuszenie zakoñczenia gry (Game Over), tak jak **O**, ale bez potwierdzenia.
 
-* **inne kolory** - zmienia wariant kolorystyczny gÃ³r (3 wersje do wyboru)
+* **inne kolory** - zmienia wariant kolorystyczny gór (3 wersje do wyboru)
 
-* **powrÃ³t** - w czasie caÅ‚ej gry w dowolnym momencie (chyba Å¼e akurat gra komputer, wtedy czasem trzeba chwilÄ™ poczekaÄ‡) moÅ¼na nacisnÄ…Ä‡ klawisz **ESC**, ktÃ³ry umoÅ¼liwia przerwanie gry i powrÃ³t na poczÄ…tek (oczywiÅ›cie jest zabezpieczenie przed przypadkowym naciÅ›niÄ™ciem).
+* **powrót** - w czasie ca³ej gry w dowolnym momencie (chyba ¿e akurat gra komputer, wtedy czasem trzeba chwilê poczekaæ) mo¿na nacisn¹æ klawisz **ESC**, który umo¿liwia przerwanie gry i powrót na pocz¹tek (oczywiœcie jest zabezpieczenie przed przypadkowym naciœniêciem).
 
-* **zatwierdzam** - w przypadku pytania o przerwanie lub zakoÅ„czenie gry - potwierdzenie decyzji
+* **zatwierdzam** - w przypadku pytania o przerwanie lub zakoñczenie gry - potwierdzenie decyzji
 
-* **visual debug** - przeÅ‚Ä…cza tryb "visual debug". Wizualizuje mierzone odlegÅ‚oÅ›ci, celowanie lasera oraz technikÄ™ celowania komputera. Pozostawia baÅ‚agan na ekranie, co nie zmienia rozgrywki, tylko jÄ… nieco utrudnia.
+* **visual debug** - prze³¹cza tryb "visual debug". Wizualizuje mierzone odleg³oœci, celowanie lasera oraz technikê celowania komputera. Pozostawia ba³agan na ekranie, co nie zmienia rozgrywki, tylko j¹ nieco utrudnia.
 
 
 ## 5. Zasady gry - bronie ofensywne.
 
-DuÅ¼e punkty otrzymane przez gracza to liczba czoÅ‚gÃ³w, ktÃ³re zginÄ™Å‚y wczeÅ›niej niÅ¼ on. JeÅ›li ktÃ³ryÅ› z innych czoÅ‚gÃ³w skapitulowaÅ‚ wczeÅ›niej (**White Flag**) nie jest doliczany do tych, ktÃ³re zginÄ™Å‚y, i nie daje punktÃ³w.
+Du¿e punkty otrzymane przez gracza to liczba czo³gów, które zginê³y wczeœniej ni¿ on. Jeœli któryœ z innych czo³gów skapitulowa³ wczeœniej (**White Flag**) nie jest doliczany do tych, które zginê³y, i nie daje punktów.
 
-Tylko te punkty decydujÄ… o kolejnoÅ›ci w podsumowaniu.
+Tylko te punkty decyduj¹ o kolejnoœci w podsumowaniu.
 
 
-### Energia czoÅ‚gÃ³w.
-* Na poczÄ…tku kaÅ¼dej rundy kaÅ¼dy czoÅ‚g ma 99 jednostek energii.
+### Energia czo³gów.
+* Na pocz¹tku ka¿dej rundy ka¿dy czo³g ma 99 jednostek energii.
 
-* Energii czoÅ‚gom ubywa na 3 sposoby: 
-    * jedna jednostka po oddaniu kaÅ¼dego strzaÅ‚u
-    * w czasie spadania (jeden piksel w dÃ³Å‚ -2 jednostki)
-    * w chwili trafienia w czoÅ‚g lub obok niego jakiegoÅ› pocisku - i tu iloÅ›Ä‡ odejmowanej energii zaleÅ¼y od odlegÅ‚oÅ›ci od centrum eksplozji i typu/siÅ‚y raÅ¼enia pocisku.
+* Energii czo³gom ubywa na 3 sposoby: 
+    * jedna jednostka po oddaniu ka¿dego strza³u
+    * w czasie spadania (jeden piksel w dó³ -2 jednostki)
+    * w chwili trafienia w czo³g lub obok niego jakiegoœ pocisku - i tu iloœæ odejmowanej energii zale¿y od odleg³oœci od centrum eksplozji i typu/si³y ra¿enia pocisku.
 
 
 ### Energia i kasa
-Jak dziaÅ‚a odejmowanie energii i zarabianie kasy:
-Po kaÅ¼dej rundzie wyliczana jest iloÅ›Ä‡ zdobytych/straconych pieniÄ™dzy, robione jest to na podstawie dwÃ³ch zmiennych gromadzonych przez kaÅ¼dy z czoÅ‚gÃ³w w trakcie rundy. Te zmienne to:
+Jak dzia³a odejmowanie energii i zarabianie kasy:
+Po ka¿dej rundzie wyliczana jest iloœæ zdobytych/straconych pieniêdzy, robione jest to na podstawie dwóch zmiennych gromadzonych przez ka¿dy z czo³gów w trakcie rundy. Te zmienne to:
 
-**gain** - energia "przechwycona" od trafionych czoÅ‚gÃ³w (takÅ¼e jeÅ›li trafimy w samego siebie :) i tu haczyk, jeÅ›li pozostaÅ‚o nam bardzo maÅ‚o energii opÅ‚acalne moÅ¼e byÄ‡ trafienie w siebie mocnÄ… broniÄ…!
+**gain** - energia "przechwycona" od trafionych czo³gów (tak¿e jeœli trafimy w samego siebie :) i tu haczyk, jeœli pozosta³o nam bardzo ma³o energii op³acalne mo¿e byæ trafienie w siebie mocn¹ broni¹!
 
-**lose** - energia stracona w wyniku eksplozji/upadku (i tu waÅ¼ne - liczona jest caÅ‚kowita utrata energii nawet jeÅ›li czoÅ‚g ma w chwili trafienia mniej).
+**lose** - energia stracona w wyniku eksplozji/upadku (i tu wa¿ne - liczona jest ca³kowita utrata energii nawet jeœli czo³g ma w chwili trafienia mniej).
 
-Dodatkowo czoÅ‚g, ktÃ³ry wygraÅ‚ rundÄ™, ma parametr gain (przechwyconej od trafionych czoÅ‚gÃ³w energii) zwiÄ™kszany o pozostaÅ‚Ä… mu na koniec rundy energiÄ™ (bo nie zginÄ…Å‚ i powinien jÄ… mieÄ‡ - choÄ‡ bywa teÅ¼ inaczej :) )
+Dodatkowo czo³g, który wygra³ rundê, ma parametr gain (przechwyconej od trafionych czo³gów energii) zwiêkszany o pozosta³¹ mu na koniec rundy energiê (bo nie zgin¹³ i powinien j¹ mieæ - choæ bywa te¿ inaczej :) )
 
 Konkretnie:
 
-### Po kaÅ¼dej rundzie:
+### Po ka¿dej rundzie:
 **money = money + (20 * (gain+energy))**
 
 **money = money - (10 * lose)**
 
-**jeÅ›li money < 0 to money = 0**
+**jeœli money < 0 to money = 0**
 
-(na starcie kaÅ¼dej rundy **gain** i **lose** majÄ… wartoÅ›Ä‡ 0)
+(na starcie ka¿dej rundy **gain** i **lose** maj¹ wartoœæ 0)
 
-W czasie rundy, jeÅ›li w wyniku strzaÅ‚u oddanego przez czoÅ‚g inny czoÅ‚g zostanie trafiony, czoÅ‚g oddajÄ…cy strzaÅ‚ "dostaje energiÄ™" zabranÄ… czoÅ‚gowi trafionemu.
+W czasie rundy, jeœli w wyniku strza³u oddanego przez czo³g inny czo³g zostanie trafiony, czo³g oddaj¹cy strza³ "dostaje energiê" zabran¹ czo³gowi trafionemu.
 
-### czoÅ‚g oddajÄ…cy strzaÅ‚:
+### czo³g oddaj¹cy strza³:
 **gain = gain + EnergyDecrease**
 
-### czoÅ‚g trafiony:
+### czo³g trafiony:
 **lose = lose + EnergyDecrease**
 
 gdzie **EnergyDecrease** to utrata energii w wyniku trafienia.
 
-OczywiÅ›cie jednoczeÅ›nie trafiony czoÅ‚g traci iloÅ›Ä‡ energii zapisanÄ… w **EnergyDecrease**, z tym Å¼e tutaj strata nie moÅ¼e przekroczyÄ‡ posiadanej energii.
+Oczywiœcie jednoczeœnie trafiony czo³g traci iloœæ energii zapisan¹ w **EnergyDecrease**, z tym ¿e tutaj strata nie mo¿e przekroczyæ posiadanej energii.
 
-## Jak dziaÅ‚a trafienie.
+## Jak dzia³a trafienie.
 
-KaÅ¼da broÅ„, ktÃ³ra skutkuje eksplozjÄ…, ma swÃ³j promieÅ„ raÅ¼enia.
+Ka¿da broñ, która skutkuje eksplozj¹, ma swój promieñ ra¿enia.
 
-Po eksplozji kaÅ¼dy czoÅ‚g w jej zasiÄ™gu traci energiÄ™.
+Po eksplozji ka¿dy czo³g w jej zasiêgu traci energiê.
 
-DziaÅ‚a to tak, Å¼e jeÅ›li trafienie jest dokÅ‚adnie w centralny punkt czoÅ‚gu, **EnergyDecrease** otrzymuje maksymalnÄ… wartoÅ›Ä‡ dla danej broni, a z kaÅ¼dym pikselem odlegÅ‚oÅ›ci od centrum czoÅ‚gu wartoÅ›Ä‡ ta jest zmniejszana o 8.
+Dzia³a to tak, ¿e jeœli trafienie jest dok³adnie w centralny punkt czo³gu, **EnergyDecrease** otrzymuje maksymaln¹ wartoœæ dla danej broni, a z ka¿dym pikselem odleg³oœci od centrum czo³gu wartoœæ ta jest zmniejszana o 8.
 
-PrzykÅ‚adowo: jeÅ›li strzaÅ‚ oddany za pomocÄ… broni **Baby Missile** trafi idealnie w centrum czoÅ‚gu, to straci on dokÅ‚adnie 88 jednostek energii (plus to, co straci spadajÄ…c po eksplozji).
-W przypadku trafienia tÄ… samÄ… broniÄ… w odlegÅ‚oÅ›ci 10-ciu pikseli od centrum czoÅ‚gu strata ta bÄ™dzie wynosiÅ‚a juÅ¼ tyko 8 jednostek.
+Przyk³adowo: jeœli strza³ oddany za pomoc¹ broni **Baby Missile** trafi idealnie w centrum czo³gu, to straci on dok³adnie 88 jednostek energii (plus to, co straci spadaj¹c po eksplozji).
+W przypadku trafienia t¹ sam¹ broni¹ w odleg³oœci 10-ciu pikseli od centrum czo³gu strata ta bêdzie wynosi³a ju¿ tyko 8 jednostek.
 
-A oto wartoÅ›ci maksymalnego ubytku energii dla poszczegÃ³lnych broni. JeÅ›li broÅ„ eksploduje kilka razy, kaÅ¼da z eksplozji jest obliczana niezaleÅ¼nie (dodatkowe wartoÅ›ci w tabeli):
+A oto wartoœci maksymalnego ubytku energii dla poszczególnych broni. Jeœli broñ eksploduje kilka razy, ka¿da z eksplozji jest obliczana niezale¿nie (dodatkowe wartoœci w tabeli):
 
-| BroÅ„ ofensywna  | Max ubytku   |
+| Broñ ofensywna  | Max ubytku   |
 |-----------------|--------------|
 | Baby Missile    | 88           |
 | Missile         | 136          |
@@ -220,140 +222,142 @@ A oto wartoÅ›ci maksymalnego ubytku energii dla poszczegÃ³lnych broni. JeÅ›li br
 | Funky Bomb      | 168 88 (*5)  |
 | MIRV            | 136 (*5)     |
 | Death's Head    | 240 (*5)     |
-| Napalm          | 40   (zob. â†“)|
-| Hot Napalm      | 80        (â†“)|
+| Napalm          | 40   (zob. ¡)|
+| Hot Napalm      | 80        (¡)|
 | Baby Roller     | 88           |
 | Roller          | 168          |
 | Heavy Roller    | 240          |
-| Riot Charge     | 0         (â†“)|
-| Riot Blast      | 0         (â†“)|
-| Riot Bomb       | 0         (â†“)|
-| Heavy Riot Bomb | 0         (â†“)|
-| Digger          | 0         (â†“)|
-| Heavy Digger    | 0         (â†“)|
-| Sandhog         | 0         (â†“)|
-| Heavy Sandhog   | 0         (â†“)|
-| Dirt Clod       | 0         (â†“)|
-| Dirt Ball       | 0         (â†“)|
-| Ton of Dirt     | 0         (â†“)|
-| Liquid Dirt     | 0         (â†“)|
-| Dirt Charge     | 0         (â†“)|
-| Propaganda      | 0         (â†“)|
-| Stomp           | 0         (â†“)|
-| Laser           | 100       (â†“)|
+| Riot Charge     | 0         (¡)|
+| Riot Blast      | 0         (¡)|
+| Riot Bomb       | 0         (¡)|
+| Heavy Riot Bomb | 0         (¡)|
+| Digger          | 0         (¡)|
+| Heavy Digger    | 0         (¡)|
+| Sandhog         | 0         (¡)|
+| Heavy Sandhog   | 0         (¡)|
+| Dirt Clod       | 0         (¡)|
+| Dirt Ball       | 0         (¡)|
+| Ton of Dirt     | 0         (¡)|
+| Liquid Dirt     | 0         (¡)|
+| Dirt Charge     | 0         (¡)|
+| Propaganda      | 0         (¡)|
+| Stomp           | 0         (¡)|
+| Laser           | 100       (¡)|
 
 Uwagi:
-* **Napalm** - ta broÅ„ jest inna i nie jest wyznaczana odlegÅ‚oÅ›Ä‡ od centrum, po prostu kaÅ¼dy czoÅ‚g znajdujÄ…cy siÄ™ w zasiÄ™gu pÅ‚omieni traci 40 jednostek energii.
+* **Napalm** - ta broñ jest inna i nie jest wyznaczana odleg³oœæ od centrum, po prostu ka¿dy czo³g znajduj¹cy siê w zasiêgu p³omieni traci 40 jednostek energii.
 
 * **Hot Napalm** - zasada taka jak w Napalm, 80 jednostek.
 
-* **Riot Charge** - nie jest odejmowana energia, ale usuwana jest czÄ™Å›Ä‡ gruntu w gÃ³rÄ™ od punktu trafienia w promieniu 31 pikseli.
+* **Riot Charge** - nie jest odejmowana energia, ale usuwana jest czêœæ gruntu w górê od punktu trafienia w promieniu 31 pikseli.
 
-* **Riot Blast** - jak w Riot Charge, tyle Å¼e w promieniu 61 pikseli.
+* **Riot Blast** - jak w Riot Charge, tyle ¿e w promieniu 61 pikseli.
 
-* **Riot Bomb** - nie jest odejmowana energia, ale niszczony jest grunt w promieniu 17 pikseli od punktu trafienia - tak jak w wypadku **Missile**. BroÅ„ przydatna do odkopywania siÄ™ po zasypaniu, bÄ…dÅº podkopywania przeciwnika.
+* **Riot Bomb** - nie jest odejmowana energia, ale niszczony jest grunt w promieniu 17 pikseli od punktu trafienia - tak jak w wypadku **Missile**. Broñ przydatna do odkopywania siê po zasypaniu, b¹dŸ podkopywania przeciwnika.
 
-* **Heavy Riot Bomb** - jak w Riot Bomb, ale promieÅ„ eksplozji to 29 pikseli od punktu trafienia - tak jak w wypadku **Nuke**.
+* **Heavy Riot Bomb** - jak w Riot Bomb, ale promieñ eksplozji to 29 pikseli od punktu trafienia - tak jak w wypadku **Nuke**.
 
-* **Digger** - nie jest odejmowana energia, ale podkopywana jest czÄ™Å›Ä‡ gruntu promieniu 60 pikseli od punktu trafienia.
+* **Digger** - nie jest odejmowana energia, ale podkopywana jest czêœæ gruntu promieniu 60 pikseli od punktu trafienia.
 
-* **Heavy Digger** - jak wyÅ¼ej - wiÄ™kszy podkop.
+* **Heavy Digger** - jak wy¿ej - wiêkszy podkop.
 
-* **Sandhog** - jak wyÅ¼ej - inny sposÃ³b podkopywania.
+* **Sandhog** - jak wy¿ej - inny sposób podkopywania.
 
-* **Heavy Sandhog** - jak wyÅ¼ej - najwiÄ™kszy podkop.
+* **Heavy Sandhog** - jak wy¿ej - najwiêkszy podkop.
 
-* **Dirt Clod** - nie jest odejmowana energia, ale tworzona jest kula gruntu o promieniu 12 pikseli od punktu trafienia. BroÅ„ przydatna do zakopywania przeciwnika.
+* **Dirt Clod** - nie jest odejmowana energia, ale tworzona jest kula gruntu o promieniu 12 pikseli od punktu trafienia. Broñ przydatna do zakopywania przeciwnika.
 
-* **Dirt Ball** - jak wyÅ¼ej, ale promieÅ„ kuli to 22 piksele.
+* **Dirt Ball** - jak wy¿ej, ale promieñ kuli to 22 piksele.
 
-* **Ton of Dirt** - jak wyÅ¼ej, ale promieÅ„ kuli to 31 pikseli.
+* **Ton of Dirt** - jak wy¿ej, ale promieñ kuli to 31 pikseli.
 
-* **Liquid Dirt** - zalewa grunt w punkcie trafienia pÅ‚ynnÄ… glebÄ…, wypeÅ‚niajÄ…c zagÅ‚Ä™bienia.
+* **Liquid Dirt** - zalewa grunt w punkcie trafienia p³ynn¹ gleb¹, wype³niaj¹c zag³êbienia.
 
-* **Dirt Charge** - nie jest odejmowana energia, ale usypywany jest dodatkowy grunt w gÃ³rÄ™ od punktu trafienia w promieniu 61 pikseli. BroÅ„ przydatna do zakopywania przeciwnika.
+* **Dirt Charge** - nie jest odejmowana energia, ale usypywany jest dodatkowy grunt w górê od punktu trafienia w promieniu 61 pikseli. Broñ przydatna do zakopywania przeciwnika.
 
 * **Propaganda** - nie jest odejmowana energia, miejsce trafienia zostaje zasypane propagandowymi tekstami.
 
-* **Stomp** - nie jest odejmowana energia, ale wszystkie czoÅ‚gi w promieniu zaleÅ¼nym od siÅ‚y strzaÅ‚u zostajÄ… odepchniÄ™te, a po odepchniÄ™ciu mogÄ… spaÅ›Ä‡ lub zostaÄ‡ zasypane. Przy maksymalnej sile 990 jednostek promieÅ„ dziaÅ‚ania to okoÅ‚o 60 pikseli.
+* **Stomp** - nie jest odejmowana energia, ale wszystkie czo³gi w promieniu zale¿nym od si³y strza³u zostaj¹ odepchniête, a po odepchniêciu mog¹ spaœæ lub zostaæ zasypane. Przy maksymalnej sile 990 jednostek promieñ dzia³ania to oko³o 60 pikseli.
 
-* **Laser** - tu takÅ¼e jest inaczej - rÃ³wno 100 tylko w przypadku bezpoÅ›redniego trafienia po prostu odejmujemy 100 jednostek energii - czyli czoÅ‚g zawsze ginie.
+* **Laser** - tu tak¿e jest inaczej - równo 100 tylko w przypadku bezpoœredniego trafienia po prostu odejmujemy 100 jednostek energii - czyli czo³g zawsze ginie.
 
 
 ## 6. A teraz bronie defensywne:
 
-* **White Flag** - powoduje poddanie gracza (moÅ¼e czasem przydaÄ‡ siÄ™ w sytuacji beznadziejnej). ZaletÄ… jest to, Å¼e poddajÄ…c siÄ™ nie dajemy duÅ¼ego punktu przeciwnikom i nie powodujemy, Å¼e ktÃ³ryÅ› zyska na tym, Å¼e nas zgÅ‚adzi, ograniczamy teÅ¼ stratÄ™ swojej energii, czyli takÅ¼e kasy. I tu takÅ¼e waÅ¼na uwaga - to jedyna broÅ„ defensywna, ktÃ³rÄ… moÅ¼na dezaktywowaÄ‡. Wystarczy ponownie wejÅ›Ä‡ do inventory i jeszcze raz wybraÄ‡ jej aktywacjÄ™.
+* **White Flag** - powoduje poddanie gracza (mo¿e czasem przydaæ siê w sytuacji beznadziejnej). Zalet¹ jest to, ¿e poddaj¹c siê nie dajemy du¿ego punktu przeciwnikom i nie powodujemy, ¿e któryœ zyska na tym, ¿e nas zg³adzi, ograniczamy te¿ stratê swojej energii, czyli tak¿e kasy. I tu tak¿e wa¿na uwaga - to jedyna broñ defensywna, któr¹ mo¿na dezaktywowaæ. Wystarczy ponownie wejœæ do inventory i jeszcze raz wybraæ jej aktywacjê.
 
-* **Battery** - w momencie aktywacji doÅ‚adowuje energiÄ™ czoÅ‚gu do peÅ‚na (99 jednostek). Jest to jedna z trzech broni defensywnych, ktÃ³ra nie dezaktywuje innych broni defensywnych w przypadku jej uÅ¼ycia.
+* **Battery** - w momencie aktywacji do³adowuje energiê czo³gu do pe³na (99 jednostek). Jest to jedna z trzech broni defensywnych, która nie dezaktywuje innych broni defensywnych w przypadku jej u¿ycia.
 
-* **Hovercraft** - broÅ„ umoÅ¼liwiajÄ…ca przemieszczanie siÄ™ czoÅ‚gu. Posiada wÅ‚asny zasÃ³b paliwa, a dodatkowo moÅ¼e byÄ‡ aktywowana wielokrotnie w czasie tej samej tury, a po jej uÅ¼yciu moÅ¼emy w tej samej turze aktywowaÄ‡ innÄ… broÅ„ defensywnÄ… i oddaÄ‡ strzaÅ‚. W wyniku jej uÅ¼ycia czoÅ‚g uniesie siÄ™ ponad gÃ³ry i za pomocÄ… klawiszy kursora lub joysticka: lewo/prawo moÅ¼emy przemieÅ›ciÄ‡ czoÅ‚g na nowÄ… pozycjÄ™, a **SPACJA** lub przycisk joysticka powodujÄ… wylÄ…dowanie czoÅ‚gu w nowym miejscu. LataÄ‡ moÅ¼na do chwili skoÅ„czenia siÄ™ "paliwa" (prezentowanego na pasku statusu tak jak energia broni defensywnej), a gdy paliwo siÄ™ skoÅ„czy, czoÅ‚g opadnie samodzielnie. Nie da siÄ™ lÄ…dowaÄ‡ na innych czoÅ‚gach.
+* **Hovercraft** - broñ umo¿liwiaj¹ca przemieszczanie siê czo³gu. Posiada w³asny zasób paliwa, a dodatkowo mo¿e byæ aktywowana wielokrotnie w czasie tej samej tury, a po jej u¿yciu mo¿emy w tej samej turze aktywowaæ inn¹ broñ defensywn¹ i oddaæ strza³. W wyniku jej u¿ycia czo³g uniesie siê ponad góry i za pomoc¹ klawiszy kursora lub joysticka: lewo/prawo mo¿emy przemieœciæ czo³g na now¹ pozycjê, a **SPACJA** lub przycisk joysticka powoduj¹ wyl¹dowanie czo³gu w nowym miejscu. Lataæ mo¿na do chwili skoñczenia siê "paliwa" (prezentowanego na pasku statusu tak jak energia broni defensywnej), a gdy paliwo siê skoñczy, czo³g opadnie samodzielnie. Nie da siê l¹dowaæ na innych czo³gach.
 
-* **Parachute** - nie chroni przed ubytkiem energii z powodu sÄ…siedniej eksplozji, powoduje Å¼e nie ubywa energii w czasie JEDNEGO spadania. Po takim upadku dezaktywuje siÄ™ i trzeba aktywowaÄ‡ nowy spadochron.
+* **Parachute** - nie chroni przed ubytkiem energii z powodu s¹siedniej eksplozji, powoduje ¿e nie ubywa energii w czasie JEDNEGO spadania. Po takim upadku dezaktywuje siê i trzeba aktywowaæ nowy spadochron.
 
-* **Strong Parachute** - spadochron z wÅ‚asnÄ… energiÄ… (na starcie 99 jednostek), dziaÅ‚a tak samo jak Parachute (nie chroni przed eksplozjami), ma za to swÃ³j wÅ‚asny zasÃ³b energii, przy spadaniu w pierwszej kolejnoÅ›ci zmniejszana jest energia tego spadochronu (1 jednostka na jeden piksel opadania - inaczej niÅ¼ czoÅ‚g!) i jeÅ›li dojdzie ona do 0, to spadochron dezaktywuje siÄ™ i dalej zmniejszana jest energia czoÅ‚gu (tutaj juÅ¼ standardowo - 2 jednostki na jeden piksel).
+* **Strong Parachute** - spadochron z w³asn¹ energi¹ (na starcie 99 jednostek), dzia³a tak samo jak Parachute (nie chroni przed eksplozjami), ma za to swój w³asny zasób energii, przy spadaniu w pierwszej kolejnoœci zmniejszana jest energia tego spadochronu (1 jednostka na jeden piksel opadania - inaczej ni¿ czo³g!) i jeœli dojdzie ona do 0, to spadochron dezaktywuje siê i dalej zmniejszana jest energia czo³gu (tutaj ju¿ standardowo - 2 jednostki na jeden piksel).
 
-* **Shield** - najprostsza osÅ‚ona, dziaÅ‚a dokÅ‚adnie przeciwnie niÅ¼ Parachute, nie chroni przed ubytkiem energii w czasie spadania, chroni za to przed ubytkiem energii spowodowanym JEDNÄ„ sÄ…siedniÄ… eksplozjÄ…. Chroni jednorazowo, bez znaczenia jak silna jest eksplozja (czy jest to tylko "draÅ›niÄ™cie", czy teÅ¼ bezpoÅ›rednie trafienie atomÃ³wkÄ…) i od razu po niej dezaktywuje siÄ™.
+* **Shield** - najprostsza os³ona, dzia³a dok³adnie przeciwnie ni¿ Parachute, nie chroni przed ubytkiem energii w czasie spadania, chroni za to przed ubytkiem energii spowodowanym JEDN¥ s¹siedni¹ eksplozj¹. Chroni jednorazowo, bez znaczenia jak silna jest eksplozja (czy jest to tylko "draœniêcie", czy te¿ bezpoœrednie trafienie atomówk¹) i od razu po niej dezaktywuje siê.
 
-* **Heavy Shield** - osÅ‚ona z wÅ‚asnÄ… energiÄ… (na starcie 99 jednostek), dziaÅ‚a tak samo jak Shield (nie chroni przed upadkiem) z tym wyjÄ…tkiem, Å¼e ma wÅ‚asny zasÃ³b energii. Przy eksplozji w pierwszej kolejnoÅ›ci zmniejszana jest energia tej osÅ‚ony i jeÅ›li dojdzie ona do 0, to osÅ‚ona dezaktywuje siÄ™ i dalej zmniejszana jest energia czoÅ‚gu. W zwiÄ…zku z takim dziaÅ‚aniem, czoÅ‚g z tym typem osÅ‚ony moÅ¼na "zabiÄ‡" podkopujÄ…c go, bo spadanie zmniejsza energiÄ™ czoÅ‚gu a nie osÅ‚ony.
+* **Heavy Shield** - os³ona z w³asn¹ energi¹ (na starcie 99 jednostek), dzia³a tak samo jak Shield (nie chroni przed upadkiem) z tym wyj¹tkiem, ¿e ma w³asny zasób energii. Przy eksplozji w pierwszej kolejnoœci zmniejszana jest energia tej os³ony i jeœli dojdzie ona do 0, to os³ona dezaktywuje siê i dalej zmniejszana jest energia czo³gu. W zwi¹zku z takim dzia³aniem, czo³g z tym typem os³ony mo¿na "zabiæ" podkopuj¹c go, bo spadanie zmniejsza energiê czo³gu a nie os³ony.
 
-* **Force Shield** - najmocniejsza osÅ‚ona - dziaÅ‚a tak jak Heavy Shield, tyle Å¼e poÅ‚Ä…czona z Parachute. Co waÅ¼ne, w jej przypadku upadek nie zabiera energii osÅ‚onie ani czoÅ‚gowi. ZabierajÄ… jÄ… tylko trafienia.
+* **Force Shield** - najmocniejsza os³ona - dzia³a tak jak Heavy Shield, tyle ¿e po³¹czona z Parachute. Co wa¿ne, w jej przypadku upadek nie zabiera energii os³onie ani czo³gowi. Zabieraj¹ j¹ tylko trafienia.
 
-* **Bouncy Castle** - broÅ„ agresywna :) DziaÅ‚a nastÄ™pujÄ…co: w przypadku bezpoÅ›redniego trafienia w czoÅ‚g (i osÅ‚onÄ™) powoduje "odbicie" pocisku w przeciwnym kierunku z takÄ… samÄ… siÅ‚Ä…, z jakÄ… byÅ‚ wystrzelony. W przypadku braku wiatru i rÃ³Å¼nicy poziomÃ³w broÅ„ trafia wtedy w czoÅ‚g, ktÃ³ry jÄ… wystrzeliÅ‚. Po takim odbiciu dezaktywuje siÄ™. W zwiÄ…zku z tym, Å¼e broÅ„ ta reaguje w ten sposÃ³b tylko na precyzyjne trafienia, jest takÅ¼e osÅ‚onÄ… odpowiadajÄ…cÄ… dziaÅ‚aniu Heavy Shield i ma na starcie 99 jednostek.
+* **Bouncy Castle** - broñ agresywna :) Dzia³a nastêpuj¹co: w przypadku bezpoœredniego trafienia w czo³g (i os³onê) powoduje "odbicie" pocisku w przeciwnym kierunku z tak¹ sam¹ si³¹, z jak¹ by³ wystrzelony. W przypadku braku wiatru i ró¿nicy poziomów broñ trafia wtedy w czo³g, który j¹ wystrzeli³. Po takim odbiciu dezaktywuje siê. W zwi¹zku z tym, ¿e broñ ta reaguje w ten sposób tylko na precyzyjne trafienia, jest tak¿e os³on¹ odpowiadaj¹c¹ dzia³aniu Heavy Shield i ma na starcie 99 jednostek.
 
-* **Mag Deflector** - druga broÅ„ agresywna :) W przypadku bezpoÅ›redniego trafienia w czoÅ‚g (i osÅ‚onÄ™) powoduje przesuniÄ™cie punktu trafienia losowo w lewo lub prawÄ… stronÄ™ chronionego czoÅ‚gu, ale niezbyt daleko, wiÄ™c moÅ¼na dostaÄ‡ "odÅ‚amkiem" przy silniejszej broni. Tak jak w przypadku Bouncy Castle jest takÅ¼e osÅ‚onÄ… odpowiadajÄ…cÄ… dziaÅ‚aniu Heavy Shield i ma na starcie 99 jednostek.
+* **Mag Deflector** - druga broñ agresywna :) W przypadku bezpoœredniego trafienia w czo³g (i os³onê) powoduje przesuniêcie punktu trafienia losowo w lewo lub praw¹ stronê chronionego czo³gu, ale niezbyt daleko, wiêc mo¿na dostaæ "od³amkiem" przy silniejszej broni. Tak jak w przypadku Bouncy Castle jest tak¿e os³on¹ odpowiadaj¹c¹ dzia³aniu Heavy Shield i ma na starcie 99 jednostek.
 
-* **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broÅ„ nie tyle defensywna, co obosieczna. Zasypuje teren opadem "radioaktywnym", ktÃ³ry jest zwyczajnÄ… glebÄ…. JeÅ›li nie mamy pod rÄ™kÄ… Å¼adnej broni odkopujÄ…cej teren i do tego osÅ‚ony (najlepiej jednorazowej), to po takim "opadzie" bÄ™dzie trzeba strzeliÄ‡ do siebie - bo bÄ™dÄ…c pod ziemiÄ… inaczej siÄ™ nie da. Ewentualnie pozostaje zawsze White Flag.
+* **Nuclear Winter** - nic nie dodaje, nic nie zabiera :) - w zasadzie to broñ nie tyle defensywna, co obosieczna. Zasypuje teren opadem "radioaktywnym", który jest zwyczajn¹ gleb¹. Jeœli nie mamy pod rêk¹ ¿adnej broni odkopuj¹cej teren i do tego os³ony (najlepiej jednorazowej), to po takim "opadzie" bêdzie trzeba strzeliæ do siebie - bo bêd¹c pod ziemi¹ inaczej siê nie da. Ewentualnie pozostaje zawsze White Flag.
 
-* **Long Schlong** - broÅ„ specjalna :) - kosztuje duÅ¼o, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem siÄ™ - tylko przy niewielkim przysypaniu - ale fajnie siÄ™ nazywa i wyglÄ…da :) - MoÅ¼na jÄ… aktywowaÄ‡ niezaleÅ¼nie od innych broni defensywnych i pozostaje aktywna do koÅ„ca rundy (nie da siÄ™ jej dezaktywowaÄ‡). BroÅ„ ta dziaÅ‚a deprymujÄ…co na przeciwnikÃ³w sterowanych przez komputer na poziomie **Poolshark** i wyÅ¼szych.
+* **Long Schlong** - broñ specjalna :) - kosztuje du¿o, nie bardzo w czymkolwiek pomaga (poza ewentualnym odkopaniem siê - tylko przy niewielkim przysypaniu - ale fajnie siê nazywa i wygl¹da :) - Mo¿na j¹ aktywowaæ niezale¿nie od innych broni defensywnych i pozostaje aktywna do koñca rundy (nie da siê jej dezaktywowaæ). Broñ ta dzia³a deprymuj¹co na przeciwników sterowanych przez komputer na poziomie **Poolshark** i wy¿szych.
 
-* **Lazy Boy** - nie jest to wÅ‚aÅ›ciwie broÅ„ defensywna. Jest to wspomaganie celowania. Po jej aktywacji czoÅ‚g stara siÄ™ wycelowaÄ‡ w najbliÅ¼szego przeciwnika i automatycznie ustawia siÅ‚Ä™ strzaÅ‚u oraz kÄ…t. W przypadku posiadania zbyt maÅ‚ej iloÅ›ci energii moÅ¼e czasem wycelowaÄ‡ Åºle (do celowania stosuje metodÄ™ takÄ… jak **Cyborg**). Tak jak **Battery** nie dezaktywuje innych broni defensywnych w przypadku jej uÅ¼ycia. Uwaga! Nie ma sensu aktywacja tej broni przed rundÄ…, celowanie nie odbÄ™dzie siÄ™, bo nie ma jeszcze do czego celowaÄ‡.
+* **Lazy Boy** - nie jest to w³aœciwie broñ defensywna. Jest to wspomaganie celowania. Po jej aktywacji czo³g stara siê wycelowaæ w najbli¿szego przeciwnika i automatycznie ustawia si³ê strza³u oraz k¹t. W przypadku posiadania zbyt ma³ej iloœci energii mo¿e czasem wycelowaæ Ÿle (do celowania stosuje metodê tak¹ jak **Cyborg**). Tak jak **Battery** nie dezaktywuje innych broni defensywnych w przypadku jej u¿ycia. Uwaga! Nie ma sensu aktywacja tej broni przed rund¹, celowanie nie odbêdzie siê, bo nie ma jeszcze do czego celowaæ.
 
-* **Lazy Darwin** - dziaÅ‚a tak jak **Lazy Boy**, ale celuje w najsÅ‚abszego przeciwnika. W tej broni po automatycznym celowaniu pozostaje aktywne "celowanie wizualne" moÅ¼na wiÄ™c Å‚Ä…two zmieniÄ‡ cel i samodzielnie wybraÄ‡ innego przeciwnika widzÄ…c czy w niego trafimy.
+* **Lazy Darwin** - dzia³a tak jak **Lazy Boy**, ale celuje w najs³abszego przeciwnika. W tej broni po automatycznym celowaniu pozostaje aktywne "celowanie wizualne" mo¿na wiêc ³¹two zmieniæ cel i samodzielnie wybraæ innego przeciwnika widz¹c czy w niego trafimy.
 
-* **Auto Defense** - wÅ‚Ä…cza tryb automatycznej aktywacji broni defensywnych. Po jej aktywowaniu czoÅ‚g automatycznie aktywuje najmocniejszÄ… posiadanÄ… osÅ‚onÄ™ (zuÅ¼ywajÄ…c jÄ… oczywiÅ›cie) w kaÅ¼dej chwili, kiedy nie ma Å¼adnej osÅ‚ony (takÅ¼e pomiÄ™dzy strzaÅ‚ami innych graczy). JednoczeÅ›nie jeÅ¼eli poziom energii czoÅ‚gu spadnie poniÅ¼ej 30 jednostek, automatycznie aktywuje **Battery** jeÅ¼eli jÄ… posiada. Ta broÅ„ pozostaje aktywna do koÅ„ca rundy i jest sygnalizowana symbolem "komputera" przed nazwÄ… aktywnej broni defensywnej w linii statusowej. Jest to druga broÅ„ defensywna, ktÃ³ra nie dezaktywuje innych broni defensywnych w przypadku jej uÅ¼ycia.
+* **Auto Defense** - w³¹cza tryb automatycznej aktywacji broni defensywnych. Po jej aktywowaniu czo³g automatycznie aktywuje najmocniejsz¹ posiadan¹ os³onê (zu¿ywaj¹c j¹ oczywiœcie) w ka¿dej chwili, kiedy nie ma ¿adnej os³ony (tak¿e pomiêdzy strza³ami innych graczy). Jednoczeœnie je¿eli poziom energii czo³gu spadnie poni¿ej 30 jednostek, automatycznie aktywuje **Battery** je¿eli j¹ posiada. Ta broñ pozostaje aktywna do koñca rundy i jest sygnalizowana symbolem "komputera" przed nazw¹ aktywnej broni defensywnej w linii statusowej. Jest to druga broñ defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej u¿ycia.
 
-* **Spy Hard** - Pomoc dla zapominalskich :) Po aktywacji pokazuje kolejno podglÄ…d informacji o kolejnych przeciwnikach. Lewo/Prawo - zmienia "szpiegowany" czoÅ‚g. Fire/Space/Return/Esc - koÅ„czy "szpiegowanie". Jest to ostatnia broÅ„ defensywna, ktÃ³ra nie dezaktywuje innych broni defensywnych w przypadku jej uÅ¼ycia.
+* **Spy Hard** - Pomoc dla zapominalskich :) Po aktywacji pokazuje kolejno podgl¹d informacji o kolejnych przeciwnikach. Lewo/Prawo - zmienia "szpiegowany" czo³g. Fire/Space/Return/Esc - koñczy "szpiegowanie". Jest to ostatnia broñ defensywna, która nie dezaktywuje innych broni defensywnych w przypadku jej u¿ycia.
 
-W zwiÄ…zku z odmiennym dziaÅ‚aniem broni **MIRV**, bronie defensywne **Bouncy Castle** i **Mag Deflector** wykorzystujÄ… tylko funkcjÄ™ osÅ‚ony przy trafieniu tÄ… broniÄ…. Dodatkowo gÅ‚owice **MIRV** w czasie opadania nie odbijajÄ… siÄ™ i nie przelatujÄ… przez Å›ciany boczne!
+W zwi¹zku z odmiennym dzia³aniem broni **MIRV**, bronie defensywne **Bouncy Castle** i **Mag Deflector** wykorzystuj¹ tylko funkcjê os³ony przy trafieniu t¹ broni¹. Dodatkowo g³owice **MIRV** w czasie opadania nie odbijaj¹ siê i nie przelatuj¹ przez œciany boczne!
 
-Å»adna z osÅ‚on nie chroni przed **Napalm**. **Bouncy Castle** czy **Mag Deflector**, przy bezpoÅ›rednim trafieniu odbije je lub przeniesie obok, ale wystarczy trafiÄ‡ bardzo blisko czoÅ‚gu i nie zadziaÅ‚a jego osÅ‚ona.
+¯adna z os³on nie chroni przed **Napalm**. **Bouncy Castle** czy **Mag Deflector**, przy bezpoœrednim trafieniu odbije je lub przeniesie obok, ale wystarczy trafiæ bardzo blisko czo³gu i nie zadzia³a jego os³ona.
 
-Bronie **White Flag**, **Hovercraft** i **Nuclear Winter** po aktywacji wymagajÄ… uruchomienia, jest to realizowanie przez "oddanie strzaÅ‚u" po aktywacji tej broni. OczywiÅ›cie strzaÅ‚ broniÄ… ofensywnÄ… nie jest wtedy oddawany, a jedynie uruchamiana jest wybrana broÅ„ defensywna.
+Bronie **White Flag**, **Hovercraft** i **Nuclear Winter** po aktywacji wymagaj¹ uruchomienia, jest to realizowanie przez "oddanie strza³u" po aktywacji tej broni. Oczywiœcie strza³ broni¹ ofensywn¹ nie jest wtedy oddawany, a jedynie uruchamiana jest wybrana broñ defensywna.
 
-MoÅ¼na mieÄ‡ aktywnÄ… tylko jednÄ… broÅ„ defensywnÄ… w danej chwili (za wyjÄ…tkiem **Long Schlong** oczywiÅ›cie :) ). Zawsze przed oddaniem strzaÅ‚u moÅ¼emy zmieniÄ‡ decyzjÄ™ i aktywowaÄ‡ innÄ… broÅ„ defensywnÄ… czy teÅ¼ dezaktywowaÄ‡ **White Flag**.
+Mo¿na mieæ aktywn¹ tylko jedn¹ broñ defensywn¹ w danej chwili (za wyj¹tkiem **Long Schlong** oczywiœcie :) ). Zawsze przed oddaniem strza³u mo¿emy zmieniæ decyzjê i aktywowaæ inn¹ broñ defensywn¹ czy te¿ dezaktywowaæ **White Flag**.
 
-OczywiÅ›cie aktywacja broni w momencie, kiedy mamy juÅ¼ aktywowanÄ… jakÄ…Å› innÄ…, powoduje utratÄ™ tej poprzedniej (nie ma zwrotÃ³w :) ).
+Oczywiœcie aktywacja broni w momencie, kiedy mamy ju¿ aktywowan¹ jak¹œ inn¹, powoduje utratê tej poprzedniej (nie ma zwrotów :) ).
 
 
 ## 7. Bronie 'inne' :) :
 
-* **Best F...g Gifts** - tej 'broni' nie uÅ¼ywa siÄ™ w rozgrywce. Jej zakup powoduje wylosowanie jednej z broni ofensywnych lub (rzadziej) defensywnych i dodanie jej do arsenaÅ‚u gracza. Jest to loteria, w ktÃ³rej moÅ¼na straciÄ‡ (jeÅ›li wylosuje siÄ™ broÅ„ taÅ„sza niÅ¼ cena **Best F...g Gifts**), ale teÅ¼ zyskaÄ‡. JeÅ›li wylosuje siÄ™ broÅ„ duÅ¼o droÅ¼sza, moÅ¼emy otrzymaÄ‡ do dyspozycji broÅ„, na ktÃ³rÄ… nie byÅ‚o nas staÄ‡! Istnieje niewielkie prawdopodobieÅ„stwo wylosowania przez **Best F...g Gifts** samej siebie :). MoÅ¼na wtedy sprÃ³bowaÄ‡ uÅ¼yÄ‡ jej w walce.
+* **Best F...g Gifts** - tej 'broni' nie u¿ywa siê w rozgrywce. Jej zakup powoduje wylosowanie jednej z broni ofensywnych lub (rzadziej) defensywnych i dodanie jej do arsena³u gracza. Jest to loteria, w której mo¿na straciæ (jeœli wylosuje siê broñ tañsza ni¿ cena **Best F...g Gifts**), ale te¿ zyskaæ. Jeœli wylosuje siê broñ du¿o dro¿sza, mo¿emy otrzymaæ do dyspozycji broñ, na któr¹ nie by³o nas staæ! Istnieje niewielkie prawdopodobieñstwo wylosowania przez **Best F...g Gifts** samej siebie :). Mo¿na wtedy spróbowaæ u¿yæ jej w walce.
 
 
-## 8. SiÅ‚a przeciwnikÃ³w AI:
+## 8. Si³a przeciwników AI:
 
-Gra posiada 8 poziomÃ³w trudnoÅ›ci przeciwnikÃ³w sterowanych przez komputer. A wÅ‚aÅ›ciwie 7 rÃ³Å¼nych i jeden "niespodziankÄ™". KaÅ¼dy z nich ma swÃ³j sposÃ³b kupowania broni defensywnych i ofensywnych oraz innÄ… metodÄ™ wyboru celu i samego celowania oraz wyboru broni. UÅ‚oÅ¼one sÄ… one na liÅ›cie wedÅ‚ug wzrastajÄ…cych "umiejÄ™tnoÅ›ci":
+Gra posiada 8 poziomów trudnoœci przeciwników sterowanych przez komputer. A w³aœciwie 7 ró¿nych i jeden "niespodziankê". Ka¿dy z nich ma swój sposób kupowania broni defensywnych i ofensywnych oraz inn¹ metodê wyboru celu i samego celowania oraz wyboru broni. U³o¿one s¹ one na liœcie wed³ug wzrastaj¹cych "umiejêtnoœci":
 
-* **Moron** - najgÅ‚upszy z przeciwnikÃ³w (co nie znaczy, Å¼e najbezpieczniejszy). Strzela caÅ‚kowicie przypadkowo uÅ¼ywajÄ…c wyÅ‚Ä…cznie jednej broni - **Baby Missile**. Nie kupuje nic, nie umie stosowaÄ‡ broni defensywnych.
+* **Moron** - najg³upszy z przeciwników (co nie znaczy, ¿e najbezpieczniejszy). Strzela ca³kowicie przypadkowo u¿ywaj¹c wy³¹cznie jednej broni - **Baby Missile**. Nie kupuje nic, nie umie stosowaæ broni defensywnych.
 
-* **Shooter** - Ten przeciwnik nie strzela na oÅ›lep. Wybiera sobie jeden kierunek. Na podstawie wÅ‚asnej pozycji - strzela w stronÄ™, z ktÃ³rej jest wiÄ™cej przestrzeni zakÅ‚adajÄ…c, Å¼e to tam sÄ… inne czoÅ‚gi. Ostrzeliwanie zaczyna od wysokiego kÄ…ta i strzaÅ‚ po strzale zmienia ten kÄ…t na coraz niÅ¼szy starajÄ…c siÄ™ ostrzelaÄ‡ caÅ‚y obszar po wybranej stronie. StrzaÅ‚ oddaje zawsze najlepszÄ… posiadanÄ… broniÄ… (najwyÅ¼szÄ… na liÅ›cie posiadanych broni - czyli niekoniecznie najlepszÄ…). Nie uÅ¼ywa broni defensywnych mimo, Å¼e je kupuje! Na poczÄ…tku rundy podejmuje 1 prÃ³bÄ™ zakupu broni defensywnych (tylko z zakresu **Battery** - **Strong Parachute**) i 4 ofensywnych (z zakresu **Missile** - **Heavy Roller**).
+* **Shooter** - Ten przeciwnik nie strzela na oœlep. Wybiera sobie jeden kierunek. Na podstawie w³asnej pozycji - strzela w stronê, z której jest wiêcej przestrzeni zak³adaj¹c, ¿e to tam s¹ inne czo³gi. Ostrzeliwanie zaczyna od wysokiego k¹ta i strza³ po strzale zmienia ten k¹t na coraz ni¿szy staraj¹c siê ostrzelaæ ca³y obszar po wybranej stronie. Strza³ oddaje zawsze najlepsz¹ posiadan¹ broni¹ (najwy¿sz¹ na liœcie posiadanych broni - czyli niekoniecznie najlepsz¹). Nie u¿ywa broni defensywnych mimo, ¿e je kupuje! Na pocz¹tku rundy podejmuje 1 próbê zakupu broni defensywnych (tylko z zakresu **Battery** - **Strong Parachute**) i 4 ofensywnych (z zakresu **Missile** - **Heavy Roller**).
 
-* **Poolshark** - AtakujÄ…c wyznacza sobie za cel najbliÅ¼szy czoÅ‚g, nastÄ™pnie dobiera kÄ…t strzaÅ‚u, a jego siÅ‚Ä™ stara siÄ™ dobraÄ‡ losujÄ…c jÄ… z wybranego przedziaÅ‚u. StrzaÅ‚ oddaje zawsze najlepszÄ… posiadanÄ… broniÄ…. UÅ¼ywa broni defensywnych. Z prawdopodobieÅ„stwem 1:3 aktywuje przed oddaniem strzaÅ‚u najlepszÄ… posiadanÄ… broÅ„ defensywnÄ… (najwyÅ¼szÄ… na liÅ›cie posiadanych broni - czyli niekoniecznie najlepszÄ…). JeÅ¼eli poziom jego energii spadnie poniÅ¼ej 30 jednostek - uÅ¼ywa **Battery** (oczywiÅ›cie jeÅ›li wczeÅ›niej jÄ… kupiÅ‚), a jeÅ¼eli energia spadnie poniÅ¼ej 5 i nie ma **Battery**, poddaje siÄ™ - **White Flag**. Na poczÄ…tku rundy podejmuje 1 prÃ³bÄ™ zakupu broni defensywnych i 6 ofensywnych.
+* **Poolshark** - Atakuj¹c wyznacza sobie za cel najbli¿szy czo³g, nastêpnie dobiera k¹t strza³u, a jego si³ê stara siê dobraæ losuj¹c j¹ z wybranego przedzia³u. Strza³ oddaje zawsze najlepsz¹ posiadan¹ broni¹. U¿ywa broni defensywnych. Z prawdopodobieñstwem 1:3 aktywuje przed oddaniem strza³u najlepsz¹ posiadan¹ broñ defensywn¹ (najwy¿sz¹ na liœcie posiadanych broni - czyli niekoniecznie najlepsz¹). Je¿eli poziom jego energii spadnie poni¿ej 30 jednostek - u¿ywa **Battery** (oczywiœcie jeœli wczeœniej j¹ kupi³), a je¿eli energia spadnie poni¿ej 5 i nie ma **Battery**, poddaje siê - **White Flag**. Na pocz¹tku rundy podejmuje 1 próbê zakupu broni defensywnych i 6 ofensywnych.
 
-* **Tosser** - AtakujÄ…c dziaÅ‚a dokÅ‚adnie tak jak **Poolshark**, jednak moÅ¼e posiadaÄ‡ "lepszy" zasÃ³b broni dziÄ™ki innej taktyce zakupÃ³w. Zawsze przed strzaÅ‚em aktywuje najlepszÄ… posiadanÄ… broÅ„ defensywnÄ…. i tak jak **Poolshark** stosuje **Battery** i **White Flag**. Na poczÄ…tku rundy ocenia ile ma pieniÄ™dzy i w zaleÅ¼noÅ›ci od tego podejmuje (pieniÄ…dze/5100) prÃ³b zakupu broni defensywnych, a nastÄ™pnie jeszcze raz sprawdza ile pieniÄ™dzy mu zostaÅ‚o i podejmuje (pieniÄ…dze/1250) prÃ³b zakupu broni ofensywnych.
+* **Tosser** - Atakuj¹c dzia³a dok³adnie tak jak **Poolshark**, jednak mo¿e posiadaæ "lepszy" zasób broni dziêki innej taktyce zakupów. Zawsze przed strza³em aktywuje najlepsz¹ posiadan¹ broñ defensywn¹. i tak jak **Poolshark** stosuje **Battery** i **White Flag**. Na pocz¹tku rundy ocenia ile ma pieniêdzy i w zale¿noœci od tego podejmuje (pieni¹dze/5100) prób zakupu broni defensywnych, a nastêpnie jeszcze raz sprawdza ile pieniêdzy mu zosta³o i podejmuje (pieni¹dze/1250) prób zakupu broni ofensywnych.
 
-* **Chooser** - Obiera sobie za cel najsÅ‚abszego przeciwnika (o najmniejszym zasobie energii) i celuje bardzo dokÅ‚adnie, jednak przed samym strzaÅ‚em energia strzaÅ‚u modyfikowana jest o parametr szczÄ™Å›cia :) , czyli mimo precyzyjnego wycelowania nie zawsze trafia. StrzaÅ‚ oddaje najlepszÄ… posiadanÄ… broniÄ… - chyba Å¼e cel jest blisko, wtedy zmienia broÅ„ na **Baby Missile**, by unikaÄ‡ trafienia samego siebie. Zawsze przed strzaÅ‚em aktywuje najlepszÄ… posiadanÄ… broÅ„ defensywnÄ… i tak jak **Poolshark** stosuje **Battery** i **White Flag**. ZakupÃ³w dokonuje tak samo jak **Tosser**.
+* **Chooser** - Obiera sobie za cel najs³abszego przeciwnika (o najmniejszym zasobie energii) i celuje bardzo dok³adnie, jednak przed samym strza³em energia strza³u modyfikowana jest o parametr szczêœcia :) , czyli mimo precyzyjnego wycelowania nie zawsze trafia. Strza³ oddaje najlepsz¹ posiadan¹ broni¹ - chyba ¿e cel jest blisko, wtedy zmienia broñ na **Baby Missile**, by unikaæ trafienia samego siebie. Zawsze przed strza³em aktywuje najlepsz¹ posiadan¹ broñ defensywn¹ i tak jak **Poolshark** stosuje **Battery** i **White Flag**. Zakupów dokonuje tak samo jak **Tosser**.
 
-* **Spoiler** - Strzela dokÅ‚adnie tak jak **Chooser**, tyle Å¼e ma wiÄ™cej szczÄ™Å›cia :), co oznacza, Å¼e nawet jeÅ›li nie trafi w wybrany cel, to moÅ¼e byÄ‡ to strzaÅ‚ precyzyjniejszy niÅ¼ **Chooser**. JeÅ›li nie jest w stanie trafiÄ‡ w obrany cel, stara siÄ™ wybraÄ‡ inny, w ktÃ³ry moÅ¼e precyzyjnie trafiÄ‡. Broni defensywnych uÅ¼ywa dokÅ‚adnie tak jak **Chooser**. Na poczÄ…tku rundy ocenia ile ma pieniÄ™dzy i w zaleÅ¼noÅ›ci od tego podejmuje (pieniÄ…dze/5100) prÃ³b zakupu broni defensywnych, a nastÄ™pnie jeszcze raz sprawdza ile pieniÄ™dzy mu zostaÅ‚o i podejmuje (pieniÄ…dze/320) prÃ³b zakupu broni ofensywnych. Przy zakupie broni defensywnych kupuje tylko bronie silne i precyzyjne - czyli takie, ktÃ³re nie zrobiÄ… mu przypadkiem krzywdy.
+* **Spoiler** - Strzela dok³adnie tak jak **Chooser**, tyle ¿e ma wiêcej szczêœcia :), co oznacza, ¿e nawet jeœli nie trafi w wybrany cel, to mo¿e byæ to strza³ precyzyjniejszy ni¿ **Chooser**. Jeœli nie jest w stanie trafiæ w obrany cel, stara siê wybraæ inny, w który mo¿e precyzyjnie trafiæ. Broni defensywnych u¿ywa dok³adnie tak jak **Chooser**. Na pocz¹tku rundy ocenia ile ma pieniêdzy i w zale¿noœci od tego podejmuje (pieni¹dze/5100) prób zakupu broni defensywnych, a nastêpnie jeszcze raz sprawdza ile pieniêdzy mu zosta³o i podejmuje (pieni¹dze/320) prób zakupu broni ofensywnych. Przy zakupie broni defensywnych kupuje tylko bronie silne i precyzyjne - czyli takie, które nie zrobi¹ mu przypadkiem krzywdy.
 
-* **Cyborg** - Obiera sobie za cel najsÅ‚abszego przeciwnika (o najmniejszym zasobie energii), lecz preferuje przeciwnikÃ³w sterowanych przez czÅ‚owieka. JeÅ›li nie jest w stanie trafiÄ‡ w obrany cel, stara siÄ™ wybraÄ‡ inny, w ktÃ³ry moÅ¼e precyzyjnie trafiÄ‡. Celuje bardzo dokÅ‚adnie i w zdecydowanej wiÄ™kszoÅ›ci przypadkÃ³w trafia za pierwszym strzaÅ‚em. StrzaÅ‚ oddaje najlepszÄ… posiadanÄ… broniÄ… - chyba Å¼e cel jest blisko, wtedy zmienia broÅ„ na **Baby Missile**, by unikaÄ‡ trafienia samego siebie. Broni defensywnych uÅ¼ywa dokÅ‚adnie tak jak **Chooser**, ale jeÅ›li ma wiÄ™cej niÅº 2 sztuki **Battery**, stosuje je jeÅ›li energia zmniejszy siÄ™ poniÅ¼szej 60 jednostek. Zakupy robi dokÅ‚adnie tak jak **Spoiler**
+* **Cyborg** - Obiera sobie za cel najs³abszego przeciwnika (o najmniejszym zasobie energii), lecz preferuje przeciwników sterowanych przez cz³owieka. Jeœli nie jest w stanie trafiæ w obrany cel, stara siê wybraæ inny, w który mo¿e precyzyjnie trafiæ. Celuje bardzo dok³adnie i w zdecydowanej wiêkszoœci przypadków trafia za pierwszym strza³em. Strza³ oddaje najlepsz¹ posiadan¹ broni¹ - chyba ¿e cel jest blisko, wtedy zmienia broñ na **Baby Missile**, by unikaæ trafienia samego siebie. Broni defensywnych u¿ywa dok³adnie tak jak **Chooser**, ale jeœli ma wiêcej niŸ 2 sztuki **Battery**, stosuje je jeœli energia zmniejszy siê poni¿szej 60 jednostek. Zakupy robi dok³adnie tak jak **Spoiler**
 
-* **Unknown** - Przed oddaniem kaÅ¼dego strzaÅ‚u losowo wybiera sposÃ³b dziaÅ‚ania od **Poolsharka** do **Cyborga** i stosuje jego taktykÄ™. Taktyka zakupÃ³w broni jest jednak zawsze identyczna jak  **Tosser**
+* **Unknown** - Przed oddaniem ka¿dego strza³u losowo wybiera sposób dzia³ania od **Poolsharka** do **Cyborga** i stosuje jego taktykê. Taktyka zakupów broni jest jednak zawsze identyczna jak  **Tosser**
+
+**Poolshark**, **Tosser**, **Chooser**, **Spoiler** i **Cyborg** w czasie gry dru¿ynowej nigdy nie celuj¹ w cz³onka w³asnej dru¿yny, nawet jeœli grozi to im samym.
 
 ### AI idzie na zakupy
 
-PrÃ³ba zakupu broni (ofensywnej lub defensywnej) wyglÄ…da nastÄ™pujÄ…co:
-Na poczÄ…tku losowana jest jedna z broni (wÅ›rÃ³d wszystkich moÅ¼liwych ofensywnych lub defensywnych). NastÄ™pnie wykonywane jest sprawdzenie, czy wylosowana broÅ„ jest na liÅ›cie broni moÅ¼liwych do zakupu przez czoÅ‚g. JeÅ›li nie, to w tej prÃ³bie Å¼adna broÅ„ nie jest kupowana, a jeÅ›li tak, to sprawdzana jest jej cena. JeÅ›li czoÅ‚g ma tyle pieniÄ™dzy, broÅ„ jest kupowana, w przeciwnym wypadku prÃ³ba koÅ„czy siÄ™ bez dokonania zakupu.
+Próba zakupu broni (ofensywnej lub defensywnej) wygl¹da nastêpuj¹co:
+Na pocz¹tku losowana jest jedna z broni (wœród wszystkich mo¿liwych ofensywnych lub defensywnych). Nastêpnie wykonywane jest sprawdzenie, czy wylosowana broñ jest na liœcie broni mo¿liwych do zakupu przez czo³g. Jeœli nie, to w tej próbie ¿adna broñ nie jest kupowana, a jeœli tak, to sprawdzana jest jej cena. Jeœli czo³g ma tyle pieniêdzy, broñ jest kupowana, w przeciwnym wypadku próba koñczy siê bez dokonania zakupu.
 
 Tabela broni kupowanych przez **Shooter**, **Poolshark**, **Tosser** i **Chooser**
 
@@ -386,22 +390,22 @@ Tabela broni kupowanych przez **Spoiler** i **Cyborg**
 
 ## 9. Porady spod lady:
 
-PamiÄ™taj o broniach defensywnych. **Auto Defense**, **Shield** i **Lazy Darwin** odpowiednio uÅ¼yte pomogÄ… wygraÄ‡ z Cyborgiem nawet przy pomocy **Baby Missile**.
+Pamiêtaj o broniach defensywnych. **Auto Defense**, **Shield** i **Lazy Darwin** odpowiednio u¿yte pomog¹ wygraæ z Cyborgiem nawet przy pomocy **Baby Missile**.
 
-DroÅ¼sze nie znaczy lepsze. ZwykÅ‚a osÅ‚ona typu **Shield** jest czasem skuteczniejsza od droÅ¼szych osÅ‚on.
+Dro¿sze nie znaczy lepsze. Zwyk³a os³ona typu **Shield** jest czasem skuteczniejsza od dro¿szych os³on.
 
-**Napalmy** przenikajÄ… przez osÅ‚ony a takÅ¼e przez glebÄ™. Mimo Å¼e palÄ… siÄ™ powyÅ¼ej niszczÄ… zasypane czoÅ‚gi.
+**Napalmy** przenikaj¹ przez os³ony a tak¿e przez glebê. Mimo ¿e pal¹ siê powy¿ej niszcz¹ zasypane czo³gi.
 
-**Lazy Darwin** wspomaga takÅ¼e celowanie broniÄ… typu **Laser**.
+**Lazy Darwin** wspomaga tak¿e celowanie broni¹ typu **Laser**.
 
-RoboczoÅ‚gi nie umiejÄ… siÄ™ odkopywaÄ‡. Zakopane ginÄ… od wÅ‚asnych strzaÅ‚Ã³w.
+Roboczo³gi nie umiej¹ siê odkopywaæ. Zakopane gin¹ od w³asnych strza³ów.
 
-W sytuacji beznadziejnej smobÃ³jstwo moÅ¼e byÄ‡ lepsze od **White Flag**. JeÅ›li trafisz w siebie silnÄ… broniÄ… zarobisz wiÄ™cej pieniÄ™dzy niÅ¼ stracisz (sprawdÅº sposÃ³b obliczania zyskÃ³w i strat).
+W sytuacji beznadziejnej smobójstwo mo¿e byæ lepsze od **White Flag**. Jeœli trafisz w siebie siln¹ broni¹ zarobisz wiêcej pieniêdzy ni¿ stracisz (sprawdŸ sposób obliczania zysków i strat).
 
-**Long Schlong** potrafi znaczÄ…co onieÅ›mieliÄ‡ przeciwnikÃ³w. BÄ…dÅº alfa-czoÅ‚giem i porzuÄ‡ wszelkie lÄ™ki.
+**Long Schlong** potrafi znacz¹co onieœmieliæ przeciwników. B¹dŸ alfa-czo³giem i porzuæ wszelkie lêki.
 
-RoboczoÅ‚gi nie majÄ… **Autodefense**, wiÄ™c defensywy aktywujÄ… tylko bezpoÅ›rednio przed swoim strzaÅ‚em. Zmasowany atak kilku graczy na jednego roboczoÅ‚ga gwarantuje sukces.
+Roboczo³gi nie maj¹ **Autodefense**, wiêc defensywy aktywuj¹ tylko bezpoœrednio przed swoim strza³em. Zmasowany atak kilku graczy na jednego roboczo³ga gwarantuje sukces.
 
-W ostatecznoÅ›ci moÅ¼esz zostaÄ‡ Terminatorem (model standardowy, nie T-1000 :) )
+W ostatecznoœci mo¿esz zostaæ Terminatorem (model standardowy, nie T-1000 :) )
 
-PoÅ‚amania luf Å¼yczÄ… autorzy.
+Po³amania luf ¿ycz¹ autorzy.

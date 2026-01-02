@@ -437,9 +437,12 @@ loop01
     beq skipThisPlayer
     lda eXistenZ,y
     beq skipThisPlayer
-    lda BarrelLength,y
-    cmp #LongBarrel     ; if target has Long Schlong do not aim
-    beq skipThisPlayer
+    ; moved to CheckTeamMember for optimization
+    ;lda BarrelLength,y
+    ;cmp #LongBarrel     ; if target has Long Schlong do not aim
+    ;beq skipThisPlayer
+    jsr CheckTeamMember
+    bcc skipThisPlayer  ; if the same Team
     lda skilltable,y
     beq ItIsHuman
     lda PreferHumansFlag
@@ -499,10 +502,12 @@ loop01
     beq skipThisPlayer
     lda eXistenZ,y
     beq skipThisPlayer
-    lda BarrelLength,y
-    cmp #LongBarrel     ; if target has Long Schlong do not aim
-    beq skipThisPlayer
-
+    ; moved to CheckTeamMember for optimization
+    ;lda BarrelLength,y
+    ;cmp #LongBarrel     ; if target has Long Schlong do not aim
+    ;beq skipThisPlayer
+    jsr CheckTeamMember
+    bcc skipThisPlayer  ; if the same Team
     lda LowResDistances,x
     cmp LowResDistances,y
     bcs EnemyOnTheLeft
@@ -819,9 +824,12 @@ SetNextTarget
     beq skipThisPlayer
     lda eXistenZ,y
     beq skipThisPlayer
-    lda BarrelLength,y
-    cmp #LongBarrel     ; if target has Long Schlong do not aim
-    beq skipThisPlayer
+    ; moved to CheckTeamMember for optimization
+    ;lda BarrelLength,y
+    ;cmp #LongBarrel     ; if target has Long Schlong do not aim
+    ;beq skipThisPlayer
+    jsr CheckTeamMember
+    bcc skipThisPlayer  ; if the same Team
     ; check target direction
     mva #0 tempor2  ; check target direction
     lda LowResDistances,x
@@ -843,6 +851,25 @@ TankHit
     rts
 .endp
 
+;----------------------------------------------
+.proc CheckTeamMember
+; Target tank number in Y
+; result in C bit ; 0 - the same Team ; 1 - another Team
+    ; optimization 
+    lda #LongBarrel-1
+    cmp BarrelLength,y     ; if target has Long Schlong do not aim
+    bcc SchlongIsLong
+    ; end of optimization
+    sec     ; if there is no team play, then as a member of another team 
+    bit TeamGame    ; if teams game
+    bvc no_teams
+    tya
+    eor TankNr
+    ror     ; check lower bits of tank numbers (team)
+no_teams
+SchlongIsLong
+    rts
+.endp
 ;----------------------------------------------
 .proc PurchaseAI ;
 ; A - skill of the TankNr, TankNr in X

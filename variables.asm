@@ -23,7 +23,7 @@ GameOverColoursTable  .ds MaxPlayers; .BYTE $80,$40,$c4,$20,$c0,$e4
 ;----------------------------------------------------
 TanksNames  ; DO NOT ZERO ON GAME RESTART - ticket #24
     ;:6 dta d"        "
-    .ds MaxPlayers*8
+    .ds (MaxPlayers+2)*8    ; +2 for Teams
 ;----------------------------------------------------
 skilltable   ; computer controlled players' skills (1-8), 0 - human (no cleaning, ticket #30)
     .DS MaxPlayers
@@ -67,7 +67,7 @@ OptionsY  .ds 1 ;vertical position of cursor on Options screen
 flyDelay .ds 1
 ;--------------
 ;NumberOfPlayers .DS 1  ;current number of players (counted from 1)
-TankSequence .DS MaxPlayers ;sequence of shooting during the Round
+TankSequence .DS MaxPlayers+2 ;sequence of shooting during the Round (+2 for teams)
 GameIsOver .DS 1 ; 1 means it was the last round in the game
 ;----------------------------------------------------
 moneyH ;we place zero at the end of prices and money
@@ -102,13 +102,13 @@ LASTeXistenZ ; eXistenZ before shoot
     .DS MaxPlayers
 
 ResultsTable ;the results in the gameeeeee
-    .DS MaxPlayers
+    .DS MaxPlayers+2    ; +2 for teams
 DirectHits
-    .DS MaxPlayers
+    .DS MaxPlayers+2    ; +2 for teams
 EarnedMoneyH
-    .DS MaxPlayers
+    .DS MaxPlayers+2    ; +2 for teams
 EarnedMoneyL
-    .DS MaxPlayers
+    .DS MaxPlayers+2    ; +2 for teams
 ;----------------------------------------------------
 ForceTableL ;shooting Force of the tank during the round
     .DS MaxPlayers

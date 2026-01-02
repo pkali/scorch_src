@@ -1422,22 +1422,35 @@ notZero
     sta plot4x4color
     tya
     tax  ; save Y
-    mwa #talk LineAddress4x4
-    jsr _calc_inverse_display
-    
-    ; now find length of the text
-@     iny
-      lda (LineAddress4x4),y
-    bpl @-
-    iny
-    sty fx
+    mwa #talk.talk5_data LineAddress4x4
+    jsr _calc_packed_display
+
+    ; record starts with length byte
+    ldy #0
+    lda (LineAddress4x4),y
+    sta fx
+    inw LineAddress4x4 ; point to packed payload
 
     txa  ; load Y
     tay
+    jmp Display4x4AboveTankPacked
+.endp
 
-    ;jsr Display4x4AboveTank
-    ;rts
-    ; POZOR !!!
+;--------------------------------------------------------
+.proc Display4x4AboveTankPacked ;
+    ; Displays packed texts using PutChar4x4 above tank and mountains.
+    ;parameters are:
+    ;Y - number of tank above which text is displayed
+    ;fx - length of text
+    ;LineAddress4x4 - address of packed payload
+
+    lda xtankstableL,y
+    sta temp
+    lda xtankstableH,y
+    sta temp+1
+    jsr Calculate4x4TextPosition
+    jmp TypeLine4x4Packed.noLengthNoColor
+
 .endp
 
 ;--------------------------------------------------------
@@ -1624,6 +1637,115 @@ TypeLine4x4Loop
     bne TypeLine4x4Loop
 
 EndOfTypeLine4x4
+    rts
+.endp
+
+;-------------------------------
+.proc TypeLine4x4Packed ;
+;-------------------------------
+    ;this routine prints packed line of length `fx`
+    ;packed payload address in LineAddress4x4
+    ;starting from LineXdraw, LineYdraw
+
+    lda #14 ; default length of 4x4 texts
+    sta fx
+
+variableLength
+    lda #$ff  ; $ff - visible characters, $00 - clearing
+
+staplot4x4color
+    sta plot4x4color
+noLengthNoColor
+
+    ; init packed bitstream
+    ; Reuse ZP vars:
+    ; - LineAddress4x4 is the packed byte pointer (advanced during decoding)
+    ; - Multiplier/Multiplier_ are used as bit buffer/state
+    lda #0
+    sta Multiplier
+    sta Multiplier+1
+    sta Multiplier_
+
+    ldy #0
+    sty LineCharNr
+
+TypeLine4x4PackedLoop
+    ldy LineCharNr
+
+    jsr _packed_get5bits
+    tay
+    lda talk.talk5_alphabet,y
+    sta CharCode4x4
+    mwa LineXdraw dx
+    mva LineYdraw dy
+    mva #0 dy+1  ;    dy is 2 bytes value
+    jsr PutChar4x4 ;type empty pixels as well!
+    adw LineXdraw #4
+    inc:lda LineCharNr
+    cmp fx
+    bne TypeLine4x4PackedLoop
+
+    rts
+.endp
+
+;--------------------------------
+; Packed 5-bit bitstream decoder
+;
+; Uses a 16-bit shift register where the lowest bits are the next bits to read.
+; Bytes are appended little-endian (LSB-first) at bit position PackedBitCount4x4.
+;--------------------------------
+.proc _packed_get5bits
+    ; ensure at least 5 bits available
+    lda Multiplier_
+    cmp #5
+    bcs have_bits
+
+    ; read next byte and append at current bit count
+    ldy #0
+    lda (LineAddress4x4),y
+    sta temp2            ; new byte
+    lda #0
+    sta temp2+1
+    inw LineAddress4x4
+
+    ldx Multiplier_
+    beq append_ready
+append_shift
+    asl temp2
+    rol temp2+1
+    dex
+    bne append_shift
+append_ready
+    lda Multiplier
+    ora temp2
+    sta Multiplier
+    lda Multiplier+1
+    ora temp2+1
+    sta Multiplier+1
+
+    lda Multiplier_
+    clc
+    adc #8
+    sta Multiplier_
+
+have_bits
+    lda Multiplier
+    and #$1f
+    sta temp2
+
+    ; shift register right by 5
+    ldx #5
+@   lsr Multiplier+1
+    ror Multiplier
+    dex
+    bne @-
+
+    lda Multiplier_
+    sec
+    sbc #5
+    sta Multiplier_
+
+    lda temp2
     rts
 .endp
 
@@ -1886,6 +2008,10 @@ ybarrel
 @     lda #$00
       sta sizep0,y ; P0-P3 widths
       lda TankColoursTable,y ; colours of sprites under tanks
+      bit TeamGame
+      bvc no_team
+      lda TankColoursTableT,y ; colours of sprites under tanks for Teams
+no_team
       sta PCOLR0,y    
       dey
     bpl @-

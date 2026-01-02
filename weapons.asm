@@ -399,19 +399,15 @@ nexttext
     bcs @-
 
     sta TextNumberOff
-    ; all text start from `talk` and end with an inverse.
-    ; we go through the `talk`, count number of inverses.
-    ; if equal to TextNumberOff, it is our text, printit
     lda #$ff
     sta plot4x4color
-    mwa #talk LineAddress4x4
-    jsr _calc_inverse_display   
-    ; now find length of the text
-@   iny
+    mwa #talk.talk5_data LineAddress4x4
+    jsr _calc_packed_display
+    ; record starts with length byte
+    ldy #0
     lda (LineAddress4x4),y
-    bpl @-
-    iny
-    sty fx
+    sta fx
+    inw LineAddress4x4 ; point to packed payload
     mwa tempXROLLER temp    ; X coordinate of hitpoint
     ; calculate position of message 
     jsr Calculate4x4TextPosition
@@ -436,7 +432,7 @@ nexttext
     dec LineXdraw+1
 DisplayMessage
     ; display propaganda message
-    jsr TypeLine4x4.noLengthNoColor
+    jsr TypeLine4x4Packed.noLengthNoColor
 
     ldy #7
     jsr PauseYFrames
@@ -1364,11 +1360,12 @@ NoSpyHard
     mva #0 escFlag
     jmp ReleaseAndLoop
 @
-/*     cmp #$80|@kbcode._up
-    jeq CTRLPressedUp
-    cmp #$80|@kbcode._down
-    jeq CTRLPressedDown */
-    
+/*     .IF TARGET = 800
+      cmp #$80|@kbcode._up      ; Ctrl + Up or Down only in A800
+      jeq CTRLPressedUp
+      cmp #$80|@kbcode._down
+      jeq CTRLPressedDown
+    .ENDIF */
     cmp #$80|@kbcode._tab
     jeq CTRLPressedTAB
 
@@ -1410,7 +1407,7 @@ NoVdebugSwitch
     cmp #@kbcode._S  ; $3e  ; S
     jeq pressedS
     .IF TARGET = 800
-      cmp #61    ; G
+      cmp #@kbcode._G   ; $61 ; G
       bne EndKeys
       jsr SelectNextGradient.NotWind
       jmp ReleaseAndLoop

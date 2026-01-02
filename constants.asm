@@ -64,13 +64,20 @@ areYouSureText
     .ELIF TARGET = 5200
         dta d"#END? Y-1/N-0#"
     .ENDIF
-
 lineClear
     dta d"              "
 
+; Additional texts - Teams
+Player_Header
+    dta d"Player"
+Team_Header
+    dta d"A-Team" ; :)
+
 TankColoursTable        .BYTE $58,$2a,$96,$ca,$7a,$ed
+TankColoursTableT       .BYTE $2a,$2a,$7a,$7a,$2a,$7a  ; Teams colors
 ;TankStatusColoursTable  .BYTE $54,$24,$92,$c4,$74,$e4  ; standard order
 TankStatusColoursTable  .BYTE $74,$c4,$24,$e4,$54,$94   ; Adam's order
+TankStatusColoursTableT .BYTE $24,$74,$24,$74,$24,$74   ; Teams colors
 ;-----------
 GradientAddrL
     .by <dliColorsFore, <dliColorsFore, <dliColorsFore2
@@ -615,8 +622,9 @@ CreditsStart
     dta   d"You were playing"^
     dta   d"Scorch"^
     dta   d"Warsaw, Miami"^
-    dta   d"2000-2025"^
-    dta   d" "*
+    dta   d" 2000-"
+    year ; 4 bytes ftom scorch.asm
+    dta   d"  "*
     dta   d"Programming"^
     dta   d"Tomasz 'Pecus' Pecko"^
     dta   d"Pawel 'pirx' Kalinowski"^
@@ -634,6 +642,7 @@ CreditsStart
     .IF TARGET = 800
       .IF CART_VERSION
       dta   d"Krzysztof 'Kaz' Ziembik"^
+      dta   d"Alex Pecko"^
       .ENDIF
       dta d"Roman 'xorcerer' Fierfas"^
     .ENDIF
@@ -658,7 +667,7 @@ CreditsStart
       dta d"RB5200, Krzysztof 'Kaz' Ziembik"^
     .ENDIF
     dta   d" "*
-    dta   d"Additional testing"^
+    dta   d"Additional testing and Teams idea"^
     dta   d"Arek and Alex Pecko"^
     dta   d" "*
     dta   d"Special thanks"^
@@ -679,7 +688,9 @@ CreditsEnd
 .IF TARGET = 5200
   ; Atari 5200 splash
   NewSplashText=*
-    dta d" 2025  atariage", $4e, "com "  ; $4e - non blinking dot
+    dta d" "
+    year ; 4 bytes ftom scorch.asm
+    dta d"  atariage", $4e, "com "  ; $4e - non blinking dot
 .ENDIF
 
 .endif  ; .IF *>0

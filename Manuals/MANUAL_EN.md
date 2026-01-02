@@ -39,7 +39,9 @@ On the first screen, you can configure gameplay options:
 
 Select options with cursor keys or a joystick.
 
-The **TAB**, **SELECT**, long press of first joystick button or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key changes the color of the mountains (3 versions to choose from).  
+The **G**, **TAB**, **SELECT**, long press of first joystick button or second joystick button (supported Joy 2B+ standard or compatible), and on the Atari 5200 console, the **5** controller key changes the color of the mountains (3 versions to choose from).  
+
+If the cursor indicates the the number of players and 4 or 6 players are selected, pressing **TAB** activates team play. This is indicated by the letter **t** next to the word **Players**. Team play is limited to 4 or 6 players and a maximum of 20 rounds. Players with odd numbers are assigned to A-Team, and players with even numbers are assigned to B-Team.
 
 If the cursor indicates the wind strength selection option **Wind**, pressing **TAB** changes the way the wind strength is drawn from "every round" to "every turn" and vice versa. Drawing every turn is indicated by the **?** sign next to the word **Wind**.  
 
@@ -86,7 +88,7 @@ This makes it possible to activate shields and others before the round starts.
 ![Main game screen.](images/StatusLine.png)
 The status line shows which player is currently allowed to take a shot and a set of other information:
 
-* **Player** - player's name,
+* **Player** - player's name. In the case of a team game, the word **Player** is replaced with the name of the team.
 
 * active joystick number or difficulty level of computer-controlled player (1-**Moron** - 8-**Unknown**),
 
@@ -111,19 +113,19 @@ The keyboard controls cursor keys or joystick: left/right - change the angle of 
 
 | A800         | Function           |
 |--------------|--------------------|
-| **SPACE**/**FIRE**   | shoot       (see â†“)|
-| **TAB**/**SELECT**   | weapon change   (â†“)|
-| **I**            | inventory       (â†“)|
-| **A**/**OPTION**     | defensives      (â†“)|
+| **SPACE**/**FIRE**   | shoot       (see ¡)|
+| **TAB**/**SELECT**   | weapon change   (¡)|
+| **I**            | inventory       (¡)|
+| **A**/**OPTION**     | defensives      (¡)|
 | **M**            | music on/off       |
 | **S**            | sound on/off       |
-| **START**        | turbo mode      (â†“)|
-| **O**            | game over       (â†“)|
-| **START**+**OPTION** | immediate quit  (â†“)|
-| **G**            | color scheme    (â†“)|
-| **ESC**          | return          (â†“)|
-| **Y**            | confirm         (â†“)|
-| **CTRL**+**HELP**    | visual debug    (â†“)|
+| **START**        | turbo mode      (¡)|
+| **O**            | game over       (¡)|
+| **START**+**OPTION** | immediate quit  (¡)|
+| **G**            | color scheme    (¡)|
+| **ESC**          | return          (¡)|
+| **Y**            | confirm         (¡)|
+| **CTRL**+**HELP**    | visual debug    (¡)|
 
 * **shoot** or joystick button pressed briefly - firing a shot.
 
@@ -222,27 +224,27 @@ And here are the values of maximum energy loss for individual weapons. If a weap
 | Funky Bomb       | 168 88 (*5) |
 | MIRV             | 136 (*5)    |
 | Death's Head     | 240 (*5)    |
-| Napalm           | 40  (see â†“) |
-| Hot Napalm       | 80      (â†“) |
+| Napalm           | 40  (see ¡) |
+| Hot Napalm       | 80      (¡) |
 | Baby Roller      | 88          |
 | Roller           | 168         |
 | Heavy Roller     | 240         |
-| Riot Charge      | 0       (â†“) |
-| Riot Blast       | 0       (â†“) |
-| Riot Bomb        | 0       (â†“) |
-| Heavy Riot Bomb  | 0       (â†“) |
-| Digger           | 0       (â†“) |
-| Heavy Digger     | 0       (â†“) |
-| Sandhog          | 0       (â†“) |
-| Heavy Sandhog    | 0       (â†“) |
-| Dirt Clod        | 0       (â†“) |
-| Dirt Ball        | 0       (â†“) |
-| Ton of Dirt      | 0       (â†“) |
-| Liquid Dirt      | 0       (â†“) |
-| Dirt Charge      | 0       (â†“) |
-| Propaganda       | 0       (â†“) |
-| Stomp            | 0       (â†“) |
-| Laser            | 100     (â†“) |
+| Riot Charge      | 0       (¡) |
+| Riot Blast       | 0       (¡) |
+| Riot Bomb        | 0       (¡) |
+| Heavy Riot Bomb  | 0       (¡) |
+| Digger           | 0       (¡) |
+| Heavy Digger     | 0       (¡) |
+| Sandhog          | 0       (¡) |
+| Heavy Sandhog    | 0       (¡) |
+| Dirt Clod        | 0       (¡) |
+| Dirt Ball        | 0       (¡) |
+| Ton of Dirt      | 0       (¡) |
+| Liquid Dirt      | 0       (¡) |
+| Dirt Charge      | 0       (¡) |
+| Propaganda       | 0       (¡) |
+| Stomp            | 0       (¡) |
+| Laser            | 100     (¡) |
 
 Remarks:
 * **Napalm** - this weapon is different and the distance from the center is not determined, simply any tank in the range of the flames loses 40 units of energy.
@@ -347,6 +349,8 @@ The game has 8 difficulty levels of computer-controlled opponents. Or 7 differen
 * **Cyborg** - Aims at the weakest opponent (with the least amount of energy) but prefers human-controlled opponents. If he is unable to hit his chosen target, he tries to choose another target that he can accurately hit. Aims very accurately and in the vast majority of cases hits on the first shot. He fires the shot with the best weapon he has unless the target is close. Then he changes his weapon to **Baby Missile** to avoid hitting himself. He uses defensive weapons exactly like **Chooser** but if he has more than 2 pieces of **Battery** he uses them if the energy decreases below 60 units. He shops exactly like **Spoiler**.
 
 * **Unknown** - Before firing each shot, he randomly chooses a course of action from **Poolshark** to **Cyborg** and applies his tactics. However, the tactics of weapon purchases are always identical to **Tosser**.
+
+**Poolshark**, **Tosser**, **Chooser**, **Spoiler**, and **Cyborg** never target a member of their own team during team play, even if it puts them at risk.
 
 ### AI goes shopping.
 Buying a weapon (offensive or defensive) works as follows:
