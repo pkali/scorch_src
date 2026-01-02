@@ -204,6 +204,7 @@ FirstZpageVariable = $4f
       .IF SPLASH = 1
         icl 'artwork/splash_v2/splash.asm'  ; new splash screen and musix
         .IF CART_VERSION = 1
+          icl 'artwork/splash_v3/splash3.asm'  ; new2 splash screen 
           icl 'artwork/splash_v1/splash.asm'  ; old splash screen (plays music from new splash)
         .ENDIF
       .ELSE
