@@ -78,6 +78,20 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+
+###### Version 1.55
+2026-01-02
+
+* A team play option has been added. by @Pecusx in #174
+
+If the cursor indicates the number of players and 4 or 6 players are selected, pressing TAB activates team play. This is indicated by the letter "t" next to the word "Players". Team play is limited to 4 or 6 players and a maximum of 20 rounds. Players with odd numbers are assigned to the A-Team, and players with even numbers are assigned to the B-Team.
+
+Who knows? When we free up more memory, a more straightforward user interface has a chance. Maybe :)
+
+For now, get your buddies and play in a completely new way against them loosers :)
+
+
+
 ###### Version 1.52
 2025-01-20
 
