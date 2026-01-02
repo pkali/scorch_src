@@ -642,6 +642,7 @@ CreditsStart
     .IF TARGET = 800
       .IF CART_VERSION
       dta   d"Krzysztof 'Kaz' Ziembik"^
+      dta   d"Alex Pecko"^
       .ENDIF
       dta d"Roman 'xorcerer' Fierfas"^
     .ENDIF
