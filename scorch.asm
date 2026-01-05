@@ -25,7 +25,7 @@
 .ENDIF
 ;---------------------------------------------------
 .ifndef SPLASH
-    .def SPLASH = 0         ; if 0 - no splash screens
+    .def SPLASH = 1         ; if 0 - no splash screens
 .endif
 .ifndef CART_VERSION
     .def CART_VERSION = 0    ; if 1 - dual splash screen
@@ -41,7 +41,7 @@
 
 ;---------------------------------------------------
 .macro build
-    dta d"1.55" ; number of this build (4 bytes)
+    dta d"1.56" ; number of this build (4 bytes)
 .endm
 .macro year
     dta d"2026" ; year of this build (4 bytes)
