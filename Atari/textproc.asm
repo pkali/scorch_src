@@ -1157,8 +1157,18 @@ NoTeamColors
     lda skillTable,x
     sta difficultyLevel
     lda digits+1,x
-    sta NameScreen2+7
-
+    sta NameScreen2+8
+    ldy #0  ; no team game
+    bit TeamGame
+    bvc NoTeams
+    ldy #"A"
+    txa
+    and #%00000001
+    beq NoBTeam
+    iny
+NoBTeam
+NoTeams
+    sty NameScreen2+7
     ; copy existing name and place cursor at end
     txa ; TankNr
     :3 asl
