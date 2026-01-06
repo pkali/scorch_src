@@ -78,6 +78,11 @@ With the advent of [fujinet](https://fujinet.online/) we are thinking about maki
 
 ## Changelog:
 
+###### Version 1.56
+2026-01-05
+
+* A/B-Team designation letter added in front of the player number in the Difficulty level selection screen.
+
 
 ###### Version 1.55
 2026-01-02
