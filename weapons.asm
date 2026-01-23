@@ -2803,6 +2803,7 @@ notpressed
     ; enimation ends
 
     jsr GetKeyFast
+    and #$3f ;CTRL and SHIFT ellimination
     cmp #@kbcode._left  ; $6
     jeq pressedLeft
     cmp #@kbcode._right  ; $7
